@@ -4,12 +4,10 @@
 * [Audience](#who)
 * [Before you begin](#before)
 * [Using the sample proxies](#using)
-* [Setting up](#initial)
-* [Deploying a sample proxy](#deploying)
-* [Invoking a sample proxy](#invoking)
 * [Modifying a sample proxy](#modifying)
 * [Ask questions on the Apigee Community](#ask)
 * [Apigee Edge documentation](#docs)
+* [Contributing](#contributing)
 
 ---
 
@@ -39,19 +37,7 @@ You are an [Apigee](https://cloud.google.com/apigee) API proxy developer, or you
 
 ## <a name="using"></a>Using the sample proxies
 
-Most developers begin by identifying an interesting sample based on a specific use case or need. You'll find the samples in the `./apigee-samples/sample-proxies` folder.
-
-### <a name="initial"></a>Setting up
-
-TODO
-
-### <a name="deploying"></a>Deploying a sample proxy
-
-TODO
-
-### <a name="invoking"></a>Invoking a sample proxy
-
-TODO
+Most developers begin by identifying an interesting sample based on a specific use case or need. You'll find all the samples in the root folder.
 
 ### <a name="modifying"></a>Modifying a sample proxy
 
@@ -71,6 +57,9 @@ The Apigee docs are located [here](https://cloud.google.com/apigee/docs).
 
 ---
 
-## <a name="modifying"></a>Contributing
+## <a name="contributing"></a>Contributing
 
-TODO
+Please add the sample as a root level directory in the repository
+
+### Contributing to existing samples
+Check for the section titled **'Contributing'** in the README specfic for that sample for details.
