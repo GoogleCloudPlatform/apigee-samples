@@ -21,8 +21,6 @@ The samples provide a jump-start for developers who wish to design and create Ap
 
 You are an [Apigee](https://cloud.google.com/apigee) API proxy developer, or you would like to learn about developing APIs that run on Apigee X & hybrid. At a minimum, we assume you're familiar with Apigee and how to create simple API proxies. To learn more, we recommend this [getting started tutorial](https://cloud.google.com/apigee/docs/api-platform/get-started/get-started). 
 
----
-
 ## <a name="before"></a>Before you begin
 
 1. See the full list of [Prerequisites](https://cloud.google.com/apigee/docs/api-platform/get-started/prerequisites) for installing Apigee.
@@ -32,8 +30,6 @@ You are an [Apigee](https://cloud.google.com/apigee) API proxy developer, or you
 3. If you don't have one, you'll need to provision an Apigee instance. [Create a free Apigee eval instance.](https://apigee.google.com/setup/eval)
 
 4. Clone this project from GitHub to your system.
-
----
 
 ## <a name="using"></a>Using the sample proxies
 
@@ -45,8 +41,6 @@ Feel free to modify and build upon the sample proxies. You can make changes in t
 
 Simply redeploy the proxies for changes to take effect. 
 
----
-
 ## <a name="ask"></a>Ask questions on the Apigee Community
 
 [Apigee Community](https://www.googlecloudcommunity.com/gc/Apigee/bd-p/cloud-apigee) is a great place to ask questions and find answers about developing API proxies.
@@ -54,8 +48,6 @@ Simply redeploy the proxies for changes to take effect.
 ## <a name="docs"></a>Apigee documentation
 
 The Apigee docs are located [here](https://cloud.google.com/apigee/docs). 
-
----
 
 ## <a name="contributing"></a>Contributing
 
