@@ -6,7 +6,7 @@
 * [Using the sample proxies](#using)
 * [Modifying a sample proxy](#modifying)
 * [Ask questions on the Apigee Community](#ask)
-* [Apigee Edge documentation](#docs)
+* [Apigee documentation](#docs)
 * [Contributing](#contributing)
 
 ---
