@@ -9,9 +9,15 @@ Let's get started!
 
 ## Setup environment
 
+Navigate to the 'oauth-client-credentials' drirectory.
+
+```sh
+cd oauth-client-credentials
+```
+
 Edit the provided sample `env.sh` file, and set the environment variables there.
 
-Click <walkthrough-editor-open-file filePath="env.sh">here</walkthrough-editor-open-file> to open the file in the editor
+Click <walkthrough-editor-open-file filePath="oauth-client-credentials/env.sh">here</walkthrough-editor-open-file> to open the file in the editor
 
 Then, source the `env.sh` file in the Cloud shell.
 
