@@ -1,0 +1,16 @@
+<APIProxy revision="9" name="cloud-logging">
+    <DisplayName></DisplayName>
+    <Description></Description>
+    <CreatedAt>1674678988286</CreatedAt>
+    <LastModifiedAt>1674678988286</LastModifiedAt>
+    <BasePaths>/cloud-logging</BasePaths>
+    <Policies>
+        <Policy>ML-CloudLogging</Policy>
+    </Policies>
+    <ProxyEndpoints>
+        <ProxyEndpoint>default</ProxyEndpoint>
+    </ProxyEndpoints>
+    <TargetEndpoints>
+        <TargetEndpoint>default</TargetEndpoint>
+    </TargetEndpoints>
+</APIProxy>
