@@ -41,7 +41,7 @@ Use the following GCP CloudShell tutorial, and follow the instructions.
 
 
 ```bash
-git clone https://github.com/markjkelly/apigee-samples.git
+git clone https://github.com/GoogleCloudPlatform/apigee-samples.git
 cd oauth-client-credentials
 ```
 
