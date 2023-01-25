@@ -42,7 +42,15 @@ First, let enabled the Cloud Build API
 gcloud services enable cloudbuild.googleapis.com
 ```
 
-Once the API is enabled, lets trigger the Cloud Build using the command
+Once the API is enabled, lets assign the Apigee Org Admin role to the Cloud Build service account
+
+```sh
+gcloud projects add-iam-policy-binding "$PROJECT_ID" \
+  --member="serviceAccount:$CLOUD_BUILD_SA" \
+  --role="roles/apigee.orgAdmin"
+```
+
+Now lets trigger the Cloud Build using the command
 
 ```sh
 gcloud builds submit --config cloudbuild.yaml .
