@@ -43,11 +43,17 @@ export PATH=$PATH:$HOME/.apigeecli/bin
 echo "Creating API Proxy Service Account and granting Cloud Logging role to it"
 gcloud iam service-accounts create $SA_NAME
 gcloud projects add-iam-policy-binding $PROJECT \
-    --member="serviceAccount:$SA_NAME@$PROJECT.iam.gserviceaccount.com" \
+    --member="serviceAccount:${SA_NAME}@${PROJECT}.iam.gserviceaccount.com" \
     --role="roles/logging.logWriter"
 
 
 echo "Importing and Deploying Apigee cloud-logging proxy..."
 zip -r cloud-logging.zip apiproxy
 REV=$(apigeecli apis import -f cloud-logging.zip --org $PROJECT --token $TOKEN --disable-check | jq ."revision" -r)
-apigeecli apis deploy --wait --name cloud-logging --ovr --rev $REV --org $PROJECT --env $APIGEE_ENV --token $TOKEN
+apigeecli apis deploy --wait --name cloud-logging --ovr --rev $REV --org $PROJECT --env $APIGEE_ENV --token $TOKEN --sa ${SA_NAME}@${PROJECT}.iam.gserviceaccount.com
+
+
+echo " "
+echo "All the Apigee artifacts are successfully deployed!"
+
+gcloud logging read "logName=projects/prod-project-242716/logs/apigee"

@@ -19,7 +19,7 @@
         </Response>
     </PostClientFlow>
     <HTTPProxyConnection>
-        <BasePath>/cloud-logging</BasePath>
+        <BasePath>/apigee-samples/cloud-logging</BasePath>
     </HTTPProxyConnection>
     <RouteRule name="default">
         <TargetEndpoint>default</TargetEndpoint>
