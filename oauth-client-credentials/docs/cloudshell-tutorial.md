@@ -9,7 +9,7 @@ Let's get started!
 
 ## Setup environment
 
-Navigate to the 'oauth-client-credentials' drirectory.
+Navigate to the 'oauth-client-credentials' drirectory in the Cloud shell.
 
 ```sh
 cd oauth-client-credentials
@@ -25,6 +25,11 @@ Then, source the `env.sh` file in the Cloud shell.
 source ./env.sh
 ```
 
+Ensure you have an active GCP account selected in the Cloud shell
+
+```sh
+gcloud auth login
+```
 ---
 
 ## Deploy Apigee components
@@ -32,7 +37,7 @@ source ./env.sh
 Next, let's create and deploy the Apigee resources necessary to request an OAuth token.
 
 ```sh
-./deploy-apigee.sh
+./deploy-oauth-client-credentials.sh
 ```
 
 This script creates an API Proxy, API product, a sample App developer, and App. The script also tests that the deployment and configuration has been sucessful.
