@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<MessageLogging continueOnError="false" enabled="true" name="ML-CloudLogging">
+    <DisplayName>ML-CloudLogging</DisplayName>
+    <CloudLogging>
+        <LogName>projects/{organization.name}/logs/apigee</LogName>
+        <Message contentType="application/json">{
+        "organization": "{organization.name}",
+        "environment": "{environment.name}",
+        "proxy": "{apiproxy.name}",
+        "verb": "{request.verb}",
+        "response.code":"{response.status.code}",
+        "response.reason":"{message.reason.phrase}",
+        "response.content":"{escapeJSON(message.content)}",
+        "literal_value":"Hi! I am a literal value"
+    }</Message>
+    </CloudLogging>
+</MessageLogging>
