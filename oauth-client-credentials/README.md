@@ -29,11 +29,11 @@ The client credentials sample uses one policy that executes on Apigee : An OAuth
     * curl
     * jq
     * npm
-# (QuickStart) CloudShell setup tutorial
+# (QuickStart) Setup using CloudShell
 
 Use the following GCP CloudShell tutorial, and follow the instructions.
 
-[![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/markjkelly/apigee-samples&cloudshell_git_branch=main&cloudshell_workspace=.)
+[![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/markjkelly/apigee-samples&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=docs/cloudshell-tutorial.md)
 
 ## Setup instructions
 
@@ -80,15 +80,16 @@ see the [auth-schemes.feature](./test/integration/features/oauth-client-credenti
 ### OAuth Bearer Token (RFC 6749)
 First obtain a short-lived opaque access token using the token endpoint. Instructions for how to find
 application credentials can be found [here](https://cloud.google.com/apigee/docs/api-platform/publish/creating-apps-surface-your-api#view-api-key).
-If the pipeline has been successfully executed, you will see the apigee-samples-app created for testing purposes.
+If the deployment has been successfully executed, you will see the `oauth-client-credentials-app` created for testing purposes.
 ```
-curl -v -XPOST https://$APIGEE_X_HOSTNAME/apigee-samples/oauth-client-credentials/token -u $CLIENT_ID:$CLIENT_SECRET -d "grant_type=client_credentials"
+curl -v -XPOST https://$APIGEE_HOST/apigee-samples/oauth-client-credentials/token -u $APP_CLIENT_ID:$APP_CLIENT_SECRET -d "grant_type=client_credentials"
 ```
 > _Note: Under normal circumstances, avoid providing secrets on the command itself using `-u`_
 
 Copy the value of the `access_token` property from the response body of the previous request and include it in the following request:
 ```
-curl -v https://$APIGEE_X_HOSTNAME/apigee-samples/oauth-client-credentials/resource -H "Authorization: Bearer $TOKEN"
+curl -v https://$APIGEE_HOST/apigee-samples/oauth-client-credentials/resource -H "Authorization: Bearer access_token"
+```
 
 ## Cleanup
 

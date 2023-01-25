@@ -70,6 +70,11 @@ export PROXY_URL="$APIGEE_HOST/apigee-samples/oauth-client-credentials"
 npm install
 npm run test
 
+echo " "
 echo "All the Apigee artifacts are successfully deployed!"
 
-#rm -rf apigee/output apigeecli*
+echo " "
+echo "Your Proxy URL is: https://$PROXY_URL"
+echo "Your app client id is: $APP_CLIENT_ID"
+echo "Your app client secret is: $APP_CLIENT_SECRET"
+echo " "
