@@ -43,7 +43,7 @@ export PATH=$PATH:$HOME/.apigeecli/bin
 echo "Creating API Proxy Service Account and granting Cloud Logging role to it"
 gcloud iam service-accounts create $SA_NAME
 gcloud projects add-iam-policy-binding $PROJECT \
-    --member="serviceAccount:${SA_NAME}@${PROJECT}.iam.gserviceaccount.com" \
+    --member="serviceAccount:$SA_NAME@$PROJECT.iam.gserviceaccount.com" \
     --role="roles/logging.logWriter"
 
 
