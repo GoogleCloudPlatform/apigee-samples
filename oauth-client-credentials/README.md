@@ -25,10 +25,10 @@ The client credentials sample uses one policy that executes on Apigee : An OAuth
 2. Configure [external access](https://cloud.google.com/apigee/docs/api-platform/get-started/configure-routing#external-access) for API traffic to your Apigee X instance
 3. Make sure the following tools are available in your terminal's $PATH (Cloud Shell has these preconfigured)
     * [gcloud SDK](https://cloud.google.com/sdk/docs/install)
-    * wget
     * unzip
     * curl
     * jq
+    * npm
 # (QuickStart) CloudShell setup tutorial
 
 Use the following GCP CloudShell tutorial, and follow the instructions.
@@ -89,3 +89,26 @@ curl -v -XPOST https://$APIGEE_X_HOSTNAME/apigee-samples/oauth-client-credential
 Copy the value of the `access_token` property from the response body of the previous request and include it in the following request:
 ```
 curl -v https://$APIGEE_X_HOSTNAME/apigee-samples/oauth-client-credentials/resource -H "Authorization: Bearer $TOKEN"
+
+## Cleanup
+
+If you want to clean up the artefacts from this example in your Apigee Organization, first source your `env.sh` script, and then run
+
+```bash
+./clean-up-oauth-client-credentials
+```
+
+## Not Google Product Clause
+
+This is not an officially supported Google product, nor is it part of an
+official Google product.
+
+## Support
+
+If you need support or assistance, you can try inquiring on [Google Cloud Community
+forum dedicated to Apigee](https://www.googlecloudcommunity.com/gc/Apigee/bd-p/cloud-apigee).
+
+## License
+
+This material is [Copyright 2023 Google LLC](./NOTICE)
+and is licensed under the [Apache 2.0 License](LICENSE).
