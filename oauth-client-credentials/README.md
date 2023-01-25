@@ -1,4 +1,4 @@
-# Client credentials grant type
+# Client Credentials Grant Type
 
 This sample lets you request an OAuth token from Apigee using the OAuth 2.0 client credentials grant type flow. 
 
@@ -21,37 +21,50 @@ curl -H "Authorization: Basic <base64-encoded key:secret>" https://your-api-url.
 The client credentials sample uses one policy that executes on Apigee : An OAuthV2 policy to generate the access token. The policy is attached to the `/token` endpoint (a custom flow on Apigee). 
 
 ## Prerequisites
+1. [Provision Apigee X](https://cloud.google.com/apigee/docs/api-platform/get-started/provisioning-intro)
+2. Configure [external access](https://cloud.google.com/apigee/docs/api-platform/get-started/configure-routing#external-access) for API traffic to your Apigee X instance
+3. Make sure the following tools are available in your terminal's $PATH (Cloud Shell has these preconfigured)
+    * [gcloud SDK](https://cloud.google.com/sdk/docs/install)
+    * wget
+    * unzip
+    * curl
+    * jq
+# (QuickStart) CloudShell setup tutorial
 
-To run this sample, you'll need:
-- [Apigee Organization](https://cloud.google.com/apigee/pricing)
+Use the following GCP CloudShell tutorial, and follow the instructions.
+
+[![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/markjkelly/apigee-samples&cloudshell_git_branch=main&cloudshell_workspace=.)
+
+## Setup instructions
+
+1. Clone the apigee-samples repo, and switch the oauth-client-credentials directory
 
 
-## Dependencies
-- [`apigee-sackmesser`](https://github.com/apigee/devrel/tree/main/tools/apigee-sackmesser)
-- `npm` and Node.js
-
-
-## Quick Start
-To deploy the artifacts, first appropriately set the following environment variables:
-```sh
-export APIGEE_X_ORG=
-export APIGEE_X_ENV=
-export APIGEE_X_HOSTNAME=
-export APIGEE_X_TOKEN=$(gcloud auth print-access-token)
+```bash
+git clone https://github.com/markjkelly/apigee-samples.git
+cd oauth-client-credentials
 ```
 
-Then, execute `pipeline.sh`:
-```
-sh ./pipeline.sh
-```
-Note that the pipeline will automatically execute integration tests after a successful deployment. To clean up all
-artifacts, set the following variable and re-run pipeline.sh:
-```
-OAUTH_CLIENT_CREDENTIALS_CLEAN_UP=true; sh pipeline.sh
+2. Edit the `env.sh` and configure the ENV vars
+
+* `PROJECT` the project where your Apigee organization is located
+* `APIGEE_HOST` the externally reachable hostname of the Apigee environment group that contains APIGEE_ENV
+* `APIGEE_ENV` the Apigee environment where the demo resources should be created
+
+Now source the `env.sh` file
+
+```bash
+source ./env.sh
 ```
 
-## Tests
-To run the integration tests, first retrieve Node.js dependencies with:
+3. Deploy Apigee API proxies, products and apps
+
+```bash
+./deploy-oauth-client-credentials.sh
+```
+
+## Testing the Client Credentials Proxy
+To run the tests, first retrieve Node.js dependencies with:
 ```
 npm install
 ```
