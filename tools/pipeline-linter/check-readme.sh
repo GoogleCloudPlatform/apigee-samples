@@ -20,20 +20,12 @@ set -e
 
 ERRORS=""
 
-array=(a1 b1 c1 d1 ee)
-
-declare -ar exclusions=("md" "txt" "tools" "sh")
-
 for TYPE in $PWD; do
   for D in "$TYPE"/*; do
     F="$(basename $D)"
-    extension="${F#*.}"
-    if [[ ! " ${exclusions[*]} " =~ " ${extension} " ]]; then
-      echo $F
+    if [[ ! $F =~ ("tools"|".md"|".txt"|".sh")$ ]]; then
+      grep "^-" README.md | grep $F -q || ERRORS="$ERRORS\n[ERROR] missing root README entry for $F"
     fi
-    # if [[ ! $F =~ ("tools"|".md"|".txt"|".sh")$ ]]; then
-    #   grep "^-" README.md | grep $F -q || ERRORS="$ERRORS\n[ERROR] missing root README entry for $F"
-    # fi
   done
 done
 
