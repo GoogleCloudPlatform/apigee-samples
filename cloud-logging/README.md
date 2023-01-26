@@ -27,6 +27,11 @@ It is also worth noting that it is quite common to add the MessageLogging policy
     * curl
     * jq
     * npm
+4. Make sure you have all the relevant IAM roles for executing this script
+    * `roles/iam.serviceAccountCreator`
+    * `roles/resourcemanager.projectIamAdmin`
+    * `roles/apigee.apiAdminV2`
+
 # (QuickStart) Setup using CloudShell
 
 Use the following GCP CloudShell tutorial, and follow the instructions.
@@ -55,46 +60,35 @@ Now source the `env.sh` file
 source ./env.sh
 ```
 
-3. Deploy Apigee API proxies, products and apps
+3. Deploy Apigee API proxy
 
 ```bash
-./deploy-oauth-client-credentials.sh
+./deploy-cloud-logging.sh
 ```
 
-## Testing the Client Credentials Proxy
-To run the tests, first retrieve Node.js dependencies with:
+## Test the API & Logging
+
+Generate a few sample requests to the deployed API Proxy.
+
 ```
-npm install
+curl  https://$APIGEE_HOST/samples/cloud-logging
 ```
-and then:
+> _If you want, consider also checking the call in the [Debug](https://cloud.google.com/apigee/docs/api-platform/debug/trace) view_
+
+After issuing some calls, let's confirm the configured variables / values set on the Message Logging policy were successfully writen to Cloud Logging with 
+
 ```
-npm run test
+gcloud logging read "logName=projects/$PROJECT/logs/apigee"
 ```
 
-## Example Requests
-For additional examples, including negative test cases,
-see the [auth-schemes.feature](./test/integration/features/oauth-client-credentials.feature) file.
-
-### OAuth Bearer Token (RFC 6749)
-First obtain a short-lived opaque access token using the token endpoint. Instructions for how to find
-application credentials can be found [here](https://cloud.google.com/apigee/docs/api-platform/publish/creating-apps-surface-your-api#view-api-key).
-If the deployment has been successfully executed, you will see the `oauth-client-credentials-app` created for testing purposes.
-```
-curl -v -XPOST https://$APIGEE_HOST/apigee-samples/oauth-client-credentials/token -u $APP_CLIENT_ID:$APP_CLIENT_SECRET -d "grant_type=client_credentials"
-```
-> _Note: Under normal circumstances, avoid providing secrets on the command itself using `-u`_
-
-Copy the value of the `access_token` property from the response body of the previous request and include it in the following request:
-```
-curl -v https://$APIGEE_HOST/apigee-samples/oauth-client-credentials/resource -H "Authorization: Bearer access_token"
-```
+Cloud Logging is quite powerful. Few free to navigate to its UI in the GCP Console (_Logging_ Product Page in the console) and explore additional features such as filters, custom searchs, custom alerts and much more.
 
 ## Cleanup
 
 If you want to clean up the artefacts from this example in your Apigee Organization, first source your `env.sh` script, and then run
 
 ```bash
-./clean-up-oauth-client-credentials
+./clean-up-cloud-logging.sh
 ```
 
 ## Not Google Product Clause
