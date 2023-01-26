@@ -16,7 +16,7 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>apigee</groupId>
-    <artifactId>hello-cicd</artifactId>
+    <artifactId>sample-hello-cicd</artifactId>
     <version>v1</version>
     <name>sample-hello-cicd-v1</name>
     <packaging>pom</packaging>
