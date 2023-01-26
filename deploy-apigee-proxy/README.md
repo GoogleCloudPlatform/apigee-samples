@@ -6,7 +6,7 @@ This sample demonstrates how to use the Apigee Maven deploy plugin to deploy a p
 1. [Provision Apigee X](https://cloud.google.com/apigee/docs/api-platform/get-started/provisioning-intro)
 2. Access to deploy proxies to Apigee, trigger Cloud Build
 3. Configure [external access](https://cloud.google.com/apigee/docs/api-platform/get-started/configure-routing#external-access) for API traffic to your Apigee X instance
-4. Make sure the following tools are available in your terminal's $PATH (Cloud Shell has these preconfigured)
+4. Make sure the following tools are available in your terminal's $PATH (Cloud Shell has these pre-configured)
     * [gcloud SDK](https://cloud.google.com/sdk/docs/install)
     * unzip
     * curl
@@ -66,7 +66,7 @@ curl -v -X GET https://$APIGEE_HOST/v1/samples/hello-cicd"
 
 ## Cleanup
 
-If you want to clean up the artefacts from this example in your Apigee Organization, first source your `env.sh` script, and then run
+If you want to clean up the artifacts from this example in your Apigee Organization, first source your `env.sh` script, and then run
 
 ```bash
 ./clean-up-deploy-apigee-proxy.sh

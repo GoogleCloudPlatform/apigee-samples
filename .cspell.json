@@ -10,9 +10,17 @@
         "lib",
         "report",
         ".vscode",
-        "CODEOWNERS"
+        "CODEOWNERS",
+        ".shellcheckrc",
+        ".cspell.json",
+        "*ignore",
+        ".*.yml",
+        ".*.yaml",
+        "commitlint.config.js",
+        "**/apigee-samples-static-checks.yml"
     ],
     "words": [
+        "addlicense",
         "Anthos",
         "apickli",
         "Apigee",
@@ -83,6 +91,7 @@
         "gkehub",
         "googleapi",
         "googleapis",
+        "googlecodelabs",
         "googletoken",
         "gserviceaccount",
         "gsutil",
@@ -167,9 +176,12 @@
         "truststore",
         "Turnstyle",
         "udca",
+        "undeploy",
         "urlencode",
         "Userinfo",
         "virtualhosts",
+        "vulnz",
+        "walkthrough",
         "xmlbuilder",
         "xvzf"
     ]

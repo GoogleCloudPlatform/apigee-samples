@@ -59,4 +59,4 @@ The Apigee docs are located [here](https://cloud.google.com/apigee/docs).
 Please add the sample as a root level directory in the repository
 
 ### Contributing to existing samples
-Check for the section titled **'Contributing'** in the README specfic for that sample for details.
+Check for the section titled **'Contributing'** in the README specific for that sample for details.
