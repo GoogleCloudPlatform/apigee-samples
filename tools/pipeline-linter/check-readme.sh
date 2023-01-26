@@ -23,7 +23,7 @@ ERRORS=""
 for TYPE in $PWD; do
   for D in "$TYPE"/*; do
     F="$(basename $D)"
-    if [[ $F == "tools" && $F == *.md && $F == *.txt ]]; then
+    if [[ $F == "tools" && $F ~= *.md$ && $F ~= *.txt$ ]]; then
       echo "if: $F"
       echo "nothing to do"
     else
