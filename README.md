@@ -37,7 +37,7 @@ You are an [Apigee](https://cloud.google.com/apigee) API proxy developer, or you
 Most developers begin by identifying an interesting sample based on a specific use case or need. You'll find all the samples in the root folder.
 
 ### <a name="samples"></a>Samples
-- [deploy-apigee-proxy](deploy-apigee-proxy) -
+- [deploy-apigee-pro](deploy-apigee-pro) -
   Deploy Apigee proxy using Apigee Maven plugin and Cloud Build
 
 ### <a name="modifying"></a>Modifying a sample proxy
