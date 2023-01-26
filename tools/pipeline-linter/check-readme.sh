@@ -24,7 +24,7 @@ for TYPE in $PWD; do
   for D in "$TYPE"/*; do
     F="$(basename $D)"
     if [[ ( $F = *.md ) || ( $F = *.txt ) ]]; then
-    if [[ $F =~ .*\.(md|txt) ]]; then
+    #if [[ $F =~ .*\.(md|txt) ]]; then
       echo "if: $F"
       echo "nothing to do"
     else
