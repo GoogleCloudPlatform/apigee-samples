@@ -71,7 +71,7 @@ source ./env.sh
 Generate a few sample requests to the deployed API Proxy.
 
 ```
-curl  https://$APIGEE_HOST/samples/cloud-logging
+curl  https://$APIGEE_HOST/v1/samples/cloud-logging
 ```
 > _If you want, consider also checking the call in the [Debug](https://cloud.google.com/apigee/docs/api-platform/debug/trace) view_
 

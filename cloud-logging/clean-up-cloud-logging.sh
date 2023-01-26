@@ -44,5 +44,8 @@ echo "Undeploying samples-cloud-logging proxy"
 REV=$(apigeecli envs deployments get --env $APIGEE_ENV --org $PROJECT --token $TOKEN --disable-check | jq .'deployments[]| select(.apiProxy=="samples-cloud-logging").revision' -r)
 apigeecli apis undeploy --name samples-cloud-logging --env $APIGEE_ENV --rev $REV --org $PROJECT --token $TOKEN
 
-echo "Deleting proxy oauth-client-credentials"
+echo "Deleting proxy samples-cloud-logging proxy"
 apigeecli apis delete --name samples-cloud-logging --org $PROJECT --token $TOKEN
+
+echo "Deleting service account"
+gcloud iam service-accounts delete ${SA_NAME}@${PROJECT}.iam.gserviceaccount.com
