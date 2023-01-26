@@ -19,58 +19,58 @@ on: # yamllint disable-line rule:truthy
     branches:
       - main
   workflow_dispatch:
-  # schedule:
-  #   - cron: "0 0 * * *"
+  schedule:
+    - cron: "0 0 * * *"
 jobs:
-  # license:
-  #   name: License Headers
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout Code
-  #       uses: actions/checkout@v2
-  #     - name: Check File License Headers
-  #       uses: ./tools/pipeline-linter
-  #       with:
-  #         pipeline-action: check-license.sh
+  license:
+    name: License Headers
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+      - name: Check File License Headers
+        uses: ./tools/pipeline-linter
+        with:
+          pipeline-action: check-license.sh
 
-  # linter:
-  #   name: Lint Codebase
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout Code
-  #       uses: actions/checkout@v2
-  #     - name: Setup Node
-  #       uses: actions/setup-node@v2
-  #       with:
-  #         node-version: "14"
-  #     - name: Install Linter dependencies
-  #       run: npm install
-  #     - name: Run Mega Linter
-  #       uses: nvuillam/mega-linter@v5
-  #       env:
-  #         DEFAULT_BRANCH: main
-  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  #         VALIDATE_JAVASCRIPT_STANDARD: false
-  #         VALIDATE_GHERKIN: false
-  #         VALIDATE_JSCPD: false
-  #         SPELL_MISSPELL_DISABLE_ERRORS: true
-  #         SPELL_CSPELL_DISABLE_ERRORS: true
-  #         COPYPASTE_JSCPD_DISABLE_ERRORS: true
-  #         LINTER_RULES_PATH: "."
-  #         GROOVY_NPM_GROOVY_LINT_FILTER_REGEX_EXCLUDE: "Jenkinsfile"
-  #         MARKDOWN_MARKDOWN_LINK_CHECK_DISABLE_ERRORS: true
+  linter:
+    name: Lint Codebase
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+      - name: Setup Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: "14"
+      - name: Install Linter dependencies
+        run: npm install
+      - name: Run Mega Linter
+        uses: nvuillam/mega-linter@v5
+        env:
+          DEFAULT_BRANCH: main
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VALIDATE_JAVASCRIPT_STANDARD: false
+          VALIDATE_GHERKIN: false
+          VALIDATE_JSCPD: false
+          SPELL_MISSPELL_DISABLE_ERRORS: true
+          SPELL_CSPELL_DISABLE_ERRORS: true
+          COPYPASTE_JSCPD_DISABLE_ERRORS: true
+          LINTER_RULES_PATH: "."
+          GROOVY_NPM_GROOVY_LINT_FILTER_REGEX_EXCLUDE: "Jenkinsfile"
+          MARKDOWN_MARKDOWN_LINK_CHECK_DISABLE_ERRORS: true
 
-  # commit-messages:
-  #   name: Conventional Commits Lint
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v3
-  #       with:
-  #         fetch-depth: 0
-  #     - uses: wagoid/commitlint-github-action@v4
-  #       with:
-  #         configFile: .github/config/commitlint.config.js
-  #         failOnWarnings: false
+  commit-messages:
+    name: Conventional Commits Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: wagoid/commitlint-github-action@v4
+        with:
+          configFile: .github/config/commitlint.config.js
+          failOnWarnings: false
 
   structure:
     name: Repo Structure
