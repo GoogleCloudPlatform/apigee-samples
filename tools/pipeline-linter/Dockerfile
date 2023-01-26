@@ -14,12 +14,15 @@
 
 FROM golang:alpine3.14
 
-RUN apk add --no-cache git
+RUN apk add --no-cache git nodejs npm
 RUN go install github.com/google/addlicense@v1.0.0
 RUN export GO111MODULE=on && go install github.com/googlecodelabs/tools/claat@v2.2.0
 
 # Install our dependencies
 COPY *.sh /usr/bin/
+
+# install apgieelint
+RUN npm install --global apigeelint@latest
 
 # Run script
 WORKDIR /home
