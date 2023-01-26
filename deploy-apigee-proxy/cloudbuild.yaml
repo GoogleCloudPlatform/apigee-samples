@@ -30,7 +30,7 @@ steps:
   args:
     - -c 
     - |
-      mvn -f pom.xml -ntp process-resources apigee-enterprise:configure -Pdev -Dorg=$PROJECT_ID
+      mvn -f pom.xml -ntp process-resources apigee-enterprise:configure -Pdev -Dorg=$PROJECT_ID -Denv=$_APIGEE_TEST_ENV
 - name: 'gcr.io/cloud-builders/mvn'
   id: "Deploy bundle"
   entrypoint: 'bash'
@@ -39,4 +39,4 @@ steps:
     - |
       # Read environment variables from disk
       source /workspace/build_vars &&
-      mvn -f pom.xml -ntp apigee-enterprise:deploy -Pdev -Dorg=$PROJECT_ID -Dbearer=${build_token}
+      mvn -f pom.xml -ntp apigee-enterprise:deploy -Pdev -Dorg=$PROJECT_ID -Denv=$_APIGEE_TEST_ENV -Dbearer=${build_token}

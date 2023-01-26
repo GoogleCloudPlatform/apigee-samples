@@ -41,11 +41,21 @@ Now source the `env.sh` file
 source ./env.sh
 ```
 
-3. Enable the Cloud Build API and trigger a build
+3. Enable the Cloud Build API and assign Apigee Org admin role to the Cloud Build service account
 
 ```bash
 gcloud services enable cloudbuild.googleapis.com
-gcloud builds submit --config cloudbuild.yaml .
+
+gcloud projects add-iam-policy-binding "$PROJECT" \
+  --member="serviceAccount:$CLOUD_BUILD_SA" \
+  --role="roles/apigee.admin"
+```
+
+4. Trigger the build
+
+```bash
+gcloud builds submit --config cloudbuild.yaml . \
+    --substitutions="_APIGEE_TEST_ENV=$APIGEE_ENV"
 ```
 
 ## Test the APIs
