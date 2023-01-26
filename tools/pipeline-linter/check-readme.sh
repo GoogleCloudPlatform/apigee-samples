@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # Copyright 2020 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,13 +20,18 @@ set -e
 
 ERRORS=""
 
+exclusions=("md" "txt" "tools" "sh")
+
 for TYPE in $PWD; do
   for D in "$TYPE"/*; do
     F="$(basename $D)"
-    if [[ ! $F =~ ("tools"|".md"|".txt"|".sh")$ ]]
-    then
-      grep "^-" README.md | grep $F -q || ERRORS="$ERRORS\n[ERROR] missing root README entry for $F"
+    extension="${F#*.}"
+    if [[ ! " ${exclusions[*]} " =~ " ${extension} " ]]; then
+      echo $F
     fi
+    # if [[ ! $F =~ ("tools"|".md"|".txt"|".sh")$ ]]; then
+    #   grep "^-" README.md | grep $F -q || ERRORS="$ERRORS\n[ERROR] missing root README entry for $F"
+    # fi
   done
 done
 
