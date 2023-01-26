@@ -20,7 +20,7 @@ set -e
 
 ERRORS=""
 
-exclusions=("md" "txt" "tools" "sh")
+declare -ar exclusions=("md" "txt" "tools" "sh")
 
 for TYPE in $PWD; do
   for D in "$TYPE"/*; do
