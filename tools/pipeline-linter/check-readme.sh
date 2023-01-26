@@ -21,6 +21,7 @@ set -e
 ERRORS=""
 
 declare -ar exclusions=("md" "txt" "tools" "sh")
+array=(a1 b1 c1 d1 ee)
 
 for TYPE in $PWD; do
   for D in "$TYPE"/*; do
