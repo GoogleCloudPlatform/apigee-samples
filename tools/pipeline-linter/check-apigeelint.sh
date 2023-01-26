@@ -22,8 +22,7 @@ set -e
 #npm install apigeelint
 
 for dir in "$PWD"/*/apiproxy; do
-    echo $dir
-    apigeelint -s $dir -f table.js -e PO013,PO025 -x tools/pipeline-linter/apigeelint
+    apigeelint -s "$dir" -f table.js -e PO013,PO025 -x tools/pipeline-linter/apigeelint
 done
 
 echo 
