@@ -38,9 +38,9 @@ echo "Installing apigeecli"
 curl -s https://raw.githubusercontent.com/apigee/apigeecli/master/downloadLatest.sh | bash
 export PATH=$PATH:$HOME/.apigeecli/bin
 
-echo "Undeploying sample-hello-cicd-v1"
-REV=$(apigeecli envs deployments get --env "$APIGEE_ENV" --org "$PROJECT" --token "$TOKEN" --disable-check | jq .'deployments[]| select(.apiProxy=="sample-hello-cicd-v1").revision' -r)
-apigeecli apis undeploy --name sample-hello-cicd-v1 --env "$APIGEE_ENV" --rev "$REV" --org "$PROJECT" --token "$TOKEN"
+echo "Undeploying sample-hello-cicd"
+REV=$(apigeecli envs deployments get --env "$APIGEE_ENV" --org "$PROJECT" --token "$TOKEN" --disable-check | jq .'deployments[]| select(.apiProxy=="sample-hello-cicd").revision' -r)
+apigeecli apis undeploy --name sample-hello-cicd --env "$APIGEE_ENV" --rev "$REV" --org "$PROJECT" --token "$TOKEN"
 
-echo "Deleting proxy sample-hello-cicd-v1"
-apigeecli apis delete --name sample-hello-cicd-v1 --org "$PROJECT" --token "$TOKEN"
+echo "Deleting proxy sample-hello-cicd"
+apigeecli apis delete --name sample-hello-cicd --org "$PROJECT" --token "$TOKEN"

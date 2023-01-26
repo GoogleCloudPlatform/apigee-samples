@@ -10,6 +10,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<APIProxy name="hello-cicd">
+<APIProxy name="sample-hello-cicd">
     <Description>A sample API proxy to demonstrate Apigee CI/CD using CloudBuild</Description>
 </APIProxy>
