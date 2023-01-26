@@ -9,7 +9,7 @@ Let's get started!
 
 ## Setup environment
 
-Navigate to the 'deploy-apigee-proxy' drirectory in the Cloud shell.
+Navigate to the 'deploy-apigee-proxy' directory in the Cloud shell.
 
 ```sh
 cd deploy-apigee-proxy
