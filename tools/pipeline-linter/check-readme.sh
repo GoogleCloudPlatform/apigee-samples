@@ -20,7 +20,7 @@ set -e
 
 ERRORS=""
 
-for TYPE in references labs tools; do
+for TYPE in $PwD; do
   for D in "$TYPE"/*; do
     grep "^-" README.md | grep "$D" -q || ERRORS="$ERRORS\n[ERROR] missing root README entry for $D"
   done
