@@ -20,14 +20,25 @@ set -e
 
 ERRORS=""
 
-for TYPE in $PWD; do
-  for D in "$TYPE"/*; do
-    F="$(basename "$D")"
-    if [[ ! $F =~ ("tools"|".md"|".txt"|".sh")$ ]]; then
-      grep "^-" README.md | grep $F -q || ERRORS="$ERRORS\n[ERROR] missing root README entry for $F"
-    fi
-  done
+#for dir in $PWD/*; do basename -- "$dir"; done
+
+for file in $PWD/*; do
+    F=$(basename -- $file)
+    case $F in
+        *.txt|*.md|tools) continue;;   ##: Skip files that matched.
+        *) grep "^-" README.md | grep "$F" -q || ERRORS="$ERRORS\n[ERROR] missing root README entry for $F";;                 ##: Change permission to the rest.
+    esac                
 done
+
+
+# for TYPE in $PWD; do
+#   for D in "$TYPE"/*; do
+#     F="$(basename "$D")"
+#     if [[ ! $F =~ ("tools"|".md"|".txt"|".sh")$ ]]; then
+#       grep "^-" README.md | grep $F -q || ERRORS="$ERRORS\n[ERROR] missing root README entry for $F"
+#     fi
+#   done
+# done
 
 if [ -n "$ERRORS" ]; then
   echo "$ERRORS"
