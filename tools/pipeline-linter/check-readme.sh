@@ -23,12 +23,8 @@ ERRORS=""
 for TYPE in $PWD; do
   for D in "$TYPE"/*; do
     F="$(basename $D)"
-    if [[ \( $F = *.md \) || \( $F = *.txt \) ]]; then
-    #if [[ $F =~ .*\.(md|txt) ]]; then
-      echo "if: $F"
-      echo "nothing to do"
-    else
-      echo "else: $F"
+    if [[ ! $F =~ ("tools"|".md"|".txt"|".sh")$ ]]
+    then
       grep "^-" README.md | grep $F -q || ERRORS="$ERRORS\n[ERROR] missing root README entry for $F"
     fi
   done
