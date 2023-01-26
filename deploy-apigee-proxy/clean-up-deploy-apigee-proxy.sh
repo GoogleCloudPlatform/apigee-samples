@@ -17,19 +17,19 @@
 #echo "Enabling APIs..."
 #gcloud services enable cloudbuild.googleapis.com
 
-if [ -z "$PROJECT" ]
+if [ -z "$PROJECT" ]; then
 then
 echo "No PROJECT variable set"
 exit
 fi
 
-if [ -z "$APIGEE_ENV" ]
+if [ -z "$APIGEE_ENV" ]; then
 then
 echo "No APIGEE_ENV variable set"
 exit
 fi
 
-if [ -z "$APIGEE_HOST" ]
+if [ -z "$APIGEE_HOST" ]; then
 then
 echo "No APIGEE_HOST variable set"
 exit
@@ -42,8 +42,8 @@ curl -s https://raw.githubusercontent.com/apigee/apigeecli/master/downloadLatest
 export PATH=$PATH:$HOME/.apigeecli/bin
 
 echo "Undeploying sample-hello-cicd-v1"
-REV=$(apigeecli envs deployments get --env $APIGEE_ENV --org $PROJECT --token $TOKEN --disable-check | jq .'deployments[]| select(.apiProxy=="sample-hello-cicd-v1").revision' -r)
-apigeecli apis undeploy --name sample-hello-cicd-v1 --env $APIGEE_ENV --rev $REV --org $PROJECT --token $TOKEN
+REV=$(apigeecli envs deployments get --env "$APIGEE_ENV" --org "$PROJECT" --token "$TOKEN" --disable-check | jq .'deployments[]| select(.apiProxy=="sample-hello-cicd-v1").revision' -r)
+apigeecli apis undeploy --name sample-hello-cicd-v1 --env "$APIGEE_ENV" --rev "$REV" --org "$PROJECT" --token "$TOKEN"
 
 echo "Deleting proxy sample-hello-cicd-v1"
-apigeecli apis delete --name sample-hello-cicd-v1 --org $PROJECT --token $TOKEN
+apigeecli apis delete --name sample-hello-cicd-v1 --org "$PROJECT" --token "$TOKEN"
