@@ -20,9 +20,11 @@ set -e
 
 ERRORS=""
 
-for TYPE in $PwD; do
+for TYPE in $PWD; do
   for D in "$TYPE"/*; do
-    grep "^-" README.md | grep "$D" -q || ERRORS="$ERRORS\n[ERROR] missing root README entry for $D"
+    if [[ ! $(basename $D) =~ (tools|.md|.txt|.sh)$ ]]; then 
+      grep "^-" README.md | grep "$(basename $D)" -q || ERRORS="$ERRORS\n[ERROR] missing root README entry for $(basename $D)"
+    fi
   done
 done
 
