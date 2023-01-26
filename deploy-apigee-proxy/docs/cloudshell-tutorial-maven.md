@@ -57,7 +57,7 @@ gcloud builds submit --config cloudbuild.yaml . \
       --substitutions="_APIGEE_TEST_ENV=$APIGEE_ENV"
 ```
 
-This will trigger the Cloud Build and execute the steps in the <walkthrough-editor-open-file filePath="deploy-apigee-proxy/cloudbuild.yaml">cloudbuild.yaml</walkthrough-editor-open-file> file. At the end of the cloud build trigger, a proxy must be deployed to Apigee called `sample-hello-cicd-v1`
+This will trigger the Cloud Build and execute the steps in the <walkthrough-editor-open-file filePath="deploy-apigee-proxy/cloudbuild.yaml">cloudbuild.yaml</walkthrough-editor-open-file> file. At the end of the Cloud Build trigger, a proxy must be deployed to Apigee called `sample-hello-cicd-v1`
 
 
 ### Test the APIs
