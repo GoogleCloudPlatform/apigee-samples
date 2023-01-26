@@ -16,7 +16,6 @@
         "*ignore",
         ".*.yml",
         ".*.yaml",
-        "commitlint.config.js",
         "**/apigee-samples-static-checks.yml"
     ],
     "words": [
@@ -52,6 +51,7 @@
         "CODEOWNERS",
         "CODEPAGE",
         "commandline",
+        "commitlint",
         "containerregistry",
         "conversionresult",
         "conversiontable",
