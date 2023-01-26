@@ -1,0 +1,23 @@
+openapi: 3.0.0
+info:
+  title: Sample Integrated Developer Portal
+  description: A portal for an API key protected proxy
+  version: "1"
+servers:
+- url: https://[YOUR_DOMAIN]/v1/sample/integrated-developer-portal
+security:
+- APIKeyQuery: []
+paths:
+  /:
+    get:
+      operationId: GetMessage
+      responses:
+        200:
+          description: A successful response.
+          content: {}
+components:
+  securitySchemes:
+    APIKeyQuery:
+      type: apiKey
+      name: apikey
+      in: query
