@@ -63,7 +63,7 @@ gcloud builds submit --config cloudbuild.yaml . \
 You can test the API call to make sure the deployment was successful
 
 ```
-curl -v -X GET https://$APIGEE_HOST/v1/samples/hello-ci-cd"
+curl -v -X GET https://$APIGEE_HOST/v1/samples/hello-cicd"
 ```
 
 ## Cleanup
