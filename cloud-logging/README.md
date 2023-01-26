@@ -81,7 +81,7 @@ After issuing some calls, let's confirm the configured variables / values set on
 gcloud logging read "logName=projects/$PROJECT/logs/apigee"
 ```
 
-Cloud Logging is quite powerful. Few free to navigate to its UI in the GCP Console (_Logging_ Product Page in the console) and explore additional features such as filters, custom searchs, custom alerts and much more.
+Cloud Logging is quite powerful. Few free to navigate to its UI in the GCP Console (_Logging_ Product Page in the console) and explore additional features such as filters, custom searchs, custom alerts and much more
 
 ## Cleanup
 
