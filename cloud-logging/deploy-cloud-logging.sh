@@ -51,16 +51,17 @@ gcloud projects add-iam-policy-binding $PROJECT \
 
 
 echo "Importing and Deploying Apigee sample-cloud-logging proxy..."
-zip -r cloud-logging.zip apiproxy
-REV=$(apigeecli apis import -f cloud-logging.zip --org $PROJECT --token $TOKEN --disable-check | jq ."revision" -r)
-apigeecli apis deploy --wait --name sample-cloud-logging --ovr --rev $REV --org $PROJECT --env $APIGEE_ENV --token $TOKEN --sa ${SA_NAME}@${PROJECT}.iam.gserviceaccount.com
+zip -r samples-cloud-logging.zip apiproxy
+REV=$(apigeecli apis import -f samples-cloud-logging.zip --org $PROJECT --token $TOKEN --disable-check | jq ."revision" -r)
+apigeecli apis deploy --wait --name samples-cloud-logging --ovr --rev $REV --org $PROJECT --env $APIGEE_ENV --token $TOKEN --sa ${SA_NAME}@${PROJECT}.iam.gserviceaccount.com
 
 
 echo " "
 echo "All the Apigee artifacts are successfully deployed!"
 
 echo " "
-echo "Generate some calls with curl  https://$APIGEE_HOST/samples/cloud-logging "
+echo "Generate some calls with:"
+echo "curl  https://$APIGEE_HOST/v1/samples/cloud-logging "
 echo "After that, make sure you read the logs from Cloud Logging with "
 echo "gcloud logging read "logName=projects/$PROJECT/logs/apigee""
 

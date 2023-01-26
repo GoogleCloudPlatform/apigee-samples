@@ -41,8 +41,8 @@ curl -s https://raw.githubusercontent.com/apigee/apigeecli/master/downloadLatest
 export PATH=$PATH:$HOME/.apigeecli/bin
 
 echo "Undeploying samples-cloud-logging proxy"
-REV=$(apigeecli envs deployments get --env $APIGEE_ENV --org $PROJECT --token $TOKEN --disable-check | jq .'deployments[]| select(.apiProxy=="sample-cloud-logging").revision' -r)
-apigeecli apis undeploy --name sample-cloud-logging --env $APIGEE_ENV --rev $REV --org $PROJECT --token $TOKEN
+REV=$(apigeecli envs deployments get --env $APIGEE_ENV --org $PROJECT --token $TOKEN --disable-check | jq .'deployments[]| select(.apiProxy=="samples-cloud-logging").revision' -r)
+apigeecli apis undeploy --name samples-cloud-logging --env $APIGEE_ENV --rev $REV --org $PROJECT --token $TOKEN
 
 echo "Deleting proxy oauth-client-credentials"
-apigeecli apis delete --name sample-cloud-logging --org $PROJECT --token $TOKEN
+apigeecli apis delete --name samples-cloud-logging --org $PROJECT --token $TOKEN
