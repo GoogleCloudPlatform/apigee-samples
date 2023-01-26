@@ -18,7 +18,7 @@ inputs:
     description: "Script to execute in the pipeline linter image"
     required: true
   project:
-    description: "Apigee Samples Project to lint. Running all projects if left unset."
+    description: "Apigee Samples to lint. Running all projects if left unset."
     required: false
 outputs:
   stdout:

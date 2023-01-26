@@ -19,8 +19,8 @@ on:
     branches:
       - main
   workflow_dispatch:
-  #schedule:
-    #- cron: "0 0 * * *"
+  # schedule:
+  #   - cron: "0 0 * * *"
 jobs:
   # license:
   #   name: License Headers
