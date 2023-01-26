@@ -42,18 +42,18 @@ Next, let's create the service account, make sure it has the proper role for wri
 
 The proxy itself is configured to write logs to a log named _projects/$PROJECT/logs/apigee_
 
-### Test the APIs
+## Test the APIs
 
 Generate a few sample requests to the deployed API Proxy.
 
-```
+```sh
 curl  https://$APIGEE_HOST/v1/samples/cloud-logging
 ```
 > _If you want, consider also checking the call in the [Debug](https://cloud.google.com/apigee/docs/api-platform/debug/trace) view_
 
 After issuing some calls, let's confirm the configured variables / values set on the Message Logging policy were successfully writen to Cloud Logging with 
 
-```
+```sh
 gcloud logging read "logName=projects/$PROJECT/logs/apigee"
 ```
 
