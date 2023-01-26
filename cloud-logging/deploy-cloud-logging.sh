@@ -36,6 +36,9 @@ fi
 TOKEN=$(gcloud auth print-access-token)
 SA_NAME=apigee-proxy-service-account
 
+echo "Enabling APIs..."
+gcloud services enable logging --project=$PROJECT
+
 echo "Installing apigeecli"
 curl -s https://raw.githubusercontent.com/apigee/apigeecli/master/downloadLatest.sh | bash
 export PATH=$PATH:$HOME/.apigeecli/bin
@@ -47,13 +50,17 @@ gcloud projects add-iam-policy-binding $PROJECT \
     --role="roles/logging.logWriter"
 
 
-echo "Importing and Deploying Apigee cloud-logging proxy..."
+echo "Importing and Deploying Apigee sample-cloud-logging proxy..."
 zip -r cloud-logging.zip apiproxy
 REV=$(apigeecli apis import -f cloud-logging.zip --org $PROJECT --token $TOKEN --disable-check | jq ."revision" -r)
-apigeecli apis deploy --wait --name cloud-logging --ovr --rev $REV --org $PROJECT --env $APIGEE_ENV --token $TOKEN --sa ${SA_NAME}@${PROJECT}.iam.gserviceaccount.com
+apigeecli apis deploy --wait --name sample-cloud-logging --ovr --rev $REV --org $PROJECT --env $APIGEE_ENV --token $TOKEN --sa ${SA_NAME}@${PROJECT}.iam.gserviceaccount.com
 
 
 echo " "
 echo "All the Apigee artifacts are successfully deployed!"
 
-gcloud logging read "logName=projects/prod-project-242716/logs/apigee"
+echo " "
+echo "Generate some calls with curl  https://$APIGEE_HOST/samples/cloud-logging "
+echo "After that, make sure you read the logs from Cloud Logging with "
+echo "gcloud logging read "logName=projects/$PROJECT/logs/apigee""
+

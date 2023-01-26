@@ -1,7 +1,7 @@
-# Client Credentials Grant Type
+# Apigee Cloud Logging Tutorial
 
 ---
-This sample lets you request an OAuth token from Apigee using the OAuth 2.0 client credentials grant type flow.
+This sample let you configure an Apigee Proxy that will write custom log entries to GCP Cloud Logging
 
 Let's get started!
 
@@ -9,15 +9,15 @@ Let's get started!
 
 ## Setup environment
 
-Navigate to the 'oauth-client-credentials' drirectory in the Cloud shell.
+Navigate to the 'cloud-logging' drirectory in the Cloud shell.
 
 ```sh
-cd oauth-client-credentials
+cd cloud-logging
 ```
 
 Edit the provided sample `env.sh` file, and set the environment variables there.
 
-Click <walkthrough-editor-open-file filePath="oauth-client-credentials/env.sh">here</walkthrough-editor-open-file> to open the file in the editor
+Click <walkthrough-editor-open-file filePath="cloud-logging/env.sh">here</walkthrough-editor-open-file> to open the file in the editor
 
 Then, source the `env.sh` file in the Cloud shell.
 
@@ -34,37 +34,37 @@ gcloud auth login
 
 ## Deploy Apigee components
 
-Next, let's create and deploy the Apigee resources necessary to request an OAuth token.
+Next, let's create the service account, make sure it has the proper role for writing into Cloud Logging and then deploy the actual Apigee proxy.
 
 ```sh
-./deploy-oauth-client-credentials.sh
+./deploy-cloud-logging.sh
 ```
 
-This script creates an API Proxy, API product, a sample App developer, and App. The script also tests that the deployment and configuration has been sucessful.
-
+The proxy itself is configured to write logs to a log named _projects/$PROJECT/logs/apigee_
 
 ### Test the APIs
 
-The script that deploys the Apigee API proxies prints the proxy and app information you will need to run the commands below.
-
-First obtain a short-lived opaque access token using the token endpoint.
+Generate a few sample requests to the deployed API Proxy.
 
 ```
-curl -v -XPOST https://$APIGEE_HOST/apigee-samples/oauth-client-credentials/token -u $APP_CLIENT_ID:$APP_CLIENT_SECRET -d "grant_type=client_credentials"
+curl  https://$APIGEE_HOST/samples/cloud-logging
 ```
-> _Note: Under normal circumstances, avoid providing secrets on the command itself using `-u`_
+> _If you want, consider also checking the call in the [Debug](https://cloud.google.com/apigee/docs/api-platform/debug/trace) view_
 
-Copy the value of the `access_token` property from the response body of the previous request and include it in the following request:
+After issuing some calls, let's confirm the configured variables / values set on the Message Logging policy were successfully writen to Cloud Logging with 
+
 ```
-curl -v https://$APIGEE_HOST/apigee-samples/oauth-client-credentials/resource -H "Authorization: Bearer access_token"
+gcloud logging read "logName=projects/$PROJECT/logs/apigee"
 ```
+
+Cloud Logging is quite powerful. Few free to navigate to its UI in the GCP Console (_Logging_ Product Page in the console) and explore additional features such as filters, custom searchs, custom alerts and much more.
 
 ---
 ## Conclusion
 
 <walkthrough-conclusion-trophy></walkthrough-conclusion-trophy>
 
-Congratulations! You've successfully requested and used an OAuth token from Apigee using the OAuth 2.0 client credentials grant type flow.
+Congratulations! You've successfully made an Apigee Proxy send custom logging messages to Google Cloud Logging!
 
 <walkthrough-inline-feedback></walkthrough-inline-feedback>
 
