@@ -1,0 +1,2 @@
+# relative paths and dynamic paths cannot be resolved by the tool
+disable=SC1090,SC1091
