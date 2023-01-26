@@ -1,6 +1,6 @@
 <APIProxy revision="1" name="samples-cloud-logging">
-    <DisplayName></DisplayName>
-    <Description></Description>
+    <DisplayName>Samples Cloud Logging</DisplayName>
+    <Description>Proxy that writes custom log messages to Cloud Logging</Description>
     <CreatedAt>1674678988286</CreatedAt>
     <LastModifiedAt>1674678988286</LastModifiedAt>
     <BasePaths>/v1/samples/cloud-logging</BasePaths>

@@ -73,5 +73,5 @@ Congratulations! You've successfully made an Apigee Proxy send custom logging me
 If you want to clean up the artefacts from this example in your Apigee Organization, first source your `env.sh` script, and then run
 
 ```bash
-./clean-up-oauth-client-credentials.sh
+./clean-up-cloud-logging.sh
 ```
