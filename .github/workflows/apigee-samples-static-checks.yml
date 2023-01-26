@@ -82,7 +82,7 @@ jobs:
         uses: ./tools/pipeline-linter
         with:
           pipeline-action: check-readme.sh
-  
+
   apigeelint:
     name: Apigeelint
     runs-on: ubuntu-latest
