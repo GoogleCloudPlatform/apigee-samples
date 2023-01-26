@@ -10,14 +10,13 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<OAuthV2 continueOnError="false" enabled="true" name="OAuth.VerifyAccessToken">
-    <DisplayName>OAuth.VerifyAccessToken</DisplayName>
-    <Properties/>
-    <Attributes/>
-    <ExternalAuthorization>false</ExternalAuthorization>
-    <Operation>VerifyAccessToken</Operation>
-    <SupportedGrantTypes/>
+<OAuthV2 name="OAuth-GenerateToken">
+    <Operation>GenerateAccessToken</Operation>
+    <ExpiresIn>180000</ExpiresIn>
+    <!-- 3 minutes -->
+    <SupportedGrantTypes>
+        <GrantType>client_credentials</GrantType>
+    </SupportedGrantTypes>
     <GenerateResponse enabled="true"/>
-    <Tokens/>
     <RFCCompliantRequestResponse>true</RFCCompliantRequestResponse>
 </OAuthV2>

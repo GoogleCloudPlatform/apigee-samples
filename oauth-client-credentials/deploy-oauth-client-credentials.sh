@@ -36,9 +36,15 @@ fi
 TOKEN=$(gcloud auth print-access-token)
 APP_NAME=oauth-client-credentials-app
 
+echo "Installing dependencies"
+npm install
+
 echo "Installing apigeecli"
 curl -s https://raw.githubusercontent.com/apigee/apigeecli/master/downloadLatest.sh | bash
 export PATH=$PATH:$HOME/.apigeecli/bin
+
+echo "Running apigeelint"
+npm run lint
 
 echo "Deploying Apigee artifacts..."
 
@@ -64,17 +70,27 @@ APP_CLIENT_SECRET=$(apigeecli apps get --name $APP_NAME --org $PROJECT --token $
 export APP_CLIENT_SECRET
 
 # var is expected by integration test (apickli)
-export PROXY_URL="$APIGEE_HOST/apigee-samples/oauth-client-credentials"
+export PROXY_URL="$APIGEE_HOST/v1/samples/oauth-client-credentials"
 
 # integration tests
-npm install
+
 npm run test
 
 echo " "
 echo "All the Apigee artifacts are successfully deployed!"
-
 echo " "
 echo "Your Proxy URL is: https://$PROXY_URL"
 echo "Your app client id is: $APP_CLIENT_ID"
 echo "Your app client secret is: $APP_CLIENT_SECRET"
+echo " "
+echo "-----------------------------"
+echo " "
+echo "To obtain a short-lived opaque access token using the token endpoint, try the following command:"
+echo " "
+echo "curl -v POST https://$PROXY_URL/token -u $APP_CLIENT_ID:$APP_CLIENT_SECRET -d \""grant_type=client_credentials\"" "
+echo " "
+echo "Then, to access the protected resource, copy the value of the access_token property"
+echo "from the response body of the previous request and include it in the following request:"
+echo " "
+echo "curl -v GET https://$PROXY_URL/resource -H \""Authorization: Bearer access_token\"" "
 echo " "

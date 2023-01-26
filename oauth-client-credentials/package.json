@@ -3,10 +3,12 @@
   "version": "1.0.0",
   "description": "API proxy demonstrating the OAuth 2.0 Client Credentials scheme",
   "scripts": {
-    "test": "npx cucumber-js test/"
+   "lint": "apigeelint -s apiproxy -e PO013,PO025 -f table.js",
+    "test": "npx cucumber-js --publish-quiet test/"
   },
   "dependencies": {
     "@cucumber/cucumber": "^7.3.0",
-    "apickli": "^3.0.1"
+    "apickli": "^3.0.1",
+    "apigeelint": "latest"
   }
 }

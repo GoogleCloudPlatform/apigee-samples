@@ -17,7 +17,7 @@
             <Condition>(proxy.pathsuffix MatchesPath "/token") and (request.verb = "POST")</Condition>
             <Request>
                 <Step>
-                    <Name>OAuth.GenerateToken</Name>
+                    <Name>OAuth-GenerateToken</Name>
                 </Step>
             </Request>
         </Flow>
@@ -25,7 +25,7 @@
             <Description/>
             <Request>
                 <Step>
-                    <Name>OAuth.VerifyAccessToken</Name>
+                    <Name>OAuth-VerifyAccessToken</Name>
                 </Step>
             </Request>
             <Response/>
@@ -34,7 +34,7 @@
     </Flows>
     <HTTPProxyConnection>
         <!-- Add a base path to the proxy to distinguish from others in the environment -->
-        <BasePath>/apigee-samples/oauth-client-credentials</BasePath>
+        <BasePath>/v1/samples/oauth-client-credentials</BasePath>
         <VirtualHost>secure</VirtualHost>
         <!-- Listen only on the HTTPS endpoint since OAuth 2.0 requires that -->
     </HTTPProxyConnection>
