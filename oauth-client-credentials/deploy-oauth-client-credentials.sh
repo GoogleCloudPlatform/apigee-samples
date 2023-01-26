@@ -14,23 +14,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-if [ -z "$PROJECT" ]
-then
-echo "No PROJECT variable set"
-exit
+if [ -z "$PROJECT" ]; then
+    echo "No PROJECT variable set"
+    exit
 fi
 
-
-if [ -z "$APIGEE_ENV" ]
-then
-echo "No APIGEE_ENV variable set"
-exit
+if [ -z "$APIGEE_ENV" ]; then
+    echo "No APIGEE_ENV variable set"
+    exit
 fi
 
-if [ -z "$APIGEE_HOST" ]
-then
-echo "No APIGEE_HOST variable set"
-exit
+if [ -z "$APIGEE_HOST" ]; then
+    echo "No APIGEE_HOST variable set"
+    exit
 fi
 
 TOKEN=$(gcloud auth print-access-token)
@@ -51,22 +47,21 @@ echo "Deploying Apigee artifacts..."
 zip -r oauth-client-credentials.zip apiproxy
 
 echo "Importing and Deploying Apigee oauth-client-credentials proxy..."
-REV=$(apigeecli apis import -f oauth-client-credentials.zip --org $PROJECT --token $TOKEN --disable-check | jq ."revision" -r)
-apigeecli apis deploy --wait --name oauth-client-credentials --ovr --rev $REV --org $PROJECT --env $APIGEE_ENV --token $TOKEN
+REV=$(apigeecli apis import -f oauth-client-credentials.zip --org "$PROJECT" --token "$TOKEN" --disable-check | jq ."revision" -r)
+apigeecli apis deploy --wait --name oauth-client-credentials --ovr --rev "$REV" --org "$PROJECT" --env "$APIGEE_ENV" --token "$TOKEN"
 
 echo "Creating API Product"
-apigeecli products create --name oauth-client-credentials-product --displayname "oauth-client-credentials-product" --proxies oauth-client-credentials --envs $APIGEE_ENV --approval auto --quota 10 --interval 1 --unit minute --org $PROJECT --token $TOKEN
-
+apigeecli products create --name oauth-client-credentials-product --displayname "oauth-client-credentials-product" --proxies oauth-client-credentials --envs "$APIGEE_ENV" --approval auto --quota 10 --interval 1 --unit minute --org "$PROJECT" --token "$TOKEN"
 echo "Creating Developer"
-apigeecli developers create --user testuser --email oauth-client-credentials_apigeesamples@acme.com --first Test --last User --org $PROJECT --token $TOKEN
+apigeecli developers create --user testuser --email oauth-client-credentials_apigeesamples@acme.com --first Test --last User --org "$PROJECT" --token "$TOKEN"
 
 echo "Creating Developer App"
-APP_ID=$(apigeecli apps create --name $APP_NAME --email oauth-client-credentials_apigeesamples@acme.com --prods oauth-client-credentials-product --org $PROJECT --token $TOKEN --disable-check | jq ."appId" -r)
+APP_ID=$(apigeecli apps create --name $APP_NAME --email oauth-client-credentials_apigeesamples@acme.com --prods oauth-client-credentials-product --org "$PROJECT" --token "$TOKEN" --disable-check | jq ."appId" -r)
 
-APP_CLIENT_ID=$(apigeecli apps get --name $APP_NAME --org $PROJECT --token $TOKEN --disable-check | jq ."[0].credentials[0].consumerKey" -r)
+APP_CLIENT_ID=$(apigeecli apps get --name $APP_NAME --org "$PROJECT" --token "$TOKEN" --disable-check | jq ."[0].credentials[0].consumerKey" -r)
 export APP_CLIENT_ID
 
-APP_CLIENT_SECRET=$(apigeecli apps get --name $APP_NAME --org $PROJECT --token $TOKEN --disable-check | jq ."[0].credentials[0].consumerSecret" -r)
+APP_CLIENT_SECRET=$(apigeecli apps get --name $APP_NAME --org "$PROJECT" --token "$TOKEN" --disable-check | jq ."[0].credentials[0].consumerSecret" -r)
 export APP_CLIENT_SECRET
 
 # var is expected by integration test (apickli)
