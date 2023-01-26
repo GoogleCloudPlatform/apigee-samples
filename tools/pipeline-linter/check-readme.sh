@@ -23,11 +23,11 @@ ERRORS=""
 for TYPE in $PWD; do
   for D in "$TYPE"/*; do
     F="$(basename $D)"
-    if [[ ! $F =~ ("tools"|".md"|".txt"|".sh")$ ]]
-    then 
-      echo $F
-      #grep "^-" README.md | grep $F -q || ERRORS="$ERRORS\n[ERROR] missing root README entry for $F"
-    fi
+    echo $F
+    # if [[ ! $F =~ ("tools"|".md"|".txt"|".sh")$ ]]
+    # then
+    #   #grep "^-" README.md | grep $F -q || ERRORS="$ERRORS\n[ERROR] missing root README entry for $F"
+    # fi
   done
 done
 
