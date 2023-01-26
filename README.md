@@ -4,6 +4,7 @@
 * [Audience](#who)
 * [Before you begin](#before)
 * [Using the sample proxies](#using)
+* [Samples](#samples)
 * [Modifying a sample proxy](#modifying)
 * [Ask questions on the Apigee Community](#ask)
 * [Apigee documentation](#docs)
@@ -35,6 +36,10 @@ You are an [Apigee](https://cloud.google.com/apigee) API proxy developer, or you
 
 Most developers begin by identifying an interesting sample based on a specific use case or need. You'll find all the samples in the root folder.
 
+### <a name="samples"></a>Samples
+- [deploy-apigee-proxy](deploy-apigee-proxy) -
+  Deploy Apigee proxy using Apigee Maven plugin and Cloud Build
+
 ### <a name="modifying"></a>Modifying a sample proxy
 
 Feel free to modify and build upon the sample proxies. You can make changes in the Apigee [management UI](https://cloud.google.com/apigee/docs/api-platform/develop/ui-edit-proxy) or by using our Cloud Code [extension for local development](https://cloud.google.com/apigee/docs/api-platform/local-development/setup) in Visual Studio Code. Whichever approach is comfortable for you. 
@@ -54,4 +59,4 @@ The Apigee docs are located [here](https://cloud.google.com/apigee/docs).
 Please add the sample as a root level directory in the repository
 
 ### Contributing to existing samples
-Check for the section titled **'Contributing'** in the README specfic for that sample for details.
+Check for the section titled **'Contributing'** in the README specific for that sample for details.
