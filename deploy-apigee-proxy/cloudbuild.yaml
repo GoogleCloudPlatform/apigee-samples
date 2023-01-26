@@ -30,7 +30,7 @@ steps:
   args:
     - -c 
     - |
-      mvn -f pom.xml -ntp apigee-enterprise:configure -Pdev -Dorg=$PROJECT_ID
+      mvn -f pom.xml -ntp process-resources apigee-enterprise:configure -Pdev -Dorg=$PROJECT_ID
 - name: 'gcr.io/cloud-builders/mvn'
   id: "Deploy bundle"
   entrypoint: 'bash'
