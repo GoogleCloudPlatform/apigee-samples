@@ -18,7 +18,7 @@
     <groupId>apigee</groupId>
     <artifactId>sample-hello-cicd</artifactId>
     <version>v1</version>
-    <name>sample-hello-cicd-v1</name>
+    <name>sample-hello-cicd</name>
     <packaging>pom</packaging>
     <pluginRepositories>
         <pluginRepository>
