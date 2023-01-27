@@ -9,6 +9,12 @@ Let's get started!
 
 ## Setup environment
 
+Ensure you have an active GCP account selected in the Cloud shell
+
+```sh
+gcloud auth login
+```
+
 Navigate to the 'oauth-client-credentials' drirectory in the Cloud shell.
 
 ```sh
@@ -25,11 +31,6 @@ Then, source the `env.sh` file in the Cloud shell.
 source ./env.sh
 ```
 
-Ensure you have an active GCP account selected in the Cloud shell
-
-```sh
-gcloud auth login
-```
 ---
 
 ## Deploy Apigee components
