@@ -82,3 +82,14 @@ jobs:
         uses: ./tools/pipeline-linter
         with:
           pipeline-action: check-readme.sh
+
+  apigeelint:
+    name: Apigeelint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+      - name: Run Apigeelint
+        uses: ./tools/pipeline-linter
+        with:
+          pipeline-action: check-apigeelint.sh
