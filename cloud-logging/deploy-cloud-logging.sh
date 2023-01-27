@@ -51,9 +51,9 @@ gcloud projects add-iam-policy-binding $PROJECT \
 
 
 echo "Importing and Deploying Apigee sample-cloud-logging proxy..."
-zip -r samples-cloud-logging.zip apiproxy
-REV=$(apigeecli apis import -f samples-cloud-logging.zip --org $PROJECT --token $TOKEN --disable-check | jq ."revision" -r)
-apigeecli apis deploy --wait --name samples-cloud-logging --ovr --rev $REV --org $PROJECT --env $APIGEE_ENV --token $TOKEN --sa ${SA_NAME}@${PROJECT}.iam.gserviceaccount.com
+zip -r sample-cloud-logging.zip apiproxy
+REV=$(apigeecli apis import -f sample-cloud-logging.zip --org $PROJECT --token $TOKEN --disable-check | jq ."revision" -r)
+apigeecli apis deploy --wait --name sample-cloud-logging --ovr --rev $REV --org $PROJECT --env $APIGEE_ENV --token $TOKEN --sa ${SA_NAME}@${PROJECT}.iam.gserviceaccount.com
 
 
 echo " "
