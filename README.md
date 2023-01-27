@@ -39,6 +39,8 @@ Most developers begin by identifying an interesting sample based on a specific u
 ### <a name="samples"></a>Samples
 - [deploy-apigee-proxy](deploy-apigee-proxy) -
   Deploy Apigee proxy using Apigee Maven plugin and Cloud Build
+- [deploy-apigee-sharedflow](deploy-apigee-sharedflow) -
+  Deploy Apigee sharedflow using Apigee Maven plugin and Cloud Build
 
 ### <a name="modifying"></a>Modifying a sample proxy
 
