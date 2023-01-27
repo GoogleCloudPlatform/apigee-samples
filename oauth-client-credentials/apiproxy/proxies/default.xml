@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <!--
  Copyright 2022 Google LLC
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,7 +29,11 @@
                     <Name>OAuth-VerifyAccessToken</Name>
                 </Step>
             </Request>
-            <Response/>
+            <Response>
+                <Step>
+                    <Name>AM-SuccessfulResponse</Name>
+                </Step>
+            </Response>
             <Condition>(proxy.pathsuffix MatchesPath "/resource") and (request.verb = "GET")</Condition>
         </Flow>
     </Flows>

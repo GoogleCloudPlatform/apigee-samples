@@ -31,6 +31,7 @@ Feature:
     Given I set authorization header to "Bearer `accessToken`"
     When I GET /resource
     Then response code should be 200
+    And response body path $.status should be success
   
   Scenario: Using an invalid OAuth Access Token
     Given I set authorization header to "Bearer foobar"

@@ -43,7 +43,7 @@ echo "Running apigeelint"
 npm run lint
 
 echo "Deploying Apigee artifacts..."
-
+rm oauth-client-credentials.zip
 zip -r oauth-client-credentials.zip apiproxy
 
 echo "Importing and Deploying Apigee oauth-client-credentials proxy..."
