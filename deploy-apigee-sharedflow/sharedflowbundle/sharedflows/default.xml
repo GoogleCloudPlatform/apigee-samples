@@ -13,10 +13,10 @@
 -->
 <SharedFlow name="default">
     <Step>
-        <Name>VAK-VerifyAPIKey</Name>
+        <Name>VA-VerifyAPIKey</Name>
     </Step>
     <Step>
-        <Name>QU-Quota</Name>
+        <Name>Q-Quota</Name>
     </Step>
     <Step>
         <Name>SA-RateLimit</Name>

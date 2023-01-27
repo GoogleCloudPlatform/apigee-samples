@@ -11,8 +11,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<Quota async="false" continueOnError="false" enabled="true" name="QU-Quota" type="calendar">
-    <DisplayName>QU-Quota</DisplayName>
+<Quota async="false" continueOnError="false" enabled="true" name="Q-Quota" type="calendar">
+    <DisplayName>Q-Quota</DisplayName>
     <Properties/>
     <Allow count="2000" countRef="request.header.allowed_quota"/>
     <Interval ref="request.header.quota_count">1</Interval>

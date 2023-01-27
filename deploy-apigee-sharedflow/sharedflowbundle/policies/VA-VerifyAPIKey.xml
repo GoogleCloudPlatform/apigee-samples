@@ -11,8 +11,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<VerifyAPIKey async="false" continueOnError="false" enabled="true" name="VAK-VerifyAPIKey">
-    <DisplayName>VAK-VerifyAPIKey</DisplayName>
+<VerifyAPIKey async="false" continueOnError="false" enabled="true" name="VA-VerifyAPIKey">
+    <DisplayName>VA-VerifyAPIKey</DisplayName>
     <Properties/>
     <APIKey ref="request.queryparam.apikey"/>
 </VerifyAPIKey>
