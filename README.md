@@ -16,11 +16,11 @@
 
 This repository contains a collection of sample API proxies that you can deploy and run on Apigee X or [hybrid](https://cloud.google.com/apigee/docs/hybrid/v1.8/what-is-hybrid).
 
-The samples provide a jump-start for developers who wish to design and create Apigee API proxies. 
+The samples provide a jump-start for developers who wish to design and create Apigee API proxies.
 
 ### <a name="who"></a>Audience
 
-You are an [Apigee](https://cloud.google.com/apigee) API proxy developer, or you would like to learn about developing APIs that run on Apigee X & hybrid. At a minimum, we assume you're familiar with Apigee and how to create simple API proxies. To learn more, we recommend this [getting started tutorial](https://cloud.google.com/apigee/docs/api-platform/get-started/get-started). 
+You are an [Apigee](https://cloud.google.com/apigee) API proxy developer, or you would like to learn about developing APIs that run on Apigee X & hybrid. At a minimum, we assume you're familiar with Apigee and how to create simple API proxies. To learn more, we recommend this [getting started tutorial](https://cloud.google.com/apigee/docs/api-platform/get-started/get-started).
 
 ## <a name="before"></a>Before you begin
 
@@ -39,14 +39,16 @@ Most developers begin by identifying an interesting sample based on a specific u
 ### <a name="samples"></a>Samples
 - [deploy-apigee-proxy](deploy-apigee-proxy) -
   Deploy Apigee proxy using Apigee Maven plugin and Cloud Build
+- [deploy-apigee-sharedflow](deploy-apigee-sharedflow) -
+  Deploy Apigee sharedflow using Apigee Maven plugin and Cloud Build
 - [oauth-client-credentials](oauth-client-credentials) -
   A sample proxy which uses the OAuth 2.0 client credentials grant type flow
 
 ### <a name="modifying"></a>Modifying a sample proxy
 
-Feel free to modify and build upon the sample proxies. You can make changes in the Apigee [management UI](https://cloud.google.com/apigee/docs/api-platform/develop/ui-edit-proxy) or by using our Cloud Code [extension for local development](https://cloud.google.com/apigee/docs/api-platform/local-development/setup) in Visual Studio Code. Whichever approach is comfortable for you. 
+Feel free to modify and build upon the sample proxies. You can make changes in the Apigee [management UI](https://cloud.google.com/apigee/docs/api-platform/develop/ui-edit-proxy) or by using our Cloud Code [extension for local development](https://cloud.google.com/apigee/docs/api-platform/local-development/setup) in Visual Studio Code. Whichever approach is comfortable for you.
 
-Simply redeploy the proxies for changes to take effect. 
+Simply redeploy the proxies for changes to take effect.
 
 ## <a name="ask"></a>Ask questions on the Apigee Community
 
@@ -54,7 +56,7 @@ Simply redeploy the proxies for changes to take effect.
 
 ## <a name="docs"></a>Apigee documentation
 
-The Apigee docs are located [here](https://cloud.google.com/apigee/docs). 
+The Apigee docs are located [here](https://cloud.google.com/apigee/docs).
 
 ## <a name="contributing"></a>Contributing
 

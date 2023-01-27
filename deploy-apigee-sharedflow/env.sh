@@ -1,5 +1,5 @@
 #!/bin/sh
-# Copyright 2020 Google LLC
+# Copyright 2023 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,20 +13,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Ensures that all sub-projects in this repository are linted
-# and also check if the basepath convention is followed
-# using apigeelint.
+export PROJECT="<GCP_PROJECT_ID>"
+export APIGEE_ENV="<APIGEE_ENVIRONMENT_NAME>"
+PROJECT_NUMBER="$(gcloud projects describe $PROJECT --format="value(projectNumber)")"
+export PROJECT_NUMBER
+export CLOUD_BUILD_SA="$PROJECT_NUMBER@cloudbuild.gserviceaccount.com"
 
-set -e
-
-# For API Proxies
-for proxyDir in "$PWD"/*/apiproxy; do
-    apigeelint -s "$proxyDir" -f table.js -e PO013,PO025 -x tools/pipeline-linter/apigeelint
-done
-
-# For Sharedflows
-for sfDir in "$PWD"/*/sharedflowbundle; do
-    apigeelint -s "$sfDir" -f table.js -e PO013,PO025
-done
-
-echo 
+gcloud config set project $PROJECT
