@@ -37,11 +37,11 @@ curl -s https://raw.githubusercontent.com/apigee/apigeecli/master/downloadLatest
 export PATH=$PATH:$HOME/.apigeecli/bin
 
 echo "Undeploying sample-cloud-logging proxy"
-REV=$(apigeecli envs deployments get --env $APIGEE_ENV --org $PROJECT --token $TOKEN --disable-check | jq .'deployments[]| select(.apiProxy=="sample-cloud-logging").revision' -r)
-apigeecli apis undeploy --name sample-cloud-logging --env $APIGEE_ENV --rev $REV --org $PROJECT --token $TOKEN
+REV=$(apigeecli envs deployments get --env "$APIGEE_ENV" --org "$PROJECT" --token "$TOKEN" --disable-check | jq .'deployments[]| select(.apiProxy=="sample-cloud-logging").revision' -r)
+apigeecli apis undeploy --name sample-cloud-logging --env "$APIGEE_ENV" --rev "$REV" --org "$PROJECT" --token "$TOKEN"
 
 echo "Deleting proxy sample-cloud-logging proxy"
-apigeecli apis delete --name sample-cloud-logging --org $PROJECT --token $TOKEN
+apigeecli apis delete --name sample-cloud-logging --org "$PROJECT" --token "$TOKEN"
 
 echo "Deleting service account"
-gcloud iam service-accounts delete ${SA_NAME}@${PROJECT}.iam.gserviceaccount.com
+gcloud iam service-accounts delete ${SA_NAME}@"${PROJECT}".iam.gserviceaccount.com
