@@ -52,11 +52,12 @@ apigeecli apis deploy --wait --name oauth-client-credentials --ovr --rev "$REV" 
 
 echo "Creating API Product"
 apigeecli products create --name oauth-client-credentials-product --displayname "oauth-client-credentials-product" --proxies oauth-client-credentials --envs "$APIGEE_ENV" --approval auto --quota 10 --interval 1 --unit minute --org "$PROJECT" --token "$TOKEN"
+
 echo "Creating Developer"
 apigeecli developers create --user testuser --email oauth-client-credentials_apigeesamples@acme.com --first Test --last User --org "$PROJECT" --token "$TOKEN"
 
 echo "Creating Developer App"
-APP_ID=$(apigeecli apps create --name $APP_NAME --email oauth-client-credentials_apigeesamples@acme.com --prods oauth-client-credentials-product --org "$PROJECT" --token "$TOKEN" --disable-check | jq ."appId" -r)
+apigeecli apps create --name $APP_NAME --email oauth-client-credentials_apigeesamples@acme.com --prods oauth-client-credentials-product --org "$PROJECT" --token "$TOKEN" --disable-check
 
 APP_CLIENT_ID=$(apigeecli apps get --name $APP_NAME --org "$PROJECT" --token "$TOKEN" --disable-check | jq ."[0].credentials[0].consumerKey" -r)
 export APP_CLIENT_ID
@@ -82,7 +83,7 @@ echo "-----------------------------"
 echo " "
 echo "To obtain a short-lived opaque access token using the token endpoint, try the following command:"
 echo " "
-echo "curl -v POST https://$PROXY_URL/token -u $APP_CLIENT_ID:$APP_CLIENT_SECRET -d \""grant_type=client_credentials\"" "
+echo "curl -v POST https://$PROXY_URL/token -u $APP_CLIENT_ID:$APP_CLIENT_SECRET -d \""grant_type=client_credentials\"""
 echo " "
 echo "Then, to access the protected resource, copy the value of the access_token property"
 echo "from the response body of the previous request and include it in the following request:"
