@@ -27,11 +27,6 @@ if [ -z "$APIGEE_ENV" ]; then
         exit
 fi
 
-if [ -z "$APIGEE_HOST" ]; then
-        echo "No APIGEE_HOST variable set"
-        exit
-fi
-
 TOKEN=$(gcloud auth print-access-token)
 
 echo "Installing apigeecli"
