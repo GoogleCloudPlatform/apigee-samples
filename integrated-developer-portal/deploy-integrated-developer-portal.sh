@@ -44,10 +44,10 @@ export PATH=$PATH:$HOME/.apigeecli/bin
 
 echo "Deploying Apigee artifacts..."
 
-zip -r integrated-developer-portal.zip apiproxy
+zip -r sample-integrated-developer-portal.zip apiproxy
 
 echo "Importing and Deploying Apigee sample-integrated-developer-portal proxy..."
-REV=$(apigeecli apis import -f integrated-developer-portal.zip --org $PROJECT --token $TOKEN --disable-check | jq ."revision" -r)
+REV=$(apigeecli apis import -f sample-integrated-developer-portal.zip --org $PROJECT --token $TOKEN --disable-check | jq ."revision" -r)
 apigeecli apis deploy --wait --name sample-integrated-developer-portal --ovr --rev $REV --org $PROJECT --env $APIGEE_ENV --token $TOKEN
 
 echo "Creating API Product"
