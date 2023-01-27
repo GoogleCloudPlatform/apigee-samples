@@ -59,5 +59,5 @@ echo " "
 echo "Generate some calls with:"
 echo "curl  https://$APIGEE_HOST/v1/samples/cloud-logging "
 echo "After that, make sure you read the logs from Cloud Logging with "
-echo "gcloud logging read "logName=projects/"$PROJECT"/logs/apigee" "
+echo "gcloud logging read \"logName=projects/"$PROJECT"/logs/apigee\" "
 
