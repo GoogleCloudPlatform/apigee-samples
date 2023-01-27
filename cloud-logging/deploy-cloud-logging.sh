@@ -15,18 +15,18 @@
 # limitations under the License.
 
 if [ -z "$PROJECT" ]; then
-    echo "No PROJECT variable set"
-    exit
+        echo "No PROJECT variable set"
+        exit
 fi
 
 if [ -z "$APIGEE_ENV" ]; then
-    echo "No APIGEE_ENV variable set"
-    exit
+        echo "No APIGEE_ENV variable set"
+        exit
 fi
 
 if [ -z "$APIGEE_HOST" ]; then
-    echo "No APIGEE_HOST variable set"
-    exit
+        echo "No APIGEE_HOST variable set"
+        exit
 fi
 
 TOKEN=$(gcloud auth print-access-token)
@@ -42,8 +42,8 @@ export PATH=$PATH:$HOME/.apigeecli/bin
 echo "Creating API Proxy Service Account and granting Cloud Logging role to it"
 gcloud iam service-accounts create $SA_NAME
 gcloud projects add-iam-policy-binding $PROJECT \
-        --member="serviceAccount:${SA_NAME}@${PROJECT}.iam.gserviceaccount.com" \
-        --role="roles/logging.logWriter"
+    --member="serviceAccount:${SA_NAME}@${PROJECT}.iam.gserviceaccount.com" \
+    --role="roles/logging.logWriter"
 
 
 echo "Importing and Deploying Apigee sample-cloud-logging proxy..."
