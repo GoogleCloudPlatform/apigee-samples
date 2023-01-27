@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <!--
  Copyright 2023 Google LLC
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -11,17 +10,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<TargetEndpoint name="default">
-  <PreFlow name="PreFlow">
-    <Request/>
-    <Response/>
-  </PreFlow>
-  <Flows/>
-  <PostFlow name="PostFlow">
-    <Request/>
-    <Response/>
-  </PostFlow>
-  <HTTPTargetConnection>
-    <URL>https://httpbin.org/get</URL>
-  </HTTPTargetConnection>
-</TargetEndpoint>
+<APIProxy revision="1" name="sample-cloud-logging">
+    <Description>Proxy that writes custom log messages to Cloud Logging</Description>
+</APIProxy>
