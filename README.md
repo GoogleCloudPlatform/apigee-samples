@@ -39,7 +39,7 @@ Most developers begin by identifying an interesting sample based on a specific u
 ### <a name="samples"></a>Samples
 - [deploy-apigee-proxy](deploy-apigee-proxy) -
   Deploy Apigee proxy using Apigee Maven plugin and Cloud Build
- - [oauth-client-credentials](oauth-client-credentials) -
+- [oauth-client-credentials](oauth-client-credentials) -
   A sample proxy which uses the OAuth 2.0 client credentials grant type flow
 
 ### <a name="modifying"></a>Modifying a sample proxy
