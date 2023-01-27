@@ -71,7 +71,7 @@
             </plugins>
         </pluginManagement>
         <plugins>
-            <!-- copy the full apiproxy folder to target folder -->
+            <!-- copy the full sharedflowbundle folder to target folder -->
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
                 <version>2.6</version>

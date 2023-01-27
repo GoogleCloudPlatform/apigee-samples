@@ -42,5 +42,5 @@ echo "Undeploying sample-hello-cicd-sf"
 REV=$(apigeecli envs deployments get --env "$APIGEE_ENV" --org "$PROJECT" --token "$TOKEN" --sharedflows --disable-check | jq .'deployments[]| select(.apiProxy=="sample-hello-cicd-sf").revision' -r)
 apigeecli sharedflows undeploy --name sample-hello-cicd-sf --env "$APIGEE_ENV" --rev "$REV" --org "$PROJECT" --token "$TOKEN"
 
-echo "Deleting proxy sample-hello-cicd-sf"
+echo "Deleting sharedflow sample-hello-cicd-sf"
 apigeecli sharedflows delete --name sample-hello-cicd-sf --org "$PROJECT" --token "$TOKEN"
