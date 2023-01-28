@@ -21,11 +21,13 @@ set -e
 
 # For API Proxies
 for proxyDir in "$PWD"/*/apiproxy; do
+    echo "Running apigeelint on $proxyDir"
     apigeelint -s "$proxyDir" -f table.js -e PO013,PO025 -x tools/pipeline-linter/apigeelint
 done
 
 # For Sharedflows
 for sfDir in "$PWD"/*/sharedflowbundle; do
+    echo "Running apigeelint on $sfDir"
     apigeelint -s "$sfDir" -f table.js -e PO013,PO025
 done
 
