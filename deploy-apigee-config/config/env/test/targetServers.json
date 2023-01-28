@@ -1,0 +1,8 @@
+[
+    {
+        "name": "SampleTarget",
+        "host": "example.com",
+        "isEnabled": true,
+        "port": 8080
+    }
+]

@@ -1,7 +1,7 @@
 # Sample to automate Apigee proxy deployments using Maven and Cloud Build
 
 ---
-This sample demonstrates how to use the Apigee Maven deploy plugin to deploy a proxy to Apigee using Cloud Build
+This sample demonstrates how to use the [Apigee Maven deploy plugin](https://github.com/apigee/apigee-deploy-maven-plugin) to deploy a proxy to Apigee using Cloud Build
 
 Let's get started!
 
@@ -37,7 +37,7 @@ source ./env.sh
 
 Next, let's deploy the sample proxy to Apigee using the Maven plugin and Cloud Build
 
-First, let enabled the Cloud Build API
+First, let's enable the Cloud Build API
 
 ```sh
 gcloud services enable cloudbuild.googleapis.com

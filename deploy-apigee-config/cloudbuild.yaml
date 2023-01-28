@@ -1,0 +1,54 @@
+# Copyright 2022 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+steps:
+  - name: 'gcr.io/cloud-builders/gcloud'
+    id: variables
+    entrypoint: 'bash'
+    args:
+      - -c
+      - |
+        export build_token=\"$(gcloud auth application-default \
+          print-access-token)\"
+
+        # write all "build_" variables to the persistent volume "/workspace"
+        env | grep "^build_" > /workspace/build_vars
+  - name: 'gcr.io/cloud-builders/mvn'
+    id: "Process resources (copy to target dir and replace env)"
+    entrypoint: 'bash'
+    args:
+      - -c
+      - |
+        mvn -f pom.xml -ntp process-resources \
+          -Dorg=$PROJECT_ID -Denv=$_APIGEE_TEST_ENV 
+  - name: 'gcr.io/cloud-builders/mvn'
+    id: "Push Apigee Environment configurations"
+    entrypoint: 'bash'
+    args:
+      - -c
+      - |
+        mvn -f pom.xml -ntp apigee-config:targetservers \
+          apigee-config:keyvaluemaps -Pdev \
+          -Dorg=$PROJECT_ID -Denv=$_APIGEE_TEST_ENV \
+          -Dbearer=${build_token} -Doptions=create
+  - name: 'gcr.io/cloud-builders/mvn'
+    id: "Push Apigee Org configurations"
+    entrypoint: 'bash'
+    args:
+      - -c
+      - |
+        mvn -f pom.xml -ntp apigee-config:apiproducts \
+          apigee-config:developers apigee-config:apps -Pdev \
+          -Dorg=$PROJECT_ID -Denv=$_APIGEE_TEST_ENV \
+          -Dbearer=${build_token} -Doptions=create
