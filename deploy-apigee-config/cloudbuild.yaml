@@ -31,7 +31,7 @@ steps:
       - -c
       - |
         mvn -f pom.xml -ntp process-resources \
-          -Dorg=$PROJECT_ID -Denv=$_APIGEE_TEST_ENV 
+          -Dorg=$PROJECT_ID -Denv=$_APIGEE_TEST_ENV
   - name: 'gcr.io/cloud-builders/mvn'
     id: "Push Apigee Environment configurations"
     entrypoint: 'bash'
