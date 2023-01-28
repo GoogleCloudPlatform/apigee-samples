@@ -1,0 +1,12 @@
+{
+    "sampledeveloper@example.com": [
+        {
+            "apiProducts": [
+                "sample-product"
+            ],
+            "callbackUrl": "http://sampleapp.com",
+            "name": "sampleapp",
+            "scopes": []
+        }
+    ]
+}

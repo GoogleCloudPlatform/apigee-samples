@@ -1,0 +1,44 @@
+[
+    {
+       "name":"sample-product",
+       "displayName":"sample-product",
+       "description":"sample-product",
+       "apiResources":[
+          "/**",
+          "/"
+       ],
+       "approvalType":"auto",
+       "attributes":[
+          {
+             "name":"description",
+             "value":"sample-product"
+          },
+          {
+            "name": "access",
+            "value": "public"
+          },
+          {
+             "name":"developer.quota.limit",
+             "value":"10000"
+          },
+          {
+             "name":"developer.quota.interval",
+             "value":"1"
+          },
+          {
+             "name":"developer.quota.timeunit",
+             "value":"month"
+          }
+       ],
+       "environments":[
+        "@env"
+       ],
+       "proxies":[
+          "sample-hello-cicd"
+       ],
+       "quota":"10000",
+       "quotaInterval":"1",
+       "quotaTimeUnit":"month",
+       "scopes":[]
+    }
+ ]
