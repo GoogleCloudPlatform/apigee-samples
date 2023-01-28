@@ -38,6 +38,8 @@ steps:
     args:
       - -c
       - |
+        # Read environment variables from disk
+        source /workspace/build_vars &&
         mvn -f pom.xml -ntp apigee-config:targetservers \
           apigee-config:keyvaluemaps -Pdev \
           -Dorg=$PROJECT_ID -Denv=$_APIGEE_TEST_ENV \
@@ -48,6 +50,8 @@ steps:
     args:
       - -c
       - |
+        # Read environment variables from disk
+        source /workspace/build_vars &&
         mvn -f pom.xml -ntp apigee-config:apiproducts \
           apigee-config:developers apigee-config:apps -Pdev \
           -Dorg=$PROJECT_ID -Denv=$_APIGEE_TEST_ENV \
