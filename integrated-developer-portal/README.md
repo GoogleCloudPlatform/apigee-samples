@@ -27,7 +27,7 @@ The Apigee proxy sample uses only a few policies:
 
 # (QuickStart) Setup using CloudShell
 
-Use the following GCP CloudShell tutorial, and follow the instructions.
+Use the following GCP CloudShell tutorial, and follow the instructions in Cloud Shell. Alternatively, follow the instructions below.
 
 [![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/apigee-samples&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=integrated-developer-portal/docs/cloudshell-tutorial.md)
 
@@ -52,14 +52,16 @@ Now source the `env.sh` file
 source ./env.sh
 ```
 
-3. Deploy Apigee API proxies, products and apps
+3. Deploy the Apigee resources necessary to create an integrated developer portal
 
 ```bash
 ./deploy-integrated-developer-portal.sh
 ```
 
+This script creates an API Proxy, API product, a sample App developer, and App. The script also tests that the deployment and configuration has been sucessfull. It does not, however, create the developer portal. We will create and test that manually.
+
 ## Testing the Client Credentials Proxy
-To run the tests, first retrieve Node.js dependencies with:
+To run the tests manually, first retrieve Node.js dependencies with:
 ```
 npm install
 ```
@@ -68,12 +70,61 @@ and then:
 npm run test
 ```
 
-## Example Requests
-For additional examples, including negative test cases, see 
+## Manually call the API
 
-## Test Developer Portal
+The script that deploys the Apigee API proxies prints the proxy and app information you will need to run the commands below.
+
+```
+curl -v http://$APIGEE_HOST/v1/sample/integrated-developer-portal -d "apikey=$APP_CLIENT_ID"
+```
+> _Note: Under normal circumstances, avoid providing secrets on the command itself using `-u`_
+
+---
+## Create Integrated Developer Portal
+
+You've successfully created an api secured proxy and all the resources needed to access it. Now we need to create the integrated developer portal:
+
+1. Access the portals page from the Apigee homepage. Publish > Portals
+2. Click the +Portal button
+3. For name you can use "Sample Integrated Developer Portal". You can leave Description blank.
+
+We also need to add our API product to the portal:
+
+1. Access your new Sample Integrated Developer Portal
+2. Enter the APIs tab, if not already selected
+3. Click + to add a new API product to the catalog
+4. Select the sample-integrated-developer-portal-product product and click next
+5. Configure as shown below
+- Display title: Sample Integrated Developer Portal
+- Display description: A portal for an API key protected proxy
+- Published: Select published (checked)
+- Require developers to specify a callback URL: Keep deselected (unchecked)
+- Visibility: Public (visibile to anyone)
+- API product image: Image of your choice
+- API documentation: Use the [integrated-developer-portal.yaml](integrated-developer-portal.yaml) OpenAPI file from this repo:
+    - Download [integrated-developer-portal.yaml](integrated-developer-portal.yaml) to your local computer
+    - Make note of your Apigee domain from the Apigee dashboard at Admin > Environments > Groups
+    - Replace "\[YOUR_DOMAIN\]" with your Apigee domain
+    - Upload your updated integrated-developer-portal.yaml as API documentation
+6. Click save
+
+## Test Integrated Developer Portal
+
+Now that we have a developer portal, let's walk through it's workflow. First we'll create our create our developer account and sign in, then we'll create a Apigee app complete with a client id and secret, then we'll use the client id to authorize our requests and test our API. To do so, follow the steps below: 
+
+1. 
+2. 
+3. 
 
 ## Cleanup
+
+After you create your integrated developer portal you can clean up the artefacts from this sample in your Apigee Organization. First source your `env.sh` script, and then run
+
+```bash
+./clean-up-oauth-client-credentials.sh
+```
+
+After this, you need to manually delete the Apigee portal. Navigate to Publish > Portals, find you portal in the portal table, hover over it, and select the trash can icon to permanently delete your integrated developer portal.
 
 ## Not Google Product Clause
 

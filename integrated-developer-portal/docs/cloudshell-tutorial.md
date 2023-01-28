@@ -43,12 +43,12 @@ Next, let's deploy the Apigee resources necessary to create an integrated develo
 This script creates an API Proxy, API product, a sample App developer, and App. The script also tests that the deployment and configuration has been sucessfull. It does not, however, create the developer portal. We will create and test that manually. 
 
 
-### Test the API
+## Manually call the API
 
 The script that deploys the Apigee API proxies prints the proxy and app information you will need to run the commands below.
 
 ```
-curl -X GET 'http://$PROXY_URL?apikey=$APP_CLIENT_ID'"
+curl -v http://$APIGEE_HOST/v1/sample/integrated-developer-portal -d "apikey=$APP_CLIENT_ID"
 ```
 > _Note: Under normal circumstances, avoid providing secrets on the command itself using `-u`_
 
@@ -70,3 +70,5 @@ After you create your integrated developer portal you can clean up the artefacts
 ```bash
 ./clean-up-oauth-client-credentials.sh
 ```
+
+After this, you need to manually delete the Apigee portal. Navigate to Publish > Portals, find you portal in the portal table, hover over it, and select the trash can icon to permanently delete your integrated developer portal.
