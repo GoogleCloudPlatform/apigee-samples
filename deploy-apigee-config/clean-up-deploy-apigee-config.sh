@@ -26,15 +26,15 @@ fi
 
 TOKEN=$(gcloud auth print-access-token)
 
-mvn clean process-resources -Pdev -Denv="$APIGEE_ENV" -Dorg="$PROJECT" -Dbearer="$TOKEN"
+mvn -ntp clean process-resources -Pdev -Denv="$APIGEE_ENV" -Dorg="$PROJECT" -Dbearer="$TOKEN"
 
 echo "Deleting API Developer Apps"
-mvn apigee-config:apps -Pdev -Denv="$APIGEE_ENV" -Dorg="$PROJECT" -Dbearer="$TOKEN" -Doptions="delete"
+mvn -ntp apigee-config:apps -Pdev -Denv="$APIGEE_ENV" -Dorg="$PROJECT" -Dbearer="$TOKEN" -Doptions="delete"
 echo "Deleting Developer"
-mvn apigee-config:developers -Pdev -Denv="$APIGEE_ENV" -Dorg="$PROJECT" -Dbearer="$TOKEN" -Doptions="delete"
+mvn -ntp apigee-config:developers -Pdev -Denv="$APIGEE_ENV" -Dorg="$PROJECT" -Dbearer="$TOKEN" -Doptions="delete"
 echo "Deleting API Products"
-mvn apigee-config:apiproducts -Pdev -Denv="$APIGEE_ENV" -Dorg="$PROJECT" -Dbearer="$TOKEN" -Doptions="delete"
+mvn -ntp apigee-config:apiproducts -Pdev -Denv="$APIGEE_ENV" -Dorg="$PROJECT" -Dbearer="$TOKEN" -Doptions="delete"
 echo "Deleting Target servers"
-mvn apigee-config:targetservers -Pdev -Denv="$APIGEE_ENV" -Dorg="$PROJECT" -Dbearer="$TOKEN" -Doptions="delete"
+mvn -ntp apigee-config:targetservers -Pdev -Denv="$APIGEE_ENV" -Dorg="$PROJECT" -Dbearer="$TOKEN" -Doptions="delete"
 echo "Deleting KeyValueMaps"
-mvn apigee-config:keyvaluemaps -Pdev -Denv="$APIGEE_ENV" -Dorg="$PROJECT" -Dbearer="$TOKEN" -Doptions="delete"
+mvn -ntp apigee-config:keyvaluemaps -Pdev -Denv="$APIGEE_ENV" -Dorg="$PROJECT" -Dbearer="$TOKEN" -Doptions="delete"

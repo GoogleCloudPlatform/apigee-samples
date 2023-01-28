@@ -22,7 +22,7 @@ RUN export GO111MODULE=on && go install github.com/googlecodelabs/tools/claat@v2
 COPY *.sh /usr/bin/
 
 # install apgieelint
-RUN npm install --global apigeelint@latest
+RUN npm install --global apigeelint npm
 
 # Run script
 WORKDIR /home
