@@ -43,6 +43,8 @@ Most developers begin by identifying an interesting sample based on a specific u
   Deploy Apigee sharedflow using Apigee Maven plugin and Cloud Build
 - [oauth-client-credentials](oauth-client-credentials) -
   A sample proxy which uses the OAuth 2.0 client credentials grant type flow
+- [cloud-logging](cloud-logging) -
+  A sample proxy that logs custom messages to Google Cloud Logging
 
 ### <a name="modifying"></a>Modifying a sample proxy
 
