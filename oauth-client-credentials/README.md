@@ -104,18 +104,3 @@ If you want to clean up the artefacts from this example in your Apigee Organizat
 ```bash
 ./clean-up-oauth-client-credentials
 ```
-
-## Not Google Product Clause
-
-This is not an officially supported Google product, nor is it part of an
-official Google product.
-
-## Support
-
-If you need support or assistance, you can try inquiring on [Google Cloud Community
-forum dedicated to Apigee](https://www.googlecloudcommunity.com/gc/Apigee/bd-p/cloud-apigee).
-
-## License
-
-This material is [Copyright 2023 Google LLC](./NOTICE)
-and is licensed under the [Apache 2.0 License](LICENSE).
