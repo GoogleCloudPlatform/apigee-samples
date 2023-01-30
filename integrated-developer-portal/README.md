@@ -91,40 +91,56 @@ You've successfully created an api secured proxy and all the resources needed to
 We also need to add our API product to the portal:
 
 1. Access your new Sample Integrated Developer Portal
-2. Enter the APIs tab, if not already selected
+2. Enter the API catalog tab, if not already selected
 3. Click + to add a new API product to the catalog
 4. Select the sample-integrated-developer-portal-product product and click next
 5. Configure as shown below
-- Display title: Sample Integrated Developer Portal
+- Display title: Leave default name, sample-integrated-developer-portal-product
 - Display description: A portal for an API key protected proxy
 - Published: Select published (checked)
 - Require developers to specify a callback URL: Keep deselected (unchecked)
-- Visibility: Public (visibile to anyone)
+- Audience: Anonymous users (anyone can view)
 - API product image: Image of your choice
 - API documentation: Use the [integrated-developer-portal.yaml](integrated-developer-portal.yaml) OpenAPI file from this repo:
     - Download [integrated-developer-portal.yaml](integrated-developer-portal.yaml) to your local computer
     - Make note of your Apigee domain from the Apigee dashboard at Admin > Environments > Groups
     - Replace "\[YOUR_DOMAIN\]" with your Apigee domain
     - Upload your updated integrated-developer-portal.yaml as API documentation
-6. Click save
+6. Scroll up and click save
 
 ## Test Integrated Developer Portal
 
 Now that we have a developer portal, let's walk through it's workflow. First we'll create our create our developer account and sign in, then we'll create a Apigee app complete with a client id and secret, then we'll use the client id to authorize our requests and test our API. To do so, follow the steps below: 
 
-1. 
-2. 
-3. 
+1. Navigate to your newly created portal API. Portals > Sample Integrated Developer Portal > API Catalog > sample-integrated-developer-portal-product
+2. Enter the portal by clicking the Live Portal button at the top right, or with the following URL: https://\[APIGEE-ORG\]-sampleintegrateddeveloperportal.apigee.io
+3. Click the Sign In button and create an account. This will necessitate an email confirmation. Note: this creates an Apigee developer account
+4. Navigate back to your portal's homepage (https://\[APIGEE-ORG\]-sampleintegrateddeveloperportal.apigee.io) and make sure that you're signed in
+5. Open the dropdown menu by clicking on your account and select Apps
+6. Select +NEW APP and update the following fields. Note: this creates an Apigee App for your developer
+- App Name: Test App
+- APIs: Enable sample-integrated-developer-portal-product
+7. Click the SAVE button
+8. Click into APIs from the top navbar
+9. Click into your sample-integrated-developer-portal-product
+10. Select AUTHORIZE and select your app from the dropdown. This authorizes all of your portal requests with your App's API key
+11. Select the / GET request Path
+12. Under Try this API, click the EXECUTE button
+13. You should receive a 200 OK response from Apigee. The body of the response is a copy of the request data you sent to Apigee
 
 ## Cleanup
 
 After you create your integrated developer portal you can clean up the artefacts from this sample in your Apigee Organization. First source your `env.sh` script, and then run
 
 ```bash
-./clean-up-oauth-client-credentials.sh
+./clean-up-integrated-developer-portal.sh
 ```
 
-After this, you need to manually delete the Apigee portal. Navigate to Publish > Portals, find you portal in the portal table, hover over it, and select the trash can icon to permanently delete your integrated developer portal.
+After this, you need to manually delete manually created Apigee resources
+1. Navigate to Publish > Developers
+2. Find the account you created in your developer portal, hover over it, and select the trash can icon to delete
+3. Navigate to Publish > Portals
+4. Find your Sample Integrated Developer Portal, hover over it, and select the trash can icon to delete
 
 ## Not Google Product Clause
 
@@ -138,5 +154,5 @@ forum dedicated to Apigee](https://www.googlecloudcommunity.com/gc/Apigee/bd-p/c
 
 ## License
 
-This material is [Copyright 2023 Google LLC](./NOTICE)
-and is licensed under the [Apache 2.0 License](LICENSE).
+This material is [Copyright 2023 Google LLC](../NOTICE.txt)
+and is licensed under the [Apache 2.0 License](../LICENSE.txt).

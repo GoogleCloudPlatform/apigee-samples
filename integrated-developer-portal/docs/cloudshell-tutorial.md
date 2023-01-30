@@ -47,8 +47,8 @@ This script creates an API Proxy, API product, a sample App developer, and App. 
 
 The script that deploys the Apigee API proxies prints the proxy and app information you will need to run the commands below.
 
-```
-curl -v http://$APIGEE_HOST/v1/sample/integrated-developer-portal -d "apikey=$APP_CLIENT_ID"
+```sh
+curl -X GET 'http://$APIGEE_HOST/v1/sample/integrated-developer-portal?apikey=$APP_CLIENT_ID'
 ```
 > _Note: Under normal circumstances, avoid providing secrets on the command itself using `-u`_
 

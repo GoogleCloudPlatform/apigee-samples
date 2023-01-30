@@ -2,7 +2,7 @@
 <CORS continueOnError="false" enabled="true" name="add-cors">
   <DisplayName>Add CORS</DisplayName>
   <AllowOrigins>{request.header.origin}</AllowOrigins>
-  <AllowMethods>GET, PUT, POST, DELETE</AllowMethods>
+  <AllowMethods>GET, PUT, POST, DELETE, OPTIONS</AllowMethods>
   <AllowHeaders>origin, x-requested-with, accept, content-type</AllowHeaders>
   <ExposeHeaders>*</ExposeHeaders>
   <MaxAge>3628800</MaxAge>
