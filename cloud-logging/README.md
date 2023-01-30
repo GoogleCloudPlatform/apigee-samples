@@ -103,5 +103,5 @@ forum dedicated to Apigee](https://www.googlecloudcommunity.com/gc/Apigee/bd-p/c
 
 ## License
 
-This material is [Copyright 2023 Google LLC](./NOTICE)
-and is licensed under the [Apache 2.0 License](LICENSE).
+This material is [Copyright 2023 Google LLC](../NOTICE)
+and is licensed under the [Apache 2.0 License](../LICENSE).
