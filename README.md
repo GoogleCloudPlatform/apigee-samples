@@ -47,6 +47,8 @@ Most developers begin by identifying an interesting sample based on a specific u
   A sample proxy which uses the OAuth 2.0 client credentials grant type flow
 - [cloud-logging](cloud-logging) -
   A sample proxy that logs custom messages to Google Cloud Logging
+- [basic-quota](basic-quota) -
+  A sample which shows how to implement a basic API consumption quota
 
 ### <a name="modifying"></a>Modifying a sample proxy
 
