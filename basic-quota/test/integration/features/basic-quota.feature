@@ -38,7 +38,7 @@ Feature:
   Scenario: Quota failure
     When I GET /?apikey=`clientId1`
     Then response code should be 429
-    And response body path $.status should be "quota exceeded"
+    And response body path $.status should be quota exceeded
 
   Scenario: Different Quota
     When I GET /?apikey=`clientId2`
