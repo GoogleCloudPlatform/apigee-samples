@@ -1,4 +1,4 @@
-# Client Credentials Grant Type
+# Basic Quota
 
 ---
 This sample shows how to implement a dynamic API consumption limit using Apigee's [Quota](https://cloud.google.com/apigee/docs/api-platform/reference/policies/quota-policy) policy. 

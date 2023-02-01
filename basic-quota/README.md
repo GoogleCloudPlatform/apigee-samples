@@ -45,7 +45,7 @@ Use the following GCP CloudShell tutorial, and follow the instructions.
 
 ## Setup instructions
 
-1. Clone the `apigee-samples` repo, and switch the `/basic-quota` directory
+1. Clone the `apigee-samples` repo, and switch the `basic-quota` directory
 
 
 ```bash

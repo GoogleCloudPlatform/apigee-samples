@@ -12,29 +12,29 @@
  limitations under the License.
 -->
 <ProxyEndpoint name="default">
-	<FaultRules>
-		<FaultRule name="QuotaViolation">
-			<Step>
-				<Name>RF-QuotaError</Name>
-			</Step>
-			<Condition>(fault.name = "QuotaViolation")</Condition>
-		</FaultRule>
-	</FaultRules>
-	<PreFlow name="PreFlow">
-		<Request>
-			<Step>
-				<Name>VA-VerifyKey</Name>
-			</Step>
-			<Step>
-				<Name>Q-ImposeQuota</Name>
-			</Step>
-		</Request>
+    <FaultRules>
+        <FaultRule name="QuotaViolation">
+            <Step>
+                <Name>RF-QuotaError</Name>
+            </Step>
+            <Condition>(fault.name = "QuotaViolation")</Condition>
+        </FaultRule>
+    </FaultRules>
+    <PreFlow name="PreFlow">
+        <Request>
+            <Step>
+                <Name>VA-VerifyKey</Name>
+            </Step>
+            <Step>
+                <Name>Q-ImposeQuota</Name>
+            </Step>
+        </Request>
         <Response>
             <Step>
                 <Name>AM-SuccessfulResponse</Name>
             </Step>
         </Response>
-	</PreFlow>
+    </PreFlow>
     <Flows/>
     <PostFlow name="PostFlow">
         <Request/>
