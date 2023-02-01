@@ -16,34 +16,58 @@ steps:
 - id: 'Build Container Image'
   name: 'gcr.io/cloud-builders/docker:latest'
   dir: 'app'
-  args: ['build', '-t', 'gcr.io/${PROJECT_ID}/${_SERVICE}:${SHORT_SHA}', '.'] # Tag docker image with git commit sha
+  args: ['build', '-t', 'gcr.io/${PROJECT_ID}/${_SERVICE}', '.'] # Tag docker image with git commit sha
 
 - id: 'Push Container Image'
   name: 'gcr.io/cloud-builders/docker:latest'
-  args: ['push', 'gcr.io/${PROJECT_ID}/${_SERVICE}:${SHORT_SHA}']
+  args: ['push', 'gcr.io/${PROJECT_ID}/${_SERVICE}']
 
 - id: 'Deploy to Cloud Run'
-  name: 'gcr.io/cloud-builders/gcloud:$_CLOUDSDK_VERSION'
-  entrypoint: /bin/bash
+  name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: gcloud
+  args: ['run', 'deploy', '${_SERVICE}', '--image', 'gcr.io/${PROJECT_ID}/${_SERVICE}','--region', '${_REGION}']
+
+- name: 'gcr.io/cloud-builders/gcloud'
+  id: variables
+  entrypoint: 'bash'
   args:
-  - '-c'
-  - |
-    gcloud run deploy ${_SERVICE}-$BUILD_ID \
-      --image gcr.io/${PROJECT_ID}/${_SERVICE}:${SHORT_SHA} \
-      --no-allow-unauthenticated
-- id: 'Get Cloud Run URL'
-  name: 'gcr.io/cloud-builders/gcloud:$_CLOUDSDK_VERSION'
-  entrypoint: '/bin/bash'
+    - -c
+    - |
+      export build_token=\"$(gcloud auth application-default \
+        print-access-token)\"
+      
+      # write all "build_" variables to the persistent volume "/workspace"
+      env | grep "^build_" > /workspace/build_vars
+
+      gcloud run services describe ${_SERVICE} --region=${_REGION} --format 'value(status.url)'  > /workspace/cloudrunendpoint
+
+      gcloud iam service-accounts create run-mock-target-sa \
+        --project "$PROJECT_ID" || true
+      
+      gcloud run services add-iam-policy-binding ${_SERVICE} \
+        --region "us-central1" \
+        --member serviceAccount:run-mock-target-sa@"$PROJECT_ID".iam.gserviceaccount.com \
+        --role roles/run.invoker \
+        --platform managed
+      
+- name: 'gcr.io/cloud-builders/mvn'
+  id: "Package bundle"
+  entrypoint: 'bash'
   args:
-  - '-c'
-  - |
-    set -e
-    source /workspace/testing/cloudbuild-templates/common.sh
-    echo $(get_url ${BUILD_ID}) > _service_url
-    echo "Cloud Run URL for ${_SERVICE}-$BUILD_ID is $(cat _service_url)"
-    echo $(get_idtoken) > _id_token
-  env:
-    # Make substitutions available in shell script.
-    - "_SECRET_NAME=${_SECRET_NAME}"
-    - "_RUNNER_IDENTITY=${_RUNNER_IDENTITY}"
-    - "_SERVICE=${_SERVICE}"
+    - -c
+    - |
+      target_url=$(cat /workspace/cloudrunendpoint)
+      echo $target_url
+      sed -i "s|@TARGETURL@|$target_url|" ./apiproxy/targets/default.xml    
+      mvn -f pom.xml -ntp process-resources apigee-enterprise:configure \
+        -Pdev -DgoogleTokenEmail=run-mock-target-sa@$PROJECT_ID.iam.gserviceaccount.com -Dorg=$PROJECT_ID -Denv=$_APIGEE_TEST_ENV
+- name: 'gcr.io/cloud-builders/mvn'
+  id: "Deploy bundle"
+  entrypoint: 'bash'
+  args:
+    - -c
+    - |
+      # Read environment variables from disk
+      source /workspace/build_vars &&
+      mvn -f pom.xml -ntp apigee-enterprise:deploy -Pdev -Dorg=$PROJECT_ID \
+      -DgoogleTokenEmail=run-mock-target-sa@$PROJECT_ID.iam.gserviceaccount.com -Denv=$_APIGEE_TEST_ENV -Dbearer=${build_token}

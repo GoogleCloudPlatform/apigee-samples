@@ -30,18 +30,21 @@ if [ -z "$APIGEE_HOST" ]; then
 fi
 
 TOKEN=$(gcloud auth print-access-token)
-SA_NAME=apigee-proxy-service-account
+SA_NAME=run-mock-target-sa
 
 echo "Installing apigeecli"
 curl -s https://raw.githubusercontent.com/apigee/apigeecli/master/downloadLatest.sh | bash
 export PATH=$PATH:$HOME/.apigeecli/bin
 
-echo "Undeploying sample-cloud-logging proxy"
-REV=$(apigeecli envs deployments get --env "$APIGEE_ENV" --org "$PROJECT" --token "$TOKEN" --disable-check | jq .'deployments[]| select(.apiProxy=="sample-cloud-logging").revision' -r)
-apigeecli apis undeploy --name sample-cloud-logging --env "$APIGEE_ENV" --rev "$REV" --org "$PROJECT" --token "$TOKEN"
+echo "Undeploying sample-cloud-run proxy"
+REV=$(apigeecli envs deployments get --env "$APIGEE_ENV" --org "$PROJECT" --token "$TOKEN" --disable-check | jq .'deployments[]| select(.apiProxy=="sample-cloud-run").revision' -r)
+apigeecli apis undeploy --name sample-cloud-run --env "$APIGEE_ENV" --rev "$REV" --org "$PROJECT" --token "$TOKEN"
 
 echo "Deleting proxy sample-cloud-logging proxy"
-apigeecli apis delete --name sample-cloud-logging --org "$PROJECT" --token "$TOKEN"
+apigeecli apis delete --name sample-cloud-run --org "$PROJECT" --token "$TOKEN"
+
+echo "Delete cloud run service"
+gcloud run services delete $CLOUD_RUN_SERVICE --region=$CLOUD_RUN_REGION
 
 echo "Deleting service account"
 gcloud iam service-accounts delete ${SA_NAME}@"${PROJECT}".iam.gserviceaccount.com

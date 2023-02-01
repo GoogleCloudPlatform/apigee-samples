@@ -15,12 +15,21 @@
  limitations under the License.
 -->
 <TargetEndpoint name="default">
+    <PreFlow name="PreFlow">
+        <Request/>
+        <Response/>
+    </PreFlow>
+    <Flows/>
+    <PostFlow name="PostFlow">
+        <Request/>
+        <Response/>
+    </PostFlow>
     <HTTPTargetConnection>
         <Authentication>
             <GoogleIDToken>
-                <Audience>CLOUD_RUN_URL</Audience>
+                <Audience>@TARGETURL@</Audience>
             </GoogleIDToken>
         </Authentication>
-        <URL>CLOUD_RUN_URL</URL>
+        <URL>@TARGETURL@</URL>
     </HTTPTargetConnection>
 </TargetEndpoint>

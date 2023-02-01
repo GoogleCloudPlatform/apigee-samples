@@ -15,7 +15,15 @@
 # limitations under the License.
 
 export PROJECT="<GCP_PROJECT_ID>"
+export PROJECT="apigee-gke-example-2"
+export PROJECT_ID=$PROJECT
 export APIGEE_HOST="<APIGEE_DOMAIN_NAME>"
+export APIGEE_HOST="api.rajesh-internal.cs.apigee.net"
 export APIGEE_ENV="<APIGEE_ENVIRONMENT_NAME>"
+export APIGEE_ENV="test"
+export PROJECT_NUMBER="$(gcloud projects describe $PROJECT --format="value(projectNumber)")"
+export CLOUD_BUILD_SA="$PROJECT_NUMBER@cloudbuild.gserviceaccount.com"
+export CLOUD_RUN_SERVICE="mock-target"
+export CLOUD_RUN_REGION="us-central1"
 
 gcloud config set project $PROJECT

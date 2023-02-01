@@ -18,11 +18,11 @@ const express = require('express');
 const app = express();
 
 app.get('/', (req, res) => {
-  res.send(`Hello from Apigee`);
+  res.send(`Mocktarget Service`);
 });
 
 const port = process.env.PORT || 8080;
 app.listen(port, () => {
-  console.log(`helloworld: listening on port ${port}`);
+  console.log(`mocktarget: listening on port ${port}`);
 });
 

@@ -1,6 +1,6 @@
 {
-"name": "hello-from-apigee",
-"description": "Simple hello world sample in Node",
+"name": "mock-from-apigee",
+"description": "Simple mock target sample in Node",
 "version": "1.0.0",
 "private": true,
 "main": "app.js",
