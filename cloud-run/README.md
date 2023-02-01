@@ -57,13 +57,17 @@ gcloud projects add-iam-policy-binding "$PROJECT_ID" \
 gcloud projects add-iam-policy-binding "$PROJECT_ID" \
   --member="serviceAccount:$CLOUD_BUILD_SA" \
   --role="roles/iam.serviceAccountUser"
+
+gcloud projects add-iam-policy-binding "$PROJECT_ID" \
+  --member="serviceAccount:$CLOUD_BUILD_SA" \
+  --role="roles/iam.serviceAccountAdmin"
 ```
 
 4. Trigger the build
 
 ```bash
 gcloud builds submit --config cloudbuild.yaml . \
-    --substitutions="_SERVICE=$CLOUD_RUN_SERVICE","_REGION=$CLOUD_RUN_REGION","_APIGEE_TEST_ENV=test"
+    --substitutions="_SERVICE=$CLOUD_RUN_SERVICE","_REGION=$CLOUD_RUN_REGION","_APIGEE_TEST_ENV=$APIGEE_ENV"
 ```
 
 ## Test the APIs
@@ -71,7 +75,7 @@ gcloud builds submit --config cloudbuild.yaml . \
 You can test the API call to make sure the deployment was successful
 
 ```bash
-curl -v -X GET https://$APIGEE_HOST/v1/samples/cloud-run-sample"
+curl -v -X GET https://$APIGEE_HOST/v1/samples/cloud-run-sample
 ```
 
 ## Cleanup
