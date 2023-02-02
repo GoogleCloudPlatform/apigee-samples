@@ -1,6 +1,6 @@
 # Deploy Apigee proxy using Apigee Maven plugin and Cloud Build
 
-This sample demonstrates how to use the Apigee Maven deploy plugin to deploy a proxy to Apigee using [Cloud Build](https://cloud.google.com/build/docs/overview)
+This sample demonstrates how to use the [Apigee Maven deploy plugin](https://github.com/apigee/apigee-deploy-maven-plugin) to deploy a proxy to Apigee using [Cloud Build](https://cloud.google.com/build/docs/overview)
 
 ## Prerequisites
 1. [Provision Apigee X](https://cloud.google.com/apigee/docs/api-platform/get-started/provisioning-intro)
@@ -25,7 +25,7 @@ Use the following GCP CloudShell tutorial, and follow the instructions.
 
 ```bash
 git clone https://github.com/GoogleCloudPlatform/apigee-samples.git
-cd deploy-apigee-proxy
+cd apigee-samples/deploy-apigee-proxy
 ```
 
 2. Edit the `env.sh` and configure the ENV vars
@@ -72,18 +72,3 @@ If you want to clean up the artifacts from this example in your Apigee Organizat
 ```bash
 ./clean-up-deploy-apigee-proxy.sh
 ```
-
-## Not Google Product Clause
-
-This is not an officially supported Google product, nor is it part of an
-official Google product.
-
-## Support
-
-If you need support or assistance, you can try inquiring on [Google Cloud Community
-forum dedicated to Apigee](https://www.googlecloudcommunity.com/gc/Apigee/bd-p/cloud-apigee).
-
-## License
-
-This material is [Copyright 2023 Google LLC](../NOTICE)
-and is licensed under the [Apache 2.0 License](../LICENSE).

@@ -41,10 +41,14 @@ Most developers begin by identifying an interesting sample based on a specific u
   Deploy Apigee proxy using Apigee Maven plugin and Cloud Build
 - [deploy-apigee-sharedflow](deploy-apigee-sharedflow) -
   Deploy Apigee sharedflow using Apigee Maven plugin and Cloud Build
+- [deploy-apigee-config](deploy-apigee-config) -
+  Deploy Apigee configurations using Apigee Maven plugin and Cloud Build
 - [oauth-client-credentials](oauth-client-credentials) -
   A sample proxy which uses the OAuth 2.0 client credentials grant type flow
 - [cloud-logging](cloud-logging) -
   A sample proxy that logs custom messages to Google Cloud Logging
+- [basic-quota](basic-quota) -
+  A sample which shows how to implement a basic API consumption quota
 
 ### <a name="modifying"></a>Modifying a sample proxy
 
@@ -66,3 +70,19 @@ Please add the sample as a root level directory in the repository
 
 ### Contributing to existing samples
 Check for the section titled **'Contributing'** in the README specific for that sample for details.
+
+## License
+
+All solutions within this repository are provided under the
+[Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0) license.
+Please see the [LICENSE](./LICENSE.txt) file for more detailed terms and conditions.
+
+## Not Google Product Clause
+
+This is not an officially supported Google product, nor is it part of an
+official Google product.
+
+## Support
+
+If you need support or assistance, you can try inquiring on [Google Cloud Community
+forum dedicated to Apigee](https://www.googlecloudcommunity.com/gc/Apigee/bd-p/cloud-apigee).
