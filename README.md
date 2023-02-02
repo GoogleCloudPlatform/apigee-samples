@@ -66,10 +66,9 @@ The Apigee docs are located [here](https://cloud.google.com/apigee/docs).
 
 ## <a name="contributing"></a>Contributing
 
-Please add the sample as a root level directory in the repository
+New samples should be added as a root level directory in this repository.
 
-### Contributing to existing samples
-Check for the section titled **'Contributing'** in the README specific for that sample for details.
+For more details on how to contribute please see the [guidelines](./CONTRIBUTING.md).
 
 ## License
 
