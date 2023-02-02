@@ -45,7 +45,7 @@ Use the following GCP CloudShell tutorial, and follow the instructions.
 
 ```bash
 git clone https://github.com/GoogleCloudPlatform/apigee-samples.git
-cd cloud-logging
+cd apigee-samples/cloud-logging
 ```
 
 2. Edit the `env.sh` and configure the ENV vars

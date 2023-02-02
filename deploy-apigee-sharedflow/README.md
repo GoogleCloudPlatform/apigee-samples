@@ -25,7 +25,7 @@ Use the following GCP CloudShell tutorial, and follow the instructions.
 
 ```bash
 git clone https://github.com/GoogleCloudPlatform/apigee-samples.git
-cd deploy-apigee-sharedflow
+cd apigee-samples/deploy-apigee-sharedflow
 ```
 
 2. Edit the `env.sh` and configure the ENV vars
