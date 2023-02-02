@@ -33,6 +33,7 @@ cd apigee-samples/cloud-run
 * `PROJECT` the project where your Apigee organization is located
 * `APIGEE_HOST` the externally reachable hostname of the Apigee environment group that contains APIGEE_ENV
 * `APIGEE_ENV` the Apigee environment where the demo resources should be created
+* `CLOUD_RUN_REGION` the region to deploy cloud run service.
 
 Now source the `env.sh` file
 
