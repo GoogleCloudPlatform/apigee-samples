@@ -42,11 +42,11 @@ echo "Deploying Apigee artifacts..."
 zip -r sample-integrated-developer-portal.zip apiproxy
 
 echo "Importing and Deploying Apigee sample-integrated-developer-portal proxy..."
-REV=$(apigeecli apis import -f sample-integrated-developer-portal.zip --org $PROJECT --token $TOKEN --disable-check | jq ."revision" -r)
-apigeecli apis deploy --wait --name sample-integrated-developer-portal --ovr --rev $REV --org $PROJECT --env $APIGEE_ENV --token $TOKEN
+REV=$(apigeecli apis import -f sample-integrated-developer-portal.zip --org "$PROJECT" --token "$TOKEN" --disable-check | jq ."revision" -r)
+apigeecli apis deploy --wait --name sample-integrated-developer-portal --ovr --rev "$REV" --org "$PROJECT" --env "$APIGEE_ENV" --token "$TOKEN"
 
 echo "Creating API Product"
-apigeecli products create --name sample-integrated-developer-portal-product --displayname "sample-integrated-developer-portal-product" --proxies sample-integrated-developer-portal --envs $APIGEE_ENV --approval auto --quota 10 --interval 1 --unit minute --org $PROJECT --token $TOKEN
+apigeecli products create --name sample-integrated-developer-portal-product --displayname "sample-integrated-developer-portal-product" --proxies sample-integrated-developer-portal --envs "$APIGEE_ENV" --approval auto --quota 10 --interval 1 --unit minute --org "$PROJECT" --token "$TOKEN"
 
 # var is expected by integration test (apickli)
 export PROXY_URL="$APIGEE_HOST/v1/samples/integrated-developer-portal"
