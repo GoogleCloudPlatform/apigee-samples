@@ -18,7 +18,8 @@ export PROJECT="<GCP_PROJECT_ID>"
 export PROJECT_ID=$PROJECT
 export APIGEE_HOST="<APIGEE_DOMAIN_NAME>"
 export APIGEE_ENV="<APIGEE_ENVIRONMENT_NAME>"
-export PROJECT_NUMBER="$(gcloud projects describe $PROJECT --format="value(projectNumber)")"
+PROJECT_NUMBER="$(gcloud projects describe $PROJECT --format="value(projectNumber)")"
+export PROJECT_NUMBER
 export CLOUD_BUILD_SA="$PROJECT_NUMBER@cloudbuild.gserviceaccount.com"
 export CLOUD_RUN_SERVICE="mock-target"
 export CLOUD_RUN_REGION="us-central1"
