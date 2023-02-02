@@ -35,7 +35,6 @@ fi
 echo "Passed variable tests"
 
 TOKEN=$(gcloud auth print-access-token)
-APP_NAME=sample-integrated-developer-portal
 
 echo "Installing apigeecli"
 curl -s https://raw.githubusercontent.com/apigee/apigeecli/master/downloadLatest.sh | bash
@@ -44,7 +43,7 @@ export PATH=$PATH:$HOME/.apigeecli/bin
 echo "Deleting API Products"
 apigeecli products delete --name sample-integrated-developer-portal-product --org "$PROJECT" --token "$TOKEN"
 
-echo "Undeploying sample-integrated-developer-portal"
+echo "Undeploying proxy sample-integrated-developer-portal"
 REV=$(apigeecli envs deployments get --env "$APIGEE_ENV" --org "$PROJECT" --token "$TOKEN" --disable-check | jq .'deployments[]| select(.apiProxy=="sample-integrated-developer-portal").revision' -r)
 apigeecli apis undeploy --name sample-integrated-developer-portal --env "$APIGEE_ENV" --rev "$REV" --org "$PROJECT" --token "$TOKEN"
 

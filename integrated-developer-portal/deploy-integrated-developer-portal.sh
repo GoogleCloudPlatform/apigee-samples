@@ -32,7 +32,6 @@ fi
 echo "Passed variable tests"
 
 TOKEN=$(gcloud auth print-access-token)
-APP_NAME=sample-integrated-developer-portal
 
 echo "Installing apigeecli"
 curl -s https://raw.githubusercontent.com/apigee/apigeecli/master/downloadLatest.sh | bash
