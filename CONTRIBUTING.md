@@ -11,7 +11,7 @@ just a few guidelines you need to follow.
 1. Projects in this repo are targeted for [Apigee X](https://cloud.google.com/apigee/docs) and [hybrid](https://cloud.google.com/apigee/docs/hybrid/latest/what-is-hybrid). We do not accept samples for the Apigee Edge platform (these may be found [here](https://github.com/apigee/api-platform-samples))
     - More information about the different versions of Apigee can be found [here](https://cloud.google.com/apigee/docs/api-platform/get-started/compare-apigee-products)
 1. Projects accepted to this repository should be considered a recommended best practice by Apigee's product management, field engineers, customers and community
-1. For large pull requests (e.g. rewrites of large portions or entire projects), please first propose the changes via a new GitHub issue and discuss with the community before submitting a PR
+1. For large pull requests (e.g. rewrites of large portions or entire projects), please first propose the changes via a new GitHub [issue](https://github.com/GoogleCloudPlatform/apigee-samples/issues/new/choose) and discuss with the community before submitting a PR
 
 
 ## Quickstart
