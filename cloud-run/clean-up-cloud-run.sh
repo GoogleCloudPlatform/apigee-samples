@@ -44,7 +44,7 @@ echo "Deleting proxy sample-cloud-logging proxy"
 apigeecli apis delete --name sample-cloud-run --org "$PROJECT" --token "$TOKEN"
 
 echo "Delete cloud run service"
-gcloud run services delete $CLOUD_RUN_SERVICE --region=$CLOUD_RUN_REGION
+gcloud run services delete "$CLOUD_RUN_SERVICE" --region="$CLOUD_RUN_REGION"
 
 echo "Deleting service account"
 gcloud iam service-accounts delete ${SA_NAME}@"${PROJECT}".iam.gserviceaccount.com
