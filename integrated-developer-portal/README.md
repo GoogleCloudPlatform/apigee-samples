@@ -37,7 +37,7 @@ Use the following GCP CloudShell tutorial, and follow the instructions in Cloud 
 
 ```bash
 git clone https://github.com/GoogleCloudPlatform/apigee-samples.git
-cd integrated-developer-portal
+cd apigee-samples/integrated-developer-portal
 ```
 
 2. Edit the `env.sh` and configure the ENV vars
@@ -69,9 +69,9 @@ This script creates an API Proxy and API product. It does not, however, create t
 ---
 ## Create Integrated Developer Portal
 
-You've successfully created an api secured proxy and all the resources needed to access it. Now we need to create the integrated developer portal:
+You've successfully created a secured Apigee proxy. Now we need to create the integrated developer portal:
 
-1. Access the portals page from the Apigee homepage. Publish > Portals
+1. Access the portals page from the [Apigee homepage](https://apigee.google.com). Publish > Portals
 2. Click the +Portal button
 3. For name you can use "Sample Integrated Developer Portal". You can leave Description blank.
 
@@ -97,11 +97,11 @@ We also need to add our API product to the portal:
 
 ## Test Integrated Developer Portal
 
-Now that we have a developer portal, let's walk through it's workflow. First we'll create our create our developer account and sign in, then we'll create a Apigee app complete with a client id and secret, then we'll use the client id to authorize our requests and test our API. To do so, follow the steps below: 
+Now that we have a developer portal, let's walk through its workflow. First we'll create our create our developer account and sign in, then we'll make an Apigee app complete with a client id and secret, and finally we'll use the client id to authorize our requests and test our API. To do so, follow the steps below: 
 
 1. Navigate to your newly created portal. Portals > Sample Integrated Developer Portal
 2. Enter the portal by clicking the Live Portal button at the top right, or with the following URL: https://\[APIGEE-ORG\]-sampleintegrateddeveloperportal.apigee.io
-3. Click the Sign In button and create an account. This will necessitate an email confirmation. Note: this creates an Apigee developer account
+3. Click the Sign In button and create an account. You need to enter a valid email as the portal necessitate an email confirmation. Note: this creates an Apigee developer account
 4. Navigate back to your portal's homepage (https://\[APIGEE-ORG\]-sampleintegrateddeveloperportal.apigee.io) and make sure that you're signed in
 5. Open the dropdown menu by clicking on your account and select Apps
 6. Select +NEW APP and update the following fields. Note: this creates an Apigee App for your developer
@@ -117,13 +117,13 @@ Now that we have a developer portal, let's walk through it's workflow. First we'
 
 ## Cleanup
 
-After you create your integrated developer portal you can clean up the artefacts from this sample in your Apigee Organization. First source your `env.sh` script, and then run
+After you create your integrated developer portal you can clean up the artifacts from this sample in your Apigee Organization. First source your `env.sh` script, and then run
 
 ```bash
 ./clean-up-integrated-developer-portal.sh
 ```
 
-After this, you need to manually delete manually created Apigee resources
+After this, you need to manually delete the created Apigee resources:
 1. Navigate to Publish > Developers
 2. Find the account you created in your developer portal, hover over it, and select the trash can icon to delete
 3. Navigate to Publish > API Products

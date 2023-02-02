@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <!--
  Copyright 2022 Google LLC
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -11,20 +10,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<APIProxy revision="1" name="sample-integrated-developer-portal">
-  <DisplayName/>
+<APIProxy name="sample-integrated-developer-portal">
   <Description>An API key protected proxy for an integrated developer portal</Description>
-  <CreatedAt>1674699452223</CreatedAt>
-  <LastModifiedAt>1674699452223</LastModifiedAt>
-  <BasePaths>/v1/samples/integrated-developer-portal</BasePaths>
-  <Policies>
-    <Policy>VA-VerifyKey</Policy>
-    <Policy>CORS-AddCORS</Policy>
-  </Policies>
-  <ProxyEndpoints>
-    <ProxyEndpoint>default</ProxyEndpoint>
-  </ProxyEndpoints>
-  <TargetEndpoints>
-    <TargetEndpoint>default</TargetEndpoint>
-  </TargetEndpoints>
 </APIProxy>
