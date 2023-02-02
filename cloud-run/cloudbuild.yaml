@@ -32,20 +32,16 @@ steps:
       - |
         export build_token=\"$(gcloud auth application-default \
           print-access-token)\"
-        
         # write all "build_" variables to the persistent volume "/workspace"
         env | grep "^build_" > /workspace/build_vars
-
         gcloud run services describe ${_SERVICE} --region=${_REGION} --format 'value(status.url)'  > /workspace/cloudrunendpoint
-
         gcloud iam service-accounts create run-mock-target-sa \
           --project "$PROJECT_ID" || true
-        
         gcloud run services add-iam-policy-binding ${_SERVICE} \
           --region "us-central1" \
           --member serviceAccount:run-mock-target-sa@"$PROJECT_ID".iam.gserviceaccount.com \
           --role roles/run.invoker \
-          --platform managed 
+          --platform managed
   - name: 'gcr.io/cloud-builders/mvn'
     id: "Package bundle"
     entrypoint: 'bash'
@@ -54,7 +50,7 @@ steps:
       - |
         target_url=$(cat /workspace/cloudrunendpoint)
         echo $target_url
-        sed -i "s|@TARGETURL@|$target_url|" ./apiproxy/targets/default.xml    
+        sed -i "s|@TARGETURL@|$target_url|" ./apiproxy/targets/default.xml
         mvn -f pom.xml -ntp process-resources apigee-enterprise:configure \
           -Pdev -DgoogleTokenEmail=run-mock-target-sa@$PROJECT_ID.iam.gserviceaccount.com -Dorg=$PROJECT_ID -Denv=$_APIGEE_TEST_ENV
   - name: 'gcr.io/cloud-builders/mvn'
