@@ -49,6 +49,8 @@ Most developers begin by identifying an interesting sample based on a specific u
   A sample proxy that logs custom messages to Google Cloud Logging
 - [basic-quota](basic-quota) -
   A sample which shows how to implement a basic API consumption quota
+- [integrated-developer-portal](integrated-developer-portal) -
+  A sample which shows you how to utilize an integrated developer portal
 
 ### <a name="modifying"></a>Modifying a sample proxy
 
