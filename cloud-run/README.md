@@ -85,4 +85,3 @@ If you want to clean up the artifacts from this example in your Apigee Organizat
 ```bash
 ./clean-up-cloud-run.sh
 ```
-
