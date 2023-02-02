@@ -52,32 +52,19 @@ Now source the `env.sh` file
 source ./env.sh
 ```
 
-3. Deploy the Apigee resources necessary to create an integrated developer portal
+3. Ensure you have an active GCP account selected in the Cloud shell
+
+```sh
+gcloud auth login
+```
+
+4. Deploy the Apigee resources necessary to create an integrated developer portal
 
 ```bash
 ./deploy-integrated-developer-portal.sh
 ```
 
-This script creates an API Proxy, API product, a sample App developer, and App. The script also tests that the deployment and configuration has been sucessfull. It does not, however, create the developer portal. We will create and test that manually.
-
-## Testing the Client Credentials Proxy
-To run the tests manually, first retrieve Node.js dependencies with:
-```
-npm install
-```
-and then:
-```
-npm run test
-```
-
-## Manually call the API
-
-The script that deploys the Apigee API proxies prints the proxy and app information you will need to run the commands below.
-
-```
-curl -v http://$APIGEE_HOST/v1/sample/integrated-developer-portal -d "apikey=$APP_CLIENT_ID"
-```
-> _Note: Under normal circumstances, avoid providing secrets on the command itself using `-u`_
+This script creates an API Proxy and API product. It does not, however, create the developer portal. We will create and test that manually.
 
 ---
 ## Create Integrated Developer Portal

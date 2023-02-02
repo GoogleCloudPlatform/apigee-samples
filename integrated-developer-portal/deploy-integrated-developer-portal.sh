@@ -53,31 +53,13 @@ apigeecli apis deploy --wait --name sample-integrated-developer-portal --ovr --r
 echo "Creating API Product"
 apigeecli products create --name sample-integrated-developer-portal-product --displayname "sample-integrated-developer-portal-product" --proxies sample-integrated-developer-portal --envs $APIGEE_ENV --approval auto --quota 10 --interval 1 --unit minute --org $PROJECT --token $TOKEN
 
-echo "Creating Developer"
-apigeecli developers create --user testuser --email sample-integrated-developer-portal_apigeesamples@acme.com --first Test --last User --org $PROJECT --token $TOKEN
-
-echo "Creating Developer App"
-APP_ID=$(apigeecli apps create --name $APP_NAME --email sample-integrated-developer-portal_apigeesamples@acme.com --prods sample-integrated-developer-portal-product --org $PROJECT --token $TOKEN --disable-check | jq ."appId" -r)
-
-APP_CLIENT_ID=$(apigeecli apps get --name $APP_NAME --org $PROJECT --token $TOKEN --disable-check | jq ."[0].credentials[0].consumerKey" -r)
-export APP_CLIENT_ID
-
-APP_CLIENT_SECRET=$(apigeecli apps get --name $APP_NAME --org $PROJECT --token $TOKEN --disable-check | jq ."[0].credentials[0].consumerSecret" -r)
-export APP_CLIENT_SECRET
-
 # var is expected by integration test (apickli)
 export PROXY_URL="$APIGEE_HOST/v1/sample/integrated-developer-portal"
-
-# integration tests
-npm install
-npm run test
 
 echo " "
 echo "All the Apigee artifacts are successfully deployed!"
 
 echo " "
 echo "Your Proxy URL is: https://$PROXY_URL"
-echo "Your app client id is: $APP_CLIENT_ID"
-echo "Your app client secret is: $APP_CLIENT_SECRET"
-echo "To call the API yourself: curl -X GET 'http://$PROXY_URL?apikey=$APP_CLIENT_ID'"
+echo "You will be unable to call the proxy url until you create an API key from the developer portal"
 echo " "
