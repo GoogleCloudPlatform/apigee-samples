@@ -82,13 +82,13 @@ We also need to add our API product to the portal:
 3. Click + to add a new API product to the catalog
 4. Select the sample-integrated-developer-portal-product product and click next
 5. Configure as shown below
+- Published: Select published (checked)
 - Display title: Leave default name, sample-integrated-developer-portal-product
 - Display description: A portal for an API key protected proxy
-- Published: Select published (checked)
 - Require developers to specify a callback URL: Keep deselected (unchecked)
 - Audience: Anonymous users (anyone can view)
 - API product image: Image of your choice
-- API documentation: Use the [integrated-developer-portal.yaml](integrated-developer-portal.yaml) OpenAPI file from this repo:
+- API documentation: Use the [integrated-developer-portal.yaml](integrated-developer-portal.yaml) OpenAPI document from this repo:
     - Download [integrated-developer-portal.yaml](integrated-developer-portal.yaml) to your local computer
     - Make note of your Apigee domain from the Apigee dashboard at Admin > Environments > Groups
     - Replace "\[YOUR_DOMAIN\]" with your Apigee domain
@@ -99,13 +99,13 @@ We also need to add our API product to the portal:
 
 Now that we have a developer portal, let's walk through it's workflow. First we'll create our create our developer account and sign in, then we'll create a Apigee app complete with a client id and secret, then we'll use the client id to authorize our requests and test our API. To do so, follow the steps below: 
 
-1. Navigate to your newly created portal API. Portals > Sample Integrated Developer Portal > API Catalog > sample-integrated-developer-portal-product
+1. Navigate to your newly created portal. Portals > Sample Integrated Developer Portal
 2. Enter the portal by clicking the Live Portal button at the top right, or with the following URL: https://\[APIGEE-ORG\]-sampleintegrateddeveloperportal.apigee.io
 3. Click the Sign In button and create an account. This will necessitate an email confirmation. Note: this creates an Apigee developer account
 4. Navigate back to your portal's homepage (https://\[APIGEE-ORG\]-sampleintegrateddeveloperportal.apigee.io) and make sure that you're signed in
 5. Open the dropdown menu by clicking on your account and select Apps
 6. Select +NEW APP and update the following fields. Note: this creates an Apigee App for your developer
-- App Name: Test App
+- App Name: Sample App
 - APIs: Enable sample-integrated-developer-portal-product
 7. Click the SAVE button
 8. Click into APIs from the top navbar
@@ -126,20 +126,7 @@ After you create your integrated developer portal you can clean up the artefacts
 After this, you need to manually delete manually created Apigee resources
 1. Navigate to Publish > Developers
 2. Find the account you created in your developer portal, hover over it, and select the trash can icon to delete
-3. Navigate to Publish > Portals
-4. Find your Sample Integrated Developer Portal, hover over it, and select the trash can icon to delete
-
-## Not Google Product Clause
-
-This is not an officially supported Google product, nor is it part of an
-official Google product.
-
-## Support
-
-If you need support or assistance, you can try inquiring on [Google Cloud Community
-forum dedicated to Apigee](https://www.googlecloudcommunity.com/gc/Apigee/bd-p/cloud-apigee).
-
-## License
-
-This material is [Copyright 2023 Google LLC](../NOTICE.txt)
-and is licensed under the [Apache 2.0 License](../LICENSE.txt).
+3. Navigate to Publish > API Products
+4. Find the product you created, open the actions menu, and delete it
+5. Navigate to Publish > Portals
+6. Find your Sample Integrated Developer Portal, hover over it, and select the trash can icon to delete

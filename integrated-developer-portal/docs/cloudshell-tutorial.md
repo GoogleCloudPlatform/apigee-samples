@@ -64,5 +64,7 @@ After you create your integrated developer portal you can clean up the artefacts
 After this, you need to manually delete manually created Apigee resources
 1. Navigate to Publish > Developers
 2. Find the account you created in your developer portal, hover over it, and select the trash can icon to delete
-3. Navigate to Publish > Portals
-4. Find your Sample Integrated Developer Portal, hover over it, and select the trash can icon to delete
+3. Navigate to Publish > API Products
+4. Find the product you created, open the actions menu, and delete it
+5. Navigate to Publish > Portals
+6. Find your Sample Integrated Developer Portal, hover over it, and select the trash can icon to delete
