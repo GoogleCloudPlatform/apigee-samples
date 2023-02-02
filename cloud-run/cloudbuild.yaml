@@ -38,7 +38,7 @@ steps:
         gcloud iam service-accounts create run-mock-target-sa \
           --project "$PROJECT_ID" || true
         gcloud run services add-iam-policy-binding ${_SERVICE} \
-          --region "us-central1" \
+          --region ${_REGION} \
           --member serviceAccount:run-mock-target-sa@"$PROJECT_ID".iam.gserviceaccount.com \
           --role roles/run.invoker \
           --platform managed
@@ -49,7 +49,6 @@ steps:
       - -c
       - |
         target_url=$(cat /workspace/cloudrunendpoint)
-        echo $target_url
         sed -i "s|@TARGETURL@|$target_url|" ./apiproxy/targets/default.xml
         mvn -f pom.xml -ntp process-resources apigee-enterprise:configure \
           -Pdev -DgoogleTokenEmail=run-mock-target-sa@$PROJECT_ID.iam.gserviceaccount.com -Dorg=$PROJECT_ID -Denv=$_APIGEE_TEST_ENV

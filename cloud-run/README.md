@@ -4,7 +4,7 @@ This sample demonstrates how to use Cloud Run Service from Apigee Proxy using Cl
 
 ## Prerequisites
 1. [Provision Apigee X](https://cloud.google.com/apigee/docs/api-platform/get-started/provisioning-intro)
-2. Access to deploy proxies to Apigee, trigger Cloud Build
+2. Access to deploy proxies to Apigee, deploy Cloud Run and trigger Cloud Build
 3. Configure [external access](https://cloud.google.com/apigee/docs/api-platform/get-started/configure-routing#external-access) for API traffic to your Apigee X instance
 4. Make sure the following tools are available in your terminal's $PATH (Cloud Shell has these pre-configured)
     * [gcloud SDK](https://cloud.google.com/sdk/docs/install)
@@ -25,7 +25,7 @@ Use the following GCP CloudShell tutorial, and follow the instructions.
 
 ```bash
 git clone https://github.com/GoogleCloudPlatform/apigee-samples.git
-cd cloud-run
+cd apigee-samples/cloud-run
 ```
 
 2. Edit the `env.sh` and configure the ENV vars
@@ -45,6 +45,7 @@ source ./env.sh
 ```bash
 gcloud services enable cloudbuild.googleapis.com
 gcloud services enable run.googleapis.com
+gcloud services enable containerregistry.googleapis.com
 
 gcloud projects add-iam-policy-binding "$PROJECT" \
   --member="serviceAccount:$CLOUD_BUILD_SA" \

@@ -42,6 +42,7 @@ First, let enabled the Cloud Build API
 ```sh
 gcloud services enable cloudbuild.googleapis.com
 gcloud services enable run.googleapis.com
+gcloud services enable containerregistry.googleapis.com
 ```
 
 Once the API is enabled, lets assign the Apigee Org Admin role to the Cloud Build service account
