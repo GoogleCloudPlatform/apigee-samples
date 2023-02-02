@@ -15,11 +15,11 @@
   <PreFlow name="PreFlow">
     <Request>
       <Step>
-        <Name>VA-verify-api-key</Name>
+        <Name>VA-VerifyKey</Name>
         <Condition>request.verb != "OPTIONS"</Condition>
       </Step>
       <Step>
-        <Name>CORS-add-cors</Name>
+        <Name>CORS-AddCORS</Name>
       </Step>
     </Request>
     <Response/>

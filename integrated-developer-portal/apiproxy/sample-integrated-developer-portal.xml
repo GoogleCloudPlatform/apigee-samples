@@ -18,8 +18,8 @@
   <LastModifiedAt>1674699452223</LastModifiedAt>
   <BasePaths>/v1/samples/integrated-developer-portal</BasePaths>
   <Policies>
-    <Policy>verify-api-key</Policy>
-    <Policy>add-cors</Policy>
+    <Policy>VA-VerifyKey</Policy>
+    <Policy>CORS-AddCORS</Policy>
   </Policies>
   <ProxyEndpoints>
     <ProxyEndpoint>default</ProxyEndpoint>
