@@ -11,5 +11,5 @@
  limitations under the License.
 -->
 <APIProxy name="sample-cloud-run">
-    <Description>A sample API proxy to demonstrate Apigee Invokation of Cloud Run application using CloudBuild</Description>
+    <Description>A sample API proxy to demonstrate Cloud Run Invocation from Apigee using CloudBuild</Description>
 </APIProxy>

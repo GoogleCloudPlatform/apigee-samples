@@ -50,7 +50,7 @@ Most developers begin by identifying an interesting sample based on a specific u
 - [basic-quota](basic-quota) -
   A sample which shows how to implement a basic API consumption quota
 - [cloud-run](cloud-run) -
-  A sample to use Cloud Run from Apigee
+  A sample proxy to invoke Cloud Run Service from Apigee
 
 ### <a name="modifying"></a>Modifying a sample proxy
 

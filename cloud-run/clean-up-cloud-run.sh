@@ -29,6 +29,16 @@ if [ -z "$APIGEE_HOST" ]; then
         exit
 fi
 
+if [ -z "$CLOUD_RUN_SERVICE" ]; then
+        echo "No CLOUD_RUN_SERVICE variable set"
+        exit
+fi
+
+if [ -z "$CLOUD_RUN_REGION" ]; then
+        echo "No CLOUD_RUN_REGION variable set"
+        exit
+fi
+
 TOKEN=$(gcloud auth print-access-token)
 SA_NAME=run-mock-target-sa
 

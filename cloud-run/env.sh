@@ -22,6 +22,6 @@ PROJECT_NUMBER="$(gcloud projects describe $PROJECT --format="value(projectNumbe
 export PROJECT_NUMBER
 export CLOUD_BUILD_SA="$PROJECT_NUMBER@cloudbuild.gserviceaccount.com"
 export CLOUD_RUN_SERVICE="mock-target"
-export CLOUD_RUN_REGION="us-central1"
+export CLOUD_RUN_REGION="<CLOUD_RUN_REGION>"
 
 gcloud config set project $PROJECT
