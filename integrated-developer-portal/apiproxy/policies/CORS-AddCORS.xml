@@ -11,7 +11,14 @@
  limitations under the License.
 -->
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<VerifyAPIKey async="false" continueOnError="false" enabled="true" name="VA-verify-api-key">
-  <DisplayName>VA-verify-api-key</DisplayName>
-  <APIKey ref="request.queryparam.apikey"/>
-</VerifyAPIKey>
+<CORS continueOnError="false" enabled="true" name="CORS-AddCORS">
+  <DisplayName>CORS-AddCORS</DisplayName>
+  <AllowOrigins>{request.header.origin}</AllowOrigins>
+  <AllowMethods>GET, PUT, POST, DELETE, OPTIONS</AllowMethods>
+  <AllowHeaders>origin, x-requested-with, accept, content-type</AllowHeaders>
+  <ExposeHeaders>*</ExposeHeaders>
+  <MaxAge>3628800</MaxAge>
+  <AllowCredentials>false</AllowCredentials>
+  <GeneratePreflightResponse>true</GeneratePreflightResponse>
+  <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+</CORS>
