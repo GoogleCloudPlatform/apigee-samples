@@ -14,23 +14,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-if [ -z "$PROJECT" ]
-then
-echo "No PROJECT variable set"
-exit
+if [ -z "$PROJECT" ]; then
+    echo "No PROJECT variable set"
+    exit
 fi
 
-
-if [ -z "$APIGEE_ENV" ]
-then
-echo "No APIGEE_ENV variable set"
-exit
+if [ -z "$APIGEE_ENV" ]; then
+    echo "No APIGEE_ENV variable set"
+    exit
 fi
 
-if [ -z "$APIGEE_HOST" ]
-then
-echo "No APIGEE_HOST variable set"
-exit
+if [ -z "$APIGEE_HOST" ]; then
+    echo "No APIGEE_HOST variable set"
+    exit
 fi
 
 echo "Passed variable tests"
@@ -54,7 +50,7 @@ echo "Creating API Product"
 apigeecli products create --name sample-integrated-developer-portal-product --displayname "sample-integrated-developer-portal-product" --proxies sample-integrated-developer-portal --envs $APIGEE_ENV --approval auto --quota 10 --interval 1 --unit minute --org $PROJECT --token $TOKEN
 
 # var is expected by integration test (apickli)
-export PROXY_URL="$APIGEE_HOST/v1/sample/integrated-developer-portal"
+export PROXY_URL="$APIGEE_HOST/v1/samples/integrated-developer-portal"
 
 echo " "
 echo "All the Apigee artifacts are successfully deployed!"

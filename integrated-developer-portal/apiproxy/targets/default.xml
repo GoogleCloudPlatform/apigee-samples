@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <TargetEndpoint name="default">
   <PreFlow name="PreFlow">
-    <Request>
-      <Step>
-        <Name>add-cors</Name>
-      </Step>
-    </Request>
+    <Request/>
     <Response/>
   </PreFlow>
   <Flows/>

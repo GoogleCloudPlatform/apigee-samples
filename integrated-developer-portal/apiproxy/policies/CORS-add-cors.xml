@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<CORS continueOnError="false" enabled="true" name="add-cors">
-  <DisplayName>Add CORS</DisplayName>
+<CORS continueOnError="false" enabled="true" name="CORS-add-cors">
+  <DisplayName>CORS-add-cors</DisplayName>
   <AllowOrigins>{request.header.origin}</AllowOrigins>
   <AllowMethods>GET, PUT, POST, DELETE, OPTIONS</AllowMethods>
   <AllowHeaders>origin, x-requested-with, accept, content-type</AllowHeaders>

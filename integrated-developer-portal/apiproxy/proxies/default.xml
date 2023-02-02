@@ -3,7 +3,11 @@
   <PreFlow name="PreFlow">
     <Request>
       <Step>
-        <Name>verify-api-key</Name>
+        <Name>VA-verify-api-key</Name>
+        <Condition>request.verb != "OPTIONS"</Condition>
+      </Step>
+      <Step>
+        <Name>CORS-add-cors</Name>
       </Step>
     </Request>
     <Response/>
@@ -21,7 +25,7 @@
     <Response/>
   </PostFlow>
   <HTTPProxyConnection>
-    <BasePath>/v1/sample/integrated-developer-portal</BasePath>
+    <BasePath>/v1/samples/integrated-developer-portal</BasePath>
   </HTTPProxyConnection>
   <RouteRule name="default">
     <TargetEndpoint>default</TargetEndpoint>

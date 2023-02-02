@@ -4,7 +4,7 @@
   <Description>An API key protected proxy for an integrated developer portal</Description>
   <CreatedAt>1674699452223</CreatedAt>
   <LastModifiedAt>1674699452223</LastModifiedAt>
-  <BasePaths>/v1/sample/integrated-developer-portal</BasePaths>
+  <BasePaths>/v1/samples/integrated-developer-portal</BasePaths>
   <Policies>
     <Policy>verify-api-key</Policy>
     <Policy>add-cors</Policy>
