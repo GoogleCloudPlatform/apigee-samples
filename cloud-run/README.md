@@ -21,7 +21,7 @@ Use the following GCP CloudShell tutorial, and follow the instructions.
 
 ## Setup instructions
 
-1. Clone the apigee-samples repo, and switch the deploy-apigee-proxy directory
+1. Clone the apigee-samples repo, and switch the cloud-run directory
 
 ```bash
 git clone https://github.com/GoogleCloudPlatform/apigee-samples.git
@@ -41,12 +41,10 @@ Now source the `env.sh` file
 source ./env.sh
 ```
 
-3. Enable the Cloud Build API and assign Apigee Org admin role to the Cloud Build service account
+3. Enable the Cloud Build API, Cloud Run API and Container Registry API. Assign Apigee Org admin, Cloud Run Admin , Service Account User and Admin role to the Cloud Build service account
 
 ```bash
-gcloud services enable cloudbuild.googleapis.com
-gcloud services enable run.googleapis.com
-gcloud services enable containerregistry.googleapis.com
+gcloud services enable cloudbuild.googleapis.com run.googleapis.com containerregistry.googleapis.com
 
 gcloud projects add-iam-policy-binding "$PROJECT" \
   --member="serviceAccount:$CLOUD_BUILD_SA" \
