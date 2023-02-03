@@ -14,7 +14,7 @@ info:
   description: A portal for an API key protected proxy
   version: "1"
 servers:
-  - url: https://[YOUR_DOMAIN]/v1/samples/integrated-developer-portal
+  - url: https://[APIGEE_HOST]/v1/samples/integrated-developer-portal
 security:
   - APIKeyQuery: []
 paths:

@@ -89,9 +89,7 @@ We also need to add our API product to the portal:
 - Audience: Anonymous users (anyone can view)
 - API product image: Image of your choice
 - API documentation: Use the [integrated-developer-portal.yaml](integrated-developer-portal.yaml) OpenAPI document from this repo:
-    - Download [integrated-developer-portal.yaml](integrated-developer-portal.yaml) to your local computer
-    - Make note of your Apigee domain from the Apigee dashboard at Admin > Environments > Groups
-    - Replace "\[YOUR_DOMAIN\]" with your Apigee domain
+    - Download [integrated-developer-portal.yaml](integrated-developer-portal.yaml) to your local computer. If you ran the deployment script from Cloud Shell, then download the file from your Shell editor. Otherwise, you will need to manually update the file to replace "\[APIGEE_HOST\]" with your own Apigee host.
     - Upload your updated integrated-developer-portal.yaml as API documentation
 6. Scroll up and click save
 

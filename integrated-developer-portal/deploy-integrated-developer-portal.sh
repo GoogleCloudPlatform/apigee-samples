@@ -48,6 +48,9 @@ apigeecli apis deploy --wait --name sample-integrated-developer-portal --ovr --r
 echo "Creating API Product"
 apigeecli products create --name sample-integrated-developer-portal-product --displayname "sample-integrated-developer-portal-product" --proxies sample-integrated-developer-portal --envs "$APIGEE_ENV" --approval auto --quota 10 --interval 1 --unit minute --org "$PROJECT" --token "$TOKEN"
 
+echo "Updating OpenAPI YAML"
+sed -i "s/\[APIGEE_HOST\]/$APIGEE_HOST/" integrated-developer-portal.yaml
+
 # var is expected by integration test (apickli)
 export PROXY_URL="$APIGEE_HOST/v1/samples/integrated-developer-portal"
 
