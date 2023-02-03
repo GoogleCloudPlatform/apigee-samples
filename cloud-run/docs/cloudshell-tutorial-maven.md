@@ -33,19 +33,15 @@ source ./env.sh
 
 ---
 
-## Deploy Apigee proxy
+## Deploy Cloud Run Sample
 
-Next, let's deploy the sample proxy to Apigee using the Maven plugin and Cloud Build
-
-First, let enabled the Cloud Build API
+First, let enabled the Cloud Build API, Cloud Run API and Container Registry API
 
 ```sh
-gcloud services enable cloudbuild.googleapis.com
-gcloud services enable run.googleapis.com
-gcloud services enable containerregistry.googleapis.com
+gcloud services enable cloudbuild.googleapis.com run.googleapis.com containerregistry.googleapis.com
 ```
 
-Once the API is enabled, lets assign the Apigee Org Admin role to the Cloud Build service account
+Once the API is enabled, lets assign the Apigee Org Admin role, Cloud Run Admin and Service Account Admin and User Role to the Cloud Build service account
 
 ```sh
 gcloud projects add-iam-policy-binding "$PROJECT" \
@@ -72,7 +68,7 @@ gcloud builds submit --config cloudbuild.yaml . \
     --substitutions="_SERVICE=$CLOUD_RUN_SERVICE","_REGION=$CLOUD_RUN_REGION","_APIGEE_TEST_ENV=$APIGEE_ENV"
 ```
 
-This will trigger the Cloud Build and execute the steps in the <walkthrough-editor-open-file filePath="deploy-apigee-proxy/cloudbuild.yaml">cloudbuild.yaml</walkthrough-editor-open-file> file. At the end of the Cloud Build trigger, a proxy must be deployed to Apigee called `cloud-run-sample`
+This will trigger the Cloud Build and execute the steps in the <walkthrough-editor-open-file filePath="cloud-run/cloudbuild.yaml">cloudbuild.yaml</walkthrough-editor-open-file> file. At the end of the Cloud Build trigger, a proxy must be deployed to Apigee called `cloud-run-sample`
 
 
 ### Test the APIs
