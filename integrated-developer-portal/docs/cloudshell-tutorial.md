@@ -55,16 +55,16 @@ Navigate back to the Github README.md doc where we first started. Find the "Crea
 
 ## Cleanup
 
-After you create your integrated developer portal you can clean up the artefacts from this sample in your Apigee Organization. First source your `env.sh` script, and then run
+After you create your integrated developer portal you can clean up the artifacts from this sample in your Apigee Organization
+
+First, you need to manually delete some Apigee resources
+1. Navigate to Publish > Developers
+2. Find the account you created in your developer portal, hover over it, and select the trash can icon to delete. This will also delete all Apigee Apps associated with your developer
+3. Navigate to Publish > Portals
+4. Find your Sample Integrated Developer Portal, hover over it, and select the trash can icon to delete
+
+After that, source your `env.sh` script, and then run
 
 ```bash
 ./clean-up-integrated-developer-portal.sh
 ```
-
-After this, you need to manually delete manually created Apigee resources
-1. Navigate to Publish > Developers
-2. Find the account you created in your developer portal, hover over it, and select the trash can icon to delete
-3. Navigate to Publish > API Products
-4. Find the product you created, open the actions menu, and delete it
-5. Navigate to Publish > Portals
-6. Find your Sample Integrated Developer Portal, hover over it, and select the trash can icon to delete
