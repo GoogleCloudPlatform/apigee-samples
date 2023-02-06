@@ -53,6 +53,8 @@ Most developers begin by identifying an interesting sample based on a specific u
   A sample which shows how to implement a basic API consumption quota
 - [cloud-run](cloud-run) -
   A sample proxy to invoke Cloud Run Service from Apigee
+- [integrated-developer-portal](integrated-developer-portal) -
+  This sample demonstrates how to create an Apigee Integrated portal and shows how to expose your API products to its catalog
 
 ### <a name="modifying"></a>Modifying a sample proxy
 
