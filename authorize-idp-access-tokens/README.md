@@ -1,6 +1,6 @@
 # Authorize IdP Access Token
 
-This sample allows you to authorize JWT access tokens issued by an OIDC compliant identiy provider.
+This sample allows you to authorize JWT access tokens issued by an OIDC compliant identity provider.
 
 ## About JWT Access Tokens
 
@@ -24,9 +24,7 @@ With this example you'll be able to:
 This implementation includes two artifacts:
 
 * Authorize IdP Access Tokens Shared Flow: includes policies to valiate JWT access tokens an identify client Apps.
-* Test Proxy: A proxy that references the previus shared flow using a Flow Callout policy.
-
-With 
+* Test Proxy: A proxy that references the previous shared flow using a Flow Callout policy.
 
 ## Prerequisites
 1. [Provision Apigee X](https://cloud.google.com/apigee/docs/api-platform/get-started/provisioning-intro)
@@ -80,7 +78,7 @@ source ./env.sh
 
 ## Testing with sample request
 
-First, obtain an access token from the OIDC Identity provider using the Client ID and Secret values that were inported into Apigee. Set the token as an environment variable and send a cURL request as shown below:
+First, obtain an access token from the OIDC Identity provider using the Client ID and Secret values that were imported into Apigee. Set the token as an environment variable and send a cURL request as shown below:
 
 ```
 IDP_TOKEN=REPLACE_WITH_IDP_ACCESS_TOKEN
@@ -89,8 +87,8 @@ curl -v https://$APIGEE_HOST/v1/samples/authorize-idp-access-tokens -H "Authoriz
 
 ## Cleanup
 
-If you want to clean up the artefacts from this example in your Apigee Organization, first source your `env.sh` script, and then run
+If you want to clean up the artifacts from this example in your Apigee Organization, first source your `env.sh` script, and then run
 
 ```bash
-./clean-up-oauth-client-credentials
+./clean-up-deploy-authorize-idp-access-tokens.sh
 ```

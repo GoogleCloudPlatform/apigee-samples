@@ -1,7 +1,7 @@
 # Authorize IdP Access Token
 
 ---
-This sample allows you to authorize JWT access tokens minted by an OIDC complient identiy provider.
+This sample allows you to authorize JWT access tokens minted by an OIDC compliant identiy provider.
 
 Let's get started!
 
@@ -46,7 +46,7 @@ This script creates a Shared Flow, an API Proxy, an API product, a sample App de
 
 ### Test the APIs
 
-Obtain a JWT access token from the Identity Provider. The grant type and method to obain the access token is specific to each IdP. However, it is common for Identity Porviders to support the client_credentials grant type to issue access tokens to authorized applications.
+Obtain a JWT access token from the Identity Provider. The grant type and method to obain the access token is specific to each IdP. However, it is common for Identity Providers to support the client_credentials grant type to issue access tokens to authorized applications.
 
 > _Note: Use the same Client ID / App Key and Secret used in the environment variables file._
 
