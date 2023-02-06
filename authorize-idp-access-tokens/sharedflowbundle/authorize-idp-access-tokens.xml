@@ -22,7 +22,7 @@ limitations under the License.
     <DisplayName></DisplayName>
     <Description></Description>
     <Policies>
-        <Policy>JWT-AuthorizeIdPToken</Policy>
+        <Policy>JWT-VerifyIdPToken</Policy>
         <Policy>VK-IdentifyClientApp</Policy>
     </Policies>
     <SharedFlows>

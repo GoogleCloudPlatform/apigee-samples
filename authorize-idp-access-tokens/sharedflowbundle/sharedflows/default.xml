@@ -17,7 +17,7 @@ limitations under the License.
 -->
 <SharedFlow name="default">
     <Step>
-        <Name>JWT-AuthorizeIdPToken</Name>
+        <Name>JWT-VerifyIdPToken</Name>
     </Step>
     <Step>
         <Name>VK-IdentifyClientApp</Name>
