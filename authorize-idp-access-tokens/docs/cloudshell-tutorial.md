@@ -67,7 +67,7 @@ Congratulations! You've successfully authorized in Apigee an access token minted
 
 ## Cleanup
 
-If you want to clean up the artefacts from this example in your Apigee Organization, first source your `env.sh` script, and then run
+If you want to delete the artifacts from this example from your Apigee Organization, first source your `env.sh` script, and then run
 
 ```bash
 ./clean-up-authorize-idp-access-tokens.sh
