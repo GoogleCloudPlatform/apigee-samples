@@ -17,5 +17,5 @@ limitations under the License.
 -->
 <VerifyAPIKey async="false" continueOnError="false" enabled="true" name="VK-IdentifyClientApp">
     <DisplayName>VK-IdentifyClientApp</DisplayName>
-    <APIKey ref="jwt.JWT-VerifyIdPToken.claim.azp"/>
+    <APIKey ref="jwt.JWT-VerifyIdPToken.claim.REPLACEWITHIDPCLIENTIDCLAIM"/>
 </VerifyAPIKey>

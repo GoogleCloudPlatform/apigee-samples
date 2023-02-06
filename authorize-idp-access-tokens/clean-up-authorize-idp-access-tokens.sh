@@ -27,36 +27,6 @@ if [ -z "$APIGEE_ENV" ]; then
     exit
 fi
 
-if [ -z "$APIGEE_HOST" ]; then
-    echo "No APIGEE_HOST variable set"
-    exit
-fi
-
-if [ -z "$JWKS_URI" ]; then
-    echo "No JWKS_URI variable set"
-    exit
-fi
-
-if [ -z "$TOKEN_ISSUER" ]; then
-    echo "No TOKEN_ISSUER variable set"
-    exit
-fi
-
-if [ -z "$TOKEN_AUDIENCE" ]; then
-    echo "No TOKEN_AUDIENCE variable set"
-    exit
-fi
-
-if [ -z "$IDP_APP_CLIENT_ID" ]; then
-    echo "No IDP_CLIENT_ID variable set"
-    exit
-fi
-
-if [ -z "$IDP_APP_CLIENT_SECRET" ]; then
-    echo "No IDP_CLIENT_SECRET variable set"
-    exit
-fi
-
 TOKEN=$(gcloud auth print-access-token)
 APP_NAME=authz-idp-acccess-tokens-sample-app
 

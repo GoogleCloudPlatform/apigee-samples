@@ -61,7 +61,7 @@ curl -v https://$APIGEE_HOST/v1/samples/authorize-idp-access-tokens -H "Authoriz
 
 <walkthrough-conclusion-trophy></walkthrough-conclusion-trophy>
 
-Congratulations! You've successfully authorized in Apigee an access token minted by an Identity provider.
+Congratulations! You've successfully authorized in Apigee an access token issued by an Identity Provider.
 
 <walkthrough-inline-feedback></walkthrough-inline-feedback>
 

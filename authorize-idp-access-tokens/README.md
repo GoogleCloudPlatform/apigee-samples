@@ -36,6 +36,10 @@ This implementation includes two artifacts:
     * curl
     * jq
     * npm
+5. Configure and obtain Client App credentials from the Identity Provider. These usually are client identifier and secret / password credential pairs.
+
+6. Obtain a JWT access token from the Identity Provider. The grant type and method to obain the access token is specific to each IdP. However, it is common for Identity Providers to support the client_credentials grant type to issue access tokens to authorized applications.
+
 # (QuickStart) Setup using CloudShell
 
 Use the following GCP CloudShell tutorial, and follow the instructions.
@@ -55,11 +59,11 @@ cd apigee-samples/authorize-idp-access-tokens
 2. Edit the `env.sh` and configure the ENV vars
 
 * `PROJECT` the project where your Apigee organization is located
-* `APIGEE_HOST` the externally reachable hostname of the Apigee environment group that contains APIGEE_ENV
 * `APIGEE_ENV` the Apigee environment where the demo resources should be created
 * `JWKS_URI` the [JWKS URI](https://openid.net/specs/openid-connect-core-1_0.html#RotateSigKeys) from the OIDC identity provider that will issue JWT access tokens
 * `TOKEN_ISSUER` the [Issuer Identifier](https://openid.net/specs/openid-connect-core-1_0.html#IssuerIdentifier) from the OIDC Identity provider that will issue JWT access tokens
 * `TOKEN_AUDIENCE` the Token Audiences as defined in the OIDC identity provider that will issuee JWT access tokens
+* `TOKEN_CLIENT_ID_CLAIM` the name of the claim that will be used to store the client application identifier in the JWT access token (examples `azp` or `client_id`)
 * `IDP_APP_CLIENT_ID` the Client ID issued by the Identity Provider. This value needs to be imported in Apigee to be able to identify the client app traffic
 * `IDP_APP_CLIENT_SECRET` the Client Secret issued by the Identity Provider. This value is not used in this sample therefore it can also be an arbitraty value
 

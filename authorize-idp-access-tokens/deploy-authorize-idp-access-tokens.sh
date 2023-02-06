@@ -24,11 +24,6 @@ if [ -z "$APIGEE_ENV" ]; then
     exit
 fi
 
-if [ -z "$APIGEE_HOST" ]; then
-    echo "No APIGEE_HOST variable set"
-    exit
-fi
-
 if [ -z "$JWKS_URI" ]; then
     echo "No JWKS_URI variable set"
     exit
@@ -41,6 +36,11 @@ fi
 
 if [ -z "$TOKEN_AUDIENCE" ]; then
     echo "No TOKEN_AUDIENCE variable set"
+    exit
+fi
+
+if [ -z "$TOKEN_CLIENT_ID_CLAIM" ]; then
+    echo "No TOKEN_CLIENT_ID_CLAIM variable set"
     exit
 fi
 
@@ -69,7 +69,14 @@ npm run lint
 
 echo "Deploying Apigee artifacts..."
 rm authorize-idp-access-tokens.zip
+mkdir rendered
+cp -r ./sharedflowbundle ./rendered
+sed -i "s/REPLACEWITHIDPCLIENTIDCLAIM/$TOKEN_CLIENT_ID_CLAIM/g" ./rendered/policies/VK-IdentifyClientApp.xml
+cd rendered
 zip -r authorize-idp-access-tokens.zip sharedflowbundle
+cp authorize-idp-access-tokens.zip ../
+cd ../
+rm -r ./rendered
 rm sample-authorize-idp-access-tokens.zip
 zip -r sample-authorize-idp-access-tokens.zip apiproxy
 rm idp_configuration.properties
