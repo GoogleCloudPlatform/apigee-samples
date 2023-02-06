@@ -1,22 +1,22 @@
 # Authorize IdP Access Token
 
-This sample allows you to authorize JWT access tokens issued by an OIDC complient identiy provider.
+This sample allows you to authorize JWT access tokens issued by an OIDC compliant identiy provider.
 
 ## About JWT Access Tokens
 
-JWT tokens are compact and self-contained way to represent and transmit clains between two parties based on the [RFC7519](https://www.rfc-editor.org/rfc/rfc7519) standard. These claims are encoded in JSON format and this data can be digitally sigeded, encrypted, and or integrity protected.
+JWT tokens are compact and self-contained way to represent and transmit claims between two parties based on the [RFC7519](https://www.rfc-editor.org/rfc/rfc7519) standard. These claims are encoded in JSON format and this data can be digitally signed, encrypted, and/or integrity protected.
 
 JWT tokens are used by [OIDC](https://openid.net/specs/openid-connect-core-1_0.html) compliant identity providers for:
-* Authentication: After an End-User has been successfully authenticated an authorization server will issue a JWT Id Token to store End-User claims.
+* Authentication: After an End-User has been successfully authenticated, an authorization server will issue a JWT Id Token to store End-User claims.
 * Authorization: A Relying Party (client application) may request access to protected resources on behalf of an End-User by presenting an authorization grant to obtain an Acccess Token. Identity providers may support access tokens as JWTs based on the [RFC9068](https://datatracker.ietf.org/doc/rfc9068/) spec.
-* Information exchamge: JWTs can be used to share securelly structured (JSON) and arbitraty / bynary data (JWE).
+* Information exchange: JWTs can be used to securely share structured (JSON) and arbitrary / bynary data (JWE).
 
 ## Purpose
 
 With this example you'll be able to:
 
 * Import Client IDs and Secrets from an Identity Provider into Apigee as Developer App credentials
-* Validate JWT access tokens issued by an Idenity Provider that supports [OIDC](https://openid.net/specs/openid-connect-core-1_0.html) or [RFC9068](https://datatracker.ietf.org/doc/rfc9068/)
+* Validate JWT access tokens issued by an Identity Provider that supports [OIDC](https://openid.net/specs/openid-connect-core-1_0.html) or [RFC9068](https://datatracker.ietf.org/doc/rfc9068/)
 * Identify the Client App in Apigee
 
 ## Components

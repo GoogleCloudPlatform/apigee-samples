@@ -18,7 +18,7 @@ gcloud auth login
 Navigate to the 'authorize-idp-access-tokens' drirectory in the Cloud shell.
 
 ```sh
-cd authorize-idp-access-tokens
+cd apigee-samples/authorize-idp-access-tokens
 ```
 
 Edit the provided sample `env.sh` file, and set the environment variables there.
@@ -41,7 +41,7 @@ Next, let's create and deploy the Apigee resources.
 ./deploy-authorize-idp-access-tokens.sh
 ```
 
-This script creates a Shared Flow, an API Proxy, an API product, a sample App developer, an App, and environemnt properties. The script also imports client application credentials obtained from an identity provider.
+This script creates a Shared Flow, an API Proxy, an API product, a sample App developer, an App, and environment properties. The script also imports client application credentials obtained from an identity provider.
 
 
 ### Test the APIs

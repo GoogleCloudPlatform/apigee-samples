@@ -1,9 +1,10 @@
 {
   "name": "oauth-client-credentials",
   "version": "1.0.0",
-  "description": "API proxy demonstrating the OAuth 2.0 Client Credentials scheme",
+  "description": "API proxy demonstrating the Authorization of JWT access tokens issued by an Identity Provider",
   "scripts": {
-   "lint": "apigeelint -s apiproxy -e PO013,PO025 -f table.js",
+   "lintapi": "apigeelint -s apiproxy -e PO013,PO025 -f table.js",
+   "lintsf": "apigeelint -s sharedflowbundle -e PO013,PO025 -f table.js",
     "test": "npx cucumber-js --publish-quiet test/"
   },
   "dependencies": {

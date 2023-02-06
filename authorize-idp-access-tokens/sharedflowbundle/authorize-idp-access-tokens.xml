@@ -18,15 +18,3 @@ limitations under the License.
 <SharedFlowBundle name="sample-hello-cicd-sf">
     <Description>Authorize IdP Access Tokens Shared Flow</Description>
 </SharedFlowBundle>
-<SharedFlowBundle revision="10" name="authorize-idp-access-tokens">
-    <DisplayName></DisplayName>
-    <Description></Description>
-    <Policies>
-        <Policy>JWT-VerifyIdPToken</Policy>
-        <Policy>VK-IdentifyClientApp</Policy>
-    </Policies>
-    <SharedFlows>
-        <SharedFlow>default</SharedFlow>
-    </SharedFlows>
-    <subType>SharedFlow</subType>
-</SharedFlowBundle>
