@@ -76,7 +76,7 @@ rm idp_configuration.properties
 echo -e "jwks_uri=$JWKS_URI\nissuer=$TOKEN_ISSUER\naudience=$TOKEN_AUDIENCE" > idp_configuration.properties
 
 echo "Importing and Deploying IdP config as an environemnt property set..."
-apigeecli res --org "$PROJECT" --env "$APIGEE_ENV" --token "$TOKEN" --name idp_configuration --type properties --respath idp_configuration.properties
+apigeecli res create --org "$PROJECT" --env "$APIGEE_ENV" --token "$TOKEN" --name idp_configuration --type properties --respath idp_configuration.properties
 
 echo "Importing and Deploying Apigee authorize-idp-access-tokens sharedflow..."
 REV_SF=$(apigeecli sharedflows import -f authorize-idp-access-tokens.zip --org "$PROJECT" --token "$TOKEN" --disable-check | jq ."revision" -r)
