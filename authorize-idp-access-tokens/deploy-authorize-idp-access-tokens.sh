@@ -80,7 +80,7 @@ apigeecli res create --org "$PROJECT" --env "$APIGEE_ENV" --token "$TOKEN" --nam
 
 echo "Importing and Deploying Apigee authorize-idp-access-tokens sharedflow..."
 REV_SF=$(apigeecli sharedflows import -f authorize-idp-access-tokens.zip --org "$PROJECT" --token "$TOKEN" --disable-check | jq ."revision" -r)
-apigeecli sharedfows deploy --wait --name sample-authorize-idp-access-tokens --ovr --rev "$REV_SF" --org "$PROJECT" --env "$APIGEE_ENV" --token "$TOKEN"
+apigeecli sharedflows deploy --wait --name sample-authorize-idp-access-tokens --ovr --rev "$REV_SF" --org "$PROJECT" --env "$APIGEE_ENV" --token "$TOKEN"
 
 echo "Importing and Deploying Apigee sample-authorize-idp-access-tokens proxy..."
 REV=$(apigeecli apis import -f sample-authorize-idp-access-tokens.zip --org "$PROJECT" --token "$TOKEN" --disable-check | jq ."revision" -r)
