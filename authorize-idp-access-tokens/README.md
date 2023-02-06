@@ -16,7 +16,7 @@ JWT tokens are used by [OIDC](https://openid.net/specs/openid-connect-core-1_0.h
 With this example you'll be able to:
 
 * Import Client IDs and Secrets from an Identity Provider into Apigee as Developer App credentials
-* Validate JWT access tokens issued by an Idenity Provider that supports [OIDC](https://openid.net/specs/openid-connect-core-1_0.html) and [RFC9068](https://datatracker.ietf.org/doc/rfc9068/)
+* Validate JWT access tokens issued by an Idenity Provider that supports [OIDC](https://openid.net/specs/openid-connect-core-1_0.html) or [RFC9068](https://datatracker.ietf.org/doc/rfc9068/)
 * Identify the Client App in Apigee
 
 ## Components
