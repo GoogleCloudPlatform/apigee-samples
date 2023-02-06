@@ -38,7 +38,7 @@ This implementation includes two artifacts:
     * npm
 5. Configure and obtain Client App credentials from the Identity Provider. These usually are client identifier and secret / password credential pairs.
 
-6. Obtain a JWT access token from the Identity Provider. The grant type and method to obain the access token is specific to each IdP. However, it is common for Identity Providers to support the client_credentials grant type to issue access tokens to authorized applications.
+6. Obtain a JWT access token from the Identity Provider. The grant type and method to obtain the access token is specific to each IdP. However, it is common for Identity Providers to support the client_credentials grant type to issue access tokens to authorized applications.
 
 # (QuickStart) Setup using CloudShell
 
