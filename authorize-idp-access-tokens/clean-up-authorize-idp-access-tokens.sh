@@ -91,3 +91,8 @@ echo "Deleting proxy authorize-idp-access-tokens sharedflow"
 apigeecli sharedflows delete --name authorize-idp-access-tokens --org "$PROJECT" --token "$TOKEN"
 
 rm authorize-idp-access-tokens.zip
+
+echo "Deleting IdP config environemnt property set..."
+apigeecli res delete --org "$PROJECT" --env "$APIGEE_ENV" --token "$TOKEN" --name idp_configuration --type properties
+
+rm idp_configuration.properties

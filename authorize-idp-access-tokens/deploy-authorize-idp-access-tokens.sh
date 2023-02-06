@@ -80,7 +80,7 @@ apigeecli res create --org "$PROJECT" --env "$APIGEE_ENV" --token "$TOKEN" --nam
 
 echo "Importing and Deploying Apigee authorize-idp-access-tokens sharedflow..."
 REV_SF=$(apigeecli sharedflows import -f authorize-idp-access-tokens.zip --org "$PROJECT" --token "$TOKEN" --disable-check | jq ."revision" -r)
-apigeecli sharedflows deploy --wait --name sample-authorize-idp-access-tokens --ovr --rev "$REV_SF" --org "$PROJECT" --env "$APIGEE_ENV" --token "$TOKEN"
+apigeecli sharedflows deploy --name authorize-idp-access-tokens --ovr --rev "$REV_SF" --org "$PROJECT" --env "$APIGEE_ENV" --token "$TOKEN"
 
 echo "Importing and Deploying Apigee sample-authorize-idp-access-tokens proxy..."
 REV=$(apigeecli apis import -f sample-authorize-idp-access-tokens.zip --org "$PROJECT" --token "$TOKEN" --disable-check | jq ."revision" -r)
@@ -96,4 +96,4 @@ echo "Creating Developer App"
 apigeecli apps create --name $APP_NAME --email authz-idp-acccess-tokens_apigeesamples@acme.com --prods authz-idp-acccess-tokens-sample-product --org "$PROJECT" --token "$TOKEN" --disable-check
 
 echo "Creating Developer App Key"
-apigeecli apps keys createkey --name $APP_NAME --email authz-idp-acccess-tokens_apigeesamples@acme.com --prods authz-idp-acccess-tokens-sample-product --org "$PROJECT" --token "$TOKEN" --key "$IDP_APP_CLIENT_ID" --secret "$IDP_APP_CLIENT_SECRET" --disable-check
+apigeecli apps keys create --name $APP_NAME --dev authz-idp-acccess-tokens_apigeesamples@acme.com --prods authz-idp-acccess-tokens-sample-product --org "$PROJECT" --token "$TOKEN" --key "$IDP_APP_CLIENT_ID" --secret "$IDP_APP_CLIENT_SECRET" --disable-check
