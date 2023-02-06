@@ -72,7 +72,7 @@ rm authorize-idp-access-tokens.zip
 mkdir rendered
 cp -r ./sharedflowbundle ./rendered
 sed -i "s/REPLACEWITHIDPCLIENTIDCLAIM/$TOKEN_CLIENT_ID_CLAIM/g" ./rendered/policies/VK-IdentifyClientApp.xml
-cd rendered
+cd rendered || exit
 zip -r authorize-idp-access-tokens.zip sharedflowbundle
 cp authorize-idp-access-tokens.zip ../
 cd ../
