@@ -5,7 +5,7 @@
   "scripts": {
    "lintapi": "apigeelint -s apiproxy -e PO013,PO025 -f table.js",
    "lintsf": "apigeelint -s sharedflowbundle -e PO013,PO025 -f table.js",
-   "lint": "npm run lintapi lintsf",
+   "lint": "npm run lintapi && npm run lintsf",
     "test": "npx cucumber-js --publish-quiet test/"
   },
   "dependencies": {
