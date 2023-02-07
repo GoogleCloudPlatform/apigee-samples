@@ -64,7 +64,7 @@ Next, let's deploy some Apigee resources necessary to create an integrated devel
 ./deploy-integrated-developer-portal.sh
 ```
 
-** NOTE: This script creates an API Proxy and API product. It does not, however, create the developer portal. We will create and test that manually**
+**NOTE: This script creates an API Proxy and API product. It does not, however, create the developer portal. We will create and test that manually**
 
 ---
 ## Create Integrated Developer Portal
