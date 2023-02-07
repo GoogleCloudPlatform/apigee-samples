@@ -15,13 +15,11 @@ Let's get started!
 cd integrated-developer-portal
 ```
 
-2. Edit the `env.sh` and configure the ENV vars
+2. Edit the `env.sh` and configure the ENV vars. Click <walkthrough-editor-open-file filePath="integrated-developer-portal/env.sh">here</walkthrough-editor-open-file> to open the file in the editor
 
 * `PROJECT` the project where your Apigee organization is located
 * `APIGEE_HOST` the externally reachable hostname of the Apigee environment group that contains APIGEE_ENV
 * `APIGEE_ENV` the Apigee environment where the demo resources should be created
-
-Click <walkthrough-editor-open-file filePath="integrated-developer-portal/env.sh">here</walkthrough-editor-open-file> to open the file in the editor
 
 Now source the `env.sh` file
 
