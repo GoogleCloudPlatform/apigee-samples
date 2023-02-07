@@ -66,12 +66,12 @@ We also need to add our API product to the portal:
 - Require developers to specify a callback URL: Keep deselected (unchecked)
 - Audience: Anonymous users (anyone can view)
 - API product image: Image of your choice (optional)
-- API documentation: Use the [integrated-developer-portal.yaml](integrated-developer-portal.yaml) OpenAPI document from this repo:
+- API documentation: Use the <walkthrough-editor-open-file filePath="integrated-developer-portal/integrated-developer-portal.yaml">integrated-developer-portal.yaml</walkthrough-editor-open-file> OpenAPI document from this repo:
     - If you ran the deployment script from Cloud Shell:
         - Navigate back to Cloud Shell
         - Open integrated-developer-portal.yaml & downlod it to your local computer. No need to update file content as it was already updated when running the deployment script.
     - Otherwise, do the following:
-        - Download [integrated-developer-portal.yaml](integrated-developer-portal.yaml) to your local computer
+        - Download <walkthrough-editor-open-file filePath="integrated-developer-portal/integrated-developer-portal.yaml">integrated-developer-portal.yaml</walkthrough-editor-open-file> to your local computer
         - Open the file and replace "\[APIGEE_HOST\]" with your own Apigee host/domain.
     - Upload your updated integrated-developer-portal.yaml file as API documentation
 6. Scroll up and click save
