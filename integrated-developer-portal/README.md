@@ -35,7 +35,7 @@ Use the following GCP CloudShell tutorial, and follow the instructions in Cloud 
 
 ```bash
 git clone https://github.com/GoogleCloudPlatform/apigee-samples.git
-cd integrated-developer-portal
+cd apige-samples/integrated-developer-portal
 ```
 
 2. Edit the `env.sh` and configure the ENV vars
