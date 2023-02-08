@@ -1,6 +1,10 @@
 # Authorize IdP Access Token
 
-This sample allows you to authorize JWT access tokens issued by an OIDC compliant identity provider.
+This sample allows you to authorize JWT access tokens issued by an OpenID Identity Provider.
+
+## About OIDC
+
+[OpenID Connect](https://openid.net/specs/openid-connect-core-1_0.html) is an identity layer on top of the OAuth 2.0. It allows Relying Parities (clients) to verify the identity of an End-User based on the authentication performed by an Authorization Server, as well as to obtain profile information about the End-User.
 
 ## About JWT Access Tokens
 
@@ -15,9 +19,9 @@ JWT tokens are used by [OIDC](https://openid.net/specs/openid-connect-core-1_0.h
 
 With this example you'll be able to:
 
-* Import Client IDs and Secrets from an Identity Provider into Apigee as Developer App credentials
-* Validate JWT access tokens issued by an Identity Provider that supports [OIDC](https://openid.net/specs/openid-connect-core-1_0.html) or [RFC9068](https://datatracker.ietf.org/doc/rfc9068/)
-* Identify the Client App in Apigee
+* Import Client IDs and Secret representing a Relying Party or Client Application from an OpenID Identity Provider that supports JWT access tokens based on [RFC9068](https://datatracker.ietf.org/doc/rfc9068/)
+* Validate JWT access tokens
+* Identify the Client Application in Apigee
 
 ## Components
 
@@ -25,6 +29,7 @@ This implementation includes two artifacts:
 
 * Authorize IdP Access Tokens Shared Flow: includes policies to valiate JWT access tokens an identify client Apps.
 * Test Proxy: A proxy that references the previous shared flow using a Flow Callout policy.
+* Deployment and cleanup scripts
 
 ## Prerequisites
 1. [Provision Apigee X](https://cloud.google.com/apigee/docs/api-platform/get-started/provisioning-intro)
@@ -36,9 +41,7 @@ This implementation includes two artifacts:
     * curl
     * jq
     * npm
-5. Configure and obtain Client App credentials from the Identity Provider. These usually are client identifier and secret / password credential pairs.
-
-6. Obtain a JWT access token from the Identity Provider. The grant type and method to obtain the access token is specific to each IdP. However, it is common for Identity Providers to support the client_credentials grant type to issue access tokens to authorized applications.
+5. Obtain a Client ID and a JWT access token from an OpenID Identity Provider (you'll be using the values during the quickstart)
 
 # (QuickStart) Setup using CloudShell
 
@@ -61,7 +64,7 @@ cd apigee-samples/authorize-idp-access-tokens
 * `PROJECT` the project where your Apigee organization is located
 * `APIGEE_ENV` the Apigee environment where the demo resources should be created
 * `JWKS_URI` the [JWKS URI](https://openid.net/specs/openid-connect-core-1_0.html#RotateSigKeys) from the OIDC identity provider that will issue JWT access tokens
-* `TOKEN_ISSUER` the [Issuer Identifier](https://openid.net/specs/openid-connect-core-1_0.html#IssuerIdentifier) from the OIDC Identity provider that will issue JWT access tokens
+* `TOKEN_ISSUER` the [Issuer Identifier](https://openid.net/specs/openid-connect-core-1_0.html#IssuerIdentifier) from the OpenID Identity Provider that will issue JWT access tokens
 * `TOKEN_AUDIENCE` the Token Audiences as defined in the OIDC identity provider that will issuee JWT access tokens
 * `TOKEN_CLIENT_ID_CLAIM` the name of the claim that will be used to store the client application identifier in the JWT access token (examples `azp` or `client_id`)
 * `IDP_APP_CLIENT_ID` the Client ID issued by the Identity Provider. This value needs to be imported in Apigee to be able to identify the client app traffic
