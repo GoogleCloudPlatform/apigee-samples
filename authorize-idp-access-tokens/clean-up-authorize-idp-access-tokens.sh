@@ -63,3 +63,17 @@ echo "Deleting IdP config environemnt property set..."
 apigeecli res delete --org "$PROJECT" --env "$APIGEE_ENV" --token "$TOKEN" --name idp_configuration --type properties
 
 rm idp_configuration.properties
+
+echo "Undeploying authorization-server-mock proxy"
+REV=$(apigeecli envs deployments get --env "$APIGEE_ENV" --org "$PROJECT" --token "$TOKEN" --disable-check | jq .'deployments[]| select(.apiProxy=="authorization-server-mock").revision' -r)
+apigeecli apis undeploy --name authorization-server-mock --env "$APIGEE_ENV" --rev "$REV" --org "$PROJECT" --token "$TOKEN"
+
+echo "Deleting proxy authorization-server-mock proxy"
+apigeecli apis delete --name authorization-server-mock --org "$PROJECT" --token "$TOKEN"
+
+rm ./mock-tools/authorization-server-mock.zip 
+
+echo "Deleting mock config environemnt property set..."
+apigeecli res delete --org "$PROJECT" --env "$APIGEE_ENV" --token "$TOKEN" --name mock_configuration --type properties
+
+rm mock_configuration.properties

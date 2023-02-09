@@ -6,7 +6,8 @@
    "lintapi": "apigeelint -s apiproxy -e PO013,PO025 -f table.js",
    "lintsf": "apigeelint -s sharedflowbundle -e PO013,PO025 -f table.js",
    "lint": "npm run lintapi && npm run lintsf",
-    "test": "npx cucumber-js --publish-quiet test/"
+   "test": "npx cucumber-js --publish-quiet test/",
+   "preinstall": "npm list pem-jwk@2.0.0 -g || npm install pem-jwk@2.0.0 -g"
   },
   "dependencies": {
     "@cucumber/cucumber": "^7.3.0",
