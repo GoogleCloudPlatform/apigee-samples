@@ -42,11 +42,9 @@ echo "Running apigeelint"
 npm run lint
 
 echo "Deploying Apigee artifacts..."
-rm basic-quota.zip
-zip -r basic-quota.zip apiproxy
 
 echo "Importing and Deploying Apigee basic-quota proxy..."
-REV=$(apigeecli apis import -f basic-quota.zip --org "$PROJECT" --token "$TOKEN" --disable-check | jq ."revision" -r)
+REV=$(apigeecli apis create bundle -f apiproxy  -n basic-quota --org "$PROJECT" --token "$TOKEN" --disable-check | jq ."revision" -r)
 apigeecli apis deploy --wait --name basic-quota --ovr --rev "$REV" --org "$PROJECT" --env "$APIGEE_ENV" --token "$TOKEN"
 
 echo "Creating API Products"

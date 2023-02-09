@@ -56,5 +56,3 @@ apigeecli apis undeploy --name basic-quota --env "$APIGEE_ENV" --rev "$REV" --or
 
 echo "Deleting proxy basic-quota"
 apigeecli apis delete --name basic-quota --org "$PROJECT" --token "$TOKEN"
-
-rm basic-quota.zip
