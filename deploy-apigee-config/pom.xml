@@ -53,7 +53,7 @@
                 <apigee.hosturl>https://apigee.googleapis.com</apigee.hosturl>
                 <apigee.apiversion>v1</apigee.apiversion>
                 <apigee.org>${org}</apigee.org>
-                <apigee.options>override</apigee.options> 
+                <apigee.options>override</apigee.options>
                 <apigee.bearer>${bearer}</apigee.bearer>
                 <apigee.config.dir>./target/config</apigee.config.dir>
                 <apigee.config.options>${options}</apigee.config.options>
@@ -118,70 +118,70 @@
                 </executions>
             </plugin>
             <plugin>
-				<groupId>com.google.code.maven-replacer-plugin</groupId>
-				<artifactId>replacer</artifactId>
-				<version>1.5.2</version>
-				<executions>
-					<execution>
-						<phase>process-resources</phase>
-						<goals>
-							<goal>replace</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<basedir>${target.root.dir}</basedir>
-					<includes>
-						<include>config/org/apiProducts.json</include>
-					</includes>
-					<replacements>
-						<replacement>
-							<token>@env</token>
-							<value>${env}</value>
-						</replacement>
-					</replacements>
-				</configuration>
-			</plugin>
+                <groupId>com.google.code.maven-replacer-plugin</groupId>
+                <artifactId>replacer</artifactId>
+                <version>1.5.2</version>
+                <executions>
+                    <execution>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>replace</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <basedir>${target.root.dir}</basedir>
+                    <includes>
+                        <include>config/org/apiProducts.json</include>
+                    </includes>
+                    <replacements>
+                        <replacement>
+                            <token>@env</token>
+                            <value>${env}</value>
+                        </replacement>
+                    </replacements>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>com.apigee.edge.config</groupId>
                 <artifactId>apigee-config-maven-plugin</artifactId>
                 <version>${apigee.config.version}</version>
                 <executions>
                     <execution>
-			            <id>create-config-keyvaluemaps</id>
-			            <phase>package</phase>                        
-			            <goals>
-			                <goal>keyvaluemaps</goal>
-			            </goals>
-			        </execution>
+                        <id>create-config-keyvaluemaps</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>keyvaluemaps</goal>
+                        </goals>
+                    </execution>
                     <execution>
-			            <id>create-config-targetservers</id>
-			            <phase>package</phase>                        
-			            <goals>
-			                <goal>targetservers</goal>
-			            </goals>
-			        </execution>
+                        <id>create-config-targetservers</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>targetservers</goal>
+                        </goals>
+                    </execution>
                     <execution>
-			            <id>create-config-apiproducts</id>
-			            <phase>install</phase>                        
-			            <goals>
-			                <goal>apiproducts</goal>
-			            </goals>
-			        </execution>
+                        <id>create-config-apiproducts</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>apiproducts</goal>
+                        </goals>
+                    </execution>
                     <execution>
-			            <id>create-config-developers</id>
-			            <phase>install</phase>                        
-			            <goals>
-			                <goal>developers</goal>
-			            </goals>
-			        </execution>
-			        <execution>
-			            <id>create-config-apps</id>
-			            <phase>install</phase>                        
-			            <goals>
-			                <goal>apps</goal>
-			            </goals>
-			        </execution>
+                        <id>create-config-developers</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>developers</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>create-config-apps</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>apps</goal>
+                        </goals>
+                    </execution>
                 </executions>
             </plugin>
         </plugins>
