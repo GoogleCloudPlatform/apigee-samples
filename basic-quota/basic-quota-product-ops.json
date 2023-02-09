@@ -1,0 +1,16 @@
+{
+    "operationConfigs": [
+      {
+        "apiSource": "basic-quota",
+        "operations": [
+          {
+            "resource": "/",
+            "methods": [
+              "GET"
+            ]
+          }
+        ]
+      }
+    ],
+    "operationConfigType": "proxy"
+  }
