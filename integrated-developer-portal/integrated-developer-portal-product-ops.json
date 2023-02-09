@@ -1,0 +1,16 @@
+{
+    "operationConfigs": [
+        {
+            "apiSource": "sample-integrated-developer-portal",
+            "operations": [
+                {
+                    "resource": "/",
+                    "methods": [
+                    "GET"
+                    ]
+                }
+            ]
+        }
+    ],
+    "operationConfigType": "proxy"
+}

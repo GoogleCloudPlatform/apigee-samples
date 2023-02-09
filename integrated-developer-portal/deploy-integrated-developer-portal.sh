@@ -46,7 +46,7 @@ REV=$(apigeecli apis import -f sample-integrated-developer-portal.zip --org "$PR
 apigeecli apis deploy --wait --name sample-integrated-developer-portal --ovr --rev "$REV" --org "$PROJECT" --env "$APIGEE_ENV" --token "$TOKEN"
 
 echo "Creating API Product"
-apigeecli products create --name sample-integrated-developer-portal-product --displayname "sample-integrated-developer-portal-product" --proxies sample-integrated-developer-portal --envs "$APIGEE_ENV" --approval auto --quota 10 --interval 1 --unit minute --org "$PROJECT" --token "$TOKEN"
+apigeecli products create --name sample-integrated-developer-portal-product --displayname "sample-integrated-developer-portal-product" --opgrp ./integrated-developer-portal-product-ops.json --envs "$APIGEE_ENV" --approval auto --quota 10 --interval 1 --unit minute --org "$PROJECT" --token "$TOKEN"
 
 echo "Updating OpenAPI YAML"
 sed -i "s/\[APIGEE_HOST\]/$APIGEE_HOST/" integrated-developer-portal.yaml
