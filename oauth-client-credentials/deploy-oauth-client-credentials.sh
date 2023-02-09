@@ -51,7 +51,7 @@ REV=$(apigeecli apis import -f oauth-client-credentials.zip --org "$PROJECT" --t
 apigeecli apis deploy --wait --name oauth-client-credentials --ovr --rev "$REV" --org "$PROJECT" --env "$APIGEE_ENV" --token "$TOKEN"
 
 echo "Creating API Product"
-apigeecli products create --name oauth-client-credentials-product --displayname "oauth-client-credentials-product" --proxies oauth-client-credentials --envs "$APIGEE_ENV" --approval auto --quota 10 --interval 1 --unit minute --org "$PROJECT" --token "$TOKEN"
+apigeecli products create --name oauth-client-credentials-product --displayname "oauth-client-credentials-product" --opgrp ./oauth-client-credentials-product-ops.json --envs "$APIGEE_ENV" --approval auto --quota 10 --interval 1 --unit minute --org "$PROJECT" --token "$TOKEN"
 
 echo "Creating Developer"
 apigeecli developers create --user testuser --email oauth-client-credentials_apigeesamples@acme.com --first Test --last User --org "$PROJECT" --token "$TOKEN"
