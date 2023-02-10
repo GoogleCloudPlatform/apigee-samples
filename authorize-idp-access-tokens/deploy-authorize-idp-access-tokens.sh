@@ -14,6 +14,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+echo "Installing dependencies"
+npm run preinstall
+npm install
+
 gen_key_pairs (){
     if [ -z "$PR_KEY" ]; then
         PR_KEY=$(openssl genrsa 4086)
@@ -88,10 +92,6 @@ fi
 
 TOKEN=$(gcloud auth print-access-token)
 APP_NAME=authz-idp-acccess-tokens-sample-app
-
-echo "Installing dependencies"
-npm run preinstall
-npm install
 
 echo "Installing apigeecli"
 curl -s https://raw.githubusercontent.com/apigee/apigeecli/master/downloadLatest.sh | bash
