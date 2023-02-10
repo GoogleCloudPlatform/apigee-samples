@@ -22,8 +22,8 @@ gen_key_pairs (){
         PR_KEY=$(printf '%s\n' "$PR_KEY" | tr -d '\n')
         JWK=$(printf '%s\n' "$JWK" | tr -d '\n') 
         TOKEN_CLIENT_ID_CLAIM=client_id
-        JWKS_URI="$APIGEE_HOST/v1/samples/oidc/jwks"
-        TOKEN_ISSUER="$APIGEE_HOST/"
+        JWKS_URI="https://$APIGEE_HOST/v1/samples/authorize-idp-access-tokens/.well-known/jwks.json"
+        TOKEN_ISSUER="https://$APIGEE_HOST/"
     fi
 }
 
@@ -98,23 +98,22 @@ mkdir rendered
 cp -r ./sharedflowbundle ./rendered
 sed -i "s/REPLACEWITHIDPCLIENTIDCLAIM/$TOKEN_CLIENT_ID_CLAIM/g" ./rendered/sharedflowbundle/policies/VK-IdentifyClientApp.xml
 if [ ! -z "$PR_KEY" ]; then
-    cd mock-tooks
-    cd ../
     echo "Deploying public and private keys for mock oidc..."
     echo -e "jwk=$JWK\nprivate_key=$PR_KEY" > mock_configuration.properties
     apigeecli res create --org "$PROJECT" --env "$APIGEE_ENV" --token "$TOKEN" --name mock_configuration --type properties --respath mock_configuration.properties
 fi
 
 echo "Importing and Deploying Apigee authorize-idp-access-tokens sharedflow..."
-REV_SF=$(apigeecli sharedflows create bundle -f ./sharedflowbundle -n authorize-idp-access-tokens --org "$PROJECT" --token "$TOKEN" --disable-check | jq ."revision" -r)
+REV_SF=$(apigeecli sharedflows create -f ./rendered/sharedflowbundle -n authorize-idp-access-tokens --org "$PROJECT" --token "$TOKEN" --disable-check | jq ."revision" -r)
 apigeecli sharedflows deploy --name authorize-idp-access-tokens --ovr --rev "$REV_SF" --org "$PROJECT" --env "$APIGEE_ENV" --token "$TOKEN"
+rm -r ./rendered
 
 echo "Importing and Deploying Apigee sample-authorize-idp-access-tokens proxy..."
 REV=$(apigeecli apis create bundle -f ./apiproxy -n sample-authorize-idp-access-tokens --org "$PROJECT" --token "$TOKEN" --disable-check | jq ."revision" -r)
 apigeecli apis deploy --wait --name sample-authorize-idp-access-tokens --ovr --rev "$REV" --org "$PROJECT" --env "$APIGEE_ENV" --token "$TOKEN"
 
 echo "Creating API Product"
-apigeecli products create --name authz-idp-acccess-tokens-sample-product --displayname "authz-idp-acccess-tokens-sample-product" --proxies sample-authorize-idp-access-tokens --envs "$APIGEE_ENV" --approval auto --quota 10 --interval 1 --unit minute --org "$PROJECT" --token "$TOKEN"
+apigeecli products create --name authz-idp-acccess-tokens-sample-product --displayname "authz-idp-acccess-tokens-sample-product"  --envs "$APIGEE_ENV" --scopes "READ,WRITE,ACTION" --approval auto --quota 10 --interval 1 --unit minute --org "$PROJECT" --token "$TOKEN --opgrp apiproduct-opgroup.json"
 
 echo "Creating Developer"
 apigeecli developers create --user testuser --email authz-idp-acccess-tokens_apigeesamples@acme.com --first Test --last User --org "$PROJECT" --token "$TOKEN"
@@ -125,8 +124,6 @@ apigeecli apps create --name $APP_NAME --email authz-idp-acccess-tokens_apigeesa
 
 if [ ! -z "$PR_KEY" ]; then
     TOKEN_AUDIENCE=$(apigeecli apps get --name $APP_NAME --org "$PROJECT" --token "$TOKEN" --disable-check | jq ."[0].credentials[0].consumerKey" -r)
-    JWKS_URI="$APIGEE_HOST/v1/samples/authorize-idp-access-tokens/.well-known/jwks.json"
-    TOKEN_ISSUER="$APIGEE_HOST/"
     IDP_APP_CLIENT_ID="$TOKEN_AUDIENCE"
     IDP_APP_CLIENT_SECRET=$(apigeecli apps get --name $APP_NAME --org "$PROJECT" --token "$TOKEN" --disable-check | jq ."[0].credentials[0].consumerSecret" -r)
     
@@ -144,13 +141,11 @@ echo -e "jwks_uri=$JWKS_URI\nissuer=$TOKEN_ISSUER\naudience=$TOKEN_AUDIENCE" > i
 echo "Importing and Deploying IdP config as an environemnt property set..."
 apigeecli res create --org "$PROJECT" --env "$APIGEE_ENV" --token "$TOKEN" --name idp_configuration --type properties --respath idp_configuration.properties
 
-export PROXY_URL="$APIGEE_HOST/v1/samples/authorize-idp-access-tokens"
-
 echo " "
 echo "All the Apigee artifacts are successfully deployed!"
 if [ ! -z "$PR_KEY" ]; then
-    AUTHZ_ENDPOINT="$APIGEE_HOST/v1/samples/authorize-idp-access-tokens/authorize"
-    TOKEN_ENDPOINT="$APIGEE_HOST/v1/samples/authorize-idp-access-tokens/token"
+    AUTHZ_ENDPOINT="https://$APIGEE_HOST/v1/samples/oidc/authorize"
+    TOKEN_ENDPOINT="https://$APIGEE_HOST/v1/samples/oidc/token"
     ENCODED_AUTHZ_ENDPOINT=$(printf '%s\n' "$AUTHZ_ENDPOINT" | jq -sRr @uri)
     ENCODED_TOKEN_ENDPOINT=$(printf '%s\n' "$TOKEN_ENDPOINT" | jq -sRr @uri)
     ENCODED_CLIENT_ID=$(printf '%s\n' "$IDP_APP_CLIENT_ID" | jq -sRr @uri)
@@ -159,5 +154,5 @@ if [ ! -z "$PR_KEY" ]; then
     echo "Your Google OAuth Playground URI is: https://developers.google.com/oauthplayground/#step1&url=https%3A%2F%2F&content_type=application%2Fjson&http_method=GET&useDefaultOauthCred=unchecked&oauthEndpointSelect=Custom&oauthAuthEndpointValue=$ENCODED_AUTHZ_ENDPOINT&oauthTokenEndpointValue=$ENCODED_TOKEN_ENDPOINT&oauthClientId=$ENCODED_CLIENT_ID&oauthClientSecret=$ENCODED_CLIENT_SECRET&includeCredentials=checked&accessTokenType=bearer&autoRefreshToken=unchecked&accessType=offline&prompt=consent&response_type=code&wrapLines=on"
 fi
 echo " "
-echo "Your Sample Request URL is: https://$PROXY_URL"
+echo "Your Sample Request URL is: https://$APIGEE_HOST/v1/samples/authorize-idp-access-tokens"
 echo " "

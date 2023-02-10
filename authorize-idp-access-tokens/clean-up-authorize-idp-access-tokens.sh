@@ -48,16 +48,12 @@ apigeecli apis undeploy --name sample-authorize-idp-access-tokens --env "$APIGEE
 echo "Deleting proxy sample-authorize-idp-access-tokens proxy"
 apigeecli apis delete --name sample-authorize-idp-access-tokens --org "$PROJECT" --token "$TOKEN"
 
-rm sample-authorize-idp-access-tokens.zip
-
 echo "Undeploying authorize-idp-access-tokens sharedflow"
 REV=$(apigeecli envs deployments get --env "$APIGEE_ENV" --org "$PROJECT" --token "$TOKEN" --sharedflows true --disable-check | jq .'deployments[]| select(.apiProxy=="authorize-idp-access-tokens").revision' -r)
 apigeecli sharedflows undeploy --name authorize-idp-access-tokens --env "$APIGEE_ENV" --rev "$REV" --org "$PROJECT" --token "$TOKEN"
 
 echo "Deleting proxy authorize-idp-access-tokens sharedflow"
 apigeecli sharedflows delete --name authorize-idp-access-tokens --org "$PROJECT" --token "$TOKEN"
-
-rm authorize-idp-access-tokens.zip
 
 echo "Deleting IdP config environemnt property set..."
 apigeecli res delete --org "$PROJECT" --env "$APIGEE_ENV" --token "$TOKEN" --name idp_configuration --type properties
@@ -70,8 +66,6 @@ apigeecli apis undeploy --name authorization-server-mock --env "$APIGEE_ENV" --r
 
 echo "Deleting proxy authorization-server-mock proxy"
 apigeecli apis delete --name authorization-server-mock --org "$PROJECT" --token "$TOKEN"
-
-rm ./mock-tools/authorization-server-mock.zip 
 
 echo "Deleting mock config environemnt property set..."
 apigeecli res delete --org "$PROJECT" --env "$APIGEE_ENV" --token "$TOKEN" --name mock_configuration --type properties
