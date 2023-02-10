@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+Copyright 2023 Google LLC
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    https://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+-->
+<ProxyEndpoint name="default">
+    <PreFlow name="PreFlow">
+        <Request/>
+        <Response/>
+    </PreFlow>
+    <Flows>
+        <Flow name="/authorize">
+            <Description/>
+            <Request>
+            </Request>
+            <Response>
+                <Step>
+                    <Name>AM-MockLoginRedirect</Name>
+                </Step>
+            </Response>
+            <Condition>(proxy.pathsuffix MatchesPath "/authorize") and (request.verb = "GET")</Condition>
+        </Flow>
+        <Flow name="/login">
+            <Description/>
+            <Request>
+                <Step>
+                    <Name>AM-SetOAuthResponseType</Name>
+                </Step>
+                <Step>
+                    <Name>OAuth-GenerateAuthorizationCode</Name>
+                </Step>
+            </Request>
+            <Response>
+                <Step>
+                    <Name>AM-MockAuthZCodeResponse</Name>
+                </Step>
+            </Response>
+            <Condition>(proxy.pathsuffix MatchesPath "/login") and (request.verb = "GET")</Condition>
+        </Flow>
+        <Flow name="/token">
+            <Description/>
+            <Request>
+                <Step>
+                    <Name>OAuth-GetCodeInfo</Name>
+                </Step>
+                <Step>
+                    <Name>OAuth-GenerateAccessToken</Name>
+                </Step>
+                <Step>
+                    <Name>AM-IssuerVars</Name>
+                </Step>
+                <Step>
+                    <Name>JWT-GenerateAccessToken</Name>
+                </Step>
+                <Step>
+                    <Name>JWT-GenerateIdToken</Name>
+                </Step>
+            </Request>
+            <Response>
+                <Step>
+                    <Name>AM-TokenResponse</Name>
+                </Step>
+            </Response>
+            <Condition>(proxy.pathsuffix MatchesPath "/token") and (request.verb = "POST")</Condition>
+        </Flow>
+        <Flow name="/.well-known/jwks.json">
+            <Description/>
+            <Request/>
+            <Response>
+                <Step>
+                    <Name>AM-SetJwksObject</Name>
+                </Step>
+            </Response>
+            <Condition>(proxy.pathsuffix MatchesPath "/.well-known/jwks.json") and (request.verb = "GET")</Condition>
+        </Flow>
+    </Flows>
+    <PostFlow name="PostFlow">
+        <Request/>
+        <Response/>
+    </PostFlow>
+    <HTTPProxyConnection>
+        <BasePath>/v1/samples/oidc</BasePath>
+    </HTTPProxyConnection>
+    <RouteRule name="noroute"/>
+</ProxyEndpoint>
