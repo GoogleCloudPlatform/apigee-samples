@@ -1,0 +1,21 @@
+<ProxyEndpoint name="default">
+	<!--<DefaultFaultRule>
+		<Step>
+			<Name>AM-PrintPropertySets</Name>
+		</Step>
+		<AlwaysEnforce>true</AlwaysEnforce>
+	</DefaultFaultRule>-->
+	<PreFlow>
+		<Request>
+			<Step>
+				<Name>FC-AuthorizeIdPToken</Name>
+			</Step>
+		</Request>
+	</PreFlow>
+	<Flows />
+	<PostFlow />
+	<HTTPProxyConnection>
+		<BasePath>/v1/samples</BasePath>
+	</HTTPProxyConnection>
+	<RouteRule name="no-route"/>
+</ProxyEndpoint>

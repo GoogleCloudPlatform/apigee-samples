@@ -1,0 +1,18 @@
+[
+  {
+    "attributes": [
+      {
+        "name": "sample_attribute_0",
+        "value": "sample_attribute_value_0"
+      }
+    ],
+    "developerEmail": "developer@cymbal.com",
+    "name": "auth0app",
+    "displayName": "auth0app",
+    "callbackUrl": "https://something.com",
+    "apiProducts": [
+      "testproduct"
+    ],
+    "expiryType": "never"
+  }
+]

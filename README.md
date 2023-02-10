@@ -43,6 +43,8 @@ Most developers begin by identifying an interesting sample based on a specific u
   Deploy Apigee sharedflow using Apigee Maven plugin and Cloud Build
 - [deploy-apigee-config](deploy-apigee-config) -
   Deploy Apigee configurations using Apigee Maven plugin and Cloud Build
+- [authorize-idp-access-tokens](authorize-idp-access-tokens) - 
+  Authorize JWT access tokens issued by an Identity Provider  
 - [oauth-client-credentials](oauth-client-credentials) -
   A sample proxy which uses the OAuth 2.0 client credentials grant type flow
 - [cloud-logging](cloud-logging) -

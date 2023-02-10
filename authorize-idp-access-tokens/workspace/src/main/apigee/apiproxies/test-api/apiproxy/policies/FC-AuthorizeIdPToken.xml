@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<FlowCallout async="false" continueOnError="false" enabled="true" name="FC-AuthorizeIdPToken">
+    <DisplayName>FC-AuthorizeIdPToken</DisplayName>
+    <SharedFlowBundle>authorize-idp-access-tokens</SharedFlowBundle>
+</FlowCallout>
