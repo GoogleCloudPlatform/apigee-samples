@@ -101,7 +101,7 @@ source ./env.sh
 ## Testing the sample with Google's OAuth Playground
 
 
-If you didn't set any values for `Optional` environment variables during the setup step, then the deploy script will provide a link to the Google OAuth Playground with custom configuration that will target a mock Authorization Server deployed in the same Apigee environment as the test proxy. To test the sample proxy with a JWT access token, follow the link on a separate browser tab and complete the steps below:
+If you didn't set values for `Optional` environment variables during the setup step, then the deploy script will generate a URI to the Google OAuth Playground with custom configuration to target a mock Authorization Server. To test the sample proxy with a JWT access token, navigate to this URI on a separate browser tab and complete the following steps:
 
 
 1. After landing on the Google OAuth Playground, accept the use of a custom OAuth configuration by clicking the green "OK! That's fine." button in the warning popup.

@@ -125,10 +125,15 @@ apigeecli apps create --name $APP_NAME --email authz-idp-acccess-tokens_apigeesa
 
 if [ ! -z "$PR_KEY" ]; then
     TOKEN_AUDIENCE=$(apigeecli apps get --name $APP_NAME --org "$PROJECT" --token "$TOKEN" --disable-check | jq ."[0].credentials[0].consumerKey" -r)
+    JWKS_URI="$APIGEE_HOST/v1/samples/authorize-idp-access-tokens/.well-known/jwks.json"
+    TOKEN_ISSUER="$APIGEE_HOST/"
+    IDP_APP_CLIENT_ID="$TOKEN_AUDIENCE"
+    IDP_APP_CLIENT_SECRET=$(apigeecli apps get --name $APP_NAME --org "$PROJECT" --token "$TOKEN" --disable-check | jq ."[0].credentials[0].consumerSecret" -r)
+    
     echo "Importing and Deploying Apigee authorization-server-mock proxy..."
     REV_A=$(apigeecli apis create bundle -f ./mock-tools/apiproxy -n authorization-server-mock --org "$PROJECT" --token "$TOKEN" --disable-check | jq ."revision" -r)
     apigeecli apis deploy --wait --name authorization-server-mock --ovr --rev "$REV" --org "$PROJECT" --env "$APIGEE_ENV" --token "$TOKEN"
-else
+else    
     echo "Creating Developer App Key"
     apigeecli apps keys create --name $APP_NAME --dev authz-idp-acccess-tokens_apigeesamples@acme.com --prods authz-idp-acccess-tokens-sample-product --org "$PROJECT" --token "$TOKEN" --key "$IDP_APP_CLIENT_ID" --secret "$IDP_APP_CLIENT_SECRET" --disable-check
 fi
@@ -139,3 +144,20 @@ echo -e "jwks_uri=$JWKS_URI\nissuer=$TOKEN_ISSUER\naudience=$TOKEN_AUDIENCE" > i
 echo "Importing and Deploying IdP config as an environemnt property set..."
 apigeecli res create --org "$PROJECT" --env "$APIGEE_ENV" --token "$TOKEN" --name idp_configuration --type properties --respath idp_configuration.properties
 
+export PROXY_URL="$APIGEE_HOST/v1/samples/authorize-idp-access-tokens"
+
+echo " "
+echo "All the Apigee artifacts are successfully deployed!"
+if [ ! -z "$PR_KEY" ]; then
+    AUTHZ_ENDPOINT="$APIGEE_HOST/v1/samples/authorize-idp-access-tokens/authorize"
+    TOKEN_ENDPOINT="$APIGEE_HOST/v1/samples/authorize-idp-access-tokens/token"
+    ENCODED_AUTHZ_ENDPOINT=$(printf '%s\n' "$AUTHZ_ENDPOINT" | jq -sRr @uri)
+    ENCODED_TOKEN_ENDPOINT=$(printf '%s\n' "$TOKEN_ENDPOINT" | jq -sRr @uri)
+    ENCODED_CLIENT_ID=$(printf '%s\n' "$IDP_APP_CLIENT_ID" | jq -sRr @uri)
+    ENCODED_CLIENT_SECRET=$(printf '%s\n' "$IDP_APP_CLIENT_SECRET" | jq -sRr @uri)
+    echo " "
+    echo "Your Google OAuth Playground URI is: https://developers.google.com/oauthplayground/#step1&url=https%3A%2F%2F&content_type=application%2Fjson&http_method=GET&useDefaultOauthCred=unchecked&oauthEndpointSelect=Custom&oauthAuthEndpointValue=$ENCODED_AUTHZ_ENDPOINT&oauthTokenEndpointValue=$ENCODED_TOKEN_ENDPOINT&oauthClientId=$ENCODED_CLIENT_ID&oauthClientSecret=$ENCODED_CLIENT_SECRET&includeCredentials=checked&accessTokenType=bearer&autoRefreshToken=unchecked&accessType=offline&prompt=consent&response_type=code&wrapLines=on"
+fi
+echo " "
+echo "Your Sample Request URL is: https://$PROXY_URL"
+echo " "
