@@ -69,5 +69,5 @@ To verify if the configurations were created, login to the [Apigee console](http
 If you want to clean up the artifacts from this example in your Apigee Organization, first source your `env.sh` script, and then run
 
 ```bash
-./clean-up-deploy-apigee-sharedflow.sh
+./clean-up-deploy-apigee-config.sh
 ```
