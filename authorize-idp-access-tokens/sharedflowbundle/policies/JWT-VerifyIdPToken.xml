@@ -19,7 +19,7 @@ limitations under the License.
     <DisplayName>JWT-VerifyIdPToken</DisplayName>
     <Algorithm>RS256</Algorithm>
     <PublicKey>
-        <JWKS ref="propertyset.idp_configuration.jwks_uri"/>
+        <JWKS uriRef="propertyset.idp_configuration.jwks_uri"/>
     </PublicKey>
     <Issuer ref="propertyset.idp_configuration.issuer"/>
     <Audience ref="propertyset.idp_configuration.audience"/>

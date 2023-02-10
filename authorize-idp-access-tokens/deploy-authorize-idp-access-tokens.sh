@@ -22,7 +22,7 @@ gen_key_pairs (){
         PR_KEY=$(printf '%s\n' "$PR_KEY" | tr -d '\n')
         JWK=$(printf '%s\n' "$JWK" | tr -d '\n') 
         TOKEN_CLIENT_ID_CLAIM=client_id
-        JWKS_URI="https://$APIGEE_HOST/v1/samples/authorize-idp-access-tokens/.well-known/jwks.json"
+        JWKS_URI="https://$APIGEE_HOST/v1/samples/oidc/.well-known/jwks.json"
         TOKEN_ISSUER="https://$APIGEE_HOST/"
     fi
 }
@@ -113,7 +113,7 @@ REV=$(apigeecli apis create bundle -f ./apiproxy -n sample-authorize-idp-access-
 apigeecli apis deploy --wait --name sample-authorize-idp-access-tokens --ovr --rev "$REV" --org "$PROJECT" --env "$APIGEE_ENV" --token "$TOKEN"
 
 echo "Creating API Product"
-apigeecli products create --name authz-idp-acccess-tokens-sample-product --displayname "authz-idp-acccess-tokens-sample-product"  --envs "$APIGEE_ENV" --scopes "READ,WRITE,ACTION" --approval auto --quota 10 --interval 1 --unit minute --org "$PROJECT" --token "$TOKEN --opgrp apiproduct-opgroup.json"
+apigeecli products create --name authz-idp-acccess-tokens-sample-product --displayname "authz-idp-acccess-tokens-sample-product"  --envs "$APIGEE_ENV" --scopes "READ"--scopes "WRITE" --scopes "ACTION" --approval auto --quota 50 --interval 1 --unit minute --opgrp ./apiproduct-opgroup.json --org "$PROJECT" --token "$TOKEN"
 
 echo "Creating Developer"
 apigeecli developers create --user testuser --email authz-idp-acccess-tokens_apigeesamples@acme.com --first Test --last User --org "$PROJECT" --token "$TOKEN"
