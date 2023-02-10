@@ -55,7 +55,7 @@ apigeecli sharedflows undeploy --name authorize-idp-access-tokens --env "$APIGEE
 echo "Deleting proxy authorize-idp-access-tokens sharedflow"
 apigeecli sharedflows delete --name authorize-idp-access-tokens --org "$PROJECT" --token "$TOKEN"
 
-echo "Deleting IdP config environemnt property set..."
+echo "Deleting IdP config environment property set..."
 apigeecli res delete --org "$PROJECT" --env "$APIGEE_ENV" --token "$TOKEN" --name idp_configuration --type properties
 
 rm idp_configuration.properties
@@ -67,7 +67,7 @@ apigeecli apis undeploy --name authorization-server-mock --env "$APIGEE_ENV" --r
 echo "Deleting proxy authorization-server-mock proxy"
 apigeecli apis delete --name authorization-server-mock --org "$PROJECT" --token "$TOKEN"
 
-echo "Deleting mock config environemnt property set..."
+echo "Deleting mock config environment property set..."
 apigeecli res delete --org "$PROJECT" --env "$APIGEE_ENV" --token "$TOKEN" --name mock_configuration --type properties
 
 rm mock_configuration.properties
