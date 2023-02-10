@@ -1,8 +1,0 @@
-{
-  "proxies": [
-    "test-api"
-  ],
-  "sharedflows": [
-    "authorize-idp-access-tokens"
-  ]
-}
