@@ -16,10 +16,18 @@
 
 gen_key_pairs (){
     if [ -z "$PR_KEY" ]; then
-        PR_KEY=$(openssl genrsa 2048)
+        PR_KEY=$(openssl genrsa 4086)
+        echo "$PR_KEY"
         PU_KEY=$(printf '%s\n' "$PR_KEY" | openssl rsa -outform PEM -pubout)
+        echo "$PU_KEY"
         JWK=$(printf '%s\n' "$PU_KEY" | pem-jwk)
+        JWK=$(printf '%s\n' "$JWK" | jq '. += {"kid":"mock_key"}')
+        JWK=$(printf '%s\n' "$JWK" | jq '. += {"alg":"RS256"}')
+        JWK=$(printf '%s\n' "$JWK" | jq '. += {"kty":"RSA"}')
+        JWK=$(printf '%s\n' "$JWK" | jq '. += {"use":"sig"}')
+        JWK=$(printf '%s\n' "{\"keys\":[$JWK]}")
         PR_KEY=$(printf '%s\n' "$PR_KEY" | tr -d '\n')
+        echo "$JWK"
         JWK=$(printf '%s\n' "$JWK" | tr -d '\n') 
         TOKEN_CLIENT_ID_CLAIM=client_id
         JWKS_URI="https://$APIGEE_HOST/v1/samples/oidc/.well-known/jwks.json"
