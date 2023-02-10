@@ -37,6 +37,7 @@ This implementation includes two artifacts:
 
 * Authorize IdP Access Tokens Shared Flow: includes policies to validate JWT access tokens and identify client Apps.
 * Test Proxy: A proxy that references the previous shared flow using a Flow Callout policy.
+* Mock Authorization Server: Included to facilitate the testing experience. You can also bring your own OIDC Identity provider to test this sample.
 * Deployment and cleanup scripts
 
 ## Prerequisites

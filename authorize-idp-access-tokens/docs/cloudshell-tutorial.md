@@ -18,7 +18,7 @@ gcloud auth login
 Navigate to the 'authorize-idp-access-tokens' drirectory in the Cloud shell.
 
 ```sh
-cd apigee-samples/authorize-idp-access-tokens
+cd authorize-idp-access-tokens
 ```
 
 Edit the provided sample `env.sh` file, and set the environment variables there.

@@ -146,7 +146,7 @@ fi
 rm idp_configuration.properties
 echo -e "jwks_uri=$JWKS_URI\nissuer=$TOKEN_ISSUER\naudience=$TOKEN_AUDIENCE" > idp_configuration.properties
 
-echo "Importing and Deploying IdP config as an environemnt property set..."
+echo "Importing and Deploying IdP config as an environment property set..."
 apigeecli res create --org "$PROJECT" --env "$APIGEE_ENV" --token "$TOKEN" --name idp_configuration --type properties --respath idp_configuration.properties
 
 echo " "
