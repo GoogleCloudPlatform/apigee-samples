@@ -105,7 +105,7 @@ echo "Deploying Apigee artifacts..."
 mkdir rendered
 cp -r ./sharedflowbundle ./rendered
 sed -i "s/REPLACEWITHIDPCLIENTIDCLAIM/$TOKEN_CLIENT_ID_CLAIM/g" ./rendered/sharedflowbundle/policies/VK-IdentifyClientApp.xml
-if [ ! -z "$PR_KEY" ]; then
+if [ -n -z "$PR_KEY" ]; then
     echo "Deploying public and private keys for mock oidc..."
     echo -e "jwk=$JWK\nprivate_key=$PR_KEY" > mock_configuration.properties
     apigeecli res create --org "$PROJECT" --env "$APIGEE_ENV" --token "$TOKEN" --name mock_configuration --type properties --respath mock_configuration.properties
@@ -130,14 +130,14 @@ echo "Creating Developer App"
 apigeecli apps create --name $APP_NAME --email authz-idp-acccess-tokens_apigeesamples@acme.com --prods authz-idp-acccess-tokens-sample-product --callback https://developers.google.com/oauthplayground/ --org "$PROJECT" --token "$TOKEN" --disable-check
 
 
-if [ ! -z "$PR_KEY" ]; then
+if [ -n -z "$PR_KEY" ]; then
     TOKEN_AUDIENCE=$(apigeecli apps get --name $APP_NAME --org "$PROJECT" --token "$TOKEN" --disable-check | jq ."[0].credentials[0].consumerKey" -r)
     IDP_APP_CLIENT_ID="$TOKEN_AUDIENCE"
     IDP_APP_CLIENT_SECRET=$(apigeecli apps get --name $APP_NAME --org "$PROJECT" --token "$TOKEN" --disable-check | jq ."[0].credentials[0].consumerSecret" -r)
     
     echo "Importing and Deploying Apigee authorization-server-mock proxy..."
     REV_A=$(apigeecli apis create bundle -f ./mock-tools/apiproxy -n authorization-server-mock --org "$PROJECT" --token "$TOKEN" --disable-check | jq ."revision" -r)
-    apigeecli apis deploy --wait --name authorization-server-mock --ovr --rev "$REV" --org "$PROJECT" --env "$APIGEE_ENV" --token "$TOKEN"
+    apigeecli apis deploy --wait --name authorization-server-mock --ovr --rev "$REV_A" --org "$PROJECT" --env "$APIGEE_ENV" --token "$TOKEN"
 else    
     echo "Creating Developer App Key"
     apigeecli apps keys create --name $APP_NAME --dev authz-idp-acccess-tokens_apigeesamples@acme.com --prods authz-idp-acccess-tokens-sample-product --org "$PROJECT" --token "$TOKEN" --key "$IDP_APP_CLIENT_ID" --secret "$IDP_APP_CLIENT_SECRET" --disable-check
@@ -151,7 +151,7 @@ apigeecli res create --org "$PROJECT" --env "$APIGEE_ENV" --token "$TOKEN" --nam
 
 echo " "
 echo "All the Apigee artifacts are successfully deployed!"
-if [ ! -z "$PR_KEY" ]; then
+if [ -n -z "$PR_KEY" ]; then
     AUTHZ_ENDPOINT="https://$APIGEE_HOST/v1/samples/oidc/authorize"
     TOKEN_ENDPOINT="https://$APIGEE_HOST/v1/samples/oidc/token"
     ENCODED_AUTHZ_ENDPOINT=$(printf '%s\n' "$AUTHZ_ENDPOINT" | jq -sRr @uri)
