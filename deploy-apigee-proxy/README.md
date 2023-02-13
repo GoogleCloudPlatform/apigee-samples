@@ -2,6 +2,8 @@
 
 This sample demonstrates how to use the [Apigee Maven deploy plugin](https://github.com/apigee/apigee-deploy-maven-plugin) to deploy a proxy to Apigee using [Cloud Build](https://cloud.google.com/build/docs/overview)
 
+### Screencast
+
 [![Alt text](https://img.youtube.com/vi/8c0RozFEYhs/0.jpg)](https://www.youtube.com/watch?v=8c0RozFEYhs)
 
 ## Prerequisites
