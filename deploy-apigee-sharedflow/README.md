@@ -2,6 +2,10 @@
 
 This sample demonstrates how to use the [Apigee Maven deploy plugin](https://github.com/apigee/apigee-deploy-maven-plugin) to deploy a sharedflow to Apigee using [Cloud Build](https://cloud.google.com/build/docs/overview)
 
+[![deploy-apigee-sharedflow]          // Title
+(https://i.ytimg.com/vi/vRo8v79yGJU/maxresdefault.jpg)] // Thumbnail
+(https://www.youtube.com/watch?v=vRo8v79yGJU "deploy-apigee-sharedflow")    // Video Link
+
 ## Prerequisites
 1. [Provision Apigee X](https://cloud.google.com/apigee/docs/api-platform/get-started/provisioning-intro)
 2. Access to deploy sharedflow to Apigee, trigger Cloud Build
