@@ -35,10 +35,10 @@ source ./env.sh
 
 ## Deploy Cloud Run Sample
 
-First, let enabled the Cloud Build API, Cloud Run API and Container Registry API
+First, lets enable the IAM API, Cloud Build API, Cloud Run API and Container Registry API
 
 ```sh
-gcloud services enable cloudbuild.googleapis.com run.googleapis.com containerregistry.googleapis.com
+gcloud services enable iam.googleapis.com cloudbuild.googleapis.com run.googleapis.com containerregistry.googleapis.com
 ```
 
 Once the API is enabled, lets assign the Apigee Org Admin role, Cloud Run Admin and Service Account Admin and User Role to the Cloud Build service account
