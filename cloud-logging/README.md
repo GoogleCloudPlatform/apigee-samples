@@ -2,10 +2,6 @@
 
 This example explores how you can send custom logging messages from Apigee into [Google Cloud Logging](https://cloud.google.com/logging/docs/overview)
 
-## Screencast
-
-[![Alt text](https://img.youtube.com/vi/p-ZbUExQgzw/0.jpg)](https://www.youtube.com/watch?v=p-ZbUExQgzw)
-
 ## About logging, analytics and other data collection mechanisms
 
 It is important to know that Apigee collects and analyzes, by default, a lot of important [API metrics](https://cloud.google.com/apigee/docs/api-platform/analytics/analytics-services-overview#what-kind-of-data-is-collected-and-analyzed) within the Apigee Analytics feature set and these can be consumed in many ways - native dashboards, custom reports, metric API, export to BigQuery or Cloud Storage and others. For many users, depending on the use-case and objectives, this native set of analytics is enough and API request/response logging might not even be needed.
@@ -21,6 +17,10 @@ This simple API proxy is basically transparent and will hit a sample target endp
 The MessageLogging policy will be placed at the [PostClientFlow](https://cloud.google.com/apigee/docs/api-platform/fundamentals/what-are-flows#designingflowexecutionsequence-havingcodeexecuteaftertheclientreceivesyourproxysresponsewithapostclientflow). While one can add this policy to any point of the request or response flow, the PostClientFlow is typically the best place to add it because we'll have all the context of the call and it is executed after the actual API response is sent to the API client. 
 As an example, we'll log flow variables, request content, reponse content, static values, etc. The policy is quite flexible in terms of what it can log.
 It is also worth noting that it is quite common to add the MessageLogging policy to Shared Flows for standardization across multiple APIs, but in this example it will be added directly to the sample proxy.
+
+## Screencast
+
+[![Alt text](https://img.youtube.com/vi/p-ZbUExQgzw/0.jpg)](https://www.youtube.com/watch?v=p-ZbUExQgzw)
 
 ## Prerequisites
 1. [Provision Apigee X](https://cloud.google.com/apigee/docs/api-platform/get-started/provisioning-intro)
