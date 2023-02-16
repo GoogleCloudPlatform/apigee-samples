@@ -2,6 +2,10 @@
 
 This sample demonstrates how to use the [Apigee Maven config plugin](https://github.com/apigee/apigee-config-maven-plugin) to push environment configurations like Targetservers, KeyValueMaps and Organization configurations like API Products, Developers and Developer Apps to Apigee using [Cloud Build](https://cloud.google.com/build/docs/overview)
 
+### Screencast
+
+[![Alt text](https://img.youtube.com/vi/RBn-8cG_i9s/0.jpg)](https://www.youtube.com/watch?v=RBn-8cG_i9s)
+
 ## Prerequisites
 1. [Provision Apigee X](https://cloud.google.com/apigee/docs/api-platform/get-started/provisioning-intro)
 2. Access to push configurations to Apigee (API Admin or Org Admin role), trigger Cloud Build

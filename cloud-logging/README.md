@@ -2,6 +2,10 @@
 
 This example explores how you can send custom logging messages from Apigee into [Google Cloud Logging](https://cloud.google.com/logging/docs/overview)
 
+## Screencast
+
+[![Alt text](https://img.youtube.com/vi/p-ZbUExQgzw/0.jpg)](https://www.youtube.com/watch?v=p-ZbUExQgzw)
+
 ## About logging, analytics and other data collection mechanisms
 
 It is important to know that Apigee collects and analyzes, by default, a lot of important [API metrics](https://cloud.google.com/apigee/docs/api-platform/analytics/analytics-services-overview#what-kind-of-data-is-collected-and-analyzed) within the Apigee Analytics feature set and these can be consumed in many ways - native dashboards, custom reports, metric API, export to BigQuery or Cloud Storage and others. For many users, depending on the use-case and objectives, this native set of analytics is enough and API request/response logging might not even be needed.
