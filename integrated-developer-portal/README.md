@@ -2,6 +2,10 @@
 
 This sample lets you create an integrated developer portal for your API product
 
+## Screencast
+
+[![Alt text](https://img.youtube.com/vi/Ka72ciHfc4s/0.jpg)](https://www.youtube.com/watch?v=Ka72ciHfc4s)
+
 ## About integrated developer portals
 
 Apigee's integrated developer portal enables users to quickly and easily stand up a developer portal for their APIs. These portals are fully supported by Google and offer premium capabilities for the majority of developer portal needs. To learn more, see the [official documentation](https://cloud.google.com/apigee/docs/api-platform/publish/portal/build-integrated-portal).
