@@ -41,10 +41,10 @@ Now source the `env.sh` file
 source ./env.sh
 ```
 
-3. Enable the Cloud Build API, Cloud Run API and Container Registry API. Assign Apigee Org admin, Cloud Run Admin , Service Account User and Admin role to the Cloud Build service account
+3. Enable the IAM API, Cloud Build API, Cloud Run API and Container Registry API. Assign Apigee Org admin, Cloud Run Admin , Service Account User and Admin role to the Cloud Build service account
 
 ```bash
-gcloud services enable cloudbuild.googleapis.com run.googleapis.com containerregistry.googleapis.com
+gcloud services enable iam.googleapis.com cloudbuild.googleapis.com run.googleapis.com containerregistry.googleapis.com
 
 gcloud projects add-iam-policy-binding "$PROJECT" \
   --member="serviceAccount:$CLOUD_BUILD_SA" \
