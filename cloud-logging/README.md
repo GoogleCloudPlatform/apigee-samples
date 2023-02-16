@@ -22,6 +22,10 @@ The MessageLogging policy will be placed at the [PostClientFlow](https://cloud.g
 As an example, we'll log flow variables, request content, reponse content, static values, etc. The policy is quite flexible in terms of what it can log.
 It is also worth noting that it is quite common to add the MessageLogging policy to Shared Flows for standardization across multiple APIs, but in this example it will be added directly to the sample proxy.
 
+## Screencast
+
+[![Alt text](https://img.youtube.com/vi/p-ZbUExQgzw/0.jpg)](https://www.youtube.com/watch?v=p-ZbUExQgzw)
+
 ## Prerequisites
 1. [Provision Apigee X](https://cloud.google.com/apigee/docs/api-platform/get-started/provisioning-intro)
 2. Configure [external access](https://cloud.google.com/apigee/docs/api-platform/get-started/configure-routing#external-access) for API traffic to your Apigee X instance
