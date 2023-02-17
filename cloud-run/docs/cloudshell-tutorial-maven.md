@@ -15,7 +15,7 @@ Ensure you have an active GCP account selected in the Cloud shell
 gcloud auth login
 ```
 
-Navigate to the 'deploy-apigee-proxy' directory in the Cloud shell.
+Navigate to the 'cloud-run' directory in the Cloud shell.
 
 ```sh
 cd cloud-run
