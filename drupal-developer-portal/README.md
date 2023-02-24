@@ -1,10 +1,10 @@
-# Integrated Developer Portal
+# Drupal Developer Portal
 
 This sample lets you create a Drupal developer portal for your Apigee API product
 
-## About integrated developer portals
+## About Drupal developer portals
 
-Apigee's Drupal developer portal enables users to quickly and easily stand up a highly customizable developer portal for their APIs. Unlike the integrated developer portal, the Drupal portal isn't managed by Apigee. So we will use the Google Cloud Platform (GCP) Marketplace solution to deploy the portal's infrastructure. To learn more about Apigee Drupal portals, see the [Google documentation](https://cloud.google.com/apigee/docs/api-platform/publish/drupal/open-source-drupal).
+Apigee's Drupal developer portal enables users to quickly and easily stand up a highly customizable developer portal for their APIs. Unlike the Drupal developer portal, the Drupal portal isn't managed by Apigee. So we will use the Google Cloud Platform (GCP) Marketplace solution to deploy the portal's infrastructure. To learn more about Apigee Drupal portals, see the [Google documentation](https://cloud.google.com/apigee/docs/api-platform/publish/drupal/open-source-drupal).
 
 ## Implementation on Apigee 
 
@@ -28,15 +28,15 @@ The Apigee proxy sample uses only a few policies:
 
 Use the following GCP CloudShell tutorial, and follow the instructions in Cloud Shell. Alternatively, follow the instructions below.
 
-[![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/apigee-samples&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=integrated-developer-portal/docs/cloudshell-tutorial.md)
+[![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/apigee-samples&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=drupal-developer-portal/docs/cloudshell-tutorial.md)
 
 ## Setup instructions
 
-1. Clone the apigee-samples repo, and switch to the integrated-developer-portal directory
+1. Clone the apigee-samples repo, and switch to the drupal-developer-portal directory
 
 ```bash
 git clone https://github.com/GoogleCloudPlatform/apigee-samples.git
-cd apige-samples/integrated-developer-portal
+cd apigee-samples/drupal-developer-portal
 ```
 
 2. Edit the `env.sh` and configure the ENV vars
@@ -59,15 +59,15 @@ gcloud auth login
 
 ## Deploy Apigee components
 
-Next, let's deploy some Apigee resources necessary to create an integrated developer portal
+Next, let's deploy some Apigee resources necessary to set up the Drupal developer portal
 
 ```bash
-./deploy-integrated-developer-portal.sh
+./deploy-drupal-developer-portal.sh
 ```
 
 **NOTE: This script creates an API Proxy and API product. It does not, however, create the developer portal. We will create and test that manually**
 
-## Test Integrated Developer Portal
+## Test Drupal Developer Portal
 
 ## Conclusion & Cleanup
 
@@ -79,5 +79,5 @@ First, you need to manually delete the Drupal developer portal
 After that, source your `env.sh` script and run the following to delete your product and proxy:
 
 ```bash
-./clean-up-integrated-developer-portal.sh
+./clean-up-drupal-developer-portal.sh
 ```
