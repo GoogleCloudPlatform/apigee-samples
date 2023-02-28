@@ -58,7 +58,7 @@ gcloud projects add-iam-policy-binding "$PROJECT" \
 
 ```bash
 gcloud builds submit --config cloudbuild.yaml . \
-    --substitutions="_APIGEE_TEST_ENV=$APIGEE_ENV"
+    --substitutions="_APIGEE_TEST_ENV=$APIGEE_ENV
 ```
 
 ## Test the APIs
