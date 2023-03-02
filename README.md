@@ -56,6 +56,8 @@ Most developers begin by identifying an interesting sample based on a specific u
 - [integrated-developer-portal](integrated-developer-portal) -
   This sample demonstrates how to create an Apigee Integrated portal and shows how to expose your API products to its catalog
 
+You can find videos of all the samples in this [YouTube playlist](https://goo.gle/ApigeeAcceleratorSeries)
+
 ### <a name="modifying"></a>Modifying a sample proxy
 
 Feel free to modify and build upon the sample proxies. You can make changes in the Apigee [management UI](https://cloud.google.com/apigee/docs/api-platform/develop/ui-edit-proxy) or by using our Cloud Code [extension for local development](https://cloud.google.com/apigee/docs/api-platform/local-development/setup) in Visual Studio Code. Whichever approach is comfortable for you.
