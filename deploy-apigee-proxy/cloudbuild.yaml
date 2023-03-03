@@ -43,4 +43,4 @@ steps:
         mvn -f pom.xml -ntp apigee-enterprise:deploy -Pdev -Dorg=$PROJECT_ID \
           -Denv=$_APIGEE_TEST_ENV -Dbearer=${build_token}
 options:
- logging: GCS_ONLY
+  logging: GCS_ONLY
