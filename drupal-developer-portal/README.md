@@ -129,8 +129,11 @@ Finally, we will test out our Drupal portal by making secured requests to our AP
 
 To clean up the artifacts created:
 
-First, you need to manually delete the Drupal developer portal
+First, you need to delete the resources we manually created
 
+1. From the Apigee console, navigate to Publish > Developers
+2. Find the account you created in your developer portal, hover over it, and select the trash can icon to delete. This will also delete all Apigee Apps associated with your developer
+3. From the GCP Deployment Manager Deployments page select your sample-drupal-developer-portal deployment and click delete at the top
 
 After that, source your `env.sh` script and run the following to delete your product and proxy:
 
