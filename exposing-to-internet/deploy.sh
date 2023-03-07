@@ -28,7 +28,7 @@ function wait_for_operation () {
     while true
     do
         STATE="$(apigeecli operations get -o "$PROJECT" -n "$1" -t "$TOKEN" | jq --raw-output '.metadata.state')"
-        if [ $STATE = "FINISHED" ]; then
+        if [ "$STATE" = "FINISHED" ]; then
             echo
             break
         fi
@@ -56,11 +56,11 @@ ENVIRONMENT_GROUP_NAME="sample-environment-group"
 # Create and attach a sample Apigee environment
 echo -n "Creating environment..."
 OPERATION=$(apigeecli environments create -o "$PROJECT" -e "$ENVIRONMENT_NAME" -d PROXY -p PROGRAMMABLE -t "$TOKEN" | jq --raw-output '.name' | awk -F/ '{print $4}')
-wait_for_operation $OPERATION
+wait_for_operation "$OPERATION"
 
 echo -n "Attaching environment to instance (may take a few minutes)..."
 OPERATION=$(apigeecli instances attachments attach -o "$PROJECT" -e "$ENVIRONMENT_NAME" -n "$INSTANCE_NAME" -t "$TOKEN" | jq --raw-output '.name' | awk -F/ '{print $4}')
-wait_for_operation $OPERATION
+wait_for_operation "$OPERATION"
 
 # Enable APIs
 gcloud services enable compute.googleapis.com --project="$PROJECT" --quiet
@@ -73,12 +73,12 @@ RUNTIME_HOST_ALIAS="$ENVIRONMENT_GROUP_NAME".$(echo "$RUNTIME_IP" | tr '.' '-').
 
 # Create a sample Apigee environment group and attach the environment
 echo -n "Creating environment group..."
-OPERATION=$(apigeecli envgroups create -o "$PROJECT" -d "$RUNTIME_HOST_ALIAS" -n "$ENVIRONMENT_GROUP_NAME" -t $TOKEN | jq --raw-output '.name' | awk -F/ '{print $4}')
-wait_for_operation $OPERATION
+OPERATION=$(apigeecli envgroups create -o "$PROJECT" -d "$RUNTIME_HOST_ALIAS" -n "$ENVIRONMENT_GROUP_NAME" -t "$TOKEN" | jq --raw-output '.name' | awk -F/ '{print $4}')
+wait_for_operation "$OPERATION"
 
 echo -n "Attaching environment to group..."
-OPERATION=$(apigeecli envgroups attach -o "$PROJECT" -e "$ENVIRONMENT_NAME" -n "$ENVIRONMENT_GROUP_NAME" -t $TOKEN | jq --raw-output '.name' | awk -F/ '{print $4}')
-wait_for_operation $OPERATION
+OPERATION=$(apigeecli envgroups attach -o "$PROJECT" -e "$ENVIRONMENT_NAME" -n "$ENVIRONMENT_GROUP_NAME" -t "$TOKEN" | jq --raw-output '.name' | awk -F/ '{print $4}')
+wait_for_operation "$OPERATION"
 
 # Create a Google managed SSL certificate
 echo "Creating SSL certificate..."
@@ -91,38 +91,38 @@ echo "Creating external load balancer..."
 # Create a PSC NEG
 gcloud compute network-endpoint-groups create sample-apigee-neg \
   --network-endpoint-type=private-service-connect \
-  --psc-target-service=$SERVICE_ATTACHMENT \
-  --region=$REGION \
-  --network=$NETWORK \
-  --subnet=${SUBNET:-default} \
-  --project=$PROJECT --quiet
+  --psc-target-service="$SERVICE_ATTACHMENT" \
+  --region="$REGION" \
+  --network="$NETWORK" \
+  --subnet="${SUBNET:-default}" \
+  --project="$PROJECT" --quiet
 
 # Create a backend service and add the NEG
 gcloud compute backend-services create sample-apigee-backend \
   --load-balancing-scheme=EXTERNAL_MANAGED \
   --protocol=HTTPS \
-  --global --project=$PROJECT --quiet
+  --global --project="$PROJECT" --quiet
 
 gcloud compute backend-services add-backend sample-apigee-backend \
   --network-endpoint-group=sample-apigee-neg \
-  --network-endpoint-group-region=$REGION \
-  --global --project=$PROJECT --quiet
+  --network-endpoint-group-region="$REGION" \
+  --global --project="$PROJECT" --quiet
 
 # Create a Load Balancing URL map
 gcloud compute url-maps create sample-apigee-urlmap \
-  --default-service sample-apigee-backend --project=$PROJECT --quiet
+  --default-service sample-apigee-backend --project="$PROJECT" --quiet
 
 # Create a Load Balancing target HTTPS proxy
 gcloud compute target-https-proxies create sample-apigee-https-proxy \
   --url-map sample-apigee-urlmap \
-  --ssl-certificates sample-apigee-ssl-cert --project=$PROJECT --quiet
+  --ssl-certificates sample-apigee-ssl-cert --project="$PROJECT" --quiet
 
 # Create a global forwarding rule
 gcloud compute forwarding-rules create sample-apigee-https-lb-rule \
   --load-balancing-scheme=EXTERNAL_MANAGED \
   --network-tier=PREMIUM \
   --address=sample-apigee-vip --global \
-  --target-https-proxy=sample-apigee-https-proxy --ports=443 --project=$PROJECT --quiet
+  --target-https-proxy=sample-apigee-https-proxy --ports=443 --project="$PROJECT" --quiet
 
 echo -n "Waiting for certificate provisioning to complete (may take some time)..."
 while true

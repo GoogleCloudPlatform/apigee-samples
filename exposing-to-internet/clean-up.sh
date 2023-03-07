@@ -28,7 +28,7 @@ function wait_for_operation () {
     while true
     do
         STATE="$(apigeecli operations get -o "$PROJECT" -n "$1" -t "$TOKEN" | jq --raw-output '.metadata.state')"
-        if [ $STATE = "FINISHED" ]; then
+        if [ "$STATE" = "FINISHED" ]; then
             echo
             break
         fi
@@ -44,7 +44,6 @@ export PATH=$PATH:$HOME/.apigeecli/bin
 TOKEN="$(gcloud auth print-access-token)"
 
 # Get Org and instance information
-ORG_JSON=$(apigeecli organizations get -o "$PROJECT" -t "$TOKEN")
 INSTANCE_JSON=$(apigeecli instances list -o "$PROJECT" -t "$TOKEN")
 INSTANCE_NAME=$(echo "$INSTANCE_JSON" | jq --raw-output '.instances[0].name')
 REGION=$(echo "$INSTANCE_JSON" | jq --raw-output '.instances[0].location')
@@ -59,21 +58,21 @@ gcloud compute forwarding-rules delete sample-apigee-https-lb-rule \
 
 # Delete target HTTPS proxy
 gcloud compute target-https-proxies delete sample-apigee-https-proxy \
-  --project=$PROJECT --quiet
+  --project="$PROJECT" --quiet
 
 # Delete URL map
 gcloud compute url-maps delete sample-apigee-urlmap \
-  --project=$PROJECT --quiet
+  --project="$PROJECT" --quiet
 
 # Delete backend service
 gcloud compute backend-services delete sample-apigee-backend \
   --global \
-  --project=$PROJECT --quiet
+  --project="$PROJECT" --quiet
 
 # Delete NEG
 gcloud compute network-endpoint-groups delete sample-apigee-neg \
-  --region=$REGION \
-  --project=$PROJECT --quiet
+  --region="$REGION" \
+  --project="$PROJECT" --quiet
 
 # Delete cert
 echo "Deleting SSL certificate..."
@@ -87,21 +86,21 @@ gcloud compute addresses delete sample-apigee-vip \
   --project "$PROJECT" --quiet
 
 echo -n "Detaching environment from group..."
-OPERATION=$(apigeecli envgroups detach -o "$PROJECT" -e "$ENVIRONMENT_NAME" -n "$ENVIRONMENT_GROUP_NAME" -t $TOKEN | jq --raw-output '.name' | awk -F/ '{print $4}')
-wait_for_operation $OPERATION
+OPERATION=$(apigeecli envgroups detach -o "$PROJECT" -e "$ENVIRONMENT_NAME" -n "$ENVIRONMENT_GROUP_NAME" -t "$TOKEN" | jq --raw-output '.name' | awk -F/ '{print $4}')
+wait_for_operation "$OPERATION"
 
 echo -n "Deleting environment group..."
 # OPERATION=$(apigeecli envgroups delete -o "$PROJECT" -n "$ENVIRONMENT_GROUP_NAME" -t $TOKEN | jq --raw-output '.name' | awk -F/ '{print $4}')
 # Use curl due to https://github.com/apigee/apigeecli/issues/159
 OPERATION=$(curl -X DELETE https://apigee.googleapis.com/v1/organizations/$PROJECT/envgroups/$ENVIRONMENT_GROUP_NAME -H "Authorization: Bearer $TOKEN" | jq --raw-output '.name' | awk -F/ '{print $4}')
-wait_for_operation $OPERATION
+wait_for_operation "$OPERATION"
 
 echo -n "Detaching environment from instance..."
 OPERATION=$(apigeecli instances attachments detach -o "$PROJECT" -e "$ENVIRONMENT_NAME" -n "$INSTANCE_NAME" -t "$TOKEN" | jq --raw-output '.name' | awk -F/ '{print $4}')
-wait_for_operation $OPERATION
+wait_for_operation "$OPERATION"
 
 echo -n "Deleting environment..."
 OPERATION=$(apigeecli environments delete -o "$PROJECT" -e "$ENVIRONMENT_NAME" -t "$TOKEN" | jq --raw-output '.name' | awk -F/ '{print $4}')
-wait_for_operation $OPERATION
+wait_for_operation "$OPERATION"
 
 echo "Clean up complete!"
