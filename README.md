@@ -56,7 +56,7 @@ Most developers begin by identifying an interesting sample based on a specific u
 - [integrated-developer-portal](integrated-developer-portal) -
   This sample demonstrates how to create an Apigee Integrated portal and shows how to expose your API products to its catalog
 - [exposing-to-internet](exposing-to-internet) -
-  This sample demonstrates how to expose an Apigee instance to the internet using an external HTTP(S) load balancer
+  This sample demonstrates how to expose an Apigee instance to the internet using a Google Cloud external HTTP(S) Load Balancer
 
 You can find videos of all the samples in this [YouTube playlist](https://goo.gle/ApigeeAcceleratorSeries)
 

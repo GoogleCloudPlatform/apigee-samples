@@ -21,14 +21,16 @@ Navigate to the `exposing-to-internet` directory in the Cloud shell.
 cd exposing-to-internet
 ```
 
-Edit the provided sample `env.sh` file, and set the environment variables there.
-
-Click <walkthrough-editor-open-file filePath="exposing-to-internet/env.sh">here</walkthrough-editor-open-file> to open the file in the editor
-
-Then, source the `env.sh` file in the Cloud shell.
+Set your GCP project ID:
 
 ```sh
-source ./env.sh
+export PROJECT="<GCP_PROJECT_ID>"
+```
+
+Then:
+
+```sh
+gcloud config set project $PROJECT
 ```
 
 ---
@@ -64,7 +66,7 @@ Congratulations! You've successfully made your Apigee instance available from th
 
 ## Cleanup
 
-If you want to clean up the artefacts from this example, first source your `env.sh` script, and then run:
+If you want to clean up the artifacts from this example, first source your `env.sh` script, and then run:
 
 ```bash
 ./clean-up.sh
