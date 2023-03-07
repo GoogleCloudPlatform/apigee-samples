@@ -25,6 +25,7 @@ Customers can connect an external load balancer to this attachment using a [PSC 
     * curl
     * jq
     * npm
+
 # (QuickStart) Setup using CloudShell
 
 Use the following GCP CloudShell tutorial, and follow the instructions.
@@ -34,7 +35,6 @@ Use the following GCP CloudShell tutorial, and follow the instructions.
 ## Setup instructions
 
 1. Clone the `apigee-samples` repo, and switch the `exposing-to-internet` directory
-
 
 ```bash
 git clone https://github.com/GoogleCloudPlatform/apigee-samples.git
