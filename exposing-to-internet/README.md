@@ -19,7 +19,7 @@ Customers can connect an external load balancer to this attachment using a [PSC 
 ![Architecture](https://cloud.google.com/static/apigee/docs/api-platform/images/psc-arch.png)
 
 ## Prerequisites
-1. An Apigee X instance already provisioned. If not you may follow the steps [here](https://cloud.google.com/apigee/docs/api-platform/get-started/provisioning-intro).
+1. An Apigee X instance already provisioned. If not, you may follow the steps [here](https://cloud.google.com/apigee/docs/api-platform/get-started/provisioning-intro).
 2. Your account must have [permissions to configure access routing](https://cloud.google.com/apigee/docs/api-platform/get-started/permissions#access-routing-permissions) and create Apigee environment and environment groups. See the predefined roles listed [here](https://cloud.google.com/apigee/docs/api-platform/get-started/permissions#predefined-roles).
 2. Make sure the following tools are available in your terminal's `$PATH` (Cloud Shell has these preconfigured)
     * [gcloud SDK](https://cloud.google.com/sdk/docs/install)
