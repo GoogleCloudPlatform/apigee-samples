@@ -55,6 +55,8 @@ Most developers begin by identifying an interesting sample based on a specific u
   A sample proxy to invoke Cloud Run Service from Apigee
 - [integrated-developer-portal](integrated-developer-portal) -
   This sample demonstrates how to create an Apigee Integrated portal and shows how to expose your API products to its catalog
+- [drupal-developer-portal](drupal-developer-portal) -
+  This sample demonstrates how to create an Drupal developer portal and shows how to expose your Apigee API products to its catalog
 
 You can find videos of all the samples in this [YouTube playlist](https://goo.gle/ApigeeAcceleratorSeries)
 
