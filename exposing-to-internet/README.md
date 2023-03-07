@@ -72,12 +72,12 @@ npm run test
 ```
 
 ## Example Requests
-To manually test the instance via the external load balancer URL, a request can be made like this:
+To manually test the instance via the external load balancer URL, wait a minute and then make the following request:
 ```
 curl https://$RUNTIME_HOST_ALIAS/healthz/ingress -H 'User-Agent: GoogleHC'
 ```
 
-You should see an HTTP 200 status returned along with the response body "`Apigee Ingress is healthy`" which indicates the instance is accessible via the external URL.
+You should see an HTTP 200 status returned along with the response body "`Apigee Ingress is healthy`" which indicates the instance is accessible via the external URL. If you see an SSL error, wait a second and try again.
 
 ## Cleanup
 

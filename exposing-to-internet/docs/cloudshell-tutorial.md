@@ -46,12 +46,12 @@ This script creates a sample [environment and environment group](https://cloud.g
 
 ### Test the Apigee instance
 
-Run the following command:
+Wait a minute for the TLS certificate to be loaded, and then run the following command:
 ```sh
 curl https://$RUNTIME_HOST_ALIAS/healthz/ingress -H 'User-Agent: GoogleHC'
 ```
 
-You should see an HTTP 200 status returned along with the response body "`Apigee Ingress is healthy`" which indicates the instance is accessible via the external URL.
+You should see an HTTP 200 status returned along with the response body "`Apigee Ingress is healthy`" which indicates the instance is accessible via the external URL.  If you see an SSL error, wait a second and try again.
 
 ---
 ## Conclusion

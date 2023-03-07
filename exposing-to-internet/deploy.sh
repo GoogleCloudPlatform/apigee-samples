@@ -135,7 +135,11 @@ do
   sleep 10
 done
 
-sleep 10
+# Pause to allow TLS setup to complete
+sleep 30
+
+echo "Installing dependencies and running tests..."
+npm install
 npm run test
 
 echo "# To send an EXTERNAL test request, execute the following command:"
