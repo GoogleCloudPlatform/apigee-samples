@@ -58,7 +58,7 @@ echo -n "Creating environment..."
 OPERATION=$(apigeecli environments create -o "$PROJECT" -e "$ENVIRONMENT_NAME" -d PROXY -p PROGRAMMABLE -t "$TOKEN" | jq --raw-output '.name' | awk -F/ '{print $4}')
 wait_for_operation $OPERATION
 
-echo -n "Attaching environment to instance..."
+echo -n "Attaching environment to instance (may take a few minutes)..."
 OPERATION=$(apigeecli instances attachments attach -o "$PROJECT" -e "$ENVIRONMENT_NAME" -n "$INSTANCE_NAME" -t "$TOKEN" | jq --raw-output '.name' | awk -F/ '{print $4}')
 wait_for_operation $OPERATION
 
@@ -124,7 +124,7 @@ gcloud compute forwarding-rules create sample-apigee-https-lb-rule \
   --address=sample-apigee-vip --global \
   --target-https-proxy=sample-apigee-https-proxy --ports=443 --project=$PROJECT --quiet
 
-echo -n "Waiting for certificate provisioning to complete..."
+echo -n "Waiting for certificate provisioning to complete (may take some time)..."
 while true
 do
   TLS_STATUS="$(gcloud compute ssl-certificates describe sample-apigee-ssl-cert --format=json --project "$PROJECT" --quiet | jq -r '.managed.status')"

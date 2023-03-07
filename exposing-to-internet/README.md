@@ -56,6 +56,7 @@ source ./env.sh
 ```bash
 ./deploy.sh
 ```
+Please note the script may take some time to complete while certificate provisioning occurs.
 
 ## Testing
 To run the tests, first retrieve Node.js dependencies with:

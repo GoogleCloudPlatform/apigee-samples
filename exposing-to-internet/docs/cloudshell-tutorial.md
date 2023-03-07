@@ -41,7 +41,7 @@ Next, let's create and deploy the resources necessary to expose the Apigee insta
 ./deploy.sh
 ```
 
-This script creates a sample [environment and environment group](https://cloud.google.com/apigee/docs/api-platform/fundamentals/environments-overview), plus an [external HTTP(S) load balancer](https://cloud.google.com/load-balancing/docs/https) with a reserved IP address and a [Google managed TLS certificate](https://cloud.google.com/load-balancing/docs/ssl-certificates/google-managed-certs). The script also tests that the deployment and configuration has been sucessful.
+This script creates a sample [environment and environment group](https://cloud.google.com/apigee/docs/api-platform/fundamentals/environments-overview), plus an [external HTTP(S) load balancer](https://cloud.google.com/load-balancing/docs/https) with a reserved IP address and a [Google managed TLS certificate](https://cloud.google.com/load-balancing/docs/ssl-certificates/google-managed-certs). The script also tests that the deployment and configuration has been sucessful. Please note the script may take some time to complete while certificate provisioning occurs.
 
 
 ### Test the Apigee instance
