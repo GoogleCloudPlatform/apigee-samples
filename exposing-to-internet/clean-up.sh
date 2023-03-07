@@ -54,7 +54,7 @@ echo "Deleting load balancer..."
 # Delete forwarding rule
 gcloud compute forwarding-rules delete sample-apigee-https-lb-rule \
    --global \
-   --project=$PROJECT --quiet
+   --project="$PROJECT" --quiet
 
 # Delete target HTTPS proxy
 gcloud compute target-https-proxies delete sample-apigee-https-proxy \
@@ -92,7 +92,7 @@ wait_for_operation "$OPERATION"
 echo -n "Deleting environment group..."
 # OPERATION=$(apigeecli envgroups delete -o "$PROJECT" -n "$ENVIRONMENT_GROUP_NAME" -t $TOKEN | jq --raw-output '.name' | awk -F/ '{print $4}')
 # Use curl due to https://github.com/apigee/apigeecli/issues/159
-OPERATION=$(curl -X DELETE https://apigee.googleapis.com/v1/organizations/$PROJECT/envgroups/$ENVIRONMENT_GROUP_NAME -H "Authorization: Bearer $TOKEN" | jq --raw-output '.name' | awk -F/ '{print $4}')
+OPERATION=$(curl -X DELETE "https://apigee.googleapis.com/v1/organizations/$PROJECT/envgroups/$ENVIRONMENT_GROUP_NAME" -H "Authorization: Bearer $TOKEN" | jq --raw-output '.name' | awk -F/ '{print $4}')
 wait_for_operation "$OPERATION"
 
 echo -n "Detaching environment from instance..."
