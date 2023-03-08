@@ -150,5 +150,6 @@ echo "Installing dependencies and running tests..."
 npm install
 npm run test
 
-echo "# To send an EXTERNAL test request, execute the following command:"
+echo "# To send an EXTERNAL test request, execute the following commands:"
+echo "export RUNTIME_HOST_ALIAS=$RUNTIME_HOST_ALIAS"
 echo "curl -v https://$RUNTIME_HOST_ALIAS/healthz/ingress -H 'User-Agent: GoogleHC'"
