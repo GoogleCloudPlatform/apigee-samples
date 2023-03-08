@@ -42,15 +42,15 @@ git clone https://github.com/GoogleCloudPlatform/apigee-samples.git
 cd exposing-to-internet
 ```
 
-2. Set project ID:
+2. Edit `env.sh` and configure the following variables:
 
-```bash
-export PROJECT="<GCP_PROJECT_ID>"
-```
+* `PROJECT` the project where your Apigee organization is located
+* `NETWORK` the VPC network where the PSC NEG will be deployed
+* `SUBNET` the VPC subnet where the PSC NEG will be deployed
 
-Then:
+Now source the `env.sh` file
 ```bash
-gcloud config set project $PROJECT
+source ./env.sh
 ```
 
 3. Deploy the environment, environment group and load balancing components:

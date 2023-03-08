@@ -19,6 +19,16 @@ if [ -z "$PROJECT" ]; then
     exit
 fi
 
+if [ -z "$NETWORK" ]; then
+    echo "No NETWORK variable set"
+    exit
+fi
+
+if [ -z "$SUBNET" ]; then
+    echo "No SUBNET variable set"
+    exit
+fi
+
 if ! [ -x "$(command -v jq)" ]; then
     echo "jq command is not on your PATH"
     exit
@@ -43,10 +53,8 @@ export PATH=$PATH:$HOME/.apigeecli/bin
 
 TOKEN="$(gcloud auth print-access-token)"
 
-# Get Org and instance information
-ORG_JSON=$(apigeecli organizations get -o "$PROJECT" -t "$TOKEN")
+# Get Apigee instance information
 INSTANCE_JSON=$(apigeecli instances list -o "$PROJECT" -t "$TOKEN")
-NETWORK=$(echo "$ORG_JSON" | jq --raw-output .authorizedNetwork)
 INSTANCE_NAME=$(echo "$INSTANCE_JSON" | jq --raw-output '.instances[0].name')
 REGION=$(echo "$INSTANCE_JSON" | jq --raw-output '.instances[0].location')
 SERVICE_ATTACHMENT=$(echo "$INSTANCE_JSON" | jq --raw-output '.instances[0].serviceAttachment')
@@ -94,7 +102,7 @@ gcloud compute network-endpoint-groups create sample-apigee-neg \
   --psc-target-service="$SERVICE_ATTACHMENT" \
   --region="$REGION" \
   --network="$NETWORK" \
-  --subnet="${SUBNET:-default}" \
+  --subnet="$SUBNET" \
   --project="$PROJECT" --quiet
 
 # Create a backend service and add the NEG

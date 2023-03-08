@@ -21,16 +21,14 @@ Navigate to the `exposing-to-internet` directory in the Cloud shell.
 cd exposing-to-internet
 ```
 
-Set your GCP project ID:
+Edit the provided sample `env.sh` file, and set the environment variables there.
+
+Click <walkthrough-editor-open-file filePath="exposing-to-internet/env.sh">here</walkthrough-editor-open-file> to open the file in the editor
+
+Then, source the `env.sh` file in the Cloud shell.
 
 ```sh
-export PROJECT="<GCP_PROJECT_ID>"
-```
-
-Then:
-
-```sh
-gcloud config set project $PROJECT
+source ./env.sh
 ```
 
 ---
