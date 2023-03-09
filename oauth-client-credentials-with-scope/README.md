@@ -36,7 +36,7 @@ The client credentials sample uses one policy that executes on Apigee : An OAuth
     * curl
     * jq
     * npm
-    
+
 # (QuickStart) Setup using CloudShell
 
 Use the following GCP CloudShell tutorial, and follow the instructions.
@@ -94,7 +94,7 @@ see the [auth-schemes.feature](./test/integration/features/oauth-client-credenti
 
 ## Test the APIs
 
-The script that deploys the Apigee API proxies will print two sets of cURL commands. 
+The script that deploys the Apigee resources will print two sets of cURL commands. 
 
 First set is with the a token with `read` access. You will find that it only works with the GET call. The POST call will fail. This is because of the insuffient scope to make a POST call to that resource.
 
