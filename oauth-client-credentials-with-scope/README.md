@@ -34,16 +34,16 @@ The client credentials sample uses one policy that executes on Apigee : An OAuth
 
 Use the following GCP CloudShell tutorial, and follow the instructions.
 
-[![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/apigee-samples&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=oauth-client-credentials/docs/cloudshell-tutorial.md)
+[![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/apigee-samples&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=oauth-client-credentials-with-scope/docs/cloudshell-tutorial.md)
 
 ## Setup instructions
 
-1. Clone the apigee-samples repo, and switch the oauth-client-credentials directory
+1. Clone the apigee-samples repo, and switch the oauth-client-credentials-with-scope directory
 
 
 ```bash
 git clone https://github.com/GoogleCloudPlatform/apigee-samples.git
-cd apigee-samples/oauth-client-credentials
+cd apigee-samples/oauth-client-credentials-with-scope
 ```
 
 2. Edit the `env.sh` and configure the ENV vars
@@ -61,7 +61,7 @@ source ./env.sh
 3. Deploy Apigee API proxies, products and apps
 
 ```bash
-./deploy-oauth-client-credentials.sh
+./deploy-oauth-client-credentials-with-scope.sh
 ```
 
 ## Testing the Client Credentials Proxy
@@ -71,8 +71,10 @@ npm install
 ```
 Ensure the following environment variables have been set correctly:
 * `PROXY_URL`
-* `APP_CLIENT_ID`
-* `APP_CLIENT_SECRET`
+* `APP_READ_SCOPE_CLIENT_ID`
+* `APP_READ_SCOPE_CLIENT_SECRET`
+* `APP_WRITE_SCOPE_CLIENT_ID`
+* `APP_WRITE_SCOPE_CLIENT_SECRET`
 
 and then run the tests:
 ```
@@ -81,26 +83,20 @@ npm run test
 
 ## Example Requests
 For additional examples, including negative test cases,
-see the [auth-schemes.feature](./test/integration/features/oauth-client-credentials.feature) file.
+see the [auth-schemes.feature](./test/integration/features/oauth-client-credentials-with-scope.feature) file.
 
-### OAuth Bearer Token (RFC 6749)
-First obtain a short-lived opaque access token using the token endpoint. Instructions for how to find
-application credentials can be found [here](https://cloud.google.com/apigee/docs/api-platform/publish/creating-apps-surface-your-api#view-api-key).
-If the deployment has been successfully executed, you will see the `oauth-client-credentials-app` created for testing purposes.
-```
-curl -v POST https://$APIGEE_HOST/v1/samples/oauth-client-credentials/token -u $APP_CLIENT_ID:$APP_CLIENT_SECRET -d "grant_type=client_credentials"
-```
-> _Note: Under normal circumstances, avoid providing secrets on the command itself using `-u`_
+## Test the APIs
 
-Copy the value of the `access_token` property from the response body of the previous request and include it in the following request:
-```
-curl -v GET https://$APIGEE_HOST/v1/samples/oauth-client-credentials/resource -H "Authorization: Bearer access_token"
-```
+The script that deploys the Apigee API proxies will print two sets of cURL commands. 
+
+First set is with the a token with `read` access. You will find that it only works with the GET call. The POST call will fail. This is because of the insuffient scope to make a POST call to that resource.
+
+Similarly, the second set of cURL commands include a token with `write` access. With this token, both the cURL should return a successful response.
 
 ## Cleanup
 
 If you want to clean up the artefacts from this example in your Apigee Organization, first source your `env.sh` script, and then run
 
 ```bash
-./clean-up-oauth-client-credentials
+./clean-up-oauth-client-credentials-with-scope.sh
 ```

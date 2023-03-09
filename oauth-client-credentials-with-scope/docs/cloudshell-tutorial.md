@@ -38,7 +38,7 @@ source ./env.sh
 Next, let's create and deploy the Apigee resources.
 
 ```sh
-./deploy-oauth-client-credentials.sh
+./deploy-oauth-client-credentials-with-scope.sh
 ```
 
 This script creates an API Proxy, two API products (one with read scope and the other with read,write scopes), a sample App developer, and App. The script also tests that the deployment and configuration has been successful.
@@ -46,7 +46,7 @@ This script creates an API Proxy, two API products (one with read scope and the 
 
 ### Test the APIs
 
-The script that deploys the Apigee API proxies print two sets of cURL commands. 
+The script that deploys the Apigee API proxies will print two sets of cURL commands. 
 
 First set is with the a token with `read` access. You will find that it only works with the GET call. The POST call will fail. This is because of the insuffient scope to make a POST call to that resource.
 
