@@ -89,7 +89,8 @@ echo " "
 echo "-----------------------------"
 echo " "
 echo "Generating a read scope token using $APP_NAME_READ_SCOPE credentials"
-READ_TOKEN=$(curl -s POST https://"$PROXY_URL"/token -u "$APP_READ_SCOPE_CLIENT_ID":"$APP_READ_SCOPE_CLIENT_SECRET" -d "grant_type=client_credentials&scope=read" | jq ."access_token" -r )export READ_TOKEN
+READ_TOKEN=$(curl -s POST https://"$PROXY_URL"/token -u "$APP_READ_SCOPE_CLIENT_ID":"$APP_READ_SCOPE_CLIENT_SECRET" -d "grant_type=client_credentials&scope=read" | jq ."access_token" -r )
+export READ_TOKEN
 echo " "
 echo "Then, to access the protected resource, run the following curl commands"
 echo " "
@@ -100,7 +101,8 @@ echo " "
 echo "-----------------------------"
 echo " "
 echo "Generating a write scope token using $APP_NAME_WRITE_SCOPE credentials"
-WRITE_TOKEN=$(curl -s POST https://"$PROXY_URL"/token -u "$APP_WRITE_SCOPE_CLIENT_ID":"$APP_WRITE_SCOPE_CLIENT_SECRET" -d "grant_type=client_credentials&scope=write" | jq ."access_token" -r )export WRITE_TOKEN
+WRITE_TOKEN=$(curl -s POST https://"$PROXY_URL"/token -u "$APP_WRITE_SCOPE_CLIENT_ID":"$APP_WRITE_SCOPE_CLIENT_SECRET" -d "grant_type=client_credentials&scope=write" | jq ."access_token" -r )
+export WRITE_TOKEN
 echo " "
 echo "Then, to access the protected resource, run the following curl commands"
 echo " "

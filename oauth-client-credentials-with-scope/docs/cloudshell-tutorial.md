@@ -15,7 +15,7 @@ Ensure you have an active GCP account selected in the Cloud shell
 gcloud auth login
 ```
 
-Navigate to the 'oauth-client-credentials-with-scope' drirectory in the Cloud shell.
+Navigate to the 'oauth-client-credentials-with-scope' directory in the Cloud shell.
 
 ```sh
 cd oauth-client-credentials-with-scope
@@ -48,9 +48,9 @@ This script creates an API Proxy, two API products (one with read scope and the 
 
 The script that deploys the Apigee resources will print two sets of cURL commands. 
 
-First set is with the a token with `read` access. You will find that it only works with the GET call. The POST call will fail. This is because of the insuffient scope to make a POST call to that resource.
+The first set returns a token with `read` access. You will find that it only works with the GET call. The POST call will fail. This is because of the insufficient scope to make a POST call to that resource.
 
-Similarly, the second set of cURL commands include a token with `write` access. With this token, both the cURL should return a successful response.
+Similarly, the second set of cURL commands include a token with `write` access. With this token, both of the cURL commands should return a successful response.
 
 ---
 ## Conclusion

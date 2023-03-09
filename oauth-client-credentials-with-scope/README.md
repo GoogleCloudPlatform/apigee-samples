@@ -1,6 +1,6 @@
 # Client Credentials Grant Type with OAuth2 scopes
 
-This sample lets you request an OAuth token from Apigee using the OAuth 2.0 client credentials grant type flow and limit access using [OAuth2 scopes](https://cloud.google.com/apigee/docs/api-platform/security/oauth/working-scopes). 
+This sample lets you request an OAuth token from Apigee using the OAuth 2.0 client credentials grant type flow and limit access using [OAuth2 scopes](https://cloud.google.com/apigee/docs/api-platform/security/oauth/working-scopes) and additionally shows how to limit access. 
 
 ## About client credentials
 
@@ -10,7 +10,7 @@ Most typically, this grant type is used when the app is also the resource owner.
 
 OAuth 2.0 scopes provide a way to limit the amount of access that is granted to an access token. For example, an access token issued to a client app may be granted READ and WRITE access to protected resources, or just READ access. You can implement your APIs to enforce any scope or combination of scopes you wish. So, if a client receives a token that has READ scope, and it tries to call an API endpoint that requires WRITE access, the call will fail.
 
-In this topic, we'll discuss how scopes are assigned to access tokens and how Apigee enforces OAuth 2.0 scopes. After reading this topic, you'll be able to use scopes with confidence.
+This sample demonstrates how scopes can be assigned to access tokens, and how Apigee enforces OAuth 2.0 scopes. After implementing this sample, you should be able to use scopes with confidence.
 
 ## How it works
 
@@ -19,8 +19,10 @@ With the client credentials grant type flow, the client app requests an access t
 The API is called like this, where the client ID and secret are Base64-encoded and used in the Basic Auth header:
 
 ```
-curl -H "Authorization: Basic <base64-encoded key:secret>" https://your-api-url.com/oauth/token?grant_type=client_credentials
+curl -H "Authorization: Basic <base64-encoded key:secret>" https://your-api-url.com/oauth/token -d "grant_type=client_credentials&scope=<scope>"
 ```
+
+For more info on how you can configure scopes on API Products and how they are assigned to access tokens, check [this document](https://cloud.google.com/apigee/docs/api-platform/security/oauth/working-scopes#howarescopesassignedtoaccesstokens)
 
 ## Implementation on Apigee 
 
@@ -96,13 +98,13 @@ see the [oauth-client-credentials-with-scope.feature](./test/integration/feature
 
 The script that deploys the Apigee resources will print two sets of cURL commands. 
 
-First set is with the a token with `read` access. You will find that it only works with the GET call. The POST call will fail. This is because of the insuffient scope to make a POST call to that resource.
+The first set returns a token with `read` access. You will find that it only works with the GET call. The POST call will fail. This is because of the insufficient scope to make a POST call to that resource.
 
-Similarly, the second set of cURL commands include a token with `write` access. With this token, both the cURL should return a successful response.
+Similarly, the second set of cURL commands include a token with `write` access. With this token, both of the cURL commands should return a successful response.
 
 ## Cleanup
 
-If you want to clean up the artefacts from this example in your Apigee Organization, first source your `env.sh` script, and then run
+If you want to clean up the artifacts from this example in your Apigee Organization, first source your `env.sh` script, and then run
 
 ```bash
 ./clean-up-oauth-client-credentials-with-scope.sh
