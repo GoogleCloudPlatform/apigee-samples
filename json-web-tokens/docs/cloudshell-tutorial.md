@@ -55,12 +55,12 @@ export PROXY_URL=<replace with script output>
 
 First, generate a _digitally signed_ JWT:
 ```sh
-curl -X POST https://$PROXY_URL/v1/samples/json-web-tokens/generate-signed
+curl -X POST https://$PROXY_URL/generate-signed
 ```
 
 Next, verify the signed token by copying the value of `output_jwt` from the response and paste into the following request:
 ```sh
-curl -X POST https://$PROXY_URL/v1/samples/json-web-tokens/verify-signed \
+curl -X POST https://$PROXY_URL/verify-signed \
   -H 'Content-Type: application/x-www-form-urlencoded' \
   --data-urlencode 'JWT=<output_jwt value>'
 ```
@@ -69,12 +69,12 @@ The output should return `JWT OK` followed by the decoded token claims.
 
 Then, generate an _encrypted_ JWT:
 ```sh
-curl -X POST https://$PROXY_URL/v1/samples/json-web-tokens/generate-encrypted
+curl -X POST https://$PROXY_URL/generate-encrypted
 ```
 
 Finally, verify the encrypted token by copying the value of `output_jwt` from the response and paste into the following request:
 ```sh
-curl -X POST https://$PROXY_URL/v1/samples/json-web-tokens/verify-encrypted \
+curl -X POST https://$PROXY_URL/verify-encrypted \
   -H 'Content-Type: application/x-www-form-urlencoded' \
   --data-urlencode 'JWT=<output_jwt value>'
 ```
