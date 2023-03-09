@@ -43,11 +43,10 @@ echo "Running apigeelint"
 npm run lint
 
 echo "Deploying Apigee artifacts..."
-rm oauth-client-credentials.zip
-zip -r oauth-client-credentials.zip apiproxy
 
 echo "Importing and Deploying Apigee oauth-client-credentials proxy..."
-REV=$(apigeecli apis import -f oauth-client-credentials.zip --org "$PROJECT" --token "$TOKEN" --disable-check | jq ."revision" -r)
+REV=$(apigeecli apis create bundle -f apiproxy  -n oauth-client-credentials --org "$PROJECT" --token "$TOKEN" --disable-check | jq ."revision" -r)
+
 apigeecli apis deploy --wait --name oauth-client-credentials --ovr --rev "$REV" --org "$PROJECT" --env "$APIGEE_ENV" --token "$TOKEN"
 
 echo "Creating API Product"

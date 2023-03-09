@@ -40,8 +40,6 @@
     <HTTPProxyConnection>
         <!-- Add a base path to the proxy to distinguish from others in the environment -->
         <BasePath>/v1/samples/oauth-client-credentials</BasePath>
-        <VirtualHost>secure</VirtualHost>
-        <!-- Listen only on the HTTPS endpoint since OAuth 2.0 requires that -->
     </HTTPProxyConnection>
     <RouteRule name="NoRoute"/>
 </ProxyEndpoint>
