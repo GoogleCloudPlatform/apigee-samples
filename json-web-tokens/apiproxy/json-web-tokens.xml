@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+ Copyright 2023 Google LLC
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+      http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<APIProxy revision="1" name="json-web-tokens">
+    <DisplayName>json-web-tokens</DisplayName>
+    <Description>Demonstrates how to generate and validate signed and encrypted JWT tokens.</Description>
+    <CreatedAt>1678207242957</CreatedAt>
+    <LastModifiedAt>1678208896140</LastModifiedAt>
+    <BasePaths>/v1/samples/json-web-tokens</BasePaths>
+    <Policies>
+        <Policy>JWT-VerifyEncrypted</Policy>
+        <Policy>AM-Response-PublicKey</Policy>
+        <Policy>AM-Response-PrivateKey</Policy>
+        <Policy>JWT-Decode</Policy>
+        <Policy>RF-UnknownRequest</Policy>
+        <Policy>AM-SetVariables</Policy>
+        <Policy>AM-Response-VerifySigned</Policy>
+        <Policy>JWT-GenerateEncrypted</Policy>
+        <Policy>AM-Response-Generate</Policy>
+        <Policy>JWT-GenerateSigned</Policy>
+        <Policy>JWT-VerifySigned</Policy>
+        <Policy>AM-Response-VerifyEncrypted</Policy>
+        <Policy>KVM-GetKeys</Policy>
+    </Policies>
+    <ProxyEndpoints>
+        <ProxyEndpoint>default</ProxyEndpoint>
+    </ProxyEndpoints>
+</APIProxy>
