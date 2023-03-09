@@ -58,7 +58,7 @@ Most developers begin by identifying an interesting sample based on a specific u
 - [exposing-to-internet](exposing-to-internet) -
   This sample demonstrates how to expose an Apigee instance to the internet using a Google Cloud external HTTP(S) Load Balancer
 - [json-web-tokens](json-web-tokens) -
-  This sample demonstrates how to generate and verify JSON Web Tokens
+  This sample demonstrates how to generate and verify JSON Web Tokens using the out of the box Apigee JWT policies
 
 You can find videos of all the samples in this [YouTube playlist](https://goo.gle/ApigeeAcceleratorSeries)
 

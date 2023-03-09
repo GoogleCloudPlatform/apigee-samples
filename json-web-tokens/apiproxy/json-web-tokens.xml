@@ -12,27 +12,5 @@
  limitations under the License.
 -->
 <APIProxy revision="1" name="json-web-tokens">
-    <DisplayName>json-web-tokens</DisplayName>
     <Description>Demonstrates how to generate and validate signed and encrypted JWT tokens.</Description>
-    <CreatedAt>1678207242957</CreatedAt>
-    <LastModifiedAt>1678208896140</LastModifiedAt>
-    <BasePaths>/v1/samples/json-web-tokens</BasePaths>
-    <Policies>
-        <Policy>JWT-VerifyEncrypted</Policy>
-        <Policy>AM-Response-PublicKey</Policy>
-        <Policy>AM-Response-PrivateKey</Policy>
-        <Policy>JWT-Decode</Policy>
-        <Policy>RF-UnknownRequest</Policy>
-        <Policy>AM-SetVariables</Policy>
-        <Policy>AM-Response-VerifySigned</Policy>
-        <Policy>JWT-GenerateEncrypted</Policy>
-        <Policy>AM-Response-Generate</Policy>
-        <Policy>JWT-GenerateSigned</Policy>
-        <Policy>JWT-VerifySigned</Policy>
-        <Policy>AM-Response-VerifyEncrypted</Policy>
-        <Policy>KVM-GetKeys</Policy>
-    </Policies>
-    <ProxyEndpoints>
-        <ProxyEndpoint>default</ProxyEndpoint>
-    </ProxyEndpoints>
 </APIProxy>
