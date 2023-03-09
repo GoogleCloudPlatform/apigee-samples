@@ -2,6 +2,10 @@
 
 This sample demonstrates how to use Cloud Run Service from Apigee Proxy using Cloud Build.
 
+### Screencast
+
+[![Alt text](https://img.youtube.com/vi/oyFyPs0tg8Y/0.jpg)](https://www.youtube.com/watch?v=oyFyPs0tg8Y)
+
 ## Prerequisites
 1. [Provision Apigee X](https://cloud.google.com/apigee/docs/api-platform/get-started/provisioning-intro)
 2. Access to deploy proxies to Apigee, deploy Cloud Run and trigger Cloud Build
