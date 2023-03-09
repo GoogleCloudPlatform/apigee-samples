@@ -47,7 +47,7 @@ Most developers begin by identifying an interesting sample based on a specific u
   Authorize JWT access tokens issued by an Identity Provider  
 - [oauth-client-credentials](oauth-client-credentials) -
   A sample proxy which uses the OAuth 2.0 client credentials grant type flow
-  - [oauth-client-credentials-with-scope](oauth-client-credentials-with-scope) -
+- [oauth-client-credentials-with-scope](oauth-client-credentials-with-scope) -
   A sample proxy which uses the OAuth 2.0 client credentials grant type flow and limit access using [OAuth2 scopes](https://cloud.google.com/apigee/docs/api-platform/security/oauth/working-scopes)
 - [cloud-logging](cloud-logging) -
   A sample proxy that logs custom messages to Google Cloud Logging
