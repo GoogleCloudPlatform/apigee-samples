@@ -55,5 +55,3 @@ apigeecli apis undeploy --name oauth-client-credentials --env "$APIGEE_ENV" --re
 
 echo "Deleting proxy oauth-client-credentials"
 apigeecli apis delete --name oauth-client-credentials --org "$PROJECT" --token "$TOKEN"
-
-rm oauth-client-credentials.zip
