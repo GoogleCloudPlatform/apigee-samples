@@ -1,6 +1,6 @@
-# Client Credentials Grant Type with scope
+# Client Credentials Grant Type with OAuth2 scopes
 
-This sample lets you request an OAuth token from Apigee using the OAuth 2.0 client credentials grant type flow. 
+This sample lets you request an OAuth token from Apigee using the OAuth 2.0 client credentials grant type flow and limit access using [OAuth2 scopes](https://cloud.google.com/apigee/docs/api-platform/security/oauth/working-scopes). 
 
 ## About client credentials
 
