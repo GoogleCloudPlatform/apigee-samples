@@ -14,8 +14,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-export PROJECT="ssv-apigee-asm-demo"
-export APIGEE_HOST="34.117.135.82.nip.io"
-export APIGEE_ENV="eval"
+export PROJECT="<GCP_PROJECT_ID>"
+export APIGEE_HOST="<APIGEE_DOMAIN_NAME>"
+export APIGEE_ENV="<APIGEE_ENVIRONMENT_NAME>"
 
 gcloud config set project $PROJECT
