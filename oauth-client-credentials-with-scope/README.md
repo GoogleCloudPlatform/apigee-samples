@@ -90,7 +90,7 @@ npm run test
 
 ## Example Requests
 For additional examples, including negative test cases,
-see the [auth-schemes.feature](./test/integration/features/oauth-client-credentials-with-scope.feature) file.
+see the [oauth-client-credentials-with-scope.feature](./test/integration/features/oauth-client-credentials-with-scope.feature) file.
 
 ## Test the APIs
 
