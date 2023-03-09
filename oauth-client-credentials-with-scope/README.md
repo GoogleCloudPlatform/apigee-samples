@@ -6,6 +6,12 @@ This sample lets you request an OAuth token from Apigee using the OAuth 2.0 clie
 
 Most typically, this grant type is used when the app is also the resource owner. For example, an app may need to access a backend cloud-based storage service to store and retrieve data that it uses to perform its work, rather than data specifically owned by the end user. This grant type flow occurs strictly between a client app and the authorization server. An end user does not participate in this grant type flow. 
 
+### What is OAuth2 scope?
+
+OAuth 2.0 scopes provide a way to limit the amount of access that is granted to an access token. For example, an access token issued to a client app may be granted READ and WRITE access to protected resources, or just READ access. You can implement your APIs to enforce any scope or combination of scopes you wish. So, if a client receives a token that has READ scope, and it tries to call an API endpoint that requires WRITE access, the call will fail.
+
+In this topic, we'll discuss how scopes are assigned to access tokens and how Apigee enforces OAuth 2.0 scopes. After reading this topic, you'll be able to use scopes with confidence.
+
 ## How it works
 
 With the client credentials grant type flow, the client app requests an access token directly by providing its client ID and client secret keys. These keys are generated when you create a Developer App in Apigee. Apigee validates the credentials and returns an access token to the client. The client can then make secure calls to the resource server.
@@ -30,6 +36,7 @@ The client credentials sample uses one policy that executes on Apigee : An OAuth
     * curl
     * jq
     * npm
+    
 # (QuickStart) Setup using CloudShell
 
 Use the following GCP CloudShell tutorial, and follow the instructions.
