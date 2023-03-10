@@ -22,11 +22,11 @@
                 </Step>
             </Request>
         </Flow>
-        <Flow name="get-protected-resource">
+        <Flow name="read-protected-resource">
             <Description/>
             <Request>
                 <Step>
-                    <Name>OAuth-VerifyAccessToken</Name>
+                    <Name>OAuth-VerifyAccessToken-Read</Name>
                 </Step>
             </Request>
             <Response>
@@ -36,10 +36,24 @@
             </Response>
             <Condition>(proxy.pathsuffix MatchesPath "/resource") and (request.verb = "GET")</Condition>
         </Flow>
+        <Flow name="write-protected-resource">
+            <Description/>
+            <Request>
+                <Step>
+                    <Name>OAuth-VerifyAccessToken-Write</Name>
+                </Step>
+            </Request>
+            <Response>
+                <Step>
+                    <Name>AM-SuccessfulResponse</Name>
+                </Step>
+            </Response>
+            <Condition>(proxy.pathsuffix MatchesPath "/resource") and (request.verb = "POST")</Condition>
+        </Flow>
     </Flows>
     <HTTPProxyConnection>
         <!-- Add a base path to the proxy to distinguish from others in the environment -->
-        <BasePath>/v1/samples/oauth-client-credentials</BasePath>
+        <BasePath>/v1/samples/oauth-client-credentials-with-scope</BasePath>
     </HTTPProxyConnection>
     <RouteRule name="NoRoute"/>
 </ProxyEndpoint>

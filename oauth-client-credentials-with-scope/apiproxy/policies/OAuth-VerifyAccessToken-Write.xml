@@ -10,6 +10,15 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<APIProxy name="sample-integrated-developer-portal">
-  <Description>An API key protected proxy for an integrated developer portal</Description>
-</APIProxy>
+<OAuthV2 continueOnError="false" enabled="true" name="OAuth-VerifyAccessToken-Write">
+    <DisplayName>OAuth-VerifyAccessToken-Write</DisplayName>
+    <Properties/>
+    <Attributes/>
+    <ExternalAuthorization>false</ExternalAuthorization>
+    <Operation>VerifyAccessToken</Operation>
+    <SupportedGrantTypes/>
+    <GenerateResponse enabled="true"/>
+    <Tokens/>
+    <Scope>write</Scope>
+    <RFCCompliantRequestResponse>true</RFCCompliantRequestResponse>
+</OAuthV2>

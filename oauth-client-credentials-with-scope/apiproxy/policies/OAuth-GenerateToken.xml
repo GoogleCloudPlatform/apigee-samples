@@ -10,6 +10,14 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<APIProxy name="sample-integrated-developer-portal">
-  <Description>An API key protected proxy for an integrated developer portal</Description>
-</APIProxy>
+<OAuthV2 name="OAuth-GenerateToken">
+    <Operation>GenerateAccessToken</Operation>
+    <ExpiresIn>180000</ExpiresIn>
+    <!-- 3 minutes -->
+    <SupportedGrantTypes>
+        <GrantType>client_credentials</GrantType>
+    </SupportedGrantTypes>
+    <GenerateResponse enabled="true"/>
+    <Scope>request.formparam.scope</Scope>
+    <RFCCompliantRequestResponse>true</RFCCompliantRequestResponse>
+</OAuthV2>
