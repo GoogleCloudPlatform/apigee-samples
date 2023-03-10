@@ -1,0 +1,14 @@
+{
+  "name": "json-web-tokens",
+  "version": "1.0.0",
+  "description": "API Proxy that demonstrates how to generate and validate signed and encrypted JWT tokens",
+  "scripts": {
+   "lint": "apigeelint -s apiproxy -e PO013,PO025 -f table.js",
+    "test": "npx cucumber-js --publish-quiet test/"
+  },
+  "dependencies": {
+    "@cucumber/cucumber": "^7.3.0",
+    "apickli": "^3.0.1",
+    "apigeelint": "latest"
+  }
+}
