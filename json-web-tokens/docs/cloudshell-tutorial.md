@@ -95,5 +95,5 @@ Congratulations! You've successfully implemented JSON Web Token generation and v
 If you want to clean up the artifacts from this example in your Apigee Organization, first source your `env.sh` script, and then run
 
 ```bash
-./clean-up-json-web-tokens.sh
+./clean-up-jwt.sh
 ```
