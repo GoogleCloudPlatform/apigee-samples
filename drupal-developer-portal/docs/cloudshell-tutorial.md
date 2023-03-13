@@ -20,7 +20,6 @@ cd drupal-developer-portal
 ```sh
 gcloud auth login
 ```
----
 
 3. Edit the `env.sh` and configure the ENV vars. Click <walkthrough-editor-open-file filePath="drupal-developer-portal/env.sh">here</walkthrough-editor-open-file> to open the file in the editor
 
@@ -33,6 +32,7 @@ Now source the `env.sh` file
 ```sh
 source ./env.sh
 ```
+---
 
 ## Deploy Apigee components
 
