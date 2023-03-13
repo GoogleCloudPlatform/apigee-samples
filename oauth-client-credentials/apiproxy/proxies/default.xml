@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <!--
- Copyright 2022 Google LLC
+ Copyright 2023 Google LLC
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
@@ -40,8 +40,6 @@
     <HTTPProxyConnection>
         <!-- Add a base path to the proxy to distinguish from others in the environment -->
         <BasePath>/v1/samples/oauth-client-credentials</BasePath>
-        <VirtualHost>secure</VirtualHost>
-        <!-- Listen only on the HTTPS endpoint since OAuth 2.0 requires that -->
     </HTTPProxyConnection>
     <RouteRule name="NoRoute"/>
 </ProxyEndpoint>

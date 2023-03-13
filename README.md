@@ -47,6 +47,8 @@ Most developers begin by identifying an interesting sample based on a specific u
   Authorize JWT access tokens issued by an Identity Provider  
 - [oauth-client-credentials](oauth-client-credentials) -
   A sample proxy which uses the OAuth 2.0 client credentials grant type flow
+- [oauth-client-credentials-with-scope](oauth-client-credentials-with-scope) -
+  A sample proxy which uses the OAuth 2.0 client credentials grant type flow and limit access using [OAuth2 scopes](https://cloud.google.com/apigee/docs/api-platform/security/oauth/working-scopes)
 - [cloud-logging](cloud-logging) -
   A sample proxy that logs custom messages to Google Cloud Logging
 - [basic-quota](basic-quota) -
@@ -55,8 +57,10 @@ Most developers begin by identifying an interesting sample based on a specific u
   A sample proxy to invoke Cloud Run Service from Apigee
 - [integrated-developer-portal](integrated-developer-portal) -
   This sample demonstrates how to create an Apigee Integrated portal and shows how to expose your API products to its catalog
-- [drupal-developer-portal](drupal-developer-portal) -
-  This sample demonstrates how to create an Drupal developer portal and shows how to expose your Apigee API products to its catalog
+- [exposing-to-internet](exposing-to-internet) -
+  This sample demonstrates how to expose an Apigee instance to the internet using a Google Cloud external HTTP(S) Load Balancer
+- [json-web-tokens](json-web-tokens) -
+  This sample demonstrates how to generate and verify JSON Web Tokens using the out of the box Apigee JWT policies
 
 You can find videos of all the samples in this [YouTube playlist](https://goo.gle/ApigeeAcceleratorSeries)
 

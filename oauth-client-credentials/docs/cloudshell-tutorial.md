@@ -41,7 +41,7 @@ Next, let's create and deploy the Apigee resources necessary to request an OAuth
 ./deploy-oauth-client-credentials.sh
 ```
 
-This script creates an API Proxy, API product, a sample App developer, and App. The script also tests that the deployment and configuration has been sucessful.
+This script creates an API Proxy, API product, a sample App developer, and App. The script also tests that the deployment and configuration has been successful.
 
 
 ### Test the APIs
@@ -71,7 +71,7 @@ Congratulations! You've successfully requested and used an OAuth token from Apig
 
 ## Cleanup
 
-If you want to clean up the artefacts from this example in your Apigee Organization, first source your `env.sh` script, and then run
+If you want to clean up the artifacts from this example in your Apigee Organization, first source your `env.sh` script, and then run
 
 ```bash
 ./clean-up-oauth-client-credentials.sh

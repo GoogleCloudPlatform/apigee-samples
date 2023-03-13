@@ -81,7 +81,7 @@ npm run test
 
 ## Example Requests
 For additional examples, including negative test cases,
-see the [auth-schemes.feature](./test/integration/features/oauth-client-credentials.feature) file.
+see the [oauth-client-credentials.feature](./test/integration/features/oauth-client-credentials.feature) file.
 
 ### OAuth Bearer Token (RFC 6749)
 First obtain a short-lived opaque access token using the token endpoint. Instructions for how to find
