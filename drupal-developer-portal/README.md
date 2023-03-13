@@ -73,13 +73,14 @@ Now we will configure our Drupal Devoper Portal and expose our Apigee API produc
 ### Launch Marketplace Solution
 
 Follow the [documentation](https://cloud.google.com/apigee/docs/api-platform/publish/drupal/get-started-cloud-marketplace) to deploy the Drupal portal infrastructure using the Marketplace Apigee Developer Portal Kickstart solution. Name your deployment `sample-drupal-developer-portal` and be sure to [enable HTTPS](https://cloud.google.com/apigee/docs/api-platform/publish/drupal/apigee-cloud-marketplace-customize#https) under Networking during portal configuration. All other configurations can be left with default values.
-* Note: if your portal has errors or does not load properly check Cloud Logging for details as it may fail silently with issues like org policy restrictions.
+* If your portal has errors or does not load properly check Cloud Logging for details as it may fail silently with issues like org policy restrictions.
+* This Marketplace solution may take up to an hour to deploy
 
 ### Finish Portal Configuration and Sync with Apigee
 
 Here we will enter our portal, configure its admin account, and sync it with our Apigee organization
 
-1. Navigate to the [Deployment Manager Deployments](https://console.cloud.google.com/dm/deployments) page in the GCP. Find your Drupal deployment and click into it
+1. Once portal deployment is complete, navigate to the [Deployment Manager Deployments](https://console.cloud.google.com/dm/deployments) page in the GCP. Find your Drupal deployment and click into it
 2. Once your portal has finished initializing, access your app using the https site link and sign into your app using the basic auth credentials
 3. Verify details after sign in and complete Drupal installation
 4. Configure Apigee: Configure the endpoint to reflect Apigee X and paste in your Apigee Org ID
