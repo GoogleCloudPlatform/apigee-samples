@@ -81,7 +81,7 @@ Follow the [documentation](https://cloud.google.com/apigee/docs/api-platform/pub
 Here we will enter our portal, configure its admin account, and sync it with our Apigee organization
 
 1. Once portal deployment is complete, navigate to the [Deployment Manager Deployments](https://console.cloud.google.com/dm/deployments) page in the GCP. Find your Drupal deployment and click into it
-2. Once your portal has finished initializing, access your app using the https site link and sign into your app using the basic auth credentials
+2. Once your portal has finished initializing, access your app using the https site link and sign into your app using the basic auth credentials found underneath the link
 3. Verify details after sign in and complete Drupal installation
 4. Configure Apigee: Configure the endpoint to reflect Apigee X and paste in your Apigee Org ID
 5. Configure Site: Configure your site with the information and admin account of your chosing. Be sure that you have no typos when defining this information

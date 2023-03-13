@@ -15,7 +15,14 @@ Let's get started!
 cd drupal-developer-portal
 ```
 
-2. Edit the `env.sh` and configure the ENV vars. Click <walkthrough-editor-open-file filePath="drupal-developer-portal/env.sh">here</walkthrough-editor-open-file> to open the file in the editor
+2. Ensure you have an active GCP account selected in the Cloud shell
+
+```sh
+gcloud auth login
+```
+---
+
+3. Edit the `env.sh` and configure the ENV vars. Click <walkthrough-editor-open-file filePath="drupal-developer-portal/env.sh">here</walkthrough-editor-open-file> to open the file in the editor
 
 * `PROJECT` the project where your Apigee organization is located
 * `APIGEE_HOST` the externally reachable hostname of the Apigee environment group that contains APIGEE_ENV
@@ -26,13 +33,6 @@ Now source the `env.sh` file
 ```sh
 source ./env.sh
 ```
-
-3. Ensure you have an active GCP account selected in the Cloud shell
-
-```sh
-gcloud auth login
-```
----
 
 ## Deploy Apigee components
 
@@ -60,7 +60,7 @@ Follow the [documentation](https://cloud.google.com/apigee/docs/api-platform/pub
 Here we will enter our portal, configure its admin account, and sync it with our Apigee organization
 
 1. Once portal deployment is complete, navigate to the [Deployment Manager Deployments](https://console.cloud.google.com/dm/deployments) page in the GCP. Find your Drupal deployment and click into it
-2. Once your portal has finished initializing, access your app using the https site link and sign into your app using the basic auth credentials
+2. Once your portal has finished initializing, access your app using the https site link and sign into your app using the basic auth credentials found underneath the link
 3. Verify details after sign in and complete Drupal installation
 4. Configure Apigee: Configure the endpoint to reflect Apigee X and paste in your Apigee Org ID
 5. Configure Site: Configure your site with the information and admin account of your chosing. Be sure that you have no typos when defining this information
