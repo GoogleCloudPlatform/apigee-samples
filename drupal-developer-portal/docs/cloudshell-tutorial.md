@@ -51,8 +51,7 @@ Now we will configure our Drupal Devoper Portal and expose our Apigee API produc
 
 ### Launch Marketplace Solution
 
-Follow the [documentation](https://cloud.google.com/apigee/docs/api-platform/publish/drupal/get-started-cloud-marketplace) to deploy the Drupal portal infrastructure using the Marketplace Apigee Developer Portal Kickstart solution. 
-* Be sure to [enable HTTPS](https://cloud.google.com/apigee/docs/api-platform/publish/drupal/apigee-cloud-marketplace-customize#https) under Networking during portal configuration. All other configurations can be left with default values.
+Follow the [documentation](https://cloud.google.com/apigee/docs/api-platform/publish/drupal/get-started-cloud-marketplace) to deploy the Drupal portal infrastructure using the Marketplace Apigee Developer Portal Kickstart solution. Name your deployment `sample-drupal-developer-portal`and be sure to [enable HTTPS](https://cloud.google.com/apigee/docs/api-platform/publish/drupal/apigee-cloud-marketplace-customize#https) under Networking during portal configuration. All other configurations can be left with default values.
 * Note: if your portal has errors or does not load properly check Cloud Logging for details as it may fail silently with issues like org policy restrictions.
 
 ### Finish Portal Configuration and Sync with Apigee
@@ -122,7 +121,7 @@ First, you need to delete the resources we manually created
 
 1. From the Apigee console, navigate to Publish > Developers
 2. Find the account you created in your developer portal, hover over it, and select the trash can icon to delete. This will also delete all Apigee Apps associated with your developer
-3. From the GCP Deployment Manager Deployments page select your Drupal portal deployment and click delete at the top. A popup will be shown, be sure to select the option to delete all resrouces associated with the Drupal portal.
+3. From the GCP Deployment Manager Deployments page select your `sample-drupal-developer-portal` deployment and click delete at the top. A popup will be shown, be sure to select the option to delete all resrouces associated with the Drupal portal.
 
 After that, source your `env.sh` script and run the following to delete your product and proxy:
 
