@@ -1,21 +1,21 @@
 # Drupal Developer Portal
 
-This sample lets you create a Drupal developer portal for your Apigee API product
+This sample lets you create a Drupal developer portal to publish your Apigee API products.
 
 ## About Drupal developer portals
 
-Apigee's Drupal developer portal enables users to quickly and easily stand up a highly customizable developer portal for their APIs. Unlike the Drupal developer portal, the Drupal portal isn't managed by Apigee. So we will use the Google Cloud Platform (GCP) Marketplace solution to deploy the portal's infrastructure. To learn more about Apigee Drupal portals, see the [Google documentation](https://cloud.google.com/apigee/docs/api-platform/publish/drupal/open-source-drupal).
+Apigee's [Drupal developer portal](https://cloud.google.com/apigee/docs/api-platform/publish/drupal/open-source-drupal) enables users to quickly and easily stand up a highly customizable developer portal for their APIs. Unlike the [Integrated developer portal](https://cloud.google.com/apigee/docs/api-platform/publish/portal/build-integrated-portal), the Drupal portal isn't managed by Apigee. So we will use the Google Cloud Platform (GCP) Marketplace solution to deploy the portal's infrastructure. To learn more about the available options for Apigee developer portals, see the [Google documentation](https://cloud.google.com/apigee/docs/api-platform/publish/intro-portals).
 
 ## Implementation on Apigee 
 
 The Apigee proxy sample uses only a few policies:
-1. An API Key policy to verify incoming request API Key credentials
+1. A VerifyAPIKey policy to verify incoming request credentials
 2. A CORS policy to allow requests from the developer portal webpage
 
 ## Prerequisites
 1. [Provision Apigee X](https://cloud.google.com/apigee/docs/api-platform/get-started/provisioning-intro)
 2. Configure [external access](https://cloud.google.com/apigee/docs/api-platform/get-started/configure-routing#external-access) for API traffic to your Apigee X instance
-3. Have access to deploy proxies, create products, and provision a portal in Apigee
+3. Have the permissions to to deploy API proxies, create Apigee products, and launch the [Apigee Developer Portal Kickstart](https://console.cloud.google.com/marketplace/product/bap-marketplace/apigee-drupal-devportal) Marketplace solution
 4. Make sure the following tools are available in your terminal's $PATH (Cloud Shell has these preconfigured)
     * [gcloud SDK](https://cloud.google.com/sdk/docs/install)
     * unzip
@@ -81,11 +81,11 @@ Here we will enter our portal for the first time and sync it with our Apigee org
 3. Verify details after sign in and complete Drupal installation
 4. Configure Apigee: Configure the endpoint to reflect Apigee X and paste in your Apigee Org ID
 5. Configure Site: Configure your site with the information and admin account of your chosing. Be sure that you have no typos when defining this information
-6. Install Demo Content: Choose to enable Demo Content and clicke Save and Continue
+6. Install Demo Content: Choose to enable Demo Content and click Save and Continue
 
 ### Add Apigee Product to the Drupal API Catalog
 
-Now we will add our sample-drupal-developer-portal-product to our Drupal API Catalog. This section takes place within the Drupal portal and assumes that you are signed into your admin account. If you don't see the admin bar at the top of your site then sign in with the admin account that you created in the previous section.
+Now we will add our `sample-drupal-developer-portal-product` to our Drupal API Catalog. This section takes place within the Drupal portal and assumes that you are signed into your admin account. If you don't see the admin bar at the top of your site then sign in with the admin account that you created in the previous section.
 
 1. From the Drupal portal, navigate to Content > API Catalog
 2. Click the "+ OpenAPI" button
@@ -97,11 +97,11 @@ Now we will add our sample-drupal-developer-portal-product to our Drupal API Cat
 - OpenAPI specification: Use the [drupal-developer-portal.yaml](drupal-developer-portal.yaml) OpenAPI document from this repo:
     - If you ran the deployment script from Cloud Shell:
         - Navigate back to Cloud Shell
-        - Open integrated-developer-portal.yaml & downlod it to your local computer. No need to update file content as it was already updated when running the deployment script.
+        - Open drupal-developer-portal.yaml & download it to your local computer. No need to update file content as it was already updated when running the deployment script.
     - Otherwise, do the following:
-        - Download [integrated-developer-portal.yaml](integrated-developer-portal.yaml) to your local computer
-        - Open the file and replace "\[APIGEE_HOST\]" with your own Apigee host/domain.
-    - Upload your updated integrated-developer-portal.yaml file as API documentation
+        - Download [drupal-developer-portal.yaml](drupal-developer-portal.yaml) to your local computer
+        - Open the file and replace `[APIGEE_HOST]` with your own Apigee host/domain.
+    - Upload your updated drupal-developer-portal.yaml file as API documentation
 - Leave all other fields as their default values.
 4. Click save
 
@@ -110,7 +110,7 @@ Now we will add our sample-drupal-developer-portal-product to our Drupal API Cat
 Now we will create ourselves an App within Drupal. This will create us an API key which we will need to call the API
 
 1. From the Drupal homepage, navigate to Apps. The button is in the navbar next to the My account and Log out buttons
-2. Click the Add app button. Name your new app "Sample Drupal Developer Portal App", leave Callback URL blank as well as the Description, finally make sure that the sample-drupal-developer-portal-product is selected.
+2. Click the Add app button. Name your new app "Sample Drupal Developer Portal App", leave Callback URL blank as well as the Description, finally make sure that the `sample-drupal-developer-portal-product` is selected.
 3. Click the Add app button to save
 4. Within your new Sample Drupal Developer Portal App, copy the Consumer Key. You'll use this for authenticating into your API
 
