@@ -1,0 +1,16 @@
+{
+    "operationConfigs": [
+        {
+            "apiSource": "sample-drupal-developer-portal",
+            "operations": [
+                {
+                    "resource": "/",
+                    "methods": [
+                    "GET"
+                    ]
+                }
+            ]
+        }
+    ],
+    "operationConfigType": "proxy"
+}
