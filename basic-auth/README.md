@@ -22,11 +22,11 @@ Use the following GCP CloudShell tutorial, and follow the instructions.
 
 ## Setup instructions
 
-1. Clone the apigee-usecase-mashup repo, and switch the basic-auth directory
+1. Clone the apigee-samples repo, and switch the basic-auth directory
 
 ```bash
-git clone https://github.com/ra2085/apigee-usecase-mashup.git
-cd apigee-usecase-mashup/basic-auth
+git clone https://github.com/ra2085/apigee-samples.git
+cd apigee-samples/basic-auth
 ```
 
 2. Edit the `env.sh` and configure the ENV vars. If you don't set variables that are marked as `Optional`, then the deploy script will also provision a mock OIDC authorization server that will allow you to issue JWT access tokens to test this sample
