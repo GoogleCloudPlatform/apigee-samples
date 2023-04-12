@@ -1,7 +1,7 @@
 # Basic Authentication
 
 
-This sample allows you to authenticate an incoming request with a Basic Authentication header using a `client_id` and a `client_secret` as the encoded credential pair. 
+This sample allows you to authenticate an incoming request with a Basic Authentication header using a `USER_ID` and a `USER_PASSWORD` as the encoded credential pair. 
 
 ## Prerequisites
 1. [Provision Apigee X](https://cloud.google.com/apigee/docs/api-platform/get-started/provisioning-intro)
@@ -48,14 +48,13 @@ source ./env.sh
 ./deploy-sample-basic-authn.sh
 ```
 
-The script output will provide values for `CLIENT_ID`, `ClIENT_SECRET` and an encoded Basic Authentication header that you'll be able to use in the next step.
+The script output will provide values for `USER_ID`, `USER_PASSWORD` and an encoded Basic Authentication header that you'll be able to use in the next step.
 
 ## Testing the sample
 
- Set the Basic Authentication as a value of the `BASIC_AUTH` environment variable and send a cURL request as shown below:
+ Set the Basic Authentication as a value of the `BASIC_AUTH` environment variable and send a cURL request as shown below (the deployment script already provides a cURL request):
 
 ```
-BASIC_AUTH=
 curl -v https://$APIGEE_HOST/v1/samples/basic-auth -H "Authorization: $BASIC_AUTH"
 ```
 

@@ -51,7 +51,7 @@ apigeecli developers create --user testuser --email basic-auth_apigeesamples@acm
 
 echo "Creating Developer App"
 apigeecli apps create --name $APP_NAME --email basic-auth_apigeesamples@acme.com --prods basic-auth-sample-product --callback https://developers.google.com/oauthplayground/ --org "$PROJECT" --token "$TOKEN" --disable-check
-apigeecli apps keys create --name $APP_NAME --dev basic-auth_apigeesamples@acme.com --prods authz-idp-acccess-tokens-sample-product --org "$PROJECT" --token "$TOKEN" --key "$USER_ID" --secret "$USER_PASSWORD" --disable-check
+apigeecli apps keys create --name $APP_NAME --dev basic-auth_apigeesamples@acme.com --prods basic-auth-sample-product --org "$PROJECT" --token "$TOKEN" --key "$USER_ID" --secret "$USER_PASSWORD" --disable-check
 
 ENCODED_PAIR=$(printf '%s\n' "$USER_ID:$USER_PASSWORD" | base64)
 BASIC_HEADER="Basic $ENCODED_PAIR"
@@ -60,7 +60,7 @@ echo "All the Apigee artifacts are successfully deployed!"
 echo " "
 echo "Your USER_ID for testing is: $USER_ID"
 echo " "
-echo "Your CLIENT_SECRET for testing is: $CLIENT_SECRET"
+echo "Your USER_PASSWORD for testing is: $USER_PASSWORD"
 echo " "
 echo "Your Basic Authentication header value is: $BASIC_HEADER"
 echo " "
