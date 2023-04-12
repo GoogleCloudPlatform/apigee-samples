@@ -15,15 +15,15 @@ Ensure you have an active GCP account selected in the Cloud shell
 gcloud auth login
 ```
 
-Navigate to the 'sample-basic-authn' drirectory in the Cloud shell.
+Navigate to the 'basic-auth' drirectory in the Cloud shell.
 
 ```sh
-cd sample-basic-authn
+cd basic-auth
 ```
 
 Edit the provided sample `env.sh` file, and set the environment variables there.
 
-Click <walkthrough-editor-open-file filePath="sample-basic-authn/env.sh">here</walkthrough-editor-open-file> to open the file in the editor
+Click <walkthrough-editor-open-file filePath="basic-auth/env.sh">here</walkthrough-editor-open-file> to open the file in the editor
 
 * `PROJECT` the project where your Apigee organization is located
 * `APIGEE_ENV` the Apigee environment where the demo resources should be created
