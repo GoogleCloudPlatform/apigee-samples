@@ -18,14 +18,14 @@ This sample allows you to authenticate an incoming request with a Basic Authenti
 
 Use the following GCP CloudShell tutorial, and follow the instructions.
 
-[![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/ra2085/apigee-samples&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=basic-auth/docs/cloudshell-tutorial.md)
+[![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/apigee-samples&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=basic-auth/docs/cloudshell-tutorial.md)
 
 ## Setup instructions
 
 1. Clone the apigee-samples repo, and switch the basic-auth directory
 
 ```bash
-git clone https://github.com/ra2085/apigee-samples.git
+git clone https://github.com/GoogleCloudPlatform/apigee-samples.git
 cd apigee-samples/basic-auth
 ```
 
