@@ -18,15 +18,15 @@ This sample allows you to authenticate an incoming request with a Basic Authenti
 
 Use the following GCP CloudShell tutorial, and follow the instructions.
 
-[![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/ra2085/apigee-usecase-mashup&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=sample-basic-authn/docs/cloudshell-tutorial.md)
+[![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/ra2085/apigee-usecase-mashup&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=basic-auth/docs/cloudshell-tutorial.md)
 
 ## Setup instructions
 
-1. Clone the apigee-usecase-mashup repo, and switch the sample-basic-authn directory
+1. Clone the apigee-usecase-mashup repo, and switch the basic-auth directory
 
 ```bash
 git clone https://github.com/ra2085/apigee-usecase-mashup.git
-cd apigee-usecase-mashup/sample-basic-authn
+cd apigee-usecase-mashup/basic-auth
 ```
 
 2. Edit the `env.sh` and configure the ENV vars. If you don't set variables that are marked as `Optional`, then the deploy script will also provision a mock OIDC authorization server that will allow you to issue JWT access tokens to test this sample
