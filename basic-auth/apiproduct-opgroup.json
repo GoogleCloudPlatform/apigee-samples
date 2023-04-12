@@ -1,0 +1,19 @@
+{
+  "operationConfigs": [
+    {
+      "apiSource": "sample-basic-auth",
+      "operations": [
+        {
+          "resource": "/",
+          "methods": []
+        }
+      ],
+        "quota": {
+        "limit": "50",
+        "interval": "1",
+        "timeUnit": "minute"
+      }
+    }
+  ],
+  "operationConfigType": "proxy"
+}

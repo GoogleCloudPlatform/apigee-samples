@@ -45,6 +45,8 @@ Most developers begin by identifying an interesting sample based on a specific u
   Deploy Apigee configurations using Apigee Maven plugin and Cloud Build
 - [authorize-idp-access-tokens](authorize-idp-access-tokens) - 
   Authorize JWT access tokens issued by an Identity Provider  
+- [basic-auth](basic-auth) - 
+  A sample proxy which authenticates incoming requests by verifying a Basic Authentication header 
 - [oauth-client-credentials](oauth-client-credentials) -
   A sample proxy which uses the OAuth 2.0 client credentials grant type flow
 - [oauth-client-credentials-with-scope](oauth-client-credentials-with-scope) -
