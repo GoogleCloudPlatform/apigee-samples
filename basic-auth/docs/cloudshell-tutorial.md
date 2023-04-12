@@ -1,7 +1,7 @@
 # Basic Authentication
 
 ---
-This sample allows you to authenticate an incoming request with a Basic Authentication header using a `USER_ID` and a `USER_PASSWORD` as the encoded credential pair. 
+This sample allows you to authenticate an incoming request using a Basic Authentication header using a `USER_ID` and a `USER_PASSWORD` as the encoded credential pair. Basic Authentication based on [RFC 7617](https://www.ietf.org/rfc/rfc2617.txt) is often used to secure system to system interactions. This scheme allows a client to authenticate itself by sending a base 64 encoded user id and password pair on each HTTP request, making it insecure if not used in combination of transport layer encryption (credentials are sent in clear text). Strong anti-spoofing controls should be put in place to prevent conterfeit servers from stealing credentials.
 
 Let's get started!
 
@@ -28,6 +28,8 @@ Click <walkthrough-editor-open-file filePath="basic-auth/env.sh">here</walkthrou
 * `PROJECT` the project where your Apigee organization is located
 * `APIGEE_ENV` the Apigee environment where the demo resources should be created
 * `APIGEE_HOST` the hostname used to expose an Apigee environment group to the Internet
+* `USER_ID` the user id that you'd like to use to create the basic authentication header
+* `USER_PASSWORD` the user password that you'd like to use to create the basic authentication header
 
 Then, source the `env.sh` file in the Cloud shell.
 

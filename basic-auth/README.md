@@ -1,7 +1,6 @@
 # Basic Authentication
 
-
-This sample allows you to authenticate an incoming request with a Basic Authentication header using a `USER_ID` and a `USER_PASSWORD` as the encoded credential pair. 
+This sample allows you to authenticate an incoming request using a Basic Authentication header using a `USER_ID` and a `USER_PASSWORD` as the encoded credential pair. Basic Authentication based on [RFC 7617](https://www.ietf.org/rfc/rfc2617.txt) is often used to secure system to system interactions. This scheme allows a client to authenticate itself by sending a base 64 encoded user id and password pair on each HTTP request, making it insecure if not used in combination of transport layer encryption (credentials are sent in clear text). Strong anti-spoofing controls should be put in place to prevent conterfeit servers from stealing credentials.
 
 ## Prerequisites
 1. [Provision Apigee X](https://cloud.google.com/apigee/docs/api-platform/get-started/provisioning-intro)
@@ -9,10 +8,8 @@ This sample allows you to authenticate an incoming request with a Basic Authenti
 3. Access to deploy proxies, create products, apps and developers in Apigee
 4. Make sure the following tools are available in your terminal's $PATH (Cloud Shell has these preconfigured)
    * [gcloud SDK](https://cloud.google.com/sdk/docs/install)
-   * unzip
    * curl
    * jq
-   * npm
 
 # (QuickStart) Setup using CloudShell
 
@@ -29,12 +26,14 @@ git clone https://github.com/GoogleCloudPlatform/apigee-samples.git
 cd apigee-samples/basic-auth
 ```
 
-2. Edit the `env.sh` and configure the ENV vars. If you don't set variables that are marked as `Optional`, then the deploy script will also provision a mock OIDC authorization server that will allow you to issue JWT access tokens to test this sample
+2. Edit the `env.sh` and configure the ENV vars.
 
 
 * `PROJECT` the project where your Apigee organization is located
 * `APIGEE_ENV` the Apigee environment where the demo resources should be created
 * `APIGEE_HOST` the hostname used to expose an Apigee environment group to the Internet
+* `USER_ID` the user id that you'd like to use to create the basic authentication header
+* `USER_PASSWORD` the user password that you'd like to use to create the basic authentication header
 
 Now source the `env.sh` file
 
