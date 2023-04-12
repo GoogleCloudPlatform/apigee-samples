@@ -20,6 +20,10 @@ curl -H "Authorization: Basic <base64-encoded key:secret>" https://your-api-url.
 
 The client credentials sample uses one policy that executes on Apigee : An OAuthV2 policy to generate the access token. The policy is attached to the `/token` endpoint (a custom flow on Apigee). 
 
+### Screencast
+
+[![Alt text](https://img.youtube.com/vi/8DWRIPuJxvk/0.jpg)](https://www.youtube.com/watch?v=8DWRIPuJxvk)
+
 ## Prerequisites
 1. [Provision Apigee X](https://cloud.google.com/apigee/docs/api-platform/get-started/provisioning-intro)
 2. Configure [external access](https://cloud.google.com/apigee/docs/api-platform/get-started/configure-routing#external-access) for API traffic to your Apigee X instance
