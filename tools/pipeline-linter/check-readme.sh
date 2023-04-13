@@ -24,7 +24,7 @@ for file in "$PWD"/*; do
     F=$(basename -- "$file")
     case $F in
         *.txt|*.md|tools) continue;;   ##: Skip files that matched.
-        *) grep "^-" README.md | grep "$F" -q || ERRORS="$ERRORS\n[ERROR] missing root README entry for $F";;
+        *) grep "^|" README.md | grep "$F" -q || ERRORS="$ERRORS\n[ERROR] missing root README entry for $F";;
     esac                
 done
 
