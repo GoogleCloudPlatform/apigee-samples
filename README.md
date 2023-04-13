@@ -44,34 +44,15 @@ Most developers begin by identifying an interesting sample based on a specific u
 | [deploy-apigee-sharedflow](deploy-apigee-sharedflow)   | Deploy Apigee sharedflow using Apigee Maven plugin and Cloud Build     | [![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/apigee-samples&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=deploy-apigee-sharedflow/docs/cloudshell-tutorial-maven.md)                     |
 | [deploy-apigee-config](deploy-apigee-config)        | Deploy Apigee configurations using Apigee Maven plugin and Cloud Build | [![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/apigee-samples&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=deploy-apigee-config/docs/cloudshell-tutorial-maven.md)                     |
 | [authorize-idp-access-tokens](authorize-idp-access-tokens) | Authorize JWT access tokens issued by an Identity Provider             | [![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/apigee-samples&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=authorize-idp-access-tokens/docs/cloudshell-tutorial.md)                     |
-|                             |                                                                        |                      |
-
-- [deploy-apigee-proxy](deploy-apigee-proxy) -
-  Deploy Apigee proxy using Apigee Maven plugin and Cloud Build
-- [deploy-apigee-sharedflow](deploy-apigee-sharedflow) -
-  Deploy Apigee sharedflow using Apigee Maven plugin and Cloud Build
-- [deploy-apigee-config](deploy-apigee-config) -
-  Deploy Apigee configurations using Apigee Maven plugin and Cloud Build
-- [authorize-idp-access-tokens](authorize-idp-access-tokens) - 
-  Authorize JWT access tokens issued by an Identity Provider  
-- [oauth-client-credentials](oauth-client-credentials) -
-  A sample proxy which uses the OAuth 2.0 client credentials grant type flow
-- [oauth-client-credentials-with-scope](oauth-client-credentials-with-scope) -
-  A sample proxy which uses the OAuth 2.0 client credentials grant type flow and limit access using [OAuth2 scopes](https://cloud.google.com/apigee/docs/api-platform/security/oauth/working-scopes)
-- [cloud-logging](cloud-logging) -
-  A sample proxy that logs custom messages to Google Cloud Logging
-- [basic-quota](basic-quota) -
-  A sample which shows how to implement a basic API consumption quota
-- [cloud-run](cloud-run) -
-  A sample proxy to invoke Cloud Run Service from Apigee
-- [integrated-developer-portal](integrated-developer-portal) -
-  This sample demonstrates how to create an Apigee Integrated portal and shows how to expose your API products to its catalog
-- [drupal-developer-portal](drupal-developer-portal) -
-  This sample demonstrates how to create a Drupal developer portal using the GCP Marketplace and shows how to expose your Apigee API products to its catalog
-- [exposing-to-internet](exposing-to-internet) -
-  This sample demonstrates how to expose an Apigee instance to the internet using a Google Cloud external HTTP(S) Load Balancer
-- [json-web-tokens](json-web-tokens) -
-  This sample demonstrates how to generate and verify JSON Web Tokens using the out of the box Apigee JWT policies
+| [oauth-client-credentials](oauth-client-credentials) | A sample proxy which uses the OAuth 2.0 client credentials grant type flow             | [![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/apigee-samples&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=oauth-client-credentials/docs/cloudshell-tutorial.md)                     |
+| [oauth-client-credentials-with-scope](oauth-client-credentials-with-scope) | A sample proxy which uses the OAuth 2.0 client credentials grant type flow and limit access using [OAuth2 scopes](https://cloud.google.com/apigee/docs/api-platform/security/oauth/working-scopes) | [![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/apigee-samples&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=oauth-client-credentials-with-scope/docs/cloudshell-tutorial.md)                     |
+| [cloud-logging](cloud-logging) | A sample proxy that logs custom messages to Google Cloud Logging | [![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/apigee-samples&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=cloud-logging/docs/cloudshell-tutorial.md) |
+| [basic-quota](basic-quota) | A sample which shows how to implement a basic API consumption quota | [![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/apigee-samples&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=basic-quota/docs/cloudshell-tutorial.md) |
+| [cloud-run](cloud-run) | A sample proxy to invoke Cloud Run Service from Apigee | [![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/apigee-samples&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=cloud-run/docs/cloudshell-tutorial-maven.md) |
+| [integrated-developer-portal](integrated-developer-portal) | This sample demonstrates how to create an Apigee Integrated portal and shows how to expose your API products to its catalog | [![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/apigee-samples&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=integrated-developer-portal/docs/cloudshell-tutorial.md) |
+| [drupal-developer-portal](drupal-developer-portal) | This sample demonstrates how to create a Drupal developer portal using the GCP Marketplace and shows how to expose your Apigee API products to its catalog | [![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/apigee-samples&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=drupal-developer-portal/docs/cloudshell-tutorial.md) |
+| [exposing-to-internet](exposing-to-internet) | This sample demonstrates how to expose an Apigee instance to the internet using a Google Cloud external HTTP(S) Load Balancer | [![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/apigee-samples&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=exposing-to-internet/docs/cloudshell-tutorial.md) |
+| [json-web-tokens](json-web-tokens) | This sample demonstrates how to generate and verify JSON Web Tokens using the out of the box Apigee JWT policies | [![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/apigee-samples&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=json-web-tokens/docs/cloudshell-tutorial.md) |
 
 You can find videos of all the samples in this [YouTube playlist](https://goo.gle/ApigeeAcceleratorSeries)
 
