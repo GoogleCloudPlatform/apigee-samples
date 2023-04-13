@@ -37,6 +37,15 @@ You are an [Apigee](https://cloud.google.com/apigee) API proxy developer, or you
 Most developers begin by identifying an interesting sample based on a specific use case or need. You'll find all the samples in the root folder.
 
 ### <a name="samples"></a>Samples
+
+| Sample                      | Description                                                            | Cloud Shell Tutorial |
+|-----------------------------|------------------------------------------------------------------------|----------------------|
+| deploy-apigee-proxy         | Deploy Apigee proxy using Apigee Maven plugin and Cloud Build          | [![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/apigee-samples&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=deploy-apigee-proxy/docs/cloudshell-tutorial-maven.md)                     |
+| deploy-apigee-sharedflow    | Deploy Apigee sharedflow using Apigee Maven plugin and Cloud Build     | [![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/apigee-samples&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=deploy-apigee-sharedflow/docs/cloudshell-tutorial-maven.md)                     |
+| deploy-apigee-config        | Deploy Apigee configurations using Apigee Maven plugin and Cloud Build | [![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/apigee-samples&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=deploy-apigee-config/docs/cloudshell-tutorial-maven.md)                     |
+| authorize-idp-access-tokens | Authorize JWT access tokens issued by an Identity Provider             | [![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/apigee-samples&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=authorize-idp-access-tokens/docs/cloudshell-tutorial.md)                     |
+|                             |                                                                        |                      |
+
 - [deploy-apigee-proxy](deploy-apigee-proxy) -
   Deploy Apigee proxy using Apigee Maven plugin and Cloud Build
 - [deploy-apigee-sharedflow](deploy-apigee-sharedflow) -
