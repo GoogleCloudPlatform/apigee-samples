@@ -50,7 +50,7 @@ gcloud projects add-iam-policy-binding "$PROJECT" \
 
 gcloud projects add-iam-policy-binding "$PROJECT_ID" \
   --member="serviceAccount:$CLOUD_BUILD_SA" \
-  --role="roles/functions.admin"
+  --role="roles/cloudfunctions.admin"
 
 gcloud projects add-iam-policy-binding "$PROJECT_ID" \
   --member="serviceAccount:$CLOUD_BUILD_SA" \
