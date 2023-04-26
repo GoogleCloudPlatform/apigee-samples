@@ -1,4 +1,4 @@
-# Use Cloud Function Service from Apigee Proxy using Apigee Maven plugin and Cloud Build
+# Use Cloud Functions from Apigee Proxy using Apigee Maven plugin and Cloud Build
 
 This sample demonstrates how to use Cloud Function Service from Apigee Proxy using Cloud Build.
 
