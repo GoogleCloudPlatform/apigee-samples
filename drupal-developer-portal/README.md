@@ -2,6 +2,10 @@
 
 This sample lets you create a Drupal developer portal to publish your Apigee API products.
 
+## Screencast
+
+[![Alt text](https://img.youtube.com/vi/FV167n7FSSA/0.jpg)](https://www.youtube.com/watch?v=FV167n7FSSA)
+
 ## About Drupal developer portals
 
 Apigee's [Drupal developer portal](https://cloud.google.com/apigee/docs/api-platform/publish/drupal/open-source-drupal) enables users to quickly and easily stand up a highly customizable developer portal for their APIs. Unlike the [Integrated developer portal](https://cloud.google.com/apigee/docs/api-platform/publish/portal/build-integrated-portal), the Drupal portal isn't managed by Apigee. So we will use the Google Cloud Platform (GCP) Marketplace solution to deploy the portal's infrastructure. To learn more about the available options for Apigee developer portals, see the [Google documentation](https://cloud.google.com/apigee/docs/api-platform/publish/intro-portals).
