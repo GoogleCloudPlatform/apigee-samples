@@ -1,4 +1,4 @@
-# Integrated Developer Portal
+# CORS Security
 
 This sample lets you create an API that is protected against cross-origin-requests (CORS)
 
@@ -65,7 +65,7 @@ Next, let's deploy some CORS protected Apigee sample proxy
 ```
 
 ---
-## Test Integrated Developer Portal
+## Test CORS Proxy
 
 Now that our API proxy is deployed, let's enable the debugger so we can see requests as they come through:
 1. Click into the sample-cors proxy
