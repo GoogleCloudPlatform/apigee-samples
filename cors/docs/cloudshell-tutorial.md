@@ -53,16 +53,12 @@ Now that our API proxy is deployed, let's enable the debugger so we can see requ
 3. Choose to start a debug session for the currently deployed proxy version
 
 With the proxy debugger still running, call the sample CORS proxy from a cross origin client:
-1. Navigate to an online HTTP request sending service such as https://cors-tester.org. The requests need to be sent from an online service and should not be sent from your local machine.
-2. From https://cors-tester.org enter your proxy's URL, https://\[APIGEE_HOST\]/v1/sample/cors into the URL input box. Leave all other fields at their default values
-3. Click send and view the response. You should see 200 response, meaning our CORS policy is working as expected and our test was a success!
-4. Navigate to the Apigee debugger. OPTIONS? SUCCESS?
+1. Navigate to an online HTTP request service such as https://test-cors.org. The requests need to be sent from an online service and should not be sent from your local machine.
+2. From https://test-cors.org find the Remote URL field and enter in your proxy's URL, https://\[APIGEE_HOST\]/v1/samples/cors. Leave all other fields at their default values
+3. Click the Send Request button and view the response. You should see 200 response, meaning our CORS policy is working as expected and our test was a success!
+4. Navigate to the Apigee debugger. You should see a 200 response there as well.
 
-Start Apigee Debugger > Go to cors-tester.org > Enter in the information > test
-
-Should retun 200 response message > If this wasn't CORS protected the request would fail
-
-Further notes on implmentation:
+Further notes on CORS:
 1. Can restrict domains
 2. Can restrict headers and other pieces of information
 3. Learn more about the CORS policy here
