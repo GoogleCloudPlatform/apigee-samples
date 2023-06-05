@@ -30,6 +30,10 @@ The keypair is stored in an encrypted [key value map](https://cloud.google.com/a
 
 The verification policies in this sample also show how to use the [TimeAllowance](https://cloud.google.com/apigee/docs/api-platform/reference/policies/verify-jwt-policy#timeallowance) element to allow a "grace period" (30 seconds in this sample) for the [Expiration Time](https://www.rfc-editor.org/rfc/rfc7519#section-4.1.4) and [Not Before](https://www.rfc-editor.org/rfc/rfc7519#section-4.1.5) claims, which can be useful in the case of errors caused by clock skew between the issuer and verifier.
 
+## Screencast
+
+[![Alt text](https://img.youtube.com/vi/L0egsQ_AtU4/0.jpg)](https://www.youtube.com/watch?v=L0egsQ_AtU4)
+
 ## Prerequisites
 1. [Provision Apigee X](https://cloud.google.com/apigee/docs/api-platform/get-started/provisioning-intro)
 2. Configure [external access](https://cloud.google.com/apigee/docs/api-platform/get-started/configure-routing#external-access) for API traffic to your Apigee X instance
