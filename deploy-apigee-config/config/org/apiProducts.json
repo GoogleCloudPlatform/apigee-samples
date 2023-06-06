@@ -3,10 +3,6 @@
        "name":"sample-product",
        "displayName":"sample-product",
        "description":"sample-product",
-       "apiResources":[
-          "/**",
-          "/"
-       ],
        "approvalType":"auto",
        "attributes":[
           {
@@ -33,9 +29,20 @@
        "environments":[
         "@env"
        ],
-       "proxies":[
-          "sample-hello-cicd"
-       ],
+       "operationGroup": {
+        "operationConfigs": [
+          {
+            "apiSource": "sample-hello-cicd",
+            "operations": [
+              {
+                "resource": "/"
+              }
+            ],
+            "quota": {}
+          }
+        ],
+        "operationConfigType": "proxy"
+      },
        "quota":"10000",
        "quotaInterval":"1",
        "quotaTimeUnit":"month",
