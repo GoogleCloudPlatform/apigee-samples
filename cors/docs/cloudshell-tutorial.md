@@ -59,6 +59,8 @@ With the proxy debugger still running, call the sample CORS proxy from a cross o
 4. Navigate to the Apigee debugger. You should see a 200 response there as well.
 
 Further notes on CORS:
+- Navigate to your CORS-addCORS policy by first entering the sample-cors proxy, then click into the develop tab, finally click the CORS-addCORS policy under the policies dropdown.
+- 
 1. Can restrict domains
 2. Can restrict headers and other pieces of information
 3. Learn more about the CORS policy here
