@@ -58,12 +58,8 @@ With the proxy debugger still running, call the sample CORS proxy from a cross o
 3. Click the Send Request button and view the response. You should see 200 response, meaning our CORS policy is working as expected and our test was a success!
 4. Navigate to the Apigee debugger. You should see a 200 response there as well.
 
-Further notes on CORS:
-- Navigate to your CORS-addCORS policy by first entering the sample-cors proxy, then click into the develop tab, finally click the CORS-addCORS policy under the policies dropdown.
-- 
-1. Can restrict domains
-2. Can restrict headers and other pieces of information
-3. Learn more about the CORS policy here
+### Further Notes on CORS
+Apigee's CORS policy can do much more than open up your APIs for cross-origin traffic like we did in this sample. It is important to understand how it can be used to protect your APIs from unwanted traffic and attacks. Please read the policy documentation to understand concepts like [allowed origins](https://cloud.google.com/apigee/docs/api-platform/reference/policies/cors-policy#allow-origins) and [maximum  age](https://cloud.google.com/apigee/docs/api-platform/reference/policies/cors-policy#max-age)
 
 ---
 ## Conclusion & Cleanup
