@@ -1,4 +1,4 @@
-# Basic Quota
+# Basic Caching
 
 ---
 This sample shows how to implement a caching using Apigee's [ResponseCache](https://cloud.google.com/apigee/docs/api-platform/reference/policies/response-cache-policy), [PopulateCache](https://cloud.google.com/apigee/docs/api-platform/reference/policies/populate-cache-policy), and [LookupCache](https://cloud.google.com/apigee/docs/api-platform/reference/policies/lookup-cache-policy) policies.
