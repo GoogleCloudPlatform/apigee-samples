@@ -11,5 +11,5 @@
  limitations under the License.
 -->
 <APIProxy name="sample-cors">
-  <Description>An API proxy that is protected against cross-origin-requests (CORS)</Description>
+  <Description>An API proxy that uses the cross-origin resource sharing (CORS) mechanism to allow requests from external webpages and applications</Description>
 </APIProxy>

@@ -68,13 +68,13 @@ Next, let's deploy some CORS protected Apigee sample proxy
 ## Test CORS Proxy
 
 Now that our API proxy is deployed, let's enable the debugger so we can see requests as they come through:
-1. Click into the sample-cors proxy
-2. Navigate to the debug section
+1. Navigate to the [Apigee homepage](https://apigee.google.com). Go to Develop > API Proxies and click into the sample-cors proxy
+2. Navigate to the debug tab
 3. Choose to start a debug session for the currently deployed proxy version
 
 With the proxy debugger still running, call the sample CORS proxy from a cross origin client:
-1. Navigate to an online HTTP request service such as https://test-cors.org. The requests need to be sent from an online service and should not be sent from your local machine.
-2. From https://test-cors.org find the Remote URL field and enter in your proxy's URL, https://\[APIGEE_HOST\]/v1/samples/cors. Leave all other fields at their default values
+1. Navigate to an online HTTP request service such as [test-cors.org](https://test-cors.org). The requests need to be sent from an online service and should not be sent from your local machine.
+2. From [test-cors.org](https://test-cors.org) find the Remote URL field and enter in your proxy's URL, https://\[APIGEE_HOST\]/v1/samples/cors. Leave all other fields at their default values
 3. Click the Send Request button and view the response. You should see 200 response, meaning our CORS policy is working as expected and our test was a success!
 4. Navigate to the Apigee debugger. You should see a 200 response there as well.
 
@@ -82,6 +82,8 @@ With the proxy debugger still running, call the sample CORS proxy from a cross o
 Apigee's CORS policy can do much more than open up your APIs for cross-origin traffic like we did in this sample. It is important to understand how it can be used to protect your APIs from unwanted traffic and attacks. Please read the policy documentation to understand concepts like [allowed origins](https://cloud.google.com/apigee/docs/api-platform/reference/policies/cors-policy#allow-origins) and [maximum  age](https://cloud.google.com/apigee/docs/api-platform/reference/policies/cors-policy#max-age)
 
 ## Conclusion & Cleanup
+
+Congratulations! You've successfully created a CORS secured Apigee API.
 
 To clean up the artifacts created source your `env.sh` script and run the following to delete your sample CORS proxy:
 
