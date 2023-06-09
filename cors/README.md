@@ -6,11 +6,11 @@ This sample lets you create an API that uses the cross-origin resource sharing (
 
 CORS is a standard solution to the [same-origin policy](https://en.wikipedia.org/wiki/Same-origin_policy) that is enforced by all browsers. CORS allows you to opt-in to serve requests from non-origin requests.
 
-Apigee's [CORS policy](https://cloud.google.com/apigee/docs/api-platform/reference/policies/cors-policy) offers a simple CORS solution for your APIs. If you desire to call your Apigee proxy from a different domain then you will need to implement a CORS policy. CORS policies can also allow/deny other request parameters such as the method or header.
+Apigee's [CORS policy](https://cloud.google.com/apigee/docs/api-platform/reference/policies/cors-policy) offers a simple CORS solution for your APIs. Consider this policy if you desire to call your Apigee proxy from a different domain. CORS policies can also allow/deny other request parameters such as the method or header.
 
 ## Implementation on Apigee 
 
-The Apigee proxy sample only a single policy; a CORS policy to protect against CORS attacks
+The Apigee proxy sample is a no-target proxy with only a single policy; a CORS policy that allows access for all cross-origin domains
 
 ## Prerequisites
 1. [Provision Apigee X](https://cloud.google.com/apigee/docs/api-platform/get-started/provisioning-intro)
@@ -38,7 +38,13 @@ git clone https://github.com/GoogleCloudPlatform/apigee-samples.git
 cd apigee-samples/cors
 ```
 
-2. Edit the `env.sh` and configure the ENV vars
+2. Ensure you have an active GCP account selected in the Cloud shell
+
+```sh
+gcloud auth login
+```
+
+3. Edit the `env.sh` and configure the ENV vars
 
 * `PROJECT` the project where your Apigee organization is located
 * `APIGEE_HOST` the externally reachable hostname of the Apigee environment group that contains APIGEE_ENV
@@ -48,12 +54,6 @@ Now source the `env.sh` file
 
 ```bash
 source ./env.sh
-```
-
-3. Ensure you have an active GCP account selected in the Cloud shell
-
-```sh
-gcloud auth login
 ```
 
 ## Deploy Apigee components
