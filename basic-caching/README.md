@@ -7,6 +7,11 @@ This sample shows how to implement caching using Apigee's [ResponseCache](https:
 Using policies for general purpose caching, you can persist any objects your proxy requires across multiple request/response sessions. You can also cache the response of a backend resource with the ResponseCache policy. Response caching is especially helpful when backend data is updated only periodically. The ResponseCache policy can reduce calls to backend data sources.
 
 ## How it works
+Through the ResponseCache policy, you can also have Apigee look at certain HTTP response caching headers and take actions according to header directives. For example, on responses from backend targets, Apigee supports the Cache-Control header. This header can be used to control the maximum age of a cached response, among other things. For more information, see [Support for HTTP response headers](https://cloud.google.com/apigee/docs/api-platform/cache/http-response-caching).
+
+With the PopulateCache policy, LookupCache policy, and InvalidateCache policy, you can populate, retrieve, and flush cached data at runtime. At runtime, your cache policies copy values between proxy variables and the configured cache you specify. When a value is placed in the cache, it is copied from the variable you specify to the cache. When it is retrieved from the cache, it is copied into the variable for use by your proxy.
+
+For more details refer to [Caching and persistence overview](https://cloud.google.com/apigee/docs/api-platform/cache/persistence-tools), and [Cache internals](https://cloud.google.com/apigee/docs/api-platform/cache/cache-internals).
 
 ## Implementation on Apigee 
 
@@ -30,23 +35,23 @@ Use the following GCP CloudShell tutorial, and follow the instructions.
 
 ## Setup instructions
 
-1. Clone the `apigee-samples` repo, and switch the `basic-caching` directory
+1. Clone the `apigee-samples` repo, and switch to the `basic-caching` directory
 
 ``` bash
 git clone https://github.com/GoogleCloudPlatform/apigee-samples.git
 cd apigee-samples/basic-caching
 ```
 
-2. Set the following variables:
+2. Edit `env.sh` and configure the following variables:
 
 * `PROJECT` the project where your Apigee organization is located
 * `APIGEE_HOST` the externally reachable hostname of the Apigee environment group that contains APIGEE_ENV
 * `APIGEE_ENV` the Apigee environment where the demo resources should be created
 
-``` bash
-export PROJECT=<Project ID>
-export APIGEE_HOST=<Hostname>
-export APIGEE_ENV=<Target environment>
+Now source the `env.sh` file
+
+```bash
+source ./env.sh
 ```
 
 3. Deploy Apigee API proxy

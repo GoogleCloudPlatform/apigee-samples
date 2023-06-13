@@ -21,27 +21,14 @@ Navigate to the `basic-caching` directory in the Cloud shell.
 cd basic-caching
 ```
 
-Set the following variables:
+Edit the provided sample `env.sh` file, and set the environment variables there.
 
-* `PROJECT` the project where your Apigee organization is located
-* `APIGEE_HOST` the externally reachable hostname of the Apigee environment group that contains APIGEE_ENV
-* `APIGEE_ENV` the Apigee environment where the demo resources should be created
+Click <walkthrough-editor-open-file filePath="basic-caching/env.sh">here</walkthrough-editor-open-file> to open the file in the editor
 
-For example, you can use a command such as the following:
+Then, source the `env.sh` file in the Cloud shell.
 
-Set the project ID:
 ```sh
-export PROJECT=<replace with project ID>
-```
-
-Set the DNS host name where the proxy can be reached:
-```sh
-export APIGEE_HOST=<replace with host name>
-```
-
-Set the environment name where the proxy will be deployed:
-```sh
-export APIGEE_ENV=<replace with target environment name>
+source ./env.sh
 ```
 ---
 
