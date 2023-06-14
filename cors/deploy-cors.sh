@@ -51,6 +51,4 @@ echo "All the Apigee artifacts are successfully deployed!"
 
 echo " "
 echo "Your Proxy URL is: https://$PROXY_URL"
-echo "You will be unable to call the proxy url until you create an API key from the developer portal"
-echo "Please folow on with the instructions to create an API Key"
 echo " "

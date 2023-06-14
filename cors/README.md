@@ -15,7 +15,7 @@ The Apigee proxy sample is a no-target proxy with only a single policy; a CORS p
 ## Prerequisites
 1. [Provision Apigee X](https://cloud.google.com/apigee/docs/api-platform/get-started/provisioning-intro)
 2. Configure [external access](https://cloud.google.com/apigee/docs/api-platform/get-started/configure-routing#external-access) for API traffic to your Apigee X instance
-3. Have access to deploy proxies, create products, and provision a portal in Apigee
+3. Have access to deploy proxies in Apigee
 4. Make sure the following tools are available in your terminal's $PATH (Cloud Shell has these preconfigured)
     * [gcloud SDK](https://cloud.google.com/sdk/docs/install)
     * unzip
