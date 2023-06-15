@@ -17,6 +17,7 @@
   <PreFlow name="PreFlow">
     <Request>
       <Step>
+        <Condition>proxy.pathsuffix MatchesPath "/allow"</Condition>
         <Name>CORS-AddCORS</Name>
       </Step>
     </Request>
