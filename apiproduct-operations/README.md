@@ -127,7 +127,7 @@ Use the following GCP CloudShell tutorial, and follow the instructions.
 
 ## Manual Setup instructions
 
-If you've clicked the big clue button above, you can ignore the rest of this README.
+If you've clicked the blue button above, you can ignore the rest of this README.
 If you choose _not_ to follow the tutorial in Cloud Shell, you can follow these steps on your own:
 
 1. Clone the `apigee-samples` repo, and cd into the `apiproduct-operations` directory
