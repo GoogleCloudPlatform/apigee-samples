@@ -24,7 +24,7 @@ Let's get started!
    gcloud auth login
    ```
 
-   You _may_ see a warning, telling you:
+   When you do that, you _may_ see a warning, telling you:
 
    > You are already authenticated with gcloud when running
    > inside the Cloud Shell and so do not need to run this
@@ -61,9 +61,10 @@ Next, let's create and deploy the Apigee resources necessary to test the quota p
 ./setup-apiproduct-operations.sh
 ```
 
-This script imports a sample API Proxy from the filesystem, and then deploys it.
-It then creates a Developer entity, three API products with different Operations
-settings, and three Apps, each one authorized for just one of those products.
+This script imports two sample API Proxies from the filesystem, lints them, and
+then deploys them. The script then creates a Developer entity, three API
+products with different Operations settings, and three Apps, each one authorized
+for just one of those products.
 
 The script also tests that the deployment and configuration has been sucessful.
 
