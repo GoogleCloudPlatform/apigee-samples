@@ -119,13 +119,16 @@ TODO: Record a Screencast, and provide the correct URL
     * jq
     * npm
 
-# (QuickStart) Setup using CloudShell
+## (QuickStart) Setup using CloudShell
 
 Use the following GCP CloudShell tutorial, and follow the instructions.
 
 [![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/DinoChiesa/apigee-samples&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=apiproduct-operations/docs/cloudshell-tutorial.md)
 
-## Setup instructions
+## Manual Setup instructions
+
+If you've clicked the big clue button above, you can ignore the rest of this README.
+If you choose _not_ to follow the tutorial in Cloud Shell, you can follow these steps on your own:
 
 1. Clone the `apigee-samples` repo, and cd into the `apiproduct-operations` directory
 
@@ -156,7 +159,7 @@ Use the following GCP CloudShell tutorial, and follow the instructions.
    It will then print some information about the credentials it has provisioned.
 
 
-## Running the automated tests
+### Running the automated tests
 
 Ensure the required environment variables have been set correctly. The setup
 script will provide easy cut/paste instructions regarding the variables and the values to set.
@@ -166,7 +169,7 @@ And then use `npm` to run the tests:
 npm run test
 ```
 
-## Manual Requests
+### Manually send requests
 
 To manually test the proxy, make requests using the API keys created by the setup script.
 
@@ -191,10 +194,10 @@ You should see a rejection; the creator product does not allow the `GET /*/users
 
 Many more combinations of credential and operation are possible. See the Cloud Shell tutorial for full details.
 
-## Cleanup
+### Cleanup
 
 To remove the configuration from this example in your Apigee Organization, first
-source your `env.sh` script, and then, in your Cloud Shell, run:
+source your `env.sh` script, and then, in your shell, run:
 
 ```bash
 ./clean-apiproduct-operations.sh
