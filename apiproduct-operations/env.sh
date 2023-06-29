@@ -14,8 +14,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# set the GCP project and the name of the Apigee environment
 export PROJECT="<GCP_PROJECT_ID>"
-export APIGEE_HOST="<APIGEE_DOMAIN_NAME>"
 export APIGEE_ENV="<APIGEE_ENVIRONMENT_NAME>"
+
+# specify the hostname at which your API proxies can be reached.
+export APIGEE_HOST="<APIGEE_DOMAIN_NAME>"
 
 gcloud config set project $PROJECT

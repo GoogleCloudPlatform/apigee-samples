@@ -1,6 +1,4 @@
-# API Product Operations
-
----
+## API Product Operations
 
 This sample shows how to use API Product Operations to limit the particular
 verb/path combinations that will be permitted for an authenticated caller
@@ -12,22 +10,27 @@ Let's get started!
 
 ## Setup environment
 
-1. If you are running this within a Cloud Shell, you do not need to authenticate
-   with the gcloud comand-line tool. But if you are following this instructions
-   using a shell on your own computer, then you need to ensure you are
-   authenticated to GCP.
+1. Check your credentials.
+   ```sh
+   gcloud auth print-access-token
+   ```
+
+   If you see a token, then you're authenticated.
+
+   If you do not see a token, then
+   gcloud will advise you to run `gcloud auth login`. Do so:
 
    ```sh
    gcloud auth login
    ```
 
-   If you do this within Cloud Shell, the program will tell you:
+   You _may_ see a warning, telling you:
 
    > You are already authenticated with gcloud when running
    > inside the Cloud Shell and so do not need to run this
    > command. Do you wish to proceed anyway?
 
-   Decline to proceed; you don't need it.
+   Ignore that :). Proceed anyway.
 
 
 2. Navigate to the `apiproduct-operations` directory in the Cloud shell.
@@ -42,7 +45,7 @@ Let's get started!
    filePath="apiproduct-operations/env.sh">here</walkthrough-editor-open-file>
    to open the file in the editor
 
-   Then, source the `env.sh` file in the Cloud shell.
+   Then, save your changes, and source the `env.sh` file in the Cloud Shell.
 
    ```sh
    source ./env.sh
@@ -66,7 +69,7 @@ The script also tests that the deployment and configuration has been sucessful.
 
 ---
 
-## Test the APIs using API Key Verification
+## Test the APIs using API Key Verification (A)
 
 The script that deploys the Apigee API proxies prints the proxy and app
 information you will need to run the commands below.
@@ -116,8 +119,10 @@ information you will need to run the commands below.
    This request uses the credential that is authorized for the VIEWER product.
 
    You should again see a rejection response.  When an app uses the credential
-   authorized for the VIEWER Product to request creation of a new user, Apigee
+   authorized for the VIEWER Product to request creation of a new user (`POST /apikey/users`), Apigee
    rejects the request.
+
+## Test the APIs using API Key Verification (C)
 
 5. Conversely, when you use the CREATOR credential for that kind of request, Apigee allows the request:
    ```sh
@@ -125,14 +130,14 @@ information you will need to run the commands below.
       -H APIKEY:$CREATOR_CLIENT_ID
    ```
 
-## Test the APIs using API Key Verification (C)
-
 6. But when you use the CREATOR credential to request a DELETE on a specific user, Apigee rejects the request:
    ```sh
    curl -i -X DELETE https://${APIGEE_HOST}/v1/samples/apiproduct-operations/apikey/users/1234 \
       -H APIKEY:$CREATOR_CLIENT_ID
    ```
    This is as expected; the CREATOR product does not grant authorization on `DELETE /apikey/users/1234`.
+
+## Test the APIs using API Key Verification (D)
 
 7. The set of operations on an API Product need not be grouped by verb.  A
    single API Product might be authorized for any set of verb+path combinations.
@@ -149,7 +154,7 @@ information you will need to run the commands below.
 
 ---
 
-## Optional: Test the APIs using OAuthV2 token Validation
+## Test the APIs using OAuthV2 token Validation (A)
 
 The above steps describe how to use an API Key as the credential. Apigee
 performs the same checks when you configure your API Proxy to verify an OAuthV2
@@ -163,7 +168,7 @@ be `token`, and passing a different header.
 1. First, make sure that you have set the X_CLIENT_SECRET shell variables
    required for obtaining tokens.  If you have already done this, this step is
    unnecessary.
-   
+
    ```sh
    export VIEWER_CLIENT_SECRET=<replace with script output>
    export CREATOR_CLIENT_SECRET=<replace with script output>
@@ -196,7 +201,7 @@ be `token`, and passing a different header.
       -H TOKEN:$VIEWER_ACCESS_TOKEN
    ```
 
-## Optional: Test the APIs using OAuthV2 token Validation (B)
+## Test the APIs using OAuthV2 token Validation (B)
 
 4. Now obtain a token for the creator.
    ```sh
@@ -218,7 +223,7 @@ be `token`, and passing a different header.
    expected, because the creator product does not grant authorization for the
    `GET /*/users` operation.
 
-## Optional: Test the APIs using OAuthV2 token Validation (C)
+## Test the APIs using OAuthV2 token Validation (C)
 
 6. Now try a creation request, using the viewer token:
    ```sh
@@ -241,7 +246,7 @@ be `token`, and passing a different header.
    Again, as expected.
 
 
-## Optional: Test the APIs using OAuthV2 token Validation (D)
+## Test the APIs using OAuthV2 token Validation (D)
 
 8. Obtain a token for the admin:
    ```sh
