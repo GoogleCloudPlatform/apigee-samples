@@ -12,27 +12,41 @@ Let's get started!
 
 ## Setup environment
 
-Ensure you have an active GCP account selected in the Cloud shell
+1. If you are running this within a Cloud Shell, you do not need to authenticate
+   with the gcloud comand-line tool. But if you are following this instructions
+   using a shell on your own computer, then you need to ensure you are
+   authenticated to GCP.
 
-```sh
-gcloud auth login
-```
+   ```sh
+   gcloud auth login
+   ```
 
-Navigate to the `apiproduct-operations` directory in the Cloud shell.
+   If you do this within Cloud Shell, the program will tell you:
 
-```sh
-cd apiproduct-operations
-```
+   > You are already authenticated with gcloud when running
+   > inside the Cloud Shell and so do not need to run this
+   > command. Do you wish to proceed anyway?
 
-Edit the provided sample `env.sh` file, and set the environment variables there.
+   Decline to proceed; you don't need it.
 
-Click <walkthrough-editor-open-file filePath="apiproduct-operations/env.sh">here</walkthrough-editor-open-file> to open the file in the editor
 
-Then, source the `env.sh` file in the Cloud shell.
+2. Navigate to the `apiproduct-operations` directory in the Cloud shell.
 
-```sh
-source ./env.sh
-```
+   ```sh
+   cd apiproduct-operations
+   ```
+
+   Edit the provided sample `env.sh` file, and set the environment variables there.
+
+   Click <walkthrough-editor-open-file
+   filePath="apiproduct-operations/env.sh">here</walkthrough-editor-open-file>
+   to open the file in the editor
+
+   Then, source the `env.sh` file in the Cloud shell.
+
+   ```sh
+   source ./env.sh
+   ```
 
 ---
 
@@ -80,6 +94,8 @@ information you will need to run the commands below.
    and the verb used.
 
 
+## Test the APIs using API Key Verification (B)
+
 3. Now, run the same request but with a different key, the one for the CREATOR:
    ```sh
    curl -i -X GET https://${APIGEE_HOST}/v1/samples/apiproduct-operations/apikey/users \
@@ -109,6 +125,8 @@ information you will need to run the commands below.
       -H APIKEY:$CREATOR_CLIENT_ID
    ```
 
+## Test the APIs using API Key Verification (C)
+
 6. But when you use the CREATOR credential to request a DELETE on a specific user, Apigee rejects the request:
    ```sh
    curl -i -X DELETE https://${APIGEE_HOST}/v1/samples/apiproduct-operations/apikey/users/1234 \
@@ -133,22 +151,26 @@ information you will need to run the commands below.
 
 ## Optional: Test the APIs using OAuthV2 token Validation
 
-The above steps describe how to use an API Key as the credential.
-Apigee performs the same checks when you configure your API Proxy to verify an OAuthV2 Bearer token.
+The above steps describe how to use an API Key as the credential. Apigee
+performs the same checks when you configure your API Proxy to verify an OAuthV2
+Bearer token.
 
 To try that out, you will need to first obtain a valid token, and then pass it
 in the same requests as shown above, just modifying the `apikey` path element to
 be `token`, and passing a different header.
 
 
-0. First, make sure that you have set the X_CLIENT_SECRET shell variables required for obtaining tokens:
+1. First, make sure that you have set the X_CLIENT_SECRET shell variables
+   required for obtaining tokens.  If you have already done this, this step is
+   unnecessary.
+   
    ```sh
    export VIEWER_CLIENT_SECRET=<replace with script output>
    export CREATOR_CLIENT_SECRET=<replace with script output>
    export ADMIN_CLIENT_SECRET=<replace with script output>
    ```
 
-1. Now, run the following command, to obtain a token for the VIEWER.
+2. Now, run the following command, to obtain a token for the VIEWER.
    ```sh
    curl -i -X POST https://${APIGEE_HOST}/v1/samples/apiproduct-operations-oauth2-cc/token \
        -u $VIEWER_CLIENT_ID:$VIEWER_CLIENT_SECRET -d 'grant_type=client_credentials'
@@ -168,11 +190,13 @@ be `token`, and passing a different header.
    VIEWER_ACCESS_TOKEN=<replace with the token in your curl output>
    ```
 
-2. Invoke the /users API using the viewer token:
+3. Invoke the /users API using the viewer token:
    ```sh
    curl -i -X GET https://${APIGEE_HOST}/v1/samples/apiproduct-operations/token/users \
       -H TOKEN:$VIEWER_ACCESS_TOKEN
    ```
+
+## Optional: Test the APIs using OAuthV2 token Validation (B)
 
 3. Now obtain a token for the creator.
    ```sh
@@ -194,6 +218,8 @@ be `token`, and passing a different header.
    expected, because the creator product does not grant authorization for the
    `GET /*/users` operation.
 
+## Optional: Test the APIs using OAuthV2 token Validation (C)
+
 5. Now try a creation request, using the viewer token:
    ```sh
    curl -i -X POST -d '' https://${APIGEE_HOST}/v1/samples/apiproduct-operations/token/users \
@@ -213,6 +239,9 @@ be `token`, and passing a different header.
       -H TOKEN:$CREATOR_ACCESS_TOKEN
    ```
    Again, as expected.
+
+
+## Optional: Test the APIs using OAuthV2 token Validation (D)
 
 7. Obtain a token for the admin:
    ```sh
