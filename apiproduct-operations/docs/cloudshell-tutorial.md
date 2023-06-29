@@ -258,8 +258,8 @@ Congratulations! You've successfully implemented and tested a set of API Product
 ## Cleanup
 
 If you want to clean up the artifacts from this example in your Apigee
-Organization, first source your `env.sh` script, and then run
+Organization, first source your `env.sh` script, and then run:
 
 ```bash
-./clean-up-basic-quota.sh
+./clean-apiproduct-operations.sh
 ```
