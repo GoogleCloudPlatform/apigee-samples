@@ -30,10 +30,10 @@ REST-ful Verb + Path combinations to support the use cases:
 
 |  # | use case                                             | verb + path       |
 | -- | ---------------------------------------------------- | ----------------- |
-|  1 | review the list of signed or unsigned contracts      | GET /contracts    |
-|  2 | review the detail of a single contract               | GET /contracts/*  |
-|  3 | add a new contract into the system                   | POST /contracts   |
-|  4 | update an unsigned contract with a signature         | POST /contracts/* |
+|  1 | review the list of signed or unsigned contracts      | `GET /contracts`    |
+|  2 | review the detail of a single contract               | `GET /contracts/*`  |
+|  3 | add a new contract into the system                   | `POST /contracts`   |
+|  4 | update an unsigned contract with a signature         | `POST /contracts/*` |
 
 The API Publisher might not want to grant authorization to ALL of the API to
 each distinct application that uses it.  The publisher might create 3 different
@@ -49,14 +49,14 @@ To make this happen, in Apigee each API Product specifies a set of operations on
 the API Proxies it authorizes.  In this example, the products would get these
 operations
 
-| product | operations                                                           |
-| ------- | -------------------------------------------------------------------- |
-| viewer  | GET /contracts, GET /contracts/*                                     |
-| creator | POST /contracts                                                      |
-| admin   | GET /contracts, GET /contracts/*, POST /contracts, POST /contracts/* |
+| product | operations                                                                   |
+| ------- | ---------------------------------------------------------------------------- |
+| viewer  | `GET /contracts`, `GET /contracts/*`                                         |
+| creator | `POST /contracts`                                                            |
+| admin   | `GET /contracts`, `GET /contracts/*`, `POST /contracts`, `POST /contracts/*` |
 
 
-## How it works
+## Credentials are "the key" for checking the Operation
 
 Configuring the set of API Products with the various operations is one part of
 the set up.  The next step is to grant access to these products to different
