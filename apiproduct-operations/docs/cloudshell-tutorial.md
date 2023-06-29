@@ -50,13 +50,14 @@ settings, and three Apps, each one authorized for just one of those products.
 
 The script also tests that the deployment and configuration has been sucessful.
 
+---
 
-### Test the APIs using API Key Verification
+## Test the APIs using API Key Verification
 
 The script that deploys the Apigee API proxies prints the proxy and app
 information you will need to run the commands below.
 
-0. First, set the required shell variables:
+1. First, set the required shell variables:
    ```sh
    export SAMPLE_PROXY_BASEPATH=<replace with script output>
    export VIEWER_CLIENT_ID=<replace with script output>
@@ -64,7 +65,7 @@ information you will need to run the commands below.
    export ADMIN_CLIENT_ID=<replace with script output>
    ```
 
-1. Now, run the following command, intended to be the kind of REST request an
+2. Now, run the following command, intended to be the kind of REST request an
    app might send to list items in a collection:
 
    ```sh
@@ -79,7 +80,7 @@ information you will need to run the commands below.
    and the verb used.
 
 
-2. Now, run the same request but with a different key, the one for the CREATOR:
+3. Now, run the same request but with a different key, the one for the CREATOR:
    ```sh
    curl -i -X GET https://${APIGEE_HOST}/v1/samples/apiproduct-operations/apikey/users \
       -H APIKEY:$CREATOR_CLIENT_ID
@@ -89,7 +90,7 @@ information you will need to run the commands below.
    indicating that when an app uses the credential authorized for the CREATOR
    Product to request a list of users, Apigee rejects the request.
 
-3. Now try a creation request. This is intended to be the kind of REST request an
+4. Now try a creation request. This is intended to be the kind of REST request an
    app might send to create a new item within a collection:
    ```sh
    curl -i -X POST -d '' https://${APIGEE_HOST}/v1/samples/apiproduct-operations/apikey/users \
@@ -102,20 +103,20 @@ information you will need to run the commands below.
    authorized for the VIEWER Product to request creation of a new user, Apigee
    rejects the request.
 
-4. Conversely, when you use the CREATOR credential for that kind of request, Apigee allows the request:
+5. Conversely, when you use the CREATOR credential for that kind of request, Apigee allows the request:
    ```sh
    curl -i -X POST -d '' https://${APIGEE_HOST}/v1/samples/apiproduct-operations/apikey/users \
       -H APIKEY:$CREATOR_CLIENT_ID
    ```
 
-5. But when you use the CREATOR credential to request a DELETE on a specific user, Apigee rejects the request:
+6. But when you use the CREATOR credential to request a DELETE on a specific user, Apigee rejects the request:
    ```sh
    curl -i -X DELETE https://${APIGEE_HOST}/v1/samples/apiproduct-operations/apikey/users/1234 \
       -H APIKEY:$CREATOR_CLIENT_ID
    ```
    This is as expected; the CREATOR product does not grant authorization on `DELETE /apikey/users/1234`.
 
-6. The set of operations on an API Product need not be grouped by verb.  A
+7. The set of operations on an API Product need not be grouped by verb.  A
    single API Product might be authorized for any set of verb+path combinations.
 
    For example, the ADMIN product is configured to allow GET, POST, or DELETE requests in that API Proxy. Using the ADMIN credential, all of the following should succeed:
@@ -130,7 +131,7 @@ information you will need to run the commands below.
 
 ---
 
-### Optional: Test the APIs using OAuthV2 token Validation
+## Optional: Test the APIs using OAuthV2 token Validation
 
 The above steps describe how to use an API Key as the credential.
 Apigee performs the same checks when you configure your API Proxy to verify an OAuthV2 Bearer token.
@@ -140,7 +141,7 @@ in the same requests as shown above, just modifying the `apikey` path element to
 be `token`, and passing a different header.
 
 
-0. First, make sure that you have set the shell variables required for obtaining tokens:
+0. First, make sure that you have set the X_CLIENT_SECRET shell variables required for obtaining tokens:
    ```sh
    export VIEWER_CLIENT_SECRET=<replace with script output>
    export CREATOR_CLIENT_SECRET=<replace with script output>
@@ -177,6 +178,9 @@ be `token`, and passing a different header.
    ```sh
    curl -i -X POST https://${APIGEE_HOST}/v1/samples/apiproduct-operations-oauth2-cc/token \
        -u $CREATOR_CLIENT_ID:$CREATOR_CLIENT_SECRET -d 'grant_type=client_credentials'
+   ```
+   and set the shell variable with the token shown in the response:
+   ```sh
    CREATOR_ACCESS_TOKEN=<replace with token from curl output>
    ```
 
@@ -200,7 +204,7 @@ be `token`, and passing a different header.
 
    You should again see a rejection response. When an app uses the credential
    authorized for the VIEWER Product to request creation of a new user, Apigee
-   rejects the request. This is true whethee the credential is an API Key or an
+   rejects the request. This is true whether the credential is an API Key or an
    Access Token.
 
 6. Conversely, when you use the CREATOR credential for that kind of request, Apigee allows the request:
@@ -214,6 +218,9 @@ be `token`, and passing a different header.
    ```sh
    curl -i -X POST https://${APIGEE_HOST}/v1/samples/apiproduct-operations-oauth2-cc/token \
        -u $ADMIN_CLIENT_ID:$ADMIN_CLIENT_SECRET -d 'grant_type=client_credentials'
+   ```
+   and again, set the shell variable with the token shown in the response:
+   ```sh
    ADMIN_ACCESS_TOKEN=<replace with token from curl output>
    ```
 
@@ -238,8 +245,8 @@ be `token`, and passing a different header.
    ..., Apigee rejects the request. This is as expected; the creator product
    does not grant authorization on `DELETE /token/users/1234`.
 
-
 ---
+
 ## Conclusion
 
 <walkthrough-conclusion-trophy></walkthrough-conclusion-trophy>
