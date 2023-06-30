@@ -18,7 +18,7 @@ Let's get started!
    If you see a token, then you're authenticated.
 
    If you do not see a token, then
-   gcloud will advise you to run `gcloud auth login`. Do so:
+   gcloud will advise you to login. Do so:
 
    ```sh
    gcloud auth login
