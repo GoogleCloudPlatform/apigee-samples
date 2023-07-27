@@ -67,7 +67,23 @@ gcloud projects add-iam-policy-binding "$PROJECT_ID" \
   --role="roles/iam.serviceAccountAdmin"
 ```
 
-4. Trigger the build
+4. Create Service Account with Cloud Run Invoker role
+
+To invoke cloud run from Apigee Proxy requires a service account with run.invoker permission. This step is optional if you are using cloudbuild to trigger the build as mentioned in step 5.
+
+```bash
+gcloud iam service-accounts create run-mock-target-sa \
+          --project "$PROJECT_ID" || true
+
+gcloud run services add-iam-policy-binding ${_SERVICE} \
+          --region ${_REGION} \
+          --member serviceAccount:run-mock-target-sa@"$PROJECT_ID".iam.gserviceaccount.com \
+          --role roles/run.invoker \
+          --platform managed
+
+```
+
+5. Trigger the build
 
 ```bash
 gcloud builds submit --config cloudbuild.yaml . \
