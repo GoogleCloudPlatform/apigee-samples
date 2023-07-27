@@ -15,9 +15,9 @@
   <DisplayName>CORS-AddCORS</DisplayName>
   <AllowOrigins>{request.header.origin}</AllowOrigins>
   <AllowMethods>GET, PUT, POST, DELETE</AllowMethods>
-  <AllowHeaders>origin, x-requested-with, accept, content-type</AllowHeaders>
+  <AllowHeaders>origin, x-requested-with, accept, content-type, foo</AllowHeaders>
   <ExposeHeaders>*</ExposeHeaders>
-  <MaxAge>3628800</MaxAge>
+  <MaxAge>1800</MaxAge>
   <AllowCredentials>false</AllowCredentials>
   <GeneratePreflightResponse>true</GeneratePreflightResponse>
   <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
