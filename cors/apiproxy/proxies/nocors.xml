@@ -11,14 +11,22 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<CORS continueOnError="false" enabled="true" name="CORS-AddCORS">
-  <DisplayName>CORS-AddCORS</DisplayName>
-  <AllowOrigins>{request.header.origin}</AllowOrigins>
-  <AllowMethods>GET, PUT, POST, DELETE</AllowMethods>
-  <AllowHeaders>origin, x-requested-with, accept, content-type, foo</AllowHeaders>
-  <ExposeHeaders>*</ExposeHeaders>
-  <MaxAge>3600</MaxAge>
-  <AllowCredentials>false</AllowCredentials>
-  <GeneratePreflightResponse>true</GeneratePreflightResponse>
-  <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
-</CORS>
+<ProxyEndpoint name="nocors">
+  <Description/>
+  <FaultRules/>
+  <PreFlow name="PreFlow">
+    <Request/>
+    <Response/>
+  </PreFlow>
+  <PostFlow name="PostFlow">
+    <Request/>
+    <Response/>
+  </PostFlow>
+  <Flows/>
+  <HTTPProxyConnection>
+    <BasePath>/v1/samples/cors/nocors</BasePath>
+    <Properties/>
+    <VirtualHost>default</VirtualHost>
+  </HTTPProxyConnection>
+  <RouteRule name="default"/>
+</ProxyEndpoint>
