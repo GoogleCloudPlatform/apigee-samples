@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<XMLToJSON continueOnError="false" enabled="true" name="X2J-XML-to-JSON">
+  <DisplayName>X2J-XML-to-JSON</DisplayName>
+  <Format>yahoo</Format>
+</XMLToJSON>

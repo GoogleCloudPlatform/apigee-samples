@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<APIProxy revision="6" name="extract-variables">
+  <DisplayName/>
+  <Description/>
+  <CreatedAt>1692374815682</CreatedAt>
+  <LastModifiedAt>1692374815682</LastModifiedAt>
+  <BasePaths>/v1/samples/extract-variables</BasePaths>
+  <Policies>
+    <Policy>AM-Set-Headers</Policy>
+    <Policy>EV-Parse-JSON-Fields</Policy>
+    <Policy>EV-Parse-XML-Fields</Policy>
+    <Policy>X2J-XML-to-JSON</Policy>
+  </Policies>
+  <ProxyEndpoints>
+    <ProxyEndpoint>default</ProxyEndpoint>
+  </ProxyEndpoints>
+  <TargetEndpoints>
+    <TargetEndpoint>default</TargetEndpoint>
+  </TargetEndpoints>
+</APIProxy>
