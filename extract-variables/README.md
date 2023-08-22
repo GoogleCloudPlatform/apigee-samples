@@ -1,10 +1,10 @@
 # Extract Variables and Assign Message
 
-This sample shows how to easily extract fields from an XML and JSON response. For this sample I will be leveraging the following policies:
+This sample shows how to easily extract fields from an XML and JSON response. This sample leverages the following policies::
 
  * [Extract Variables](https://cloud.google.com/apigee/docs/api-platform/reference/policies/extract-variables-policy) policy to extract subsets of data from the response body.
  * [XML to JSON](https://cloud.google.com/apigee/docs/api-platform/reference/policies/xml-json-policy) policy to convert the XML response from the target server to JSON.
- * [Assign Message](https://cloud.google.com/apigee/docs/api-platform/reference/policies/assign-message-policy?hl=en) policy to set the response Headers with the extracted fields and other flow variables.
+ * [Assign Message](https://cloud.google.com/apigee/docs/api-platform/reference/policies/assign-message-policy?hl=en) policy to set the response Headers with the extracted fields and other [flow variables](https://cloud.google.com/apigee/docs/api-platform/fundamentals/introduction-flow-variables).
 
 ## About the extract variables policy
 
@@ -40,14 +40,10 @@ Later on we leverage the [XML to JSON](https://cloud.google.com/apigee/docs/api-
 We use again the  [Extract Variables](https://cloud.google.com/apigee/docs/api-platform/reference/policies/extract-variables-policy) policy to extract subsets of data from the now converted JSON string.
 Finally we use the [Assign Message](https://cloud.google.com/apigee/docs/api-platform/reference/policies/assign-message-policy?hl=en) policy to set the response headers with the extracted fields and other [flow variables](https://cloud.google.com/apigee/docs/api-platform/reference/variables-reference).
 
-## Screencast
-
-[![Alt text](https://img.youtube.com/vi/ep7h_tGHtiw/0.jpg)](https://www.youtube.com/watch?v=ep7h_tGHtiw)
-
 ## Prerequisites
 1. [Provision Apigee X](https://cloud.google.com/apigee/docs/api-platform/get-started/provisioning-intro)
 2. Configure [external access](https://cloud.google.com/apigee/docs/api-platform/get-started/configure-routing#external-access) for API traffic to your Apigee X instance
-3. Access to deploy proxies, create products, apps and developers in Apigee
+3. Access to deploy proxies in Apigee
 4. Make sure the following tools are available in your terminal's $PATH (Cloud Shell has these preconfigured)
     * [gcloud SDK](https://cloud.google.com/sdk/docs/install)
     * unzip
@@ -82,7 +78,7 @@ Now source the `env.sh` file
 source ./env.sh
 ```
 
-3. Deploy Apigee API proxies, products and apps
+3. Deploy Apigee API proxies:
 
 ```bash
 ./deploy.sh
@@ -98,7 +94,7 @@ curl https://$APIGEE_HOST/v1/samples/extract-variables
 
 ## Cleanup
 
-If you want to clean up the artefacts from this example in your Apigee Organization, first source your `env.sh` script, and then run
+If you want to clean up the artifacts from this example in your Apigee Organization, first source your `env.sh` script, and then run
 
 ```bash
 ./clean-up.sh
