@@ -51,7 +51,7 @@ The script that deploys the Apigee API proxies prints the proxy and other inform
 
 Run the following curl command:
 ```sh
-curl https://$APIGEE_HOST/v1/samples/extract-variables
+curl -v https://$APIGEE_HOST/v1/samples/extract-variables
 ```
 
 Use the debug tool inside Apigee to see how we:

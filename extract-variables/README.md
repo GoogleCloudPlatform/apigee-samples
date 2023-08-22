@@ -87,8 +87,8 @@ source ./env.sh
 ## Example Requests
 To manually test the proxy, make requests using curl:
 
-```
-curl https://$APIGEE_HOST/v1/samples/extract-variables
+```bash
+curl -v https://$APIGEE_HOST/v1/samples/extract-variables
 ```
 
 
