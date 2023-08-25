@@ -36,9 +36,16 @@ The WebSockets connection is closed when:
     * curl
     * jq
     * npm
+    * docker
+
 5. Make sure that the following GCP APIs are enabled:
     * Cloud Run API
     * Container Registry API
+
+6. Make sure that you have the following permissions:
+
+    * [Artifact Registry Repository Administrator](https://cloud.google.com/iam/docs/understanding-roles#artifactregistry.repoAdmin) role  (roles/artifactregistry.repoAdmin)
+    * [Cloud Run Developer](https://cloud.google.com/run/docs/reference/iam/roles) role (roles/run.developer)
 
 # (QuickStart) Setup using CloudShell
 
