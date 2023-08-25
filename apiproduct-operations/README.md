@@ -103,9 +103,7 @@ The behavior with regard to operations authorization checks is exactly the same.
 
 ## Screencast
 
-TODO: Record a Screencast, and provide the correct URL
-
-[![Alt text](https://img.youtube.com/vi/ep7h_tGHtiw/0.jpg)](https://www.youtube.com/watch?v=ep7h_tGHtiw)
+[![Alt text](./img/screenshot-20230825-154607.png)](https://www.youtube.com/watch?v=ep7h_tGHtiw)
 
 ## Prerequisites
 
