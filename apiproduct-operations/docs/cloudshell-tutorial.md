@@ -72,12 +72,11 @@ The script also tests that the deployment and configuration has been sucessful.
 
 ## Test the APIs using API Key Verification (A)
 
-The script that deploys the Apigee API proxies prints the proxy and app
+When the script finishes, it prints the proxy and app
 information you will need to run the commands below.
 
 1. First, set the required shell variables:
    ```sh
-   export SAMPLE_PROXY_BASEPATH=<replace with script output>
    export VIEWER_CLIENT_ID=<replace with script output>
    export CREATOR_CLIENT_ID=<replace with script output>
    export ADMIN_CLIENT_ID=<replace with script output>
@@ -92,7 +91,7 @@ information you will need to run the commands below.
    ```
 
    This request uses the API Key authorized for the VIEWER product. You should see
-   a 200 response.  This API does not actually return a list of users; it's
+   a 200 response. This API does not actually return a list of users; it's
    returning a status of the credential check.  Observe the success response; it
    will show the the name of the API Product, the path of the authorized resource,
    and the verb used.
@@ -166,9 +165,10 @@ in the same requests as shown above, just modifying the `apikey` path element to
 be `token`, and passing a different header.
 
 
-1. First, make sure that you have set the X_CLIENT_SECRET shell variables
-   required for obtaining tokens.  If you have already done this, this step is
-   unnecessary.
+1. First, make sure that you have set the X\_CLIENT\_SECRET shell variables
+   required for obtaining tokens. These are the companion variables
+   corresponding to the CLIENT_ID variables you set earlier. If you have already
+   done this, this step is unnecessary.
 
    ```sh
    export VIEWER_CLIENT_SECRET=<replace with script output>
@@ -286,7 +286,7 @@ be `token`, and passing a different header.
 
 <walkthrough-conclusion-trophy></walkthrough-conclusion-trophy>
 
-Congratulations! You've successfully implemented and tested a set of API Products with different Operations.
+Congratulations! You've successfully configured a set of API Products with different Operations, and you've seen how those operation checks work.
 
 <walkthrough-inline-feedback></walkthrough-inline-feedback>
 
