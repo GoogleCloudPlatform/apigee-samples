@@ -25,7 +25,36 @@ The WebSockets connection is closed when:
 * The proxy endpoint receives a request with an expired or invalid API key or OAuth token.
 * The WebSockets connection times out.
 
-## Create a websockets backend in Cloud Run
+
+## Prerequisites
+1. [Provision Apigee X](https://cloud.google.com/apigee/docs/api-platform/get-started/provisioning-intro)
+2. Configure [external access](https://cloud.google.com/apigee/docs/api-platform/get-started/configure-routing#external-access) for API traffic to your Apigee X instance
+3. Access to deploy proxies, create products, apps and developers in Apigee
+4. Make sure the following tools are available in your terminal's $PATH (Cloud Shell has these preconfigured)
+    * [gcloud SDK](https://cloud.google.com/sdk/docs/install)
+    * unzip
+    * curl
+    * jq
+    * npm
+5. Make sure that the following GCP APIs are enabled:
+    * Cloud Run API
+    * Container Registry API
+
+# (QuickStart) Setup using CloudShell
+
+Use the following GCP CloudShell tutorial, and follow the instructions.
+
+[![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/apigee-samples&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=websockets/docs/cloudshell-tutorial.md)
+
+## Setup instructions
+
+### Create a websockets backend in Cloud Run
+
+Enable the Cloud Run API and Container Registry API:
+
+```bash
+gcloud services enable run.googleapis.com containerregistry.googleapis.com
+```
 
 Create a Docker image:
 In Cloud Shell, clone the websockets repo 
@@ -102,24 +131,7 @@ Go ahead and save the Service URL, since it will be used in the next step when w
 export CLOUD_RUN_SERVICE_URL=<Cloud Run service endpoint from above without the "https://" prefix>
 ```
 
-## Prerequisites
-1. [Provision Apigee X](https://cloud.google.com/apigee/docs/api-platform/get-started/provisioning-intro)
-2. Configure [external access](https://cloud.google.com/apigee/docs/api-platform/get-started/configure-routing#external-access) for API traffic to your Apigee X instance
-3. Access to deploy proxies, create products, apps and developers in Apigee
-4. Make sure the following tools are available in your terminal's $PATH (Cloud Shell has these preconfigured)
-    * [gcloud SDK](https://cloud.google.com/sdk/docs/install)
-    * unzip
-    * curl
-    * jq
-    * npm
-
-# (QuickStart) Setup using CloudShell
-
-Use the following GCP CloudShell tutorial, and follow the instructions.
-
-[![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/apigee-samples&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=websockets/docs/cloudshell-tutorial.md)
-
-## Setup instructions
+### Deploy Apigee Resources
 
 1. Clone the `apigee-samples` repo, and switch to the `websockets` directory
 
