@@ -38,7 +38,15 @@ echo "Installing apigeecli"
 curl -s https://raw.githubusercontent.com/apigee/apigeecli/master/downloadLatest.sh | bash
 export PATH=$PATH:$HOME/.apigeecli/bin
 
+echo "Deleting Developer Apps"
+DEVELOPER_ID=$(apigeecli developers get --email websockets_apigeesamples@acme.com --org "$PROJECT" --token "$TOKEN" --disable-check | jq .'developerId' -r)
+apigeecli apps delete --id "$DEVELOPER_ID" --name websocketsApp --org "$PROJECT" --token "$TOKEN"
 
+echo "Deleting Developer"
+apigeecli developers delete --email websockets_apigeesamples@acme.com --org "$PROJECT" --token "$TOKEN"
+
+echo "Deleting API Products"
+apigeecli products delete --name websockets --org "$PROJECT" --token "$TOKEN"
 
 echo "Undeploying websockets"
 REV=$(apigeecli envs deployments get --env "$APIGEE_ENV" --org "$PROJECT" --token "$TOKEN" --disable-check | jq .'deployments[]| select(.apiProxy=="websockets").revision' -r)
