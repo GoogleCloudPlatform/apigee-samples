@@ -106,8 +106,8 @@ If this command is successful it should deploy the websockets server into Cloud 
 
 Go ahead and save the Service URL, since it will be used in the next step when we configure the Apigee proxy.
 
-```
-export CLOUD_RUN_SERVICE_URL=<Cloud Run service endpoint from above without the "https://" prefix>
+```sh
+CLOUD_RUN_SERVICE_URL=$(gcloud run services describe websockets-echo-server --platform managed --region $REGION --format 'value(status.url)' | sed -E 's/http.+\///')
 ```
 
 ---
