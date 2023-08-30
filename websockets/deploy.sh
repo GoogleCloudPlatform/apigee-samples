@@ -45,15 +45,13 @@ echo "Installing apigeecli"
 curl -s https://raw.githubusercontent.com/apigee/apigeecli/master/downloadLatest.sh | bash
 export PATH=$PATH:$HOME/.apigeecli/bin
 
-echo "Replacing target server URL for $CLOUD_RUN_SERVICE_URL..."
-
-sed -i '' "s/websockets-echo-server.a.run.app/$CLOUD_RUN_SERVICE_URL/" ./apiproxy/targets/default.xml
-
 echo "Running apigeelint"
 npm run lint
 
 
 echo "Deploying Apigee artifacts..."
+echo "Deploying target server for the Cloud Run service $CLOUD_RUN_SERVICE_URL..."
+apigeecli targetservers create -n websockets --org "$PROJECT" --env "$APIGEE_ENV" --token "$TOKEN" -p 443 -s "$CLOUD_RUN_SERVICE_URL" --tls
 
 echo "Importing and Deploying Apigee websockets proxy..."
 REV=$(apigeecli apis create bundle -f apiproxy  -n websockets --org "$PROJECT" --token "$TOKEN" --disable-check | jq ."revision" -r)
@@ -68,8 +66,8 @@ apigeecli developers create --user testuser --email websockets_apigeesamples@acm
 echo "Creating Developer App"
 apigeecli apps create --name websocketsApp --email websockets_apigeesamples@acme.com --prods websockets --org "$PROJECT" --token "$TOKEN" --disable-check
 
-CLIENT_ID_1=$(apigeecli apps get --name websocketsApp --org "$PROJECT" --token "$TOKEN" --disable-check | jq ."[0].credentials[0].consumerKey" -r)
-export CLIENT_ID_1
+CLIENT_ID=$(apigeecli apps get --name websocketsApp --org "$PROJECT" --token "$TOKEN" --disable-check | jq ."[0].credentials[0].consumerKey" -r)
+export CLIENT_ID
 
 # var is expected by integration test (apickli)
 export PROXY_URL="$APIGEE_HOST/v1/samples/websockets"
@@ -87,5 +85,5 @@ echo "-----------------------------"
 echo " "
 echo "To call the API use wscat or another websockets client:"
 echo " "
-echo "wscat -c wss://$PROXY_URL?apikey=$CLIENT_ID_1"
+echo "wscat -c wss://$PROXY_URL?apikey=$CLIENT_ID"
 echo " "
