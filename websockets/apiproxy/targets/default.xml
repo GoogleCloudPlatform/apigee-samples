@@ -16,20 +16,10 @@
 -->
 
 <TargetEndpoint name="default">
-  <Description/>
-  <FaultRules/>
-  <PreFlow name="PreFlow">
-    <Request>
-    </Request>
-    <Response/>
-  </PreFlow>
-  <PostFlow name="PostFlow">
-    <Request/>
-    <Response/>
-  </PostFlow>
-  <Flows/>
+  <Description>Target server pointing to Cloud Run backend</Description>
   <HTTPTargetConnection>
-    <Properties/>
-    <URL>wss://websockets-echo-server.a.run.app</URL>
+    <LoadBalancer>
+      <Server name="websockets"/>
+    </LoadBalancer>
   </HTTPTargetConnection>
 </TargetEndpoint>
