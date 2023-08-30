@@ -18,17 +18,4 @@
 <APIProxy revision="8" name="websockets">
   <DisplayName/>
   <Description>Passthrough proxy for a websocket server running in Cloud Run</Description>
-  <CreatedAt>1692641118849</CreatedAt>
-  <LastModifiedAt>1692641118849</LastModifiedAt>
-  <BasePaths>/v1/samples/websockets</BasePaths>
-  <Policies>
-    <Policy>VA-Verify-API-key</Policy>
-    <Policy>AM-Remove-API-Key-Param</Policy>
-  </Policies>
-  <ProxyEndpoints>
-    <ProxyEndpoint>default</ProxyEndpoint>
-  </ProxyEndpoints>
-  <TargetEndpoints>
-    <TargetEndpoint>default</TargetEndpoint>
-  </TargetEndpoints>
 </APIProxy>
