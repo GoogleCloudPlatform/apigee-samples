@@ -134,8 +134,8 @@ If this command is successful it should deploy the websockets server to Cloud Ru
 
 Go ahead and save the Service URL, since it will be used in the next step when we configure the Apigee proxy.
 
-```
-export CLOUD_RUN_SERVICE_URL=<Cloud Run service endpoint from above without the "https://" prefix>
+```bash
+CLOUD_RUN_SERVICE_URL=$(gcloud run services describe websockets-echo-server --platform managed --region $REGION --format 'value(status.url)' | sed -E 's/http.+\///')
 ```
 
 ### Deploy Apigee Resources
@@ -153,6 +153,7 @@ cd apigee-samples/websockets
 * `PROJECT` the project where your Apigee organization is located
 * `APIGEE_HOST` the externally reachable hostname of the Apigee environment group that contains APIGEE_ENV
 * `APIGEE_ENV` the Apigee environment where the demo resources should be created
+* `CLOUD_RUN_SERVICE_URL` the service URL for the Cloud Run service running the websockets echo server
 
 Now source the `env.sh` file
 
