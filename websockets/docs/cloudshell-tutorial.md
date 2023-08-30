@@ -21,16 +21,6 @@ Navigate to the `websockets` directory in the Cloud shell.
 cd websockets
 ```
 
-Edit the provided sample `env.sh` file, and set the environment variables there.
-
-Click <walkthrough-editor-open-file filePath="websockets/env.sh">here</walkthrough-editor-open-file> to open the file in the editor
-
-Then, source the `env.sh` file in the Cloud shell.
-
-```sh
-source ./env.sh
-```
-
 ---
 
 ## Create a websockets backend in Cloud Run
@@ -111,9 +101,21 @@ CLOUD_RUN_SERVICE_URL=$(gcloud run services describe websockets-echo-server --pl
 export CLOUD_RUN_SERVICE_URL
 ```
 
+
+
 ---
 
 ## Deploy Apigee components
+
+Edit the provided sample `env.sh` file, and set the environment variables there.
+
+Click <walkthrough-editor-open-file filePath="websockets/env.sh">here</walkthrough-editor-open-file> to open the file in the editor
+
+Then, source the `env.sh` file in the Cloud shell.
+
+```sh
+source ./env.sh
+```
 
 Next, let's create and deploy the Apigee resources necessary to test the websockets proxy. (Make sure you are on the root folder of the websockets repository):
 
