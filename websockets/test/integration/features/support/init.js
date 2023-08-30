@@ -17,14 +17,13 @@
 const apickli = require("apickli");
 const { Before: before } = require("@cucumber/cucumber");
 
-if (!process.env.PROXY_URL || !process.env.CLIENT_ID_1) {
+if (!process.env.PROXY_URL || !process.env.CLIENT_ID) {
   
   console.log();
-  console.log('Environment variables PROXY_URL, CLIENT_ID_1 must be set before the tests can be run.');
+  console.log('Environment variables PROXY_URL, CLIENT_ID must be set before the tests can be run.');
   console.log();
   console.log('Please set the Environment variables and try running the command again.');
   console.log();
-
   process.exit(1);
 
 } else {
@@ -33,6 +32,6 @@ if (!process.env.PROXY_URL || !process.env.CLIENT_ID_1) {
       "https",
       process.env.PROXY_URL
     );
-    this.apickli.setGlobalVariable("clientId1", process.env.CLIENT_ID_1);
+    this.apickli.setGlobalVariable("clientId", process.env.CLIENT_ID);
   });
 }
