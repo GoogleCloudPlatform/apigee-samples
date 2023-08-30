@@ -136,6 +136,7 @@ Go ahead and save the Service URL, since it will be used in the next step when w
 
 ```bash
 CLOUD_RUN_SERVICE_URL=$(gcloud run services describe websockets-echo-server --platform managed --region $REGION --format 'value(status.url)' | sed -E 's/http.+\///')
+export CLOUD_RUN_SERVICE_URL
 ```
 
 ### Deploy Apigee Resources
