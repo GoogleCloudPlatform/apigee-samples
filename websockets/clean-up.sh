@@ -56,4 +56,4 @@ echo "Deleting proxy websockets"
 apigeecli apis delete --name websockets --org "$PROJECT" --token "$TOKEN"
 
 echo "Deleting target server websockets"
-apigeecli targetservers delete --name websockets --org "$PROJECT" --token "$TOKEN"
+apigeecli targetservers delete --name websockets --org "$PROJECT" --token "$TOKEN" -e "$APIGEE_ENV"
