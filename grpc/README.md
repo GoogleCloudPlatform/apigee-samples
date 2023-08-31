@@ -36,8 +36,7 @@ Use the following GCP CloudShell tutorial, and follow the instructions.
 
 ## Create a gRPC backend
 
-Create the Docker image:
-
+In this first step we will create a docker image with the hello world application.
 Go to Cloud Shell, and clone the gRPC repo:
 
 ```sh
