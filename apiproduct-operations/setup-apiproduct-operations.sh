@@ -51,7 +51,7 @@ create_app() {
 
 import_and_deploy_apiproxy() {
 	local proxy_name=$1
-	REV=$(apigeecli apis create bundle -f ./bundles/${proxy_name}/apiproxy -n "$proxy_name" --org "$PROJECT" --token "$TOKEN" --disable-check | jq ."revision" -r)
+	REV=$(apigeecli apis create bundle -f "./bundles/${proxy_name}/apiproxy" -n "$proxy_name" --org "$PROJECT" --token "$TOKEN" --disable-check | jq ."revision" -r)
 	apigeecli apis deploy --wait --name "$proxy_name" --ovr --rev "$REV" --org "$PROJECT" --env "$APIGEE_ENV" --token "$TOKEN" --disable-check
 }
 
@@ -94,9 +94,9 @@ else
 fi
 
 echo "Checking and possibly Creating Developer Apps"
-VIEWER_CLIENT_CREDS=($(create_app "apiproduct-operations-viewer" "${DEVELOPER_EMAIL}"))
-CREATOR_CLIENT_CREDS=($(create_app "apiproduct-operations-creator" "${DEVELOPER_EMAIL}"))
-ADMIN_CLIENT_CREDS=($(create_app "apiproduct-operations-admin" "${DEVELOPER_EMAIL}"))
+mapfile -t VIEWER_CLIENT_CREDS < <(create_app "apiproduct-operations-viewer" "${DEVELOPER_EMAIL}")
+mapfile -t CREATOR_CLIENT_CREDS < <(create_app "apiproduct-operations-creator" "${DEVELOPER_EMAIL}")
+mapfile -t ADMIN_CLIENT_CREDS < <(create_app "apiproduct-operations-admin" "${DEVELOPER_EMAIL}")
 
 # these vars are all expected by integration tests (apickli)
 export SAMPLE_PROXY_BASEPATH="/v1/samples/$PROXY_NAME"

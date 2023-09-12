@@ -19,7 +19,7 @@ might each have a different rate limit, for example. Or different pricing
 levels. Or different target systems. Information about which data fields to include or
 exclude from a response. OAuth scopes. It's a very flexible model.
 
-### API Product Operations
+### The Operations within an API Product
 
 One particular aspect of an API Product is the set of Operations it allows.
 
@@ -163,7 +163,7 @@ Ensure the required environment variables have been set correctly. The setup
 script will provide easy cut/paste instructions regarding the variables and the values to set.
 
 And then use `npm` to run the tests:
-```
+```bash
 npm run test
 ```
 
@@ -176,7 +176,7 @@ corresponding apps  (`apiproduct-operations-{viewer,creator,admin}-app`). Instru
 application credentials can be found [here](https://cloud.google.com/apigee/docs/api-platform/publish/creating-apps-surface-your-api#view-api-key).
 
 Invoke your first request using the viewer credential:
-```
+```bash
 curl -i -X GET https://${APIGEE_HOST}/v1/samples/apiproduct-operations/apikey/users -H APIKEY:$VIEWER_CLIENT_ID"
 ```
 
@@ -184,7 +184,7 @@ Because the viewer credential is authorized on the viewer Product, which allows
 the `GET /*/users` operation, you should see a success response.
 
 Now try the creator credential on the same request
-```
+```bash
 curl -i -X GET https://${APIGEE_HOST}/v1/samples/apiproduct-operations/apikey/users -H APIKEY:$CREATOR_CLIENT_ID"
 ```
 

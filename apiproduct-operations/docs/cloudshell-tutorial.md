@@ -1,4 +1,4 @@
-## API Product Operations
+# API Product Operations
 
 This sample shows how to use API Product Operations to limit the particular
 verb/path combinations that will be permitted for an authenticated caller
@@ -66,7 +66,7 @@ then deploys them. The script then creates a Developer entity, three API
 products with different Operations settings, and three Apps, each one authorized
 for just one of those products.
 
-The script also tests that the deployment and configuration has been sucessful.
+The script also tests that the deployment and configuration has been successful.
 
 ---
 
