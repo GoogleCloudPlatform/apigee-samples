@@ -18,68 +18,67 @@ PROXY_NAME=apiproduct-operations
 OAUTH_CC_PROXY_NAME=apiproduct-operations-oauth2
 
 delete_product() {
-    local product_name=$1
-    apigeecli products get --name "${product_name}" --org "$PROJECT" --token "$TOKEN" --disable-check >> /dev/null 2>&1
-    if [[ $? -eq 0 ]] ; then
-        printf "Deleting API Product %s\n" ${product_name}
-        apigeecli products delete --name "${product_name}" --org "$PROJECT" --token "$TOKEN" --disable-check
-    else
-        printf "  The apiproduct %s does not exist.\n" ${product_name}
-    fi
+	local product_name=$1
+	apigeecli products get --name "${product_name}" --org "$PROJECT" --token "$TOKEN" --disable-check >>/dev/null 2>&1
+	if [[ $? -eq 0 ]]; then
+		printf "Deleting API Product %s\n" ${product_name}
+		apigeecli products delete --name "${product_name}" --org "$PROJECT" --token "$TOKEN" --disable-check
+	else
+		printf "  The apiproduct %s does not exist.\n" ${product_name}
+	fi
 }
 
 delete_app() {
-    local developer_id=$1
-    local app_name=$2
-    printf "Checking Developer App %s\n" ${app_name}
-    local NUM_APPS=$(apigeecli apps get --name ${app_name} --org "$PROJECT" --token "$TOKEN" --disable-check | jq -r .'| length')
-    if [[ $NUM_APPS -eq 1 ]] ; then
-        printf "Deleting Developer App %s\n" ${app_name}
-        apigeecli apps delete --id ${developer_id} --name ${app_name} --org "$PROJECT" --token "$TOKEN"
-    else
-        printf "  The app %s does not exist for developer %s.\n" ${app_name} ${developer_id}
-    fi
+	local developer_id=$1
+	local app_name=$2
+	printf "Checking Developer App %s\n" ${app_name}
+	local NUM_APPS=$(apigeecli apps get --name ${app_name} --org "$PROJECT" --token "$TOKEN" --disable-check | jq -r .'| length')
+	if [[ $NUM_APPS -eq 1 ]]; then
+		printf "Deleting Developer App %s\n" ${app_name}
+		apigeecli apps delete --id ${developer_id} --name ${app_name} --org "$PROJECT" --token "$TOKEN"
+	else
+		printf "  The app %s does not exist for developer %s.\n" ${app_name} ${developer_id}
+	fi
 }
 
 delete_developer() {
-    local developer_email=$1
-    apigeecli developers get --email  ${developer_email} --org "$PROJECT" --token "$TOKEN" --disable-check >> /dev/null 2>&1
-    if [[ $? -eq 0 ]] ; then
-        apigeecli developers delete --email ${developer_email} --org "$PROJECT" --token "$TOKEN" --disable-check
-    else
-        printf "  The developer %s does not exist.\n" ${developer_email}
-    fi
+	local developer_email=$1
+	apigeecli developers get --email ${developer_email} --org "$PROJECT" --token "$TOKEN" --disable-check >>/dev/null 2>&1
+	if [[ $? -eq 0 ]]; then
+		apigeecli developers delete --email ${developer_email} --org "$PROJECT" --token "$TOKEN" --disable-check
+	else
+		printf "  The developer %s does not exist.\n" ${developer_email}
+	fi
 }
 
 delete_apiproxy() {
-    local proxy_name=$1
-    printf "Checking Proxy %s\n" ${proxy_name}
-    apigeecli apis get --name $proxy_name --org "$PROJECT" --token "$TOKEN" --disable-check > /dev/null 2>&1
-    if [[ $? -eq 0 ]]; then
-        OUTFILE=$(mktemp /tmp/apigee-samples.apigeecli.out.XXXXXX)
-        apigeecli apis listdeploy --name $proxy_name --org "$PROJECT" --token "$TOKEN" --disable-check > $OUTFILE 2>&1
-        if [[ $? -eq 0 ]]; then
-            NUM_DEPLOYS=$(jq -r '.deployments | length' $OUTFILE )
-            if [[ $NUM_DEPLOYS -ne 0 ]]; then
-                echo "Undeploying ${proxy_name}"
-                for (( i = 0; i < $NUM_DEPLOYS; i++ ))
-                do
-                    ENVNAME=$(jq -r ".deployments[$i].environment" $OUTFILE )
-                    REV=$(jq -r ".deployments[$i].revision" $OUTFILE )
-                    apigeecli apis undeploy --name ${proxy_name} --env "$ENVNAME" --rev "$REV" --org "$PROJECT" --token "$TOKEN" --disable-check
-                done
-            else
-                printf "  There are no deployments of ${proxy_name} to remove.\n"
-            fi
-        fi
-        [[ -f "$OUTFILE" ]] && rm $OUTFILE
+	local proxy_name=$1
+	printf "Checking Proxy %s\n" ${proxy_name}
+	apigeecli apis get --name $proxy_name --org "$PROJECT" --token "$TOKEN" --disable-check >/dev/null 2>&1
+	if [[ $? -eq 0 ]]; then
+		OUTFILE=$(mktemp /tmp/apigee-samples.apigeecli.out.XXXXXX)
+		apigeecli apis listdeploy --name $proxy_name --org "$PROJECT" --token "$TOKEN" --disable-check >$OUTFILE 2>&1
+		if [[ $? -eq 0 ]]; then
+			NUM_DEPLOYS=$(jq -r '.deployments | length' $OUTFILE)
+			if [[ $NUM_DEPLOYS -ne 0 ]]; then
+				echo "Undeploying ${proxy_name}"
+				for ((i = 0; i < $NUM_DEPLOYS; i++)); do
+					ENVNAME=$(jq -r ".deployments[$i].environment" $OUTFILE)
+					REV=$(jq -r ".deployments[$i].revision" $OUTFILE)
+					apigeecli apis undeploy --name ${proxy_name} --env "$ENVNAME" --rev "$REV" --org "$PROJECT" --token "$TOKEN" --disable-check
+				done
+			else
+				printf "  There are no deployments of ${proxy_name} to remove.\n"
+			fi
+		fi
+		[[ -f "$OUTFILE" ]] && rm $OUTFILE
 
-        echo "Deleting proxy ${proxy_name}"
-        apigeecli apis delete --name ${proxy_name} --org "$PROJECT" --token "$TOKEN" --disable-check
+		echo "Deleting proxy ${proxy_name}"
+		apigeecli apis delete --name ${proxy_name} --org "$PROJECT" --token "$TOKEN" --disable-check
 
-    else
-        printf "  The proxy ${proxy_name} does not exist.\n"
-    fi
+	else
+		printf "  The proxy ${proxy_name} does not exist.\n"
+	fi
 }
 
 [[ -z "$PROJECT" ]] && echo "No PROJECT variable set" && exit 1
@@ -94,23 +93,23 @@ export PATH=$PATH:$HOME/.apigeecli/bin
 
 DEVELOPER_EMAIL="${PROXY_NAME}-apigeesamples@acme.com"
 printf "Checking Developer %s\n" ${DEVELOPER_EMAIL}
-apigeecli developers get --email ${DEVELOPER_EMAIL} --org "$PROJECT" --token "$TOKEN" --disable-check >> /dev/null 2>&1
-if [[ $? -eq 0 ]] ; then
-    echo "Checking Developer Apps"
-    DEVELOPER_ID=$(apigeecli developers get --email ${DEVELOPER_EMAIL} --org "$PROJECT" --token "$TOKEN" --disable-check | jq -r .'developerId' )
-    for apptype in "viewer" "creator" "admin"; do
-        delete_app  "$DEVELOPER_ID" "apiproduct-operations-${apptype}-app"
-    done
+apigeecli developers get --email ${DEVELOPER_EMAIL} --org "$PROJECT" --token "$TOKEN" --disable-check >>/dev/null 2>&1
+if [[ $? -eq 0 ]]; then
+	echo "Checking Developer Apps"
+	DEVELOPER_ID=$(apigeecli developers get --email ${DEVELOPER_EMAIL} --org "$PROJECT" --token "$TOKEN" --disable-check | jq -r .'developerId')
+	for apptype in "viewer" "creator" "admin"; do
+		delete_app "$DEVELOPER_ID" "apiproduct-operations-${apptype}-app"
+	done
 
-    echo "Deleting Developer"
-    delete_developer ${DEVELOPER_EMAIL}
+	echo "Deleting Developer"
+	delete_developer ${DEVELOPER_EMAIL}
 else
-    printf "  The developer %s does not exist.\n" ${DEVELOPER_EMAIL}
+	printf "  The developer %s does not exist.\n" ${DEVELOPER_EMAIL}
 fi
 
 echo "Checking API Products"
 for apptype in "viewer" "creator" "admin"; do
-    delete_product  "apiproduct-operations-${apptype}"
+	delete_product "apiproduct-operations-${apptype}"
 done
 
 delete_apiproxy ${PROXY_NAME}

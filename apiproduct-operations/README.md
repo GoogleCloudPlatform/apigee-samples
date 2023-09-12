@@ -70,7 +70,7 @@ When the API request reaches Apigee, the API proxy that handles it must invoke a
 policy to verify the credentials - either
 [VerifyAPIKey](https://cloud.google.com/apigee/docs/api-platform/reference/policies/verify-api-key-policy)
 or
-[OAuthV2/VeriryAccessToken](https://cloud.google.com/apigee/docs/api-platform/reference/policies/oauthv2-policy#verifyaccesstoken). When
+[OAuthV2/VerifyAccessToken](https://cloud.google.com/apigee/docs/api-platform/reference/policies/oauthv2-policy#verifyaccesstoken). When
 that happens, Apigee checks the credential and maps it to one or more API
 Products. (In the simple case, an app is authorized for a single API Product,
 but Apigee allows apps to have access to more than one product.)  Then, Apigee
@@ -97,13 +97,13 @@ For the purposes of demonstration, the proxy uses an
 policy to set a mock success response, which includes the API product name, and
 the operation that was authorized.
 
-There's also a conditional flow in the proxy that uses [OAuthV2/VeriryAccessToken](https://cloud.google.com/apigee/docs/api-platform/reference/policies/oauthv2-policy#verifyaccesstoken) in place of VerifyAPIKey.
+There's also a conditional flow in the proxy that uses [OAuthV2/VerifyAccessToken](https://cloud.google.com/apigee/docs/api-platform/reference/policies/oauthv2-policy#verifyaccesstoken) in place of VerifyAPIKey.
 The behavior with regard to operations authorization checks is exactly the same.
 
 
 ## Screencast
 
-[![Alt text](./img/screenshot-20230828-140220.png)](https://www.youtube.com/watch?v=ep7h_tGHtiw)
+[![screencast link](https://img.youtube.com/vi/to-be-determined/0.jpg)](https://www.youtube.com/watch?v=to-be-determined)
 
 ## Prerequisites
 
@@ -121,7 +121,7 @@ The behavior with regard to operations authorization checks is exactly the same.
 
 Use the following GCP CloudShell tutorial, and follow the instructions.
 
-[![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/DinoChiesa/apigee-samples&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=apiproduct-operations/docs/cloudshell-tutorial.md)
+[![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/apigee-samples&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=apiproduct-operations/docs/cloudshell-tutorial.md)
 
 ## Manual Setup instructions
 
@@ -132,7 +132,7 @@ If you choose _not_ to follow the tutorial in Cloud Shell, you can follow these 
 
    ```bash
    git clone https://github.com/GoogleCloudPlatform/apigee-samples.git
-   cd b/apiproduct-operations
+   cd apiproduct-operations
    ```
 
 2. Edit `env.sh` and configure the following variables:
