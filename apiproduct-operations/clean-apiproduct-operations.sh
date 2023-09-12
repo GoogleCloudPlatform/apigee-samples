@@ -55,7 +55,7 @@ delete_apiproxy() {
 	printf "Checking Proxy %s\n" "${proxy_name}"
 	if apigeecli apis get --name "$proxy_name" --org "$PROJECT" --token "$TOKEN" --disable-check >/dev/null 2>&1; then
 		OUTFILE=$(mktemp /tmp/apigee-samples.apigeecli.out.XXXXXX)
-		if apigeecli apis listdeploy --name "$proxy_name" --org "$PROJECT" --token "$TOKEN" --disable-check >$OUTFILE 2>&1; then
+		if apigeecli apis listdeploy --name "$proxy_name" --org "$PROJECT" --token "$TOKEN" --disable-check >"$OUTFILE" 2>&1; then
 			NUM_DEPLOYS=$(jq -r '.deployments | length' "$OUTFILE")
 			if [[ $NUM_DEPLOYS -ne 0 ]]; then
 				echo "Undeploying ${proxy_name}"

@@ -23,7 +23,7 @@ create_apiproduct() {
 	if apigeecli products get --name "${product_name}" --org "$PROJECT" --token "$TOKEN" --disable-check >>/dev/null 2>&1; then
 		[[ ! -f "$ops_file" ]] && printf "missing operations definition file %s\n" "$ops_file" && exit 1
 		apigeecli products create --name "${product_name}" --displayname "${product_name}" \
-			--opgrp $ops_file \
+			--opgrp "$ops_file" \
 			--envs "$APIGEE_ENV" --approval auto \
 			--org "$PROJECT" --token "$TOKEN"
 	else
@@ -40,13 +40,13 @@ create_app() {
 	local NUM_APPS
 	NUM_APPS=$(apigeecli apps get --name "${app_name}" --org "$PROJECT" --token "$TOKEN" --disable-check | jq -r .'| length')
 	if [[ $NUM_APPS -eq 0 ]]; then
-		IFS=$' ' KEYPAIR=($(apigeecli apps create --name "${app_name}" --email "${developer}" --prods "${product_name}" --org "$PROJECT" --token "$TOKEN" --disable-check | jq -r ".credentials[0] | .consumerKey,.consumerSecret"))
+		mapfile -t KEYPAIR < <(apigeecli apps create --name "${app_name}" --email "${developer}" --prods "${product_name}" --org "$PROJECT" --token "$TOKEN" --disable-check | jq -r ".credentials[0] | .consumerKey,.consumerSecret")
 	else
 		# must not echo here, it corrupts the return value of the function.
 		# printf "  The app %s already exists!\n" ${app_name}
-		IFS=$' ' KEYPAIR=($(apigeecli apps get --name "${app_name}" --org "$PROJECT" --token "$TOKEN" --disable-check | jq -r ".[0].credentials[0] | .consumerKey,.consumerSecret"))
+		mapfile -t KEYPAIR < <(apigeecli apps get --name "${app_name}" --org "$PROJECT" --token "$TOKEN" --disable-check | jq -r ".[0].credentials[0] | .consumerKey,.consumerSecret")
 	fi
-	echo ${KEYPAIR}
+	echo "${KEYPAIR[@]}"
 }
 
 import_and_deploy_apiproxy() {
@@ -75,8 +75,8 @@ node_modules/apigeelint/cli.js -s ./bundles/apiproduct-operations/apiproxy -f ta
 echo "Configuring Apigee artifacts..."
 
 echo "Importing and Deploying Apigee the proxies..."
-import_and_deploy_apiproxy $PROXY_NAME
-import_and_deploy_apiproxy $OAUTH_CC_PROXY_NAME
+import_and_deploy_apiproxy "$PROXY_NAME"
+import_and_deploy_apiproxy "$OAUTH_CC_PROXY_NAME"
 
 echo "Creating API Products"
 create_apiproduct "apiproduct-operations-viewer"
@@ -84,8 +84,8 @@ create_apiproduct "apiproduct-operations-creator"
 create_apiproduct "apiproduct-operations-admin"
 
 DEVELOPER_EMAIL="${PROXY_NAME}-apigeesamples@acme.com"
-printf "Creating Developer %s\n" ${DEVELOPER_EMAIL}
-if apigeecli developers get --email ${DEVELOPER_EMAIL} --org "$PROJECT" --token "$TOKEN" --disable-check >>/dev/null 2>&1; then
+printf "Creating Developer %s\n" "${DEVELOPER_EMAIL}"
+if apigeecli developers get --email "${DEVELOPER_EMAIL}" --org "$PROJECT" --token "$TOKEN" --disable-check >>/dev/null 2>&1; then
 	apigeecli developers create --user "${DEVELOPER_EMAIL}" --email "${DEVELOPER_EMAIL}" \
 		--first APIProduct --last SampleDeveloper \
 		--org "$PROJECT" --token "$TOKEN"
@@ -94,9 +94,9 @@ else
 fi
 
 echo "Checking and possibly Creating Developer Apps"
-VIEWER_CLIENT_CREDS=($(create_app "apiproduct-operations-viewer" ${DEVELOPER_EMAIL}))
-CREATOR_CLIENT_CREDS=($(create_app "apiproduct-operations-creator" ${DEVELOPER_EMAIL}))
-ADMIN_CLIENT_CREDS=($(create_app "apiproduct-operations-admin" ${DEVELOPER_EMAIL}))
+VIEWER_CLIENT_CREDS=($(create_app "apiproduct-operations-viewer" "${DEVELOPER_EMAIL}"))
+CREATOR_CLIENT_CREDS=($(create_app "apiproduct-operations-creator" "${DEVELOPER_EMAIL}"))
+ADMIN_CLIENT_CREDS=($(create_app "apiproduct-operations-admin" "${DEVELOPER_EMAIL}"))
 
 # these vars are all expected by integration tests (apickli)
 export SAMPLE_PROXY_BASEPATH="/v1/samples/$PROXY_NAME"
