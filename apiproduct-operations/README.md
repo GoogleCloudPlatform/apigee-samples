@@ -101,10 +101,6 @@ There's also a conditional flow in the proxy that uses [OAuthV2/VerifyAccessToke
 The behavior with regard to operations authorization checks is exactly the same.
 
 
-## Screencast
-
-[![screencast link](https://img.youtube.com/vi/to-be-determined/0.jpg)](https://www.youtube.com/watch?v=to-be-determined)
-
 ## Prerequisites
 
 1. [Provision Apigee X](https://cloud.google.com/apigee/docs/api-platform/get-started/provisioning-intro)
