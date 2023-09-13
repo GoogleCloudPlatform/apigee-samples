@@ -89,18 +89,18 @@ curl -s https://raw.githubusercontent.com/apigee/apigeecli/master/downloadLatest
 export PATH=$PATH:$HOME/.apigeecli/bin
 
 DEVELOPER_EMAIL="${PROXY_NAME}-apigeesamples@acme.com"
-printf "Checking Developer %s\n" ${DEVELOPER_EMAIL}
-if apigeecli developers get --email ${DEVELOPER_EMAIL} --org "$PROJECT" --token "$TOKEN" --disable-check >>/dev/null 2>&1; then
+printf "Checking Developer %s\n" "${DEVELOPER_EMAIL}"
+if apigeecli developers get --email "${DEVELOPER_EMAIL}" --org "$PROJECT" --token "$TOKEN" --disable-check >>/dev/null 2>&1; then
 	echo "Checking Developer Apps"
-	DEVELOPER_ID=$(apigeecli developers get --email ${DEVELOPER_EMAIL} --org "$PROJECT" --token "$TOKEN" --disable-check | jq -r .'developerId')
+	DEVELOPER_ID=$(apigeecli developers get --email "${DEVELOPER_EMAIL}" --org "$PROJECT" --token "$TOKEN" --disable-check | jq -r .'developerId')
 	for apptype in "viewer" "creator" "admin"; do
 		delete_app "$DEVELOPER_ID" "apiproduct-operations-${apptype}-app"
 	done
 
 	echo "Deleting Developer"
-	delete_developer ${DEVELOPER_EMAIL}
+	delete_developer "${DEVELOPER_EMAIL}"
 else
-	printf "  The developer %s does not exist.\n" ${DEVELOPER_EMAIL}
+	printf "  The developer %s does not exist.\n" "${DEVELOPER_EMAIL}"
 fi
 
 echo "Checking API Products"
@@ -108,8 +108,8 @@ for apptype in "viewer" "creator" "admin"; do
 	delete_product "apiproduct-operations-${apptype}"
 done
 
-delete_apiproxy ${PROXY_NAME}
-delete_apiproxy ${OAUTH_CC_PROXY_NAME}
+delete_apiproxy "${PROXY_NAME}"
+delete_apiproxy "${OAUTH_CC_PROXY_NAME}"
 
 echo " "
 echo "All the Apigee artifacts should have been removed."

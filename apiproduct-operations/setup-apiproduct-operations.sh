@@ -21,13 +21,13 @@ create_apiproduct() {
 	local product_name=$1
 	local ops_file="./configuration-data/operations-defn-${product_name}.json"
 	if apigeecli products get --name "${product_name}" --org "$PROJECT" --token "$TOKEN" --disable-check >>/dev/null 2>&1; then
+		printf "  The apiproduct %s already exists!\n" "${product_name}"
+	else
 		[[ ! -f "$ops_file" ]] && printf "missing operations definition file %s\n" "$ops_file" && exit 1
 		apigeecli products create --name "${product_name}" --displayname "${product_name}" \
 			--opgrp "$ops_file" \
 			--envs "$APIGEE_ENV" --approval auto \
-			--org "$PROJECT" --token "$TOKEN"
-	else
-		printf "  The apiproduct %s already exists!\n" "${product_name}"
+			--org "$PROJECT" --token "$TOKEN" --disable-check
 	fi
 }
 
@@ -86,17 +86,17 @@ create_apiproduct "apiproduct-operations-admin"
 DEVELOPER_EMAIL="${PROXY_NAME}-apigeesamples@acme.com"
 printf "Creating Developer %s\n" "${DEVELOPER_EMAIL}"
 if apigeecli developers get --email "${DEVELOPER_EMAIL}" --org "$PROJECT" --token "$TOKEN" --disable-check >>/dev/null 2>&1; then
+	printf "  The developer already exists.\n"
+else
 	apigeecli developers create --user "${DEVELOPER_EMAIL}" --email "${DEVELOPER_EMAIL}" \
 		--first APIProduct --last SampleDeveloper \
-		--org "$PROJECT" --token "$TOKEN"
-else
-	printf "  The developer already exists.\n"
+		--org "$PROJECT" --token "$TOKEN" --disable-check
 fi
 
 echo "Checking and possibly Creating Developer Apps"
-mapfile -t VIEWER_CLIENT_CREDS < <(create_app "apiproduct-operations-viewer" "${DEVELOPER_EMAIL}")
-mapfile -t CREATOR_CLIENT_CREDS < <(create_app "apiproduct-operations-creator" "${DEVELOPER_EMAIL}")
-mapfile -t ADMIN_CLIENT_CREDS < <(create_app "apiproduct-operations-admin" "${DEVELOPER_EMAIL}")
+IFS=$' ' read -a VIEWER_CLIENT_CREDS <<<$(create_app "apiproduct-operations-viewer" "${DEVELOPER_EMAIL}")
+IFS=$' ' read -a CREATOR_CLIENT_CREDS <<<$(create_app "apiproduct-operations-creator" "${DEVELOPER_EMAIL}")
+IFS=$' ' read -a ADMIN_CLIENT_CREDS <<<$(create_app "apiproduct-operations-admin" "${DEVELOPER_EMAIL}")
 
 # these vars are all expected by integration tests (apickli)
 export SAMPLE_PROXY_BASEPATH="/v1/samples/$PROXY_NAME"
@@ -114,8 +114,9 @@ echo " "
 echo "All the Apigee artifacts are successfully deployed."
 echo " "
 echo "Copy/paste these statements into cloud shell to set variables for the"
-echo "API Keys and secrets:"
-#echo "  export SAMPLE_PROXY_BASEPATH=$SAMPLE_PROXY_BASEPATH"
+echo "API Keys and secrets. You need the CLIENT_SECRET variables only if you"
+echo "will be using the access token examples."
+echo " "
 echo "  export VIEWER_CLIENT_ID=$VIEWER_CLIENT_ID"
 echo "  export CREATOR_CLIENT_ID=$CREATOR_CLIENT_ID"
 echo "  export ADMIN_CLIENT_ID=$ADMIN_CLIENT_ID"
@@ -124,7 +125,6 @@ echo "  export VIEWER_CLIENT_SECRET=$VIEWER_CLIENT_SECRET"
 echo "  export CREATOR_CLIENT_SECRET=$CREATOR_CLIENT_SECRET"
 echo "  export ADMIN_CLIENT_SECRET=$ADMIN_CLIENT_SECRET"
 echo " "
-echo "You need the CLIENT_SECRET variables only if you will be using the access token examples."
 echo " "
 echo "-----------------------------"
 echo " "

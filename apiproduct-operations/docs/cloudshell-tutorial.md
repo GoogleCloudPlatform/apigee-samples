@@ -55,7 +55,7 @@ Let's get started!
 
 ## Deploy Apigee components
 
-Next, let's create and deploy the Apigee resources necessary to test the quota policy.
+Next, let's create and deploy the Apigee resources necessary to test the API Product operations capabilities.
 
 ```sh
 ./setup-apiproduct-operations.sh
