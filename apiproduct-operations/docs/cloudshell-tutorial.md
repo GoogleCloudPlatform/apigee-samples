@@ -8,7 +8,11 @@ Let's get started!
 
 ---
 
-## Setup environment
+## Set up your environment
+
+The following steps will set up your environment.
+
+## First, sign-in
 
 1. Check your credentials.
    ```sh
@@ -32,6 +36,9 @@ Let's get started!
 
    Ignore that :). Proceed anyway.
 
+---
+
+## Change to the correct directory, and set some variables
 
 2. Navigate to the `apiproduct-operations` directory in the Cloud shell.
 
@@ -75,11 +82,11 @@ The script also tests that the deployment and configuration has been successful.
 When the script finishes, it prints the proxy and app
 information you will need to run the commands below.
 
-1. First, set the required shell variables:
+1. Set the required shell variables:
    ```sh
-   export VIEWER_CLIENT_ID=<replace with script output>
-   export CREATOR_CLIENT_ID=<replace with script output>
-   export ADMIN_CLIENT_ID=<replace with script output>
+   VIEWER_CLIENT_ID=<replace with script output>
+   CREATOR_CLIENT_ID=<replace with script output>
+   ADMIN_CLIENT_ID=<replace with script output>
    ```
 
 2. Now, run the following command, intended to be the kind of REST request an
@@ -152,7 +159,6 @@ information you will need to run the commands below.
       -H APIKEY:$ADMIN_CLIENT_ID
    ```
 
----
 
 ## Test the APIs using OAuthV2 token Validation (A)
 
@@ -171,9 +177,9 @@ be `token`, and passing a different header.
    done this, this step is unnecessary.
 
    ```sh
-   export VIEWER_CLIENT_SECRET=<replace with script output>
-   export CREATOR_CLIENT_SECRET=<replace with script output>
-   export ADMIN_CLIENT_SECRET=<replace with script output>
+   VIEWER_CLIENT_SECRET=<replace with script output>
+   CREATOR_CLIENT_SECRET=<replace with script output>
+   ADMIN_CLIENT_SECRET=<replace with script output>
    ```
 
 2. Now, run the following command, to obtain a token for the VIEWER.

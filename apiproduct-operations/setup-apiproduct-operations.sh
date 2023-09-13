@@ -94,11 +94,14 @@ else
 fi
 
 echo "Checking and possibly Creating Developer Apps"
+# shellcheck disable=SC2046,SC2162
 IFS=$' ' read -a VIEWER_CLIENT_CREDS <<<$(create_app "apiproduct-operations-viewer" "${DEVELOPER_EMAIL}")
+# shellcheck disable=SC2046,SC2162
 IFS=$' ' read -a CREATOR_CLIENT_CREDS <<<$(create_app "apiproduct-operations-creator" "${DEVELOPER_EMAIL}")
+# shellcheck disable=SC2046,SC2162
 IFS=$' ' read -a ADMIN_CLIENT_CREDS <<<$(create_app "apiproduct-operations-admin" "${DEVELOPER_EMAIL}")
 
-# these vars are all expected by integration tests (apickli)
+# Must export. These vars are all expected by the integration tests (apickli).
 export SAMPLE_PROXY_BASEPATH="/v1/samples/$PROXY_NAME"
 export VIEWER_CLIENT_ID=${VIEWER_CLIENT_CREDS[0]}
 export CREATOR_CLIENT_ID=${CREATOR_CLIENT_CREDS[0]}
@@ -117,13 +120,13 @@ echo "Copy/paste these statements into cloud shell to set variables for the"
 echo "API Keys and secrets. You need the CLIENT_SECRET variables only if you"
 echo "will be using the access token examples."
 echo " "
-echo "  export VIEWER_CLIENT_ID=$VIEWER_CLIENT_ID"
-echo "  export CREATOR_CLIENT_ID=$CREATOR_CLIENT_ID"
-echo "  export ADMIN_CLIENT_ID=$ADMIN_CLIENT_ID"
+echo "  VIEWER_CLIENT_ID=$VIEWER_CLIENT_ID"
+echo "  CREATOR_CLIENT_ID=$CREATOR_CLIENT_ID"
+echo "  ADMIN_CLIENT_ID=$ADMIN_CLIENT_ID"
 echo ""
-echo "  export VIEWER_CLIENT_SECRET=$VIEWER_CLIENT_SECRET"
-echo "  export CREATOR_CLIENT_SECRET=$CREATOR_CLIENT_SECRET"
-echo "  export ADMIN_CLIENT_SECRET=$ADMIN_CLIENT_SECRET"
+echo "  VIEWER_CLIENT_SECRET=$VIEWER_CLIENT_SECRET"
+echo "  CREATOR_CLIENT_SECRET=$CREATOR_CLIENT_SECRET"
+echo "  ADMIN_CLIENT_SECRET=$ADMIN_CLIENT_SECRET"
 echo " "
 echo " "
 echo "-----------------------------"
