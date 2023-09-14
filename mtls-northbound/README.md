@@ -45,7 +45,7 @@ These are the high level tasks to configure mTLS on an existing GLB configuratio
 
 Use the following GCP CloudShell tutorial, and follow the instructions in Cloud Shell. Alternatively, follow the instructions below.
 
-[![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/apigee-samples&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=cors/docs/cloudshell-tutorial.md)
+[![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/kurtkanaskie/apigee-samples&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=mtls-northbound/docs/cloudshell-tutorial.md)
 
 ## Setup instructions
 
@@ -67,12 +67,14 @@ gcloud auth login
 * `PROJECT` the project where your Apigee organization is located.
 * `APIGEE_HOST` the externally reachable hostname of the Apigee environment group that contains APIGEE_ENV.
 * `APIGEE_ENV` the Apigee environment where the demo resources should be created.
-* `TARGET_PROXY` the Target HTTPS Proxy used in your GLB configuration.
-* `BACKEND_SERVICE` the Backend Service used in your GLB configuration.
 * `POOL` the name of the Private CA pool (e.g. partners-pool).
 * `ROOT` the name of the Root CA in the pool (e.g. partner1-root-ca).
 * `TRUST_CONFIG` the name of the Trust Configuration for the Root CA (e.g. partner1-trust-config).
 * `CERT_NAME` the name of the client certificate used in API calls (e.g. partner-1-client-1).
+
+Other environment variables set below.
+* `TARGET_PROXY` the Target HTTPS Proxy in your GLB configuration (set below).
+* `BACKEND_SERVICE` the Backend Service in your GLB configuration (set below).
 
 Now source the `env.sh` file
 
@@ -587,6 +589,14 @@ This one is from the invalid certificate request, without "-extended-key-usages=
 ## Conclusion & Cleanup
 
 Congratulations! You've successfully configured mTLS on your GLB and tested API requests in "lenient" and "strict" mode. You've also used Cloud Logging to observe errors when using "strict" mode.
+
+The clean up script:
+* Restores Target HTTPS Proxy to no mTLS
+* Verifies mTLS is not being enforced and then undeploys and deletes the API Proxy
+* Deletes Security Policies
+* Deletes Trust Config
+* Disables and deletes root CA
+* Deletes the private CA
 
 ```bash
 ./clean-up-mtls.sh

@@ -46,6 +46,7 @@ gcloud compute target-https-proxies import ${TARGET_PROXY} \
    --source=${TARGET_PROXY}-none.yaml  \
    --quiet
 
+echo "Verifying ${TARGET_PROXY} has been restored"
 while true
 do
     curl -s https://$APIGEE_HOST/sample-mtls | grep 200

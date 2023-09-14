@@ -19,11 +19,6 @@ export PROJECT="<GCP_PROJECT_ID>"
 export APIGEE_HOST="<APIGEE_DOMAIN_NAME>"
 export APIGEE_ENV="<APIGEE_ENVIRONMENT_NAME>"
 
-# Use: gcloud compute target-https-proxies list
-export TARGET_PROXY="<GCP_TARGET_PROXY_NAME>"
-# Use: gcloud compute backend-services list
-export BACKEND_SERVICE="<GCP_BACKEND_SERVICE_NAME>"
-
 # For the sample
 export POOL="partners-pool"
 export ROOT="partner1-root-ca"
