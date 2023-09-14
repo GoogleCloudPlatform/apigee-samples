@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ProxyEndpoint name="default">
+    <DefaultFaultRule name="DefaultFaultRule">
+        <AlwaysEnforce>true</AlwaysEnforce>
+    </DefaultFaultRule>
+    <PreFlow name="PreFlow">
+        <Request>
+            <Step>
+                <Condition>(request.header.x-bypass-mtls != "true") AND (request.header.x-client-cert-chain-verified = false)</Condition>
+                <Name>RF-bad-mtls-request</Name>
+            </Step>
+        </Request>
+        <Response>
+            <Step>
+                <Name>AM-response</Name>
+            </Step>
+        </Response>
+    </PreFlow>
+    <PostFlow name="PostFlow">
+        <Request/>
+        <Response/>
+    </PostFlow>
+    <PostClientFlow name="PostClientFlow">
+        <Request/>
+        <Response/>
+    </PostClientFlow>
+    <Flows/>
+    <HTTPProxyConnection>
+        <BasePath>/sample-mtls</BasePath>
+    </HTTPProxyConnection>
+    <RouteRule name="noroute"/>
+</ProxyEndpoint>

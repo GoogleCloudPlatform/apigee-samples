@@ -1,0 +1,14 @@
+<APIProxy revision="5" name="sample-mtls">
+    <DisplayName>notarget</DisplayName>
+    <Description>SC to test for errors, enabled false - With TLS protocol</Description>
+    <CreatedAt>1694197057627</CreatedAt>
+    <LastModifiedAt>1694197057627</LastModifiedAt>
+    <BasePaths>/sample-mtls</BasePaths>
+    <Policies>
+        <Policy>RF-bad-mtls-request</Policy>
+        <Policy>AM-response</Policy>
+    </Policies>
+    <ProxyEndpoints>
+        <ProxyEndpoint>default</ProxyEndpoint>
+    </ProxyEndpoints>
+</APIProxy>

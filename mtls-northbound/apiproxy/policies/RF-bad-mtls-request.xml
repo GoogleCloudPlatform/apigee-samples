@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<RaiseFault continueOnError="false" enabled="true" name="RF-bad-mtls-request">
+    <FaultResponse>
+        <Copy source="request">
+            <Headers/>
+        </Copy>
+        <Set>
+            <Payload contentType="application/json">
+{
+    "request":"{request.verb} {client.scheme}://{request.header.host}{request.uri}",
+    "status":"{message.status.code}",
+    "reason":"{message.reason.phrase}",
+    "error":"Bad Certificate Request",
+    "description":"Invalid or missing client certificate",
+    "mtls_error_details":{
+        "x-client-cert-error":"{request.header.x-client-cert-error}",
+        "x-client-cert-present":"{request.header.x-client-cert-present}",
+        "x-client-cert-chain-verified":"{request.header.x-client-cert-chain-verified}",
+        "x-client-cert-serial-number":"{request.header.x-client-cert-serial-number}",
+        "x-client-cert-hash":"{request.header.x-client-cert-hash}",
+        "x-client-cert-dnsname-sans":"{request.header.x-client-cert-dnsname-sans}",
+        "x-client-cert-uri-sans":"{request.header.x-client-cert-uri-sans}",
+        "x-client-cert-spiffe":"{request.header.x-client-cert-spiffe}",
+        "x-client-cert-valid-not-before":"{request.header.x-client-cert-valid-not-before}",
+        "x-client-cert-valid-not-after":"{request.header.x-client-cert-valid-not-after}"
+    }
+}
+</Payload>
+            <StatusCode>400</StatusCode>
+            <ReasonPhrase>Bad Request</ReasonPhrase>
+        </Set>
+    </FaultResponse>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+</RaiseFault>

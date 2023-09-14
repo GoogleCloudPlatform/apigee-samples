@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AssignMessage async="false" continueOnError="false" enabled="true" name="AM-response">
+    <Set>
+        <Payload contentType="application/json">
+{
+    "request":"{request.verb} {client.scheme}://{request.header.host}{request.uri}",
+    "status":"{message.status.code}",
+    "reason":"{message.reason.phrase}",
+    "organization":"{organization.name}",
+    "environment":"{environment.name}",
+    "tls_protocol":"{tls.protocol}",
+    "tls_cipher":"{tls.cipher}",
+    "tls_server.name":"{tls.server.name}",
+    "tls_session.id":"{tls.session.id}",
+    "mtls_details":{
+        "x-client-cert-error":"{request.header.x-client-cert-error}",
+        "x-client-cert-present":"{request.header.x-client-cert-present}",
+        "x-client-cert-chain-verified":"{request.header.x-client-cert-chain-verified}",
+        "x-client-cert-serial-number":"{request.header.x-client-cert-serial-number}",
+        "x-client-cert-hash":"{request.header.x-client-cert-hash}",
+        "x-client-cert-dnsname-sans":"{request.header.x-client-cert-dnsname-sans}",
+        "x-client-cert-dnsname-sans-decoded":"{decodeBase64(request.header.x-client-cert-dnsname-sans)}",
+        "x-client-cert-uri-sans":"{request.header.x-client-cert-uri-sans}",
+        "x-client-cert-uri-sans-decoded":"{decodeBase64(request.header.x-client-cert-uri-sans)}",
+        "x-client-cert-spiffe":"{request.header.x-client-cert-spiffe}",
+        "x-client-cert-valid-not-before":"{request.header.x-client-cert-valid-not-before}",
+        "x-client-cert-valid-not-after":"{request.header.x-client-cert-valid-not-after}"
+    }
+}
+</Payload>
+        <StatusCode>200</StatusCode>
+        <ReasonPhrase>OK</ReasonPhrase>
+    </Set>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+</AssignMessage>
