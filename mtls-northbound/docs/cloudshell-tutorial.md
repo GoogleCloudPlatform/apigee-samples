@@ -224,13 +224,13 @@ Next, let's deploy the "sample-mtls" proxy.
 Now that our API proxy is deployed, let's test to see what a non-mTLS response looks like.\
  Notice there are no values in the "mtls_details" properties.
 ```
-curl https://$APIGEE_HOST/sample-mtls
+curl https://$APIGEE_HOST/v1/sample-mtls
 ```
 
 Sample response:
 ```
 {
-    "request":"GET https://xapi-dev.kurtkanaskie.net/sample-mtls",
+    "request":"GET https://xapi-dev.kurtkanaskie.net/v1/sample-mtls",
     "status":"200",
     "reason":"OK",
     "organization":"apigeex-mint-kurt",
@@ -274,13 +274,13 @@ Notice the value of "x-client-cert-chain-verified" is false, we use that in a co
 The value in "x-client-cert-error" indicates the type of error. \
 The possible errors can be found [here](https://cloud.google.com/load-balancing/docs/https/https-logging-monitoring#failure-messages).
 ```
-curl https://$APIGEE_HOST/sample-mtls
+curl https://$APIGEE_HOST/v1/sample-mtls
 ```
 
 Sample response:
 ```
 {
-    "request":"GET https://xapi-dev.kurtkanaskie.net/sample-mtls",
+    "request":"GET https://xapi-dev.kurtkanaskie.net/v1/sample-mtls",
     "status":"400",
     "reason":"Bad Request",
     "error":"Bad Certificate Request",
@@ -338,13 +338,13 @@ Test with the valid certificate and key.
 
 Notice the value of "x-client-cert-chain-verified" is true.
 ```
-curl https://$APIGEE_HOST/sample-mtls --cert ./${CERT_NAME}-cert.pem --key ./${CERT_NAME}-key.pem
+curl https://$APIGEE_HOST/v1/sample-mtls --cert ./${CERT_NAME}-cert.pem --key ./${CERT_NAME}-key.pem
 ```
 
 Sample response:
 ```
 {
-    "request":"GET https://xapi-dev.kurtkanaskie.net/sample-mtls",
+    "request":"GET https://xapi-dev.kurtkanaskie.net/v1/sample-mtls",
     "status":"200",
     "reason":"OK",
     "organization":"apigeex-mint-kurt",
@@ -390,13 +390,13 @@ Notice the value of "x-client-cert-chain-verified" is false, we use that in a co
 The value in "x-client-cert-error" indicates the type of error. \
 The possible errors can be found [here](https://cloud.google.com/load-balancing/docs/https/https-logging-monitoring#failure-messages).
 ```
-curl https://$APIGEE_HOST/sample-mtls --cert ./${INVALID_CERT_NAME}-cert.pem --key ./${INVALID_CERT_NAME}-key.pem
+curl https://$APIGEE_HOST/v1/sample-mtls --cert ./${INVALID_CERT_NAME}-cert.pem --key ./${INVALID_CERT_NAME}-key.pem
 ```
 
 Sample response:
 ```
 {
-    "request":"GET https://xapi-dev.kurtkanaskie.net/sample-mtls",
+    "request":"GET https://xapi-dev.kurtkanaskie.net/v1/sample-mtls",
     "status":"400",
     "reason":"Bad Request",
     "error":"Bad Certificate Request",
@@ -428,7 +428,7 @@ Wait a couple minutes for the configuration to propogate and test the API again.
 First lets test with no certificates to ensure the confuguration has propogated.\
 You may see the following error before the configuration is complete.
 ```
-curl https://$APIGEE_HOST/sample-mtls 
+curl https://$APIGEE_HOST/v1/sample-mtls 
 ```
 Sample responses:
 ```
@@ -443,12 +443,12 @@ Once the configuration has propogated, notice that the response is from curl, no
 Now lets test with the valid certificate and key.
 
 ```
-curl https://$APIGEE_HOST/sample-mtls --cert ./${CERT_NAME}-cert.pem --key ./${CERT_NAME}-key.pem
+curl https://$APIGEE_HOST/v1/sample-mtls --cert ./${CERT_NAME}-cert.pem --key ./${CERT_NAME}-key.pem
 ```
 Sample response:
 ```
 {
-    "request":"GET https://xapi-dev.kurtkanaskie.net/sample-mtls",
+    "request":"GET https://xapi-dev.kurtkanaskie.net/v1/sample-mtls",
     "status":"200",
     "reason":"OK",
     "organization":"apigeex-mint-kurt",
@@ -479,7 +479,7 @@ Now lets test with the invalid certificate and key.\
 Again, notice the response is from curl, not the Raise Fault policy in the proxy.
 
 ```
-curl https://$APIGEE_HOST/sample-mtls --cert ./${INVALID_CERT_NAME}-cert.pem --key ./${INVALID_CERT_NAME}-key.pem
+curl https://$APIGEE_HOST/v1/sample-mtls --cert ./${INVALID_CERT_NAME}-cert.pem --key ./${INVALID_CERT_NAME}-key.pem
 ```
 Sample response:
 ```

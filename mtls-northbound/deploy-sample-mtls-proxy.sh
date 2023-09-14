@@ -44,7 +44,7 @@ REV=$(apigeecli apis create bundle -f apiproxy -n sample-mtls --org "$PROJECT" -
 apigeecli apis deploy --wait --name sample-mtls --ovr --rev "$REV" --org "$PROJECT" --env "$APIGEE_ENV" --token "$TOKEN"
 
 # var is expected by integration test (apickli)
-export PROXY_URL="$APIGEE_HOST/sample-mtls"
+export PROXY_URL="$APIGEE_HOST/v1/sample-mtls"
 
 echo " "
 echo "All the Apigee artifacts are successfully deployed!"
