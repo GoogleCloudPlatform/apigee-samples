@@ -1,16 +1,16 @@
 # Basic Quota
 
-This sample shows how to implement a basic API consumption limit using Apigee's [Quota](https://cloud.google.com/apigee/docs/api-platform/reference/policies/quota-policy) policy. 
+This sample shows how to implement a basic API consumption limit using Apigee's [Quota](https://cloud.google.com/apigee/docs/api-platform/reference/policies/quota-policy) policy.
 
 ## About quotas
 
-The Quota policy enforces consumption limits on client apps by maintaining a counter that tallies incoming requests. The counter can tally API calls for any identifiable entity, including apps, developers, API keys, access tokens, and so on. Usually, API keys are used to identify client apps. This policy should be used to enforce business contracts or SLAs with developers and partners, rather than for operational traffic throttling. 
+The Quota policy enforces consumption limits on client apps by maintaining a counter that tallies incoming requests. The counter can tally API calls for any identifiable entity, including apps, developers, API keys, access tokens, and so on. Usually, API keys are used to identify client apps. This policy should be used to enforce business contracts or SLAs with developers and partners, rather than for operational traffic throttling.
 
 ## How it works
 
 A quota is an allotment of request messages that an API proxy can handle over a time period, such as minute, hour, day, week, or month. The Quota policy enables API providers to enforce limits on the number of API calls made by apps over this time period.
 
-When an API proxy reaches its quota limit, subsequent API calls are rejected; Apigee returns an error for every request that exceeds the quota. 
+When an API proxy reaches its quota limit, subsequent API calls are rejected; Apigee returns an error for every request that exceeds the quota.
 
 You can set the quota to be the same for all apps accessing the API proxy, or you can set the quota based on:
 
@@ -23,7 +23,7 @@ This sample shows how to enforce a dynamic quota as defined by the API product. 
 
 The Quota policy contains many options to control the desired behavior. For more information see the Quota policy [reference](https://cloud.google.com/apigee/docs/api-platform/reference/policies/quota-policy).
 
-## Implementation on Apigee 
+## Implementation on Apigee
 
 This sample uses a [VerifyAPIKey](https://cloud.google.com/apigee/docs/api-platform/reference/policies/verify-api-key-policy) policy to identify the calling application and the API product associated with the proxy. The Quota policy is configured to enforce the limit and time interval defined in the API product. An [AssignMessage](https://cloud.google.com/apigee/docs/api-platform/reference/policies/assign-message-policy) policy is used to set a success response that includes the current value of the counter vs. the allowed limit. A [RaiseFault](https://cloud.google.com/apigee/docs/api-platform/reference/policies/raise-fault-policy) policy is used to return a custom error payload when the quota is exceeded.
 

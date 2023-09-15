@@ -1,7 +1,7 @@
 # Basic Quota
 
 ---
-This sample shows how to implement a dynamic API consumption limit using Apigee's [Quota](https://cloud.google.com/apigee/docs/api-platform/reference/policies/quota-policy) policy. 
+This sample shows how to implement a dynamic API consumption limit using Apigee's [Quota](https://cloud.google.com/apigee/docs/api-platform/reference/policies/quota-policy) policy.
 
 Let's get started!
 

@@ -52,7 +52,7 @@ curl  https://$APIGEE_HOST/v1/samples/cloud-logging
 ```
 > _If you want, consider also checking the call in the [Debug](https://cloud.google.com/apigee/docs/api-platform/debug/trace) view_
 
-After issuing some calls, let's confirm the configured variables / values set on the Message Logging policy were successfully writen to Cloud Logging with 
+After issuing some calls, let's confirm the configured variables / values set on the Message Logging policy were successfully writen to Cloud Logging with
 
 ```sh
 gcloud logging read "logName=projects/$PROJECT/logs/apigee"

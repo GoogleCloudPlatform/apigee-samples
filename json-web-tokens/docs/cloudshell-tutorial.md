@@ -1,7 +1,7 @@
 # JSON Web Tokens
 
 ---
-This sample shows how to generate and validate JSON Web Tokens (JWT) using Apigee's [JWT policies](https://cloud.google.com/apigee/docs/api-platform/reference/policies/jwt-policies-overview). 
+This sample shows how to generate and validate JSON Web Tokens (JWT) using Apigee's [JWT policies](https://cloud.google.com/apigee/docs/api-platform/reference/policies/jwt-policies-overview).
 
 Let's get started!
 

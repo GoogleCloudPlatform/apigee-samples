@@ -67,19 +67,19 @@ We also need to add our API product to the portal:
 - Audience: Anonymous users (anyone can view)
 - API product image: Image of your choice (optional)
 - API documentation: Use the <walkthrough-editor-open-file filePath="integrated-developer-portal/integrated-developer-portal.yaml">integrated-developer-portal.yaml</walkthrough-editor-open-file> OpenAPI document from this repo:
-    - If you ran the deployment script from Cloud Shell:
-        - Navigate back to Cloud Shell
-        - Open integrated-developer-portal.yaml & downlod it to your local computer. No need to update file content as it was already updated when running the deployment script.
-    - Otherwise, do the following:
-        - Download <walkthrough-editor-open-file filePath="integrated-developer-portal/integrated-developer-portal.yaml">integrated-developer-portal.yaml</walkthrough-editor-open-file> to your local computer
-        - Open the file and replace "\[APIGEE_HOST\]" with your own Apigee host/domain.
-    - Upload your updated integrated-developer-portal.yaml file as API documentation
+  - If you ran the deployment script from Cloud Shell:
+    - Navigate back to Cloud Shell
+    - Open integrated-developer-portal.yaml & downlod it to your local computer. No need to update file content as it was already updated when running the deployment script.
+  - Otherwise, do the following:
+    - Download <walkthrough-editor-open-file filePath="integrated-developer-portal/integrated-developer-portal.yaml">integrated-developer-portal.yaml</walkthrough-editor-open-file> to your local computer
+    - Open the file and replace "\[APIGEE_HOST\]" with your own Apigee host/domain.
+  - Upload your updated integrated-developer-portal.yaml file as API documentation
 6. Scroll up and click save
 
 ---
 ## Test Integrated Developer Portal
 
-Now that we have a developer portal, let's walk through its workflow. First we'll create our developer account and sign in, then we'll make an Apigee app complete with a client id and secret, and finally we'll use the client id to authorize our requests and test our API. To do so, follow the steps below: 
+Now that we have a developer portal, let's walk through its workflow. First we'll create our developer account and sign in, then we'll make an Apigee app complete with a client id and secret, and finally we'll use the client id to authorize our requests and test our API. To do so, follow the steps below:
 
 1. Navigate to your newly created portal. Portals > Sample Integrated Developer Portal
 2. Enter the portal by clicking the Live Portal button at the top right, or with the following URL: https://\[APIGEE-ORG\]-sampleintegrateddeveloperportal.apigee.io

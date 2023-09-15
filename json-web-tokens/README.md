@@ -1,6 +1,6 @@
 # JSON Web Tokens
 
-This sample shows how to generate and validate JSON Web Tokens (JWT) using Apigee's [JWT policies](https://cloud.google.com/apigee/docs/api-platform/reference/policies/jwt-policies-overview). 
+This sample shows how to generate and validate JSON Web Tokens (JWT) using Apigee's [JWT policies](https://cloud.google.com/apigee/docs/api-platform/reference/policies/jwt-policies-overview).
 
 ## About JWTs
 
@@ -16,7 +16,7 @@ Customers can use Apigee's JWT policies to:
 
 Apigee supports generation and verification of both digitally signed and encrypted JWTs. For more detailed information on how Apigee's policies can be used along with information on supported algorithms, see the [JWS and JWT policies overview](https://cloud.google.com/apigee/docs/api-platform/reference/policies/jwt-policies-overview) page.
 
-## Implementation on Apigee 
+## Implementation on Apigee
 
 This sample proxy exposes several endpoints:
 * `/v1/samples/json-web-tokens/generate-signed` generates a digitally signed JWT using the private key generated during the sample setup, and returns the token in the response payload and a header

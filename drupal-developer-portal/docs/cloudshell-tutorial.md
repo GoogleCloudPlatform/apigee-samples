@@ -78,13 +78,13 @@ Now we will add our `sample-drupal-developer-portal-product` to our Drupal API C
 - Image: Image of your choice (optional)
 - Specification Source Type: File
 - OpenAPI specification:Use the <walkthrough-editor-open-file filePath="drupal-developer-portal/drupal-developer-portal.yaml">drupal-developer-portal.yaml</walkthrough-editor-open-file>  OpenAPI document from this repo:
-    - If you ran the deployment script from Cloud Shell:
-        - Navigate back to Cloud Shell
-        - Open drupal-developer-portal.yaml & download it to your local computer. No need to update file content as it was already updated when running the deployment script.
-    - Otherwise, do the following:
-        - Download <walkthrough-editor-open-file filePath="drupal-developer-portal/drupal-developer-portal.yaml">drupal-developer-portal.yaml</walkthrough-editor-open-file> to your local computer
-        - Open the file and replace `[APIGEE_HOST]` with your own Apigee host/domain.
-    - Upload your updated drupal-developer-portal.yaml file as API documentation
+  - If you ran the deployment script from Cloud Shell:
+    - Navigate back to Cloud Shell
+    - Open drupal-developer-portal.yaml & download it to your local computer. No need to update file content as it was already updated when running the deployment script.
+  - Otherwise, do the following:
+    - Download <walkthrough-editor-open-file filePath="drupal-developer-portal/drupal-developer-portal.yaml">drupal-developer-portal.yaml</walkthrough-editor-open-file> to your local computer
+    - Open the file and replace `[APIGEE_HOST]` with your own Apigee host/domain.
+  - Upload your updated drupal-developer-portal.yaml file as API documentation
 - Leave all other fields as their default values.
 4. Click save
 

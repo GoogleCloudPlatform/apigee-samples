@@ -1,10 +1,10 @@
 # Client Credentials Grant Type
 
-This sample lets you request an OAuth token from Apigee using the OAuth 2.0 client credentials grant type flow. 
+This sample lets you request an OAuth token from Apigee using the OAuth 2.0 client credentials grant type flow.
 
 ## About client credentials
 
-Most typically, this grant type is used when the app is also the resource owner. For example, an app may need to access a backend cloud-based storage service to store and retrieve data that it uses to perform its work, rather than data specifically owned by the end user. This grant type flow occurs strictly between a client app and the authorization server. An end user does not participate in this grant type flow. 
+Most typically, this grant type is used when the app is also the resource owner. For example, an app may need to access a backend cloud-based storage service to store and retrieve data that it uses to perform its work, rather than data specifically owned by the end user. This grant type flow occurs strictly between a client app and the authorization server. An end user does not participate in this grant type flow.
 
 ## How it works
 
@@ -16,9 +16,9 @@ The API is called like this, where the client ID and secret are Base64-encoded a
 curl -H "Authorization: Basic <base64-encoded key:secret>" https://your-api-url.com/oauth/token?grant_type=client_credentials
 ```
 
-## Implementation on Apigee 
+## Implementation on Apigee
 
-The client credentials sample uses one policy that executes on Apigee : An OAuthV2 policy to generate the access token. The policy is attached to the `/token` endpoint (a custom flow on Apigee). 
+The client credentials sample uses one policy that executes on Apigee : An OAuthV2 policy to generate the access token. The policy is attached to the `/token` endpoint (a custom flow on Apigee).
 
 ### Screencast
 

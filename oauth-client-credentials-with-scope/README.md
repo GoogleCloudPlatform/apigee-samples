@@ -1,10 +1,10 @@
 # Client Credentials Grant Type with OAuth2 scopes
 
-This sample lets you request an OAuth token from Apigee using the OAuth 2.0 client credentials grant type flow and limit access using [OAuth2 scopes](https://cloud.google.com/apigee/docs/api-platform/security/oauth/working-scopes) and additionally shows how to limit access. 
+This sample lets you request an OAuth token from Apigee using the OAuth 2.0 client credentials grant type flow and limit access using [OAuth2 scopes](https://cloud.google.com/apigee/docs/api-platform/security/oauth/working-scopes) and additionally shows how to limit access.
 
 ## About client credentials
 
-Most typically, this grant type is used when the app is also the resource owner. For example, an app may need to access a backend cloud-based storage service to store and retrieve data that it uses to perform its work, rather than data specifically owned by the end user. This grant type flow occurs strictly between a client app and the authorization server. An end user does not participate in this grant type flow. 
+Most typically, this grant type is used when the app is also the resource owner. For example, an app may need to access a backend cloud-based storage service to store and retrieve data that it uses to perform its work, rather than data specifically owned by the end user. This grant type flow occurs strictly between a client app and the authorization server. An end user does not participate in this grant type flow.
 
 ### What is OAuth2 scope?
 
@@ -24,9 +24,9 @@ curl -H "Authorization: Basic <base64-encoded key:secret>" https://your-api-url.
 
 For more info on how you can configure scopes on API Products and how they are assigned to access tokens, check [this document](https://cloud.google.com/apigee/docs/api-platform/security/oauth/working-scopes#howarescopesassignedtoaccesstokens)
 
-## Implementation on Apigee 
+## Implementation on Apigee
 
-The client credentials sample uses one policy that executes on Apigee : An OAuthV2 policy to generate the access token. The policy is attached to the `/token` endpoint (a custom flow on Apigee). 
+The client credentials sample uses one policy that executes on Apigee : An OAuthV2 policy to generate the access token. The policy is attached to the `/token` endpoint (a custom flow on Apigee).
 
 ### Screencast
 
@@ -100,7 +100,7 @@ see the [oauth-client-credentials-with-scope.feature](./test/integration/feature
 
 ## Test the APIs
 
-The script that deploys the Apigee resources will print two sets of cURL commands. 
+The script that deploys the Apigee resources will print two sets of cURL commands.
 
 The first set returns a token with `read` access. You will find that it only works with the GET call. The POST call will fail. This is because of the insufficient scope to make a POST call to that resource.
 
