@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+ Copyright 2023 Google LLC
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+      http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<ProxyEndpoint name="default">
+  <Description>the OAuth V2 token dispensing endpoint</Description>
+
+  <HTTPProxyConnection>
+    <BasePath>/v1/samples/apiproduct-operations-oauth2-cc</BasePath>
+  </HTTPProxyConnection>
+
+  <FaultRules/>
+
+  <DefaultFaultRule name="fault-rule">
+    <Step>
+      <Name>AM-Inject-Proxy-Revision-Header</Name>
+    </Step>
+    <AlwaysEnforce>true</AlwaysEnforce>
+  </DefaultFaultRule>
+
+  <PreFlow name="PreFlow">
+    <Request/>
+    <Response/>
+  </PreFlow>
+
+  <PostFlow name="PostFlow">
+    <Request/>
+    <Response>
+      <Step>
+        <Name>AM-Clean-Response-Headers</Name>
+      </Step>
+      <Step>
+        <Name>JS-Groom-Token-Response</Name>
+        <Condition>request.formparam.grant_type = "client_credentials"</Condition>
+      </Step>
+      <Step>
+        <Name>AM-Inject-Proxy-Revision-Header</Name>
+      </Step>
+      <Step>
+        <Name>AM-TokenHeader</Name>
+        <Condition>apigee.access_token != null</Condition>
+      </Step>
+    </Response>
+  </PostFlow>
+
+  <Flows>
+    <Flow name="generate-an-opaque-token">
+      <Description>dispense opaque tokens for OAuth2.0, for Client credentials</Description>
+      <!--
+          An example request is like this:
+
+          curl -i -X POST -H 'content-type: application/x-www-form-urlencoded' \
+            -u ${client_id}:${client_secret} \
+            "$endpoint/oauth2-cc/token" \
+            -d 'grant_type=client_credentials'
+
+          The resulting token will have an expiry, and a set of metadata.
+
+      -->
+      <Request>
+        <Step>
+          <!-- basic validation of the inbound request. Is it well formed? -->
+          <Name>RF-Invalid-Grant-Type</Name>
+          <Condition>request.formparam.grant_type != "client_credentials"</Condition>
+        </Step>
+        <Step>
+          <!-- this policy generates a payload -->
+          <Name>OAuthV2-GenerateAccessToken-CC</Name>
+        </Step>
+      </Request>
+      <Response/>
+      <Condition>(proxy.pathsuffix MatchesPath "/token") and (request.verb = "POST")</Condition>
+    </Flow>
+
+    <Flow name="unknown request">
+      <Request>
+        <Step>
+          <Name>RF-Unknown-Request</Name>
+        </Step>
+      </Request>
+      <Response/>
+    </Flow>
+  </Flows>
+
+  <!-- There is no backend target. Responses for oauth token generation and
+       refresh are direct from this API proxy.
+  -->
+  <RouteRule name="NoRouteRule"/>
+</ProxyEndpoint>

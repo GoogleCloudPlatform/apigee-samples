@@ -1,0 +1,30 @@
+{
+  "operationConfigs": [
+    {
+      "apiSource": "apiproduct-operations",
+      "operations": [
+        {
+          "resource": "/*/users",
+          "methods": [
+            "GET",
+            "POST"
+          ]
+        }
+      ]
+    },
+    {
+      "apiSource": "apiproduct-operations",
+      "operations": [
+        {
+          "resource": "/*/users/*",
+          "methods": [
+            "DELETE",
+            "GET",
+            "PUT"
+          ]
+        }
+      ]
+    }
+  ],
+  "operationConfigType": "proxy"
+}
