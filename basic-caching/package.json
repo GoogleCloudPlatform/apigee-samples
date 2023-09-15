@@ -1,0 +1,14 @@
+{
+    "name": "basic-caching",
+    "version": "1.0.0",
+    "description": "API proxy that demonstrates basic caching policies",
+    "scripts": {
+     "lint": "apigeelint -s apiproxy -f table.js",
+      "test": "npx cucumber-js --publish-quiet test/"
+    },
+    "dependencies": {
+      "@cucumber/cucumber": "latest",
+      "apickli": "latest",
+      "apigeelint": "latest"
+    }
+}

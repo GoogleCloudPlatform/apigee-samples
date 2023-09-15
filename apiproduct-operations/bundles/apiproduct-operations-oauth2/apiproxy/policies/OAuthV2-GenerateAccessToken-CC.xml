@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+ Copyright 2023 Google LLC
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+      http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<OAuthV2 name='OAuthV2-GenerateAccessToken-CC'>
+  <Operation>GenerateAccessToken</Operation>
+  <!--
+      ExpiresIn, in milliseconds. The ref is optional. The explicitly specified
+      value is the default, when the variable reference cannot be resolved.
+      1800000 = 30 minutes
+      2400000 = 40 minutes
+      3600000 = 60 minutes
+  -->
+  <ExpiresIn ref="request.queryparam.lifetimems">1800000</ExpiresIn>
+
+  <!--
+      RefreshTokenExpiresIn, in milliseconds. Optional; if it is not
+      specified, the default value will be used which is -1 (no expiration).
+      691200000 = 8 days
+      2592000000 = 30 days
+  -->
+  <RefreshTokenExpiresIn>691200000</RefreshTokenExpiresIn>
+
+  <SupportedGrantTypes>
+    <!--
+        for client_credentials, the client_id and client_secret must be
+        passed in , in the Basic Auth header, as per the
+        specification.
+    -->
+
+    <GrantType>client_credentials</GrantType>
+  </SupportedGrantTypes>
+
+  <!-- variable that specifies the requested grant type -->
+  <GrantType>request.formparam.grant_type</GrantType>
+
+  <!-- variable that specifies the requested scope -->
+  <Scope>request.formparam.scope</Scope>
+
+  <Attributes>
+    <Attribute name='grant_type'
+               ref='request.formparam.grant_type'
+               display='true'>UNDEFINED</Attribute>
+  </Attributes>
+
+  <GenerateResponse enabled='true'/>
+  <!--
+
+      If you include GenerateResponse and have enabled='true', then
+      the response is sent directly to the caller. The payload looks like
+      this:
+
+      {
+        "issued_at": "1420262924658",
+        "scope": "READ",
+        "application_name": "ce1e94a2-9c3e-42fa-a2c6-1ee01815476b",
+        "status": "approved",
+        "api_product_list": "[PremiumWeatherAPI]",
+        "expires_in": "1799",
+        "developer.email": "tesla@weathersample.com",
+        "organization_id": "0",
+        "token_type": "BearerToken",
+        "client_id": "5jUAdGv9pBouF0wOH5keAVI35GBtx3dT",
+        "access_token": "2l4IQtZXbn5WBJdL6EF7uenOWRsi",
+        "organization_name": "docs",
+        "refresh_token_expires_in": "0",
+        "refresh_count": "0"
+      }
+
+      If you omit GenerateResponse or have enabled='false', then
+      these flow variables are set on success:
+
+      oauthv2accesstoken.OAuthV2-GenerateAccessToken-CC.access_token
+      oauthv2accesstoken.OAuthV2-GenerateAccessToken-CC.token_type
+      oauthv2accesstoken.OAuthV2-GenerateAccessToken-CC.expires_in
+      oauthv2accesstoken.OAuthV2-GenerateAccessToken-CC.refresh_token
+      oauthv2accesstoken.OAuthV2-GenerateAccessToken-CC.refresh_token_expires_in
+      oauthv2accesstoken.OAuthV2-GenerateAccessToken-CC.refresh_token_issued_at
+      oauthv2accesstoken.OAuthV2-GenerateAccessToken-CC.refresh_token_status
+  -->
+
+</OAuthV2>

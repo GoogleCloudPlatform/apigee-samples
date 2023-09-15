@@ -18,6 +18,10 @@ Customers can connect an external load balancer to this attachment using a [PSC 
 
 ![Architecture](https://cloud.google.com/static/apigee/docs/api-platform/images/psc-arch.png)
 
+## Screencast
+
+[![Alt text](https://img.youtube.com/vi/LlE05zlfnlA/0.jpg)](https://www.youtube.com/watch?v=LlE05zlfnlA)
+
 ## Prerequisites
 1. An Apigee X instance already provisioned. If not, you may follow the steps [here](https://cloud.google.com/apigee/docs/api-platform/get-started/provisioning-intro).
 2. Your account must have [permissions to configure access routing](https://cloud.google.com/apigee/docs/api-platform/get-started/permissions#access-routing-permissions) and create Apigee environment and environment groups. See the predefined roles listed [here](https://cloud.google.com/apigee/docs/api-platform/get-started/permissions#predefined-roles).

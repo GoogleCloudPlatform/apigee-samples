@@ -1,0 +1,938 @@
+{
+  "kind": "books#volumes",
+  "totalItems": 1744,
+  "items": [
+    {
+      "kind": "books#volume",
+      "id": "8sdOEAAAQBAJ",
+      "etag": "v5/datdZMLA",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/8sdOEAAAQBAJ",
+      "volumeInfo": {
+        "title": "The Definitive Guide to Modernizing Applications on Google Cloud",
+        "subtitle": "The what, why, and how of application modernization on Google Cloud",
+        "authors": [
+          "Steve (Satish) Sangapu",
+          "Dheeraj Panyam",
+          "Jason Marston"
+        ],
+        "publisher": "Packt Publishing Ltd",
+        "publishedDate": "2022-01-06",
+        "description": "Get to grips with the tools, services, and functions needed for application migration to help you move from legacy applications to cloud-native on Google Cloud Key FeaturesDiscover how a sample legacy application can be transformed into a cloud-native application on Google CloudLearn where to start and how to apply application modernization techniques and toolingWork with real-world use cases and instructions to modernize an application on Google CloudBook Description Legacy applications, which comprise 75–80% of all enterprise applications, often end up being stuck in data centers. Modernizing these applications to make them cloud-native enables them to scale in a cloud environment without taking months or years to start seeing the benefits. This book will help software developers and solutions architects to modernize their applications on Google Cloud and transform them into cloud-native applications. This book helps you to build on your existing knowledge of enterprise application development and takes you on a journey through the six Rs: rehosting, replatforming, rearchitecting, repurchasing, retiring, and retaining. You'll learn how to modernize a legacy enterprise application on Google Cloud and build on existing assets and skills effectively. Taking an iterative and incremental approach to modernization, the book introduces the main services in Google Cloud in an easy-to-understand way that can be applied immediately to an application. By the end of this Google Cloud book, you'll have learned how to modernize a legacy enterprise application by exploring various interim architectures and tooling to develop a cloud-native microservices-based application. What you will learnDiscover the principles and best practices for building cloud-native applicationsStudy the six Rs of migration strategy and learn when to choose which strategyRehost a legacy enterprise application on Google Compute EngineReplatform an application to use Google Load Balancer and Google Cloud SQLRefactor into a single-page application (SPA) supported by REST servicesReplatform an application to use Google Identity Platform and Firebase AuthenticationRefactor to microservices using the strangler patternAutomate the deployment process using a CI/CD pipeline with Google Cloud BuildWho this book is for This book is for software developers and solutions architects looking to gain experience in modernizing their enterprise applications to run on Google Cloud and transform them into cloud-native applications. Basic knowledge of Java and Spring Boot is necessary. Prior knowledge of Google Cloud is useful but not mandatory.",
+        "industryIdentifiers": [
+          {
+            "type": "ISBN_13",
+            "identifier": "9781800209022"
+          },
+          {
+            "type": "ISBN_10",
+            "identifier": "1800209029"
+          }
+        ],
+        "readingModes": {
+          "text": true,
+          "image": true
+        },
+        "pageCount": 488,
+        "printType": "BOOK",
+        "categories": [
+          "Computers"
+        ],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": true,
+        "contentVersion": "1.1.1.0.preview.3",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=8sdOEAAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=8sdOEAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+        },
+        "language": "en",
+        "previewLink": "http://books.google.com/books?id=8sdOEAAAQBAJ&pg=PA284&dq=apigee&hl=&cd=1&source=gbs_api",
+        "infoLink": "https://play.google.com/store/books/details?id=8sdOEAAAQBAJ&source=gbs_api",
+        "canonicalVolumeLink": "https://play.google.com/store/books/details?id=8sdOEAAAQBAJ"
+      },
+      "saleInfo": {
+        "country": "US",
+        "saleability": "FOR_SALE",
+        "isEbook": true,
+        "listPrice": {
+          "amount": 43.99,
+          "currencyCode": "USD"
+        },
+        "retailPrice": {
+          "amount": 31.72,
+          "currencyCode": "USD"
+        },
+        "buyLink": "https://play.google.com/store/books/details?id=8sdOEAAAQBAJ&rdid=book-8sdOEAAAQBAJ&rdot=1&source=gbs_api",
+        "offers": [
+          {
+            "finskyOfferType": 1,
+            "listPrice": {
+              "amountInMicros": 43990000,
+              "currencyCode": "USD"
+            },
+            "retailPrice": {
+              "amountInMicros": 31720000,
+              "currencyCode": "USD"
+            },
+            "giftable": true
+          }
+        ]
+      },
+      "accessInfo": {
+        "country": "US",
+        "viewability": "PARTIAL",
+        "embeddable": true,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": true
+        },
+        "pdf": {
+          "isAvailable": true
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=8sdOEAAAQBAJ&hl=&source=gbs_api",
+        "accessViewStatus": "SAMPLE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "The \u003cb\u003eApigee\u003c/b\u003e approach is where you use the API Gateway features of \u003cb\u003eApigee\u003c/b\u003e. This is usually done if you expect to have multiple applications exposing APIs rather than just a few APIs in a single application. API management solutions such&nbsp;..."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "l4k4EAAAQBAJ",
+      "etag": "BrbMWjZu4f0",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/l4k4EAAAQBAJ",
+      "volumeInfo": {
+        "title": "Google Cloud Certified Professional Cloud Developer Exam Guide",
+        "subtitle": "Modernize your applications using cloud-native services and best practices",
+        "authors": [
+          "Sebastian Moreno"
+        ],
+        "publisher": "Packt Publishing Ltd",
+        "publishedDate": "2021-09-13",
+        "description": "Discover how Google Cloud services can help you to reduce operational tasks and focus on delivering business value with your applications Key FeaturesDesign, develop, and deploy end-to-end cloud-native applications using Google Cloud servicesPrepare for the GCP developer exam with the help of a fictitious business case and a Q&A sectionGet hands-on with implementing code examples of different GCP services in your applicationsBook Description Google Cloud Platform is one of the three major cloud providers in the industry, exhibiting great leadership in application modernization and data management. This book provides a comprehensive introduction for those who are new to cloud development and shows you how to use the tools to create cloud-native applications by integrating the technologies used by Google. The book starts by taking you through the basic programming concepts and security fundamentals necessary for developing in Google Cloud. You'll then discover best practices for developing and deploying applications in the cloud using different components offered by Google Cloud Platform such as Cloud Functions, Google App Engine, Cloud Run, and other GCP technologies. As you advance, you'll learn the basics of cloud storage and choosing the best options for storing different kinds of data as well as understand what site reliability engineers do. In the last part, you'll work on a sample case study of Hip Local, a community application designed to facilitate communication between people nearby, created by the Google Cloud team. By the end of this guide, you'll have learned how to design, develop, and deploy an end-to-end application on the Google Cloud Platform. What you will learnGet to grips with the fundamentals of Google Cloud Platform developmentDiscover security best practices for applications in the cloudFind ways to create and modernize legacy applicationsUnderstand how to manage data and databases in Google CloudExplore best practices for site reliability engineering, monitoring, logging, and debuggingBecome well-versed with the practical implementation of GCP with the help of a case studyWho this book is for This book is for cloud engineers or developers working or starting to work on Google Cloud Platform and looking to take advantage of cloud-native applications. You'll also find this book useful if you are preparing for the GCP developer exam.",
+        "industryIdentifiers": [
+          {
+            "type": "ISBN_13",
+            "identifier": "9781800569867"
+          },
+          {
+            "type": "ISBN_10",
+            "identifier": "1800569866"
+          }
+        ],
+        "readingModes": {
+          "text": true,
+          "image": true
+        },
+        "pageCount": 382,
+        "printType": "BOOK",
+        "categories": [
+          "Computers"
+        ],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "preview-1.0.0",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=l4k4EAAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=l4k4EAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+        },
+        "language": "en",
+        "previewLink": "http://books.google.com/books?id=l4k4EAAAQBAJ&pg=PA123&dq=apigee&hl=&cd=2&source=gbs_api",
+        "infoLink": "https://play.google.com/store/books/details?id=l4k4EAAAQBAJ&source=gbs_api",
+        "canonicalVolumeLink": "https://play.google.com/store/books/details?id=l4k4EAAAQBAJ"
+      },
+      "saleInfo": {
+        "country": "US",
+        "saleability": "FOR_SALE",
+        "isEbook": true,
+        "listPrice": {
+          "amount": 39.99,
+          "currencyCode": "USD"
+        },
+        "retailPrice": {
+          "amount": 31.19,
+          "currencyCode": "USD"
+        },
+        "buyLink": "https://play.google.com/store/books/details?id=l4k4EAAAQBAJ&rdid=book-l4k4EAAAQBAJ&rdot=1&source=gbs_api",
+        "offers": [
+          {
+            "finskyOfferType": 1,
+            "listPrice": {
+              "amountInMicros": 39990000,
+              "currencyCode": "USD"
+            },
+            "retailPrice": {
+              "amountInMicros": 31190000,
+              "currencyCode": "USD"
+            },
+            "giftable": true
+          }
+        ]
+      },
+      "accessInfo": {
+        "country": "US",
+        "viewability": "PARTIAL",
+        "embeddable": true,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": true
+        },
+        "pdf": {
+          "isAvailable": true
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=l4k4EAAAQBAJ&hl=&source=gbs_api",
+        "accessViewStatus": "SAMPLE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "\u003cb\u003eApigee\u003c/b\u003e, that is, API Gateway Enterprise Edition, is an API platform product, acquired by Google in 2016, that allows us to manage and protect our services. In this section, we will review in detail how to implement the \u003cb\u003eApigee\u003c/b\u003e API&nbsp;..."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "QpGbDwAAQBAJ",
+      "etag": "Khkb1PRkI0c",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/QpGbDwAAQBAJ",
+      "volumeInfo": {
+        "title": "Novel Practices and Trends in Grid and Cloud Computing",
+        "authors": [
+          "Raj, Pethuru",
+          "Koteeswaran, S."
+        ],
+        "publisher": "IGI Global",
+        "publishedDate": "2019-06-28",
+        "description": "Business and IT organizations are currently embracing new strategically sound concepts in order to be more customer-centric, competitive, and cognitive in their daily operations. While useful, the various software tools, pioneering technologies, as well as their unique contributions largely go unused due to the lack of information provided on their special characteristics. Novel Practices and Trends in Grid and Cloud Computing is a collection of innovative research on the key concerns of cloud computing and how they are being addressed, as well as the various technologies and tools empowering cloud theory to be participative, penetrative, pervasive, and persuasive. While highlighting topics including cyber security, smart technology, and artificial intelligence, this book is ideally designed for students, researchers, and business managers on the lookout for innovative IT solutions for all the business automation software and improvisations of computational technologies.",
+        "industryIdentifiers": [
+          {
+            "type": "ISBN_13",
+            "identifier": "9781522590255"
+          },
+          {
+            "type": "ISBN_10",
+            "identifier": "1522590250"
+          }
+        ],
+        "readingModes": {
+          "text": false,
+          "image": true
+        },
+        "pageCount": 374,
+        "printType": "BOOK",
+        "categories": [
+          "Computers"
+        ],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "0.0.2.0.preview.1",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=QpGbDwAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=QpGbDwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+        },
+        "language": "en",
+        "previewLink": "http://books.google.com/books?id=QpGbDwAAQBAJ&pg=PA125&dq=apigee&hl=&cd=3&source=gbs_api",
+        "infoLink": "https://play.google.com/store/books/details?id=QpGbDwAAQBAJ&source=gbs_api",
+        "canonicalVolumeLink": "https://play.google.com/store/books/details?id=QpGbDwAAQBAJ"
+      },
+      "saleInfo": {
+        "country": "US",
+        "saleability": "FOR_SALE",
+        "isEbook": true,
+        "listPrice": {
+          "amount": 255,
+          "currencyCode": "USD"
+        },
+        "retailPrice": {
+          "amount": 204,
+          "currencyCode": "USD"
+        },
+        "buyLink": "https://play.google.com/store/books/details?id=QpGbDwAAQBAJ&rdid=book-QpGbDwAAQBAJ&rdot=1&source=gbs_api",
+        "offers": [
+          {
+            "finskyOfferType": 1,
+            "listPrice": {
+              "amountInMicros": 255000000,
+              "currencyCode": "USD"
+            },
+            "retailPrice": {
+              "amountInMicros": 204000000,
+              "currencyCode": "USD"
+            },
+            "giftable": true
+          }
+        ]
+      },
+      "accessInfo": {
+        "country": "US",
+        "viewability": "PARTIAL",
+        "embeddable": true,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": false
+        },
+        "pdf": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.com/books/download/Novel_Practices_and_Trends_in_Grid_and_C-sample-pdf.acsm?id=QpGbDwAAQBAJ&format=pdf&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=QpGbDwAAQBAJ&hl=&source=gbs_api",
+        "accessViewStatus": "SAMPLE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "EDGE CLOUD ENVIRONMENT \u003cb\u003eApigee\u003c/b\u003e Edge \u003cb\u003eApigee\u003c/b\u003e Edge is a platform for developing and managing API proxies. The app developers who need backend services are the primary consumers (as cited in \u003cb\u003eapigee\u003c/b\u003e, n.d). A company that want to expose&nbsp;..."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "fQMG1ldT3KgC",
+      "etag": "Y+SlZeZvMm8",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/fQMG1ldT3KgC",
+      "volumeInfo": {
+        "title": "Building eCommerce Applications",
+        "authors": [
+          "Developers from DevZone"
+        ],
+        "publisher": "\"O'Reilly Media, Inc.\"",
+        "publishedDate": "2011-10-04",
+        "description": "This collection of articles and blog entries is representative of the full spectrum of commerce-related content we’ve published on PayPal’s Developer Network over the past year. You will find tutorials and quick reference pieces for developers. With the creation of x.commerce we have expanded our coverage to address the needs of eBay and Magento developers and you can expect to see more content focused on helping both the developer and merchant communities in the coming year. Our team has covered a wide variety of topics including building mobile shopping carts, QR codes, working with various PayPal APIs, including how to integrate PayPal with other technologies such as WordPress. Three main themes have emerged in the commerce world today: Mobile, Social, and Local. Expect to see more coverage of these in the coming months.",
+        "industryIdentifiers": [
+          {
+            "type": "ISBN_13",
+            "identifier": "9781449318611"
+          },
+          {
+            "type": "ISBN_10",
+            "identifier": "1449318614"
+          }
+        ],
+        "readingModes": {
+          "text": true,
+          "image": true
+        },
+        "pageCount": 242,
+        "printType": "BOOK",
+        "categories": [
+          "Computers"
+        ],
+        "averageRating": 5,
+        "ratingsCount": 1,
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": true,
+        "contentVersion": "1.3.4.0.preview.3",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=fQMG1ldT3KgC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=fQMG1ldT3KgC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+        },
+        "language": "en",
+        "previewLink": "http://books.google.com/books?id=fQMG1ldT3KgC&pg=PT106&dq=apigee&hl=&cd=4&source=gbs_api",
+        "infoLink": "https://play.google.com/store/books/details?id=fQMG1ldT3KgC&source=gbs_api",
+        "canonicalVolumeLink": "https://play.google.com/store/books/details?id=fQMG1ldT3KgC"
+      },
+      "saleInfo": {
+        "country": "US",
+        "saleability": "FOR_SALE",
+        "isEbook": true,
+        "listPrice": {
+          "amount": 0,
+          "currencyCode": "USD"
+        },
+        "retailPrice": {
+          "amount": 0,
+          "currencyCode": "USD"
+        },
+        "buyLink": "https://play.google.com/store/books/details?id=fQMG1ldT3KgC&rdid=book-fQMG1ldT3KgC&rdot=1&source=gbs_api"
+      },
+      "accessInfo": {
+        "country": "US",
+        "viewability": "PARTIAL",
+        "embeddable": true,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": true
+        },
+        "pdf": {
+          "isAvailable": true
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=fQMG1ldT3KgC&hl=&source=gbs_api",
+        "accessViewStatus": "SAMPLE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "Accelerate Your Development Using the \u003cb\u003eApigee\u003c/b\u003e API Console Bill Day It seems these days that every service provider must offer a developer API for their services if they are to attract partners. This rise of the API economy has been well&nbsp;..."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "ZPljEAAAQBAJ",
+      "etag": "rF5Z0xqyroA",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/ZPljEAAAQBAJ",
+      "volumeInfo": {
+        "title": "Visualizing Google Cloud",
+        "subtitle": "101 Illustrated References for Cloud Engineers and Architects",
+        "authors": [
+          "Priyanka Vergadia"
+        ],
+        "publisher": "John Wiley & Sons",
+        "publishedDate": "2022-03-11",
+        "description": "Easy-to-follow visual walkthrough of every important part of the Google Cloud Platform The Google Cloud Platform incorporates dozens of specialized services that enable organizations to offload technological needs onto the cloud. From routine IT operations like storage to sophisticated new capabilities including artificial intelligence and machine learning, the Google Cloud Platform offers enterprises the opportunity to scale and grow efficiently. In Visualizing Google Cloud: Illustrated References for Cloud Engineers & Architects, Google Cloud expert Priyanka Vergadia delivers a fully illustrated, visual guide to matching the best Google Cloud Platform services to your own unique use cases. After a brief introduction to the major categories of cloud services offered by Google, the author offers approximately 100 solutions divided into eight categories of services included in Google Cloud Platform: Compute Storage Databases Data Analytics Data Science, Machine Learning and Artificial Intelligence Application Development and Modernization with Containers Networking Security You’ll find richly illustrated flowcharts and decision diagrams with straightforward explanations in each category, making it easy to adopt and adapt Google’s cloud services to your use cases. With coverage of the major categories of cloud models—including infrastructure-, containers-, platforms-, functions-, and serverless—and discussions of storage types, databases and Machine Learning choices, Visualizing Google Cloud: Illustrated References for Cloud Engineers & Architects is perfect for every Google Cloud enthusiast, of course. It is for anyone who is planning a cloud migration or new cloud deployment. It is for anyone preparing for cloud certification, and for anyone looking to make the most of Google Cloud. It is for cloud solutions architects, IT decision-makers, and cloud data and ML engineers. In short, this book is for YOU.",
+        "industryIdentifiers": [
+          {
+            "type": "ISBN_13",
+            "identifier": "9781119816331"
+          },
+          {
+            "type": "ISBN_10",
+            "identifier": "1119816335"
+          }
+        ],
+        "readingModes": {
+          "text": true,
+          "image": true
+        },
+        "pageCount": 256,
+        "printType": "BOOK",
+        "categories": [
+          "Computers"
+        ],
+        "averageRating": 5,
+        "ratingsCount": 1,
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": true,
+        "contentVersion": "1.4.4.0.preview.3",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=ZPljEAAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=ZPljEAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+        },
+        "language": "en",
+        "previewLink": "http://books.google.com/books?id=ZPljEAAAQBAJ&pg=PT426&dq=apigee&hl=&cd=5&source=gbs_api",
+        "infoLink": "https://play.google.com/store/books/details?id=ZPljEAAAQBAJ&source=gbs_api",
+        "canonicalVolumeLink": "https://play.google.com/store/books/details?id=ZPljEAAAQBAJ"
+      },
+      "saleInfo": {
+        "country": "US",
+        "saleability": "FOR_SALE",
+        "isEbook": true,
+        "listPrice": {
+          "amount": 22,
+          "currencyCode": "USD"
+        },
+        "retailPrice": {
+          "amount": 22,
+          "currencyCode": "USD"
+        },
+        "buyLink": "https://play.google.com/store/books/details?id=ZPljEAAAQBAJ&rdid=book-ZPljEAAAQBAJ&rdot=1&source=gbs_api",
+        "offers": [
+          {
+            "finskyOfferType": 1,
+            "listPrice": {
+              "amountInMicros": 22000000,
+              "currencyCode": "USD"
+            },
+            "retailPrice": {
+              "amountInMicros": 22000000,
+              "currencyCode": "USD"
+            },
+            "giftable": true
+          }
+        ]
+      },
+      "accessInfo": {
+        "country": "US",
+        "viewability": "PARTIAL",
+        "embeddable": true,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.com/books/download/Visualizing_Google_Cloud-sample-epub.acsm?id=ZPljEAAAQBAJ&format=epub&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "pdf": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.com/books/download/Visualizing_Google_Cloud-sample-pdf.acsm?id=ZPljEAAAQBAJ&format=pdf&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=ZPljEAAAQBAJ&hl=&source=gbs_api",
+        "accessViewStatus": "SAMPLE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "API Security with \u003cb\u003eApigee\u003c/b\u003e The \u003cb\u003eApigee\u003c/b\u003e API management platform provides a single point of management for APIs through the entire life cycle from both a development and operations perspective. The platform inspects API requests to protect,&nbsp;..."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "MLUvCwAAQBAJ",
+      "etag": "6NUQaDL2UWU",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/MLUvCwAAQBAJ",
+      "volumeInfo": {
+        "title": "The Silicon Valley Model",
+        "subtitle": "Management for Entrepreneurship",
+        "authors": [
+          "Annika Steiber",
+          "Sverker Alänge"
+        ],
+        "publisher": "Springer",
+        "publishedDate": "2015-12-11",
+        "description": "This book presents a new management model that has evolved in Silicon Valley. The future will favor companies that can migrate to a management model, better suited for the times. The abilities to remain entrepreneurial and innovate constantly will be essential for all companies in an innovation economy. However, most firms still use industrial-age management models that are not suited to attracting and energizing entrepreneurial talent. This book imbibes latest results from a year-long study of Google’s approaches to management, and finds similar principles being applied at companies including, Facebook, LinkedIn, Twitter, Tesla Motors, and Apigee. By distilling on the aspects that work across a variety of innovative firms, the authors present a synthesis that could have profound implications for managers everywhere.",
+        "industryIdentifiers": [
+          {
+            "type": "ISBN_13",
+            "identifier": "9783319249216"
+          },
+          {
+            "type": "ISBN_10",
+            "identifier": "3319249215"
+          }
+        ],
+        "readingModes": {
+          "text": true,
+          "image": true
+        },
+        "pageCount": 171,
+        "printType": "BOOK",
+        "categories": [
+          "Business & Economics"
+        ],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": true,
+        "contentVersion": "1.6.5.0.preview.3",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=MLUvCwAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=MLUvCwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+        },
+        "language": "en",
+        "previewLink": "http://books.google.com/books?id=MLUvCwAAQBAJ&pg=PA14&dq=apigee&hl=&cd=6&source=gbs_api",
+        "infoLink": "https://play.google.com/store/books/details?id=MLUvCwAAQBAJ&source=gbs_api",
+        "canonicalVolumeLink": "https://play.google.com/store/books/details?id=MLUvCwAAQBAJ"
+      },
+      "saleInfo": {
+        "country": "US",
+        "saleability": "FOR_SALE_AND_RENTAL",
+        "isEbook": true,
+        "listPrice": {
+          "amount": 54.99,
+          "currencyCode": "USD"
+        },
+        "retailPrice": {
+          "amount": 43.44,
+          "currencyCode": "USD"
+        },
+        "buyLink": "https://play.google.com/store/books/details?id=MLUvCwAAQBAJ&rdid=book-MLUvCwAAQBAJ&rdot=1&source=gbs_api",
+        "offers": [
+          {
+            "finskyOfferType": 1,
+            "listPrice": {
+              "amountInMicros": 54990000,
+              "currencyCode": "USD"
+            },
+            "retailPrice": {
+              "amountInMicros": 43440000,
+              "currencyCode": "USD"
+            },
+            "giftable": true
+          },
+          {
+            "finskyOfferType": 3,
+            "listPrice": {
+              "amountInMicros": 19250000,
+              "currencyCode": "USD"
+            },
+            "retailPrice": {
+              "amountInMicros": 16750000,
+              "currencyCode": "USD"
+            },
+            "rentalDuration": {
+              "unit": "DAY",
+              "count": 90
+            }
+          }
+        ]
+      },
+      "accessInfo": {
+        "country": "US",
+        "viewability": "PARTIAL",
+        "embeddable": true,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.com/books/download/The_Silicon_Valley_Model-sample-epub.acsm?id=MLUvCwAAQBAJ&format=epub&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "pdf": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.com/books/download/The_Silicon_Valley_Model-sample-pdf.acsm?id=MLUvCwAAQBAJ&format=pdf&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=MLUvCwAAQBAJ&hl=&source=gbs_api",
+        "accessViewStatus": "SAMPLE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "For \u003cb\u003eApigee\u003c/b\u003e, the challenge is to constantly evolve the platform while adding new services that can vary widely. (For instance, \u003cb\u003eApigee\u003c/b\u003e offers predictive analytics, a very sophisticated service, which involves monitoring patterns of&nbsp;..."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "eNuMDwAAQBAJ",
+      "etag": "WrZceZiuHJw",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/eNuMDwAAQBAJ",
+      "volumeInfo": {
+        "title": "Official Google Cloud Certified Associate Cloud Engineer Study Guide",
+        "authors": [
+          "Dan Sullivan"
+        ],
+        "publisher": "John Wiley & Sons",
+        "publishedDate": "2019-04-16",
+        "description": "The Only Official Google Cloud Study Guide The Official Google Cloud Certified Associate Cloud Engineer Study Guide, provides everything you need to prepare for this important exam and master the skills necessary to land that coveted Google Cloud Engineering certification. Beginning with a pre-book assessment quiz to evaluate what you know before you begin, each chapter features exam objectives and review questions, plus the online learning environment includes additional complete practice tests. Written by Dan Sullivan, a popular and experienced online course author for machine learning, big data, and Cloud topics, Official Google Cloud Certified Associate Cloud Engineer Study Guide is your ace in the hole for deploying and managing Google Cloud Services. Select the right Google service from the various choices based on the application to be built Compute with Cloud VMs and managing VMs Plan and deploying storage Network and configure access and security Google Cloud Platform is a leading public cloud that provides its users to many of the same software, hardware, and networking infrastructure used to power Google services. Businesses, organizations, and individuals can launch servers in minutes, store petabytes of data, and implement global virtual clouds with the Google Cloud Platform. Certified Associate Cloud Engineers have demonstrated the knowledge and skills needed to deploy and operate infrastructure, services, and networks in the Google Cloud. This exam guide is designed to help you understand the Google Cloud Platform in depth so that you can meet the needs of those operating resources in the Google Cloud.",
+        "industryIdentifiers": [
+          {
+            "type": "ISBN_13",
+            "identifier": "9781119564416"
+          },
+          {
+            "type": "ISBN_10",
+            "identifier": "1119564417"
+          }
+        ],
+        "readingModes": {
+          "text": false,
+          "image": true
+        },
+        "pageCount": 560,
+        "printType": "BOOK",
+        "categories": [
+          "Computers"
+        ],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "0.3.2.0.preview.1",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=eNuMDwAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=eNuMDwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+        },
+        "language": "en",
+        "previewLink": "http://books.google.com/books?id=eNuMDwAAQBAJ&pg=PA30&dq=apigee&hl=&cd=7&source=gbs_api",
+        "infoLink": "http://books.google.com/books?id=eNuMDwAAQBAJ&dq=apigee&hl=&source=gbs_api",
+        "canonicalVolumeLink": "https://books.google.com/books/about/Official_Google_Cloud_Certified_Associat.html?hl=&id=eNuMDwAAQBAJ"
+      },
+      "saleInfo": {
+        "country": "US",
+        "saleability": "NOT_FOR_SALE",
+        "isEbook": false
+      },
+      "accessInfo": {
+        "country": "US",
+        "viewability": "PARTIAL",
+        "embeddable": true,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": false
+        },
+        "pdf": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.com/books/download/Official_Google_Cloud_Certified_Associat-sample-pdf.acsm?id=eNuMDwAAQBAJ&format=pdf&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=eNuMDwAAQBAJ&hl=&source=gbs_api",
+        "accessViewStatus": "SAMPLE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "The \u003cb\u003eApigee\u003c/b\u003e API platform is a management service for GCP customers providing API access to their applications. The \u003cb\u003eApigee\u003c/b\u003e platform allows developers to deploy, monitor, and secure their APIs. It also generates API proxies based on the&nbsp;..."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "pLN7BxMTg7IC",
+      "etag": "ELe4ldntVJ4",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/pLN7BxMTg7IC",
+      "volumeInfo": {
+        "title": "APIs: A Strategy Guide",
+        "authors": [
+          "Daniel Jacobson",
+          "Greg Brail",
+          "Dan Woods"
+        ],
+        "publisher": "\"O'Reilly Media, Inc.\"",
+        "publishedDate": "2012",
+        "description": "\"Creating channels with application programming interfaces\"--Cover.",
+        "industryIdentifiers": [
+          {
+            "type": "ISBN_13",
+            "identifier": "9781449308926"
+          },
+          {
+            "type": "ISBN_10",
+            "identifier": "1449308929"
+          }
+        ],
+        "readingModes": {
+          "text": false,
+          "image": true
+        },
+        "pageCount": 149,
+        "printType": "BOOK",
+        "categories": [
+          "Computers"
+        ],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "preview-1.0.0",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=pLN7BxMTg7IC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=pLN7BxMTg7IC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+        },
+        "language": "en",
+        "previewLink": "http://books.google.com/books?id=pLN7BxMTg7IC&printsec=frontcover&dq=apigee&hl=&cd=8&source=gbs_api",
+        "infoLink": "http://books.google.com/books?id=pLN7BxMTg7IC&dq=apigee&hl=&source=gbs_api",
+        "canonicalVolumeLink": "https://books.google.com/books/about/APIs_A_Strategy_Guide.html?hl=&id=pLN7BxMTg7IC"
+      },
+      "saleInfo": {
+        "country": "US",
+        "saleability": "NOT_FOR_SALE",
+        "isEbook": false
+      },
+      "accessInfo": {
+        "country": "US",
+        "viewability": "PARTIAL",
+        "embeddable": true,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": false
+        },
+        "pdf": {
+          "isAvailable": true
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=pLN7BxMTg7IC&hl=&source=gbs_api",
+        "accessViewStatus": "SAMPLE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "&quot;Creating channels with application programming interfaces&quot;--Cover."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "6G-YDgAAQBAJ",
+      "etag": "VtbH9iuuwyE",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/6G-YDgAAQBAJ",
+      "volumeInfo": {
+        "title": "Smart Mobility – Connecting Everyone",
+        "subtitle": "Trends, Concepts and Best Practices",
+        "authors": [
+          "Barbara Flügge"
+        ],
+        "publisher": "Springer",
+        "publishedDate": "2017-04-03",
+        "description": "This book presents a comprehensive overview of various aspects of mobility and transportation to be smart and seamless. It provides basic principles and trends of smart mobility as well as international examples. The topic of this work is especially interesting as the future of human centered and business triggered ecosystems is increasingly dependent on the coordination capabilities of all participating and influencing members to manage transportation needs. Even more the fulfillment of the right to mobility for individual and cargo related mobility asks for mobility enablement in a predictive, digital and intermodal manner. Therefore, this book is useful not only for decision makers in several positions but also for people who are interested in trends of transportation and mobility.",
+        "industryIdentifiers": [
+          {
+            "type": "ISBN_13",
+            "identifier": "9783658156220"
+          },
+          {
+            "type": "ISBN_10",
+            "identifier": "3658156228"
+          }
+        ],
+        "readingModes": {
+          "text": true,
+          "image": true
+        },
+        "pageCount": 293,
+        "printType": "BOOK",
+        "categories": [
+          "Computers"
+        ],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "0.0.1.0.preview.3",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=6G-YDgAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=6G-YDgAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+        },
+        "language": "en",
+        "previewLink": "http://books.google.com/books?id=6G-YDgAAQBAJ&pg=PA288&dq=apigee&hl=&cd=9&source=gbs_api",
+        "infoLink": "https://play.google.com/store/books/details?id=6G-YDgAAQBAJ&source=gbs_api",
+        "canonicalVolumeLink": "https://play.google.com/store/books/details?id=6G-YDgAAQBAJ"
+      },
+      "saleInfo": {
+        "country": "US",
+        "saleability": "FOR_SALE_AND_RENTAL",
+        "isEbook": true,
+        "listPrice": {
+          "amount": 84.99,
+          "currencyCode": "USD"
+        },
+        "retailPrice": {
+          "amount": 67.99,
+          "currencyCode": "USD"
+        },
+        "buyLink": "https://play.google.com/store/books/details?id=6G-YDgAAQBAJ&rdid=book-6G-YDgAAQBAJ&rdot=1&source=gbs_api",
+        "offers": [
+          {
+            "finskyOfferType": 1,
+            "listPrice": {
+              "amountInMicros": 84990000,
+              "currencyCode": "USD"
+            },
+            "retailPrice": {
+              "amountInMicros": 67990000,
+              "currencyCode": "USD"
+            },
+            "giftable": true
+          },
+          {
+            "finskyOfferType": 3,
+            "listPrice": {
+              "amountInMicros": 29750000,
+              "currencyCode": "USD"
+            },
+            "retailPrice": {
+              "amountInMicros": 25880000,
+              "currencyCode": "USD"
+            },
+            "rentalDuration": {
+              "unit": "DAY",
+              "count": 90
+            }
+          }
+        ]
+      },
+      "accessInfo": {
+        "country": "US",
+        "viewability": "PARTIAL",
+        "embeddable": true,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.com/books/download/Smart_Mobility_Connecting_Everyone-sample-epub.acsm?id=6G-YDgAAQBAJ&format=epub&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "pdf": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.com/books/download/Smart_Mobility_Connecting_Everyone-sample-pdf.acsm?id=6G-YDgAAQBAJ&format=pdf&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=6G-YDgAAQBAJ&hl=&source=gbs_api",
+        "accessViewStatus": "SAMPLE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "Accessed 18 Sept 2016 [182] Wikipedia (2016) OAuth. https://en.wikipedia.org/wiki/OAuth. Accessed 18 Sept 2016 [183] \u003cb\u003eApigee\u003c/b\u003e Corp. (2016) \u003cb\u003eapigee\u003c/b\u003e – intelligent API management. http://\u003cb\u003eapigee\u003c/b\u003e.com/about/products/ api-management."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "qcsoLHusAFsC",
+      "etag": "N+27x63Wc1A",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/qcsoLHusAFsC",
+      "volumeInfo": {
+        "title": "Getting Started with OAuth 2.0",
+        "authors": [
+          "Ryan Boyd"
+        ],
+        "publisher": "\"O'Reilly Media, Inc.\"",
+        "publishedDate": "2012-02-22",
+        "description": "Shows how the OAuth 2.0 protocol provides a single authorization for use across different sites on the Internet so that users can access their profiles, photographs, videos, and contact lists anywhere.",
+        "industryIdentifiers": [
+          {
+            "type": "ISBN_13",
+            "identifier": "9781449311605"
+          },
+          {
+            "type": "ISBN_10",
+            "identifier": "1449311601"
+          }
+        ],
+        "readingModes": {
+          "text": false,
+          "image": true
+        },
+        "pageCount": 81,
+        "printType": "BOOK",
+        "categories": [
+          "Computers"
+        ],
+        "averageRating": 5,
+        "ratingsCount": 1,
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "preview-1.0.0",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=qcsoLHusAFsC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=qcsoLHusAFsC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+        },
+        "language": "en",
+        "previewLink": "http://books.google.com/books?id=qcsoLHusAFsC&pg=PA62&dq=apigee&hl=&cd=10&source=gbs_api",
+        "infoLink": "http://books.google.com/books?id=qcsoLHusAFsC&dq=apigee&hl=&source=gbs_api",
+        "canonicalVolumeLink": "https://books.google.com/books/about/Getting_Started_with_OAuth_2_0.html?hl=&id=qcsoLHusAFsC"
+      },
+      "saleInfo": {
+        "country": "US",
+        "saleability": "NOT_FOR_SALE",
+        "isEbook": false
+      },
+      "accessInfo": {
+        "country": "US",
+        "viewability": "PARTIAL",
+        "embeddable": true,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": false
+        },
+        "pdf": {
+          "isAvailable": true
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=qcsoLHusAFsC&hl=&source=gbs_api",
+        "accessViewStatus": "SAMPLE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "Google&#39;s OAuth Playground \u003cb\u003eApigee&#39;s\u003c/b\u003e Console The \u003cb\u003eApigee\u003c/b\u003e Console enables exploring APIs from 20+ API providers, such as Facebook, Twitter, Salesforce, and SoundCloud. For those APIs supporting OAuth, it performs a typical OAuth flow,&nbsp;..."
+      }
+    }
+  ]
+}
