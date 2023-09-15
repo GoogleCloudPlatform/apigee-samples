@@ -18,7 +18,7 @@ export PROJECT="<GCP_PROJECT_ID>"
 export APIGEE_ENV="<APIGEE_ENVIRONMENT_NAME>"
 export APIGEE_HOST="<APIGEE_ENVIRONMENT_NAME>"
 
-# Uncomment and set values for the variables below if you want to bring 
+# Uncomment and set values for the variables below if you want to bring
 # your own OIDC Identity Provider for testing purposes.
 #
 #export JWKS_URI="<IDP_PROVIDED_JWKS_ENDPOINT>"

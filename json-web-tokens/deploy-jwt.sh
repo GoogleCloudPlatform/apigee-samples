@@ -15,28 +15,28 @@
 # limitations under the License.
 
 if [ -z "$PROJECT" ]; then
-    echo "No PROJECT variable set"
-    exit
+	echo "No PROJECT variable set"
+	exit
 fi
 
 if [ -z "$APIGEE_ENV" ]; then
-    echo "No APIGEE_ENV variable set"
-    exit
+	echo "No APIGEE_ENV variable set"
+	exit
 fi
 
 if [ -z "$APIGEE_HOST" ]; then
-    echo "No APIGEE_HOST variable set"
-    exit
+	echo "No APIGEE_HOST variable set"
+	exit
 fi
 
 if ! [ -x "$(command -v jq)" ]; then
-    echo "jq command is not on your PATH"
-    exit
+	echo "jq command is not on your PATH"
+	exit
 fi
 
 if ! [ -x "$(command -v openssl)" ]; then
-    echo "openssl command is not on your PATH"
-    exit
+	echo "openssl command is not on your PATH"
+	exit
 fi
 
 TOKEN=$(gcloud auth print-access-token)
@@ -54,7 +54,7 @@ npm run lint
 echo "Deploying Apigee artifacts..."
 
 echo "Importing and Deploying Apigee json-web-tokens proxy..."
-REV=$(apigeecli apis create bundle -f apiproxy  -n json-web-tokens --org "$PROJECT" --token "$TOKEN" --disable-check | jq ."revision" -r)
+REV=$(apigeecli apis create bundle -f apiproxy -n json-web-tokens --org "$PROJECT" --token "$TOKEN" --disable-check | jq ."revision" -r)
 apigeecli apis deploy --wait --name json-web-tokens --ovr --rev "$REV" --org "$PROJECT" --env "$APIGEE_ENV" --token "$TOKEN"
 
 echo "Generating keypair..."

@@ -18,18 +18,18 @@
 #gcloud services enable cloudbuild.googleapis.com
 
 if [ -z "$PROJECT" ]; then
-    echo "No PROJECT variable set"
-    exit
+	echo "No PROJECT variable set"
+	exit
 fi
 
 if [ -z "$APIGEE_ENV" ]; then
-    echo "No APIGEE_ENV variable set"
-    exit
+	echo "No APIGEE_ENV variable set"
+	exit
 fi
 
 if [ -z "$APIGEE_HOST" ]; then
-    echo "No APIGEE_HOST variable set"
-    exit
+	echo "No APIGEE_HOST variable set"
+	exit
 fi
 
 TOKEN=$(gcloud auth print-access-token)

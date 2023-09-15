@@ -15,26 +15,25 @@
 # limitations under the License.
 
 if [ -z "$PROJECT" ]; then
-    echo "No PROJECT variable set"
-    exit
+	echo "No PROJECT variable set"
+	exit
 fi
 
 if ! [ -x "$(command -v jq)" ]; then
-    echo "jq command is not on your PATH"
-    exit
+	echo "jq command is not on your PATH"
+	exit
 fi
 
-function wait_for_operation () {
-    while true
-    do
-        STATE="$(apigeecli operations get -o "$PROJECT" -n "$1" -t "$TOKEN" | jq --raw-output '.metadata.state')"
-        if [ "$STATE" = "FINISHED" ]; then
-            echo
-            break
-        fi
-        echo -n .
-        sleep 5
-    done
+function wait_for_operation() {
+	while true; do
+		STATE="$(apigeecli operations get -o "$PROJECT" -n "$1" -t "$TOKEN" | jq --raw-output '.metadata.state')"
+		if [ "$STATE" = "FINISHED" ]; then
+			echo
+			break
+		fi
+		echo -n .
+		sleep 5
+	done
 }
 
 echo "Installing apigeecli"
@@ -53,37 +52,37 @@ ENVIRONMENT_GROUP_NAME="sample-environment-group"
 echo "Deleting load balancer..."
 # Delete forwarding rule
 gcloud compute forwarding-rules delete sample-apigee-https-lb-rule \
-   --global \
-   --project="$PROJECT" --quiet
+	--global \
+	--project="$PROJECT" --quiet
 
 # Delete target HTTPS proxy
 gcloud compute target-https-proxies delete sample-apigee-https-proxy \
-  --project="$PROJECT" --quiet
+	--project="$PROJECT" --quiet
 
 # Delete URL map
 gcloud compute url-maps delete sample-apigee-urlmap \
-  --project="$PROJECT" --quiet
+	--project="$PROJECT" --quiet
 
 # Delete backend service
 gcloud compute backend-services delete sample-apigee-backend \
-  --global \
-  --project="$PROJECT" --quiet
+	--global \
+	--project="$PROJECT" --quiet
 
 # Delete NEG
 gcloud compute network-endpoint-groups delete sample-apigee-neg \
-  --region="$REGION" \
-  --project="$PROJECT" --quiet
+	--region="$REGION" \
+	--project="$PROJECT" --quiet
 
 # Delete cert
 echo "Deleting SSL certificate..."
 gcloud compute ssl-certificates delete sample-apigee-ssl-cert \
-   --project "$PROJECT" --quiet
+	--project "$PROJECT" --quiet
 
 # Delete VIP
 echo "Deleting load balancer IP address..."
 gcloud compute addresses delete sample-apigee-vip \
-  --global \
-  --project "$PROJECT" --quiet
+	--global \
+	--project "$PROJECT" --quiet
 
 echo -n "Detaching environment from group..."
 OPERATION=$(apigeecli envgroups detach -o "$PROJECT" -e "$ENVIRONMENT_NAME" -n "$ENVIRONMENT_GROUP_NAME" -t "$TOKEN" | jq --raw-output '.name' | awk -F/ '{print $4}')

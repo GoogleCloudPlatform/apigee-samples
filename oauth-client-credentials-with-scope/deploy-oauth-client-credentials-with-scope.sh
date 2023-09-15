@@ -15,18 +15,18 @@
 # limitations under the License.
 
 if [ -z "$PROJECT" ]; then
-    echo "No PROJECT variable set"
-    exit
+	echo "No PROJECT variable set"
+	exit
 fi
 
 if [ -z "$APIGEE_ENV" ]; then
-    echo "No APIGEE_ENV variable set"
-    exit
+	echo "No APIGEE_ENV variable set"
+	exit
 fi
 
 if [ -z "$APIGEE_HOST" ]; then
-    echo "No APIGEE_HOST variable set"
-    exit
+	echo "No APIGEE_HOST variable set"
+	exit
 fi
 
 TOKEN=$(gcloud auth print-access-token)
@@ -46,7 +46,7 @@ export PATH=$PATH:$HOME/.apigeecli/bin
 echo "Deploying Apigee artifacts..."
 
 echo "Importing and Deploying Apigee oauth-client-credentials-with-scope proxy..."
-REV=$(apigeecli apis create bundle -f apiproxy  -n oauth-client-credentials-with-scope --org "$PROJECT" --token "$TOKEN" --disable-check | jq ."revision" -r)
+REV=$(apigeecli apis create bundle -f apiproxy -n oauth-client-credentials-with-scope --org "$PROJECT" --token "$TOKEN" --disable-check | jq ."revision" -r)
 apigeecli apis deploy --wait --name oauth-client-credentials-with-scope --ovr --rev "$REV" --org "$PROJECT" --env "$APIGEE_ENV" --token "$TOKEN"
 
 echo "Creating API Products"
@@ -89,7 +89,7 @@ echo " "
 echo "-----------------------------"
 echo " "
 echo "Generating a read scope token using $APP_NAME_READ_SCOPE credentials"
-READ_TOKEN=$(curl -s POST https://"$PROXY_URL"/token -u "$APP_READ_SCOPE_CLIENT_ID":"$APP_READ_SCOPE_CLIENT_SECRET" -d "grant_type=client_credentials&scope=read" | jq ."access_token" -r )
+READ_TOKEN=$(curl -s POST https://"$PROXY_URL"/token -u "$APP_READ_SCOPE_CLIENT_ID":"$APP_READ_SCOPE_CLIENT_SECRET" -d "grant_type=client_credentials&scope=read" | jq ."access_token" -r)
 export READ_TOKEN
 echo " "
 echo "Then, to access the protected resource, run the following curl commands"
@@ -101,7 +101,7 @@ echo " "
 echo "-----------------------------"
 echo " "
 echo "Generating a write scope token using $APP_NAME_WRITE_SCOPE credentials"
-WRITE_TOKEN=$(curl -s POST https://"$PROXY_URL"/token -u "$APP_WRITE_SCOPE_CLIENT_ID":"$APP_WRITE_SCOPE_CLIENT_SECRET" -d "grant_type=client_credentials&scope=write" | jq ."access_token" -r )
+WRITE_TOKEN=$(curl -s POST https://"$PROXY_URL"/token -u "$APP_WRITE_SCOPE_CLIENT_ID":"$APP_WRITE_SCOPE_CLIENT_SECRET" -d "grant_type=client_credentials&scope=write" | jq ."access_token" -r)
 export WRITE_TOKEN
 echo " "
 echo "Then, to access the protected resource, run the following curl commands"

@@ -15,36 +15,35 @@
 # limitations under the License.
 
 if [ -z "$PROJECT" ]; then
-    echo "No PROJECT variable set"
-    exit
+	echo "No PROJECT variable set"
+	exit
 fi
 
 if [ -z "$NETWORK" ]; then
-    echo "No NETWORK variable set"
-    exit
+	echo "No NETWORK variable set"
+	exit
 fi
 
 if [ -z "$SUBNET" ]; then
-    echo "No SUBNET variable set"
-    exit
+	echo "No SUBNET variable set"
+	exit
 fi
 
 if ! [ -x "$(command -v jq)" ]; then
-    echo "jq command is not on your PATH"
-    exit
+	echo "jq command is not on your PATH"
+	exit
 fi
 
-function wait_for_operation () {
-    while true
-    do
-        STATE="$(apigeecli operations get -o "$PROJECT" -n "$1" -t "$TOKEN" | jq --raw-output '.metadata.state')"
-        if [ "$STATE" = "FINISHED" ]; then
-            echo
-            break
-        fi
-        echo -n .
-        sleep 5
-    done
+function wait_for_operation() {
+	while true; do
+		STATE="$(apigeecli operations get -o "$PROJECT" -n "$1" -t "$TOKEN" | jq --raw-output '.metadata.state')"
+		if [ "$STATE" = "FINISHED" ]; then
+			echo
+			break
+		fi
+		echo -n .
+		sleep 5
+	done
 }
 
 echo "Installing apigeecli"
@@ -91,56 +90,55 @@ wait_for_operation "$OPERATION"
 # Create a Google managed SSL certificate
 echo "Creating SSL certificate..."
 gcloud compute ssl-certificates create sample-apigee-ssl-cert \
-    --domains="$RUNTIME_HOST_ALIAS" --project "$PROJECT" --quiet
+	--domains="$RUNTIME_HOST_ALIAS" --project "$PROJECT" --quiet
 
 ## Create a global Load Balancer
 echo "Creating external load balancer..."
 
 # Create a PSC NEG
 gcloud compute network-endpoint-groups create sample-apigee-neg \
-  --network-endpoint-type=private-service-connect \
-  --psc-target-service="$SERVICE_ATTACHMENT" \
-  --region="$REGION" \
-  --network="$NETWORK" \
-  --subnet="$SUBNET" \
-  --project="$PROJECT" --quiet
+	--network-endpoint-type=private-service-connect \
+	--psc-target-service="$SERVICE_ATTACHMENT" \
+	--region="$REGION" \
+	--network="$NETWORK" \
+	--subnet="$SUBNET" \
+	--project="$PROJECT" --quiet
 
 # Create a backend service and add the NEG
 gcloud compute backend-services create sample-apigee-backend \
-  --load-balancing-scheme=EXTERNAL_MANAGED \
-  --protocol=HTTPS \
-  --global --project="$PROJECT" --quiet
+	--load-balancing-scheme=EXTERNAL_MANAGED \
+	--protocol=HTTPS \
+	--global --project="$PROJECT" --quiet
 
 gcloud compute backend-services add-backend sample-apigee-backend \
-  --network-endpoint-group=sample-apigee-neg \
-  --network-endpoint-group-region="$REGION" \
-  --global --project="$PROJECT" --quiet
+	--network-endpoint-group=sample-apigee-neg \
+	--network-endpoint-group-region="$REGION" \
+	--global --project="$PROJECT" --quiet
 
 # Create a Load Balancing URL map
 gcloud compute url-maps create sample-apigee-urlmap \
-  --default-service sample-apigee-backend --project="$PROJECT" --quiet
+	--default-service sample-apigee-backend --project="$PROJECT" --quiet
 
 # Create a Load Balancing target HTTPS proxy
 gcloud compute target-https-proxies create sample-apigee-https-proxy \
-  --url-map sample-apigee-urlmap \
-  --ssl-certificates sample-apigee-ssl-cert --project="$PROJECT" --quiet
+	--url-map sample-apigee-urlmap \
+	--ssl-certificates sample-apigee-ssl-cert --project="$PROJECT" --quiet
 
 # Create a global forwarding rule
 gcloud compute forwarding-rules create sample-apigee-https-lb-rule \
-  --load-balancing-scheme=EXTERNAL_MANAGED \
-  --network-tier=PREMIUM \
-  --address=sample-apigee-vip --global \
-  --target-https-proxy=sample-apigee-https-proxy --ports=443 --project="$PROJECT" --quiet
+	--load-balancing-scheme=EXTERNAL_MANAGED \
+	--network-tier=PREMIUM \
+	--address=sample-apigee-vip --global \
+	--target-https-proxy=sample-apigee-https-proxy --ports=443 --project="$PROJECT" --quiet
 
 echo -n "Waiting for certificate provisioning to complete (may take some time)..."
-while true
-do
-  TLS_STATUS="$(gcloud compute ssl-certificates describe sample-apigee-ssl-cert --format=json --project "$PROJECT" --quiet | jq -r '.managed.status')"
-  if [ "$TLS_STATUS" = "ACTIVE" ]; then
-    break
-  fi
-  echo -n .
-  sleep 10
+while true; do
+	TLS_STATUS="$(gcloud compute ssl-certificates describe sample-apigee-ssl-cert --format=json --project "$PROJECT" --quiet | jq -r '.managed.status')"
+	if [ "$TLS_STATUS" = "ACTIVE" ]; then
+		break
+	fi
+	echo -n .
+	sleep 10
 done
 
 # Pause to allow TLS setup to complete
