@@ -13,7 +13,7 @@ With the PopulateCache policy, LookupCache policy, and InvalidateCache policy, y
 
 For more details refer to [Caching and persistence overview](https://cloud.google.com/apigee/docs/api-platform/cache/persistence-tools), and [Cache internals](https://cloud.google.com/apigee/docs/api-platform/cache/cache-internals).
 
-## Implementation on Apigee 
+## Implementation on Apigee
 
 This sample demonstrates how to use the ResponseCache policy to cache the response from the target backend. When the request cannot be served from a cache entry, the current time is also cached, and is returned as the cached-on header. Since this additional data point is not part of the target backend's response payload, caching is achieved by using the PopulateCache, and LookupCache policies.
 

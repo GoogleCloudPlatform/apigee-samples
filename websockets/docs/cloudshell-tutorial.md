@@ -26,7 +26,7 @@ cd websockets
 ## Create a websockets backend in Cloud Run
 
 Create a Docker image:
-In Cloud Shell, clone the websockets repo 
+In Cloud Shell, clone the websockets repo
 
 ```sh
 export PROJECT=$GOOGLE_CLOUD_PROJECT

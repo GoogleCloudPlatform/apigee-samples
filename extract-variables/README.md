@@ -2,9 +2,9 @@
 
 This sample shows how to easily extract fields from an XML and JSON response. This sample leverages the following policies::
 
- * [Extract Variables](https://cloud.google.com/apigee/docs/api-platform/reference/policies/extract-variables-policy) policy to extract subsets of data from the response body.
- * [XML to JSON](https://cloud.google.com/apigee/docs/api-platform/reference/policies/xml-json-policy) policy to convert the XML response from the target server to JSON.
- * [Assign Message](https://cloud.google.com/apigee/docs/api-platform/reference/policies/assign-message-policy?hl=en) policy to set the response Headers with the extracted fields and other [flow variables](https://cloud.google.com/apigee/docs/api-platform/fundamentals/introduction-flow-variables).
+* [Extract Variables](https://cloud.google.com/apigee/docs/api-platform/reference/policies/extract-variables-policy) policy to extract subsets of data from the response body.
+* [XML to JSON](https://cloud.google.com/apigee/docs/api-platform/reference/policies/xml-json-policy) policy to convert the XML response from the target server to JSON.
+* [Assign Message](https://cloud.google.com/apigee/docs/api-platform/reference/policies/assign-message-policy?hl=en) policy to set the response Headers with the extracted fields and other [flow variables](https://cloud.google.com/apigee/docs/api-platform/fundamentals/introduction-flow-variables).
 
 ## About the extract variables policy
 
@@ -27,7 +27,7 @@ When defining the [ExtractVariables](https://cloud.google.com/apigee/docs/api-pl
 When executed, the policy applies a text pattern to the content and, upon finding a match, sets the value of the designated variable with the content. Other policies and code can then consume those variables to enable dynamic behavior or to send business data to Apigee API Analytics.
 
 
-## Implementation on Apigee 
+## Implementation on Apigee
 
 This sample uses the the [Apigee Mock Target API](https://apidocs.apigee.com/docs/mock-target/1/overview) as backend server, providing an XML response with the following fields:
 
@@ -35,7 +35,7 @@ This sample uses the the [Apigee Mock Target API](https://apidocs.apigee.com/doc
 <?xml version="1.0" encoding="UTF-8"?> <root><city>San Jose</city><firstName>John</firstName><lastName>Doe</lastName><state>CA</state></root>
 ```
 
-We use the  [Extract Variables](https://cloud.google.com/apigee/docs/api-platform/reference/policies/extract-variables-policy) policy as a first step to extract subsets of data from the XML response body. 
+We use the  [Extract Variables](https://cloud.google.com/apigee/docs/api-platform/reference/policies/extract-variables-policy) policy as a first step to extract subsets of data from the XML response body.
 Later on we leverage the [XML to JSON](https://cloud.google.com/apigee/docs/api-platform/reference/policies/xml-json-policy) policy to convert the XML response from the target server to JSON.
 We use again the  [Extract Variables](https://cloud.google.com/apigee/docs/api-platform/reference/policies/extract-variables-policy) policy to extract subsets of data from the now converted JSON string.
 Finally we use the [Assign Message](https://cloud.google.com/apigee/docs/api-platform/reference/policies/assign-message-policy?hl=en) policy to set the response headers with the extracted fields and other [flow variables](https://cloud.google.com/apigee/docs/api-platform/reference/variables-reference).

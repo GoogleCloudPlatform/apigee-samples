@@ -16,18 +16,18 @@
 set -e
 
 if [ -z "$PROJECT" ]; then
-    echo "No PROJECT variable set"
-    exit
+	echo "No PROJECT variable set"
+	exit
 fi
 
 if [ -z "$APIGEE_ENV" ]; then
-    echo "No APIGEE_ENV variable set"
-    exit
+	echo "No APIGEE_ENV variable set"
+	exit
 fi
 
 if [ -z "$APIGEE_HOST" ]; then
-    echo "No APIGEE_HOST variable set"
-    exit
+	echo "No APIGEE_HOST variable set"
+	exit
 fi
 
 TOKEN=$(gcloud auth print-access-token)
@@ -45,7 +45,7 @@ npm run lint
 echo "Deploying Apigee artifacts..."
 
 echo "Importing and Deploying Apigee basic-caching proxy..."
-REV=$(apigeecli apis create bundle -f apiproxy  -n basic-caching --org "$PROJECT" --token "$TOKEN" --disable-check | jq ."revision" -r)
+REV=$(apigeecli apis create bundle -f apiproxy -n basic-caching --org "$PROJECT" --token "$TOKEN" --disable-check | jq ."revision" -r)
 apigeecli apis deploy --wait --name basic-caching --ovr --rev "$REV" --org "$PROJECT" --env "$APIGEE_ENV" --token "$TOKEN"
 
 # var is expected by integration test (apickli)
