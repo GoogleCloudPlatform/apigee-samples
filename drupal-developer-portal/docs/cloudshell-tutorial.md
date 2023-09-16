@@ -9,7 +9,7 @@ Let's get started!
 
 ## Setup environment
 
-1. Navigate to the 'drupal-developer-portal' drirectory in the Cloud Shell.
+1. Navigate to the 'drupal-developer-portal' directory in the Cloud Shell.
 
 ```sh
 cd drupal-developer-portal
@@ -32,6 +32,7 @@ Now source the `env.sh` file
 ```sh
 source ./env.sh
 ```
+
 ---
 
 ## Deploy Apigee components
@@ -45,13 +46,15 @@ Next, let's deploy some Apigee resources necessary to create a Drupal developer 
 **NOTE: This script creates an API Proxy and API product. It does not, however, create the developer portal. We will create and test that manually**
 
 ---
+
 ## Configure Drupal Developer Portal
 
-Now we will configure our Drupal Devoper Portal and expose our Apigee API product through it
+Now we will configure our Drupal Developer Portal and expose our Apigee API product through it
 
 ### Launch Marketplace Solution
 
 Follow the [documentation](https://cloud.google.com/apigee/docs/api-platform/publish/drupal/get-started-cloud-marketplace) to deploy the Drupal portal infrastructure using the Marketplace Apigee Developer Portal Kickstart solution. Name your deployment `sample-drupal-developer-portal`and be sure to [enable HTTPS](https://cloud.google.com/apigee/docs/api-platform/publish/drupal/apigee-cloud-marketplace-customize#https) under Networking during portal configuration. All other configurations can be left with default values.
+
 * If your portal has errors or does not load properly check Cloud Logging for details as it may fail silently with issues like org policy restrictions.
 * This Marketplace solution may take up to an hour to deploy
 
@@ -63,7 +66,7 @@ Here we will enter our portal, configure its admin account, and sync it with our
 2. Once your portal has finished initializing, access your app using the https site link and sign into your app using the basic auth credentials found underneath the link
 3. Verify details after sign in and complete Drupal installation
 4. Configure Apigee: Configure the endpoint to reflect Apigee X and paste in your Apigee Org ID
-5. Configure Site: Configure your site with the information and admin account of your chosing. Be sure that you have no typos when defining this information
+5. Configure Site: Configure your site with the information and admin account of your choosing. Be sure that you have no typos when defining this information
 6. Install Demo Content: Choose to enable Demo Content and click Save and Continue
 
 ### Add Apigee Product to the Drupal API Catalog
@@ -73,19 +76,21 @@ Now we will add our `sample-drupal-developer-portal-product` to our Drupal API C
 1. From the Drupal portal, navigate to Content > API Catalog
 2. Click the "+ OpenAPI" button
 3. Configure as shown below
-- Name: Sample Drupal Developer Portal API
-- Description: A portal for an API key protected proxy
-- Image: Image of your choice (optional)
-- Specification Source Type: File
-- OpenAPI specification:Use the <walkthrough-editor-open-file filePath="drupal-developer-portal/drupal-developer-portal.yaml">drupal-developer-portal.yaml</walkthrough-editor-open-file>  OpenAPI document from this repo:
-    - If you ran the deployment script from Cloud Shell:
-        - Navigate back to Cloud Shell
-        - Open drupal-developer-portal.yaml & download it to your local computer. No need to update file content as it was already updated when running the deployment script.
-    - Otherwise, do the following:
-        - Download <walkthrough-editor-open-file filePath="drupal-developer-portal/drupal-developer-portal.yaml">drupal-developer-portal.yaml</walkthrough-editor-open-file> to your local computer
-        - Open the file and replace `[APIGEE_HOST]` with your own Apigee host/domain.
-    - Upload your updated drupal-developer-portal.yaml file as API documentation
-- Leave all other fields as their default values.
+
+* Name: Sample Drupal Developer Portal API
+* Description: A portal for an API key protected proxy
+* Image: Image of your choice (optional)
+* Specification Source Type: File
+* OpenAPI specification:Use the <walkthrough-editor-open-file filePath="drupal-developer-portal/drupal-developer-portal.yaml">drupal-developer-portal.yaml</walkthrough-editor-open-file>  OpenAPI document from this repo:
+  * If you ran the deployment script from Cloud Shell:
+    * Navigate back to Cloud Shell
+    * Open drupal-developer-portal.yaml & download it to your local computer. No need to update file content as it was already updated when running the deployment script.
+  * Otherwise, do the following:
+    * Download <walkthrough-editor-open-file filePath="drupal-developer-portal/drupal-developer-portal.yaml">drupal-developer-portal.yaml</walkthrough-editor-open-file> to your local computer
+    * Open the file and replace `[APIGEE_HOST]` with your own Apigee host/domain.
+  * Upload your updated drupal-developer-portal.yaml file as API documentation
+* Leave all other fields as their default values.
+
 4. Click save
 
 ### Create API App in Drupal
@@ -106,8 +111,8 @@ Finally, we will test out our Drupal portal by making secured requests to our AP
 3. Select the / GET call from under API REFERENCE. Under Try this API click EXECUTE
 4. Voila! You have a working API secured and documented within your Marketplace Drupal Portal!
 
-
 ---
+
 ## Conclusion & Cleanup
 
 <walkthrough-conclusion-trophy></walkthrough-conclusion-trophy>
@@ -122,7 +127,7 @@ First, you need to delete the resources we manually created
 
 1. From the Apigee console, navigate to Publish > Developers
 2. Find the account you created in your developer portal, hover over it, and select the trash can icon to delete. This will also delete all Apigee Apps associated with your developer
-3. From the GCP Deployment Manager Deployments page select your `sample-drupal-developer-portal` deployment and click delete at the top. A popup will be shown, be sure to select the option to delete all resrouces associated with the Drupal portal.
+3. From the GCP Deployment Manager Deployments page select your `sample-drupal-developer-portal` deployment and click delete at the top. A popup will be shown, be sure to select the option to delete all resources associated with the Drupal portal.
 
 After that, source your `env.sh` script and run the following to delete your product and proxy:
 

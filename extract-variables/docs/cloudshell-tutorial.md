@@ -3,7 +3,6 @@
 ---
 This sample shows how to easily extract fields from an XML and JSON response.
 
-
 Let's get started!
 
 ---
@@ -44,12 +43,12 @@ Next, let's create and deploy the Apigee resources necessary to test the Extract
 
 This script creates a sample API Proxy. The script also tests that the deployment and configuration has been successful.
 
-
 ### Test the APIs
 
 The script that deploys the Apigee API proxies prints the proxy and other information you will need to run the commands below.
 
 Run the following curl command:
+
 ```sh
 curl -v https://$APIGEE_HOST/v1/samples/extract-variables
 ```
@@ -62,6 +61,7 @@ Use the debug tool inside Apigee to see how we:
 4. Assign the extracted variables to the HTTP response headers.
 
 ---
+
 ## Conclusion
 
 <walkthrough-conclusion-trophy></walkthrough-conclusion-trophy>

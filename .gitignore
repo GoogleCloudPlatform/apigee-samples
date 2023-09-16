@@ -1,6 +1,7 @@
 **/node_modules/**
 **/generated/**
 **/target/**
+**/megalinter-reports/**
 
 .settings
 .project

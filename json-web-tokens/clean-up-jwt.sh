@@ -15,18 +15,18 @@
 # limitations under the License.
 
 if [ -z "$PROJECT" ]; then
-    echo "No PROJECT variable set"
-    exit
+	echo "No PROJECT variable set"
+	exit
 fi
 
 if [ -z "$APIGEE_ENV" ]; then
-    echo "No APIGEE_ENV variable set"
-    exit
+	echo "No APIGEE_ENV variable set"
+	exit
 fi
 
 if ! [ -x "$(command -v jq)" ]; then
-    echo "jq command is not on your PATH"
-    exit
+	echo "jq command is not on your PATH"
+	exit
 fi
 
 TOKEN=$(gcloud auth print-access-token)

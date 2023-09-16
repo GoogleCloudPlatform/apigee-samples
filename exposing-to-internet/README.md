@@ -23,6 +23,7 @@ Customers can connect an external load balancer to this attachment using a [PSC 
 [![Alt text](https://img.youtube.com/vi/LlE05zlfnlA/0.jpg)](https://www.youtube.com/watch?v=LlE05zlfnlA)
 
 ## Prerequisites
+
 1. An Apigee X instance already provisioned. If not, you may follow the steps [here](https://cloud.google.com/apigee/docs/api-platform/get-started/provisioning-intro).
 2. Your account must have [permissions to configure access routing](https://cloud.google.com/apigee/docs/api-platform/get-started/permissions#access-routing-permissions) and create Apigee environment and environment groups. See the predefined roles listed [here](https://cloud.google.com/apigee/docs/api-platform/get-started/permissions#predefined-roles).
 2. Make sure the following tools are available in your terminal's `$PATH` (Cloud Shell has these preconfigured)
@@ -31,7 +32,7 @@ Customers can connect an external load balancer to this attachment using a [PSC 
     * jq
     * npm
 
-# (QuickStart) Setup using CloudShell
+## (QuickStart) Setup using CloudShell
 
 Use the following GCP CloudShell tutorial, and follow the instructions.
 
@@ -53,6 +54,7 @@ cd exposing-to-internet
 * `SUBNET` the VPC subnet where the PSC NEG will be deployed
 
 Now source the `env.sh` file
+
 ```bash
 source ./env.sh
 ```
@@ -62,24 +64,32 @@ source ./env.sh
 ```bash
 ./deploy.sh
 ```
+
 Please note the script may take some time to complete while certificate provisioning occurs.
 
 ## Testing
+
 To run the tests, first retrieve Node.js dependencies with:
-```
+
+```bash
 npm install
 ```
+
 Ensure the following environment variables have been set correctly:
+
 * `RUNTIME_HOST_ALIAS`
 
 and then run the tests:
-```
+
+```bash
 npm run test
 ```
 
 ## Example Requests
+
 To manually test the instance via the external load balancer URL, wait a minute and then make the following request:
-```
+
+```bash
 curl https://$RUNTIME_HOST_ALIAS/healthz/ingress -H 'User-Agent: GoogleHC'
 ```
 

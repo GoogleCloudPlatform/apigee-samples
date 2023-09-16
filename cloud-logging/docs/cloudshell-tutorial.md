@@ -15,7 +15,7 @@ Ensure you have an active GCP account selected in the Cloud shell
 gcloud auth login
 ```
 
-Navigate to the 'cloud-logging' drirectory in the Cloud shell.
+Navigate to the 'cloud-logging' directory in the Cloud shell.
 
 ```sh
 cd cloud-logging
@@ -50,17 +50,19 @@ Generate a few sample requests to the deployed API Proxy.
 ```sh
 curl  https://$APIGEE_HOST/v1/samples/cloud-logging
 ```
+
 > _If you want, consider also checking the call in the [Debug](https://cloud.google.com/apigee/docs/api-platform/debug/trace) view_
 
-After issuing some calls, let's confirm the configured variables / values set on the Message Logging policy were successfully writen to Cloud Logging with 
+After issuing some calls, let's confirm the configured variables / values set on the Message Logging policy were successfully written to Cloud Logging with
 
 ```sh
 gcloud logging read "logName=projects/$PROJECT/logs/apigee"
 ```
 
-Cloud Logging is quite powerful. Few free to navigate to its UI in the GCP Console (_Logging_ Product Page in the console) and explore additional features such as filters, custom searchs, custom alerts and much more.
+Cloud Logging is quite powerful. Few free to navigate to its UI in the GCP Console (_Logging_ Product Page in the console) and explore additional features such as filters, custom searches, custom alerts and much more.
 
 ---
+
 ## Conclusion
 
 <walkthrough-conclusion-trophy></walkthrough-conclusion-trophy>
@@ -71,7 +73,7 @@ Congratulations! You've successfully made an Apigee Proxy send custom logging me
 
 ## Cleanup
 
-If you want to clean up the artefacts from this example in your Apigee Organization, first source your `env.sh` script, and then run
+If you want to clean up the artifacts from this example in your Apigee Organization, first source your `env.sh` script, and then run
 
 ```bash
 ./clean-up-cloud-logging.sh

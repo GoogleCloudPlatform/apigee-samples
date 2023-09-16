@@ -14,6 +14,10 @@
 
 MD013:
   code_blocks: false
+  line_length: 1000
 MD024:
   siblings_only: true
 MD041: false
+MD029: false
+MD033: false
+MD036: false

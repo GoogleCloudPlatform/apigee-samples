@@ -1,10 +1,10 @@
 # Client Credentials Grant Type with OAuth2 scopes
 
-This sample lets you request an OAuth token from Apigee using the OAuth 2.0 client credentials grant type flow and limit access using [OAuth2 scopes](https://cloud.google.com/apigee/docs/api-platform/security/oauth/working-scopes) and additionally shows how to limit access. 
+This sample lets you request an OAuth token from Apigee using the OAuth 2.0 client credentials grant type flow and limit access using [OAuth2 scopes](https://cloud.google.com/apigee/docs/api-platform/security/oauth/working-scopes) and additionally shows how to limit access.
 
 ## About client credentials
 
-Most typically, this grant type is used when the app is also the resource owner. For example, an app may need to access a backend cloud-based storage service to store and retrieve data that it uses to perform its work, rather than data specifically owned by the end user. This grant type flow occurs strictly between a client app and the authorization server. An end user does not participate in this grant type flow. 
+Most typically, this grant type is used when the app is also the resource owner. For example, an app may need to access a backend cloud-based storage service to store and retrieve data that it uses to perform its work, rather than data specifically owned by the end user. This grant type flow occurs strictly between a client app and the authorization server. An end user does not participate in this grant type flow.
 
 ### What is OAuth2 scope?
 
@@ -18,21 +18,22 @@ With the client credentials grant type flow, the client app requests an access t
 
 The API is called like this, where the client ID and secret are Base64-encoded and used in the Basic Auth header:
 
-```
+```bash
 curl -H "Authorization: Basic <base64-encoded key:secret>" https://your-api-url.com/oauth/token -d "grant_type=client_credentials&scope=<scope>"
 ```
 
 For more info on how you can configure scopes on API Products and how they are assigned to access tokens, check [this document](https://cloud.google.com/apigee/docs/api-platform/security/oauth/working-scopes#howarescopesassignedtoaccesstokens)
 
-## Implementation on Apigee 
+## Implementation on Apigee
 
-The client credentials sample uses one policy that executes on Apigee : An OAuthV2 policy to generate the access token. The policy is attached to the `/token` endpoint (a custom flow on Apigee). 
+The client credentials sample uses one policy that executes on Apigee : An OAuthV2 policy to generate the access token. The policy is attached to the `/token` endpoint (a custom flow on Apigee).
 
 ### Screencast
 
 [![Alt text](https://img.youtube.com/vi/kZEaKPQshro/0.jpg)](https://www.youtube.com/watch?v=kZEaKPQshro)
 
 ## Prerequisites
+
 1. [Provision Apigee X](https://cloud.google.com/apigee/docs/api-platform/get-started/provisioning-intro)
 2. Configure [external access](https://cloud.google.com/apigee/docs/api-platform/get-started/configure-routing#external-access) for API traffic to your Apigee X instance
 3. Access to deploy proxies, create products, apps and developers in Apigee
@@ -43,7 +44,7 @@ The client credentials sample uses one policy that executes on Apigee : An OAuth
     * jq
     * npm
 
-# (QuickStart) Setup using CloudShell
+## (QuickStart) Setup using CloudShell
 
 Use the following GCP CloudShell tutorial, and follow the instructions.
 
@@ -52,7 +53,6 @@ Use the following GCP CloudShell tutorial, and follow the instructions.
 ## Setup instructions
 
 1. Clone the apigee-samples repo, and switch the oauth-client-credentials-with-scope directory
-
 
 ```bash
 git clone https://github.com/GoogleCloudPlatform/apigee-samples.git
@@ -78,11 +78,15 @@ source ./env.sh
 ```
 
 ## Testing the Client Credentials Proxy
+
 To run the tests, first retrieve Node.js dependencies with:
-```
+
+```bash
 npm install
 ```
+
 Ensure the following environment variables have been set correctly:
+
 * `PROXY_URL`
 * `APP_READ_SCOPE_CLIENT_ID`
 * `APP_READ_SCOPE_CLIENT_SECRET`
@@ -90,17 +94,19 @@ Ensure the following environment variables have been set correctly:
 * `APP_WRITE_SCOPE_CLIENT_SECRET`
 
 and then run the tests:
-```
+
+```bash
 npm run test
 ```
 
 ## Example Requests
+
 For additional examples, including negative test cases,
 see the [oauth-client-credentials-with-scope.feature](./test/integration/features/oauth-client-credentials-with-scope.feature) file.
 
 ## Test the APIs
 
-The script that deploys the Apigee resources will print two sets of cURL commands. 
+The script that deploys the Apigee resources will print two sets of cURL commands.
 
 The first set returns a token with `read` access. You will find that it only works with the GET call. The POST call will fail. This is because of the insufficient scope to make a POST call to that resource.
 

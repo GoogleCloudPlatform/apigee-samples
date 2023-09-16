@@ -13,6 +13,8 @@ info:
   title: Sample Integrated Developer Portal
   description: A portal for an API key protected proxy
   version: "1"
+  contact:
+    name: Sample Integrated Developer Portal
 servers:
   - url: https://[APIGEE_HOST]/v1/samples/integrated-developer-portal
 security:
@@ -22,7 +24,7 @@ paths:
     get:
       operationId: GetMessage
       responses:
-        200:
+        '200':
           description: A successful response.
           content: {}
 components:
