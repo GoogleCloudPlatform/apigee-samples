@@ -19,11 +19,11 @@ just a few guidelines you need to follow.
  multiple projects in the same pull request
     - Consult
 [GitHub Help](https://help.github.com/articles/about-pull-requests/) for more information on using pull requests. Also please check if GitHub Action is enabled in your forked repo. Go to the Settings tab in the GitHub repo, under Actions and General, make sure the permissions are set to allow all actions and reusable workflows
-2. In your forked repo, create a new branch and make your changes: 
-    i. To run the mega-linter locally, you will need to install docker and node on your local machine
-    ii. Install mega-linter-runner by running `npm install mega-linter-runner -g` (Note: You might need to run this with sudo permissions)
-    iii. Run the megalinter locally by running `mega-linter-runner -p .`. This should run all the checks locally
-    iv. Once all the checks and changes are made, commit them to your branch
+2. In your forked repo, create a new branch and make your changes:
+    1. To run the mega-linter locally, you will need to install docker and node on your local machine
+    2. Install mega-linter-runner by running `npm install mega-linter-runner -g` (Note: You might need to run this with sudo permissions)
+    3. Run the megalinter locally by running `mega-linter-runner -p .`. This should run all the checks locally
+    4. Once all the checks and changes are made, commit them to your branch
 3. Submit a PR from your branch to the main branch in *your forked* repo itself. This should trigger the GitHub Action in your forked repo
 4. Make sure all they all pass. Once they are all passed, you can submit a pull request from your fork repo's main branch to the Google's apigee-samples repo
 5. This again should trigger the GitHub Action. Ensure the pull request checks listed below all pass
