@@ -20,6 +20,7 @@ ENABLE_LINTERS:
   - YAML_YAMLLINT
   - DOCKERFILE_HADOLINT
   - GHERKIN_GHERKIN_LINT
+  - OPENAPI_SPECTRAL
 
 DISABLE:
   - COPYPASTE # Comment to enable checks of excessive copy-pastes
