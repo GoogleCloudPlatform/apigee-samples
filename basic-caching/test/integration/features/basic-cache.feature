@@ -16,9 +16,9 @@ Feature:
   As an Apigee platform explorer
   I want to experiment with the caching policy
   So that I can understand how it can be implemented
-  
-  Scenario Outline: Response Cache Skipped
-    When I GET /?q=apigeex&country=us
-    And I set x-bypass-cache header to true
-    Then response code should be 200
-    And response header served-from-cache should be false
+
+Scenario: Response Cache Skipped
+  When I GET /?q=apigeex&country=us
+  And I set x-bypass-cache header to true
+  Then response code should be 200
+  And response header served-from-cache should be false

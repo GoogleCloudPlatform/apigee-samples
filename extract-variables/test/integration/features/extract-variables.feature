@@ -16,8 +16,8 @@ Feature:
   As an Apigee platform explorer
   I want to experiment with the extract-variables policy
   So that I can understand how it can be implemented
-  
-  Scenario Outline: Extract-variables
-    When I GET /v1/samples/extract-variables
-    Then response code should be 200
-    Then response body should be valid json
+
+Scenario: Extract-variables
+  When I GET /v1/samples/extract-variables
+  Then response code should be 200
+  And response body should be valid json

@@ -6,6 +6,7 @@ APPLY_FIXES: all # all, none, or list of linter keys
 # ENABLE: # If you use ENABLE variable, all other languages/formats/tooling-formats will be disabled by default
 
 MARKDOWN_MARKDOWNLINT_CONFIG_FILE: .markdown-lint.yml
+GHERKIN_GHERKIN_LINT_CONFIG_FILE: .gherkin-lintrc
 
 ENABLE_LINTERS:
   - BASH_EXEC
@@ -18,6 +19,7 @@ ENABLE_LINTERS:
   - XML_XMLLINT
   - YAML_YAMLLINT
   - DOCKERFILE_HADOLINT
+  - GHERKIN_GHERKIN_LINT
 
 DISABLE:
   - COPYPASTE # Comment to enable checks of excessive copy-pastes
