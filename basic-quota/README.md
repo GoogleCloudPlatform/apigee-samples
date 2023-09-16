@@ -115,7 +115,7 @@ When testing with the `basic-quota-premium-app` key, the response will instead s
 
 ## Cleanup
 
-If you want to clean up the artefacts from this example in your Apigee Organization, first source your `env.sh` script, and then run
+If you want to clean up the artifacts from this example in your Apigee Organization, first source your `env.sh` script, and then run
 
 ```bash
 ./clean-up-basic-quota.sh

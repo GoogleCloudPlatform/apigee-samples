@@ -1,7 +1,7 @@
 # Authorize IdP Access Token
 
 ---
-This sample allows you to authorize JWT access tokens minted by an OIDC compliant identiy provider.
+This sample allows you to authorize JWT access tokens minted by an OIDC compliant identity provider.
 
 Let's get started!
 
@@ -15,7 +15,7 @@ Ensure you have an active GCP account selected in the Cloud shell
 gcloud auth login
 ```
 
-Navigate to the 'authorize-idp-access-tokens' drirectory in the Cloud shell.
+Navigate to the 'authorize-idp-access-tokens' directory in the Cloud shell.
 
 ```sh
 cd authorize-idp-access-tokens

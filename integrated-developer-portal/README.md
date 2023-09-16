@@ -41,7 +41,7 @@ Use the following GCP CloudShell tutorial, and follow the instructions in Cloud 
 
 ```bash
 git clone https://github.com/GoogleCloudPlatform/apigee-samples.git
-cd apige-samples/integrated-developer-portal
+cd apigee-samples/integrated-developer-portal
 ```
 
 2. Edit the `env.sh` and configure the ENV vars
@@ -99,7 +99,7 @@ We also need to add our API product to the portal:
 * API documentation: Use the [integrated-developer-portal.yaml](integrated-developer-portal.yaml) OpenAPI document from this repo:
   * If you ran the deployment script from Cloud Shell:
     * Navigate back to Cloud Shell
-    * Open integrated-developer-portal.yaml & downlod it to your local computer. No need to update file content as it was already updated when running the deployment script.
+    * Open integrated-developer-portal.yaml & download it to your local computer. No need to update file content as it was already updated when running the deployment script.
   * Otherwise, do the following:
     * Download [integrated-developer-portal.yaml](integrated-developer-portal.yaml) to your local computer
     * Open the file and replace "\[APIGEE_HOST\]" with your own Apigee host/domain.

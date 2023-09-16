@@ -7,6 +7,8 @@ APPLY_FIXES: all # all, none, or list of linter keys
 
 MARKDOWN_MARKDOWNLINT_CONFIG_FILE: .markdown-lint.yml
 GHERKIN_GHERKIN_LINT_CONFIG_FILE: .gherkin-lintrc
+SPELL_CSPELL_CONFIG_FILE: .cspell.json
+SPELL_CSPELL_FILE_EXTENSIONS: [".md"]
 
 ENABLE_LINTERS:
   - BASH_EXEC
@@ -21,6 +23,8 @@ ENABLE_LINTERS:
   - DOCKERFILE_HADOLINT
   - GHERKIN_GHERKIN_LINT
   - OPENAPI_SPECTRAL
+  - REPOSITORY_SECRETLINT
+  - SPELL_CSPELL
 
 DISABLE:
   - COPYPASTE # Comment to enable checks of excessive copy-pastes

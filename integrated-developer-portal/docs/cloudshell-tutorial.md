@@ -9,7 +9,7 @@ Let's get started!
 
 ## Setup environment
 
-1. Navigate to the 'integrated-developer-portal' drirectory in the Cloud Shell.
+1. Navigate to the 'integrated-developer-portal' directory in the Cloud Shell.
 
 ```sh
 cd integrated-developer-portal
@@ -72,7 +72,7 @@ We also need to add our API product to the portal:
 * API documentation: Use the <walkthrough-editor-open-file filePath="integrated-developer-portal/integrated-developer-portal.yaml">integrated-developer-portal.yaml</walkthrough-editor-open-file> OpenAPI document from this repo:
   * If you ran the deployment script from Cloud Shell:
     * Navigate back to Cloud Shell
-    * Open integrated-developer-portal.yaml & downlod it to your local computer. No need to update file content as it was already updated when running the deployment script.
+    * Open integrated-developer-portal.yaml & download it to your local computer. No need to update file content as it was already updated when running the deployment script.
   * Otherwise, do the following:
     * Download <walkthrough-editor-open-file filePath="integrated-developer-portal/integrated-developer-portal.yaml">integrated-developer-portal.yaml</walkthrough-editor-open-file> to your local computer
     * Open the file and replace "\[APIGEE_HOST\]" with your own Apigee host/domain.

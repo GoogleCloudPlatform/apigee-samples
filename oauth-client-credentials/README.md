@@ -114,7 +114,7 @@ curl -v GET https://$APIGEE_HOST/v1/samples/oauth-client-credentials/resource -H
 
 ## Cleanup
 
-If you want to clean up the artefacts from this example in your Apigee Organization, first source your `env.sh` script, and then run
+If you want to clean up the artifacts from this example in your Apigee Organization, first source your `env.sh` script, and then run
 
 ```bash
 ./clean-up-oauth-client-credentials

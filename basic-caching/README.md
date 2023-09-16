@@ -99,7 +99,7 @@ curl -S "https://$APIGEE_HOST/v1/samples/basic-caching?q=apigee&country=us"
 
 ## Cleanup
 
-If you want to clean up the artifacts from this example in your Apigee Organization, ensure the `PROJECT`, `APIGEE_HOST`, and `APIGEE_ENV` environment variabales have been set as described in [Setup Instructions](#setup-instructions), and then run the following command.
+If you want to clean up the artifacts from this example in your Apigee Organization, ensure the `PROJECT`, `APIGEE_HOST`, and `APIGEE_ENV` environment variables have been set as described in [Setup Instructions](#setup-instructions), and then run the following command.
 
 ``` bash
 ./clean-up-basic-caching.sh

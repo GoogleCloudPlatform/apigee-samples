@@ -41,7 +41,7 @@ Next, let's create and deploy the Apigee resources necessary to test the JWT pol
 ./deploy-jwt.sh
 ```
 
-This script creates a sample API Proxy and a key value map containing a public/private keypair. The script also tests that the deployment and configuration has been sucessful.
+This script creates a sample API Proxy and a key value map containing a public/private keypair. The script also tests that the deployment and configuration has been successful.
 
 ### Test the APIs
 

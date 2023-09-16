@@ -121,7 +121,7 @@ Next, let's create and deploy the Apigee resources necessary to test the websock
 ./deploy.sh
 ```
 
-This script creates a sample websockets API Proxy. The script also tests that the deployment and configuration has been sucessful.
+This script creates a sample websockets API Proxy. The script also tests that the deployment and configuration has been successful.
 
 ### Test the APIs
 

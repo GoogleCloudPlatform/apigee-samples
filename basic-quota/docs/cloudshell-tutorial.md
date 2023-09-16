@@ -41,7 +41,7 @@ Next, let's create and deploy the Apigee resources necessary to test the quota p
 ./deploy-basic-quota.sh
 ```
 
-This script creates a sample API Proxy, a Developer, two API products, and two Apps. The script also tests that the deployment and configuration has been sucessful.
+This script creates a sample API Proxy, a Developer, two API products, and two Apps. The script also tests that the deployment and configuration has been successful.
 
 ### Test the APIs
 
@@ -93,7 +93,7 @@ Congratulations! You've successfully implemented a dynamic API consumption quota
 
 ## Cleanup
 
-If you want to clean up the artefacts from this example in your Apigee Organization, first source your `env.sh` script, and then run
+If you want to clean up the artifacts from this example in your Apigee Organization, first source your `env.sh` script, and then run
 
 ```bash
 ./clean-up-basic-quota.sh

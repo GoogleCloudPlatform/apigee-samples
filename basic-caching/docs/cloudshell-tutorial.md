@@ -73,7 +73,7 @@ Congratulations! You've successfully implemented caching in your API!
 
 ## Cleanup
 
-If you want to clean up the artifacts from this example in your Apigee Organization, ensure the `PROJECT`, `APIGEE_HOST`, and `APIGEE_ENV` environment variabales have been set as described in Setup environment, and then run the following command.
+If you want to clean up the artifacts from this example in your Apigee Organization, ensure the `PROJECT`, `APIGEE_HOST`, and `APIGEE_ENV` environment variables have been set as described in Setup environment, and then run the following command.
 
 ```bash
 ./clean-up-basic-caching.sh

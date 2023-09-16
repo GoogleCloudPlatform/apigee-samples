@@ -15,7 +15,7 @@ This simple API proxy is basically transparent and will hit a sample target endp
 ## Implementation on Apigee
 
 The MessageLogging policy will be placed at the [PostClientFlow](https://cloud.google.com/apigee/docs/api-platform/fundamentals/what-are-flows#designingflowexecutionsequence-havingcodeexecuteaftertheclientreceivesyourproxysresponsewithapostclientflow). While one can add this policy to any point of the request or response flow, the PostClientFlow is typically the best place to add it because we'll have all the context of the call and it is executed after the actual API response is sent to the API client.
-As an example, we'll log flow variables, request content, reponse content, static values, etc. The policy is quite flexible in terms of what it can log.
+As an example, we'll log flow variables, request content, response content, static values, etc. The policy is quite flexible in terms of what it can log.
 It is also worth noting that it is quite common to add the MessageLogging policy to Shared Flows for standardization across multiple APIs, but in this example it will be added directly to the sample proxy.
 
 ## Screencast
@@ -80,17 +80,17 @@ curl  https://$APIGEE_HOST/v1/samples/cloud-logging
 
 > _If you want, consider also checking the call in the [Debug](https://cloud.google.com/apigee/docs/api-platform/debug/trace) view_
 
-After issuing some calls, let's confirm the configured variables / values set on the Message Logging policy were successfully writen to Cloud Logging with
+After issuing some calls, let's confirm the configured variables / values set on the Message Logging policy were successfully written to Cloud Logging with
 
 ```bash
 gcloud logging read "logName=projects/$PROJECT/logs/apigee"
 ```
 
-Cloud Logging is quite powerful. Few free to navigate to its UI in the GCP Console (_Logging_ Product Page in the console) and explore additional features such as filters, custom searchs, custom alerts and much more
+Cloud Logging is quite powerful. Few free to navigate to its UI in the GCP Console (_Logging_ Product Page in the console) and explore additional features such as filters, custom searches, custom alerts and much more
 
 ## Cleanup
 
-If you want to clean up the artefacts from this example in your Apigee Organization, first source your `env.sh` script, and then run
+If you want to clean up the artifacts from this example in your Apigee Organization, first source your `env.sh` script, and then run
 
 ```bash
 ./clean-up-cloud-logging.sh
