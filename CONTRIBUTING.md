@@ -7,10 +7,10 @@ just a few guidelines you need to follow.
 
 1. The primary focus of this repo is to provide introductory Apigee samples of low to medium complexity, aimed at developers who are new to Apigee
     - More complex projects may be better suited for the [Apigee DevRel](https://github.com/apigee/devrel) repo
-1. Projects in this repo are targeted for [Apigee X](https://cloud.google.com/apigee/docs) and [hybrid](https://cloud.google.com/apigee/docs/hybrid/latest/what-is-hybrid). We do not accept samples for the Apigee Edge platform (these may be found [here](https://github.com/apigee/api-platform-samples))
+2. Projects in this repo are targeted for [Apigee X](https://cloud.google.com/apigee/docs) and [hybrid](https://cloud.google.com/apigee/docs/hybrid/latest/what-is-hybrid). We do not accept samples for the Apigee Edge platform (these may be found [here](https://github.com/apigee/api-platform-samples))
     - More information about the different versions of Apigee can be found [here](https://cloud.google.com/apigee/docs/api-platform/get-started/compare-apigee-products)
-1. Projects accepted to this repository should be considered a recommended best practice by Apigee's product management, field engineers, customers and community
-1. For large pull requests (e.g. rewrites of large portions or entire projects), please first propose the changes via a new GitHub [issue](https://github.com/GoogleCloudPlatform/apigee-samples/issues/new/choose) and discuss with the community before submitting a PR
+3. Projects accepted to this repository should be considered a recommended best practice by Apigee's product management, field engineers, customers and community
+4. For large pull requests (e.g. rewrites of large portions or entire projects), please first propose the changes via a new GitHub [issue](https://github.com/GoogleCloudPlatform/apigee-samples/issues/new/choose) and discuss with the community before submitting a PR
 
 ## Quickstart
 
@@ -18,11 +18,17 @@ just a few guidelines you need to follow.
  the repository and make your contribution. Please don't make changes to
  multiple projects in the same pull request
     - Consult
-[GitHub Help](https://help.github.com/articles/about-pull-requests/) for more
-information on using pull requests
-1. Ensure the pull request checks listed below all pass
-1. Submit your PR, and we will perform a code review
-1. Once any issues are resolved, your change will be merged!
+[GitHub Help](https://help.github.com/articles/about-pull-requests/) for more information on using pull requests. Also please check if GitHub Action is enabled in your forked repo. Go to the Settings tab in the GitHub repo, under Actions and General, make sure the permissions are set to allow all actions and reusable workflows
+2. In your forked repo, create a new branch and make your changes:
+    1. To run the mega-linter locally, you will need to install docker and node on your local machine
+    2. Install mega-linter-runner by running `npm install mega-linter-runner -g` (Note: You might need to run this with sudo permissions)
+    3. Run the megalinter locally by running `mega-linter-runner -p .`. This should run all the checks locally
+    4. Once all the checks and changes are made, commit them to your branch
+3. Submit a PR from your branch to the main branch in **your forked repo** itself. This should trigger the GitHub Action in your forked repo
+4. Make sure all they all pass. Once they are all passed, you can submit a pull request from your fork repo's main branch to the Google's apigee-samples repo
+5. This again should trigger the GitHub Action. Ensure the pull request checks listed below all pass
+6. Submit your PR, and we will perform a code review
+7. Once all issues are resolved, your change will be merged!
 
 ## <a name="pull-request-checks"></a>Pull Request Checks
 
