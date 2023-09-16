@@ -3,11 +3,11 @@
 
 APPLY_FIXES: all # all, none, or list of linter keys
 
-#ENABLE: # If you use ENABLE variable, all other languages/formats/tooling-formats will be disabled by default
+# ENABLE: # If you use ENABLE variable, all other languages/formats/tooling-formats will be disabled by default
 
 MARKDOWN_MARKDOWNLINT_CONFIG_FILE: .markdown-lint.yml
 
-ENABLE_LINTERS: 
+ENABLE_LINTERS:
   - BASH_EXEC
   - BASH_SHELLCHECK
   - BASH_SHFMT
@@ -15,6 +15,8 @@ ENABLE_LINTERS:
   - JSON_JSONLINT
   - JSON_NPM_PACKAGE_JSON_LINT
   - MARKDOWN_MARKDOWNLINT
+  - XML_XMLLINT
+  - YAML_YAMLLINT
 
 DISABLE:
   - COPYPASTE # Comment to enable checks of excessive copy-pastes
@@ -22,4 +24,4 @@ DISABLE:
 SHOW_ELAPSED_TIME: false
 FILEIO_REPORTER: false
 # DISABLE_ERRORS: true # Uncomment if you want MegaLinter to detect errors but not block CI to pass
-#FILTER_REGEX_EXCLUDE: (.github/|tools/)
+FILTER_REGEX_EXCLUDE: (.github/|tools/)
