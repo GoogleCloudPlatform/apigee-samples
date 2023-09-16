@@ -15,6 +15,7 @@ The WebSockets [spec](https://websockets.spec.whatwg.org/) and protocol is maint
 In Apigee and Apigee hybrid, environment groups provide routing to environments and define the hostnames on which API proxies are exposed. Environment groups support both the HTTP and WS protocols natively. You do not have to create a special environment group or any special configuration to use WebSockets. Rather, it is up to the client to request a protocol upgrade from HTTP to WS by including the Upgrade request header. An upgrade request made to an API proxy endpoint returns a 101 Switching Protocols response. Further requests and responses are made bidirectionally on the open WebSockets connection, until it is closed.
 
 ### Policy support
+
 With a WebSockets connection, you can only use the [Verify API Key](https://cloud.google.com/apigee/docs/api-platform/reference/policies/verify-api-key-policy) and [OAuthV2](https://cloud.google.com/apigee/docs/api-platform/reference/policies/oauthv2-policy) policies in your API proxy. All other policies are ignored.
 
 ### Revoking the connection
@@ -25,8 +26,8 @@ The WebSockets connection is closed when:
 * The proxy endpoint receives a request with an expired or invalid API key or OAuth token.
 * The WebSockets connection times out.
 
-
 ## Prerequisites
+
 1. [Provision Apigee X](https://cloud.google.com/apigee/docs/api-platform/get-started/provisioning-intro)
 2. Configure [external access](https://cloud.google.com/apigee/docs/api-platform/get-started/configure-routing#external-access) for API traffic to your Apigee X instance
 3. Access to deploy proxies, create products, apps and developers in Apigee
@@ -142,7 +143,6 @@ export CLOUD_RUN_SERVICE_URL
 ### Deploy Apigee Resources
 
 1. Clone the `apigee-samples` repo, and switch to the `websockets` directory
-
 
 ```bash
 git clone https://github.com/GoogleCloudPlatform/apigee-samples.git

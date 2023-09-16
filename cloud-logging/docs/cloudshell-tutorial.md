@@ -50,6 +50,7 @@ Generate a few sample requests to the deployed API Proxy.
 ```sh
 curl  https://$APIGEE_HOST/v1/samples/cloud-logging
 ```
+
 > _If you want, consider also checking the call in the [Debug](https://cloud.google.com/apigee/docs/api-platform/debug/trace) view_
 
 After issuing some calls, let's confirm the configured variables / values set on the Message Logging policy were successfully writen to Cloud Logging with
@@ -61,6 +62,7 @@ gcloud logging read "logName=projects/$PROJECT/logs/apigee"
 Cloud Logging is quite powerful. Few free to navigate to its UI in the GCP Console (_Logging_ Product Page in the console) and explore additional features such as filters, custom searchs, custom alerts and much more.
 
 ---
+
 ## Conclusion
 
 <walkthrough-conclusion-trophy></walkthrough-conclusion-trophy>

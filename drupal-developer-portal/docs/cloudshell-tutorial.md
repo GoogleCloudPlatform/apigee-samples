@@ -32,6 +32,7 @@ Now source the `env.sh` file
 ```sh
 source ./env.sh
 ```
+
 ---
 
 ## Deploy Apigee components
@@ -45,6 +46,7 @@ Next, let's deploy some Apigee resources necessary to create a Drupal developer 
 **NOTE: This script creates an API Proxy and API product. It does not, however, create the developer portal. We will create and test that manually**
 
 ---
+
 ## Configure Drupal Developer Portal
 
 Now we will configure our Drupal Devoper Portal and expose our Apigee API product through it
@@ -52,6 +54,7 @@ Now we will configure our Drupal Devoper Portal and expose our Apigee API produc
 ### Launch Marketplace Solution
 
 Follow the [documentation](https://cloud.google.com/apigee/docs/api-platform/publish/drupal/get-started-cloud-marketplace) to deploy the Drupal portal infrastructure using the Marketplace Apigee Developer Portal Kickstart solution. Name your deployment `sample-drupal-developer-portal`and be sure to [enable HTTPS](https://cloud.google.com/apigee/docs/api-platform/publish/drupal/apigee-cloud-marketplace-customize#https) under Networking during portal configuration. All other configurations can be left with default values.
+
 * If your portal has errors or does not load properly check Cloud Logging for details as it may fail silently with issues like org policy restrictions.
 * This Marketplace solution may take up to an hour to deploy
 
@@ -73,19 +76,20 @@ Now we will add our `sample-drupal-developer-portal-product` to our Drupal API C
 1. From the Drupal portal, navigate to Content > API Catalog
 2. Click the "+ OpenAPI" button
 3. Configure as shown below
-- Name: Sample Drupal Developer Portal API
-- Description: A portal for an API key protected proxy
-- Image: Image of your choice (optional)
-- Specification Source Type: File
-- OpenAPI specification:Use the <walkthrough-editor-open-file filePath="drupal-developer-portal/drupal-developer-portal.yaml">drupal-developer-portal.yaml</walkthrough-editor-open-file>  OpenAPI document from this repo:
-  - If you ran the deployment script from Cloud Shell:
-    - Navigate back to Cloud Shell
-    - Open drupal-developer-portal.yaml & download it to your local computer. No need to update file content as it was already updated when running the deployment script.
-  - Otherwise, do the following:
-    - Download <walkthrough-editor-open-file filePath="drupal-developer-portal/drupal-developer-portal.yaml">drupal-developer-portal.yaml</walkthrough-editor-open-file> to your local computer
-    - Open the file and replace `[APIGEE_HOST]` with your own Apigee host/domain.
-  - Upload your updated drupal-developer-portal.yaml file as API documentation
-- Leave all other fields as their default values.
+* Name: Sample Drupal Developer Portal API
+* Description: A portal for an API key protected proxy
+* Image: Image of your choice (optional)
+* Specification Source Type: File
+* OpenAPI specification:Use the <walkthrough-editor-open-file filePath="drupal-developer-portal/drupal-developer-portal.yaml">drupal-developer-portal.yaml</walkthrough-editor-open-file>  OpenAPI document from this repo:
+  * If you ran the deployment script from Cloud Shell:
+    * Navigate back to Cloud Shell
+    * Open drupal-developer-portal.yaml & download it to your local computer. No need to update file content as it was already updated when running the deployment script.
+  * Otherwise, do the following:
+    * Download <walkthrough-editor-open-file filePath="drupal-developer-portal/drupal-developer-portal.yaml">drupal-developer-portal.yaml</walkthrough-editor-open-file> to your local computer
+    * Open the file and replace `[APIGEE_HOST]` with your own Apigee host/domain.
+  * Upload your updated drupal-developer-portal.yaml file as API documentation
+* Leave all other fields as their default values.
+
 4. Click save
 
 ### Create API App in Drupal
@@ -106,8 +110,8 @@ Finally, we will test out our Drupal portal by making secured requests to our AP
 3. Select the / GET call from under API REFERENCE. Under Try this API click EXECUTE
 4. Voila! You have a working API secured and documented within your Marketplace Drupal Portal!
 
-
 ---
+
 ## Conclusion & Cleanup
 
 <walkthrough-conclusion-trophy></walkthrough-conclusion-trophy>

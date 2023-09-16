@@ -15,6 +15,7 @@ The following steps will set up your environment.
 ## First, sign-in
 
 1. Check your credentials.
+
    ```sh
    gcloud auth print-access-token
    ```
@@ -83,6 +84,7 @@ When the script finishes, it prints the proxy and app
 information you will need to run the commands below.
 
 1. Set the required shell variables:
+
    ```sh
    VIEWER_CLIENT_ID=<replace with script output>
    CREATOR_CLIENT_ID=<replace with script output>
@@ -103,10 +105,10 @@ information you will need to run the commands below.
    will show the the name of the API Product, the path of the authorized resource,
    and the verb used.
 
-
 ## Test the APIs using API Key Verification (B)
 
 3. Now, run the same request but with a different key, the one for the CREATOR:
+
    ```sh
    curl -i -X GET https://${APIGEE_HOST}/v1/samples/apiproduct-operations/apikey/users \
       -H APIKEY:$CREATOR_CLIENT_ID
@@ -118,6 +120,7 @@ information you will need to run the commands below.
 
 4. Now try a creation request. This is intended to be the kind of REST request an
    app might send to create a new item within a collection:
+
    ```sh
    curl -i -X POST -d '' https://${APIGEE_HOST}/v1/samples/apiproduct-operations/apikey/users \
       -H APIKEY:$VIEWER_CLIENT_ID
@@ -132,16 +135,19 @@ information you will need to run the commands below.
 ## Test the APIs using API Key Verification (C)
 
 5. Conversely, when you use the CREATOR credential for that kind of request, Apigee allows the request:
+
    ```sh
    curl -i -X POST -d '' https://${APIGEE_HOST}/v1/samples/apiproduct-operations/apikey/users \
       -H APIKEY:$CREATOR_CLIENT_ID
    ```
 
 6. But when you use the CREATOR credential to request a DELETE on a specific user, Apigee rejects the request:
+
    ```sh
    curl -i -X DELETE https://${APIGEE_HOST}/v1/samples/apiproduct-operations/apikey/users/1234 \
       -H APIKEY:$CREATOR_CLIENT_ID
    ```
+
    This is as expected; the CREATOR product does not grant authorization on `DELETE /apikey/users/1234`.
 
 ## Test the APIs using API Key Verification (D)
@@ -150,6 +156,7 @@ information you will need to run the commands below.
    single API Product might be authorized for any set of verb+path combinations.
 
    For example, the ADMIN product is configured to allow GET, POST, or DELETE requests in that API Proxy. Using the ADMIN credential, all of the following should succeed:
+
    ```sh
    curl -i -X GET https://${APIGEE_HOST}/v1/samples/apiproduct-operations/apikey/users \
       -H APIKEY:$ADMIN_CLIENT_ID
@@ -158,7 +165,6 @@ information you will need to run the commands below.
    curl -i -X DELETE https://${APIGEE_HOST}/v1/samples/apiproduct-operations/apikey/users/1234 \
       -H APIKEY:$ADMIN_CLIENT_ID
    ```
-
 
 ## Test the APIs using OAuthV2 token Validation (A)
 
@@ -169,7 +175,6 @@ Bearer token.
 To try that out, you will need to first obtain a valid token, and then pass it
 in the same requests as shown above, just modifying the `apikey` path element to
 be `token`, and passing a different header.
-
 
 1. First, make sure that you have set the X\_CLIENT\_SECRET shell variables
    required for obtaining tokens. These are the companion variables
@@ -183,11 +188,14 @@ be `token`, and passing a different header.
    ```
 
 2. Now, run the following command, to obtain a token for the VIEWER.
+
    ```sh
    curl -i -X POST https://${APIGEE_HOST}/v1/samples/apiproduct-operations-oauth2-cc/token \
        -u $VIEWER_CLIENT_ID:$VIEWER_CLIENT_SECRET -d 'grant_type=client_credentials'
    ```
+
    You should see an access token in the response:
+
    ```json
    {
      "token_type": "Bearer",
@@ -197,12 +205,15 @@ be `token`, and passing a different header.
      "expires_in": 1799
    }
    ```
+
    Set a shell variable containing that access token:
+
    ```sh
    VIEWER_ACCESS_TOKEN=<replace with the token in your curl output>
    ```
 
 3. Invoke the /users API using the viewer token:
+
    ```sh
    curl -i -X GET https://${APIGEE_HOST}/v1/samples/apiproduct-operations/token/users \
       -H TOKEN:$VIEWER_ACCESS_TOKEN
@@ -211,16 +222,20 @@ be `token`, and passing a different header.
 ## Test the APIs using OAuthV2 token Validation (B)
 
 4. Now obtain a token for the creator.
+
    ```sh
    curl -i -X POST https://${APIGEE_HOST}/v1/samples/apiproduct-operations-oauth2-cc/token \
        -u $CREATOR_CLIENT_ID:$CREATOR_CLIENT_SECRET -d 'grant_type=client_credentials'
    ```
+
    and set the shell variable with the token shown in the response:
+
    ```sh
    CREATOR_ACCESS_TOKEN=<replace with token from curl output>
    ```
 
 5. Use the creator token to invoke the /users API :
+
    ```sh
    curl -i -X GET https://${APIGEE_HOST}/v1/samples/apiproduct-operations/token/users \
       -H TOKEN:$CREATOR_ACCESS_TOKEN
@@ -233,6 +248,7 @@ be `token`, and passing a different header.
 ## Test the APIs using OAuthV2 token Validation (C)
 
 6. Now try a creation request, using the viewer token:
+
    ```sh
    curl -i -X POST -d '' https://${APIGEE_HOST}/v1/samples/apiproduct-operations/token/users \
       -H TOKEN:$VIEWER_ACCESS_TOKEN
@@ -246,26 +262,31 @@ be `token`, and passing a different header.
    Access Token.
 
 7. Conversely, when you use the CREATOR credential for that kind of request, Apigee allows the request:
+
    ```sh
    curl -i -X POST -d '' https://${APIGEE_HOST}/v1/samples/apiproduct-operations/token/users \
       -H TOKEN:$CREATOR_ACCESS_TOKEN
    ```
-   Again, as expected.
 
+   Again, as expected.
 
 ## Test the APIs using OAuthV2 token Validation (D)
 
 8. Obtain a token for the admin:
+
    ```sh
    curl -i -X POST https://${APIGEE_HOST}/v1/samples/apiproduct-operations-oauth2-cc/token \
        -u $ADMIN_CLIENT_ID:$ADMIN_CLIENT_SECRET -d 'grant_type=client_credentials'
    ```
+
    and again, set the shell variable with the token shown in the response:
+
    ```sh
    ADMIN_ACCESS_TOKEN=<replace with token from curl output>
    ```
 
 9. Use it to invoke any API:
+
    ```sh
    curl -i -X GET https://${APIGEE_HOST}/v1/samples/apiproduct-operations/token/users \
       -H TOKEN:$ADMIN_ACCESS_TOKEN
@@ -278,6 +299,7 @@ be `token`, and passing a different header.
    All of these should succeed; the admin product grants authorization for all of those operations.
 
    But when you use the creator token to request a DELETE on a specific user:
+
    ```sh
    curl -i -X DELETE https://${APIGEE_HOST}/v1/samples/apiproduct-operations/token/users/1234 \
       -H TOKEN:$CREATOR_ACCESS_TOKEN

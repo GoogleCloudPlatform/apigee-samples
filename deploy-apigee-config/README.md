@@ -7,6 +7,7 @@ This sample demonstrates how to use the [Apigee Maven config plugin](https://git
 [![Alt text](https://img.youtube.com/vi/RBn-8cG_i9s/0.jpg)](https://www.youtube.com/watch?v=RBn-8cG_i9s)
 
 ## Prerequisites
+
 1. [Provision Apigee X](https://cloud.google.com/apigee/docs/api-platform/get-started/provisioning-intro)
 2. Access to push configurations to Apigee (API Admin or Org Admin role), trigger Cloud Build
 3. Make sure the following tools are available in your terminal's $PATH (Cloud Shell has these pre-configured)
@@ -62,11 +63,11 @@ gcloud builds submit --config cloudbuild.yaml . \
 ## Verification
 
 To verify if the configurations were created, login to the [Apigee console](https://apigee.google.com).
-- Navigate to "Admin" --> "Environments" --> "Target Servers", you should see a target server `SampleTarget` created.
-- Similarly navigate to "Admin" --> "Environments" --> "Key Value Maps", you should see a Key Value Map `SampleKVM` created
-- Navigate to "Publish" --> "API Products", you should find the `sample-product` product created.
-- Navigate to "Publish" --> "Developers", you should find the `Sample Developer` developer created.
-- Navigate to "Publish" --> "Apps", you should find the `sampleapp` app created.
+* Navigate to "Admin" --> "Environments" --> "Target Servers", you should see a target server `SampleTarget` created.
+* Similarly navigate to "Admin" --> "Environments" --> "Key Value Maps", you should see a Key Value Map `SampleKVM` created
+* Navigate to "Publish" --> "API Products", you should find the `sample-product` product created.
+* Navigate to "Publish" --> "Developers", you should find the `Sample Developer` developer created.
+* Navigate to "Publish" --> "Apps", you should find the `sampleapp` app created.
 
 ## Cleanup
 

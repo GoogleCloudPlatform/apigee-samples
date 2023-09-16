@@ -32,6 +32,7 @@ This sample uses a [VerifyAPIKey](https://cloud.google.com/apigee/docs/api-platf
 [![Alt text](https://img.youtube.com/vi/ep7h_tGHtiw/0.jpg)](https://www.youtube.com/watch?v=ep7h_tGHtiw)
 
 ## Prerequisites
+
 1. [Provision Apigee X](https://cloud.google.com/apigee/docs/api-platform/get-started/provisioning-intro)
 2. Configure [external access](https://cloud.google.com/apigee/docs/api-platform/get-started/configure-routing#external-access) for API traffic to your Apigee X instance
 3. Access to deploy proxies, create products, apps and developers in Apigee
@@ -41,6 +42,7 @@ This sample uses a [VerifyAPIKey](https://cloud.google.com/apigee/docs/api-platf
     * curl
     * jq
     * npm
+
 # (QuickStart) Setup using CloudShell
 
 Use the following GCP CloudShell tutorial, and follow the instructions.
@@ -50,7 +52,6 @@ Use the following GCP CloudShell tutorial, and follow the instructions.
 ## Setup instructions
 
 1. Clone the `apigee-samples` repo, and switch the `basic-quota` directory
-
 
 ```bash
 git clone https://github.com/GoogleCloudPlatform/apigee-samples.git
@@ -76,27 +77,34 @@ source ./env.sh
 ```
 
 ## Testing the Quota Proxy
+
 To run the tests, first retrieve Node.js dependencies with:
+
 ```
 npm install
 ```
+
 Ensure the following environment variables have been set correctly:
+
 * `PROXY_URL`
 * `CLIENT_ID_1`
 * `CLIENT_ID_2`
 
 and then run the tests:
+
 ```
 npm run test
 ```
 
 ## Example Requests
+
 To manually test the proxy, make requests using the API keys created by the deploy script.
 
 If the deployment has been successfully executed, you will see two products (`basic-quota-trial` & `basic-quota-premium`) and two corresponding apps (`basic-quota-trial-app` & `basic-quota-premium-app`) created for testing purposes. Instructions for how to find
 application credentials can be found [here](https://cloud.google.com/apigee/docs/api-platform/publish/creating-apps-surface-your-api#view-api-key).
 
 The requests can be made like this:
+
 ```
 curl https://$APIGEE_HOST/v1/samples/basic-quota?apikey=$CLIENT_ID_1
 ```

@@ -3,7 +3,6 @@
 We'd love to accept your patches and contributions to this project. There are
 just a few guidelines you need to follow.
 
-
 ## General Guidelines
 
 1. The primary focus of this repo is to provide introductory Apigee samples of low to medium complexity, aimed at developers who are new to Apigee
@@ -12,7 +11,6 @@ just a few guidelines you need to follow.
     - More information about the different versions of Apigee can be found [here](https://cloud.google.com/apigee/docs/api-platform/get-started/compare-apigee-products)
 1. Projects accepted to this repository should be considered a recommended best practice by Apigee's product management, field engineers, customers and community
 1. For large pull requests (e.g. rewrites of large portions or entire projects), please first propose the changes via a new GitHub [issue](https://github.com/GoogleCloudPlatform/apigee-samples/issues/new/choose) and discuss with the community before submitting a PR
-
 
 ## Quickstart
 
@@ -26,7 +24,6 @@ information on using pull requests
 1. Submit your PR, and we will perform a code review
 1. Once any issues are resolved, your change will be merged!
 
-
 ## <a name="pull-request-checks"></a>Pull Request Checks
 
 - Submitter has signed a [Contributor License Agreement](#cla) (see below)
@@ -37,7 +34,6 @@ information on using pull requests
 - [apigeelint](https://github.com/apigee/apigeelint) checks pass
 - Commit messages follow the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/)
   standard
-
 
 ## <a name="cla"></a>Contributor License Agreement
 

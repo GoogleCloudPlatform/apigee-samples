@@ -3,7 +3,9 @@
 
 APPLY_FIXES: all # all, none, or list of linter keys
 
-ENABLE: # If you use ENABLE variable, all other languages/formats/tooling-formats will be disabled by default
+#ENABLE: # If you use ENABLE variable, all other languages/formats/tooling-formats will be disabled by default
+
+MARKDOWN_MARKDOWNLINT_CONFIG_FILE: .markdown-lint.yml
 
 ENABLE_LINTERS: 
   - BASH_EXEC

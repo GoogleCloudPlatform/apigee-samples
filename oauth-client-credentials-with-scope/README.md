@@ -33,6 +33,7 @@ The client credentials sample uses one policy that executes on Apigee : An OAuth
 [![Alt text](https://img.youtube.com/vi/kZEaKPQshro/0.jpg)](https://www.youtube.com/watch?v=kZEaKPQshro)
 
 ## Prerequisites
+
 1. [Provision Apigee X](https://cloud.google.com/apigee/docs/api-platform/get-started/provisioning-intro)
 2. Configure [external access](https://cloud.google.com/apigee/docs/api-platform/get-started/configure-routing#external-access) for API traffic to your Apigee X instance
 3. Access to deploy proxies, create products, apps and developers in Apigee
@@ -52,7 +53,6 @@ Use the following GCP CloudShell tutorial, and follow the instructions.
 ## Setup instructions
 
 1. Clone the apigee-samples repo, and switch the oauth-client-credentials-with-scope directory
-
 
 ```bash
 git clone https://github.com/GoogleCloudPlatform/apigee-samples.git
@@ -78,11 +78,15 @@ source ./env.sh
 ```
 
 ## Testing the Client Credentials Proxy
+
 To run the tests, first retrieve Node.js dependencies with:
+
 ```
 npm install
 ```
+
 Ensure the following environment variables have been set correctly:
+
 * `PROXY_URL`
 * `APP_READ_SCOPE_CLIENT_ID`
 * `APP_READ_SCOPE_CLIENT_SECRET`
@@ -90,11 +94,13 @@ Ensure the following environment variables have been set correctly:
 * `APP_WRITE_SCOPE_CLIENT_SECRET`
 
 and then run the tests:
+
 ```
 npm run test
 ```
 
 ## Example Requests
+
 For additional examples, including negative test cases,
 see the [oauth-client-credentials-with-scope.feature](./test/integration/features/oauth-client-credentials-with-scope.feature) file.
 

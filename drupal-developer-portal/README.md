@@ -13,10 +13,12 @@ Apigee's [Drupal developer portal](https://cloud.google.com/apigee/docs/api-plat
 ## Implementation on Apigee
 
 The Apigee proxy sample uses only a few policies:
+
 1. A VerifyAPIKey policy to verify incoming request credentials
 2. A CORS policy to allow requests from the developer portal webpage
 
 ## Prerequisites
+
 1. [Provision Apigee X](https://cloud.google.com/apigee/docs/api-platform/get-started/provisioning-intro)
 2. Configure [external access](https://cloud.google.com/apigee/docs/api-platform/get-started/configure-routing#external-access) for API traffic to your Apigee X instance
 3. Have the permissions to deploy API proxies, create Apigee products, and launch the [Apigee Developer Portal Kickstart](https://console.cloud.google.com/marketplace/product/bap-marketplace/apigee-drupal-devportal) Marketplace solution
@@ -77,6 +79,7 @@ Now we will configure our Drupal Devoper Portal and expose our Apigee API produc
 ### Launch Marketplace Solution
 
 Follow the [documentation](https://cloud.google.com/apigee/docs/api-platform/publish/drupal/get-started-cloud-marketplace) to deploy the Drupal portal infrastructure using the Marketplace Apigee Developer Portal Kickstart solution. Name your deployment `sample-drupal-developer-portal` and be sure to [enable HTTPS](https://cloud.google.com/apigee/docs/api-platform/publish/drupal/apigee-cloud-marketplace-customize#https) under Networking during portal configuration. All other configurations can be left with default values.
+
 * If your portal has errors or does not load properly check Cloud Logging for details as it may fail silently with issues like org policy restrictions.
 * This Marketplace solution may take up to an hour to deploy
 
@@ -98,19 +101,20 @@ Now we will add our `sample-drupal-developer-portal-product` to our Drupal API C
 1. From the Drupal portal, navigate to Content > API Catalog
 2. Click the "+ OpenAPI" button
 3. Configure as shown below
-- Name: Sample Drupal Developer Portal API
-- Description: A portal for an API key protected proxy
-- Image: Image of your choice (optional)
-- Specification Source Type: File
-- OpenAPI specification: Use the [drupal-developer-portal.yaml](drupal-developer-portal.yaml) OpenAPI document from this repo:
-  - If you ran the deployment script from Cloud Shell:
-    - Navigate back to Cloud Shell
-    - Open drupal-developer-portal.yaml & download it to your local computer. No need to update file content as it was already updated when running the deployment script.
-  - Otherwise, do the following:
-    - Download [drupal-developer-portal.yaml](drupal-developer-portal.yaml) to your local computer
-    - Open the file and replace `[APIGEE_HOST]` with your own Apigee host/domain.
-  - Upload your updated drupal-developer-portal.yaml file as API documentation
-- Leave all other fields as their default values.
+* Name: Sample Drupal Developer Portal API
+* Description: A portal for an API key protected proxy
+* Image: Image of your choice (optional)
+* Specification Source Type: File
+* OpenAPI specification: Use the [drupal-developer-portal.yaml](drupal-developer-portal.yaml) OpenAPI document from this repo:
+  * If you ran the deployment script from Cloud Shell:
+    * Navigate back to Cloud Shell
+    * Open drupal-developer-portal.yaml & download it to your local computer. No need to update file content as it was already updated when running the deployment script.
+  * Otherwise, do the following:
+    * Download [drupal-developer-portal.yaml](drupal-developer-portal.yaml) to your local computer
+    * Open the file and replace `[APIGEE_HOST]` with your own Apigee host/domain.
+  * Upload your updated drupal-developer-portal.yaml file as API documentation
+* Leave all other fields as their default values.
+
 4. Click save
 
 ### Create API App in Drupal

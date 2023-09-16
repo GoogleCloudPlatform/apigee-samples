@@ -19,6 +19,7 @@ Apigee supports generation and verification of both digitally signed and encrypt
 ## Implementation on Apigee
 
 This sample proxy exposes several endpoints:
+
 * `/v1/samples/json-web-tokens/generate-signed` generates a digitally signed JWT using the private key generated during the sample setup, and returns the token in the response payload and a header
 * `/v1/samples/json-web-tokens/generate-encrypted` generates an encrypted JWT using the public key generated during the sample setup, and returns the token in the response payload and a header
 * `/v1/samples/json-web-tokens/verify-signed` accepts a digitally signed JWT as a form parameter, verifies the token signature against the public key, checks that the [`Subject`](https://www.rfc-editor.org/rfc/rfc7519#section-4.1.2) and [`Audience`](https://www.rfc-editor.org/rfc/rfc7519#section-4.1.3) claims match allowed values, then decodes and outputs the token contents to the response in plain text.
@@ -35,6 +36,7 @@ The verification policies in this sample also show how to use the [TimeAllowance
 [![Alt text](https://img.youtube.com/vi/L0egsQ_AtU4/0.jpg)](https://www.youtube.com/watch?v=L0egsQ_AtU4)
 
 ## Prerequisites
+
 1. [Provision Apigee X](https://cloud.google.com/apigee/docs/api-platform/get-started/provisioning-intro)
 2. Configure [external access](https://cloud.google.com/apigee/docs/api-platform/get-started/configure-routing#external-access) for API traffic to your Apigee X instance
 3. Access to deploy proxies and create KVMs in Apigee
@@ -55,7 +57,6 @@ Use the following GCP CloudShell tutorial, and follow the instructions.
 ## Setup instructions
 
 1. Clone the `apigee-samples` repo, and switch the `json-web-tokens` directory
-
 
 ```bash
 git clone https://github.com/GoogleCloudPlatform/apigee-samples.git
@@ -83,13 +84,17 @@ source ./env.sh
 ## Testing the JWT Proxy
 
 To run the tests, first retrieve Node.js dependencies with:
+
 ```
 npm install
 ```
+
 Ensure the following environment variables have been set correctly:
+
 * `PROXY_URL`
 
 and then run the tests:
+
 ```
 npm run test
 ```
@@ -97,11 +102,13 @@ npm run test
 ## Example Requests
 
 To generate a signed JWT:
+
 ```
 curl -X POST https://$APIGEE_HOST/v1/samples/json-web-tokens/generate-signed
 ```
 
 You should see an response like this:
+
 ```
 {
     "output_jwt": "<JWT value>"
@@ -109,6 +116,7 @@ You should see an response like this:
 ```
 
 To verify, copy the value from the output above and paste into the following request:
+
 ```
 curl -X POST https://$APIGEE_HOST/v1/samples/json-web-tokens/verify-signed \
   -H 'Content-Type: application/x-www-form-urlencoded' \
@@ -118,16 +126,19 @@ curl -X POST https://$APIGEE_HOST/v1/samples/json-web-tokens/verify-signed \
 The output should return `JWT OK` followed by the decoded token claims.
 
 To generate an encrypted JWT:
+
 ```
 curl -X POST https://$APIGEE_HOST/v1/samples/json-web-tokens/generate-encrypted
 ```
 
 To verify, copy the value from the output above and paste into the following request:
+
 ```
 curl -X POST https://$APIGEE_HOST/v1/samples/json-web-tokens/verify-encrypted \
   -H 'Content-Type: application/x-www-form-urlencoded' \
   --data-urlencode 'JWT=<output_jwt value>'
 ```
+
 Note the [`enc`](https://www.rfc-editor.org/rfc/rfc7516#section-4.1.2) header is returned in the response for the encrypted token.
 
 ## Cleanup

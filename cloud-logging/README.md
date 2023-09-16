@@ -23,6 +23,7 @@ It is also worth noting that it is quite common to add the MessageLogging policy
 [![Alt text](https://img.youtube.com/vi/p-ZbUExQgzw/0.jpg)](https://www.youtube.com/watch?v=p-ZbUExQgzw)
 
 ## Prerequisites
+
 1. [Provision Apigee X](https://cloud.google.com/apigee/docs/api-platform/get-started/provisioning-intro)
 2. Configure [external access](https://cloud.google.com/apigee/docs/api-platform/get-started/configure-routing#external-access) for API traffic to your Apigee X instance
 3. Make sure the following tools are available in your terminal's $PATH (Cloud Shell has these preconfigured)
@@ -45,7 +46,6 @@ Use the following GCP CloudShell tutorial, and follow the instructions.
 ## Setup instructions
 
 1. Clone the apigee-samples repo, and switch the cloud-logging directory
-
 
 ```bash
 git clone https://github.com/GoogleCloudPlatform/apigee-samples.git
@@ -77,6 +77,7 @@ Generate a few sample requests to the deployed API Proxy.
 ```
 curl  https://$APIGEE_HOST/v1/samples/cloud-logging
 ```
+
 > _If you want, consider also checking the call in the [Debug](https://cloud.google.com/apigee/docs/api-platform/debug/trace) view_
 
 After issuing some calls, let's confirm the configured variables / values set on the Message Logging policy were successfully writen to Cloud Logging with

@@ -43,22 +43,24 @@ Next, let's create and deploy the Apigee resources necessary to test the JWT pol
 
 This script creates a sample API Proxy and a key value map containing a public/private keypair. The script also tests that the deployment and configuration has been sucessful.
 
-
 ### Test the APIs
 
 The script that deploys the Apigee API proxies prints the information you will need to run the commands below.
 
 Set the proxy URL:
+
 ```sh
 export PROXY_URL=<replace with script output>
 ```
 
 First, generate a _digitally signed_ JWT:
+
 ```sh
 curl -X POST https://$PROXY_URL/generate-signed
 ```
 
 Next, verify the signed token by copying the value of `output_jwt` from the response and paste into the following request:
+
 ```sh
 curl -X POST https://$PROXY_URL/verify-signed \
   -H 'Content-Type: application/x-www-form-urlencoded' \
@@ -68,11 +70,13 @@ curl -X POST https://$PROXY_URL/verify-signed \
 The output should return `JWT OK` followed by the decoded token claims.
 
 Then, generate an _encrypted_ JWT:
+
 ```sh
 curl -X POST https://$PROXY_URL/generate-encrypted
 ```
 
 Finally, verify the encrypted token by copying the value of `output_jwt` from the response and paste into the following request:
+
 ```sh
 curl -X POST https://$PROXY_URL/verify-encrypted \
   -H 'Content-Type: application/x-www-form-urlencoded' \
@@ -82,6 +86,7 @@ curl -X POST https://$PROXY_URL/verify-encrypted \
 Once again, the output should return `JWT OK` followed by the decoded token claims, however this time note the [`enc`](https://www.rfc-editor.org/rfc/rfc7516#section-4.1.2) header value is also present in the response.
 
 ---
+
 ## Conclusion
 
 <walkthrough-conclusion-trophy></walkthrough-conclusion-trophy>

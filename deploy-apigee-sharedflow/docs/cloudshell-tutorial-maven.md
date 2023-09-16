@@ -60,12 +60,12 @@ gcloud builds submit --config cloudbuild.yaml . \
 
 This will trigger the Cloud Build and execute the steps in the <walkthrough-editor-open-file filePath="deploy-apigee-sharedflow/cloudbuild.yaml">cloudbuild.yaml</walkthrough-editor-open-file> file. At the end of the Cloud Build trigger, a sharedflow must be deployed to Apigee called `sample-hello-cicd-sf`
 
-
 ### Verification
 
 Login to the [Apigee console](https://apigee.google.com), click "Develop" and then "Shared Flows", you should see a sharedflow called `sample-hello-ci-cd-sf` imported and deployed.
 
 ---
+
 ## Conclusion
 
 <walkthrough-conclusion-trophy></walkthrough-conclusion-trophy>

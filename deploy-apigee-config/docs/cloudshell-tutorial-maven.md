@@ -60,10 +60,10 @@ gcloud builds submit --config cloudbuild.yaml . \
 
 This will trigger the Cloud Build and execute the steps in the <walkthrough-editor-open-file filePath="deploy-apigee-config/cloudbuild.yaml">cloudbuild.yaml</walkthrough-editor-open-file> file. At the end of the Cloud Build trigger, the configurations should be created in your Apigee org.
 
-
 ### Verification
 
 To verify if the configurations were created, login to the [Apigee console](https://apigee.google.com).
+
 - Navigate to "Admin" --> "Environments" --> "Target Servers", you should see a target server `SampleTarget` created.
 - Similarly navigate to "Admin" --> "Environments" --> "Key Value Maps", you should see a Key Value Map `SampleKVM` created
 - Navigate to "Publish" --> "API Products", you should find the `sample-product` product created.
@@ -71,6 +71,7 @@ To verify if the configurations were created, login to the [Apigee console](http
 - Navigate to "Publish" --> "Apps", you should find the `sampleapp` app created.
 
 ---
+
 ## Conclusion
 
 <walkthrough-conclusion-trophy></walkthrough-conclusion-trophy>

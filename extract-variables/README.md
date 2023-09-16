@@ -26,7 +26,6 @@ When defining the [ExtractVariables](https://cloud.google.com/apigee/docs/api-pl
 
 When executed, the policy applies a text pattern to the content and, upon finding a match, sets the value of the designated variable with the content. Other policies and code can then consume those variables to enable dynamic behavior or to send business data to Apigee API Analytics.
 
-
 ## Implementation on Apigee
 
 This sample uses the the [Apigee Mock Target API](https://apidocs.apigee.com/docs/mock-target/1/overview) as backend server, providing an XML response with the following fields:
@@ -41,6 +40,7 @@ We use again the  [Extract Variables](https://cloud.google.com/apigee/docs/api-p
 Finally we use the [Assign Message](https://cloud.google.com/apigee/docs/api-platform/reference/policies/assign-message-policy?hl=en) policy to set the response headers with the extracted fields and other [flow variables](https://cloud.google.com/apigee/docs/api-platform/reference/variables-reference).
 
 ## Prerequisites
+
 1. [Provision Apigee X](https://cloud.google.com/apigee/docs/api-platform/get-started/provisioning-intro)
 2. Configure [external access](https://cloud.google.com/apigee/docs/api-platform/get-started/configure-routing#external-access) for API traffic to your Apigee X instance
 3. Access to deploy proxies in Apigee
@@ -50,6 +50,7 @@ Finally we use the [Assign Message](https://cloud.google.com/apigee/docs/api-pla
     * curl
     * jq
     * npm
+
 # (QuickStart) Setup using CloudShell
 
 Use the following GCP CloudShell tutorial, and follow the instructions.
@@ -59,7 +60,6 @@ Use the following GCP CloudShell tutorial, and follow the instructions.
 ## Setup instructions
 
 1. Clone the `apigee-samples` repo, and switch the `extract-variables` directory
-
 
 ```bash
 git clone https://github.com/GoogleCloudPlatform/apigee-samples.git
@@ -85,12 +85,12 @@ source ./env.sh
 ```
 
 ## Example Requests
+
 To manually test the proxy, make requests using curl:
 
 ```bash
 curl -v https://$APIGEE_HOST/v1/samples/extract-variables
 ```
-
 
 ## Cleanup
 

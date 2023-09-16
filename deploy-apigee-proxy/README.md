@@ -7,6 +7,7 @@ This sample demonstrates how to use the [Apigee Maven deploy plugin](https://git
 [![Alt text](https://img.youtube.com/vi/8c0RozFEYhs/0.jpg)](https://www.youtube.com/watch?v=8c0RozFEYhs)
 
 ## Prerequisites
+
 1. [Provision Apigee X](https://cloud.google.com/apigee/docs/api-platform/get-started/provisioning-intro)
 2. Access to deploy proxies to Apigee, trigger Cloud Build
 3. Configure [external access](https://cloud.google.com/apigee/docs/api-platform/get-started/configure-routing#external-access) for API traffic to your Apigee X instance
