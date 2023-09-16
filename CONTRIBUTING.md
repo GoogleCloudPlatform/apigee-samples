@@ -24,7 +24,7 @@ just a few guidelines you need to follow.
     2. Install mega-linter-runner by running `npm install mega-linter-runner -g` (Note: You might need to run this with sudo permissions)
     3. Run the megalinter locally by running `mega-linter-runner -p .`. This should run all the checks locally
     4. Once all the checks and changes are made, commit them to your branch
-3. Submit a PR from your branch to the main branch in *your forked* repo itself. This should trigger the GitHub Action in your forked repo
+3. Submit a PR from your branch to the main branch in **your forked repo** itself. This should trigger the GitHub Action in your forked repo
 4. Make sure all they all pass. Once they are all passed, you can submit a pull request from your fork repo's main branch to the Google's apigee-samples repo
 5. This again should trigger the GitHub Action. Ensure the pull request checks listed below all pass
 6. Submit your PR, and we will perform a code review
