@@ -17,6 +17,7 @@ ENABLE_LINTERS:
   - MARKDOWN_MARKDOWNLINT
   - XML_XMLLINT
   - YAML_YAMLLINT
+  - DOCKERFILE_HADOLINT
 
 DISABLE:
   - COPYPASTE # Comment to enable checks of excessive copy-pastes
