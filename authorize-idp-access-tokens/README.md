@@ -46,7 +46,7 @@ This implementation includes two artifacts:
    * npm
 5. Obtain a Client ID, a Client Secret, and a JWT access token from an OIDC Identity Provider (you'll be using the values during the quickstart)
 
-# (QuickStart) Setup using CloudShell
+## (QuickStart) Setup using CloudShell
 
 Use the following GCP CloudShell tutorial, and follow the instructions.
 
@@ -101,7 +101,7 @@ If you didn't set values for `Optional` environment variables during the setup s
 
 If you set `Optional` environment variables with values from your own OIDC Identity Provider during the setup step, then obtain a JWT access token by completing an authorization flow of your choice. Set the JWT access token as a value of the `IDP_TOKEN` environment variable and send a cURL request as shown below:
 
-```
+```bash
 IDP_TOKEN=REPLACE_WITH_IDP_ACCESS_TOKEN
 curl -v https://$APIGEE_HOST/v1/samples/authorize-idp-access-tokens -H "Authorization: Bearer $IDP_TOKEN"
 ```

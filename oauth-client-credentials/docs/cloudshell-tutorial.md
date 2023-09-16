@@ -49,7 +49,7 @@ The script that deploys the Apigee API proxies prints the proxy and app informat
 
 First obtain a short-lived opaque access token using the token endpoint.
 
-```
+```bash
 curl -v -XPOST https://$APIGEE_HOST/apigee-samples/oauth-client-credentials/token -u $APP_CLIENT_ID:$APP_CLIENT_SECRET -d "grant_type=client_credentials"
 ```
 
@@ -57,7 +57,7 @@ curl -v -XPOST https://$APIGEE_HOST/apigee-samples/oauth-client-credentials/toke
 
 Copy the value of the `access_token` property from the response body of the previous request and include it in the following request:
 
-```
+```bash
 curl -v https://$APIGEE_HOST/apigee-samples/oauth-client-credentials/resource -H "Authorization: Bearer access_token"
 ```
 

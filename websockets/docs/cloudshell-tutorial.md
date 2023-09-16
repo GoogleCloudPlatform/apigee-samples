@@ -59,7 +59,7 @@ wscat --connect ws://localhost:8080
 
 You should be able to type anything and receive an echo response from the server:
 
-```
+```sh
 Connected (press CTRL+C to quit)
 > hello
 < hello

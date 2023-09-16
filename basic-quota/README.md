@@ -43,7 +43,7 @@ This sample uses a [VerifyAPIKey](https://cloud.google.com/apigee/docs/api-platf
     * jq
     * npm
 
-# (QuickStart) Setup using CloudShell
+## (QuickStart) Setup using CloudShell
 
 Use the following GCP CloudShell tutorial, and follow the instructions.
 
@@ -80,7 +80,7 @@ source ./env.sh
 
 To run the tests, first retrieve Node.js dependencies with:
 
-```
+```bash
 npm install
 ```
 
@@ -92,7 +92,7 @@ Ensure the following environment variables have been set correctly:
 
 and then run the tests:
 
-```
+```bash
 npm run test
 ```
 
@@ -105,7 +105,7 @@ application credentials can be found [here](https://cloud.google.com/apigee/docs
 
 The requests can be made like this:
 
-```
+```bash
 curl https://$APIGEE_HOST/v1/samples/basic-quota?apikey=$CLIENT_ID_1
 ```
 

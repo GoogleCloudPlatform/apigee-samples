@@ -62,6 +62,7 @@ We also need to add our API product to the portal:
 3. Click + to add a new API product to the catalog
 4. Select the sample-integrated-developer-portal-product product and click next
 5. Configure as shown below
+
 * Published: Select published (checked)
 * Display title: Leave default name, sample-integrated-developer-portal-product
 * Display description: A portal for an API key protected proxy
@@ -91,6 +92,7 @@ Now that we have a developer portal, let's walk through its workflow. First we'l
 4. Navigate back to your portal's homepage (https://\[APIGEE-ORG\]-sampleintegrateddeveloperportal.apigee.io) and make sure that you're signed in
 5. Open the dropdown menu by clicking on your account and select Apps
 6. Select +NEW APP and update the following fields. Note: this creates an Apigee App for your developer
+
 * App Name: Sample App
 * APIs: Enable sample-integrated-developer-portal-product
 

@@ -48,7 +48,7 @@ The WebSockets connection is closed when:
     * [Artifact Registry Repository Administrator](https://cloud.google.com/iam/docs/understanding-roles#artifactregistry.repoAdmin) role  (roles/artifactregistry.repoAdmin)
     * [Cloud Run Developer](https://cloud.google.com/run/docs/reference/iam/roles) role (roles/run.developer)
 
-# (QuickStart) Setup using CloudShell
+## (QuickStart) Setup using CloudShell
 
 Use the following GCP CloudShell tutorial, and follow the instructions.
 
@@ -98,7 +98,7 @@ wscat --connect ws://localhost:8080
 
 You should be able to type anything and receive an echo response from the server:
 
-```
+```sh
 Connected (press CTRL+C to quit)
 > hello
 < hello

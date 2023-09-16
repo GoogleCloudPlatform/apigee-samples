@@ -51,7 +51,7 @@ Finally we use the [Assign Message](https://cloud.google.com/apigee/docs/api-pla
     * jq
     * npm
 
-# (QuickStart) Setup using CloudShell
+## (QuickStart) Setup using CloudShell
 
 Use the following GCP CloudShell tutorial, and follow the instructions.
 

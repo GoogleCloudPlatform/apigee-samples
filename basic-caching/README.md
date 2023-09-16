@@ -30,7 +30,7 @@ This sample demonstrates how to use the ResponseCache policy to cache the respon
     * jq
     * npm
 
-# (QuickStart) Setup using CloudShell
+## (QuickStart) Setup using CloudShell
 
 Use the following GCP CloudShell tutorial, and follow the instructions.
 

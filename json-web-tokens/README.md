@@ -48,7 +48,7 @@ The verification policies in this sample also show how to use the [TimeAllowance
     * openssl
     * npm
 
-# (QuickStart) Setup using CloudShell
+## (QuickStart) Setup using CloudShell
 
 Use the following GCP CloudShell tutorial, and follow the instructions.
 
@@ -85,7 +85,7 @@ source ./env.sh
 
 To run the tests, first retrieve Node.js dependencies with:
 
-```
+```bash
 npm install
 ```
 
@@ -95,7 +95,7 @@ Ensure the following environment variables have been set correctly:
 
 and then run the tests:
 
-```
+```bash
 npm run test
 ```
 
@@ -103,13 +103,13 @@ npm run test
 
 To generate a signed JWT:
 
-```
+```bash
 curl -X POST https://$APIGEE_HOST/v1/samples/json-web-tokens/generate-signed
 ```
 
 You should see an response like this:
 
-```
+```json
 {
     "output_jwt": "<JWT value>"
 }
@@ -117,7 +117,7 @@ You should see an response like this:
 
 To verify, copy the value from the output above and paste into the following request:
 
-```
+```bash
 curl -X POST https://$APIGEE_HOST/v1/samples/json-web-tokens/verify-signed \
   -H 'Content-Type: application/x-www-form-urlencoded' \
   --data-urlencode 'JWT=<output_jwt value>'
@@ -127,13 +127,13 @@ The output should return `JWT OK` followed by the decoded token claims.
 
 To generate an encrypted JWT:
 
-```
+```bash
 curl -X POST https://$APIGEE_HOST/v1/samples/json-web-tokens/generate-encrypted
 ```
 
 To verify, copy the value from the output above and paste into the following request:
 
-```
+```bash
 curl -X POST https://$APIGEE_HOST/v1/samples/json-web-tokens/verify-encrypted \
   -H 'Content-Type: application/x-www-form-urlencoded' \
   --data-urlencode 'JWT=<output_jwt value>'

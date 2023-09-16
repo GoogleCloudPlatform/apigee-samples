@@ -2,7 +2,7 @@
 
 This sample demonstrates how to use Cloud Run Service from Apigee Proxy using Cloud Build.
 
-### Screencast
+## Screencast
 
 [![Alt text](https://img.youtube.com/vi/oyFyPs0tg8Y/0.jpg)](https://www.youtube.com/watch?v=oyFyPs0tg8Y)
 

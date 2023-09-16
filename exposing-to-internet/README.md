@@ -32,7 +32,7 @@ Customers can connect an external load balancer to this attachment using a [PSC 
     * jq
     * npm
 
-# (QuickStart) Setup using CloudShell
+## (QuickStart) Setup using CloudShell
 
 Use the following GCP CloudShell tutorial, and follow the instructions.
 
@@ -71,7 +71,7 @@ Please note the script may take some time to complete while certificate provisio
 
 To run the tests, first retrieve Node.js dependencies with:
 
-```
+```bash
 npm install
 ```
 
@@ -81,7 +81,7 @@ Ensure the following environment variables have been set correctly:
 
 and then run the tests:
 
-```
+```bash
 npm run test
 ```
 
@@ -89,7 +89,7 @@ npm run test
 
 To manually test the instance via the external load balancer URL, wait a minute and then make the following request:
 
-```
+```bash
 curl https://$RUNTIME_HOST_ALIAS/healthz/ingress -H 'User-Agent: GoogleHC'
 ```
 

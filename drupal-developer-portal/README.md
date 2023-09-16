@@ -29,7 +29,7 @@ The Apigee proxy sample uses only a few policies:
     * jq
     * npm
 
-# (QuickStart) Setup using CloudShell
+## (QuickStart) Setup using CloudShell
 
 Use the following GCP CloudShell tutorial, and follow the instructions in Cloud Shell. Alternatively, follow the instructions below.
 
@@ -101,6 +101,7 @@ Now we will add our `sample-drupal-developer-portal-product` to our Drupal API C
 1. From the Drupal portal, navigate to Content > API Catalog
 2. Click the "+ OpenAPI" button
 3. Configure as shown below
+
 * Name: Sample Drupal Developer Portal API
 * Description: A portal for an API key protected proxy
 * Image: Image of your choice (optional)

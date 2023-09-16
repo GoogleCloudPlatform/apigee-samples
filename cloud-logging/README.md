@@ -37,7 +37,7 @@ It is also worth noting that it is quite common to add the MessageLogging policy
     * `roles/resourcemanager.projectIamAdmin`
     * `roles/apigee.apiAdminV2`
 
-# (QuickStart) Setup using CloudShell
+## (QuickStart) Setup using CloudShell
 
 Use the following GCP CloudShell tutorial, and follow the instructions.
 
@@ -74,7 +74,7 @@ source ./env.sh
 
 Generate a few sample requests to the deployed API Proxy.
 
-```
+```bash
 curl  https://$APIGEE_HOST/v1/samples/cloud-logging
 ```
 
@@ -82,7 +82,7 @@ curl  https://$APIGEE_HOST/v1/samples/cloud-logging
 
 After issuing some calls, let's confirm the configured variables / values set on the Message Logging policy were successfully writen to Cloud Logging with
 
-```
+```bash
 gcloud logging read "logName=projects/$PROJECT/logs/apigee"
 ```
 

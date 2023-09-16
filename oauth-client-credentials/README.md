@@ -12,7 +12,7 @@ With the client credentials grant type flow, the client app requests an access t
 
 The API is called like this, where the client ID and secret are Base64-encoded and used in the Basic Auth header:
 
-```
+```bash
 curl -H "Authorization: Basic <base64-encoded key:secret>" https://your-api-url.com/oauth/token?grant_type=client_credentials
 ```
 
@@ -36,7 +36,7 @@ The client credentials sample uses one policy that executes on Apigee : An OAuth
     * jq
     * npm
 
-# (QuickStart) Setup using CloudShell
+## (QuickStart) Setup using CloudShell
 
 Use the following GCP CloudShell tutorial, and follow the instructions.
 
@@ -73,7 +73,7 @@ source ./env.sh
 
 To run the tests, first retrieve Node.js dependencies with:
 
-```
+```bash
 npm install
 ```
 
@@ -85,7 +85,7 @@ Ensure the following environment variables have been set correctly:
 
 and then run the tests:
 
-```
+```bash
 npm run test
 ```
 
@@ -100,7 +100,7 @@ First obtain a short-lived opaque access token using the token endpoint. Instruc
 application credentials can be found [here](https://cloud.google.com/apigee/docs/api-platform/publish/creating-apps-surface-your-api#view-api-key).
 If the deployment has been successfully executed, you will see the `oauth-client-credentials-app` created for testing purposes.
 
-```
+```bash
 curl -v POST https://$APIGEE_HOST/v1/samples/oauth-client-credentials/token -u $APP_CLIENT_ID:$APP_CLIENT_SECRET -d "grant_type=client_credentials"
 ```
 
@@ -108,7 +108,7 @@ curl -v POST https://$APIGEE_HOST/v1/samples/oauth-client-credentials/token -u $
 
 Copy the value of the `access_token` property from the response body of the previous request and include it in the following request:
 
-```
+```bash
 curl -v GET https://$APIGEE_HOST/v1/samples/oauth-client-credentials/resource -H "Authorization: Bearer access_token"
 ```
 

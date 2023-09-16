@@ -2,7 +2,7 @@
 
 This sample demonstrates how to use the [Apigee Maven config plugin](https://github.com/apigee/apigee-config-maven-plugin) to push environment configurations like Targetservers, KeyValueMaps and Organization configurations like API Products, Developers and Developer Apps to Apigee using [Cloud Build](https://cloud.google.com/build/docs/overview)
 
-### Screencast
+## Screencast
 
 [![Alt text](https://img.youtube.com/vi/RBn-8cG_i9s/0.jpg)](https://www.youtube.com/watch?v=RBn-8cG_i9s)
 
@@ -63,6 +63,7 @@ gcloud builds submit --config cloudbuild.yaml . \
 ## Verification
 
 To verify if the configurations were created, login to the [Apigee console](https://apigee.google.com).
+
 * Navigate to "Admin" --> "Environments" --> "Target Servers", you should see a target server `SampleTarget` created.
 * Similarly navigate to "Admin" --> "Environments" --> "Key Value Maps", you should see a Key Value Map `SampleKVM` created
 * Navigate to "Publish" --> "API Products", you should find the `sample-product` product created.

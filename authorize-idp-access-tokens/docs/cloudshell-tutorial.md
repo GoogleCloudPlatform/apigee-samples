@@ -73,7 +73,7 @@ If you set `Optional` environment variables with values from your own OIDC Ident
 
 > _Note: Use the same Client ID / App Key and Secret used in the environment variables file._
 
-```
+```bash
 IDP_TOKEN=REPLACE_WITH_IDP_ACCESS_TOKEN
 curl -v https://$APIGEE_HOST/v1/samples/authorize-idp-access-tokens -H "Authorization: Bearer $IDP_TOKEN"
 ```

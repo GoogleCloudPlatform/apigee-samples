@@ -18,7 +18,7 @@ With the client credentials grant type flow, the client app requests an access t
 
 The API is called like this, where the client ID and secret are Base64-encoded and used in the Basic Auth header:
 
-```
+```bash
 curl -H "Authorization: Basic <base64-encoded key:secret>" https://your-api-url.com/oauth/token -d "grant_type=client_credentials&scope=<scope>"
 ```
 
@@ -44,7 +44,7 @@ The client credentials sample uses one policy that executes on Apigee : An OAuth
     * jq
     * npm
 
-# (QuickStart) Setup using CloudShell
+## (QuickStart) Setup using CloudShell
 
 Use the following GCP CloudShell tutorial, and follow the instructions.
 
@@ -81,7 +81,7 @@ source ./env.sh
 
 To run the tests, first retrieve Node.js dependencies with:
 
-```
+```bash
 npm install
 ```
 
@@ -95,7 +95,7 @@ Ensure the following environment variables have been set correctly:
 
 and then run the tests:
 
-```
+```bash
 npm run test
 ```
 
