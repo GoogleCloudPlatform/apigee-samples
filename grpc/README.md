@@ -77,7 +77,7 @@ Let's run the script that will create and deploy the resources necessary to test
 To manually test the proxy, make requests using grpcurl or another gRPC client:
 
 ```sh
-grpcurl -H \"x-apikey:$CLIENT_ID\" -import-path $PWD/grpc-backend/examples/protos -proto helloworld.proto -d '{\"name\":\"Guest\"}' <YOUR_APIGEE_GRPC_HOSTNAME>:443 helloworld.Greeter/SayHello"
+grpcurl -H "x-apikey:$CLIENT_ID" -import-path $PWD/grpc-backend/examples/protos -proto helloworld.proto -d '{"name\":"Guest"}' <YOUR_APIGEE_GRPC_HOSTNAME>:443 helloworld.Greeter/SayHello"
 ```
 
 ## Cleanup
