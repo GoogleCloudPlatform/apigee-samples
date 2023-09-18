@@ -14,8 +14,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-export PROJECT="apigee-argolis-non-prod"
-export NETWORK="apigee-network"
-export SUBNET="apigee-grpc-subnet"
+export PROJECT="<GCP_PROJECT_ID>"
+export NETWORK="<VPC_NETWORK>"
+export SUBNET="<VPC_SUBNET>"
 
 gcloud config set project $PROJECT
