@@ -108,7 +108,7 @@ gcloud run deploy grpc-backend-apigee --allow-unauthenticated \
 --quiet \
 --source=.
 
-CLOUD_RUN_SERVICE_URL=$(gcloud run services describe grpc-backend-apigee --platform managed --region $REGION --format 'value(status.url)' | sed -E 's/http.+\///')
+CLOUD_RUN_SERVICE_URL=$(gcloud run services describe grpc-backend-apigee --platform managed --region "$REGION" --format 'value(status.url)' | sed -E 's/http.+\///')
 
 # Create a Google managed SSL certificate
 echo "Creating SSL certificate..."
