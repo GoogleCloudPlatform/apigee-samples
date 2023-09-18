@@ -30,7 +30,7 @@ cd grpc
 
 ## Deploy Apigee and GCP components
 
-1. Click <walkthrough-editor-open-file filePath="cloudshell_open/apigee-samples/grpc/env.sh">here</walkthrough-editor-open-file> to open the `env.sh` fileand set the following environment variables:
+1. Click <walkthrough-editor-open-file filePath="grpc/env.sh">here</walkthrough-editor-open-file> to open the `env.sh` fileand set the following environment variables:
 
 * `PROJECT` the project where your Apigee organization is located
 * `NETWORK` the VPC network where the PSC NEG will be deployed
