@@ -77,7 +77,11 @@ OPERATION=$(apigeecli instances attachments attach -o "$PROJECT" -e "$ENVIRONMEN
 wait_for_operation "$OPERATION"
 
 # Enable APIs
-gcloud services enable compute.googleapis.com --project="$PROJECT" --quiet
+gcloud services enable \
+    compute.googleapis.com \
+    cloudbuild.googleapis.com \
+    artifactregistry.googleapis.com \
+    --project="$PROJECT" --quiet
 
 # Reserve an IP address for the Load Balancer"
 echo "Reserving load balancer IP address..."
@@ -96,10 +100,6 @@ wait_for_operation "$OPERATION"
 
 #Deploy gRPC backend to Cloud Run
 git clone https://github.com/grpc/grpc.git grpc-backend
-
-gcloud services enable \
-  cloudbuild.googleapis.com \
-  artifactregistry.googleapis.com
 
 gcloud run deploy grpc-backend-apigee --allow-unauthenticated \
 --port 50051 \
