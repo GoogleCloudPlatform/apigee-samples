@@ -15,7 +15,7 @@
  limitations under the License.
 -->
 
-<APIProxy revision="9" name="grpc">
-  <DisplayName/>
+<APIProxy revision="2" name="grpc">
+  <DisplayName>grpc</DisplayName>
   <Description>A sample passthrough proxy for a gRPC service</Description>
 </APIProxy>
