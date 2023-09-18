@@ -1,9 +1,6 @@
 # gRPC on Apigee
-
 This sample shows how to use Apigee in front of your gRPC backends.
 For this example we will be using Cloud Run to host a gRPC server and configure it as a target server in Apigee. Apigee will act as a simple reverse proxy in front of the gRPC backend. For more detailed information on using gRPC proxies in Apigee, please refer to the official [documentation](https://cloud.google.com/apigee/docs/api-platform/fundamentals/build-simple-api-proxy#creating-grpc-api-proxies).
-
-
 
 ## Prerequisites
 1. [Provision Apigee X](https://cloud.google.com/apigee/docs/api-platform/get-started/provisioning-intro)
@@ -68,6 +65,7 @@ Let's run the script that will create and deploy the resources necessary to test
 * Deploy a sample gRPC Greeter service to Cloud Run
 * Deploy an API proxy, target server, developer, app and api product 
 
+ Finally it tests that the deployment and configuration has been sucessful.
 
 3. Run the deploy.sh script:
 
@@ -75,17 +73,12 @@ Let's run the script that will create and deploy the resources necessary to test
 ./deploy.sh
 ```
 
-This script creates a sample API Proxy, a Developer, an API product, and a gRPC target server. The script also creates an External Load Balancer and deploys a sample gRPC service to Cloud Run. Finally it tests that the deployment and configuration has been sucessful.
-
 ## Manually Testing the gRPC Proxy
-
-## Example Requests
 To manually test the proxy, make requests using grpcurl or another gRPC client:
 
 ```sh
-grpcurl -H \"x-apikey:$CLIENT_ID\" -import-path $PWD/grpc-backend/examples/protos -proto helloworld.proto -d '{\"name\":\"Guest\"}' <YOUR_APIGEE_GRPC_HOSNAME>:443 helloworld.Greeter/SayHello"
+grpcurl -H \"x-apikey:$CLIENT_ID\" -import-path $PWD/grpc-backend/examples/protos -proto helloworld.proto -d '{\"name\":\"Guest\"}' <YOUR_APIGEE_GRPC_HOSTNAME>:443 helloworld.Greeter/SayHello"
 ```
-
 
 ## Cleanup
 If you want to clean up the artifacts from this example in your Apigee Organization, first source your `env.sh` script, and then run
