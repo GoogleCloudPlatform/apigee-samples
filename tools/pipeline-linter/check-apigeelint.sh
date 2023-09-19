@@ -19,8 +19,8 @@
 
 set -e
 
-proxyExclusions=("grpc") #add any proxy that needs to be excluded. Needs review before adding any exclusions
-sfExclusions=("") #add any sharedflow that needs to be excluded. Needs review before adding any exclusions
+declare -a proxyExclusions=("grpc") #add any proxy that needs to be excluded. Needs review before adding any exclusions
+declare -a sfExclusions=("") #add any sharedflow that needs to be excluded. Needs review before adding any exclusions
 
 # For API Proxies
 for proxyDir in "$PWD"/*/apiproxy "$PWD"/*/bundles/*/apiproxy; do
