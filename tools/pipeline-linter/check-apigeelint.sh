@@ -26,7 +26,7 @@ proxyExclusions=(
 
 #add any sharedflow that needs to be excluded. Needs review before adding any exclusions
 sfExclusions=(
-''
+' '
 )
 
 # For API Proxies

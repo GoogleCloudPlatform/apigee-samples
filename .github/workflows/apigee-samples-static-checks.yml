@@ -93,5 +93,3 @@ jobs:
         run: npm install apigeelint -g
       - name: Run Apigeelint
         run: bash ./tools/pipeline-linter/check-apigeelint.sh
-        #with:
-          #pipeline-action: check-apigeelint.sh
