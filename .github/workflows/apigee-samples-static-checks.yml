@@ -89,7 +89,7 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
-      - name: Install Linter dependencies
-        run: npm install apigeelint -g
       - name: Run Apigeelint
-        run: bash ./tools/pipeline-linter/check-apigeelint.sh
+        uses: ./tools/pipeline-linter
+        with:
+          pipeline-action: bash -ex check-apigeelint.sh
