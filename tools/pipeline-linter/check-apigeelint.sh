@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Copyright 2020 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,7 +20,7 @@
 set -e
 
 exceptions=(
-"$PWD/grpc/apiproxy"
+    "$PWD/grpc/apiproxy"
 )
 # For API Proxies
 for proxyDir in "$PWD"/*/apiproxy; do
