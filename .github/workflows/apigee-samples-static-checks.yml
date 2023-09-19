@@ -91,5 +91,6 @@ jobs:
         uses: actions/checkout@v2
       - name: Run Apigeelint
         uses: ./tools/pipeline-linter
-        with:
-          pipeline-action: check-apigeelint.sh
+        run: bash check-apigeelint.sh
+        #with:
+          #pipeline-action: check-apigeelint.sh
