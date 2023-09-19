@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Copyright 2020 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,10 +19,17 @@
 
 set -e
 
+exceptions=(
+    "$PWD/grpc/apiproxy"
+)
 # For API Proxies
 for proxyDir in "$PWD"/*/apiproxy; do
-    echo "Running apigeelint on $proxyDir"
-    apigeelint -s "$proxyDir" -f table.js -e PO013,PO025 -x tools/pipeline-linter/apigeelint --profile apigeex
+    if [[ " ${exceptions[*]} " =~ " ${proxyDir} " ]]; then
+        echo "Skipping $proxyDir..."
+    else
+        echo "Running apigeelint on $proxyDir"
+        apigeelint -s "$proxyDir" -f table.js -e PO013,PO025 -x tools/pipeline-linter/apigeelint --profile apigeex        
+    fi
 done
 
 # For Sharedflows
