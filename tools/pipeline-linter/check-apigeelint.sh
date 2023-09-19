@@ -19,8 +19,15 @@
 
 set -e
 
-proxyExclusions=('basic-caching' 'cors') #add any proxy that needs to be excluded. Needs review before adding any exclusions
-sfExclusions=(' ') #add any sharedflow that needs to be excluded. Needs review before adding any exclusions
+#add any proxy that needs to be excluded. Needs review before adding any exclusions
+proxyExclusions=(
+'grpc'
+)
+
+#add any sharedflow that needs to be excluded. Needs review before adding any exclusions
+sfExclusions=(
+''
+)
 
 # For API Proxies
 for proxyDir in "$PWD"/*/apiproxy "$PWD"/*/bundles/*/apiproxy; do
