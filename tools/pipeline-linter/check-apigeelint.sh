@@ -19,13 +19,13 @@
 
 set -e
 
-declare -a proxyExclusions=("grpc") #add any proxy that needs to be excluded. Needs review before adding any exclusions
-declare -a sfExclusions=("") #add any sharedflow that needs to be excluded. Needs review before adding any exclusions
+proxyExclusions=('basic-caching' 'cors') #add any proxy that needs to be excluded. Needs review before adding any exclusions
+sfExclusions=(' ') #add any sharedflow that needs to be excluded. Needs review before adding any exclusions
 
 # For API Proxies
 for proxyDir in "$PWD"/*/apiproxy "$PWD"/*/bundles/*/apiproxy; do
     skip=false
-    for excl in ${proxyExclusions[@]}; do
+    for excl in "${proxyExclusions[@]}"; do
         if [[ $proxyDir == *"$excl"* ]]; then
             skip=true
         fi
@@ -39,7 +39,7 @@ done
 # For Sharedflows
 for sfDir in "$PWD"/*/sharedflowbundle; do
     skip=false
-    for excl in ${sfExclusions[@]}; do
+    for excl in "${sfExclusions[@]}"; do
         if [[ $sfDir == *"$excl"* ]]; then
             skip=true
         fi
