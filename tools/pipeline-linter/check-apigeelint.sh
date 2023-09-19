@@ -19,6 +19,7 @@
 
 set -e
 
+
 #add any proxy that needs to be excluded. Needs review before adding any exclusions
 proxyExclusions=(
 'grpc'
