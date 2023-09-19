@@ -19,21 +19,43 @@
 
 set -e
 
-exception="$PWD/grpc/apiproxy"
+
+#add any proxy that needs to be excluded. Needs review before adding any exclusions
+proxyExclusions=(
+'grpc'
+)
+
+#add any sharedflow that needs to be excluded. Needs review before adding any exclusions
+sfExclusions=(
+' '
+)
+
 # For API Proxies
-for proxyDir in "$PWD"/*/apiproxy; do
-    if [ "$proxyDir" = "$exception" ]; then 
-        echo "Skipping $proxyDir..."
-    else
+for proxyDir in "$PWD"/*/apiproxy "$PWD"/*/bundles/*/apiproxy; do
+    skip=false
+    for excl in "${proxyExclusions[@]}"; do
+        if [[ $proxyDir == *"$excl"* ]]; then
+            skip=true
+        fi
+    done
+    if [[ $skip = false ]]; then
         echo "Running apigeelint on $proxyDir"
-        apigeelint -s "$proxyDir" -f table.js -e PO013,PO025 -x tools/pipeline-linter/apigeelint --profile apigeex     
+        apigeelint -s "$proxyDir" -f table.js -e PO013,PO025 -x tools/pipeline-linter/apigeelint --profile apigeex
     fi
 done
 
 # For Sharedflows
 for sfDir in "$PWD"/*/sharedflowbundle; do
-    echo "Running apigeelint on $sfDir"
-    apigeelint -s "$sfDir" -f table.js -e PO013,PO025 --profile apigeex
+    skip=false
+    for excl in "${sfExclusions[@]}"; do
+        if [[ $sfDir == *"$excl"* ]]; then
+            skip=true
+        fi
+    done
+    if [[ $skip = false ]]; then
+        echo "Running apigeelint on $sfDir"
+        apigeelint -s "$sfDir" -f table.js -e PO013,PO025 --profile apigeex
+    fi
 done
 
 echo 
