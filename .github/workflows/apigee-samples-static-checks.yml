@@ -34,31 +34,24 @@ jobs:
           pipeline-action: check-license.sh
 
   linter:
-    name: Lint Codebase
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
-      - name: Setup Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: "14"
-      - name: Install Linter dependencies
-        run: npm install
-      - name: Run Mega Linter
-        uses: nvuillam/mega-linter@v5
-        env:
-          DEFAULT_BRANCH: main
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          VALIDATE_JAVASCRIPT_STANDARD: false
-          VALIDATE_GHERKIN: false
-          VALIDATE_JSCPD: false
-          SPELL_MISSPELL_DISABLE_ERRORS: true
-          SPELL_CSPELL_DISABLE_ERRORS: true
-          COPYPASTE_JSCPD_DISABLE_ERRORS: true
-          LINTER_RULES_PATH: "."
-          GROOVY_NPM_GROOVY_LINT_FILTER_REGEX_EXCLUDE: "Jenkinsfile"
-          MARKDOWN_MARKDOWN_LINK_CHECK_DISABLE_ERRORS: true
+      name: Lint Codebase
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout Code
+          uses: actions/checkout@v3
+        - name: Run Mega Linter
+          uses: oxsecurity/megalinter@v7
+          env:
+            VALIDATE_ALL_CODEBASE: true
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        - name: Archive production artifacts
+          if: ${{ success() }} || ${{ failure() }}
+          uses: actions/upload-artifact@v3
+          with:
+            name: MegaLinter reports
+            path: |
+              megalinter-reports
+              mega-linter.log
 
   commit-messages:
     name: Conventional Commits Lint
