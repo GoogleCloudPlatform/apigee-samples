@@ -38,15 +38,18 @@ Let's get started!
     ```bash
     source ./env.sh
     ```
-
+4. Enable APIs
+    ```bash
+    gcloud services enable privateca.googleapis.com
+    gcloud services enable certificatemanager.googleapis.com
+    gcloud services enable networksecurity.googleapis.com
+    ```
 ## Create CA pool and root CAs
 We'll use the use case of multiple partners communicating with our APIs.
 
 ### CA Pool
 Create a pool for each of the partner CAs.
 ```
-gcloud services enable privateca.googleapis.com
-
 gcloud privateca pools create ${POOL} --location=${LOCATION}
 ```
 
@@ -83,8 +86,6 @@ EOF
 ```
 Finally create the trust config.
 ```
-gcloud services enable certificatemanager.googleapis.com
-
 gcloud beta certificate-manager trust-configs import ${TRUST_CONFIG} \
   --source=${TRUST_CONFIG}.yaml
 ```
@@ -105,8 +106,6 @@ EOF
 ```
 Create the lenient policy.
 ```
-gcloud services enable networksecurity.googleapis.com
-
 gcloud beta network-security server-tls-policies import ${ROOT}-lenient \
   --source=${ROOT}-lenient.yaml \
   --location=global
@@ -530,7 +529,7 @@ apigee-proxy-https-lb-rule                  34.149.167.159  TCP          apigee-
 apigee-proxy-modern-https-lb-rule           34.160.201.100  TCP          apigee-proxy-modern-https-proxy
 ```
 
-Right click on the Cloud Logging in the GCP Console [link](https://console.cloud.google.com/logs/query) and open in a separate tab.
+Open [Cloud Logging](https://console.cloud.google.com/logs/query) in the GCP Console in a separate tab.
 
 Enter the query using the value from your configuration for "resource.labels.forwarding_rule_name".
 ```
