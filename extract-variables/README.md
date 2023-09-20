@@ -43,7 +43,6 @@ Finally we use the [Assign Message](https://cloud.google.com/apigee/docs/api-pla
 
 [![Alt text](https://img.youtube.com/vi/xQPd4M08Wm4/0.jpg)](https://www.youtube.com/watch?v=xQPd4M08Wm4&list=PLIivdWyY5sqJCRHhuNgWXhISaBkGINFGp)
 
-
 ## Prerequisites
 
 1. [Provision Apigee X](https://cloud.google.com/apigee/docs/api-platform/get-started/provisioning-intro)
