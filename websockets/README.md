@@ -14,10 +14,11 @@ The WebSockets [spec](https://websockets.spec.whatwg.org/) and protocol is maint
 
 In Apigee and Apigee hybrid, environment groups provide routing to environments and define the hostnames on which API proxies are exposed. Environment groups support both the HTTP and WS protocols natively. You do not have to create a special environment group or any special configuration to use WebSockets. Rather, it is up to the client to request a protocol upgrade from HTTP to WS by including the Upgrade request header. An upgrade request made to an API proxy endpoint returns a 101 Switching Protocols response. Further requests and responses are made bidirectionally on the open WebSockets connection, until it is closed.
 
-### Policy support 
+### Policy support
+
 With a WebSockets connection, you can only use the [Verify API Key](https://cloud.google.com/apigee/docs/api-platform/reference/policies/verify-api-key-policy) and [OAuthV2](https://cloud.google.com/apigee/docs/api-platform/reference/policies/oauthv2-policy) policies in your API proxy. All other policies are ignored.
 
-### Revoking the connection 
+### Revoking the connection
 
 The WebSockets connection is closed when:
 
@@ -25,8 +26,8 @@ The WebSockets connection is closed when:
 * The proxy endpoint receives a request with an expired or invalid API key or OAuth token.
 * The WebSockets connection times out.
 
-
 ## Prerequisites
+
 1. [Provision Apigee X](https://cloud.google.com/apigee/docs/api-platform/get-started/provisioning-intro)
 2. Configure [external access](https://cloud.google.com/apigee/docs/api-platform/get-started/configure-routing#external-access) for API traffic to your Apigee X instance
 3. Access to deploy proxies, create products, apps and developers in Apigee
@@ -47,7 +48,7 @@ The WebSockets connection is closed when:
     * [Artifact Registry Repository Administrator](https://cloud.google.com/iam/docs/understanding-roles#artifactregistry.repoAdmin) role  (roles/artifactregistry.repoAdmin)
     * [Cloud Run Developer](https://cloud.google.com/run/docs/reference/iam/roles) role (roles/run.developer)
 
-# (QuickStart) Setup using CloudShell
+## (QuickStart) Setup using CloudShell
 
 Use the following GCP CloudShell tutorial, and follow the instructions.
 
@@ -64,7 +65,7 @@ gcloud services enable run.googleapis.com containerregistry.googleapis.com
 ```
 
 Create a Docker image:
-In Cloud Shell, clone the websockets repo 
+In Cloud Shell, clone the websockets repo
 
 ```sh
 export PROJECT=$GOOGLE_CLOUD_PROJECT
@@ -97,7 +98,7 @@ wscat --connect ws://localhost:8080
 
 You should be able to type anything and receive an echo response from the server:
 
-```
+```sh
 Connected (press CTRL+C to quit)
 > hello
 < hello
@@ -143,7 +144,6 @@ export CLOUD_RUN_SERVICE_URL
 
 1. Clone the `apigee-samples` repo, and switch to the `websockets` directory
 
-
 ```bash
 git clone https://github.com/GoogleCloudPlatform/apigee-samples.git
 cd apigee-samples/websockets
@@ -172,7 +172,7 @@ source ./env.sh
 
 The script that deploys the Apigee API proxy, should have printed the proxy URL and API keys you will need to call the websockets API. If we open the Debug tool inside of Apigee we should be able to see that Apigee is receiving the request from the client and upgrading the protocol from HTTP to Websockets and sending the HTTP status code 101 (switching protocols). You will see this request in the Debug tool for every new connection that is opened. Any subsequent messages won’t show in the tool, since they are being transferred over websockets.
 
-To call the API manually use wscat or another websockets client: 
+To call the API manually use wscat or another websockets client:
 
 ```bash
 wscat -c wss://$PROXY_URL?apikey=$CLIENT_ID_1

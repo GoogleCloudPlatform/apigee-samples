@@ -17,26 +17,25 @@ Feature:
   I want to experiment with the client credentials OAuth flow
   So that I can understand how it can be implemented
 
-  Scenario: [Helper] Obtain OAuth Access Token
-    Given I set form parameters to
-      |parameter|value|
-      |grant_type|client_credentials|
-    And I have basic authentication credentials `clientId` and `clientSecret`
-    When I POST to /token
-    Then response code should be 200
-    And response body should be valid json
-    And I store the value of body path $.access_token as accessToken in global scope
-  
-  Scenario: Using a valid OAuth Access Token
-    Given I set authorization header to "Bearer `accessToken`"
-    When I GET /resource
-    Then response code should be 200
-    And response body path $.status should be success
-  
-  Scenario: Using an invalid OAuth Access Token
-    Given I set authorization header to "Bearer foobar"
-    When I GET /resource
-    Then response code should be 401
-    And response body should be valid json
-    And response body path $.fault.detail.errorcode should be keymanagement.service.invalid_access_token
-    
+Scenario: [Helper] Obtain OAuth Access Token
+  Given I set form parameters to
+    |parameter|value|
+    |grant_type|client_credentials|
+  And I have basic authentication credentials `clientId` and `clientSecret`
+  When I POST to /token
+  Then response code should be 200
+  And response body should be valid json
+  And I store the value of body path $.access_token as accessToken in global scope
+
+Scenario: Using a valid OAuth Access Token
+  Given I set authorization header to "Bearer `accessToken`"
+  When I GET /resource
+  Then response code should be 200
+  And response body path $.status should be success
+
+Scenario: Using an invalid OAuth Access Token
+  Given I set authorization header to "Bearer foobar"
+  When I GET /resource
+  Then response code should be 401
+  And response body should be valid json
+  And response body path $.fault.detail.errorcode should be keymanagement.service.invalid_access_token

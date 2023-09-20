@@ -1,0 +1,50 @@
+# Copyright 2023 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Configuration file for MegaLinter
+# See all available variables at https://megalinter.io/configuration/ and in linters documentation
+
+APPLY_FIXES: all # all, none, or list of linter keys
+
+# ENABLE: # If you use ENABLE variable, all other languages/formats/tooling-formats will be disabled by default
+
+MARKDOWN_MARKDOWNLINT_CONFIG_FILE: .markdown-lint.yml
+DOCKERFILE_HADOLINT_CONFIG_FILE: .hadolint.yml
+GHERKIN_GHERKIN_LINT_CONFIG_FILE: .gherkin-lintrc
+SPELL_CSPELL_CONFIG_FILE: .cspell.json
+SPELL_CSPELL_FILE_EXTENSIONS: [".md"]
+
+ENABLE_LINTERS:
+  - BASH_EXEC
+  - BASH_SHELLCHECK
+  - BASH_SHFMT
+  - JAVASCRIPT_ES
+  - JSON_JSONLINT
+  - JSON_NPM_PACKAGE_JSON_LINT
+  - MARKDOWN_MARKDOWNLINT
+  - XML_XMLLINT
+  - YAML_YAMLLINT
+  - DOCKERFILE_HADOLINT
+  - GHERKIN_GHERKIN_LINT
+  - OPENAPI_SPECTRAL
+  - REPOSITORY_SECRETLINT
+  - SPELL_CSPELL
+
+DISABLE:
+  - COPYPASTE # Comment to enable checks of excessive copy-pastes
+  # - SPELL # Uncomment to disable checks of spelling mistakes
+SHOW_ELAPSED_TIME: false
+FILEIO_REPORTER: false
+# DISABLE_ERRORS: true # Uncomment if you want MegaLinter to detect errors but not block CI to pass
+# FILTER_REGEX_EXCLUDE: (.github/|tools/)

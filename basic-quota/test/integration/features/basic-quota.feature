@@ -16,32 +16,32 @@ Feature:
   As an Apigee platform explorer
   I want to experiment with the quota policy
   So that I can understand how it can be implemented
-  
-  Scenario Outline: Quota
-    When I GET /?apikey=`clientId1`
-    Then response code should be <code>
-    And response body path $.status should be <status>
-    And response body path $.allowed should be <allowed>
-    Examples:
-      | iteration | code |  status | allowed |
-      |         1 |  200 | success |      10 |
-      |         2 |  200 | success |      10 |
-      |         3 |  200 | success |      10 |
-      |         4 |  200 | success |      10 |
-      |         5 |  200 | success |      10 |
-      |         6 |  200 | success |      10 |
-      |         7 |  200 | success |      10 |
-      |         8 |  200 | success |      10 |
-      |         9 |  200 | success |      10 |
-      |        10 |  200 | success |      10 |
-    
-  Scenario: Quota failure
-    When I GET /?apikey=`clientId1`
-    Then response code should be 429
-    And response body path $.status should be quota exceeded
 
-  Scenario: Different Quota
-    When I GET /?apikey=`clientId2`
-    Then response code should be 200
-    And response body path $.status should be success
-    And response body path $.allowed should be 1000
+Scenario Outline: Quota
+  When I GET /?apikey=`clientId1`
+  Then response code should be <code>
+  And response body path $.status should be <status>
+  And response body path $.allowed should be <allowed>
+Examples:
+  | code |  status | allowed |
+  |  200 | success |      10 |
+  |  200 | success |      10 |
+  |  200 | success |      10 |
+  |  200 | success |      10 |
+  |  200 | success |      10 |
+  |  200 | success |      10 |
+  |  200 | success |      10 |
+  |  200 | success |      10 |
+  |  200 | success |      10 |
+  |  200 | success |      10 |
+
+Scenario: Quota failure
+  When I GET /?apikey=`clientId1`
+  Then response code should be 429
+  And response body path $.status should be quota exceeded
+
+Scenario: Different Quota
+  When I GET /?apikey=`clientId2`
+  Then response code should be 200
+  And response body path $.status should be success
+  And response body path $.allowed should be 1000

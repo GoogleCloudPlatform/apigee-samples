@@ -16,8 +16,8 @@ Feature:
   As an Apigee platform explorer
   I want to expose Apigee to the internet
   So that I can understand how to call APIs externally
-  
-  Scenario Outline: Healthcheck
-    Given I set User-Agent header to GoogleHC
-    When I GET /healthz/ingress
-    Then response code should be 200
+
+Scenario: Healthcheck
+  Given I set User-Agent header to GoogleHC
+  When I GET /healthz/ingress
+  Then response code should be 200

@@ -10,12 +10,12 @@ But if you need per API-call specific logging of specific API request/response f
 
 ## How it works
 
-This simple API proxy is basically transparent and will hit a sample target endpoint. But, it will be configured to use [Google Authentication](https://cloud.google.com/apigee/docs/api-platform/security/google-auth/overview). The proxy will use credentials corresponding to the identity of a [service account](https://cloud.google.com/iam/docs/understanding-service-accounts) we'll create and that has permissions to create logging entries (`logging.logEntries.create`) in this project's Cloud Logging. 
+This simple API proxy is basically transparent and will hit a sample target endpoint. But, it will be configured to use [Google Authentication](https://cloud.google.com/apigee/docs/api-platform/security/google-auth/overview). The proxy will use credentials corresponding to the identity of a [service account](https://cloud.google.com/iam/docs/understanding-service-accounts) we'll create and that has permissions to create logging entries (`logging.logEntries.create`) in this project's Cloud Logging.
 
-## Implementation on Apigee 
+## Implementation on Apigee
 
-The MessageLogging policy will be placed at the [PostClientFlow](https://cloud.google.com/apigee/docs/api-platform/fundamentals/what-are-flows#designingflowexecutionsequence-havingcodeexecuteaftertheclientreceivesyourproxysresponsewithapostclientflow). While one can add this policy to any point of the request or response flow, the PostClientFlow is typically the best place to add it because we'll have all the context of the call and it is executed after the actual API response is sent to the API client. 
-As an example, we'll log flow variables, request content, reponse content, static values, etc. The policy is quite flexible in terms of what it can log.
+The MessageLogging policy will be placed at the [PostClientFlow](https://cloud.google.com/apigee/docs/api-platform/fundamentals/what-are-flows#designingflowexecutionsequence-havingcodeexecuteaftertheclientreceivesyourproxysresponsewithapostclientflow). While one can add this policy to any point of the request or response flow, the PostClientFlow is typically the best place to add it because we'll have all the context of the call and it is executed after the actual API response is sent to the API client.
+As an example, we'll log flow variables, request content, response content, static values, etc. The policy is quite flexible in terms of what it can log.
 It is also worth noting that it is quite common to add the MessageLogging policy to Shared Flows for standardization across multiple APIs, but in this example it will be added directly to the sample proxy.
 
 ## Screencast
@@ -23,6 +23,7 @@ It is also worth noting that it is quite common to add the MessageLogging policy
 [![Alt text](https://img.youtube.com/vi/p-ZbUExQgzw/0.jpg)](https://www.youtube.com/watch?v=p-ZbUExQgzw)
 
 ## Prerequisites
+
 1. [Provision Apigee X](https://cloud.google.com/apigee/docs/api-platform/get-started/provisioning-intro)
 2. Configure [external access](https://cloud.google.com/apigee/docs/api-platform/get-started/configure-routing#external-access) for API traffic to your Apigee X instance
 3. Make sure the following tools are available in your terminal's $PATH (Cloud Shell has these preconfigured)
@@ -36,7 +37,7 @@ It is also worth noting that it is quite common to add the MessageLogging policy
     * `roles/resourcemanager.projectIamAdmin`
     * `roles/apigee.apiAdminV2`
 
-# (QuickStart) Setup using CloudShell
+## (QuickStart) Setup using CloudShell
 
 Use the following GCP CloudShell tutorial, and follow the instructions.
 
@@ -45,7 +46,6 @@ Use the following GCP CloudShell tutorial, and follow the instructions.
 ## Setup instructions
 
 1. Clone the apigee-samples repo, and switch the cloud-logging directory
-
 
 ```bash
 git clone https://github.com/GoogleCloudPlatform/apigee-samples.git
@@ -74,22 +74,23 @@ source ./env.sh
 
 Generate a few sample requests to the deployed API Proxy.
 
-```
+```bash
 curl  https://$APIGEE_HOST/v1/samples/cloud-logging
 ```
+
 > _If you want, consider also checking the call in the [Debug](https://cloud.google.com/apigee/docs/api-platform/debug/trace) view_
 
-After issuing some calls, let's confirm the configured variables / values set on the Message Logging policy were successfully writen to Cloud Logging with 
+After issuing some calls, let's confirm the configured variables / values set on the Message Logging policy were successfully written to Cloud Logging with
 
-```
+```bash
 gcloud logging read "logName=projects/$PROJECT/logs/apigee"
 ```
 
-Cloud Logging is quite powerful. Few free to navigate to its UI in the GCP Console (_Logging_ Product Page in the console) and explore additional features such as filters, custom searchs, custom alerts and much more
+Cloud Logging is quite powerful. Few free to navigate to its UI in the GCP Console (_Logging_ Product Page in the console) and explore additional features such as filters, custom searches, custom alerts and much more
 
 ## Cleanup
 
-If you want to clean up the artefacts from this example in your Apigee Organization, first source your `env.sh` script, and then run
+If you want to clean up the artifacts from this example in your Apigee Organization, first source your `env.sh` script, and then run
 
 ```bash
 ./clean-up-cloud-logging.sh

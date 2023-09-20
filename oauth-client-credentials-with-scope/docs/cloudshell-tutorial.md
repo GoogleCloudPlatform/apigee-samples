@@ -43,16 +43,16 @@ Next, let's create and deploy the Apigee resources.
 
 This script creates an API Proxy, two API products (one with read scope and the other with read,write scopes), a sample App developer, and App. The script also tests that the deployment and configuration has been successful.
 
-
 ### Test the APIs
 
-The script that deploys the Apigee resources will print two sets of cURL commands. 
+The script that deploys the Apigee resources will print two sets of cURL commands.
 
 The first set returns a token with `read` access. You will find that it only works with the GET call. The POST call will fail. This is because of the insufficient scope to make a POST call to that resource.
 
 Similarly, the second set of cURL commands include a token with `write` access. With this token, both of the cURL commands should return a successful response.
 
 ---
+
 ## Conclusion
 
 <walkthrough-conclusion-trophy></walkthrough-conclusion-trophy>

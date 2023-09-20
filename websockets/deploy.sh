@@ -15,26 +15,24 @@
 # limitations under the License.
 
 if [ -z "$PROJECT" ]; then
-    echo "No PROJECT variable set"
-    exit
+  echo "No PROJECT variable set"
+  exit
 fi
 
 if [ -z "$APIGEE_ENV" ]; then
-    echo "No APIGEE_ENV variable set"
-    exit
+  echo "No APIGEE_ENV variable set"
+  exit
 fi
 
 if [ -z "$APIGEE_HOST" ]; then
-    echo "No APIGEE_HOST variable set"
-    exit
+  echo "No APIGEE_HOST variable set"
+  exit
 fi
 
 if [ -z "$CLOUD_RUN_SERVICE_URL" ]; then
-    echo "No CLOUD_RUN_SERVICE_URL variable set"
-    exit
+  echo "No CLOUD_RUN_SERVICE_URL variable set"
+  exit
 fi
-
-
 
 TOKEN=$(gcloud auth print-access-token)
 
@@ -48,13 +46,12 @@ export PATH=$PATH:$HOME/.apigeecli/bin
 echo "Running apigeelint"
 npm run lint
 
-
 echo "Deploying Apigee artifacts..."
 echo "Deploying target server for the Cloud Run service $CLOUD_RUN_SERVICE_URL..."
 apigeecli targetservers create -n websockets --org "$PROJECT" --env "$APIGEE_ENV" --token "$TOKEN" -p 443 -s "$CLOUD_RUN_SERVICE_URL" --tls
 
 echo "Importing and Deploying Apigee websockets proxy..."
-REV=$(apigeecli apis create bundle -f apiproxy  -n websockets --org "$PROJECT" --token "$TOKEN" --disable-check | jq ."revision" -r)
+REV=$(apigeecli apis create bundle -f apiproxy -n websockets --org "$PROJECT" --token "$TOKEN" --disable-check | jq ."revision" -r)
 apigeecli apis deploy --wait --name websockets --ovr --rev "$REV" --org "$PROJECT" --env "$APIGEE_ENV" --token "$TOKEN"
 
 echo "Creating API Products"

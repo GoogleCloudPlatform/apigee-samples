@@ -16,8 +16,8 @@ Feature:
   As an Apigee platform explorer
   I want to experiment with the websockets proxy
   So that I can understand how it can be implemented
-  
-  Scenario Outline: Websockets
-    When I GET /?apikey=`clientId`
-    Then response code should be 426
-    And response body should contain (Upgrade\sRequired)
+
+Scenario: Websockets
+  When I GET /?apikey=`clientId`
+  Then response code should be 426
+  And response body should contain (Upgrade\sRequired)

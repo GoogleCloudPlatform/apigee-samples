@@ -9,6 +9,7 @@ allowed Operations in an API Product.
 
 In Apigee, the [API Product](https://cloud.google.com/apigee/docs/api-platform/publish/what-api-product)
 is the unit of packaging for APIs.
+
 - it allows an API Publisher to share an API out, via an API Catalog, or developer portal.
 - it is the thing an API Consumer Developer gains access to, via the self-service API Catalog
 
@@ -55,7 +56,6 @@ operations
 | creator | `POST /contracts`                                                            |
 | admin   | `GET /contracts`, `GET /contracts/*`, `POST /contracts`, `POST /contracts/*` |
 
-
 ## Credentials are "the key" for checking the Operation
 
 Configuring the set of API Products with the various operations is one part of
@@ -100,18 +100,17 @@ the operation that was authorized.
 There's also a conditional flow in the proxy that uses [OAuthV2/VerifyAccessToken](https://cloud.google.com/apigee/docs/api-platform/reference/policies/oauthv2-policy#verifyaccesstoken) in place of VerifyAPIKey.
 The behavior with regard to operations authorization checks is exactly the same.
 
-
 ## Prerequisites
 
 1. [Provision Apigee X](https://cloud.google.com/apigee/docs/api-platform/get-started/provisioning-intro)
 2. Configure [external access](https://cloud.google.com/apigee/docs/api-platform/get-started/configure-routing#external-access) for API traffic to your Apigee X instance
 3. Permissions to create and deploy proxies, to create products, and to register apps and developers in Apigee. Get these permissions via the Apigee orgadmin role, or the combination of two roles: API Admin and Developer Admin. ([more on Apigee-specific roles](https://cloud.google.com/apigee/docs/api-platform/system-administration/apigee-roles#apigee-specific-roles))
 4. Make sure the following tools are available in your terminal's $PATH (Cloud Shell has these preconfigured)
-    * [gcloud SDK](https://cloud.google.com/sdk/docs/install)
-    * unzip
-    * curl
-    * jq
-    * npm
+    - [gcloud SDK](https://cloud.google.com/sdk/docs/install)
+    - unzip
+    - curl
+    - jq
+    - npm
 
 ## (QuickStart) Setup using CloudShell
 
@@ -133,9 +132,9 @@ If you choose _not_ to follow the tutorial in Cloud Shell, you can follow these 
 
 2. Edit `env.sh` and configure the following variables:
 
-   * `PROJECT` the project where your Apigee organization is located
-   * `APIGEE_HOST` the externally reachable hostname of the Apigee environment group that contains APIGEE_ENV
-   * `APIGEE_ENV` the Apigee environment where the demo resources should be created
+   - `PROJECT` the project where your Apigee organization is located
+   - `APIGEE_HOST` the externally reachable hostname of the Apigee environment group that contains APIGEE_ENV
+   - `APIGEE_ENV` the Apigee environment where the demo resources should be created
 
    Now source the `env.sh` file
 
@@ -152,13 +151,13 @@ If you choose _not_ to follow the tutorial in Cloud Shell, you can follow these 
    This step will also run some tests to verify the setup.
    It will then print some information about the credentials it has provisioned.
 
-
 ### Running the automated tests
 
 Ensure the required environment variables have been set correctly. The setup
 script will provide easy cut/paste instructions regarding the variables and the values to set.
 
 And then use `npm` to run the tests:
+
 ```bash
 npm run test
 ```
@@ -172,6 +171,7 @@ corresponding apps  (`apiproduct-operations-{viewer,creator,admin}-app`). Instru
 application credentials can be found [here](https://cloud.google.com/apigee/docs/api-platform/publish/creating-apps-surface-your-api#view-api-key).
 
 Invoke your first request using the viewer credential:
+
 ```bash
 curl -i -X GET https://${APIGEE_HOST}/v1/samples/apiproduct-operations/apikey/users -H APIKEY:$VIEWER_CLIENT_ID"
 ```
@@ -180,6 +180,7 @@ Because the viewer credential is authorized on the viewer Product, which allows
 the `GET /*/users` operation, you should see a success response.
 
 Now try the creator credential on the same request
+
 ```bash
 curl -i -X GET https://${APIGEE_HOST}/v1/samples/apiproduct-operations/apikey/users -H APIKEY:$CREATOR_CLIENT_ID"
 ```

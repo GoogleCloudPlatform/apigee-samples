@@ -10,13 +10,15 @@ This sample lets you create an integrated developer portal for your API product
 
 Apigee's integrated developer portal enables users to quickly and easily stand up a developer portal for their APIs. These portals are fully supported by Google and offer premium capabilities for the majority of developer portal needs. To learn more, see the [official documentation](https://cloud.google.com/apigee/docs/api-platform/publish/portal/build-integrated-portal).
 
-## Implementation on Apigee 
+## Implementation on Apigee
 
 The Apigee proxy sample uses only a few policies:
+
 1. An API Key policy to verify incoming request API Key credentials
 2. A CORS policy to allow requests from the developer portal webpage
 
 ## Prerequisites
+
 1. [Provision Apigee X](https://cloud.google.com/apigee/docs/api-platform/get-started/provisioning-intro)
 2. Configure [external access](https://cloud.google.com/apigee/docs/api-platform/get-started/configure-routing#external-access) for API traffic to your Apigee X instance
 3. Have access to deploy proxies, create products, and provision a portal in Apigee
@@ -27,7 +29,7 @@ The Apigee proxy sample uses only a few policies:
     * jq
     * npm
 
-# (QuickStart) Setup using CloudShell
+## (QuickStart) Setup using CloudShell
 
 Use the following GCP CloudShell tutorial, and follow the instructions in Cloud Shell. Alternatively, follow the instructions below.
 
@@ -39,7 +41,7 @@ Use the following GCP CloudShell tutorial, and follow the instructions in Cloud 
 
 ```bash
 git clone https://github.com/GoogleCloudPlatform/apigee-samples.git
-cd apige-samples/integrated-developer-portal
+cd apigee-samples/integrated-developer-portal
 ```
 
 2. Edit the `env.sh` and configure the ENV vars
@@ -71,6 +73,7 @@ Next, let's deploy some Apigee resources necessary to create an integrated devel
 **NOTE: This script creates an API Proxy and API product. It does not, however, create the developer portal. We will create and test that manually**
 
 ---
+
 ## Create Integrated Developer Portal
 
 You've successfully deployed a secured Apigee proxy. Now we need to provision the integrated developer portal:
@@ -86,25 +89,27 @@ We also need to add our API product to the portal:
 3. Click + to add a new API product to the catalog
 4. Select the sample-integrated-developer-portal-product product and click next
 5. Configure as shown below
-- Published: Select published (checked)
-- Display title: Leave default name, sample-integrated-developer-portal-product
-- Display description: A portal for an API key protected proxy
-- Require developers to specify a callback URL: Keep deselected (unchecked)
-- Audience: Anonymous users (anyone can view)
-- API product image: Image of your choice (optional)
-- API documentation: Use the [integrated-developer-portal.yaml](integrated-developer-portal.yaml) OpenAPI document from this repo:
-    - If you ran the deployment script from Cloud Shell:
-        - Navigate back to Cloud Shell
-        - Open integrated-developer-portal.yaml & downlod it to your local computer. No need to update file content as it was already updated when running the deployment script.
-    - Otherwise, do the following:
-        - Download [integrated-developer-portal.yaml](integrated-developer-portal.yaml) to your local computer
-        - Open the file and replace "\[APIGEE_HOST\]" with your own Apigee host/domain.
-    - Upload your updated integrated-developer-portal.yaml file as API documentation
+
+* Published: Select published (checked)
+* Display title: Leave default name, sample-integrated-developer-portal-product
+* Display description: A portal for an API key protected proxy
+* Require developers to specify a callback URL: Keep deselected (unchecked)
+* Audience: Anonymous users (anyone can view)
+* API product image: Image of your choice (optional)
+* API documentation: Use the [integrated-developer-portal.yaml](integrated-developer-portal.yaml) OpenAPI document from this repo:
+  * If you ran the deployment script from Cloud Shell:
+    * Navigate back to Cloud Shell
+    * Open integrated-developer-portal.yaml & download it to your local computer. No need to update file content as it was already updated when running the deployment script.
+  * Otherwise, do the following:
+    * Download [integrated-developer-portal.yaml](integrated-developer-portal.yaml) to your local computer
+    * Open the file and replace "\[APIGEE_HOST\]" with your own Apigee host/domain.
+  * Upload your updated integrated-developer-portal.yaml file as API documentation
+
 6. Scroll up and click save
 
 ## Test Integrated Developer Portal
 
-Now that we have a developer portal, let's walk through its workflow. First we'll create our developer account and sign in, then we'll make an Apigee app complete with a client id and secret, and finally we'll use the client id to authorize our requests and test our API. To do so, follow the steps below: 
+Now that we have a developer portal, let's walk through its workflow. First we'll create our developer account and sign in, then we'll make an Apigee app complete with a client id and secret, and finally we'll use the client id to authorize our requests and test our API. To do so, follow the steps below:
 
 1. Navigate to your newly created portal. Portals > Sample Integrated Developer Portal
 2. Enter the portal by clicking the Live Portal button at the top right, or with the following URL: https://\[APIGEE-ORG\]-sampleintegrateddeveloperportal.apigee.io
@@ -112,8 +117,10 @@ Now that we have a developer portal, let's walk through its workflow. First we'l
 4. Navigate back to your portal's homepage (https://\[APIGEE-ORG\]-sampleintegrateddeveloperportal.apigee.io) and make sure that you're signed in
 5. Open the dropdown menu by clicking on your account and select Apps
 6. Select +NEW APP and update the following fields. Note: this creates an Apigee App for your developer
-- App Name: Sample App
-- APIs: Enable sample-integrated-developer-portal-product
+
+* App Name: Sample App
+* APIs: Enable sample-integrated-developer-portal-product
+
 7. Click the SAVE button
 8. Click into APIs from the top navbar
 9. Click into your sample-integrated-developer-portal-product
@@ -127,6 +134,7 @@ Now that we have a developer portal, let's walk through its workflow. First we'l
 To clean up the artifacts created:
 
 First, you need to manually delete some Apigee resources
+
 1. Navigate to Publish > Developers
 2. Find the account you created in your developer portal, hover over it, and select the trash can icon to delete. This will also delete all Apigee Apps associated with your developer
 3. Navigate to Publish > Portals

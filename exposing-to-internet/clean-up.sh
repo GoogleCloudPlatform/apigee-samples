@@ -15,26 +15,25 @@
 # limitations under the License.
 
 if [ -z "$PROJECT" ]; then
-    echo "No PROJECT variable set"
-    exit
+  echo "No PROJECT variable set"
+  exit
 fi
 
 if ! [ -x "$(command -v jq)" ]; then
-    echo "jq command is not on your PATH"
-    exit
+  echo "jq command is not on your PATH"
+  exit
 fi
 
-function wait_for_operation () {
-    while true
-    do
-        STATE="$(apigeecli operations get -o "$PROJECT" -n "$1" -t "$TOKEN" | jq --raw-output '.metadata.state')"
-        if [ "$STATE" = "FINISHED" ]; then
-            echo
-            break
-        fi
-        echo -n .
-        sleep 5
-    done
+function wait_for_operation() {
+  while true; do
+    STATE="$(apigeecli operations get -o "$PROJECT" -n "$1" -t "$TOKEN" | jq --raw-output '.metadata.state')"
+    if [ "$STATE" = "FINISHED" ]; then
+      echo
+      break
+    fi
+    echo -n .
+    sleep 5
+  done
 }
 
 echo "Installing apigeecli"
@@ -53,8 +52,8 @@ ENVIRONMENT_GROUP_NAME="sample-environment-group"
 echo "Deleting load balancer..."
 # Delete forwarding rule
 gcloud compute forwarding-rules delete sample-apigee-https-lb-rule \
-   --global \
-   --project="$PROJECT" --quiet
+  --global \
+  --project="$PROJECT" --quiet
 
 # Delete target HTTPS proxy
 gcloud compute target-https-proxies delete sample-apigee-https-proxy \
@@ -77,7 +76,7 @@ gcloud compute network-endpoint-groups delete sample-apigee-neg \
 # Delete cert
 echo "Deleting SSL certificate..."
 gcloud compute ssl-certificates delete sample-apigee-ssl-cert \
-   --project "$PROJECT" --quiet
+  --project "$PROJECT" --quiet
 
 # Delete VIP
 echo "Deleting load balancer IP address..."

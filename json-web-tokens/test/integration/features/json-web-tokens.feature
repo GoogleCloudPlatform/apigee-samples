@@ -16,33 +16,33 @@ Feature:
   As an Apigee platform explorer
   I want to experiment with the JWT policy
   So that I can understand how it can be implemented
-  
-  Scenario Outline: Generate Signed JWT
-    When I POST to /generate-signed
-    Then response code should be 200
-    And response body should be valid json
-    And response body should contain output_jwt
-    And I store the value of body path $.output_jwt as outputToken in global scope
-    
-  Scenario: Verify Signed JWT
-    Given I set form parameters to
-      | parameter | value         |
-      | JWT       | `outputToken` |
-    When I POST to /verify-signed
-    Then response code should be 200
-    And response body should contain alg=RS256
 
-  Scenario Outline: Generate Encrypted JWT
-    When I POST to /generate-encrypted
-    Then response code should be 200
-    And response body should be valid json
-    And response body should contain output_jwt
-    And I store the value of body path $.output_jwt as outputToken in global scope
-    
-  Scenario: Verify Encrypted JWT
-    Given I set form parameters to
-      | parameter | value         |
-      | JWT       | `outputToken` |
-    When I POST to /verify-encrypted
-    Then response code should be 200
-    And response body should contain enc=A128GCM
+Scenario: Generate Signed JWT
+  When I POST to /generate-signed
+  Then response code should be 200
+  And response body should be valid json
+  And response body should contain output_jwt
+  And I store the value of body path $.output_jwt as outputToken in global scope
+
+Scenario: Verify Signed JWT
+  Given I set form parameters to
+    | parameter | value         |
+    | JWT       | `outputToken` |
+  When I POST to /verify-signed
+  Then response code should be 200
+  And response body should contain alg=RS256
+
+Scenario: Generate Encrypted JWT
+  When I POST to /generate-encrypted
+  Then response code should be 200
+  And response body should be valid json
+  And response body should contain output_jwt
+  And I store the value of body path $.output_jwt as outputToken in global scope
+
+Scenario: Verify Encrypted JWT
+  Given I set form parameters to
+    | parameter | value         |
+    | JWT       | `outputToken` |
+  When I POST to /verify-encrypted
+  Then response code should be 200
+  And response body should contain enc=A128GCM
