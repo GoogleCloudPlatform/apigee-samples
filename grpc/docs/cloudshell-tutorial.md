@@ -3,7 +3,6 @@
 ---
 This sample shows how to use Apigee in front of your gRPC backends:
 
-
 Let's get started!
 
 ---
@@ -36,7 +35,6 @@ cd grpc
 * `NETWORK` the VPC network where the PSC NEG will be deployed
 * `SUBNET` the VPC subnet where the PSC NEG will be deployed
 
-
 2. Now source the `env.sh` file
 
 ```bash
@@ -47,8 +45,7 @@ Let's run the script that will create and deploy the resources necessary to test
 
 * An External Loadbalancer with an HTTP2 backend
 * Deploy a sample gRPC Greeter service to Cloud Run
-* Deploy an API proxy, target server, developer, app and api product 
-
+* Deploy an API proxy, target server, developer, app and api product
 
 ```sh
 ./deploy.sh
@@ -57,14 +54,15 @@ Let's run the script that will create and deploy the resources necessary to test
 ## Manually Testing the gRPC Proxy
 
 ## Example Requests
+
 To manually test the proxy, make requests using grpcurl or another gRPC client:
 
 ```sh
 grpcurl -H \"x-apikey:$CLIENT_ID\" -import-path $PWD/grpc-backend/examples/protos -proto helloworld.proto -d '{\"name\":\"Guest\"}' <YOUR_APIGEE_GRPC_HOSTNAME>:443 helloworld.Greeter/SayHello"
 ```
 
-
 ---
+
 ## Conclusion
 
 <walkthrough-conclusion-trophy></walkthrough-conclusion-trophy>

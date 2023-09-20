@@ -16,8 +16,8 @@ Feature:
   As an Apigee platform explorer
   I want to experiment with the gRPC functionality
   So that I can understand how it can be implemented
-  
-  Scenario Outline: gRPC
-    Given I set x-apikey header to `clientId`
-    When I GET /helloworld.Greeter/SayHello
-    Then response code should be 200
+
+Scenario: gRPC
+  Given I set x-apikey header to `clientId`
+  When I GET /helloworld.Greeter/SayHello
+  Then response code should be 200
