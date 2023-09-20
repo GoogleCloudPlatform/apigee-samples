@@ -40,6 +40,11 @@ Later on we leverage the [XML to JSON](https://cloud.google.com/apigee/docs/api-
 We use again the  [Extract Variables](https://cloud.google.com/apigee/docs/api-platform/reference/policies/extract-variables-policy) policy to extract subsets of data from the now converted JSON string.
 Finally we use the [Assign Message](https://cloud.google.com/apigee/docs/api-platform/reference/policies/assign-message-policy?hl=en) policy to set the response headers with the extracted fields and other [flow variables](https://cloud.google.com/apigee/docs/api-platform/reference/variables-reference).
 
+## Screencast
+
+[![Alt text](https://img.youtube.com/vi/ep7h_tGHtiw/0.jpg)](https://www.youtube.com/watch?v=xQPd4M08Wm4&list=PLIivdWyY5sqJCRHhuNgWXhISaBkGINFGp)
+
+
 ## Prerequisites
 1. [Provision Apigee X](https://cloud.google.com/apigee/docs/api-platform/get-started/provisioning-intro)
 2. Configure [external access](https://cloud.google.com/apigee/docs/api-platform/get-started/configure-routing#external-access) for API traffic to your Apigee X instance
