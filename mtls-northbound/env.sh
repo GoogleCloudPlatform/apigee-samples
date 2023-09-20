@@ -20,6 +20,7 @@ export APIGEE_HOST="<APIGEE_DOMAIN_NAME>"
 export APIGEE_ENV="<APIGEE_ENVIRONMENT_NAME>"
 
 # For the sample
+export LOCATION="us-east1"
 export POOL="partners-pool"
 export ROOT="partner1-root-ca"
 export TRUST_CONFIG="partner1-trust-config"

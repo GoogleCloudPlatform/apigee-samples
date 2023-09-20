@@ -10,7 +10,7 @@ You can also enforce mTLS strictly or leniently, allowing missing or invalid cer
 In the later case, the backend is responsible for rejecting the request, in this sample, that will be the Apigee proxy.
 
 ## Implementation on Apigee 
-There are no Apigee specific configuration steps, all that is required is to access the custom header values populated in the GLB configuration. The sample Apigee proxy (sample-mtls) is a simple no target proxy with an Assign Message policy that will extract the custom requst header values and return them in a JSON response. It also has a Raise Fault policy that is used to reject requests when mTLS is not strictly enforced in the GLB.
+There are no Apigee specific configuration steps, all that is required is to access the custom header values populated in the GLB configuration. The sample Apigee proxy (sample-mtls) is a simple no target proxy with an Assign Message policy that will extract the custom request header values and return them in a JSON response. It also has a RaiseFault policy that is used to reject requests when mTLS is not strictly enforced in the GLB.
 
 ## Implementation on GCP GLBs
 Adding mTLS is done on an existing GLB configuration setup for Apigee external access. 
@@ -21,7 +21,7 @@ In either case, custom header values are populated and made available to the API
 
 * Strict enforcement happens at the load balancer and invalid connections will be rejected. 
 In this case the GLB logs can be used to view connection errors for details.
-* Lenient enforcement happens in the API proxy flow. In this case, the proxy must use Conditions on the custom header values and a Raise Fault policy to reject the request.
+* Lenient enforcement happens in the API proxy flow. In this case, the proxy must use Conditions on the custom header values and a RaiseFault policy to reject the request.
 
 These are the high level tasks to configure mTLS on an existing GLB configuration.
 1. Create Private CA
@@ -35,7 +35,7 @@ These are the high level tasks to configure mTLS on an existing GLB configuratio
 
 ## Prerequisites
 1. [Provision Apigee X](https://cloud.google.com/apigee/docs/api-platform/get-started/provisioning-intro)
-2. Configure [external access](https://cloud.google.com/apigee/docs/api-platform/get-started/configure-routing#external-access) for API traffic to your Apigee X instance
+2. Configure [external access](https://cloud.google.com/apigee/docs/api-platform/get-started/configure-routing#external-access) for API traffic to your Apigee X instance or use [exposing-to-internet](../exposing-to-internet/README.md) sample in this repository.
 3. Have access to deploy proxies in Apigee
 4. Make sure the following tools are available in your terminal's $PATH (Cloud Shell has these preconfigured)
     * [gcloud SDK](https://cloud.google.com/sdk/docs/install)
@@ -51,54 +51,57 @@ Use the following GCP CloudShell tutorial, and follow the instructions in Cloud 
 
 1. Clone the apigee-samples repo, and switch to the mtls-northbound directory
 
-```bash
-git clone https://github.com/GoogleCloudPlatform/apigee-samples.git
-cd apigee-samples/mtls-northbound
-```
+    ```bash
+    git clone https://github.com/GoogleCloudPlatform/apigee-samples.git
+    cd apigee-samples/mtls-northbound
+    ```
 
 2. Ensure you have an active GCP account selected in the Cloud shell
 
-```sh
-gcloud auth login
-```
+    ```sh
+    gcloud auth login
+    ```
 
 3. Edit the `env.sh` and configure the ENV vars specific to your installation.
 
-* `PROJECT` the project where your Apigee organization is located.
-* `APIGEE_HOST` the externally reachable hostname of the Apigee environment group that contains APIGEE_ENV.
-* `APIGEE_ENV` the Apigee environment where the demo resources should be created.
-* `POOL` the name of the Private CA pool (e.g. partners-pool).
-* `ROOT` the name of the Root CA in the pool (e.g. partner1-root-ca).
-* `TRUST_CONFIG` the name of the Trust Configuration for the Root CA (e.g. partner1-trust-config).
-* `CERT_NAME` the name of the client certificate used in API calls (e.g. partner-1-client-1).
+    * `PROJECT` the project where your Apigee organization is located.
+    * `APIGEE_HOST` the externally reachable hostname of the Apigee environment group that contains APIGEE_ENV.
+    * `APIGEE_ENV` the Apigee environment where the demo resources should be created.
+    * `LOCATION` the GCP region for the Private CA, root and certificates.
+    * `POOL` the name of the Private CA pool (e.g. partners-pool).
+    * `ROOT` the name of the Root CA in the pool (e.g. partner1-root-ca).
+    * `TRUST_CONFIG` the name of the Trust Configuration for the Root CA (e.g. partner1-trust-config).
+    * `CERT_NAME` the name of the client certificate used in API calls (e.g. partner-1-client-1).
 
-Other environment variables set below.
-* `TARGET_PROXY` the Target HTTPS Proxy in your GLB configuration (set below).
-* `BACKEND_SERVICE` the Backend Service in your GLB configuration (set below).
+    Other environment variables set below.
+    * `TARGET_PROXY` the Target HTTPS Proxy in your GLB configuration (set below).
+    * `BACKEND_SERVICE` the Backend Service in your GLB configuration (set below).
 
-Now source the `env.sh` file
+    Now source the `env.sh` file
 
-```bash
-source ./env.sh
-```
+    ```bash
+    source ./env.sh
+    ```
 
 ## Create CA pool and root CAs
-We'll use the use case of multiple partners communicating with our APIs.
+We'll consider the use case of multiple partners communicating with our APIs.
 
 ### CA Pool
 Create a pool for each of the partner CAs.
 ```
-gcloud privateca pools create ${POOL} --location=us-east1
+gcloud services enable privateca.googleapis.com
+
+gcloud privateca pools create ${POOL} --location=${LOCATION}
 ```
 
 ### Root CAs
 Create a Root CA.
 ```
 gcloud privateca roots create ${ROOT} \
-    --pool=${POOL} \
-    --subject="CN=partner1-ca, O=Partner 1" \
-    --location=us-east1 \
-    --auto-enable
+  --pool=${POOL} \
+  --subject="CN=partner1-ca, O=Partner 1" \
+  --location=${LOCATION} \
+  --auto-enable
 ```
 
 ## Create Trust Configuration
@@ -107,9 +110,9 @@ The trust configuration can be used by multiple Server TLS Policies (e.g. lenien
 First, get the private CA root certificate.
 ```
 gcloud privateca roots describe ${ROOT} \
-   --pool=${POOL} \
-   --location=us-east1 \
-   --format='value(pemCaCertificates)' > ${ROOT}.cert
+  --pool=${POOL} \
+  --location=${LOCATION} \
+  --format='value(pemCaCertificates)' > ${ROOT}.cert
 ```
 Then format to remove newlines and create the trust config yaml file. 
 ```
@@ -119,11 +122,13 @@ cat << EOF > ${TRUST_CONFIG}.yaml
 name: ${TRUST_CONFIG}
 trustStores:
 - trustAnchors:
-   - pemCertificate: "${ROOT_PEM?}"
+  - pemCertificate: "${ROOT_PEM?}"
 EOF
 ```
 Finally create the trust config.
 ```
+gcloud services enable certificatemanager.googleapis.com
+
 gcloud beta certificate-manager trust-configs import ${TRUST_CONFIG} --source=${TRUST_CONFIG}.yaml
 ```
 
@@ -143,9 +148,11 @@ EOF
 ```
 Create the lenient policy.
 ```
+gcloud services enable networksecurity.googleapis.com
+
 gcloud beta network-security server-tls-policies import ${ROOT}-lenient \
-    --source=${ROOT}-lenient.yaml \
-    --location=global
+  --source=${ROOT}-lenient.yaml \
+  --location=global
 ```
 
 ### Strict
@@ -161,8 +168,8 @@ EOF
 Create the strict policy.
 ```
 gcloud beta network-security server-tls-policies import ${ROOT}-strict \
-    --source=${ROOT}-strict.yaml \
-    --location=global
+  --source=${ROOT}-strict.yaml \
+  --location=global
 ```
 
 ## Prepare Configuration files to Update the GLB
@@ -172,6 +179,9 @@ You can easily switch between the TLS policies by creating representations for e
 Find the Target HTTPS Proxy for your GLB.
 ```
 gcloud compute target-https-proxies list
+```
+Example response:
+```
                                 SSL_CERTIFICATES            URL_MAP              REGION    CERTIFICATE_MAP
 apigee-proxy-https-proxy        gm-xapi-kurtkanaskie-net    apigee-proxy-url-map
 apigee-proxy-modern-https-proxy gm-m-xapi-kurtkanaskie-net  apigee-proxy-modern-url-map
@@ -180,14 +190,17 @@ apigee-proxy-modern-https-proxy gm-m-xapi-kurtkanaskie-net  apigee-proxy-modern-
 ### Create Target HTTPS Proxy configurations
 We'll create multiple configurations so we can easily switch between them, one for "none", "lenient" and "strict".
 
+Set the TARGET_PROXY environment variable for your configuration.
+```
+export TARGET_PROXY=apigee-proxy-https-proxy
+```
+
 Export the Target HTTPS Proxy configuration and store in a "none" file.
 This allows us to remove the Server TLS Policy later.
 ```
-export TARGET_PROXY=apigee-proxy-https-proxy
-
 gcloud compute target-https-proxies export ${TARGET_PROXY} \
-   --global \
-   --destination=${TARGET_PROXY}-none.yaml
+  --global \
+  --destination=${TARGET_PROXY}-none.yaml
 ```
 Copy to create new files for "lenient" and "strict" and add the appropriate Server TLS Policy names.
 
@@ -206,27 +219,34 @@ echo "serverTlsPolicy: //networksecurity.googleapis.com/projects/${PROJECT}/loca
 ```
 
 ## Update the GLB Backend Service with mTLS headers
-First, find the Backend Service(s) for the GLB.
-The custom header configuration must be added to each Backend Service, in this example we only have one.
-For example:
+First, find the Backend Service(s) for the GLB using:
 ```
 gcloud compute backend-services list --global
+```
+
+Example response:
+```
 NAME                  BACKENDS                                                                                PROTOCOL
 apigee-proxy-backend  us-east1/instanceGroups/apigee-mig-us-east1,us-west1/instanceGroups/apigee-mig-us-west1 HTTPS
 ```
-[Update the custom headers](https://cloud.google.com/load-balancing/docs/https/custom-headers-global#mtls-variables).
+Set the BACKEND_SERVICE environment variable for your configuration.
+For example:
+```
+export BACKEND_SERVICE=apigee-proxy-backend
+```
+
+If you have multiple Backend Services you must update the [custom headers](https://cloud.google.com/load-balancing/docs/https/custom-headers-global#mtls-variables) for each one, in this example we only have one.\
 We'll also turn on logging so we can check Cloud Logging for errors in "strict" mode.
 
-**CAUTION**: Check if you already have custom headers configured so as not to overwrite them. Use:
+**CAUTION**: Check if you already have custom headers configured so as not to overwrite them. Save the current setting to a file using:
 ```
-gcloud compute backend-services describe $BACKEND_SERVICE --global --format=json > $BACKEND_SERVICE.json
+gcloud compute backend-services describe $BACKEND_SERVICE \
+  --global --format=json > $BACKEND_SERVICE.json
 ```
 
 **NOTE**: There's a limit of 16 custom headers.
 ```
-export BACKEND_SERVICE=apigee-proxy-backend
-
-gcloud compute backend-services update apigee-proxy-backend \
+gcloud compute backend-services update ${BACKEND_SERVICE} \
   --global \
   --enable-logging --logging-sample-rate=1 \
   --custom-request-header="X-Client-Cert-Present:{client_cert_present}" \
@@ -288,18 +308,20 @@ curl https://$APIGEE_HOST/v1/samples/mtls
 ### Update Target HTTPS Proxy for "lenient" security
 ```
 gcloud compute target-https-proxies import ${TARGET_PROXY} \
-   --global \
-   --source=${TARGET_PROXY}-lenient.yaml  \
-   --quiet
+  --global \
+  --source=${TARGET_PROXY}-lenient.yaml  \
+  --quiet
 ```
 
-Wait a couple minutes for the configuration to propogate and test the API again.\
-You may see the following error before the configuration is complete.
+Wait a couple minutes for the configuration to propagate and test the API again.\
+You may see one of the following errors before the configuration is complete.
 ```
 curl: (56) Failure when receiving data from the peer
+curl: (56) Recv failure: Connection reset by peer
+curl: (52) Empty reply from server
 ```
 When complete, notice the 400 and the custom header details in the response.\
-Notice the value of "x-client-cert-chain-verified" is false, we use that in a condition to execute the Rasie Fault policy. \
+Notice the value of "x-client-cert-chain-verified" is false, we use that in a condition to execute the RaiseFault policy. \
 The value in "x-client-cert-error" indicates the type of error. \
 The possible errors can be found [here](https://cloud.google.com/load-balancing/docs/https/https-logging-monitoring#failure-messages).
 ```
@@ -325,8 +347,8 @@ curl https://$APIGEE_HOST/v1/samples/mtls
     }
 }
 ```
-#### Test with valid certificte
-Now lets create valid client certificates from the Root CA.
+#### Test with valid certificate
+Now let's create valid client certificates from the Root CA.
 
 **NOTE:** You may be required to install Python and the Pyca library if you see this error when creating certificates:
 ```
@@ -344,16 +366,16 @@ Create a valid certificate and key, being sure to use "--extended-key-usages=cli
 ```
 export CERT_NAME="partner-1-client-1"
 gcloud privateca certificates create ${CERT_NAME} \
-    --issuer-pool=${POOL} \
-    --ca=${ROOT} \
-    --issuer-location=us-east1 \
-    --generate-key \
-    --extended-key-usages=client_auth \
-    --key-output-file=./${CERT_NAME}-key.pem \
-    --cert-output-file=./${CERT_NAME}-cert.pem \
-    --dns-san=${APIGEE_HOST} \
-    --uri-san=https://${APIGEE_HOST} \
-    --subject="C=US,ST=Pennsylvania,L=Macungie,O=Google LLC,CN=${APIGEE_HOST}"
+  --issuer-pool=${POOL} \
+  --ca=${ROOT} \
+  --issuer-location=${LOCATION} \
+  --generate-key \
+  --extended-key-usages=client_auth \
+  --key-output-file=./${CERT_NAME}-key.pem \
+  --cert-output-file=./${CERT_NAME}-cert.pem \
+  --dns-san=${APIGEE_HOST} \
+  --uri-san=https://${APIGEE_HOST} \
+  --subject="C=US,ST=Pennsylvania,L=Macungie,O=Google LLC,CN=${APIGEE_HOST}"
 ```
 
 Test with the valid certificate and key.
@@ -362,7 +384,9 @@ Test with the valid certificate and key.
 
 Notice the value of "x-client-cert-chain-verified" is true.
 ```
-curl https://$APIGEE_HOST/v1/samples/mtls --cert ./${CERT_NAME}-cert.pem --key ./${CERT_NAME}-key.pem
+curl https://$APIGEE_HOST/v1/samples/mtls \
+  --cert ./${CERT_NAME}-cert.pem \
+  --key ./${CERT_NAME}-key.pem
 
 {
     "request":"GET https://xapi-dev.kurtkanaskie.net/v1/samples/mtls",
@@ -396,22 +420,24 @@ Create a certificate and key without "-extended-key-usages=client_auth".
 ```
 export INVALID_CERT_NAME="partner-1-invalid-1"
 gcloud privateca certificates create ${INVALID_CERT_NAME} \
-    --issuer-pool=${POOL} \
-    --ca=${ROOT} \
-    --issuer-location=us-east1 \
-    --generate-key \
-    --key-output-file=./${INVALID_CERT_NAME}-key.pem \
-    --cert-output-file=./${INVALID_CERT_NAME}-cert.pem \
-    --dns-san=${APIGEE_HOST} \
-    --uri-san=https://${APIGEE_HOST} \
-    --subject="C=US,ST=Pennsylvania,L=Macungie,O=Google LLC,CN=${APIGEE_HOST}"
+  --issuer-pool=${POOL} \
+  --ca=${ROOT} \
+  --issuer-location=${LOCATION} \
+  --generate-key \
+  --key-output-file=./${INVALID_CERT_NAME}-key.pem \
+  --cert-output-file=./${INVALID_CERT_NAME}-cert.pem \
+  --dns-san=${APIGEE_HOST} \
+  --uri-san=https://${APIGEE_HOST} \
+  --subject="C=US,ST=Pennsylvania,L=Macungie,O=Google LLC,CN=${APIGEE_HOST}"
 ```
 Test with the valid certificate and key.\
 Notice the value of "x-client-cert-chain-verified" is false, we use that in a condition to execute the Rasie Fault policy. \
 The value in "x-client-cert-error" indicates the type of error. \
 The possible errors can be found [here](https://cloud.google.com/load-balancing/docs/https/https-logging-monitoring#failure-messages).
 ```
-curl https://$APIGEE_HOST/v1/samples/mtls --cert ./${INVALID_CERT_NAME}-cert.pem --key ./${INVALID_CERT_NAME}-key.pem
+curl https://$APIGEE_HOST/v1/samples/mtls \
+  --cert ./${INVALID_CERT_NAME}-cert.pem \
+  --key ./${INVALID_CERT_NAME}-key.pem
 
 {
     "request":"GET https://xapi-dev.kurtkanaskie.net/v1/samples/mtls",
@@ -437,30 +463,34 @@ curl https://$APIGEE_HOST/v1/samples/mtls --cert ./${INVALID_CERT_NAME}-cert.pem
 Now that we've verified the configuration in "lenient" mode, we can switch to "strict" mode.
 ```
 gcloud compute target-https-proxies import ${TARGET_PROXY} \
-   --global \
-   --source=${TARGET_PROXY}-strict.yaml  \
-   --quiet
+  --global \
+  --source=${TARGET_PROXY}-strict.yaml  \
+  --quiet
 ```
 
-Wait a couple minutes for the configuration to propogate and test the API again.\
-First lets test with no certificates to ensure the confuguration has propogated.\
-You may see the following error before the configuration is complete.
+Wait a couple minutes for the configuration to propagate and test the API again.\
+First let's test with no certificates to ensure the configuration has propagated.\
 ```
 curl https://$APIGEE_HOST/v1/samples/mtls 
-curl: (56) Recv failure: Connection reset by peer
 ```
-Once the configuration has propogated note the response is from curl, not the Raise Fault policy, since the request was rejected by the GLB Target HTTPS Proxy due to the "strict" configuration.
-
+You may see one of the following errors before the configuration is complete.
 ```
-curl https://$APIGEE_HOST/v1/samples/mtls 
 curl: (56) Failure when receiving data from the peer
-
+curl: (56) Recv failure: Connection reset by peer
+curl: (52) Empty reply from server
 ```
+Once the configuration has propagated, notice that the response is consistent and from curl, not the RaiseFault policy. This is because the request is being rejected by the GLB Target HTTPS Proxy due to the "strict" configuration. The response may be different based on the curl client (Mac, Windows). In Cloud Shell the response will be:
+```
+curl: (52) Empty reply from server
+```
+
 #### Test with valid certificate and key
-Now lets test with the valid certificate and key.
+Now let's test with the valid certificate and key.
 
 ```
-curl https://$APIGEE_HOST/v1/samples/mtls --cert ./${CERT_NAME}-cert.pem --key ./${CERT_NAME}-key.pem
+curl https://$APIGEE_HOST/v1/samples/mtls \
+  --cert ./${CERT_NAME}-cert.pem \
+  --key ./${CERT_NAME}-key.pem
 
 {
     "request":"GET https://xapi-dev.kurtkanaskie.net/v1/samples/mtls",
@@ -490,33 +520,38 @@ curl https://$APIGEE_HOST/v1/samples/mtls --cert ./${CERT_NAME}-cert.pem --key .
 ```
 
 #### Test with invalid certificate and key
-Now lets test with the invalid certificate and key.\
-Again, notice the response is from curl, not the Raise Fault policy in the proxy.
+Now let's test with the invalid certificate and key.\
+Again, notice the response is from curl, not the RaiseFault policy in the proxy.
 
 ```
-curl https://$APIGEE_HOST/v1/samples/mtls --cert ./${INVALID_CERT_NAME}-cert.pem --key ./${INVALID_CERT_NAME}-key.pem
+curl https://$APIGEE_HOST/v1/samples/mtls \
+  --cert ./${INVALID_CERT_NAME}-cert.pem \
+  --key ./${INVALID_CERT_NAME}-key.pem
 curl: (56) Recv failure: Connection reset by peer
 ```
 
 ### Check GLB Logs
-Since we have enforced strict mTLS and our requests are being rejected by the GLB, lets take a look at Cloud Logging to see the errors there.
+Since we have enforced strict mTLS and our requests are being rejected by the GLB, let's take a look at Cloud Logging to see the errors there.
 
 GLB Failures: https://cloud.google.com/load-balancing/docs/https/https-logging-monitoring#failure-messages \
 See logs: https://cloud.google.com/load-balancing/docs/https/https-logging-monitoring#log-fwd-rule
 
 **NOTE:** Log entries will only exist when clientValidationMode is set to REJECT_INVALID and not ALLOW_INVALID_OR_MISSING_CLIENT_CERT.
 
-Find the forwarding rule for the GLB. For example:
+Find the forwarding rule for the GLB using:
 ```
 gcloud compute forwarding-rules list 
+```
+Example response:
+```
 NAME                                              REGION    IP_ADDRESS      IP_PROTOCOL  TARGET
 apigee-proxy-https-lb-rule                  34.149.167.159  TCP          apigee-proxy-https-proxy
 apigee-proxy-modern-https-lb-rule           34.160.201.100  TCP          apigee-proxy-modern-https-proxy
 ```
 
-Navigate to [Cloud Logging in the GCP Console](https://pantheon.corp.google.com/logs/query). 
+Right click on the Cloud Logging in the GCP Console [link](https://console.cloud.google.com/logs/query) and open in a separate tab.
 
-Enter the query for you forwarding rule.
+Enter the query using the value from your configuration for "resource.labels.forwarding_rule_name".
 ```
 jsonPayload.statusDetails=~"client_cert"
 jsonPayload.@type="type.googleapis.com/google.cloud.loadbalancing.type.LoadBalancerLogEntry"
@@ -590,14 +625,15 @@ This one is from the invalid certificate request, without "-extended-key-usages=
 
 Congratulations! You've successfully configured mTLS on your GLB and tested API requests in "lenient" and "strict" mode. You've also used Cloud Logging to observe errors when using "strict" mode.
 
-The clean up script:
-* Restores Target HTTPS Proxy to no mTLS
-* Verifies mTLS is not being enforced and then undeploys and deletes the API Proxy
-* Deletes Security Policies
-* Deletes Trust Config
-* Disables and deletes root CA
-* Deletes the private CA
+The clean up script performs these actions:
+* Restore Target HTTPS Proxy to no mTLS
+* Verify mTLS is not being enforced and then undeploy and delete the API Proxy
+* Delete Security Policies
+* Delete Trust Config
+* Disable and deletes root CA
+* Delete the private CA
 
+If you want to clean up the artifacts from this example in your project, first source your env.sh script, and then run:
 ```bash
 ./clean-up-mtls.sh
 ```
