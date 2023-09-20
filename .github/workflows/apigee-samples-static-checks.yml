@@ -34,24 +34,24 @@ jobs:
           pipeline-action: check-license.sh
 
   linter:
-      name: Lint Codebase
-      runs-on: ubuntu-latest
-      steps:
-        - name: Checkout Code
-          uses: actions/checkout@v3
-        - name: Run Mega Linter
-          uses: oxsecurity/megalinter@v7
-          env:
-            VALIDATE_ALL_CODEBASE: true
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        - name: Archive production artifacts
-          if: ${{ success() }} || ${{ failure() }}
-          uses: actions/upload-artifact@v3
-          with:
-            name: MegaLinter reports
-            path: |
-              megalinter-reports
-              mega-linter.log
+    name: Lint Codebase
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+      - name: Run Mega Linter
+        uses: oxsecurity/megalinter@v7
+        env:
+          VALIDATE_ALL_CODEBASE: true
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Archive production artifacts
+        if: ${{ success() }} || ${{ failure() }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: MegaLinter reports
+          path: |
+            megalinter-reports
+            mega-linter.log
 
   commit-messages:
     name: Conventional Commits Lint
