@@ -15,18 +15,18 @@
 # limitations under the License.
 
 if [ -z "$PROJECT" ]; then
-    echo "No PROJECT variable set"
-    exit
+  echo "No PROJECT variable set"
+  exit
 fi
 
 if [ -z "$APIGEE_ENV" ]; then
-    echo "No APIGEE_ENV variable set"
-    exit
+  echo "No APIGEE_ENV variable set"
+  exit
 fi
 
 if [ -z "$APIGEE_HOST" ]; then
-    echo "No APIGEE_HOST variable set"
-    exit
+  echo "No APIGEE_HOST variable set"
+  exit
 fi
 
 echo "Passed variable tests"
@@ -52,4 +52,3 @@ echo "All the Apigee artifacts are successfully deployed!"
 echo " "
 echo "Your Proxy URL is: https://$PROXY_URL"
 echo " "
-

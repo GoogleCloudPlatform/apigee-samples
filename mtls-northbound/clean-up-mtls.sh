@@ -18,18 +18,18 @@
 #gcloud services enable cloudbuild.googleapis.com
 
 if [ -z "$PROJECT" ]; then
-    echo "No PROJECT variable set"
-    exit
+  echo "No PROJECT variable set"
+  exit
 fi
 
 if [ -z "$APIGEE_ENV" ]; then
-    echo "No APIGEE_ENV variable set"
-    exit
+  echo "No APIGEE_ENV variable set"
+  exit
 fi
 
 if [ -z "$APIGEE_HOST" ]; then
-    echo "No APIGEE_HOST variable set"
-    exit
+  echo "No APIGEE_HOST variable set"
+  exit
 fi
 
 echo "Passed variable tests"
@@ -42,21 +42,19 @@ export PATH=$PATH:$HOME/.apigeecli/bin
 
 echo "Restoring Target HTTPS Proxy to no mTLS"
 gcloud compute target-https-proxies import "${TARGET_PROXY}" \
-   --global \
-   --source="${TARGET_PROXY}"-none.yaml  \
-   --quiet
+  --global \
+  --source="${TARGET_PROXY}"-none.yaml \
+  --quiet
 
 echo Verifying "${TARGET_PROXY}" has been restored
-while true
-do
-    if ! curl -s https://"$APIGEE_HOST"/v1/samples/mtls | grep 200
-    then
-        echo "${TARGET_PROXY}" not restored, waiting 10 seconds
-        sleep 10
-    else
-        echo "${TARGET_PROXY}" restored to no mTLS
-        break
-    fi
+while true; do
+  if ! curl -s https://"$APIGEE_HOST"/v1/samples/mtls | grep 200; then
+    echo "${TARGET_PROXY}" not restored, waiting 10 seconds
+    sleep 10
+  else
+    echo "${TARGET_PROXY}" restored to no mTLS
+    break
+  fi
 done
 
 echo "Undeploying proxy sample-mtls"
@@ -79,4 +77,3 @@ gcloud privateca roots delete "${ROOT}" --location=us-east1 --pool="${POOL}" --s
 
 echo "Deleting CA pool"
 gcloud privateca pools delete "${POOL}" --location=us-east1 --quiet
-
