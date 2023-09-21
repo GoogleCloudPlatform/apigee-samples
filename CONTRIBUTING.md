@@ -20,9 +20,9 @@ just a few guidelines you need to follow.
     - Consult
 [GitHub Help](https://help.github.com/articles/about-pull-requests/) for more information on using pull requests. Also please check if GitHub Action is enabled in your forked repo. Go to the Settings tab in the GitHub repo, under Actions and General, make sure the permissions are set to allow all actions and reusable workflows
 2. In your forked repo, create a new branch and make your changes:
-    1. To run the mega-linter locally, you will need to install [Docker](https://docs.docker.com/get-docker) and [Node.js](https://nodejs.org/en) on your local machine
+    1. To run the mega-linter locally, you will need to install latest versions of [Docker](https://docs.docker.com/get-docker) and [Node.js](https://nodejs.org/en) on your local machine
     2. Install mega-linter-runner by running `npm install mega-linter-runner -g` (Note: You might need to run this with sudo permissions)
-    3. From the main directory, run the megalinter locally by executing `mega-linter-runner -p .`. This should run all the checks locally.
+    3. From the main directory, run the megalinter locally by executing `mega-linter-runner -p . --remove-container`. This should run all the checks locally.
     4. Additionally, you can also run:
         1. `./tools/pipeline-linter/check-readme.sh` to check if the sample is added to main [README](./README.md#samples) table
         2. `./tools/pipeline-linter/check-apigeelint.sh` to check if the samples pass all the Apigeelint rules

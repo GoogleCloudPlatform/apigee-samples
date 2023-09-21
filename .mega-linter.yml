@@ -16,7 +16,8 @@
 # See all available variables at https://megalinter.io/configuration/ and in linters documentation
 
 APPLY_FIXES: all # all, none, or list of linter keys
-
+CLEAR_REPORT_FOLDER: true
+IGNORE_GITIGNORED_FILES: true
 # ENABLE: # If you use ENABLE variable, all other languages/formats/tooling-formats will be disabled by default
 
 MARKDOWN_MARKDOWNLINT_CONFIG_FILE: .markdown-lint.yml
