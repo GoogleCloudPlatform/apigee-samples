@@ -1,6 +1,10 @@
 {
     "version": "0.2",
     "language": "en",
+    "languageSettings": [{
+        "languageId": "markdown",
+        "ignoreRegExpList": ["/^\\s*```[\\s\\S]*?^\\s*```/gm"]
+        }],
     "ignorePaths": [
         "**/node_modules/**",
         "**/vscode-extension/**",
@@ -19,6 +23,7 @@
         ".*.yaml",
         "**/apigee-samples-static-checks.yml"
     ],
+    "allowCompoundWords": true,
     "words": [
         "addlicense",
         "Anthos",
@@ -166,6 +171,7 @@
         "protos",
         "proxiesremaining",
         "pushd",
+        "Pyca",
         "queryparam",
         "Quickstart",
         "Qwiklabs",
