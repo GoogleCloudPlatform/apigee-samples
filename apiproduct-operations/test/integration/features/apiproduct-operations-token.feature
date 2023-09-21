@@ -17,107 +17,106 @@ Feature:
   I want to experiment with API Product Operations while using OAuth tokens
   So that I can understand how Operations work
 
-  Scenario Outline: missing Token
-    When I GET /token/users
-    Then response code should be 401
-    And response body path $.fault.detail.errorcode should be oauth.v2.InvalidAccessToken
+Scenario: missing Token
+  When I GET /token/users
+  Then response code should be 401
+  And response body path $.fault.detail.errorcode should be oauth.v2.InvalidAccessToken
 
-  Scenario Outline: get a token for viewer
-    Given I have basic authentication credentials `viewerClientId` and `viewerClientSecret`
-      And I set Content-Type header to application/x-www-form-urlencoded
-      And I set body to grant_type=client_credentials
-    When I POST to -oauth2-cc/token
-    Then response code should be 200
-      And response body path $.token_type should be Bearer
-      And I store the value of body path $.access_token as VIEWER_ACCESSTOKEN in global scope
+Scenario: get a token for viewer
+  Given I have basic authentication credentials `viewerClientId` and `viewerClientSecret`
+  And I set Content-Type header to application/x-www-form-urlencoded
+  And I set body to grant_type=client_credentials
+  When I POST to -oauth2-cc/token
+  Then response code should be 200
+  And response body path $.token_type should be Bearer
+  And I store the value of body path $.access_token as VIEWER_ACCESSTOKEN in global scope
 
-  Scenario Outline: get a token for creator
-    Given I have basic authentication credentials `creatorClientId` and `creatorClientSecret`
-      And I set Content-Type header to application/x-www-form-urlencoded
-      And I set body to grant_type=client_credentials
-    When I POST to -oauth2-cc/token
-    Then response code should be 200
-      And response body path $.token_type should be Bearer
-      And I store the value of body path $.access_token as CREATOR_ACCESSTOKEN in global scope
+Scenario: get a token for creator
+  Given I have basic authentication credentials `creatorClientId` and `creatorClientSecret`
+  And I set Content-Type header to application/x-www-form-urlencoded
+  And I set body to grant_type=client_credentials
+  When I POST to -oauth2-cc/token
+  Then response code should be 200
+  And response body path $.token_type should be Bearer
+  And I store the value of body path $.access_token as CREATOR_ACCESSTOKEN in global scope
 
-  Scenario Outline: get a token for admin
-    Given I have basic authentication credentials `adminClientId` and `adminClientSecret`
-      And I set Content-Type header to application/x-www-form-urlencoded
-      And I set body to grant_type=client_credentials
-    When I POST to -oauth2-cc/token
-    Then response code should be 200
-      And response body path $.token_type should be Bearer
-      And I store the value of body path $.access_token as ADMIN_ACCESSTOKEN in global scope
+Scenario: get a token for admin
+  Given I have basic authentication credentials `adminClientId` and `adminClientSecret`
+  And I set Content-Type header to application/x-www-form-urlencoded
+  And I set body to grant_type=client_credentials
+  When I POST to -oauth2-cc/token
+  Then response code should be 200
+  And response body path $.token_type should be Bearer
+  And I store the value of body path $.access_token as ADMIN_ACCESSTOKEN in global scope
 
-  Scenario Outline: unknown resource
-    Given I set TOKEN header to `VIEWER_ACCESSTOKEN`
-    When I GET /token/unknown-resource
-    Then response code should be 400
-    And response body path $.response.message should be that request was unknown
+Scenario: unknown resource
+  Given I set TOKEN header to `VIEWER_ACCESSTOKEN`
+  When I GET /token/unknown-resource
+  Then response code should be 400
+  And response body path $.response.message should be that request was unknown
 
-  Scenario Outline: list users ok
-    Given I set TOKEN header to `VIEWER_ACCESSTOKEN`
-    When I GET /token/users
-    Then response code should be 200
-      And response body path $.status should be OK
-      And response body path $.verb should be GET
-      And response body path $.apiproduct-operation-resource should be /*/users
+Scenario: list users ok
+  Given I set TOKEN header to `VIEWER_ACCESSTOKEN`
+  When I GET /token/users
+  Then response code should be 200
+  And response body path $.status should be OK
+  And response body path $.verb should be GET
+  And response body path $.apiproduct-operation-resource should be /*/users
 
-  Scenario Outline: list users reject
-    Given I set TOKEN header to `CREATOR_ACCESSTOKEN`
-    When I GET /token/users
-    Then response code should be 401
-    And response body path $.fault.detail.errorcode should be keymanagement.service.InvalidAPICallAsNoApiProductMatchFound
+Scenario: list users reject
+  Given I set TOKEN header to `CREATOR_ACCESSTOKEN`
+  When I GET /token/users
+  Then response code should be 401
+  And response body path $.fault.detail.errorcode should be keymanagement.service.InvalidAPICallAsNoApiProductMatchFound
 
-  Scenario Outline: get single user ok
-    Given I set TOKEN header to `VIEWER_ACCESSTOKEN`
-    When I GET /token/users/1234
-    Then response code should be 200
-      And response body path $.status should be OK
-      And response body path $.verb should be GET
-      And response body path $.apiproduct-operation-resource should be /*/users/*
+Scenario: get single user ok
+  Given I set TOKEN header to `VIEWER_ACCESSTOKEN`
+  When I GET /token/users/1234
+  Then response code should be 200
+  And response body path $.status should be OK
+  And response body path $.verb should be GET
+  And response body path $.apiproduct-operation-resource should be /*/users/*
 
-  Scenario Outline: get single user reject
-    Given I set TOKEN header to `CREATOR_ACCESSTOKEN`
-    When I GET /token/users/1234
-    Then response code should be 401
-      And response body path $.fault.detail.errorcode should be keymanagement.service.InvalidAPICallAsNoApiProductMatchFound
+Scenario: get single user reject
+  Given I set TOKEN header to `CREATOR_ACCESSTOKEN`
+  When I GET /token/users/1234
+  Then response code should be 401
+  And response body path $.fault.detail.errorcode should be keymanagement.service.InvalidAPICallAsNoApiProductMatchFound
 
-  Scenario Outline: create user reject
-    Given I set TOKEN header to `VIEWER_ACCESSTOKEN`
-      And I set Content-Type header to text/plain
-      And I set body to does-not-matter
-    When I POST to /token/users
-    Then response code should be 401
-      And response body path $.fault.detail.errorcode should be keymanagement.service.InvalidAPICallAsNoApiProductMatchFound
+Scenario: create user reject
+  Given I set TOKEN header to `VIEWER_ACCESSTOKEN`
+  And I set Content-Type header to text/plain
+  And I set body to does-not-matter
+  When I POST to /token/users
+  Then response code should be 401
+  And response body path $.fault.detail.errorcode should be keymanagement.service.InvalidAPICallAsNoApiProductMatchFound
 
-  Scenario Outline: create user ok
-    Given I set TOKEN header to `CREATOR_ACCESSTOKEN`
-      And I set Content-Type header to text/plain
-      And I set body to does-not-matter
-    When I POST to /token/users
-    Then response code should be 200
-      And response body path $.status should be OK
-      And response body path $.verb should be POST
-      And response body path $.apiproduct-operation-resource should be /*/users
+Scenario: create user ok
+  Given I set TOKEN header to `CREATOR_ACCESSTOKEN`
+  And I set Content-Type header to text/plain
+  And I set body to does-not-matter
+  When I POST to /token/users
+  Then response code should be 200
+  And response body path $.status should be OK
+  And response body path $.verb should be POST
+  And response body path $.apiproduct-operation-resource should be /*/users
 
+Scenario: delete user reject 1
+  Given I set TOKEN header to `VIEWER_ACCESSTOKEN`
+  When I DELETE /token/users/1234
+  Then response code should be 401
+  And response body path $.fault.detail.errorcode should be keymanagement.service.InvalidAPICallAsNoApiProductMatchFound
 
-  Scenario Outline: delete user reject 1
-    Given I set TOKEN header to `VIEWER_ACCESSTOKEN`
-    When I DELETE /token/users/1234
-    Then response code should be 401
-      And response body path $.fault.detail.errorcode should be keymanagement.service.InvalidAPICallAsNoApiProductMatchFound
+Scenario: delete user reject 2
+  Given I set TOKEN header to `CREATOR_ACCESSTOKEN`
+  When I DELETE /token/users/1234
+  Then response code should be 401
+  And response body path $.fault.detail.errorcode should be keymanagement.service.InvalidAPICallAsNoApiProductMatchFound
 
-  Scenario Outline: delete user reject 2
-    Given I set TOKEN header to `CREATOR_ACCESSTOKEN`
-    When I DELETE /token/users/1234
-    Then response code should be 401
-      And response body path $.fault.detail.errorcode should be keymanagement.service.InvalidAPICallAsNoApiProductMatchFound
-
-  Scenario Outline: delete user ok
-    Given I set TOKEN header to `ADMIN_ACCESSTOKEN`
-    When I DELETE /token/users/1234
-    Then response code should be 200
-      And response body path $.status should be OK
-      And response body path $.verb should be DELETE
-      And response body path $.apiproduct-operation-resource should be /*/users/*
+Scenario: delete user ok
+  Given I set TOKEN header to `ADMIN_ACCESSTOKEN`
+  When I DELETE /token/users/1234
+  Then response code should be 200
+  And response body path $.status should be OK
+  And response body path $.verb should be DELETE
+  And response body path $.apiproduct-operation-resource should be /*/users/*

@@ -15,28 +15,28 @@
 # limitations under the License.
 
 if [ -z "$PROJECT" ]; then
-        echo "No PROJECT variable set"
-        exit
+  echo "No PROJECT variable set"
+  exit
 fi
 
 if [ -z "$APIGEE_ENV" ]; then
-        echo "No APIGEE_ENV variable set"
-        exit
+  echo "No APIGEE_ENV variable set"
+  exit
 fi
 
 if [ -z "$APIGEE_HOST" ]; then
-        echo "No APIGEE_HOST variable set"
-        exit
+  echo "No APIGEE_HOST variable set"
+  exit
 fi
 
 if [ -z "$CLOUD_RUN_SERVICE" ]; then
-        echo "No CLOUD_RUN_SERVICE variable set"
-        exit
+  echo "No CLOUD_RUN_SERVICE variable set"
+  exit
 fi
 
 if [ -z "$CLOUD_RUN_REGION" ]; then
-        echo "No CLOUD_RUN_REGION variable set"
-        exit
+  echo "No CLOUD_RUN_REGION variable set"
+  exit
 fi
 
 TOKEN=$(gcloud auth print-access-token)

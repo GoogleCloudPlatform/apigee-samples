@@ -15,39 +15,36 @@
 # limitations under the License.
 
 if [ -z "$PROJECT" ]; then
-    echo "No PROJECT variable set"
-    exit
+  echo "No PROJECT variable set"
+  exit
 fi
 
-
 if [ -z "$NETWORK" ]; then
-    echo "No NETWORK variable set"
-    exit
+  echo "No NETWORK variable set"
+  exit
 fi
 
 if [ -z "$SUBNET" ]; then
-    echo "No SUBNET variable set"
-    exit
+  echo "No SUBNET variable set"
+  exit
 fi
 
 if ! [ -x "$(command -v jq)" ]; then
-    echo "jq command is not on your PATH"
-    exit
+  echo "jq command is not on your PATH"
+  exit
 fi
 
-function wait_for_operation () {
-    while true
-    do
-        STATE="$(apigeecli operations get -o "$PROJECT" -n "$1" -t "$TOKEN" | jq --raw-output '.metadata.state')"
-        if [ "$STATE" = "FINISHED" ]; then
-            echo
-            break
-        fi
-        echo -n .
-        sleep 5
-    done
+function wait_for_operation() {
+  while true; do
+    STATE="$(apigeecli operations get -o "$PROJECT" -n "$1" -t "$TOKEN" | jq --raw-output '.metadata.state')"
+    if [ "$STATE" = "FINISHED" ]; then
+      echo
+      break
+    fi
+    echo -n .
+    sleep 5
+  done
 }
-
 
 #Create Load Balancer and Apigee backend
 echo "Installing apigeecli"
@@ -78,10 +75,10 @@ wait_for_operation "$OPERATION"
 
 # Enable APIs
 gcloud services enable \
-    compute.googleapis.com \
-    cloudbuild.googleapis.com \
-    artifactregistry.googleapis.com \
-    --project="$PROJECT" --quiet
+  compute.googleapis.com \
+  cloudbuild.googleapis.com \
+  artifactregistry.googleapis.com \
+  --project="$PROJECT" --quiet
 
 # Reserve an IP address for the Load Balancer"
 echo "Reserving load balancer IP address..."
@@ -102,18 +99,18 @@ wait_for_operation "$OPERATION"
 git clone https://github.com/grpc/grpc.git grpc-backend
 
 gcloud run deploy grpc-backend-apigee --allow-unauthenticated \
---port 50051 \
---timeout 3600 \
---region="${REGION}" \
---quiet \
---source=.
+  --port 50051 \
+  --timeout 3600 \
+  --region="${REGION}" \
+  --quiet \
+  --source=.
 
 CLOUD_RUN_SERVICE_URL=$(gcloud run services describe grpc-backend-apigee --platform managed --region "$REGION" --format 'value(status.url)' | sed -E 's/http.+\///')
 
 # Create a Google managed SSL certificate
 echo "Creating SSL certificate..."
 gcloud compute ssl-certificates create sample-apigee-ssl-cert \
-    --domains="$RUNTIME_HOST_ALIAS" --project "$PROJECT" --quiet
+  --domains="$RUNTIME_HOST_ALIAS" --project "$PROJECT" --quiet
 
 ## Create a global Load Balancer
 echo "Creating external load balancer..."
@@ -155,8 +152,7 @@ gcloud compute forwarding-rules create sample-apigee-https-lb-rule \
   --target-https-proxy=sample-apigee-https-proxy --ports=443 --project="$PROJECT" --quiet
 
 echo -n "Waiting for certificate provisioning to complete (may take some time)..."
-while true
-do
+while true; do
   TLS_STATUS="$(gcloud compute ssl-certificates describe sample-apigee-ssl-cert --format=json --project "$PROJECT" --quiet | jq -r '.managed.status')"
   if [ "$TLS_STATUS" = "ACTIVE" ]; then
     break
@@ -175,18 +171,18 @@ echo "Deploying Apigee artifacts..."
 echo -n "Creating the gRPC target server..."
 GRPC_TARGET_SERVER_NAME="grpc-server"
 apigeecli targetservers create \
-     --name "${GRPC_TARGET_SERVER_NAME}" \
-     --port 443 \
-     --host "${CLOUD_RUN_SERVICE_URL}" \
-     --enable \
-     --tls true  \
-     --org "${PROJECT}" \
-     --env "${ENVIRONMENT_NAME}" \
-     --protocol GRPC_TARGET \
-     --token "${TOKEN}"
+  --name "${GRPC_TARGET_SERVER_NAME}" \
+  --port 443 \
+  --host "${CLOUD_RUN_SERVICE_URL}" \
+  --enable \
+  --tls true \
+  --org "${PROJECT}" \
+  --env "${ENVIRONMENT_NAME}" \
+  --protocol GRPC_TARGET \
+  --token "${TOKEN}"
 
 echo "Importing and Deploying Apigee grpc proxy..."
-REV=$(apigeecli apis create bundle -f apiproxy  -n grpc --org "$PROJECT" --token "$TOKEN" --disable-check | jq ."revision" -r)
+REV=$(apigeecli apis create bundle -f apiproxy -n grpc --org "$PROJECT" --token "$TOKEN" --disable-check | jq ."revision" -r)
 apigeecli apis deploy --wait --name grpc --ovr --rev "$REV" --org "$PROJECT" --env "$ENVIRONMENT_NAME" --token "$TOKEN"
 
 echo "Creating API Products..."

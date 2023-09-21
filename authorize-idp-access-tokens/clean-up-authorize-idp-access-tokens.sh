@@ -15,13 +15,13 @@
 # limitations under the License.
 
 if [ -z "$PROJECT" ]; then
-    echo "No PROJECT variable set"
-    exit
+  echo "No PROJECT variable set"
+  exit
 fi
 
 if [ -z "$APIGEE_ENV" ]; then
-    echo "No APIGEE_ENV variable set"
-    exit
+  echo "No APIGEE_ENV variable set"
+  exit
 fi
 
 TOKEN=$(gcloud auth print-access-token)

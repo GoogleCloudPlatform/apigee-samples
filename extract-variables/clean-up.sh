@@ -18,18 +18,18 @@
 #gcloud services enable cloudbuild.googleapis.com
 
 if [ -z "$PROJECT" ]; then
-    echo "No PROJECT variable set"
-    exit
+  echo "No PROJECT variable set"
+  exit
 fi
 
 if [ -z "$APIGEE_ENV" ]; then
-    echo "No APIGEE_ENV variable set"
-    exit
+  echo "No APIGEE_ENV variable set"
+  exit
 fi
 
 if [ -z "$APIGEE_HOST" ]; then
-    echo "No APIGEE_HOST variable set"
-    exit
+  echo "No APIGEE_HOST variable set"
+  exit
 fi
 
 TOKEN=$(gcloud auth print-access-token)
@@ -37,7 +37,6 @@ TOKEN=$(gcloud auth print-access-token)
 echo "Installing apigeecli"
 curl -s https://raw.githubusercontent.com/apigee/apigeecli/master/downloadLatest.sh | bash
 export PATH=$PATH:$HOME/.apigeecli/bin
-
 
 echo "Undeploying extract-variables"
 REV=$(apigeecli envs deployments get --env "$APIGEE_ENV" --org "$PROJECT" --token "$TOKEN" --disable-check | jq .'deployments[]| select(.apiProxy=="extract-variables").revision' -r)

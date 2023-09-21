@@ -14,8 +14,13 @@
 
 extends: default
 rules:
+  comments:
+    require-starting-space: true
+    ignore-shebangs: true
+    min-spaces-from-content: 1
   document-start: disable
   line-length:
+    max: 500
     level: warning
   new-line-at-end-of-file:
     level: warning

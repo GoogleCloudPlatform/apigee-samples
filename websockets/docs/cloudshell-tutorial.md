@@ -26,7 +26,7 @@ cd websockets
 ## Create a websockets backend in Cloud Run
 
 Create a Docker image:
-In Cloud Shell, clone the websockets repo 
+In Cloud Shell, clone the websockets repo
 
 ```sh
 export PROJECT=$GOOGLE_CLOUD_PROJECT
@@ -59,7 +59,7 @@ wscat --connect ws://localhost:8080
 
 You should be able to type anything and receive an echo response from the server:
 
-```
+```sh
 Connected (press CTRL+C to quit)
 > hello
 < hello
@@ -101,8 +101,6 @@ CLOUD_RUN_SERVICE_URL=$(gcloud run services describe websockets-echo-server --pl
 export CLOUD_RUN_SERVICE_URL
 ```
 
-
-
 ---
 
 ## Deploy Apigee components
@@ -123,16 +121,14 @@ Next, let's create and deploy the Apigee resources necessary to test the websock
 ./deploy.sh
 ```
 
-This script creates a sample websockets API Proxy. The script also tests that the deployment and configuration has been sucessful.
-
+This script creates a sample websockets API Proxy. The script also tests that the deployment and configuration has been successful.
 
 ### Test the APIs
 
 The script that deploys the Apigee API proxy, should have printed the proxy information you will need to call the websockets API. If we open the Debug tool inside of Apigee we should be able to see that Apigee is receiving the request from the client and upgrading the protocol from HTTP to Websockets and sending the HTTP status code 101 (switching protocols). You will see this request in the Debug tool for every new connection that is opened. Any subsequent messages won’t show in the tool, since they are being transferred over websockets.
 
-
-
 ---
+
 ## Conclusion
 
 <walkthrough-conclusion-trophy></walkthrough-conclusion-trophy>

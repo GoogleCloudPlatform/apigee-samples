@@ -15,7 +15,7 @@ Ensure you have an active GCP account selected in the Cloud shell
 gcloud auth login
 ```
 
-Navigate to the 'oauth-client-credentials' drirectory in the Cloud shell.
+Navigate to the 'oauth-client-credentials' directory in the Cloud shell.
 
 ```sh
 cd oauth-client-credentials
@@ -43,24 +43,26 @@ Next, let's create and deploy the Apigee resources necessary to request an OAuth
 
 This script creates an API Proxy, API product, a sample App developer, and App. The script also tests that the deployment and configuration has been successful.
 
-
 ### Test the APIs
 
 The script that deploys the Apigee API proxies prints the proxy and app information you will need to run the commands below.
 
 First obtain a short-lived opaque access token using the token endpoint.
 
+```bash
+curl -v -X POST https://$APIGEE_HOST/apigee-samples/oauth-client-credentials/token -u $APP_CLIENT_ID:$APP_CLIENT_SECRET -d "grant_type=client_credentials"
 ```
-curl -v -XPOST https://$APIGEE_HOST/apigee-samples/oauth-client-credentials/token -u $APP_CLIENT_ID:$APP_CLIENT_SECRET -d "grant_type=client_credentials"
-```
+
 > _Note: Under normal circumstances, avoid providing secrets on the command itself using `-u`_
 
 Copy the value of the `access_token` property from the response body of the previous request and include it in the following request:
-```
+
+```bash
 curl -v https://$APIGEE_HOST/apigee-samples/oauth-client-credentials/resource -H "Authorization: Bearer access_token"
 ```
 
 ---
+
 ## Conclusion
 
 <walkthrough-conclusion-trophy></walkthrough-conclusion-trophy>
