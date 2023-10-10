@@ -18,7 +18,7 @@ gcloud auth login
 Navigate to the `property-set` directory in the Cloud shell.
 
 ```sh
-cd extract-variables
+cd property-set
 ```
 
 Edit the provided sample `env.sh` file, and set the environment variables there.
@@ -71,6 +71,9 @@ In this sample, we create a JSON response, which contains values of the property
   "privatekey": "splitwithsoundman"
 }
 ```
+
+Note: private information (e.g. ```privatekey```) should be handled using encrypted 
+KVMs (Key Value Maps) and not property sets.
 
 ---
 
