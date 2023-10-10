@@ -1,0 +1,14 @@
+{
+  "name": "property-set",
+  "version": "1.0.0",
+  "description": "API proxy that demonstrates how to use a Property Set",
+  "scripts": {
+    "lint": "apigeelint -s apiproxy -e PO013,PO025 -f table.js",
+    "test": "npx cucumber-js --publish-quiet test/"
+  },
+  "dependencies": {
+    "@cucumber/cucumber": "^7.3.0",
+    "apickli": "^3.0.1",
+    "apigeelint": "latest"
+  }
+}
