@@ -1,6 +1,8 @@
-# Extract Variables and Assign Message
+# Property Set
 
-This sample shows how to easily extract fields from an XML and JSON response. This sample leverages the following policies::
+This sample shows how to easily define a Property Set and how to
+access data from it.
+This sample leverages the following policy:
 
 * [Assign Message](https://cloud.google.com/apigee/docs/api-platform/reference/policies/assign-message-policy?hl=en) policy to set the JSON response with values retrieved from a [property set](https://cloud.google.com/apigee/docs/api-platform/cache/property-sets).
 
