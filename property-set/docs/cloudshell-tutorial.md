@@ -72,6 +72,9 @@ In this sample, we create a JSON response, which contains values of the property
 }
 ```
 
+Note: private information (e.g. ```privatekey```) should be handled using encrypted 
+KVMs (Key Value Maps) and not property sets.
+
 ---
 
 ## Conclusion
