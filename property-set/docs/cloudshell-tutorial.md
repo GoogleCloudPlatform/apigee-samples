@@ -18,7 +18,7 @@ gcloud auth login
 Navigate to the `property-set` directory in the Cloud shell.
 
 ```sh
-cd extract-variables
+cd property-set
 ```
 
 Edit the provided sample `env.sh` file, and set the environment variables there.
