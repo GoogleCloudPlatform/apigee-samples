@@ -35,10 +35,6 @@ You must add the suffix .properties to a property file name. For example:
 is not allowed.
 
 The structure of a property set specification is: ```property_set_name.property_name.properties```
-The property set name and property name cannot have dots in them.
-For example: myconfig.my_key.properties is allowed, but 
-```myconfig.my.key.properties``` and ```my.config.my_key.properties```
-are not allowed.
 
 The following example (used in this sample) shows a simple property set
 file that defines several properties:
