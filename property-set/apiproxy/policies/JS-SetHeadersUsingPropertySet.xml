@@ -11,15 +11,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<AssignMessage name="AM-SetResponseUsingPropertySet">
-  <Set>
-    <Payload contentType="application/json">
-    {
-      "foo":"{propertyset.myProps.foo}",
-      "message":"{propertyset.myProps.message}"
-    }
-    </Payload>
-  </Set>
-  <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
-  <AssignTo createNew="false" transport="http" type="response"/>
-</AssignMessage>
+<Javascript name="JS-SetHeadersUsingPropertySet">
+  <ResourceURL>jsc://JS-SetHeadersUsingPropertySet.js</ResourceURL>
+</Javascript>

@@ -4,7 +4,9 @@ This sample shows how to easily define a Property Set and how to
 access data from it.
 This sample leverages the following policy:
 
-* [Assign Message](https://cloud.google.com/apigee/docs/api-platform/reference/policies/assign-message-policy?hl=en) policy to set the JSON response with values retrieved from a [property set](https://cloud.google.com/apigee/docs/api-platform/cache/property-sets).
+* [Assign Message](https://cloud.google.com/apigee/docs/api-platform/reference/policies/assign-message-policy?hl=en) policy to set the JSON response with values retrieved from a [property set](https://cloud.google.com/apigee/docs/api-platform/cache/property-sets)
+* [JavaScript](https://cloud.google.com/apigee/docs/api-platform/reference/policies/javascript-policy?hl=en) policy to set HTTP response headers with values
+retrieved from the same property set
 
 ## About Property Set
 
@@ -36,11 +38,12 @@ is not allowed.
 
 The structure of a property set specification is: ```property_set_name.property_name.properties```
 
-The following example (used in this sample) shows a simple property set
+The following example (used in this sample) shows a simple property
+set (```myProps.properties```)
 file that defines several properties:
 
 ```
-# resources.properties file
+# myProps.properties file
 # General properties
 foo=bar
 baz=biff
@@ -59,11 +62,17 @@ privatekey=splitwithsoundman
 
 This sample is configured as a "no target API Proxy".
 
-A Property Set (```resources.properties```) is part of the ```property-set```
+A Property Set (```myProps.properties```) is part of the ```property-set```
 API Proxy resources.
-Then we use the [Assign Message](https://cloud.google.com/apigee/docs/api-platform/reference/policies/assign-message-policy?hl=en) policy to get values for each key of the Property Set.
-This same policy is used to set a response presenting the key/value pairs
+
+We use the [Assign Message](https://cloud.google.com/apigee/docs/api-platform/reference/policies/assign-message-policy?hl=en)
+policy to get values for two keys of the Property Set.
+This same policy is used to set a response presenting some key/value pairs
 in the form of a JSON content.
+
+We use the [JavaScript](https://cloud.google.com/apigee/docs/api-platform/reference/policies/javascript-policy?hl=en)
+policy to get values for two keys of the Property Set.
+This same policy is used to set HTTP response headers using the accessed values.
 
 ## Screencast
 
