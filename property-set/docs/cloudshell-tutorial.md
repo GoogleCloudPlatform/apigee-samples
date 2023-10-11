@@ -57,7 +57,7 @@ Use the debug tool inside Apigee to see how we access values in a property set, 
 
 ```propertyset.<property_set_name>.<property_name>```
 
-## AssignMessage policy to access a Property Set
+### AssignMessage policy to access a Property Set
 
 You can use the ```AssignMessage``` policy to assign the value of property set key to a flow variable dynamically.
 In this sample, we create a JSON response, which contains values of the property set for two keys.
@@ -91,7 +91,7 @@ Here is the configuration of the ```AssignMessage``` policy:
 Note: private information should be handled using encrypted 
 KVMs (Key Value Maps) and not property sets.
 
-## JavaScript policy to access a Property Set
+### JavaScript policy to access a Property Set
 
 Access property set values anywhere in an API proxy where you can access flow variables:
 in policies, flows, JavaScript code, and so on.
