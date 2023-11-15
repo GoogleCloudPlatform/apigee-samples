@@ -17,6 +17,9 @@
   <PreFlow name="PreFlow">
     <Request>
       <Step>
+        <Name>JS-SetHeadersUsingPropertySet</Name>
+      </Step>
+      <Step>
         <Name>AM-SetResponseUsingPropertySet</Name>
       </Step>
     </Request>

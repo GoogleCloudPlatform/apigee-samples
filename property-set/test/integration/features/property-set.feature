@@ -22,3 +22,5 @@ Scenario: Property-Set
   Then response code should be 200
   And response body should be valid json
   And response body path $.foo should be bar
+  And response header x-baz should be biff
+  And response header x-note should exist

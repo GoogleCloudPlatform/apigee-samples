@@ -57,23 +57,55 @@ Use the debug tool inside Apigee to see how we access values in a property set, 
 
 ```propertyset.<property_set_name>.<property_name>```
 
-You can use the AssignMessage policy to assign the value of property set key to a flow variable dynamically.
-In this sample, we create a JSON response, which contains values of the property set for each key:
+### AssignMessage policy to access a Property Set
 
+You can use the ```AssignMessage``` policy to assign the value of property set key to a flow variable dynamically.
+In this sample, we create a JSON response, which contains values of the property set for two keys.
+
+Here is the configuration of the ```AssignMessage``` policy:
+
+```xml
+<AssignMessage name="AM-SetResponseUsingPropertySet">
+  <Set>
+    <Payload contentType="application/json">
+    {
+      "foo":"{propertyset.myProps.foo}",
+      "message":"{propertyset.myProps.message}"
+    }
+    </Payload>
+  </Set>
+  <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+  <AssignTo createNew="false" transport="http" type="response"/>
+</AssignMessage>
 ```
+
+...and the JSON payload (response) that is created:
+
+```json
 {
   "foo": "bar",
-  "baz": "biff",
-  "message": "This is a basic message.",
-  "note_message": "This is an important message.",
-  "error_message": "This is an error message.",
-  "publickey": "abc123",
-  "privatekey": "splitwithsoundman"
+  "message": "This is a basic message."
 }
 ```
 
-Note: private information (e.g. ```privatekey```) should be handled using encrypted 
+Note: private information should be handled using encrypted 
 KVMs (Key Value Maps) and not property sets.
+
+### JavaScript policy to access a Property Set
+
+Access property set values anywhere in an API proxy where you can access flow variables:
+in policies, flows, JavaScript code, and so on.
+
+For example, in a JavaScript policy, use the ```getVariable()``` method
+to get a value from a property set:
+
+```javascript
+...
+// access properties of the myProps.properties file
+var baz = context.getVariable('propertyset.myProps.baz');
+var note = context.getVariable('propertyset.myProps.note_message');
+...
+```
 
 ---
 
