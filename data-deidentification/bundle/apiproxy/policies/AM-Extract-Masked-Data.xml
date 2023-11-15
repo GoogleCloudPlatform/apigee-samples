@@ -1,0 +1,15 @@
+<AssignMessage name='AM-Extract-Masked-Data'>
+  <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+  <AssignVariable>
+    <Name>json_query</Name>
+    <Value>$.item.value</Value>
+  </AssignVariable>
+  <AssignVariable>
+    <!--
+        After this policy completes, the `masked_content` variable now holds the
+        form of the content that has been masked.
+    -->
+    <Name>masked_content</Name>
+    <Template>{jsonPath(json_query,dlpResponse.content)}</Template>
+  </AssignVariable>
+</AssignMessage>

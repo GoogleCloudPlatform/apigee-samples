@@ -1,0 +1,136 @@
+<ProxyEndpoint name="endpoint1">
+  <Description>Proxy Endpoint for the DLP demonstration</Description>
+
+  <HTTPProxyConnection>
+    <BasePath>/v1/samples/data-deidentification</BasePath>
+  </HTTPProxyConnection>
+
+  <FaultRules/>
+  <DefaultFaultRule name="default-fault-rule">
+    <Step>
+      <Name>AM-Inject-Proxy-Revision-Header</Name>
+    </Step>
+    <AlwaysEnforce>true</AlwaysEnforce>
+  </DefaultFaultRule>
+
+  <PreFlow name="PreFlow">
+    <Request/>
+    <Response>
+      <Step>
+        <Name>AM-Clean-Request-Headers-From-Response</Name>
+      </Step>
+    </Response>
+  </PreFlow>
+
+  <PostFlow name="PostFlow">
+    <Request/>
+    <Response>
+      <Step>
+        <Name>AM-Inject-Proxy-Revision-Header</Name>
+      </Step>
+    </Response>
+  </PostFlow>
+
+  <PostClientFlow name="PostClientFlow">
+    <Request/>
+    <Response/>
+  </PostClientFlow>
+
+  <Flows>
+
+    <Flow name="flow1-mask-xml">
+      <!--
+
+          curl -i  -X POST $apigeeendpoint/dlp-example/mask-xml \
+           -H "content-type: application/xml" \
+           -d '
+            <ServiceRequest xmlns="urn:932F4698-0A64-49D4-963F-E6615BC399E8">
+              <CustomerId>C939D5E8-2FEB-477E-A9B8-E87371973E61</CustomerId>
+              <URL>https://marcia.com</URL>
+              <Email>marcia@example.com</Email>
+              <Phone>434-902-1092</Phone>
+              <Requested>2023-11-15T21:36:06.391Z</Requested>
+            </ServiceRequest>'
+      -->
+      <Description>mask XML data with ServiceCallout and DLP</Description>
+      <Request>
+        <Step>
+          <Condition>request.header.content-type != "text/xml" AND
+             request.header.content-type != "application/xml"</Condition>
+          <Name>RF-Invalid-Content-Type-XML</Name>
+        </Step>
+      </Request>
+
+      <Response>
+        <Step>
+          <Condition>request.queryparam.justemail = "true"</Condition>
+          <Name>SC-DLP-DeIdentify-Template2</Name>
+        </Step>
+        <Step>
+          <Condition>request.queryparam.justemail != "true"</Condition>
+          <Name>SC-DLP-DeIdentify-Template1</Name>
+        </Step>
+        <Step>
+          <Name>AM-Extract-Masked-Data</Name>
+        </Step>
+        <Step>
+          <Name>AM-Response-XML</Name>
+        </Step>
+      </Response>
+      <Condition>(proxy.pathsuffix MatchesPath "/mask-xml") and (request.verb = "POST")</Condition>
+    </Flow>
+
+    <Flow name="flow2-mask-json">
+      <!--
+
+          curl -i  -X POST $apigeeendpoint/dlp-example/mask-json \
+           -H "content-type: application/json" \
+           -d '{
+              "customerId" : "C939D5E8-2FEB-477E-A9B8-E87371973E61",
+              "url": "https://marcia.com",
+              "email": "marcia@example.com",
+              "phone": "434-902-1092",
+              "requested": "2023-11-15T21:36:06.391Z"
+            }'
+      -->
+      <Description>mask JSON data with ServiceCallout and DLP</Description>
+      <Request>
+        <Step>
+          <Condition>request.header.content-type != "application/json"</Condition>
+          <Name>RF-Invalid-Content-Type-JSON</Name>
+        </Step>
+      </Request>
+
+      <Response>
+        <Step>
+          <Condition>request.queryparam.justemail = "true"</Condition>
+          <Name>SC-DLP-DeIdentify-Template2</Name>
+        </Step>
+        <Step>
+          <Condition>request.queryparam.justemail != "true"</Condition>
+          <Name>SC-DLP-DeIdentify-Template1</Name>
+        </Step>
+        <Step>
+          <Name>AM-Extract-Masked-Data</Name>
+        </Step>
+        <Step>
+          <Name>AM-Response-JSON</Name>
+        </Step>
+      </Response>
+      <Condition>(proxy.pathsuffix MatchesPath "/mask-json") and (request.verb = "POST")</Condition>
+    </Flow>
+
+    <Flow name="unknown request">
+      <Request>
+        <Step>
+          <Name>RF-Unknown-Request</Name>
+        </Step>
+      </Request>
+      <Response/>
+    </Flow>
+
+  </Flows>
+
+  <RouteRule name="NoRouteRule"/>
+
+</ProxyEndpoint>

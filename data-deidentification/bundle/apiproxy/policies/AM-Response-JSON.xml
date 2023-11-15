@@ -1,0 +1,13 @@
+<AssignMessage name='AM-Response-JSON'>
+  <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+  <Set>
+    <Payload contentType='application/json'>{
+  "original" : {request.content},
+  "masked" : {masked_content}
+}
+</Payload>
+    <ReasonPhrase>OK</ReasonPhrase>
+    <StatusCode>200</StatusCode>
+  </Set>
+  <AssignTo>response</AssignTo>
+</AssignMessage>

@@ -1,0 +1,10 @@
+<APIProxy revision="1" name="data-deidentification">
+  <ConfigurationVersion minorVersion="0" majorVersion="4"/>
+  <CreatedAt>1489339923158</CreatedAt>
+  <CreatedBy>dino</CreatedBy>
+  <Description>This proxy demonstrates the use of Google Cloud Data De-Identification / Masking, via a ServiceCallout policy</Description>
+  <DisplayName>data-deidentification</DisplayName>
+  <LastModifiedAt>1489340418969</LastModifiedAt>
+  <LastModifiedBy>orgAdmin</LastModifiedBy>
+  <TargetEndpoints/>
+</APIProxy>
