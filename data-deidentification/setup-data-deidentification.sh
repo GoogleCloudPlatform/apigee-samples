@@ -20,6 +20,7 @@ SA_NAME_PREFIX=samples-data-deid-
 
 # creating and deleting the SA repeatedly causes problems?
 # So I need to introduce a random factor into the SA
+# shellcheck disable=SC2002
 rand_string=$(cat /dev/urandom | LC_CTYPE=C tr -cd '[:alnum:]' | head -c 6)
 SA_NAME=${SA_NAME_PREFIX}${rand_string}
 SA_EMAIL=${SA_NAME}@${PROJECT}.iam.gserviceaccount.com
@@ -31,7 +32,7 @@ create_deid_template() {
     [[ ! -f "$template_file" ]] && printf "missing template definition file %s\n" "$template_file" && exit 1
     TNAME=$(curl -s -X POST "${DLP}/v2/projects/${PROJECT}/deidentifyTemplates" \
         -H content-type:application/json \
-        -H "Authorization: Bearer $TOKEN" -d @${template_file} | jq -r .name)
+        -H "Authorization: Bearer $TOKEN" -d @"${template_file}" | jq -r .name)
     # eg, projects/infinite-epoch-2900/deidentifyTemplates/3396177047123483279
     echo "$TNAME"
 }
@@ -39,19 +40,21 @@ create_deid_template() {
 create_service_account() {
     local ARR NEEDED_ROLES
     echo "Creating service account $SA_NAME"
-    gcloud iam service-accounts create $SA_NAME
+    gcloud iam service-accounts create "$SA_NAME"
 
     echo "Checking DLP permissions on service account"
-    ARR=($(gcloud projects get-iam-policy ${PROJECT} \
+    # shellcheck disable=SC2086
+    ARR=($(gcloud projects get-iam-policy "${PROJECT}" \
         --flatten="bindings[].members" \
         --filter="bindings.members:${SA_EMAIL}" | grep -v deleted | grep -A 1 members | grep role | sed -e 's/role: //'))
 
     NEEDED_ROLES=("roles/dlp.deidentifyTemplatesReader" "roles/dlp.user")
     for role in "${NEEDED_ROLES[@]}"; do
         echo "Checking ${role}"
-        if ! [[ ${ARR[@]} =~ "$role" ]]; then
+        # shellcheck disable=SC2076
+        if ! [[ ${ARR[*]} =~ "$role" ]]; then
             echo "Adding ${role}"
-            gcloud projects add-iam-policy-binding ${PROJECT} \
+            gcloud projects add-iam-policy-binding "${PROJECT}" \
                 --member="serviceAccount:${SA_EMAIL}" \
                 --role="$role" >>/dev/null 2>&1
         fi

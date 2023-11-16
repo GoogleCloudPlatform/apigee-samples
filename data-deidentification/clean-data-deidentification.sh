@@ -52,7 +52,7 @@ remove_sample_deid_templates() {
     OUTFILE=$(mktemp /tmp/apigee-samples.data-deid.curl.out.XXXXXX)
 
     # The template list can be paged, so we need to iterate.
-    while [[ ! -z $nextPageToken ]]; do
+    while [[ -n $nextPageToken ]]; do
 
         #echo "GET ${DLP}/v2/projects/${PROJECT}/deidentifyTemplates${query}"
 
@@ -63,7 +63,7 @@ remove_sample_deid_templates() {
             -X GET "${DLP}/v2/projects/${PROJECT}/deidentifyTemplates${query}" >"$OUTFILE" 2>&1
 
         # filter that list to select those with apigee-deid-sample in the description
-        ARR=($(jq -r '.deidentifyTemplates[]? | select( .description | test("^apigee-deid-sample.+") ) | .name ' $OUTFILE))
+        mapfile -t ARR < <(jq -r '.deidentifyTemplates[]? | select( .description | test("^apigee-deid-sample.+") ) | .name ' "$OUTFILE")
 
         if [[ ${#ARR[@]} -gt 0 ]]; then
             # Delete those
@@ -77,7 +77,7 @@ remove_sample_deid_templates() {
         fi
 
         # get the next page token
-        nextPageToken=$(jq -r '.nextPageToken | ""' $OUTFILE)
+        nextPageToken=$(jq -r '.nextPageToken | ""' "$OUTFILE")
         if [[ -z $nextPageToken ]]; then
             query=""
         else
@@ -102,12 +102,12 @@ delete_apiproxy "${PROXY_NAME}"
 
 echo "Checking service account"
 
-ARR=($(gcloud iam service-accounts list | grep $SA_NAME_PREFIX | sed -e 's/EMAIL: //'))
+mapfile -t ARR < <(gcloud iam service-accounts list | grep $SA_NAME_PREFIX | sed -e 's/EMAIL: //')
 if [[ ${#ARR[@]} -gt 0 ]]; then
     # Delete those
     for sa in "${ARR[@]}"; do
         echo "Deleting service account ${sa}"
-        gcloud --quiet iam service-accounts delete ${sa}
+        gcloud --quiet iam service-accounts delete "${sa}"
     done
 fi
 

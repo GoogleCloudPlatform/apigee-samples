@@ -17,7 +17,6 @@ Feature:
   I want to experiment with DLP masking
   So that I can understand how to mask sensitive data
 
-
 Scenario: GET unknown resource
   When I GET /unknown-resource
   Then response code should be 404
@@ -27,7 +26,6 @@ Scenario: POST to an unknown resource
   When I POST to /unknown-resource
   Then response code should be 404
   And response body path $.error.message should be that request was unknown
-
 
 Scenario: try to mask xml with wrong content-type
   Given I set Content-Type header to text/plain
@@ -42,7 +40,6 @@ Scenario: try to mask json with wrong content-type
   When I POST to /mask-json
   Then response code should be 415
   And response body path $.error.code should be 415.02
-
 
 Scenario: mask email within xml
   Given I set Content-Type header to application/xml
@@ -68,7 +65,6 @@ Scenario: do not mask phone in XML when using justemail template
   And response header Content-Type should be application/xml
   And response body should not contain <contact>\*\*\*-\*\*\*-\*\*23</contact>
 
-
 Scenario: mask email within json
   Given I set Content-Type header to application/json
   And I set body to { "address" : "someone@example.com" }
@@ -84,7 +80,6 @@ Scenario: mask phone within json
   Then response code should be 200
   And response header Content-Type should be application/json
   And response body should contain { "contact" : "\*\*\*\-\*\*\*\-\*\*23" }
-
 
 Scenario: do not mask phone when template is justemail
   Given I set Content-Type header to application/json
