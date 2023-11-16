@@ -43,7 +43,7 @@ create_service_account() {
     gcloud iam service-accounts create "$SA_NAME"
 
     echo "Checking DLP permissions on service account"
-    # shellcheck disable=SC2086
+    # shellcheck disable=SC2207
     ARR=($(gcloud projects get-iam-policy "${PROJECT}" \
         --flatten="bindings[].members" \
         --filter="bindings.members:${SA_EMAIL}" | grep -v deleted | grep -A 1 members | grep role | sed -e 's/role: //'))
@@ -60,7 +60,7 @@ create_service_account() {
         fi
     done
 
-    gcloud projects get-iam-policy ${PROJECT} \
+    gcloud projects get-iam-policy "${PROJECT}" \
         --flatten="bindings[].members" \
         --filter="bindings.members:${SA_EMAIL}" | grep -v deleted | grep -A 1 members | grep role | sed -e 's/role: //'
 }
