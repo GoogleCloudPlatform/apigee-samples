@@ -1,15 +1,4 @@
-<AssignMessage name='AM-Response-XML'>
-  <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
-  <Set>
-    <Payload contentType='application/xml'><mask-result>
-  <original-request>
-    {request.content}
-  </original-request>
-
-  <masked-version>
-    {masked_content}
-  </masked-version>
-</<!--
+<!--
  Copyright 2023 Google LLC
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,7 +13,18 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-mask-result>
+<AssignMessage name='AM-Response-XML'>
+  <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+  <Set>
+    <Payload contentType='application/xml'><mask-result>
+  <original-request>
+    {request.content}
+  </original-request>
+
+  <masked-version>
+    {masked_content}
+  </masked-version>
+</mask-result>
 </Payload>
     <ReasonPhrase>OK</ReasonPhrase>
     <StatusCode>200</StatusCode>
