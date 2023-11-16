@@ -17,4 +17,5 @@
 
 set -e
 
+# shellcheck disable=SC2035
 addlicense -check -ignore **/example-input.* "$PWD"
