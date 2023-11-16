@@ -28,6 +28,7 @@ Learn more in [this video](https://youtu.be/JLDpbXbT6wo).
 ### An Example
 
 Suppose you have an inbound XML document, like this:
+
 ```xml
 <ServiceRequest xmlns='urn:932F4698-0A64-49D4-963F-E6615BC399E8'>
   <CustomerId>C939D5E8-2FEB-477E-A9B8-E87371973E61</CustomerId>
@@ -39,6 +40,7 @@ Suppose you have an inbound XML document, like this:
 ```
 
 You might like to mask the URL, Email, and Phone, resulting in something like this:
+
 ```xml
 <ServiceRequest xmlns='urn:932F4698-0A64-49D4-963F-E6615BC399E8'>
   <CustomerId>C939D5E8-2FEB-477E-A9B8-E87371973E61</CustomerId>
@@ -50,6 +52,7 @@ You might like to mask the URL, Email, and Phone, resulting in something like th
 ```
 
 Or, you might have a JSON document with sensitive data:
+
 ```json
 {
   "customerId" : "C939D5E8-2FEB-477E-A9B8-E87371973E61",
@@ -61,6 +64,7 @@ Or, you might have a JSON document with sensitive data:
 ```
 
 And you want to mask it into this form:
+
 ```json
 {
   "customerId" : "C939D5E8-2FEB-477E-A9B8-E87371973E61",
@@ -77,7 +81,7 @@ information or propagating sensitive data unnecessarily.
 ## Integrating DLP into an Apigee API Proxy
 
 The DLP service in Google Cloud is accessible via an API endpoint, at
-https://dlp.googleapis.com .
+<https://dlp.googleapis.com> .
 
 Apigee proxies can perform a series of steps on an inbound API request; usually
 that includes verifying some credential like an API Key or a Token, and maybe
@@ -87,14 +91,12 @@ step that an API Proxy can perform.
 The DLP API can accept inbound HTTP POST requests, formatted in JSON, and can return masked data.
 Apigee can send out the appropriate request via an appropriately configured [ServiceCallout policy](https://cloud.google.com/apigee/docs/api-platform/reference/policies/service-callout-policy), and then receive and parse the response.
 
-
 ## Implementation in the API Proxy
 
 This sample uses a simple API Proxy to demonstrate this function. The proxy uses
 ServiceCallout to invoke the DLP API, and retrieve the response. The
 ServiceCallout policy is configured to automatically generate and attach an
 access token, to authenticate to the DLP API.
-
 
 After receiving the DLP response, the proxy uses an [AssignMessage
 policy](https://cloud.google.com/apigee/docs/api-platform/reference/policies/assign-message-policy)
@@ -110,7 +112,7 @@ For the purposes of the demonstration, this API Proxy is simple. It does not per
 
 2. Configure [external access](https://cloud.google.com/apigee/docs/api-platform/get-started/configure-routing#external-access) for API traffic to your Apigee X instance
 
-3. Permissions to enable the Google Cloud APIs for IAM and DLP 
+3. Permissions to enable the Google Cloud APIs for IAM and DLP
 
 4. Permissions to create and deploy proxies in Apigee. Get these permissions via the Apigee orgadmin role, or the combination of two roles: API Admin and Developer Admin. ([more on Apigee-specific roles](https://cloud.google.com/apigee/docs/api-platform/system-administration/apigee-roles#apigee-specific-roles))
 
@@ -130,7 +132,6 @@ For the purposes of the demonstration, this API Proxy is simple. It does not per
 Use the following GCP CloudShell tutorial, and follow the instructions.
 
 [![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/apigee-samples&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=data-deidentification/docs/cloudshell-tutorial.md)
-
 
 ## Manual Setup instructions
 
@@ -184,7 +185,6 @@ gcloud services enable iam.googleapis.com dlp.googleapis.com
    addresses, don't mask dot or dash in phone numbers...), and a second template
    that masks only email addresses.
 
-
 ### Running the automated tests
 
 Ensure the required environment variables have been set correctly. The setup
@@ -208,7 +208,6 @@ curl -i -X POST https://${APIGEE_HOST}/v1/samples/data-deidentification/mask-xml
 ```
 
 This will show you the masked XML as well as the original XML in output.
-
 
 Try a JSON payload:
 
@@ -241,7 +240,6 @@ curl -i -X POST https://${APIGEE_HOST}/v1/samples/data-deidentification/mask-jso
   -d '{ "contact": { "phn": "412-563-7724", "email": "nate@cymbalgroup.com" } }'
 ```
 
-
 This sample uses two different DLP de-identification templates. Compare the results you see when using the query parameter, to the results you see without the query parameter:
 
 ```bash
@@ -250,14 +248,22 @@ curl -i -X POST https://${APIGEE_HOST}/v1/samples/data-deidentification/mask-jso
   -d '{ "contact": { "phn": "412-563-7724", "email": "nate@cymbalgroup.com" } }'
 ```
 
-
 When you use DLP in your systems, you can define the templates that make sense
 for you.
 
 You can crack open the setup script to see how to define your own
 templates. Experiment with other templates if you like.
 
-### Cleanup
+## Modifying the proxy
+
+If you want to modify the sample proxy, you can do that offline by editing the proxy configuration files.
+Then, you can re-import and deploy the modified proxy, with this script:
+
+```bash
+./import-and-deploy.sh
+```
+
+## Cleanup
 
 To remove the configuration from this example from your GCP project, first
 source your `env.sh` script, and then, in your shell, run:

@@ -14,55 +14,56 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-PROXY_NAME=data-deidentification
-DLP=https://dlp.googleapis.com
-SA_NAME_PREFIX=samples-data-deid-
+PROXY_NAME="data-deidentification"
+DLP="https://dlp.googleapis.com"
+SA_NAME_PREFIX="samples-data-deid-"
 
 # creating and deleting the SA repeatedly causes problems?
 # So I need to introduce a random factor into the SA
 # shellcheck disable=SC2002
 rand_string=$(cat /dev/urandom | LC_CTYPE=C tr -cd '[:alnum:]' | head -c 6)
-SA_NAME=${SA_NAME_PREFIX}${rand_string}
-SA_EMAIL=${SA_NAME}@${PROJECT}.iam.gserviceaccount.com
+SA_NAME="${SA_NAME_PREFIX}${rand_string}"
+SA_EMAIL="${SA_NAME}@${PROJECT}.iam.gserviceaccount.com"
 
 create_deid_template() {
-    local template_name=$1 template_file
-    template_file="./configuration-data/${template_name}.json"
-    local TNAME
-    [[ ! -f "$template_file" ]] && printf "missing template definition file %s\n" "$template_file" && exit 1
-    TNAME=$(curl -s -X POST "${DLP}/v2/projects/${PROJECT}/deidentifyTemplates" \
-        -H content-type:application/json \
-        -H "Authorization: Bearer $TOKEN" -d @"${template_file}" | jq -r .name)
-    # eg, projects/infinite-epoch-2900/deidentifyTemplates/3396177047123483279
-    echo "$TNAME"
+  local template_name=$1 template_file
+  template_file="./configuration-data/${template_name}.json"
+  local TNAME
+  [[ ! -f "$template_file" ]] && printf "missing template definition file %s\n" "$template_file" && exit 1
+  TNAME=$(curl -s -X POST "${DLP}/v2/projects/${PROJECT}/deidentifyTemplates" \
+    -H content-type:application/json \
+    -H "Authorization: Bearer $TOKEN" -d @"${template_file}" | jq -r .name)
+  # eg, projects/infinite-epoch-2900/deidentifyTemplates/3396177047123483279
+  echo "$TNAME"
 }
 
 create_service_account() {
-    local ARR NEEDED_ROLES
-    echo "Creating service account $SA_NAME"
-    gcloud iam service-accounts create "$SA_NAME"
+  local ARR NEEDED_ROLES
+  echo "Creating service account $SA_NAME"
+  gcloud iam service-accounts create "$SA_NAME"
+  echo "$SA_NAME" >./.sa_name
 
-    echo "Checking DLP permissions on service account"
-    # shellcheck disable=SC2207
-    ARR=($(gcloud projects get-iam-policy "${PROJECT}" \
-        --flatten="bindings[].members" \
-        --filter="bindings.members:${SA_EMAIL}" | grep -v deleted | grep -A 1 members | grep role | sed -e 's/role: //'))
+  echo "Checking DLP permissions on service account"
+  # shellcheck disable=SC2207
+  ARR=($(gcloud projects get-iam-policy "${PROJECT}" \
+    --flatten="bindings[].members" \
+    --filter="bindings.members:${SA_EMAIL}" | grep -v deleted | grep -A 1 members | grep role | sed -e 's/role: //'))
 
-    NEEDED_ROLES=("roles/dlp.deidentifyTemplatesReader" "roles/dlp.user")
-    for role in "${NEEDED_ROLES[@]}"; do
-        echo "Checking ${role}"
-        # shellcheck disable=SC2076
-        if ! [[ ${ARR[*]} =~ "$role" ]]; then
-            echo "Adding ${role}"
-            gcloud projects add-iam-policy-binding "${PROJECT}" \
-                --member="serviceAccount:${SA_EMAIL}" \
-                --role="$role" >>/dev/null 2>&1
-        fi
-    done
+  NEEDED_ROLES=("roles/dlp.deidentifyTemplatesReader" "roles/dlp.user")
+  for role in "${NEEDED_ROLES[@]}"; do
+    echo "Checking ${role}"
+    # shellcheck disable=SC2076
+    if ! [[ ${ARR[*]} =~ "$role" ]]; then
+      echo "Adding ${role}"
+      gcloud projects add-iam-policy-binding "${PROJECT}" \
+        --member="serviceAccount:${SA_EMAIL}" \
+        --role="$role" >>/dev/null 2>&1
+    fi
+  done
 
-    gcloud projects get-iam-policy "${PROJECT}" \
-        --flatten="bindings[].members" \
-        --filter="bindings.members:${SA_EMAIL}" | grep -v deleted | grep -A 1 members | grep role | sed -e 's/role: //'
+  gcloud projects get-iam-policy "${PROJECT}" \
+    --flatten="bindings[].members" \
+    --filter="bindings.members:${SA_EMAIL}" | grep -v deleted | grep -A 1 members | grep role | sed -e 's/role: //'
 }
 
 [[ -z "$PROJECT" ]] && echo "No PROJECT variable set" && exit 1
@@ -84,12 +85,15 @@ node_modules/apigeelint/cli.js -s ./bundle/apiproxy -f table.js --profile apigee
 echo "Checking Service Account..."
 create_service_account
 
+# There can be errors if all these changes happen too quickly
+sleep 5
 WHOAMI=$(gcloud auth list --filter=status:ACTIVE --format="value(account)")
 echo "Applying serviceAccountUser role for $SA_NAME to $WHOAMI..."
 gcloud iam service-accounts add-iam-policy-binding "$SA_EMAIL" \
-    --member="user:$WHOAMI" \
-    --role="roles/iam.serviceAccountUser" >>/dev/null 2>&1
+  --member="user:$WHOAMI" \
+  --role="roles/iam.serviceAccountUser" >>/dev/null 2>&1
 
+sleep 5
 TOKEN=$(gcloud auth print-access-token)
 
 echo "Creating DLP templates..."
@@ -105,14 +109,17 @@ deidentify_template2 = $TMPL2
 project = ${PROJECT}
 END_OF_TEXT
 
+sleep 12
+
 echo "Importing the Apigee proxy..."
 REV=$(apigeecli apis create bundle -f "./bundle/apiproxy" -n "$PROXY_NAME" --org "$PROJECT" --token "$TOKEN" --disable-check | jq '.revision' -r)
 
+sleep 12
 TOKEN=$(gcloud auth print-access-token)
 echo "Deploying the Apigee proxy..."
 apigeecli apis deploy --wait --name "$PROXY_NAME" --ovr \
-    --rev "$REV" --org "$PROJECT" --env "$APIGEE_ENV" \
-    --token "$TOKEN" --sa "$SA_EMAIL" --disable-check
+  --rev "$REV" --org "$PROJECT" --env "$APIGEE_ENV" \
+  --token "$TOKEN" --sa "$SA_EMAIL" --disable-check
 
 # Must export. This variable is expected by the integration tests (apickli).
 export SAMPLE_PROXY_BASEPATH="/v1/samples/$PROXY_NAME"

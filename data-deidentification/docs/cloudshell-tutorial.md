@@ -104,6 +104,7 @@ information you will need to run the commands below.
    ```
 
 2. Then run the tests:
+
    ```sh
    npm run test
    ```
@@ -122,7 +123,6 @@ information you will need to run the commands below.
    The proxy will send that payload to DLP, and then capture the masked response.
    The proxy sends back a response with the original XML and the masked version,
    to allow you to compare and see the results.
-
 
 4. To mask that same payload with a different de-identification template,
    use the `justemail=true` query parameter:
@@ -145,7 +145,6 @@ information you will need to run the commands below.
       -H content-type:application/xml -d '<root><addr>me@cymbalgroup.net</addr></root>'
    ```
 
-
 ## Test the APIs for masking JSON
 
 6. The proxy can also mask JSON.
@@ -159,7 +158,6 @@ information you will need to run the commands below.
    The proxy will send that payload to DLP, and then capture the masked response.
    The proxy sends back a response with the original JSON and the masked version.
    You can see that the URL, Email, and Phone number have been masked.
-
 
 7. To mask that same payload with a different de-identification template,
    again, use the `justemail=true` query parameter:

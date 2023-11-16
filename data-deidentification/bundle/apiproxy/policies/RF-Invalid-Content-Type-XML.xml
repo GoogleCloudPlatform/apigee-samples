@@ -1,10 +1,4 @@
-<RaiseFault name='RF-Invalid-Content-Type-XML'>
-  <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
-  <FaultResponse>
-    <Set>
-      <Payload contentType='application/json'>{
-  "error" : {
-    "code" : "<!--
+<!--
  Copyright 2023 Google LLC
 
  Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,7 +13,13 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-415.01",
+<RaiseFault name='RF-Invalid-Content-Type-XML'>
+  <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+  <FaultResponse>
+    <Set>
+      <Payload contentType='application/json'>{
+  "error" : {
+    "code" : "415.01",
     "message" : "pass content-type:text/xml or content-type:application/xml."
   }
 }
