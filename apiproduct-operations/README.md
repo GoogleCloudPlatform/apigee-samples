@@ -173,7 +173,7 @@ application credentials can be found [here](https://cloud.google.com/apigee/docs
 Invoke your first request using the viewer credential:
 
 ```bash
-curl -i -X GET https://${APIGEE_HOST}/v1/samples/apiproduct-operations/apikey/users -H APIKEY:$VIEWER_CLIENT_ID"
+curl -i -X GET https://${APIGEE_HOST}/v1/samples/apiproduct-operations/apikey/users -H APIKEY:$VIEWER_CLIENT_ID
 ```
 
 Because the viewer credential is authorized on the viewer Product, which allows
@@ -182,7 +182,7 @@ the `GET /*/users` operation, you should see a success response.
 Now try the creator credential on the same request
 
 ```bash
-curl -i -X GET https://${APIGEE_HOST}/v1/samples/apiproduct-operations/apikey/users -H APIKEY:$CREATOR_CLIENT_ID"
+curl -i -X GET https://${APIGEE_HOST}/v1/samples/apiproduct-operations/apikey/users -H APIKEY:$CREATOR_CLIENT_ID
 ```
 
 You should see a rejection; the creator product does not allow the `GET /*/users` operation.
