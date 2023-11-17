@@ -68,7 +68,8 @@ Next, let's create and deploy the resources necessary to run the data deidentifi
 ./setup-data-deidentification.sh
 ```
 
-This script creates and provisions the necessary assets in your Google Cloud
+This will take a few moments.
+The script creates and provisions the necessary assets in your Google Cloud
 project to run the sample.  It creates two different de-identification
 templates, creates a Service Account and applies the necessary permissions to
 that service account, configures the sample API Proxy stored in the filesystem

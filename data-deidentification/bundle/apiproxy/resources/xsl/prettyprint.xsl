@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
  Copyright 2023 Google LLC
 
@@ -13,22 +14,18 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<AssignMessage name='AM-Response-XML'>
-  <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
-  <Set>
-    <Payload contentType='application/xml'>
-      <mask-result>
-        <original-request>
-          {request.content}
-        </original-request>
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
+                version="2.0">
+  <xsl:strip-space elements="*"/>
+  <xsl:output method="xml"
+              omit-xml-declaration="yes"
+              indent="yes"/>
 
-        <masked-version>
-          {masked_content}
-        </masked-version>
-      </mask-result>
-    </Payload>
-    <ReasonPhrase>OK</ReasonPhrase>
-    <StatusCode>200</StatusCode>
-  </Set>
-  <AssignTo>response</AssignTo>
-</AssignMessage>
+  <xsl:template match="@*|node()">
+    <xsl:copy>
+      <xsl:apply-templates select="@*|node()"/>
+    </xsl:copy>
+  </xsl:template>
+
+</xsl:stylesheet>

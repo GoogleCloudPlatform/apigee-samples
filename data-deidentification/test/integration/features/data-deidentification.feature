@@ -71,7 +71,7 @@ Scenario: mask email within json
   When I POST to /mask-json
   Then response code should be 200
   And response header Content-Type should be application/json
-  And response body should contain { "address" : "\*\*\*\*\*\*\*@\*\*\*\*\*\*\*\.com" }
+  And response body should contain "\*\*\*\*\*\*\*@\*\*\*\*\*\*\*\.com"
 
 Scenario: mask phone within json
   Given I set Content-Type header to application/json
@@ -79,7 +79,7 @@ Scenario: mask phone within json
   When I POST to /mask-json
   Then response code should be 200
   And response header Content-Type should be application/json
-  And response body should contain { "contact" : "\*\*\*\-\*\*\*\-\*\*23" }
+  And response body should contain "\*\*\*\-\*\*\*\-\*\*23"
 
 Scenario: do not mask phone when template is justemail
   Given I set Content-Type header to application/json
@@ -87,4 +87,4 @@ Scenario: do not mask phone when template is justemail
   When I POST to /mask-json?justemail=true
   Then response code should be 200
   And response header Content-Type should be application/json
-  And response body should not contain { "contact" : "\*\*\*\-\*\*\*\-\*\*23" }
+  And response body should not contain "\*\*\*\-\*\*\*\-\*\*23"

@@ -91,6 +91,9 @@
         <Step>
           <Name>AM-Response-XML</Name>
         </Step>
+        <Step>
+          <Name>XSL-Prettyprint-XML</Name>
+        </Step>
       </Response>
       <Condition>(proxy.pathsuffix MatchesPath "/mask-xml") and (request.verb = "POST")</Condition>
     </Flow>
@@ -130,6 +133,9 @@
         </Step>
         <Step>
           <Name>AM-Response-JSON</Name>
+        </Step>
+        <Step>
+          <Name>JS-Prettyprint-JSON</Name>
         </Step>
       </Response>
       <Condition>(proxy.pathsuffix MatchesPath "/mask-json") and (request.verb = "POST")</Condition>
