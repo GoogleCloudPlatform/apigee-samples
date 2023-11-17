@@ -62,23 +62,30 @@ The following steps will set up your environment.
 
 ## Provision the assets for Apigee and DLP
 
-Next, let's create and deploy the resources necessary to run the data deidentification sample.
+3. Next, lets enable the required services in Google Cloud
 
-```sh
-./setup-data-deidentification.sh
-```
+   ```sh
+   gcloud services enable iam.googleapis.com dlp.googleapis.com
+   ```
 
-This will take a few moments.
-The script creates and provisions the necessary assets in your Google Cloud
-project to run the sample.  It creates two different de-identification
-templates, creates a Service Account and applies the necessary permissions to
-that service account, configures the sample API Proxy stored in the filesystem
-with the names of the de-identification templates, runs apigeelint on the proxy,
-then imports and deploys it.
+4. And now, run the script to create and deploy the resources necessary to run
+   the data deidentification sample.
 
-The script also tests that the deployment and configuration has been successful.
+   ```sh
+   ./setup-data-deidentification.sh
+   ```
 
-But what is a de-identification template?
+   This will take a few moments. The script creates and provisions the
+   necessary assets in your Google Cloud project to run the sample. It creates
+   two different de-identification templates, creates a Service Account and
+   applies the necessary permissions to that service account, configures the
+   sample API Proxy stored in the filesystem with the names of the
+   de-identification templates, runs apigeelint on the proxy, then imports and
+   deploys it.
+
+   The script also tests that the deployment and configuration has been successful.
+
+### But what is a de-identification template?
 
 [The documentation](https://cloud.google.com/dlp/docs/concepts-templates) states:
 
