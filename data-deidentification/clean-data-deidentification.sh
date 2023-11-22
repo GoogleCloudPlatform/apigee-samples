@@ -19,73 +19,73 @@ SA_NAME_PREFIX="samples-data-deid-"
 DLP="https://dlp.googleapis.com"
 
 delete_apiproxy() {
-    local proxy_name=$1
-    printf "Checking Proxy %s\n" "${proxy_name}"
-    if apigeecli apis get --name "$proxy_name" --org "$PROJECT" --token "$TOKEN" --disable-check >/dev/null 2>&1; then
-        OUTFILE=$(mktemp /tmp/apigee-samples.apigeecli.out.XXXXXX)
-        if apigeecli apis listdeploy --name "$proxy_name" --org "$PROJECT" --token "$TOKEN" --disable-check >"$OUTFILE" 2>&1; then
-            NUM_DEPLOYS=$(jq -r '.deployments | length' "$OUTFILE")
-            if [[ $NUM_DEPLOYS -ne 0 ]]; then
-                echo "Undeploying ${proxy_name}"
-                for ((i = 0; i < NUM_DEPLOYS; i++)); do
-                    ENVNAME=$(jq -r ".deployments[$i].environment" "$OUTFILE")
-                    REV=$(jq -r ".deployments[$i].revision" "$OUTFILE")
-                    apigeecli apis undeploy --name "${proxy_name}" --env "$ENVNAME" --rev "$REV" --org "$PROJECT" --token "$TOKEN" --disable-check
-                done
-            else
-                printf "  There are no deployments of %s to remove.\n" "${proxy_name}"
-            fi
-        fi
-        [[ -f "$OUTFILE" ]] && rm "$OUTFILE"
-
-        echo "Deleting proxy ${proxy_name}"
-        apigeecli apis delete --name "${proxy_name}" --org "$PROJECT" --token "$TOKEN" --disable-check
-
-    else
-        printf "  The proxy %s does not exist.\n" "${proxy_name}"
+  local proxy_name=$1
+  printf "Checking Proxy %s\n" "${proxy_name}"
+  if apigeecli apis get --name "$proxy_name" --org "$PROJECT" --token "$TOKEN" --disable-check >/dev/null 2>&1; then
+    OUTFILE=$(mktemp /tmp/apigee-samples.apigeecli.out.XXXXXX)
+    if apigeecli apis listdeploy --name "$proxy_name" --org "$PROJECT" --token "$TOKEN" --disable-check >"$OUTFILE" 2>&1; then
+      NUM_DEPLOYS=$(jq -r '.deployments | length' "$OUTFILE")
+      if [[ $NUM_DEPLOYS -ne 0 ]]; then
+        echo "Undeploying ${proxy_name}"
+        for ((i = 0; i < NUM_DEPLOYS; i++)); do
+          ENVNAME=$(jq -r ".deployments[$i].environment" "$OUTFILE")
+          REV=$(jq -r ".deployments[$i].revision" "$OUTFILE")
+          apigeecli apis undeploy --name "${proxy_name}" --env "$ENVNAME" --rev "$REV" --org "$PROJECT" --token "$TOKEN" --disable-check
+        done
+      else
+        printf "  There are no deployments of %s to remove.\n" "${proxy_name}"
+      fi
     fi
+    [[ -f "$OUTFILE" ]] && rm "$OUTFILE"
+
+    echo "Deleting proxy ${proxy_name}"
+    apigeecli apis delete --name "${proxy_name}" --org "$PROJECT" --token "$TOKEN" --disable-check
+
+  else
+    printf "  The proxy %s does not exist.\n" "${proxy_name}"
+  fi
 }
 
 remove_sample_deid_templates() {
-    local ARR name OUTFILE nextPageToken="start" query=""
+  local ARR name OUTFILE nextPageToken="start" query=""
 
-    OUTFILE=$(mktemp /tmp/apigee-samples.data-deid.curl.out.XXXXXX)
+  OUTFILE=$(mktemp /tmp/apigee-samples.data-deid.curl.out.XXXXXX)
 
-    # The template list can be paged, so we need to iterate.
-    while [[ -n $nextPageToken ]]; do
+  # The template list can be paged, so we need to iterate.
+  while [[ -n $nextPageToken ]]; do
 
-        #echo "GET ${DLP}/v2/projects/${PROJECT}/deidentifyTemplates${query}"
+    #echo "GET ${DLP}/v2/projects/${PROJECT}/deidentifyTemplates${query}"
 
-        # list the templates
+    # list the templates
+    curl -s -H "Authorization: Bearer $TOKEN" \
+      -H "x-goog-user-project: $PROJECT" \
+      -H 'content-type: application/json' \
+      -X GET "${DLP}/v2/projects/${PROJECT}/deidentifyTemplates${query}" >"$OUTFILE" 2>&1
+
+    # filter that list to select those with apigee-deid-sample in the description
+    mapfile -t ARR < <(jq -r '.deidentifyTemplates[]? | select( .description | test("^apigee-deid-sample.+") ) | .name ' "$OUTFILE")
+
+    if [[ ${#ARR[@]} -gt 0 ]]; then
+      # Delete those
+      for name in "${ARR[@]}"; do
+        echo "Delete DLP de-identify template ${name}"
         curl -s -H "Authorization: Bearer $TOKEN" \
-            -H "x-goog-user-project: $PROJECT" \
-            -H 'content-type: application/json' \
-            -X GET "${DLP}/v2/projects/${PROJECT}/deidentifyTemplates${query}" >"$OUTFILE" 2>&1
+          -H "x-goog-user-project: $PROJECT" \
+          -H 'content-type: application/json' \
+          -X DELETE "${DLP}/v2/${name}" >>/dev/null 2>&1
+      done
+    fi
 
-        # filter that list to select those with apigee-deid-sample in the description
-        mapfile -t ARR < <(jq -r '.deidentifyTemplates[]? | select( .description | test("^apigee-deid-sample.+") ) | .name ' "$OUTFILE")
+    # get the next page token
+    nextPageToken=$(jq -r '.nextPageToken | ""' "$OUTFILE")
+    if [[ -z $nextPageToken ]]; then
+      query=""
+    else
+      query="?pageToken=${nextPageToken}"
+    fi
+  done
 
-        if [[ ${#ARR[@]} -gt 0 ]]; then
-            # Delete those
-            for name in "${ARR[@]}"; do
-                echo "Delete DLP de-identify template ${name}"
-                curl -s -H "Authorization: Bearer $TOKEN" \
-                    -H "x-goog-user-project: $PROJECT" \
-                    -H 'content-type: application/json' \
-                    -X DELETE "${DLP}/v2/${name}" >>/dev/null 2>&1
-            done
-        fi
-
-        # get the next page token
-        nextPageToken=$(jq -r '.nextPageToken | ""' "$OUTFILE")
-        if [[ -z $nextPageToken ]]; then
-            query=""
-        else
-            query="?pageToken=${nextPageToken}"
-        fi
-    done
-
-    [[ -f "$OUTFILE" ]] && rm "$OUTFILE"
+  [[ -f "$OUTFILE" ]] && rm "$OUTFILE"
 }
 
 [[ -z "$PROJECT" ]] && echo "No PROJECT variable set" && exit 1
@@ -104,27 +104,27 @@ echo "Removing IAM Policy Bindings"
 
 ROLES_OF_INTEREST=("roles/dlp.deidentifyTemplatesReader" "roles/dlp.user")
 for role in "${ROLES_OF_INTEREST[@]}"; do
-    printf "Checking role %s\n" "$role"
-    # shellcheck disable=SC2207
-    members=($(gcloud projects get-iam-policy $PROJECT --format=json |
-        jq --arg r "$role" '.bindings[] | select( .role == $r )' | jq --arg prefix "$SA_NAME_PREFIX" '.members[] | select(contains("serviceAccount:") and contains($prefix))' | sed -e 's/"//g'))
+  printf "Checking role %s\n" "$role"
+  # shellcheck disable=SC2207
+  members=($(gcloud projects get-iam-policy "$PROJECT" --format=json |
+    jq --arg r "$role" '.bindings[] | select( .role == $r )' | jq --arg prefix "$SA_NAME_PREFIX" '.members[] | select(contains("serviceAccount:") and contains($prefix))' | sed -e 's/"//g'))
 
-    for member in "${members[@]}"; do
-        printf "  Removing IAM binding for %s\n" $member
-        gcloud projects remove-iam-policy-binding "${PROJECT}" \
-            --member="$member" \
-            --role="$role" >>/dev/null
-    done
+  for member in "${members[@]}"; do
+    printf "  Removing IAM binding for %s\n" "$member"
+    gcloud projects remove-iam-policy-binding "${PROJECT}" \
+      --member="$member" \
+      --role="$role" >>/dev/null
+  done
 done
 
 echo "Removing service accounts"
 
 mapfile -t ARR < <(gcloud iam service-accounts list | grep $SA_NAME_PREFIX | sed -e 's/EMAIL: //')
 if [[ ${#ARR[@]} -gt 0 ]]; then
-    for sa in "${ARR[@]}"; do
-        echo "Deleting service account ${sa}"
-        gcloud --quiet iam service-accounts delete "${sa}"
-    done
+  for sa in "${ARR[@]}"; do
+    echo "Deleting service account ${sa}"
+    gcloud --quiet iam service-accounts delete "${sa}"
+  done
 fi
 
 echo "Removing sample De-Identification templates"
