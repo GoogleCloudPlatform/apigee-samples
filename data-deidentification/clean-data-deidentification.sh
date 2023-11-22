@@ -100,11 +100,27 @@ export PATH=$PATH:$HOME/.apigeecli/bin
 
 delete_apiproxy "${PROXY_NAME}"
 
+echo "Removing IAM Policy Bindings"
+
+ROLES_OF_INTEREST=("roles/dlp.deidentifyTemplatesReader" "roles/dlp.user")
+for role in "${ROLES_OF_INTEREST[@]}"; do
+  printf "Checking role %s\n" "$role"
+  # shellcheck disable=SC2207
+  members=($(gcloud projects get-iam-policy "$PROJECT" --format=json |
+    jq --arg r "$role" '.bindings[] | select( .role == $r )' | jq --arg prefix "$SA_NAME_PREFIX" '.members[] | select(contains("serviceAccount:") and contains($prefix))' | sed -e 's/"//g'))
+
+  for member in "${members[@]}"; do
+    printf "  Removing IAM binding for %s\n" "$member"
+    gcloud projects remove-iam-policy-binding "${PROJECT}" \
+      --member="$member" \
+      --role="$role" >>/dev/null
+  done
+done
+
 echo "Removing service accounts"
 
 mapfile -t ARR < <(gcloud iam service-accounts list | grep $SA_NAME_PREFIX | sed -e 's/EMAIL: //')
 if [[ ${#ARR[@]} -gt 0 ]]; then
-  # Delete those
   for sa in "${ARR[@]}"; do
     echo "Deleting service account ${sa}"
     gcloud --quiet iam service-accounts delete "${sa}"
