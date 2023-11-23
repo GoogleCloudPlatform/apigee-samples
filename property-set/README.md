@@ -4,7 +4,7 @@ This sample shows how to easily define a Property Set and how to
 access data from it.
 This sample leverages the following policy:
 
-* [Assign Message](https://cloud.google.com/apigee/docs/api-platform/reference/policies/assign-message-policy?hl=en) policy to set the JSON response with values retrieved from a [property set](https://cloud.google.com/apigee/docs/api-platform/cache/property-sets)
+* [Assign Message](https://cloud.google.com/apigee/docs/api-platform/reference/policies/assign-message-policy?hl=en) policy to set the JSON response with values retrieved from a[property set](https://cloud.google.com/apigee/docs/api-platform/cache/property-sets)
 * [JavaScript](https://cloud.google.com/apigee/docs/api-platform/reference/policies/javascript-policy?hl=en) policy to set HTTP response headers with values
 retrieved from the same property set
 
@@ -98,7 +98,7 @@ Use the following GCP CloudShell tutorial, and follow the instructions.
 
 ## Setup instructions
 
-1. Clone the `apigee-samples` repo, and switch the `property-set` directory
+1. Clone the `apigee-samples` repo, and switch to the `property-set` directory
 
 ```bash
 git clone https://github.com/GoogleCloudPlatform/apigee-samples.git
@@ -130,6 +130,61 @@ To manually test the proxy, make requests using curl:
 ```bash
 curl -v https://$APIGEE_HOST/v1/samples/property-set
 ```
+
+Use the debug tool inside Apigee to see how we access values in a property set, using the following syntax:
+
+```propertyset.<property_set_name>.<property_name>```
+
+### AssignMessage policy to access a Property Set
+
+You can use the ```AssignMessage``` policy to assign the value of property set key to a flow variable dynamically.
+In this sample, we create a JSON response, which contains values of the property set for two keys.
+
+Here is the configuration of the ```AssignMessage``` policy:
+
+```xml
+<AssignMessage name="AM-SetResponseUsingPropertySet">
+  <Set>
+    <Payload contentType="application/json">
+    {
+      "foo":"{propertyset.myProps.foo}",
+      "message":"{propertyset.myProps.message}"
+    }
+    </Payload>
+  </Set>
+  <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+  <AssignTo createNew="false" transport="http" type="response"/>
+</AssignMessage>
+```
+
+...and the JSON payload (response) that is created:
+
+```json
+{
+  "foo": "bar",
+  "message": "This is a basic message."
+}
+```
+
+Note: private information should be handled using encrypted 
+KVMs (Key Value Maps) and not property sets.
+
+### JavaScript policy to access a Property Set
+
+Access property set values anywhere in an API proxy where you can access flow variables:
+in policies, flows, JavaScript code, and so on.
+
+For example, in a JavaScript policy, use the ```getVariable()``` method
+to get a value from a property set:
+
+```javascript
+...
+// access properties of the myProps.properties file
+var baz = context.getVariable('propertyset.myProps.baz');
+var note = context.getVariable('propertyset.myProps.note_message');
+...
+```
+
 
 ## Cleanup
 
