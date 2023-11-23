@@ -15,15 +15,15 @@
   <Description/>
   <FaultRules/>
   <PreFlow name="PreFlow">
-    <Request>
+    <Request/>
+    <Response>
       <Step>
         <Name>JS-SetHeadersUsingPropertySet</Name>
       </Step>
       <Step>
         <Name>AM-SetResponseUsingPropertySet</Name>
       </Step>
-    </Request>
-    <Response/>
+    </Response>
   </PreFlow>
   <PostFlow name="PostFlow">
     <Request/>
@@ -33,7 +33,6 @@
   <HTTPProxyConnection>
     <BasePath>/v1/samples/property-set</BasePath>
     <Properties/>
-    <VirtualHost>default</VirtualHost>
   </HTTPProxyConnection>
   <RouteRule name="default"/>
 </ProxyEndpoint>

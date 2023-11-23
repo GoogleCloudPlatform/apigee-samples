@@ -1,7 +1,13 @@
 # Property Set
 
 ---
-This sample shows how to easily get data from a Property Set using an AssignMessage policy.
+This sample shows how to easily define a Property Set and how to
+access data from it.
+This sample leverages the following policy:
+
+* [Assign Message](https://cloud.google.com/apigee/docs/api-platform/reference/policies/assign-message-policy?hl=en) policy to set the JSON response with values retrieved from a [property set](https://cloud.google.com/apigee/docs/api-platform/cache/property-sets)
+* [JavaScript](https://cloud.google.com/apigee/docs/api-platform/reference/policies/javascript-policy?hl=en) policy to set HTTP response headers with values
+retrieved from the same property set
 
 Let's get started!
 
