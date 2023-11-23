@@ -1,5 +1,6 @@
-#!/bin/sh
-# Copyright 2020,2023 Google LLC
+#!/bin/bash
+
+# Copyright 2023 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,9 +14,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Ensures that all files in this repository have the required license headers
+# set the GCP project and the name of the Apigee environment
+export PROJECT="<GCP_PROJECT_ID>"
+export APIGEE_ENV="<APIGEE_ENVIRONMENT_NAME>"
 
-set -e
+# specify the hostname at which your API proxies can be reached.
+export APIGEE_HOST="<APIGEE_DOMAIN_NAME>"
 
-# shellcheck disable=SC2035
-addlicense -check -ignore '**/example-input.xml' "$PWD"
+gcloud config set project $PROJECT
