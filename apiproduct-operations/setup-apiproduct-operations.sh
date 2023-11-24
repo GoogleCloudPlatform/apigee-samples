@@ -74,7 +74,7 @@ node_modules/apigeelint/cli.js -s ./bundles/apiproduct-operations/apiproxy -f ta
 
 echo "Configuring Apigee artifacts..."
 
-echo "Importing and Deploying Apigee the proxies..."
+echo "Importing and Deploying the Apigee proxies..."
 import_and_deploy_apiproxy "$PROXY_NAME"
 import_and_deploy_apiproxy "$OAUTH_CC_PROXY_NAME"
 

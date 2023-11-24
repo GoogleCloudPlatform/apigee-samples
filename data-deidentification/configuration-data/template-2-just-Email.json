@@ -1,0 +1,28 @@
+{
+  "deidentifyTemplate": {
+    "name": "just-email",
+    "description": "apigee-deid-sample - masks just Email",
+    "deidentifyConfig": {
+      "infoTypeTransformations": {
+        "transformations": [ {
+          "infoTypes": [
+            {
+              "name": "EMAIL_ADDRESS"
+            }
+          ],
+          "primitiveTransformation": {
+            "characterMaskConfig": {
+              "numberToMask": -3,
+              "reverseOrder": false,
+              "charactersToIgnore": [
+                {
+                  "charactersToSkip": ".@"
+                }
+              ]
+            }
+          }
+        } ]
+      }
+    }
+  }
+}
