@@ -1,7 +1,8 @@
-# Sample to use Cloud Run Service from Apigee Proxy using Maven and Cloud Build
+# Sample to use Cloud Run Service from an Apigee Proxy
 
 ---
-This sample demonstrates how to use Cloud Run Services from Apigee Proxy using Cloud Build
+This sample demonstrates how to use Cloud Run Services from Apigee Proxy.
+We'll use Cloud Build to build and deploy the Cloud Run Service, and the Apigee Proxy.
 
 Let's get started!
 
@@ -68,15 +69,22 @@ gcloud builds submit --config cloudbuild.yaml . \
     --substitutions="_SERVICE=$CLOUD_RUN_SERVICE","_REGION=$CLOUD_RUN_REGION","_APIGEE_TEST_ENV=$APIGEE_ENV"
 ```
 
-This will trigger the Cloud Build and execute the steps in the <walkthrough-editor-open-file filePath="cloud-run/cloudbuild.yaml">cloudbuild.yaml</walkthrough-editor-open-file> file. At the end of the Cloud Build trigger, a proxy must be deployed to Apigee called `cloud-run-sample`
+This will trigger the Cloud Build and execute the steps in the
+<walkthrough-editor-open-file
+filePath="cloud-run/cloudbuild.yaml">cloudbuild.yaml</walkthrough-editor-open-file>
+file. At the end of the Cloud Build trigger, a Cloud Run service will
+be deployed and available, and an API
+proxy called `cloud-run-sample` will be deployed to Apigee.
 
 ### Test the APIs
 
 You can test the API call to make sure the deployment was successful
 
 ```sh
-curl https://$APIGEE_HOST/v1/samples/cloud-run-sample
+curl -i https://$APIGEE_HOST/v1/samples/cloud-run-sample
 ```
+
+This sends a request to Apigee, which then connects to the Cloud Run service.
 
 ---
 
@@ -84,13 +92,16 @@ curl https://$APIGEE_HOST/v1/samples/cloud-run-sample
 
 <walkthrough-conclusion-trophy></walkthrough-conclusion-trophy>
 
-Congratulations! You've successfully deployed an Apigee proxy using the Maven plugin and Cloud Build
+Congratulations! You've successfully demonstrated an Apigee Proxy that connects
+to Cloud Run Services. You used Cloud Build to build and deploy both the Cloud
+Run Service, _and_ to deploy the Apigee API Proxy.
 
 <walkthrough-inline-feedback></walkthrough-inline-feedback>
 
 ## Cleanup
 
-If you want to clean up the artifacts from this example in your Apigee Organization, first source your `env.sh` script, and then run
+If you want to clean up the artifacts from this example in your Apigee
+Organization, first source your `env.sh` script, and then run
 
 ```bash
 ./clean-up-cloud-run.sh
