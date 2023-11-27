@@ -94,7 +94,7 @@ Here is the configuration of the ```AssignMessage``` policy:
 }
 ```
 
-Note: private information should be handled using encrypted 
+Note: private information should be handled using encrypted
 KVMs (Key Value Maps) and not property sets.
 
 ### JavaScript policy to access a Property Set

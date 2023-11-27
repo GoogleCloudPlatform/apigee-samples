@@ -42,7 +42,7 @@ The following example (used in this sample) shows a simple property
 set (```myProps.properties```)
 file that defines several properties:
 
-```
+```bash
 # myProps.properties file
 # General properties
 foo=bar
@@ -75,8 +75,6 @@ policy to get values for two keys of the Property Set.
 This same policy is used to set HTTP response headers using the accessed values.
 
 ## Screencast
-
-
 
 ## Prerequisites
 
@@ -166,7 +164,7 @@ Here is the configuration of the ```AssignMessage``` policy:
 }
 ```
 
-Note: private information should be handled using encrypted 
+Note: private information should be handled using encrypted
 KVMs (Key Value Maps) and not property sets.
 
 ### JavaScript policy to access a Property Set
@@ -184,7 +182,6 @@ var baz = context.getVariable('propertyset.myProps.baz');
 var note = context.getVariable('propertyset.myProps.note_message');
 ...
 ```
-
 
 ## Cleanup
 
