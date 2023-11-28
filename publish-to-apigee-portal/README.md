@@ -36,7 +36,10 @@ cd apigee-samples/publish-to-apigee-portal
 * `PROJECT` the project where your Apigee organization is located
 * `APIGEE_HOST` the externally reachable hostname of the Apigee environment group that contains APIGEE_ENV.
 * `APIGEE_ENV` the Apigee environment where the demo resources should be created
-* `APIGEE_PORTAL_SITE_ID` the name of the portal, in the form `PROJECT-PORTAL_NAME`
+* `APIGEE_PORTAL_SITE_ID` the name of the portal, in the form ORG_NAME-PORTAL_NAME, 
+    where ORG_NAME is the name of the organization
+    PORTAL_NAME is the portal name converted to all lowercase 
+    and with spaces and dashes removed. For example, my-org-myportal.
 
 Now source the `env.sh` file
 
