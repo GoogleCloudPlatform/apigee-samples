@@ -38,7 +38,7 @@ Most developers begin by identifying an interesting sample based on a specific u
 
 ### <a name="samples"></a>Samples
 
-|  S No   | Sample                      | Description                                                            | Cloud Shell Tutorial |
+|    | Sample                      | Description                                                            | Cloud Shell Tutorial |
 |-----|-----------------------------|------------------------------------------------------------------------|----------------------|
 |1| [deploy-apigee-proxy](deploy-apigee-proxy)         | Deploy Apigee proxy using Apigee Maven plugin and Cloud Build          | [![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/apigee-samples&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=deploy-apigee-proxy/docs/cloudshell-tutorial-maven.md)                     |
 |2| [deploy-apigee-sharedflow](deploy-apigee-sharedflow)   | Deploy Apigee sharedflow using Apigee Maven plugin and Cloud Build     | [![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/apigee-samples&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=deploy-apigee-sharedflow/docs/cloudshell-tutorial-maven.md)                     |
