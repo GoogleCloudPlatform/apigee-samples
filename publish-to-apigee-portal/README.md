@@ -2,8 +2,6 @@
 
 This sample demonstrates how to use the [Apigee Maven config plugin](https://github.com/apigee/apigee-config-maven-plugin) to publish configurations like API Docs and API Categories to Apigee Integrated Portal using [Cloud Build](https://cloud.google.com/build/docs/overview)
 
-## Screencast
-
 ## Prerequisites
 
 1. [Provision Apigee X](https://cloud.google.com/apigee/docs/api-platform/get-started/provisioning-intro)
