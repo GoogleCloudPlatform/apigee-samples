@@ -1,0 +1,51 @@
+[
+    {
+       "name":"MockProduct",
+       "displayName":"MockProduct",
+       "description":"MockProduct",
+       "approvalType":"auto",
+       "attributes":[
+          {
+             "name":"description",
+             "value":"MockProduct"
+          },
+          {
+            "name": "access",
+            "value": "public"
+          },
+          {
+             "name":"developer.quota.limit",
+             "value":"10000"
+          },
+          {
+             "name":"developer.quota.interval",
+             "value":"1"
+          },
+          {
+             "name":"developer.quota.timeunit",
+             "value":"month"
+          }
+       ],
+       "environments":[
+        "@env"
+       ],
+       "operationGroup": {
+        "operationConfigs": [
+          {
+            "apiSource": "sample-mock",
+            "operations": [
+              {
+                "resource": "/"
+              }
+            ],
+            "quota": {}
+          }
+        ],
+        "operationConfigType": "proxy"
+      },
+       "quota":"10000",
+       "quotaInterval":"1",
+       "quotaTimeUnit":"month",
+       "scopes":[]
+    }
+ ]
