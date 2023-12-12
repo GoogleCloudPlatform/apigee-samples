@@ -2,6 +2,10 @@
 
 This sample lets you create an API that uses the cross-origin resource sharing (CORS) mechanism to allow requests from external webpages and applications
 
+## Screencast
+
+[![Alt text](https://img.youtube.com/vi/8T8dEuUP79w/0.jpg)](https://www.youtube.com/watch?v=8T8dEuUP79w)
+
 ## About CORS Security
 
 CORS is a standard solution to the [same-origin policy](https://en.wikipedia.org/wiki/Same-origin_policy) that is enforced by all browsers. CORS allows you to opt-in to serve requests from non-origin requests.
