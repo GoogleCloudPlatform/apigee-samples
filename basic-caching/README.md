@@ -30,11 +30,11 @@ This sample demonstrates how to use the ResponseCache policy to cache the respon
     * jq
     * npm
 
-## (QuickStart) Setup using CloudShell
+## (QuickStart) Setup using Cloud Shell
 
-Use the following GCP CloudShell tutorial, and follow the instructions.
+Use the following GCP Cloud Shell tutorial, and follow the instructions.
 
-[![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/apigee-samples&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=basic-quota/docs/cloudshell-tutorial.md)
+[![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/apigee-samples&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=basic-caching/docs/cloudshell-tutorial.md)
 
 ## Setup instructions
 
@@ -65,7 +65,7 @@ source ./env.sh
 
 This will not only deploy the proxy but also run the tests.
 
-## Testing the Quota Proxy
+## Testing the Caching Proxy
 
 If you would like to run the tests separately from deploying the proxy, first retrieve Node.js dependencies with (this step is not necessary if you already ran the deploy-basic-caching.sh script):
 
