@@ -1,0 +1,17 @@
+<APIProxy revision="1" name="threat-protection">
+    <DisplayName></DisplayName>
+    <Description>Example of threat protection using Regular Expression and JSON Threat Protection policies.</Description>
+    <CreatedAt>1702429018032</CreatedAt>
+    <LastModifiedAt>1702429018032</LastModifiedAt>
+    <BasePaths>/v1/threat-protection</BasePaths>
+    <Policies>
+        <Policy>Regular-Expression-Protection-1</Policy>
+        <Policy>JSON-Threat-Protection-1</Policy>
+    </Policies>
+    <ProxyEndpoints>
+        <ProxyEndpoint>default</ProxyEndpoint>
+    </ProxyEndpoints>
+    <TargetEndpoints>
+        <TargetEndpoint>default</TargetEndpoint>
+    </TargetEndpoints>
+</APIProxy>
