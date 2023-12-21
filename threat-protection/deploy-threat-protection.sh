@@ -47,25 +47,8 @@ echo "Importing and Deploying Apigee threat-protection proxy..."
 REV=$(apigeecli apis create bundle -f apiproxy -n threat-protection --org "$PROJECT" --token "$TOKEN" --disable-check | jq ."revision" -r)
 apigeecli apis deploy --wait --name threat-protection --ovr --rev "$REV" --org "$PROJECT" --env "$APIGEE_ENV" --token "$TOKEN"
 
-#echo "Creating API Products"
-#apigeecli products create --name basic-quota-trial --displayname "basic-quota-trial" --opgrp ./basic-quota-product-ops.json --envs "$APIGEE_ENV" --approval auto --quota 10 --interval 1 --unit minute --org "$PROJECT" --token "$TOKEN"
-#apigeecli products create --name basic-quota-premium --displayname "basic-quota-premium" --opgrp ./basic-quota-product-ops.json --envs "$APIGEE_ENV" --approval auto --quota 1000 --interval 1 --unit hour --org "$PROJECT" --token "$TOKEN"
-
-#echo "Creating Developer"
-#apigeecli developers create --user testuser --email basic-quota_apigeesamples@acme.com --first Test --last User --org "$PROJECT" --token "$TOKEN"
-
-#echo "Creating Developer Apps"
-#apigeecli apps create --name basic-quota-trial-app --email basic-quota_apigeesamples@acme.com --prods basic-quota-trial --org "$PROJECT" --token "$TOKEN" --disable-check
-#apigeecli apps create --name basic-quota-premium-app --email basic-quota_apigeesamples@acme.com --prods basic-quota-premium --org "$PROJECT" --token "$TOKEN" --disable-check
-
-#CLIENT_ID_1=$(apigeecli apps get --name basic-quota-trial-app --org "$PROJECT" --token "$TOKEN" --disable-check | jq ."[0].credentials[0].consumerKey" -r)
-#export CLIENT_ID_1
-
-#CLIENT_ID_2=$(apigeecli apps get --name basic-quota-premium-app --org "$PROJECT" --token "$TOKEN" --disable-check | jq ."[0].credentials[0].consumerKey" -r)
-#export CLIENT_ID_2
-
 # var is expected by integration test (apickli)
-export PROXY_URL="$APIGEE_HOST/v1/threat-protection"
+export PROXY_URL="$APIGEE_HOST/v1/samples/threat-protection"
 
 # integration tests
 
