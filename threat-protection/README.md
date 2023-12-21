@@ -23,11 +23,11 @@ Let's get started!
 
 Use the following GCP CloudShell tutorial, and follow the instructions.
 
-[![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/rmistry75/apigee-samples&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=threat-protection/docs/cloudshell-tutorial.md)
+[![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/apigee-samples&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=threat-protection/docs/cloudshell-tutorial.md)
 
 ## Setup instructions
 
-1. Clone the `apigee-samples` repo, and switch the `threat-protection` directory
+1. Clone the `apigee-samples` repo, and switch to the `threat-protection` directory
 
 ```bash
 git clone https://github.com/GoogleCloudPlatform/apigee-samples.git
@@ -52,7 +52,7 @@ source ./env.sh
 ./deploy-threat-protection.sh
 ```
 
-## Testing the Quota Proxy
+## Testing the Proxy
 
 To run the tests, first retrieve Node.js dependencies with:
 
@@ -65,10 +65,6 @@ and then run the tests:
 ```bash
 npm run test
 ```
-
-## Example Requests
-
-To manually test the proxy...
 
 ## Cleanup
 

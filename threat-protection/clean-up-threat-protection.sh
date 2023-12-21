@@ -14,9 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#echo "Enabling APIs..."
-#gcloud services enable cloudbuild.googleapis.com
-
 if [ -z "$PROJECT" ]; then
   echo "No PROJECT variable set"
   exit
