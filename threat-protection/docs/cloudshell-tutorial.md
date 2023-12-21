@@ -43,20 +43,14 @@ Next, let's create and deploy the Apigee resources necessary to test threat prot
 
 This script creates a sample API Proxy that demonstrates two threat protection examples. The script also tests that the deployment and configuration has been successful.
 
-### Test the APIs
+### Test the API
 
 The script that deploys the Apigee API proxies prints the proxy and app information you will need to run the commands below.
-
-Set the proxy URL:
-
-```sh
-export PROXY_URL=<replace with script output>
-```
 
 Run the following command to test the Regular Expression Policy:
 
 ```sh
-curl https://$APIGEE_HOST/v1/threat-protection?query=delete
+curl https://$APIGEE_HOST/v1/threat-protection/json?query=delete
 ```
 
 Observe how the API Proxy returns an error because it found a suspicious `delete` statement in the query string (e.g. a potential SQL injection attack).
@@ -64,10 +58,27 @@ Observe how the API Proxy returns an error because it found a suspicious `delete
 Next, repeat the command with `select` in the query string:
 
 ```sh
-curl https://$APIGEE_HOST/v1/threat-protection?query=select
+curl https://$APIGEE_HOST/v1/threat-protection/json?query=select
 ```
 
 Observe how the API Proxy returns a 200 OK as the Regular Expression Policy did not find a potential threat in the HTTP request.
+
+
+Run the following command to test the JSON Threat Protection Policy:
+
+```sh
+curl -X POST 'https://$APIGEE_HOST/v1/threat-protection/echo' -H 'Content-Type: application/json' -d '{"field1": "test_value1", "field2": "test_value2", "field3]": "test_value3", "field4": "test_value4", "field5": "test_value5", "field6": "test_value6"}'
+```
+
+Observe how the API Proxy returns an error because the JSON request has more fields than what was expected by the JSON Threat Protection Policy.  See the JSON Threat Protection policy in Apigee to see the configuration.  You can set the JSON Threat Protection Policy to conform to the valid JSON payloads you expect in the HTTP request body.
+
+Next, run the following curl request:
+
+```sh
+curl -X POST 'https://api-dev.apigee-west.com/v1/threat-protection/echo' -H 'Content-Type: application/json' -d '{"field1": "test_value1", "field2": "test_value2", "field3]": "test_value3", "field4": "test_value4", "field5": "test_value5"}'
+```
+
+Observe how the API Proxy returns a 200 OK along with the output as the JSON Threat Protection Policy confirmed the input payload was as expected (i.e. correct number of input fields).
 
 ---
 
