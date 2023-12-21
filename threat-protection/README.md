@@ -1,18 +1,11 @@
 # Threat Protection
 
-This sample shows how to implement threat protection in Apigee.
+---
+This sample shows how to implement threat protection using Apigee's [RegularExpression Policy](https://cloud.google.com/apigee/docs/api-platform/reference/policies/regular-expression-protection) policy and [JSONThreatProtection Policy](https://cloud.google.com/apigee/docs/api-platform/reference/policies/json-threat-protection-policy) policy
 
-## How it works
+Let's get started!
 
-...
-
-## Implementation on Apigee
-
-This sample uses ...
-
-## Screencast
-
-...
+---
 
 ## Prerequisites
 
