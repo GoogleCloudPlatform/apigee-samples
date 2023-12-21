@@ -1,7 +1,7 @@
-# Basic Quota
+# Threat Protection
 
 ---
-This sample shows how to implement a dynamic API consumption limit using Apigee's [Quota](https://cloud.google.com/apigee/docs/api-platform/reference/policies/quota-policy) policy.
+This sample shows how to implement threat protection using Apigee's [RegularExpression Policy](https://cloud.google.com/apigee/docs/api-platform/reference/policies/regular-expression-protection) policy and [JSONThreatProtection Policy](https://cloud.google.com/apigee/docs/api-platform/reference/policies/json-threat-protection-policy) policy
 
 Let's get started!
 
@@ -18,12 +18,12 @@ gcloud auth login
 Navigate to the `basic-quota` directory in the Cloud shell.
 
 ```sh
-cd basic-quota
+cd threat-protection
 ```
 
 Edit the provided sample `env.sh` file, and set the environment variables there.
 
-Click <walkthrough-editor-open-file filePath="basic-quota/env.sh">here</walkthrough-editor-open-file> to open the file in the editor
+Click <walkthrough-editor-open-file filePath="threat-protection/env.sh">here</walkthrough-editor-open-file> to open the file in the editor
 
 Then, source the `env.sh` file in the Cloud shell.
 
@@ -35,13 +35,13 @@ source ./env.sh
 
 ## Deploy Apigee components
 
-Next, let's create and deploy the Apigee resources necessary to test the quota policy.
+Next, let's create and deploy the Apigee resources necessary to test threat protection.
 
 ```sh
-./deploy-basic-quota.sh
+./deploy-threat-protection.sh
 ```
 
-This script creates a sample API Proxy, a Developer, two API products, and two Apps. The script also tests that the deployment and configuration has been successful.
+This script creates a sample API Proxy that demonstrates two threat protection examples. The script also tests that the deployment and configuration has been successful.
 
 ### Test the APIs
 
@@ -53,33 +53,21 @@ Set the proxy URL:
 export PROXY_URL=<replace with script output>
 ```
 
-Set the trial app key:
+Run the following command to test the Regular Expression Policy:
 
 ```sh
-export CLIENT_ID_1=<replace with script output>
+curl https://$APIGEE_HOST/v1/threat-protection?query=delete
 ```
 
-Set the premium app key:
+Observe how the API Proxy returns an error because it found a suspicious `delete` statement in the query string (e.g. a potential SQL injection attack).
+
+Next, repeat the command with a `select` string:
 
 ```sh
-export CLIENT_ID_2=<replace with script output>
+curl https://$APIGEE_HOST/v1/threat-protection?query=select
 ```
 
-Run the following command several times in succession:
-
-```sh
-curl https://$APIGEE_HOST/v1/samples/basic-quota?apikey=$CLIENT_ID_1
-```
-
-Observe how the `available` and `used` values in the response payload update on each request made. On the eleventh request, observe the [429](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429) status code and payload indicating the quota has been exceeded. Wait up to a minute and repeat the command again. Observe how the counter has reset and requests begin to succeed again.
-
-Next, repeat the command using the second application key:
-
-```sh
-curl https://$APIGEE_HOST/v1/samples/basic-quota?apikey=$CLIENT_ID_2
-```
-
-Observe the new, larger value in the `allowed` field contained in the response payload. The `allowed` value is applied dynamically based on the API product configuration.
+Observe how the API Proxy returns a 200 OK as the Regular Expression Policy did not find a potential threat in the HTTP request.
 
 ---
 
@@ -87,7 +75,7 @@ Observe the new, larger value in the `allowed` field contained in the response p
 
 <walkthrough-conclusion-trophy></walkthrough-conclusion-trophy>
 
-Congratulations! You've successfully implemented a dynamic API consumption quota limit.
+Congratulations! You've successfully implemented threat protection in Apigee.
 
 <walkthrough-inline-feedback></walkthrough-inline-feedback>
 
@@ -96,5 +84,5 @@ Congratulations! You've successfully implemented a dynamic API consumption quota
 If you want to clean up the artifacts from this example in your Apigee Organization, first source your `env.sh` script, and then run
 
 ```bash
-./clean-up-basic-quota.sh
+./clean-up-threat-protection.sh
 ```
