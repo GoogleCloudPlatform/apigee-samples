@@ -12,7 +12,7 @@ This sample uses ...
 
 ## Screencast
 
-[![Alt text](https://img.youtube.com/vi/ep7h_tGHtiw/0.jpg)](https://www.youtube.com/watch?v=ep7h_tGHtiw)
+...
 
 ## Prerequisites
 
