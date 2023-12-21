@@ -1,7 +1,7 @@
 {
-  "name": "basic-protection",
+  "name": "threat-protection",
   "version": "1.0.0",
-  "description": "API proxy that demonstrates basic protection",
+  "description": "API proxy that demonstrates threat protection",
   "scripts": {
    "lint": "apigeelint -s apiproxy -e PO013,PO025 -f table.js",
     "test": "npx cucumber-js --publish-quiet test/"
