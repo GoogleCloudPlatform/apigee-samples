@@ -15,7 +15,7 @@ Ensure you have an active GCP account selected in the Cloud shell
 gcloud auth login
 ```
 
-Navigate to the `basic-quota` directory in the Cloud shell.
+Navigate to the `threat-protection` directory in the Cloud shell.
 
 ```sh
 cd threat-protection
