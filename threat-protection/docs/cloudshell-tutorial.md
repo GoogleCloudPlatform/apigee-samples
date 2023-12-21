@@ -67,7 +67,7 @@ Observe how the API Proxy returns a 200 OK as the Regular Expression Policy did 
 Run the following command to test the JSON Threat Protection Policy:
 
 ```sh
-curl -X POST 'https://$APIGEE_HOST/v1/threat-protection/echo' -H 'Content-Type: application/json' -d '{"field1": "test_value1", "field2": "test_value2", "field3]": "test_value3", "field4": "test_value4", "field5": "test_value5", "field6": "test_value6"}'
+curl -X POST https://$APIGEE_HOST/v1/threat-protection/echo -H 'Content-Type: application/json' -d '{"field1": "test_value1", "field2": "test_value2", "field3]": "test_value3", "field4": "test_value4", "field5": "test_value5", "field6": "test_value6"}'
 ```
 
 Observe how the API Proxy returns an error because the JSON request has more fields than what was expected by the JSON Threat Protection Policy.  See the JSON Threat Protection policy in Apigee to see the configuration.  You can set the JSON Threat Protection Policy to conform to the valid JSON payloads you expect in the HTTP request body.
@@ -75,7 +75,7 @@ Observe how the API Proxy returns an error because the JSON request has more fie
 Next, run the following curl request:
 
 ```sh
-curl -X POST 'https://api-dev.apigee-west.com/v1/threat-protection/echo' -H 'Content-Type: application/json' -d '{"field1": "test_value1", "field2": "test_value2", "field3]": "test_value3", "field4": "test_value4", "field5": "test_value5"}'
+curl -X POST https://$APIGEE_HOST/v1/threat-protection/echo -H 'Content-Type: application/json' -d '{"field1": "test_value1", "field2": "test_value2", "field3]": "test_value3", "field4": "test_value4", "field5": "test_value5"}'
 ```
 
 Observe how the API Proxy returns a 200 OK along with the output as the JSON Threat Protection Policy confirmed the input payload was as expected (i.e. correct number of input fields).
