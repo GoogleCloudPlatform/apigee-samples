@@ -1,0 +1,20 @@
+[
+  	{
+  		"title": "MockTarget",
+  		"description": "Mock Target API",
+  		"anonAllowed": true,
+  		"imageUrl": "",
+  		"requireCallbackUrl": true,
+  		"published": true,
+  		"apiProductName": "MockProduct",
+  		"categories": [
+  			"mock"
+  		],
+  		"oasDocumentation": {
+	     "spec": {
+	        "displayName": "sample-openapi",
+	        "file": "./target/specs/openapi.yaml"
+	      }
+	   }
+  	}
+]

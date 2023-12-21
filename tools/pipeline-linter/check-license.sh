@@ -1,5 +1,5 @@
 #!/bin/sh
-# Copyright 2020 Google LLC
+# Copyright 2020,2023 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,4 +17,5 @@
 
 set -e
 
-addlicense -check "$PWD"
+# shellcheck disable=SC2035
+addlicense -check -ignore '**/example-input.xml' "$PWD"
