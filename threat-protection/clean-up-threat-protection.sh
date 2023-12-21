@@ -42,5 +42,5 @@ echo "Undeploying proxy"
 REV=$(apigeecli envs deployments get --env "$APIGEE_ENV" --org "$PROJECT" --token "$TOKEN" --disable-check | jq .'deployments[]| select(.apiProxy=="threat-protection").revision' -r)
 apigeecli apis undeploy --name threat-protection --env "$APIGEE_ENV" --rev "$REV" --org "$PROJECT" --token "$TOKEN"
 
-echo "Deleting proxy" 
+echo "Deleting proxy"
 apigeecli apis delete --name threat-protection --org "$PROJECT" --token "$TOKEN"

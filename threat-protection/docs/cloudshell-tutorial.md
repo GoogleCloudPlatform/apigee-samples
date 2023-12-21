@@ -63,7 +63,6 @@ curl https://$APIGEE_HOST/v1/threat-protection/json?query=select
 
 Observe how the API Proxy returns a 200 OK as the Regular Expression Policy did not find a potential threat in the HTTP request.
 
-
 Run the following command to test the JSON Threat Protection Policy:
 
 ```sh

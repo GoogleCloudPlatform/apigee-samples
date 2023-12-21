@@ -29,7 +29,7 @@
         <Response/>
     </PostFlow>
     <HTTPProxyConnection>
-        <BasePath>/v1/threat-protection</BasePath>
+	    <BasePath>/v1/samples/threat-protection</BasePath>
     </HTTPProxyConnection>
     <RouteRule name="default">
         <TargetEndpoint>default</TargetEndpoint>
