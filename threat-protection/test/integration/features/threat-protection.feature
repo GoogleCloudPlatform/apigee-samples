@@ -19,22 +19,22 @@ Feature:
 
 Scenario: Threat in Request (SQL Injection Detected)
   When I GET /json?query="delete"
-  Then response code should be 500 
+  Then response code should be 500
 
 Scenario: No Threat in Request (No Threat Detected)
   When I GET /json?query="select"
-  Then response code should be 200 
+  Then response code should be 200
 
 Scenario: JSON Payload larger than expected (Potential Threat Detected)
-Given I store the raw value {"field1": "test_value1", "field2": "test_value2", "field3": "test_value3", "field4": "test_value4", "field5": "test_value5", "field6": "test_value6"} as myPayload in scenario scope
-And I set body to `myPayload`
-And I set content-type header to application/json
+  Given I store the raw value {"f1": "t1", "f2": "t2", "f3": "t3", "f4": "t4", "f5": "t5", "f6": "t6"} as myPayload in scenario scope
+  And I set body to `myPayload`
+  And I set content-type header to application/json
   When I POST to /echo
   Then response code should be 500
 
-Scenario: JSON Payload as expected (No Threat Detected) 
-Given I store the raw value {"field1": "test_value1", "field2": "test_value2", "field3": "test_value3", "field4": "test_value4", "field5": "test_value5"} as myPayload in scenario scope
-And I set body to `myPayload`
-And I set content-type header to application/json
+Scenario: JSON Payload as expected (No Threat Detected)
+  Given I store the raw value {"f1": "t1", "f2": "t2", "f3": "t3", "f4": "t4", "f5": "t5"} as myPayload in scenario scope
+  And I set body to `myPayload`
+  And I set content-type header to application/json
   When I POST to /echo
   Then response code should be 200
