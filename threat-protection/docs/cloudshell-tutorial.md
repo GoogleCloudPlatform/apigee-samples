@@ -61,7 +61,7 @@ curl https://$APIGEE_HOST/v1/threat-protection?query=delete
 
 Observe how the API Proxy returns an error because it found a suspicious `delete` statement in the query string (e.g. a potential SQL injection attack).
 
-Next, repeat the command with a `select` string:
+Next, repeat the command with `select` in the query string:
 
 ```sh
 curl https://$APIGEE_HOST/v1/threat-protection?query=select
