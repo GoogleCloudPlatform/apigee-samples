@@ -54,6 +54,7 @@
   </PreFlow>
 
   <PostFlow name="PostFlow">
+    <Request/>
     <Response>
       <Step>
         <Name>AM-Inject-Proxy-Revision-Header</Name>

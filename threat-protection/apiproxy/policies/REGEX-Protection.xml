@@ -11,9 +11,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<JSONThreatProtection async="false" continueOnError="false" enabled="true" name="JSON-Threat-Protection-1">
-    <DisplayName>JSON Threat Protection-1</DisplayName>
-    <Properties/>
-    <ObjectEntryCount>5</ObjectEntryCount>
+<RegularExpressionProtection async="false" continueOnError="false" enabled="true" name="REGEX-Protection">
     <Source>request</Source>
-</JSONThreatProtection>
+    <QueryParam name="query">
+        <Pattern>[\s]*(?i)((delete)|(exec)|(drop\s*table)|(insert)|(shutdown)|(update)|(\bor\b))</Pattern>
+    </QueryParam>
+</RegularExpressionProtection>

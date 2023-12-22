@@ -16,7 +16,6 @@
     <HTTPProxyConnection>
         <BasePath>/v1/samples/json-web-tokens</BasePath>
         <Properties/>
-        <VirtualHost>secure</VirtualHost>
     </HTTPProxyConnection>
     <FaultRules/>
     <PreFlow name="PreFlow">

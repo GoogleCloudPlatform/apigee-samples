@@ -37,7 +37,6 @@
   <HTTPProxyConnection>
     <BasePath>/v1/samples/websockets</BasePath>
     <Properties/>
-    <VirtualHost>default</VirtualHost>
   </HTTPProxyConnection>
   <RouteRule name="default">
     <TargetEndpoint>default</TargetEndpoint>

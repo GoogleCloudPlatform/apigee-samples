@@ -16,9 +16,15 @@ limitations under the License.
 
 -->
 <TargetEndpoint name="default">
-    <PreFlow name="PreFlow"/>
+    <PreFlow name="PreFlow">
+        <Request/>
+        <Response/>
+    </PreFlow>
     <Flows/>
-    <PostFlow name="PostFlow"/>
+    <PostFlow name="PostFlow">
+        <Request/>
+        <Response/>
+    </PostFlow>
     <HTTPTargetConnection>
         <URL>https://httpbin.org/get</URL>
     </HTTPTargetConnection>
