@@ -1,7 +1,7 @@
 # Composite API
 
 ---
-This sample shows how to implement composite APIs (e.g. mashup) using Apigee's using Apigee's [ServiceCallout Policy](https://cloud.google.com/apigee/docs/api-platform/reference/policies/service-callout-policy) and [ExtractVariables Policy](https://cloud.google.com/apigee/docs/api-platform/reference/policies/extract-variables-policy)
+This sample shows how to implement composite APIs (e.g. mashup) using Apigee's [ServiceCallout Policy](https://cloud.google.com/apigee/docs/api-platform/reference/policies/service-callout-policy) and [ExtractVariables Policy](https://cloud.google.com/apigee/docs/api-platform/reference/policies/extract-variables-policy)
 
 Let's get started!
 
