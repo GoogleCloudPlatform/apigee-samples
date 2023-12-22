@@ -53,7 +53,7 @@ Run the following command to test the composite API:
 curl https://$APIGEE_HOST/v1/samples/composite-api/temperature?near=Chicago
 ```
 
-Observe how the API Proxy returns a 200 OK along with a JSON response which contains the current temperature in Chicago in Celcius. There are two steps to this API Proxy which you can see if you step through the Apigee Debug tool. The first step of the API Proxy is to make an API call to a geocoding API to convert "Chicago" into it's latitude and longitude. The second step of the API Proxy is to call the API target which is a weather API that returns the current temperature of a given latitude and longitude (which was retrieved in the first API call). Try this same API call with different cities, and use the Apigee Debug Tool to see what happens.
+Observe how the API Proxy returns a 200 OK along with a JSON response which contains the current temperature in Chicago. There are two steps to this API Proxy which you can see if you step through the Apigee Debug tool. The first step of the API Proxy is to make an API call to a geocoding API to convert "Chicago" into it's latitude and longitude. The second step of the API Proxy is to call the API target which is a weather API that returns the current temperature of a given latitude and longitude (which was retrieved in the first API call). Try this same API call with different cities, and use the Apigee Debug Tool to see what happens.
 
 ---
 
