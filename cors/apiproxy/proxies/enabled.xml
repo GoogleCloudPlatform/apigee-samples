@@ -30,7 +30,6 @@
   <HTTPProxyConnection>
     <BasePath>/v1/samples/cors/enabled</BasePath>
     <Properties/>
-    <VirtualHost>default</VirtualHost>
   </HTTPProxyConnection>
   <RouteRule name="default"/>
 </ProxyEndpoint>

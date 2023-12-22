@@ -20,6 +20,6 @@ limitations under the License.
         <Name>JWT-VerifyIdPToken</Name>
     </Step>
     <Step>
-        <Name>VK-IdentifyClientApp</Name>
+        <Name>VA-IdentifyClientApp</Name>
     </Step>
 </SharedFlow>

@@ -26,7 +26,6 @@
   <HTTPProxyConnection>
     <BasePath>/v1/samples/cors/nocors</BasePath>
     <Properties/>
-    <VirtualHost>default</VirtualHost>
   </HTTPProxyConnection>
   <RouteRule name="default"/>
 </ProxyEndpoint>

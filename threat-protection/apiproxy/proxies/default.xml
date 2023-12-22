@@ -20,7 +20,7 @@
         <Flow name="View JSON Response">
             <Request>
                 <Step>
-                    <Name>Regular-Expression-Protection-1</Name>
+                    <Name>REGEX-Protection</Name>
                 </Step>
             </Request>
             <Response/>
@@ -29,7 +29,8 @@
         <Flow name="Send request and view request headers and body">
             <Request>
                 <Step>
-                    <Name>JSON-Threat-Protection-1</Name>
+                    <Name>JSONTHREAT-Protection</Name>
+                    <Condition>request.content != null</Condition>
                 </Step>
             </Request>
             <Response/>
