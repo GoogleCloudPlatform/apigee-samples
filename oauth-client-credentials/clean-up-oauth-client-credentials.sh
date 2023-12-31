@@ -36,7 +36,7 @@ TOKEN=$(gcloud auth print-access-token)
 APP_NAME=oauth-client-credentials-app
 
 echo "Installing apigeecli"
-curl -s https://raw.githubusercontent.com/apigee/apigeecli/master/downloadLatest.sh | bash
+curl -s https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.sh | bash
 export PATH=$PATH:$HOME/.apigeecli/bin
 
 echo "Deleting Developer App"
