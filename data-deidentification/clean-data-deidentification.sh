@@ -95,7 +95,7 @@ remove_sample_deid_templates() {
 TOKEN=$(gcloud auth print-access-token)
 
 echo "Installing apigeecli"
-curl -s https://raw.githubusercontent.com/apigee/apigeecli/master/downloadLatest.sh | bash
+curl -s https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.sh | bash
 export PATH=$PATH:$HOME/.apigeecli/bin
 
 delete_apiproxy "${PROXY_NAME}"

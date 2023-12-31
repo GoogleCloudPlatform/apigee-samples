@@ -76,7 +76,7 @@ echo "Installing dependencies"
 npm install
 
 echo "Installing apigeecli"
-curl -s https://raw.githubusercontent.com/apigee/apigeecli/master/downloadLatest.sh | bash
+curl -s https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.sh | bash
 export PATH=$PATH:$HOME/.apigeecli/bin
 
 echo "Running apigeelint"
