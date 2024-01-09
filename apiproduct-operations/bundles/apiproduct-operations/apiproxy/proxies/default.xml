@@ -35,7 +35,7 @@
       </Step>
       <Step>
         <Name>RF-Unknown-Request</Name>
-        <Condition>NOT (proxy.pathsuffix ~~ "/token/users(/.*)?") and NOT (proxy.pathsuffix ~~ "/apikey/users(/.*)?")</Condition>
+        <Condition>!(proxy.pathsuffix ~~ "/token/users(/.*)?") and !(gitproxy.pathsuffix ~~ "/apikey/users(/.*)?")</Condition>
       </Step>
     </Request>
     <Response>
