@@ -6,7 +6,7 @@
 * [Using the sample proxies](#using)
 * [Samples](#samples)
 * [Modifying a sample proxy](#modifying)
-* [Ask questions on the Apigee Community](#ask)
+* [Ask questions on the Community forum](#ask)
 * [Apigee documentation](#docs)
 * [Contributing](#contributing)
 
@@ -65,6 +65,7 @@ Most developers begin by identifying an interesting sample based on a specific u
 |23| [publish-to-apigee-portal](publish-to-apigee-portal) | Publish OpenAPI Spec to Apigee Integrated Portal using Maven plugin and Cloud Build | [![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/apigee-samples&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=publish-to-apigee-portal/docs/cloudshell-tutorial.md) |
 |24| [threat-protection](threat-protection) | Threat Protection sample in Apigee | [![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/apigee-samples&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=threat-protection/docs/cloudshell-tutorial.md) |
 |25| [composite-api](composite-api) | Composite API sample in Apigee | [![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/apigee-samples&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=composite-api/docs/cloudshell-tutorial.md) |
+|26| [cloud-functions](cloud-functions) | A sample proxy that connects to an app running in Cloud Functions | [![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/apigee-samples&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=cloud-functions/docs/cloudshell-tutorial.md) |
 
 
 You can find videos of all the samples in this [YouTube playlist](https://goo.gle/ApigeeAcceleratorSeries)
@@ -75,9 +76,9 @@ Feel free to modify and build upon the sample proxies. You can make changes in t
 
 Simply redeploy the proxies for changes to take effect.
 
-## <a name="ask"></a>Ask questions on the Apigee Community
+## <a name="ask"></a>Ask questions on the Community Forum
 
-[Apigee Community](https://www.googlecloudcommunity.com/gc/Apigee/bd-p/cloud-apigee) is a great place to ask questions and find answers about developing API proxies.
+[The Apigee Forum](https://www.googlecloudcommunity.com/gc/Apigee/bd-p/cloud-apigee) on the [Google Cloud Community site](https://www.googlecloudcommunity.com/) is a great place to ask questions and find answers about developing API proxies.
 
 ## <a name="docs"></a>Apigee documentation
 
