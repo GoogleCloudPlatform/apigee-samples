@@ -25,7 +25,7 @@
       </Step>
       <Step>
         <Name>PC-SetCachedOnDateTime</Name>
-        <Condition>(responsecache.RC-CacheVolumes.cachehit == false)</Condition>
+        <Condition>(responsecache.RC-CacheVolumes.cachehit = false)</Condition>
       </Step>
       <Step>
         <Name>LC-LookupCachedOnDateTime</Name>

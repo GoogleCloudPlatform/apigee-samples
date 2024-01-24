@@ -29,6 +29,9 @@ sfExclusions=(
   ' '
 )
 
+echo "Running using Apigeelint version - $(apigeelint --version)"
+echo ""
+
 # For API Proxies
 for proxyDir in "$PWD"/*/apiproxy "$PWD"/*/bundles/*/apiproxy; do
   skip=false

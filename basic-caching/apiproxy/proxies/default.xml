@@ -29,7 +29,7 @@
             </Step>
             <Step>
                 <Name>AM-SetCachedOnHeader</Name>
-                <Condition>(request.header.x-bypass-cache != "true") and (responsecache.RC-CacheVolumes.cachehit == true)</Condition>
+                <Condition>(request.header.x-bypass-cache != "true") and (responsecache.RC-CacheVolumes.cachehit = true)</Condition>
             </Step>
         </Response>
     </PostFlow>
