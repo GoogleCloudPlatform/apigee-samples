@@ -46,7 +46,7 @@ Now source the `env.sh` file
 source ./env.sh
 ```
 
-3. Deploy Apigee API proxies, products and apps
+3. Deploy Apigee API proxies
 
 ```bash
 ./deploy-composite-api.sh
