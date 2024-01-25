@@ -33,5 +33,5 @@ If you want to clean up the artifacts from this example in your Apigee
 organization, first source your `env.sh` script, and then run
 
 ```bash
-./clean-up-cloud-run.sh
+./clean-cloud-functions.sh
 ```

@@ -1,4 +1,0 @@
-
-npx @google-cloud/functions-framework --target=hello-sample
-
-

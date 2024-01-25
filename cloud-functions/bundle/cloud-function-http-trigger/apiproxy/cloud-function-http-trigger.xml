@@ -16,20 +16,5 @@
  limitations under the License.
 -->
 <APIProxy name="cloud-function-http-trigger">
-  <ConfigurationVersion majorVersion="4" minorVersion="0"/>
-  <CreatedAt>1491498008040</CreatedAt>
-  <Description/>
-  <DisplayName>cloud-function-http-trigger</DisplayName>
-  <LastModifiedAt>1491517153495</LastModifiedAt>
-  <Policies/>
-  <ProxyEndpoints>
-    <ProxyEndpoint>default</ProxyEndpoint>
-  </ProxyEndpoints>
-  <Resources/>
-  <Spec/>
-  <TargetServers/>
-  <TargetEndpoints>
-    <TargetEndpoint>default</TargetEndpoint>
-  </TargetEndpoints>
-  <validate>false</validate>
+    <Description>A sample API proxy to demonstrate an invocation of Cloud Functions from Apigee</Description>
 </APIProxy>
