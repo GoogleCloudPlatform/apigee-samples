@@ -217,30 +217,23 @@ curl -i -H "Authorization: Bearer $SA_ID_TOKEN" "$CF_URL/hello-sample"
 ...and you'll see that it works.
 
 We have shown that the Cloud Function will allow an authenticated request,
-bearing the ID token of a particular service account.
+bearing the ID token of a particular service account. Now let's use the API
+Proxy to do that.
 
-Now we want to configure the Apigee API Proxy to use that same identity.
+## The API Proxy
 
----
+The configuration files for the Apigee API Proxy, which are stored in the
+filesystem, already contain the appropriate configuration that tells Apigee to
+use the identity of a service account for calls to the upstream.
 
-## Now Configure the Apigee proxy to Invoke that Function
+Click <walkthrough-editor-open-file filePath="cloud-functions/bundle/apiproxy/targets/target-1.xml">here</walkthrough-editor-open-file> to open the TargetEndpoint file in your editor.
 
-First, modify the target endpoint to use the correct url. To see the correct
-URL, just echo it in the terminal.
-
-```sh
-echo $CF_URL
-```
-
-Now Click <walkthrough-editor-open-file filePath="cloud-functions/bundle/apiproxy/targets/target-1.xml">here</walkthrough-editor-open-file> to open the file in the editor.
-
-Modify it so that the `Audience` element and the `URL` element contain the value
-of the Cloud Function URL.
-
-The result should look something like this, but with the value correct for your
-region and project.
+The `Audience` element and the `URL` element will contain the value of the Cloud
+Function URL. It should look something like this, but with the correct value for
+your region and project.
 
 ```xml
+  ...
   <HTTPTargetConnection>
     <Authentication>
       <GoogleIDToken>
@@ -258,37 +251,23 @@ region and project.
   </HTTPTargetConnection>
 ```
 
-Save the file.
+This tells Apigee to generate an ID token, for its service account, and pass it
+to the upstream target. Which service account?  The one you specify when you
+deploy the API Proxy. We'll do that next.
 
-## Import the proxy into Apigee
+## Import and Deploy the proxy into Apigee
 
-First, in the terminal, change to the directory that holds the API proxy configuration files.
+In the terminal, change to the directory that holds the API proxy configuration files.
 If your terminal window is in the `app` directory currently, this command will do it:
 
 ```sh
-cd ../../bundle/cloud-function-http-trigger
+cd ..
 ```
 
-Now, get an access token for yourself.
+Now, import and deploy the API Proxy.
 
 ```sh
-export PATH=$PATH:$HOME/.apigeecli/bin
-TOKEN=$(gcloud auth print-access-token)
-```
-
-You will use that token in the following two administrative commands.
-
-Import the proxy configuration that is stored in the
-filesystem, into your Apigee organization.
-
-```sh
-apigeecli apis create bundle -f apiproxy --name ${PWD##*/} -o "$APIGEE_PROJECT" --token $TOKEN
-```
-
-And now deploy that API Proxy:
-
-```sh
-apigeecli apis deploy --wait --name ${PWD##*/} --ovr --org "$APIGEE_PROJECT" --env "$APIGEE_ENV" --token $TOKEN --sa "${PROXY_SA_EMAIL}"
+./deploy-proxy-cloud-functions.sh
 ```
 
 Deployment takes a few moments. The command will terminate when deployment is complete.
@@ -315,26 +294,13 @@ curl -i "https://$APIGEE_HOST/v1/samples/cloud-function-http-trigger/hello-sampl
 
 You can see the output from the Cloud Function.
 
+## Commentary on Credentials
+
 Your curl command sent no Authorization header. During handling of the inbound
 request, the Apigee proxy created the appropriate Authorization header,
 containing a token that identifies the appropriate Service Account. The proxy
 then passed that Authorization header in the request that it sends to the target
 cloud function.
-
-The Apigee proxy used this configuration snip from the TargetEndpoint, to
-determine which Authorization header to produce.
-
-```xml
-  <HTTPTargetConnection>
-    <Authentication>
-      <GoogleIDToken>
-        <Audience>https://us-west1-your-project-name.cloudfunctions.net/apigee-sample-hello</Audience>
-      </GoogleIDToken>
-    </Authentication>
-    ...
-```
-
-## Commentary on Credentials
 
 Typically, an Apigee proxy will perform "security mediation" - it accepts one
 kind of credential on input, and uses a different credential for requests sent
@@ -379,10 +345,8 @@ Cloud Function and the Apigee API Proxy.
 ## Cleanup
 
 If you want to remove the artifacts from this example in your Apigee
-organization, source your `env.sh` script, and then run the cleanup script.
+organization, run the cleanup script.
 
 ```bash
-cd ../..
-source ./env.sh
 ./clean-cloud-functions.sh
 ```

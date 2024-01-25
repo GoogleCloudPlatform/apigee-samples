@@ -17,35 +17,34 @@
 PROXY_NAME=cloud-function-http-trigger
 
 delete_apiproxy() {
-  local proxy_name=$1
-  printf "Checking Proxy %s\n" "${proxy_name}"
-  if apigeecli apis get --name "$proxy_name" --org "$PROJECT" --token "$TOKEN" --disable-check >/dev/null 2>&1; then
-    OUTFILE=$(mktemp /tmp/apigee-samples.apigeecli.out.XXXXXX)
-    if apigeecli apis listdeploy --name "$proxy_name" --org "$PROJECT" --token "$TOKEN" --disable-check >"$OUTFILE" 2>&1; then
-      NUM_DEPLOYS=$(jq -r '.deployments | length' "$OUTFILE")
-      if [[ $NUM_DEPLOYS -ne 0 ]]; then
-        echo "Undeploying ${proxy_name}"
-        for ((i = 0; i < NUM_DEPLOYS; i++)); do
-          ENVNAME=$(jq -r ".deployments[$i].environment" "$OUTFILE")
-          REV=$(jq -r ".deployments[$i].revision" "$OUTFILE")
-          apigeecli apis undeploy --name "${proxy_name}" --env "$ENVNAME" --rev "$REV" --org "$PROJECT" --token "$TOKEN" --disable-check
-        done
-      else
-        printf "  There are no deployments of %s to remove.\n" "${proxy_name}"
-      fi
+    local proxy_name=$1
+    printf "Checking Proxy %s\n" "${proxy_name}"
+    if apigeecli apis get --name "$proxy_name" --org "$PROJECT" --token "$TOKEN" --disable-check >/dev/null 2>&1; then
+        OUTFILE=$(mktemp /tmp/apigee-samples.apigeecli.out.XXXXXX)
+        if apigeecli apis listdeploy --name "$proxy_name" --org "$PROJECT" --token "$TOKEN" --disable-check >"$OUTFILE" 2>&1; then
+            NUM_DEPLOYS=$(jq -r '.deployments | length' "$OUTFILE")
+            if [[ $NUM_DEPLOYS -ne 0 ]]; then
+                echo "Undeploying ${proxy_name}"
+                for ((i = 0; i < NUM_DEPLOYS; i++)); do
+                    ENVNAME=$(jq -r ".deployments[$i].environment" "$OUTFILE")
+                    REV=$(jq -r ".deployments[$i].revision" "$OUTFILE")
+                    apigeecli apis undeploy --name "${proxy_name}" --env "$ENVNAME" --rev "$REV" --org "$PROJECT" --token "$TOKEN" --disable-check
+                done
+            else
+                printf "  There are no deployments of %s to remove.\n" "${proxy_name}"
+            fi
+        fi
+        [[ -f "$OUTFILE" ]] && rm "$OUTFILE"
+
+        echo "Deleting proxy ${proxy_name}"
+        apigeecli apis delete --name "${proxy_name}" --org "$PROJECT" --token "$TOKEN" --disable-check
+
+    else
+        printf "  The proxy %s does not exist.\n" "${proxy_name}"
     fi
-    [[ -f "$OUTFILE" ]] && rm "$OUTFILE"
-
-    echo "Deleting proxy ${proxy_name}"
-    apigeecli apis delete --name "${proxy_name}" --org "$PROJECT" --token "$TOKEN" --disable-check
-
-  else
-    printf "  The proxy %s does not exist.\n" "${proxy_name}"
-  fi
 }
 
 MISSING_ENV_VARS=()
-[[ -z "$CF_PROJECT" ]] && MISSING_ENV_VARS+=('CF_PROJECT')
 [[ -z "$APIGEE_PROJECT" ]] && MISSING_ENV_VARS+=('APIGEE_PROJECT')
 [[ -z "$APIGEE_ENV" ]] && MISSING_ENV_VARS+=('APIGEE_ENV')
 [[ -z "$APIGEE_HOST" ]] && MISSING_ENV_VARS+=('APIGEE_HOST')
@@ -54,15 +53,15 @@ MISSING_ENV_VARS=()
 [[ -z "$CLOUD_FUNCTION_NAME" ]] && MISSING_ENV_VARS+=('CLOUD_FUNCTION_NAME')
 
 [[ ${#MISSING_ENV_VARS[@]} -ne 0 ]] && {
-  printf -v joined '%s,' "${MISSING_ENV_VARS[@]}"
-  printf "You must set these environment variables: %s\n" "${joined%,}"
-  exit 1
+    printf -v joined '%s,' "${MISSING_ENV_VARS[@]}"
+    printf "You must set these environment variables: %s\n" "${joined%,}"
+    exit 1
 }
 
 TOKEN=$(gcloud auth print-access-token)
 
 printf "Installing apigeecli\n"
-curl -s https://raw.githubusercontent.com/apigee/apigeecli/master/downloadLatest.sh | bash
+curl -s https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.sh | bash
 export PATH=$PATH:$HOME/.apigeecli/bin
 
 delete_apiproxy "${PROXY_NAME}"
@@ -71,20 +70,20 @@ printf "Deleting the proxy service account\n"
 PROXY_SA_NAME=proxy-apigee-sample-sa-1
 PROXY_SA_EMAIL="${PROXY_SA_NAME}@${APIGEE_PROJECT}.iam.gserviceaccount.com"
 gcloud iam service-accounts delete "${PROXY_SA_EMAIL}" \
-  --project="${APIGEE_PROJECT}" \
-  --quiet
+    --project="${APIGEE_PROJECT}" \
+    --quiet
 
 printf "Deleting the cloud function\n"
 gcloud functions delete "$CLOUD_FUNCTION_NAME" \
-  --region="$CLOUD_FUNCTIONS_REGION" \
-  --project="$CLOUD_FUNCTIONS_PROJECT" \
-  --quiet
+    --region="$CLOUD_FUNCTIONS_REGION" \
+    --project="$CLOUD_FUNCTIONS_PROJECT" \
+    --quiet
 
 printf "Deleting the cloud function service account\n"
 CF_SA_NAME=cf-apigee-sample-sa-1
 CF_SA_EMAIL="${CF_SA_NAME}@${CLOUD_FUNCTIONS_PROJECT}.iam.gserviceaccount.com"
 gcloud iam service-accounts delete "${CF_SA_EMAIL}" \
-  --project="$CLOUD_FUNCTIONS_PROJECT" \
-  --quiet
+    --project="$CLOUD_FUNCTIONS_PROJECT" \
+    --quiet
 
 printf "\nAll the artifacts for this sample have been removed.\n"

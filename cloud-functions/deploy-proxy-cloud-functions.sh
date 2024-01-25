@@ -16,6 +16,13 @@
 
 PROXY_NAME=cloud-function-http-trigger
 
+import_and_deploy_apiproxy() {
+    local proxy_name=$1
+    local TOKEN=$(gcloud auth print-access-token)
+    local REV=$(apigeecli apis create bundle -f "./bundle/${proxy_name}/apiproxy" -n "$proxy_name" --org "$PROJECT" --token "$TOKEN" --disable-check | jq ."revision" -r)
+    apigeecli apis deploy --wait --name "$proxy_name" --ovr --rev "$REV" --org "$APIGEE_PROJECT" --env "$APIGEE_ENV" --token "$TOKEN" --disable-check
+}
+
 MISSING_ENV_VARS=()
 [[ -z "$APIGEE_PROJECT" ]] && MISSING_ENV_VARS+=('APIGEE_PROJECT')
 [[ -z "$APIGEE_ENV" ]] && MISSING_ENV_VARS+=('APIGEE_ENV')
@@ -30,41 +37,14 @@ MISSING_ENV_VARS=()
     exit 1
 }
 
-replace_element_text() {
-    local element_name=$1
-    local cf_url=$2
-    local file_name=$3
-    local match_pattern="<${element_name}>.\\+</${element_name}>"
-    local replace_pattern="<${element_name}>${cf_url}</${element_name}>"
-    local sed_script="s#${match_pattern}#${replace_pattern}#"
-    #  in-place editing
-    local SEDOPTION="-i"
-    if [[ "$OSTYPE" == "darwin"* ]]; then
-        SEDOPTION='-i \x27\x27'
-    fi
-    sed "$SEDOPTION" -e "${sed_script}" "${file_name}"
-}
-
-echo "Installing dependencies, including apigeelint"
-npm install
+echo "Running apigeelint"
+node_modules/apigeelint/cli.js --profile apigeex -e TD002,TD004 -s "./bundle/${PROXY_NAME}/apiproxy" -f table.js
 
 echo "Installing apigeecli"
 curl -s https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.sh | bash
 export PATH=$PATH:$HOME/.apigeecli/bin
 
-# construct the URL for the Cloud Function that we will deploy
-CF_URL="https://${CLOUD_FUNCTIONS_REGION}-${CLOUD_FUNCTIONS_PROJECT}.cloudfunctions.net/apigee-sample-hello"
-
-# Insert that URL into the proper places, in the Apigee API Proxy TargetEndpoint
-# configuration file.
-
-echo "Setting the Cloud Functions endpoint in the proxy..."
-TARGET_1="./bundle/${PROXY_NAME}/apiproxy/targets/target-1.xml"
-replace_element_text "Audience" "${CF_URL}" "${TARGET_1}"
-replace_element_text "URL" "${CF_URL}" "${TARGET_1}"
-
-echo "Running apigeelint"
-node_modules/apigeelint/cli.js --profile apigeex -e TD002,TD004 -s "./bundle/${PROXY_NAME}/apiproxy" -f table.js
+import_and_deploy_apiproxy "$PROXY_NAME"
 
 echo " "
-echo "Preliminary setup is complete. "
+echo "The proxy is deployed. "
