@@ -2,13 +2,7 @@
 
 ---
 This sample demonstrates how to connect to a Cloud Function from an Apigee
-Proxy. [Cloud Functions](https://cloud.google.com/functions) is Google Cloud's
-Functions-as-a-Service offering.
-
-This sample will use a Cloud Function that responds to HTTP calls.  In this
-sample, the Cloud Function runs with the identity of a specific service account,
-and the Apigee proxy that invokes it, runs with the identity of a different
-service account.
+Proxy. 
 
 Let's get started!
 
@@ -26,7 +20,7 @@ gcloud auth login
 
 ## Enable APIs
 
-Ensure that the required APIs in Google Cloud are enabled. This includes the
+Ensure that the required APIs are enabled in your Google Cloud project. This includes the
 APIs for Cloud Functions, IAM, Cloud Build, Cloud Run and Artifact Registry, as
 well as Logging.
 
@@ -50,9 +44,13 @@ If your Cloud Shell terminal is not in the `cloud-functions` directory, navigate
 cd cloud-functions
 ```
 
-Edit the provided sample `env.sh` file, and set the environment variables there.
+Edit the provided sample `env.sh` file, and modify it to set the appropriate
+values for the environment variables listed there.
 
-One note: In this sample, your Apigee proxy may run in a separate GCP project from your Cloud Function. Or they may be in the same project. Set the appropriate variables, depending on your preference.  You must have already created a distinct project for Cloud Functions, if you want to use two distinct projects.
+In this sample, your Apigee proxy may run in a separate GCP project from your
+Cloud Function. Or they may be in the same project. Set the appropriate
+variables, depending on your preference.  You must have already created a
+distinct project for Cloud Functions, if you want to use two distinct projects.
 
 Click <walkthrough-editor-open-file filePath="cloud-functions/env.sh">here</walkthrough-editor-open-file> to open the file in the editor.
 
@@ -67,8 +65,9 @@ source ./env.sh
 This sample uses two service accounts: one to provide the identity of the Cloud
 Function, and another to provide the identity of the Apigee API proxy. These
 service accounts may be in different GCP projects, if you are running your Cloud
-Function in a different GCP Project than your Apigee. Or they may be in the same project.
-The projects are those you set in the prior step, by modifying the env.sh file.
+Function in a different GCP Project than your Apigee. Or they may be in the same
+project.  The projects are those you set in the prior step, in your modified
+`env.sh` file.
 
 Let's create the service accounts now.
 
@@ -110,7 +109,8 @@ Click <walkthrough-editor-open-file
 filePath="cloud-functions/app/app.js">here</walkthrough-editor-open-file> to
 open the app.js file in the editor.
 
-You could modify this app to do whatever you like. For now, let's keep it as is.
+If you know nodejs, you could modify this app to do whatever you like. For now,
+let's keep it as is.
 
 Back to the terminal. Insure you are in the `app` subdirectory.
 
@@ -123,7 +123,7 @@ Now, deploy the simple app as a function.
 ```sh
 gcloud functions deploy "$CLOUD_FUNCTION_NAME" \
   --gen2 \
-  --project "$CLOUD_FUNCTIONS_PROJECT" \
+  --project="$CLOUD_FUNCTIONS_PROJECT" \
   --runtime=nodejs18 \
   --region="$CLOUD_FUNCTIONS_REGION" \
   --source=. \
@@ -149,8 +149,9 @@ And then we can invoke the function:
 curl -i $CF_URL/hello-sample
 ```
 
-The response to this should be a 403 code and an error message, because we
-haven't provided an identity token. Let's correct that.
+The response to this should be a 403 code and an error message, because the
+cloud function requires authentication, and the request we sent did not provide
+an identity token. Let's correct that.
 
 ---
 
@@ -162,7 +163,7 @@ identifies the Apigee API Proxy. First, grant rights to yourself to do so:
 ```sh
 WHOAMI=$(gcloud config list account --format "value(core.account)")
 gcloud iam service-accounts add-iam-policy-binding "$PROXY_SA_EMAIL" \
-    --project "$APIGEE_PROJECT" \
+    --project="$APIGEE_PROJECT" \
     --member="user:${WHOAMI}" \
     --role=roles/iam.serviceAccountUser
 ```
@@ -186,7 +187,8 @@ curl -i -H "Authorization: Bearer $SA_ID_TOKEN" "$CF_URL/hello-sample"
 ```
 
 What happens?  You should again see a 403 response code, with a www-authenticate
-header telling you the caller has insufficient scope. Why?
+header telling you the caller has insufficient scope. Why? The request included
+an ID token with the correct audience. What's missing?
 
 We need to grant permission to the Proxy Service Account, to invoke the Cloud
 Function.
@@ -313,12 +315,13 @@ curl -i "https://$APIGEE_HOST/v1/samples/cloud-function-http-trigger/hello-sampl
 
 You can see the output from the Cloud Function.
 
-Your curl command sent no Authorization header. The Apigee proxy created the
-appropriate Authorization header, containing a token that identifies the
-appropriate Service Account. The proxy then passed that Authorization header in
-the request to the target cloud function.
+Your curl command sent no Authorization header. During handling of the inbound
+request, the Apigee proxy created the appropriate Authorization header,
+containing a token that identifies the appropriate Service Account. The proxy
+then passed that Authorization header in the request that it sends to the target
+cloud function.
 
-The Apigee proxy used this configuration snip from the TargetEndpoint , to
+The Apigee proxy used this configuration snip from the TargetEndpoint, to
 determine which Authorization header to produce.
 
 ```xml
@@ -336,12 +339,13 @@ determine which Authorization header to produce.
 Typically, an Apigee proxy will perform "security mediation" - it accepts one
 kind of credential on input, and uses a different credential for requests sent
 to the target. The input credential might be an OAuth2 access token issued by
-Apigee, while the credential used for the target could be an ID token , if the
+Apigee, while the credential used for the target could be an ID token, if the
 target is a cloud function.
 
 In this particular sample, the Apigee proxy did not require any credential on
-the inbound request.  But you could easily modify it so that it requires an API
-key or OAuth2 token.
+the inbound request. But that is only because this is a simplified sample. You
+could easily modify this sample so that the proxy requires an API key or OAuth2
+token.
 
 ## Extra Credit
 
