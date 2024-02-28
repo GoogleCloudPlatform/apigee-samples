@@ -24,6 +24,6 @@
             }
         </Payload>
         <StatusCode>200</StatusCode>
-        <ReasonPhrase />
+        <ReasonPhrase>OK</ReasonPhrase>
     </Set>
 </AssignMessage>
