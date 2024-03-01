@@ -17,10 +17,10 @@
 PROXY_NAME=cloud-function-http-trigger
 
 import_and_deploy_apiproxy() {
-    local proxy_name=$1
-    local TOKEN=$(gcloud auth print-access-token)
-    local REV=$(apigeecli apis create bundle -f "./bundle/${proxy_name}/apiproxy" -n "$proxy_name" --org "$PROJECT" --token "$TOKEN" --disable-check | jq ."revision" -r)
-    apigeecli apis deploy --wait --name "$proxy_name" --ovr --rev "$REV" --org "$APIGEE_PROJECT" --env "$APIGEE_ENV" --token "$TOKEN" --disable-check
+  local proxy_name=$1 TOKEN REV
+  TOKEN=$(gcloud auth print-access-token)
+  REV=$(apigeecli apis create bundle -f "./bundle/${proxy_name}/apiproxy" -n "$proxy_name" --org "$PROJECT" --token "$TOKEN" --disable-check | jq ."revision" -r)
+  apigeecli apis deploy --wait --name "$proxy_name" --ovr --rev "$REV" --org "$APIGEE_PROJECT" --env "$APIGEE_ENV" --token "$TOKEN" --disable-check
 }
 
 MISSING_ENV_VARS=()
@@ -32,9 +32,9 @@ MISSING_ENV_VARS=()
 [[ -z "$CLOUD_FUNCTION_NAME" ]] && MISSING_ENV_VARS+=('CLOUD_FUNCTION_NAME')
 
 [[ ${#MISSING_ENV_VARS[@]} -ne 0 ]] && {
-    printf -v joined '%s,' "${MISSING_ENV_VARS[@]}"
-    printf "You must set these environment variables: %s\n" "${joined%,}"
-    exit 1
+  printf -v joined '%s,' "${MISSING_ENV_VARS[@]}"
+  printf "You must set these environment variables: %s\n" "${joined%,}"
+  exit 1
 }
 
 echo "Running apigeelint"

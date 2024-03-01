@@ -67,8 +67,7 @@ Most developers begin by identifying an interesting sample based on a specific u
 |25| [composite-api](composite-api) | Composite API sample in Apigee | [![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/apigee-samples&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=composite-api/docs/cloudshell-tutorial.md) |
 |26| [cloud-functions](cloud-functions) | A sample proxy that connects to an app running in Cloud Functions | [![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/apigee-samples&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=cloud-functions/docs/cloudshell-tutorial.md) |
 
-
-You can find videos of all the samples in this [YouTube playlist](https://goo.gle/ApigeeAcceleratorSeries)
+You can find video walkthroughs of many of these samples in this [YouTube playlist](https://goo.gle/ApigeeAcceleratorSeries)
 
 ### <a name="modifying"></a>Modifying a sample proxy
 

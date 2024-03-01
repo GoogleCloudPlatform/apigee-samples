@@ -2,7 +2,7 @@
 
 ---
 This sample demonstrates how to connect to a Cloud Function from an Apigee
-Proxy. 
+Proxy.
 
 Let's get started!
 
@@ -99,7 +99,7 @@ PROXY_SA_EMAIL="${PROXY_SA_NAME}@${APIGEE_PROJECT}.iam.gserviceaccount.com"
 
 ---
 
-## Deploy the Cloud Function
+## The Cloud Function
 
 In this sample, the logic for the cloud function is implemented in nodejs. This
 app will be triggered by an HTTP request, and responds with a very simple
@@ -111,6 +111,8 @@ open the app.js file in the editor.
 
 If you know nodejs, you could modify this app to do whatever you like. For now,
 let's keep it as is.
+
+## Deploy the Cloud Function - Allowing Unauthenticated Access
 
 Back to the terminal. Insure you are in the `app` subdirectory.
 
@@ -133,23 +135,55 @@ gcloud functions deploy "$CLOUD_FUNCTION_NAME" \
   --trigger-http
 ```
 
-Notice that we use `--no-allow-unauthenticated`, which means this function will
-be accessible only from an authenticated and authorized client.
+This command uses `--allow-unauthenticated`, which means this function will
+allow un-authenticated access.
 
-At the exit of that command, you will see a url, where the function is
-accessible. Let's capture that url:
+This will take a few moments. When the command finishes, you will see a
+url. That provides the URL you can use to invoke the function. Let's capture
+that url:
 
 ```sh
 CF_URL=$(gcloud functions describe "$CLOUD_FUNCTION_NAME" --region="$CLOUD_FUNCTIONS_REGION" --format='value(url)')
 ```
 
-And then we can invoke the function:
+And then invoke the function:
 
 ```sh
 curl -i $CF_URL/hello-sample
 ```
 
-The response to this should be a 403 code and an error message, because the
+You'll see that the request succeeds. The Cloud function is allowing any access.
+
+## Deploy the Cloud Function - but Require Authentication for Access
+
+Now, deploy again, but specify that you want to require authentication for access:
+
+```sh
+gcloud functions deploy "$CLOUD_FUNCTION_NAME" \
+  --gen2 \
+  --project="$CLOUD_FUNCTIONS_PROJECT" \
+  --runtime=nodejs18 \
+  --region="$CLOUD_FUNCTIONS_REGION" \
+  --source=. \
+  --no-allow-unauthenticated \
+  --service-account="${CF_SA_EMAIL}" \
+  --entry-point=hello-sample \
+  --trigger-http
+```
+
+Notice that now, this command uses `--no-allow-unauthenticated`, which means
+this function will be accessible only from an authenticated and authorized
+client.
+
+Again, this will take a few moments. The URL will be the same.
+
+Now, invoke the function again, in the same way, with no authentication:
+
+```sh
+curl -i $CF_URL/hello-sample
+```
+
+The response to this should be a 403 code and an error message. The
 cloud function requires authentication, and the request we sent did not provide
 an identity token. Let's correct that.
 
@@ -195,7 +229,7 @@ Function.
 
 ---
 
-## Grant the Service Account permission to invoke the Function
+## Grant permission to the Service Account to invoke the Function
 
 This command says, "allow the given service account to invoke the specific Cloud Function":
 
@@ -207,8 +241,10 @@ gcloud functions add-invoker-policy-binding "$CLOUD_FUNCTION_NAME" \
 
 ```
 
-You may need to wait a bit here, perhaps 30 seconds, for that change to take effect.
-Then re-try the curl command:
+You may need to wait a bit here, perhaps 30 seconds, for that change to take
+effect. [Updating IAM policy is an "eventually consistent"
+operation](https://cloud.google.com/iam/docs/access-change-propagation).  After
+the permissions get propagated, you can retry the curl command:
 
 ```sh
 curl -i -H "Authorization: Bearer $SA_ID_TOKEN" "$CF_URL/hello-sample"
@@ -267,7 +303,7 @@ cd ..
 Now, import and deploy the API Proxy.
 
 ```sh
-./deploy-proxy-cloud-functions.sh
+./import-and-deploy-proxy.sh
 ```
 
 Deployment takes a few moments. The command will terminate when deployment is complete.
@@ -317,11 +353,12 @@ token.
 
 If you like, you can try:
 
-- modify the `<Audience>` to specify a different URL
+- modify the `<Audience>` in the proxy to specify a different URL
 - remove the `<Authentication>` element entirely
 
-... and in each case, re-import and re-deploy the proxy, then re-try the
-request.  What results do you expect to see?
+... and in each case, re-import and re-deploy the proxy (use the
+`./import-and-deploy-proxy.sh` script), then re-try the request.  What results
+do you expect to see?
 
 You can also try modifying the app.js logic, to do something more interesting -
 read from a storage bucket or a database, etc.  Be sure to re-deploy the Cloud
