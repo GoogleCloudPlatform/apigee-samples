@@ -1,0 +1,11 @@
+{
+  "name": "apigee-sample-cloud-functions",
+  "version": "1.0.0",
+  "description": "Sample that demonstrates how Apigee can connect to Cloud Functions",
+  "scripts": {
+    "lint": "apigeelint --profile apigeex -e TD002,TD004 -s ./bundle/cloud-function-http-trigger/apiproxy -f table.js"
+  },
+  "dependencies": {
+    "apigeelint": "latest"
+  }
+}
