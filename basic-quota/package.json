@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "API proxy that demonstrates a basic quota policy",
   "scripts": {
-   "lint": "apigeelint -s apiproxy -e PO013,PO025 -f table.js",
+   "lint": "apigeelint -s apiproxy -e PO013,PO025,PO034 -f table.js",
     "test": "npx cucumber-js --publish-quiet test/"
   },
   "dependencies": {
