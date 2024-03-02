@@ -1,52 +1,35 @@
-# Sample to use Cloud Function from an Apigee Proxy
-
----
-This sample demonstrates how to connect to a Cloud Function from an Apigee
-Proxy.
-
-## Overview
-
-The sample API Proxy uses a Service Account to authenticate to the Cloud Function.
-
-Let's get started!
-
----
+# Manual Steps for this sample
 
 ## Verify that you are Logged in
 
-Ensure you have an active GCP account selected in the Cloud shell.
+First, ensure you have an active GCP account, and you are logged in.
 
 ```sh
 gcloud auth login
 ```
 
----
-
 ## Set up the environment
 
-If your Cloud Shell terminal is not in the `cloud-functions` directory, navigate there now:
+If your terminal is not in the `cloud-functions` directory, navigate there now:
 
 ```sh
 cd cloud-functions
 ```
 
-Edit the provided sample `env.sh` file, and modify it to set the appropriate
-values for the environment variables listed there.
+Using your favorite text editor, open the provided sample `env.sh` file, and
+modify it to set the appropriate values for the environment variables listed
+there.
 
 In this sample, your Apigee proxy may run in a separate GCP project from your
 Cloud Function. Or they may be in the same project. Set the appropriate
 variables, depending on your preference.  You must have already created a
 distinct project for Cloud Functions, if you want to use two distinct projects.
 
-Click <walkthrough-editor-open-file filePath="cloud-functions/env.sh">here</walkthrough-editor-open-file> to open the file in the editor.
-
-Save the file. Then, source the `env.sh` file in the Cloud shell.
+Save the file. Then, source the `env.sh` file in your terminal.
 
 ```sh
 source ./env.sh
 ```
-
----
 
 ## Set the project
 
@@ -69,8 +52,6 @@ gcloud services enable \
   cloudbuild.googleapis.com \
   logging.googleapis.com
 ```
-
----
 
 ## Create service accounts
 
@@ -109,17 +90,12 @@ Capture the email address of that service account also:
 PROXY_SA_EMAIL="${PROXY_SA_NAME}@${APIGEE_PROJECT}.iam.gserviceaccount.com"
 ```
 
----
-
 ## The Cloud Function
 
 In this sample, the logic for the cloud function is implemented in nodejs. This
 app will be triggered by an HTTP request, and responds with a very simple
-"Hello, World" response.  Have a look at the app now.
-
-Click <walkthrough-editor-open-file
-filePath="cloud-functions/app/app.js">here</walkthrough-editor-open-file> to
-open the app.js file in the editor.
+"Hello, World" response.  If you like, you can have a look at the app now, by
+opening the [app.js](./app/app.js) file in your favorite text editor.
 
 If you know nodejs, you could modify this app to do whatever you like. For now,
 let's keep it as is.
@@ -196,11 +172,9 @@ When deployment completes, invoke the function again, in the same way, with no a
 curl -i $CF_URL/hello-sample
 ```
 
-The response to this should be a 403 code and an error message. The
+The response to this will be a 403 code and an error message. The
 cloud function now requires authentication, and the request we sent did not provide
 an identity token. Let's correct that.
-
----
 
 ## Obtain an Identity Token
 
@@ -214,6 +188,8 @@ gcloud iam service-accounts add-iam-policy-binding "$PROXY_SA_EMAIL" \
     --member="user:${WHOAMI}" \
     --role=roles/iam.serviceAccountUser
 ```
+
+(Your user may already have such rights, implicitly or explicitly)
 
 Now obtain the identity token identifying the Service Account. Notice that we
 need to specify the `audience`, in the request for the token. The Cloud Function
@@ -241,11 +217,9 @@ an ID token with the correct audience. What's missing?
 We need to grant permission to the Proxy Service Account, to invoke the Cloud
 Function.
 
----
-
 ## Grant permission to the Service Account to invoke the Function
 
-This command says, "allow the given service account to invoke the specific Cloud Function":
+The following command says, "allow the given service account to invoke the specific Cloud Function":
 
 ```sh
 gcloud functions add-invoker-policy-binding "$CLOUD_FUNCTION_NAME" \
@@ -277,7 +251,8 @@ The configuration files for the Apigee API Proxy, which are stored in the
 filesystem, already contain the appropriate configuration that tells Apigee to
 use the identity of a service account for calls to the upstream.
 
-Click <walkthrough-editor-open-file filePath="cloud-functions/bundle/cloud-function-http-trigger/apiproxy/targets/target-1.xml">here</walkthrough-editor-open-file> to open the TargetEndpoint file in your editor.
+If you open the file [target-1.xml](./bundle/apiproxy/targets/target-1.xml) in
+your favorite text editor, you can see the relevant configuration.
 
 Scroll down to view the `Audience` element and the `URL` elements. It should look something like this:
 
@@ -319,9 +294,9 @@ Then modify the `Audience` and `URL` elements:
 
 Now, again look in your editor and see that the elements have been updated.
 
-The configuration tells Apigee to generate an ID token, for its service account,
-and pass it to the upstream target. Which service account?  The one you specify
-when you deploy the API Proxy. We'll do that next.
+This configuration tells Apigee to generate an ID token, for its service account, and pass it
+to the upstream target. Which service account?  The one you specify when you
+deploy the API Proxy. We'll do that next.
 
 ## Import and Deploy the proxy into Apigee
 
@@ -334,8 +309,6 @@ the Service Account you previously created for the API Proxy.
 
 Deployment takes a few moments. The command will terminate when deployment is complete.
 
----
-
 ## Invoke the Apigee Proxy
 
 After deployment of the API proxy succeeds, the proxy is ready to handle inbound
@@ -343,10 +316,10 @@ REST requests.
 
 The URL for the Apigee proxy is a concatenation of:
 
-- the scheme: `https://`
-- the Apigee hostname
-- the proxy basepath, `/v1/samples/cloud-function-http-trigger`
-- the path suffix, `/hello-sample`
+* the scheme: `https://`
+* the Apigee hostname
+* the proxy basepath, `/v1/samples/cloud-function-http-trigger`
+* the path suffix, `/hello-sample`
 
 Let's send a GET request.
 
@@ -354,8 +327,7 @@ Let's send a GET request.
 curl -i "https://$APIGEE_HOST/v1/samples/cloud-function-http-trigger/hello-sample"
 ```
 
-You can see the output from the Cloud Function. It should be a 200 status code,
-with the "Hello, World" message. The API Proxy has successfully connected to the Cloud Function.
+You can see the output from the Cloud Function.
 
 ## Commentary on Credentials
 
@@ -386,8 +358,8 @@ If you like, you can try:
 
 2. Modifying the API proxy.
 
-   - modify the `<Audience>` in the proxy to specify a different URL
-   - remove the `<Authentication>` element entirely
+   * modify the `<Audience>` in the proxy to specify a different URL
+   * remove the `<Authentication>` element entirely
 
    ... and in each case, re-import and re-deploy the proxy (use the
    `./import-and-deploy-proxy.sh` script), then re-try the request.  What results
@@ -400,23 +372,17 @@ If you like, you can try:
    If you do modify and redeploy the Cloud Function, you don't _necessarily_
    need to also modify the API Proxy.
 
----
-
 ## Conclusion
-
-<walkthrough-conclusion-trophy></walkthrough-conclusion-trophy>
 
 Congratulations! You've successfully demonstrated an Apigee Proxy that connects
 to a Cloud Function. You used multiple distinct Service Accounts to identify the
 Cloud Function and the Apigee API Proxy.
 
-<walkthrough-inline-feedback></walkthrough-inline-feedback>
-
 ## Cleanup
 
-If you want to remove the artifacts from this example in your Apigee
-organization, run the cleanup script.
+If you want to clean up the artifacts from this example in your Apigee
+organization, run the cleanup script:
 
-```bash
+```sh
 ./clean-cloud-functions.sh
 ```

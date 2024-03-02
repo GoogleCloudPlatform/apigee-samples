@@ -17,10 +17,12 @@
 PROXY_NAME=cloud-function-http-trigger
 
 import_and_deploy_apiproxy() {
-  local proxy_name=$1 TOKEN REV
+  local proxy_name=$1 SA=$2 TOKEN REV
   TOKEN=$(gcloud auth print-access-token)
-  REV=$(apigeecli apis create bundle -f "./bundle/${proxy_name}/apiproxy" -n "$proxy_name" --org "$PROJECT" --token "$TOKEN" --disable-check | jq ."revision" -r)
-  apigeecli apis deploy --wait --name "$proxy_name" --ovr --rev "$REV" --org "$APIGEE_PROJECT" --env "$APIGEE_ENV" --token "$TOKEN" --disable-check
+  echo "Importing the proxy bundle..."
+  REV=$(apigeecli apis create bundle -f "./bundle/${proxy_name}/apiproxy" -n "$proxy_name" --org "$APIGEE_PROJECT" --token "$TOKEN" --disable-check | jq ."revision" -r)
+  echo "Deploying the apiproxy..."
+  apigeecli apis deploy --wait --name "$proxy_name" --ovr --rev "$REV" --org "$APIGEE_PROJECT" --env "$APIGEE_ENV" --token "$TOKEN" --sa "$SA" --disable-check
 }
 
 MISSING_ENV_VARS=()
@@ -44,7 +46,10 @@ echo "Installing apigeecli"
 curl -s https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.sh | bash
 export PATH=$PATH:$HOME/.apigeecli/bin
 
-import_and_deploy_apiproxy "$PROXY_NAME"
+PROXY_SA_NAME=proxy-apigee-sample-sa-1
+PROXY_SA_EMAIL="${PROXY_SA_NAME}@${APIGEE_PROJECT}.iam.gserviceaccount.com"
+
+import_and_deploy_apiproxy "$PROXY_NAME" "$PROXY_SA_EMAIL"
 
 echo " "
 echo "The proxy is deployed. "

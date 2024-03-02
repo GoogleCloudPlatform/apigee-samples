@@ -39,9 +39,10 @@ browser window.
 
 ## Option 2: Manual steps in your own Terminal
 
-You will need to open a Linux-like terminal (CloudShell's Debian variant works;
-MacOS works; sorry, Powershell does not) in order to follow these steps.  This
-sample demonstrates how to connect to a Cloud Function from an Apigee Proxy.
+You will need to open a Linux-like terminal in order to follow these steps. The
+Debian variant in [Google Cloud Shell](https://shell.cloud.google.com/) works;
+MacOS works; sorry, Powershell does not. This sample demonstrates how to connect
+to a Cloud Function from an Apigee Proxy.
 
 Make sure the following tools are available in your terminal's PATH
     *[gcloud SDK](https://cloud.google.com/sdk/docs/install)

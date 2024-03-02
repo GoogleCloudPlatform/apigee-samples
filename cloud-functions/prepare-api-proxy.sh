@@ -53,15 +53,16 @@ curl -s https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.s
 export PATH=$PATH:$HOME/.apigeecli/bin
 
 # construct the URL for the Cloud Function that we will deploy
-CF_URL="https://${CLOUD_FUNCTIONS_REGION}-${CLOUD_FUNCTIONS_PROJECT}.cloudfunctions.net/apigee-sample-hello"
+CF_URL=$(gcloud functions describe "$CLOUD_FUNCTION_NAME" --region="$CLOUD_FUNCTIONS_REGION" --format='value(serviceConfig.uri)')
+CF_URL_WITH_PATH="$CF_URL/apigee-sample-hello"
 
 # Insert that URL into the proper places, in the Apigee API Proxy TargetEndpoint
 # configuration file.
 
 echo "Setting the Cloud Functions endpoint in the proxy..."
 TARGET_1="./bundle/${PROXY_NAME}/apiproxy/targets/target-1.xml"
-replace_element_text "Audience" "${CF_URL}" "${TARGET_1}"
-replace_element_text "URL" "${CF_URL}" "${TARGET_1}"
+replace_element_text "Audience" "${CF_URL_WITH_PATH}" "${TARGET_1}"
+replace_element_text "URL" "${CF_URL_WITH_PATH}" "${TARGET_1}"
 
 echo "Running apigeelint"
 node_modules/apigeelint/cli.js --profile apigeex -e TD002,TD004 -s "./bundle/${PROXY_NAME}/apiproxy" -f table.js

@@ -43,7 +43,7 @@
   <HTTPTargetConnection>
     <Authentication>
       <GoogleIDToken>
-        <Audience>https://REGION-PROJECT.cloudfunctions.net/apigee-sample-hello</Audience>
+        <Audience>https://REGION-PROJECT.apigee-sample-zeiq-uw.a.run.app/apigee-sample-hello</Audience>
       </GoogleIDToken>
     </Authentication>
 
@@ -53,6 +53,6 @@
     </SSLInfo>
 
     <!-- the proxy.pathsuffix will get appended to this -->
-    <URL>https://REGION-PROJECT.cloudfunctions.net/apigee-sample-hello</URL>
+    <URL>https://REGION-PROJECT.apigee-sample-zeiq-uw.a.run.app/apigee-sample-hello</URL>
   </HTTPTargetConnection>
 </TargetEndpoint>
