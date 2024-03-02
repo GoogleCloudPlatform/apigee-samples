@@ -56,4 +56,4 @@ Cloud Shell has all of these pre-configured. If you use your own machine, you
 will need to install these yourself.
 
 After you've insured the pre-requisites are in order, you can get started. Follow the
-steps in [Manual-Steps.md](./Manual-Steps.sh).
+steps in [Manual-Steps.md](./Manual-Steps.md).
