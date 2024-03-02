@@ -172,9 +172,20 @@ When deployment completes, invoke the function again, in the same way, with no a
 curl -i $CF_URL/hello-sample
 ```
 
-The response to this will be a 403 code and an error message. The
-cloud function now requires authentication, and the request we sent did not provide
-an identity token. Let's correct that.
+
+Because the Cloud Function now requires authentication, and because this request
+didn't pass any credentials, you will expect to see a response with a 403 status
+code and a "Forbidden" error message.  But the request may succeed!  [Updating IAM policy
+is an "eventually consistent"
+operation](https://cloud.google.com/iam/docs/access-change-propagation).
+
+So if it does return a 200 status, you may need to wait a bit here, perhaps 2
+minutes, for that change in authentication settings to take effect.
+
+Re-try the curl command, waiting a bit each time, until you see the 403 response code.
+
+The Cloud Function now requires authentication, and the request we sent did not
+provide an identity token. Let's correct that.
 
 ## Obtain an Identity Token
 
@@ -241,7 +252,7 @@ curl -i -H "Authorization: Bearer $SA_ID_TOKEN" "$CF_URL/hello-sample"
 ...and you'll see that it works. If it fails with the same 403 message, wait a
 bit, and try again.
 
-We have shown that the Cloud Function will allow an authenticated request,
+We have shown that the Cloud Function will allow an authenticated request
 bearing the ID token of a particular service account. Now let's use the API
 Proxy to do that.
 
@@ -261,7 +272,7 @@ Scroll down to view the `Audience` element and the `URL` elements. It should loo
   <HTTPTargetConnection>
     <Authentication>
       <GoogleIDToken>
-        <Audience>https://REGION-PROJECT.apigee-sample-zeiq-uw.a.run.app/apigee-sample-hello</Audience>
+        <Audience>https://apigee-sample-hello-SOMETHING.a.run.app/apigee-sample-hello</Audience>
       </GoogleIDToken>
     </Authentication>
 
@@ -271,7 +282,7 @@ Scroll down to view the `Audience` element and the `URL` elements. It should loo
     </SSLInfo>
 
     <!-- the proxy.pathsuffix will get appended -->
-    <URL>https://REGION-PROJECT.apigee-sample-zeiq-uw.a.run.app/apigee-sample-hello</URL>
+    <URL>https://apigee-sample-hello-SOMETHING.a.run.app/apigee-sample-hello</URL>
   </HTTPTargetConnection>
   ...
 ```
