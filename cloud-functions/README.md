@@ -45,11 +45,12 @@ MacOS works; sorry, Powershell does not. This sample demonstrates how to connect
 to a Cloud Function from an Apigee Proxy.
 
 Make sure the following tools are available in your terminal's PATH
-    *[gcloud SDK](https://cloud.google.com/sdk/docs/install)
-    * unzip
-    *curl
-    * jq
-    * npm
+
+  * [gcloud SDK](https://cloud.google.com/sdk/docs/install)
+  * unzip
+  * curl
+  * jq
+  * npm
 
 Cloud Shell has all of these pre-configured. If you use your own machine, you
 will need to install these yourself.
