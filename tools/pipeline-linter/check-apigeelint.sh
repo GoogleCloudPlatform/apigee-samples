@@ -33,7 +33,7 @@ echo "Running using Apigeelint version - $(apigeelint --version)"
 echo ""
 
 # For API Proxies
-for proxyDir in "$PWD"/*/apiproxy "$PWD"/*/bundles/*/apiproxy; do
+for proxyDir in "$PWD"/*/apiproxy "$PWD"/*/bundle/*/apiproxy "$PWD"/*/bundles/*/apiproxy; do
   skip=false
   for excl in "${proxyExclusions[@]}"; do
     if [[ $proxyDir == *"$excl"* ]]; then
