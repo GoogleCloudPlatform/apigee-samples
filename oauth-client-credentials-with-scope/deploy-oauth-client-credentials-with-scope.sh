@@ -50,8 +50,8 @@ REV=$(apigeecli apis create bundle -f apiproxy -n oauth-client-credentials-with-
 apigeecli apis deploy --wait --name oauth-client-credentials-with-scope --ovr --rev "$REV" --org "$PROJECT" --env "$APIGEE_ENV" --token "$TOKEN"
 
 echo "Creating API Products"
-apigeecli products create --name oauth-client-credentials-product-with-read-scope --displayname "oauth-client-credentials-product-with-read-scope" --opgrp ./oauth-client-credentials-product-ops.json --envs "$APIGEE_ENV" --approval auto --quota 10 --interval 1 --unit minute --org "$PROJECT" --token "$TOKEN" --scopes "read"
-apigeecli products create --name oauth-client-credentials-product-with-write-scope --displayname "oauth-client-credentials-product-with-write-scope" --opgrp ./oauth-client-credentials-product-ops.json --envs "$APIGEE_ENV" --approval auto --quota 10 --interval 1 --unit minute --org "$PROJECT" --token "$TOKEN" --scopes "read" --scopes "write"
+apigeecli products create --name oauth-client-credentials-product-with-read-scope --display-name "oauth-client-credentials-product-with-read-scope" --opgrp ./oauth-client-credentials-product-ops.json --envs "$APIGEE_ENV" --approval auto --quota 10 --interval 1 --unit minute --org "$PROJECT" --token "$TOKEN" --scopes "read"
+apigeecli products create --name oauth-client-credentials-product-with-write-scope --display-name "oauth-client-credentials-product-with-write-scope" --opgrp ./oauth-client-credentials-product-ops.json --envs "$APIGEE_ENV" --approval auto --quota 10 --interval 1 --unit minute --org "$PROJECT" --token "$TOKEN" --scopes "read" --scopes "write"
 
 echo "Creating Developer"
 apigeecli developers create --user testuser --email oauth-client-credentials-with-scope_apigeesamples@acme.com --first Test --last User --org "$PROJECT" --token "$TOKEN"

@@ -55,7 +55,7 @@ REV=$(apigeecli apis create bundle -f apiproxy -n websockets --org "$PROJECT" --
 apigeecli apis deploy --wait --name websockets --ovr --rev "$REV" --org "$PROJECT" --env "$APIGEE_ENV" --token "$TOKEN"
 
 echo "Creating API Products"
-apigeecli products create --name websockets --displayname "websockets" --envs "$APIGEE_ENV" --approval auto --org "$PROJECT" --token "$TOKEN"
+apigeecli products create --name websockets --display-name "websockets" --envs "$APIGEE_ENV" --approval auto --org "$PROJECT" --token "$TOKEN"
 
 echo "Creating Developer"
 apigeecli developers create --user testuser --email websockets_apigeesamples@acme.com --first Test --last User --org "$PROJECT" --token "$TOKEN"

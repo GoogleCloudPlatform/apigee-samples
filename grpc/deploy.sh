@@ -186,7 +186,7 @@ REV=$(apigeecli apis create bundle -f apiproxy -n grpc --org "$PROJECT" --token 
 apigeecli apis deploy --wait --name grpc --ovr --rev "$REV" --org "$PROJECT" --env "$ENVIRONMENT_NAME" --token "$TOKEN"
 
 echo "Creating API Products..."
-apigeecli products create --name grpc --displayname "gRPC" --envs "$ENVIRONMENT_NAME" --approval auto --org "$PROJECT" --token "$TOKEN"
+apigeecli products create --name grpc --display-name "gRPC" --envs "$ENVIRONMENT_NAME" --approval auto --org "$PROJECT" --token "$TOKEN"
 
 echo "Creating Developer..."
 apigeecli developers create --user testuser --email grpc_apigeesamples@acme.com --first Test --last User --org "$PROJECT" --token "$TOKEN"
