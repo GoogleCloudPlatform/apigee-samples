@@ -24,7 +24,7 @@ create_apiproduct() {
     printf "  The apiproduct %s already exists!\n" "${product_name}"
   else
     [[ ! -f "$ops_file" ]] && printf "missing operations definition file %s\n" "$ops_file" && exit 1
-    apigeecli products create --name "${product_name}" --displayname "${product_name}" \
+    apigeecli products create --name "${product_name}" --display-name "${product_name}" \
       --opgrp "$ops_file" \
       --envs "$APIGEE_ENV" --approval auto \
       --org "$PROJECT" --token "$TOKEN" --disable-check

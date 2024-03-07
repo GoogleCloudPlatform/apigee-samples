@@ -44,7 +44,7 @@ REV=$(apigeecli apis create bundle -f apiproxy -n sample-drupal-developer-portal
 apigeecli apis deploy --wait --name sample-drupal-developer-portal --ovr --rev "$REV" --org "$PROJECT" --env "$APIGEE_ENV" --token "$TOKEN"
 
 echo "Creating API Product"
-apigeecli products create --name sample-drupal-developer-portal-product --displayname "sample-drupal-developer-portal-product" --opgrp ./drupal-developer-portal-product-ops.json --envs "$APIGEE_ENV" --approval auto --quota 10 --interval 1 --unit minute --org "$PROJECT" --token "$TOKEN"
+apigeecli products create --name sample-drupal-developer-portal-product --display-name "sample-drupal-developer-portal-product" --opgrp ./drupal-developer-portal-product-ops.json --envs "$APIGEE_ENV" --approval auto --quota 10 --interval 1 --unit minute --org "$PROJECT" --token "$TOKEN"
 
 echo "Updating OpenAPI YAML"
 sed -i "s/\[APIGEE_HOST\]/$APIGEE_HOST/" drupal-developer-portal.yaml

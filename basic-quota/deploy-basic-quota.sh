@@ -48,8 +48,8 @@ REV=$(apigeecli apis create bundle -f apiproxy -n basic-quota --org "$PROJECT" -
 apigeecli apis deploy --wait --name basic-quota --ovr --rev "$REV" --org "$PROJECT" --env "$APIGEE_ENV" --token "$TOKEN"
 
 echo "Creating API Products"
-apigeecli products create --name basic-quota-trial --displayname "basic-quota-trial" --opgrp ./basic-quota-product-ops.json --envs "$APIGEE_ENV" --approval auto --quota 10 --interval 1 --unit minute --org "$PROJECT" --token "$TOKEN"
-apigeecli products create --name basic-quota-premium --displayname "basic-quota-premium" --opgrp ./basic-quota-product-ops.json --envs "$APIGEE_ENV" --approval auto --quota 1000 --interval 1 --unit hour --org "$PROJECT" --token "$TOKEN"
+apigeecli products create --name basic-quota-trial --display-name "basic-quota-trial" --opgrp ./basic-quota-product-ops.json --envs "$APIGEE_ENV" --approval auto --quota 10 --interval 1 --unit minute --org "$PROJECT" --token "$TOKEN"
+apigeecli products create --name basic-quota-premium --display-name "basic-quota-premium" --opgrp ./basic-quota-product-ops.json --envs "$APIGEE_ENV" --approval auto --quota 1000 --interval 1 --unit hour --org "$PROJECT" --token "$TOKEN"
 
 echo "Creating Developer"
 apigeecli developers create --user testuser --email basic-quota_apigeesamples@acme.com --first Test --last User --org "$PROJECT" --token "$TOKEN"
