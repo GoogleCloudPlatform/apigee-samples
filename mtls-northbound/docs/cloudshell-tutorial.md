@@ -248,8 +248,11 @@ gcloud compute backend-services update ${BACKEND_SERVICE} \
   --custom-request-header="X-Client-Cert-Present:{client_cert_present}" \
   --custom-request-header="X-Client-Cert-Chain-Verified:{client_cert_chain_verified}" \
   --custom-request-header="X-Client-Cert-Error:{client_cert_error}" \
+  --custom-request-header="X-Client-Cert-Encoded:{client_cert_leaf}" \
   --custom-request-header="X-Client-Cert-Hash:{client_cert_sha256_fingerprint}" \
   --custom-request-header="X-Client-Cert-Serial-Number:{client_cert_serial_number}" \
+  --custom-request-header="X-Client-Cert-SubjectDN:{client_cert_subject_dn}" \
+  --custom-request-header="X-Client-Cert-IssuerDN:{client_cert_issuer_dn}" \
   --custom-request-header="X-Client-Cert-SPIFFE:{client_cert_spiffe_id}" \
   --custom-request-header="X-Client-Cert-URI-SANs:{client_cert_uri_sans}" \
   --custom-request-header="X-Client-Cert-DNSName-SANs:{client_cert_dnsname_sans}" \
