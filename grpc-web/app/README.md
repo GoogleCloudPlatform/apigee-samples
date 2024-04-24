@@ -24,10 +24,9 @@ This directory contains sample code for creating a gRPC server + gRPC-web wrappe
 - [How to run the app locally with Docker](#how-to-run-the-app-locally-with-docker)
 - [How to build and deploy to Cloud Run](#how-to-build-and-deploy-to-cloud-run)
 
-
 ## How to build the app locally
 
-First install the protobuf compiler `protoc` , see instructions at: https://grpc.io/docs/protoc-installation/
+First install the protobuf compiler `protoc` , see instructions at: <https://grpc.io/docs/protoc-installation/>
 
 Then, install the [Go plugins](https://grpc.io/docs/languages/go/quickstart/#prerequisites) for `protoc`
 
@@ -43,7 +42,6 @@ go generate ./...
 go build -o go-grpc-web ./cmd/
 ```
 
-
 ## How to run the app locally
 
 Use the instructions below to run the sample gRPC servers manually.
@@ -51,7 +49,6 @@ Use the instructions below to run the sample gRPC servers manually.
 ```shell
 PORT=8080 GRPC_PORT=10000 ./go-grpc-web
 ````
-
 
 ## How to run the app locally with Docker
 
@@ -61,12 +58,11 @@ First build the docker image
 docker build -t grpc-web-app .
 ```
 
-Then, run it 
+Then, run it
 
 ```shell
 docker run --rm -it -p 8080:8080 grpc-web-app
 ```
-
 
 ## How to build and deploy to Cloud Run
 
@@ -80,6 +76,7 @@ repository automatically in your GCP Project.
 The gRPC-Web server will be available publicly without authentication, use this for testing only.
 
 First authenticate with gcloud, and set your project using `gcloud`
+
 ```shell
 gcloud auth login
 gcloud config set project YOUR_GCP_POJECT
@@ -92,16 +89,14 @@ export REGION=us-west1
 ./deploy-grpc-web-cloud-run.sh
 ```
 
-Once build is complete, Cloud Run will give you the URL to access the container, e.g. https://apigee-grpc-web-backend-p57ysoduga-uw.a.run.app
+Once build is complete, Cloud Run will give you the URL to access the container, e.g. <https://apigee-grpc-web-backend-p57ysoduga-uw.a.run.app>
 
 You can use `cURL` to verify it's working as expected.
 
 **Note** Since this is a gRPC-Web call, both the request and response payloads are actually protobufs that have been base64 encoded.
-
 
 ```shell
 curl 'https://apigee-grpc-web-backend-p57ysoduga-uw.a.run.app/helloworld.Greeter/SayHello' \
   -H 'content-type: application/grpc-web-text' \
   --data-raw 'AAAAAAYKBGhvbWU='
 ```
-

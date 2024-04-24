@@ -7,9 +7,10 @@
 
 ## Building the Java Callout Jar file
 
-This step is needed to generate the Jar file 
+This step is needed to generate the Jar file
 
-* Build the Java Callout Jar file
+- Build the Java Callout Jar file
+
   ```shell
   ./build-jar.sh
   ```

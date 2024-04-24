@@ -14,7 +14,7 @@
 
 FROM golang:1.22 as builder
 
-ADD ./ /src
+COPY ./ /src
 WORKDIR /src
 
 RUN apt-get update && apt-get install -y protobuf-compiler

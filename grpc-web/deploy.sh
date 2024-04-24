@@ -64,7 +64,7 @@ TARGET_1="./bundle/apiproxy/targets/default.xml"
 replace_element_text "URL" "${BACKEND_SERVICE}" "${TARGET_1}"
 
 echo "Building the Java callout"
-cd callout
+cd callout || exit
 ./build-jar.sh
 cd ..
 

@@ -17,7 +17,6 @@ This sample shows how to use Apigee in front of your gRPC backends using [gRPC-W
     * protoc
     * grpcurl
 
-
 5. The following GCP APIs will be enabled:
     * Cloud Run API
     * Container Registry API
@@ -83,7 +82,7 @@ This will compile and build the Java [callout](../grpc-web/callout) to create a 
 
 Execute the cURL commands as prompted by the script.
 
-First command should return a 200 response as its not a threat request. 
+First command should return a 200 response as its not a threat request.
 
 However the second command should return a 400 response as it is a threat request.
 
@@ -94,4 +93,3 @@ If you want to clean up the artifacts from this example in your Apigee Organizat
 ```bash
 ./clean-up.sh
 ```
-

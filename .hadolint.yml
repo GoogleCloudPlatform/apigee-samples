@@ -15,3 +15,5 @@
 ignored:
   - DL3018  # Pin versions in apk add
   - DL3059  # Multiple consecutive RUN instructions
+  - DL3008  # Pin versions in apt get install
+  - DL3015  # Avoid additional packages by specifying `--no-install-recommends`

@@ -15,8 +15,6 @@
 # limitations under the License.
 
 set -e
-export PATH="$(pwd)/tools/apache-maven/bin:$PATH"
-
 
 echo "*** Downloading Apigee Expressions jar file ***"
 curl -s -O https://raw.githubusercontent.com/apigee/api-platform-samples/master/doc-samples/java-cookbook/lib/expressions-1.0.0.jar
@@ -37,7 +35,6 @@ rm expressions-1.0.0.jar
 echo ""
 echo ""
 
-
 echo "*** Downloading Apigee Message Flow jar file ***"
 curl -s -O https://raw.githubusercontent.com/apigee/api-platform-samples/master/doc-samples/java-cookbook/lib/message-flow-1.0.0.jar
 echo ""
@@ -52,7 +49,7 @@ mvn -ntp install:install-file \
   -Dpackaging=jar \
   -DgeneratePom=true
 
-rm message-flow-1.0.0.jar 
+rm message-flow-1.0.0.jar
 
 rm -f ./target/*.jar
 echo ""
@@ -62,7 +59,6 @@ echo "*** Building Java callout Jar file ***"
 mvn -ntp package
 echo ""
 echo ""
-
 
 echo "*** Copying Java callout Jar file to apiproxy ***"
 mkdir -p ../bundle/apiproxy/resources/java/

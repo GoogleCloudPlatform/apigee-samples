@@ -41,10 +41,10 @@ cd grpc-web
 ```bash
 source ./env.sh
 ```
+
 ---
 
 ## Deploy the gRPC-Web service
-
 
 Let's first deploy the gRPC-Web application to Cloud Run
 
@@ -70,7 +70,7 @@ This will compile and build the Java [callout](../callout) to create a jar file 
 
 Execute the cURL commands as prompted by the script.
 
-First command should return a 200 response as its not a threat request. 
+First command should return a 200 response as its not a threat request.
 
 However the second command should return a 400 response as it is a threat request.
 
@@ -81,7 +81,6 @@ However the second command should return a 400 response as it is a threat reques
 <walkthrough-conclusion-trophy></walkthrough-conclusion-trophy>
 
 Congratulations! You've successfully implemented a proxy that points to the gRPC-Web service and checks for any attacks.
-
 
 <walkthrough-inline-feedback></walkthrough-inline-feedback>
 
