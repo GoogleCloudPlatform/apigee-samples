@@ -22,6 +22,6 @@
         <Response/>
     </PostFlow>
     <HTTPTargetConnection>
-        <URL>https://apigee-grpc-web-backend-2bjrvv4byq-uw.a.run.app</URL>
+        <URL>@TARGETURL@</URL>
     </HTTPTargetConnection>
 </TargetEndpoint>
