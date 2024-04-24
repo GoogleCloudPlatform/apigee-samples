@@ -19,7 +19,7 @@ package grpc
 import (
 	"context"
 	"fmt"
-	"github.com/apigee-samples/grpc-web/app/pkg/grpc/generated/pb"
+	"github.com/GoogleCloudPlatform/apigee-samples/grpc-web/app/pkg/grpc/generated/pb"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )

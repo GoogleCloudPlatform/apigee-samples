@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-module github.com/apigee-samples/grpc-web/app
+module github.com/GoogleCloudPlatform/apigee-samples/grpc-web/app
 
 go 1.22
 

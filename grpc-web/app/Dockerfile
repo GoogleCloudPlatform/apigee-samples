@@ -31,7 +31,7 @@ EXPOSE ${PORT}
 
 LABEL org.opencontainers.image.url='https://github.com/GoogleCloudPlatform/apigee-samples/grpc-web/app' \
       org.opencontainers.image.documentation='https://github.com/GoogleCloudPlatform/apigee-samples/grpc-web/app' \
-      org.opencontainers.image.source='https://github.com/GoogleCloudPlatform/apigee-samples/grpc-web/app' \
+      org.opencontainers.image.source='https://github.com/GoogleCloudPlatform/apigee-samples//grpc-web/app' \
       org.opencontainers.image.vendor='Google LLC' \
       org.opencontainers.image.licenses='Apache-2.0' \
       org.opencontainers.image.description='This is sample backend app for gRPC-Web'

@@ -15,8 +15,8 @@
 package main
 
 import (
-	"github.com/apigee-samples/grpc-web/app/pkg/grpc"
-	"github.com/apigee-samples/grpc-web/app/pkg/grpc-web"
+	"github.com/GoogleCloudPlatform/apigee-samples/grpc-web/app/pkg/grpc"
+	"github.com/GoogleCloudPlatform/apigee-samples/grpc-web/app/pkg/grpc-web"
 	"os"
 )
 
@@ -33,9 +33,12 @@ func main() {
 
 	gRPCServer, err := grpc.Start(gRPCPort)
 	if err != nil {
-		return
+		panic(err)
 	}
 
 	err = grpc_web.Start(gRPCServer, gRPCWebPort)
+	if err != nil {
+		panic(err)
+	}
 
 }

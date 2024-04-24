@@ -16,7 +16,7 @@ package grpc
 
 import (
 	"fmt"
-	"github.com/apigee-samples/grpc-web/app/pkg/grpc/generated/pb"
+	"github.com/GoogleCloudPlatform/apigee-samples/grpc-web/app/pkg/grpc/generated/pb"
 	"github.com/pkg/errors"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
