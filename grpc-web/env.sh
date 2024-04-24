@@ -15,7 +15,7 @@
 # limitations under the License.
 
 export PROJECT="<GCP_PROJECT_ID>"
-export NETWORK="<VPC_NETWORK>"
-export SUBNET="<VPC_SUBNET>"
+export REGION="<GCP_REGION>"
+
 
 gcloud config set project $PROJECT

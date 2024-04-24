@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "API proxy that demonstrates a gRPC-web passthrough proxy",
   "scripts": {
-    "lint": "apigeelint -s apiproxy -e PO013,PO025 -f table.js",
+    "lint": "apigeelint -s bundle/apiproxy -e PO013,PO025 -f table.js",
     "test": "npx cucumber-js --publish-quiet test/"
   },
   "dependencies": {
