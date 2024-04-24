@@ -71,7 +71,7 @@ cd app
 cd ../
 ```
 
-**NOTE** This may take a few minutes to complete.
+**NOTE:** This may take a few minutes to complete.
 
 Once the script is complete, export the BACKEND_SERVICE variable.
 
