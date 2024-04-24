@@ -24,8 +24,23 @@ if [ -z "$REGION" ]; then
   exit
 fi
 
+if [ -z "$APIGEE_ENV" ]; then
+  echo "No APIGEE_ENV variable set"
+  exit
+fi
+
+if [ -z "$APIGEE_HOST" ]; then
+  echo "No APIGEE_HOST variable set"
+  exit
+fi
+
 if [ -z "$BACKEND_SERVICE" ]; then
   echo "No BACKEND_SERVICE variable set"
+  exit
+fi
+
+if ! [ -x "$(command -v jq)" ]; then
+  echo "jq command is not on your PATH"
   exit
 fi
 

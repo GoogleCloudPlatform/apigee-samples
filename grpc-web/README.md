@@ -39,11 +39,11 @@ This sample shows how to use Apigee in front of your gRPC backends using [gRPC-W
 
 Use the following GCP CloudShell tutorial, and follow the instructions.
 
-[![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/apigee-samples&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=grpc/docs/cloudshell-tutorial.md)
+[![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/apigee-samples&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=grpc-web/docs/cloudshell-tutorial.md)
 
 ## Setup instructions
 
-1. Clone the `apigee-samples` repo, and switch the `grpc` directory
+1. Clone the `apigee-samples` repo, and switch the `grpc-web` directory
 
 ```bash
 git clone https://github.com/GoogleCloudPlatform/apigee-samples.git
@@ -53,8 +53,9 @@ cd apigee-samples/grpc-web
 2. Edit the `env.sh` file and configure the following variables:
 
 * `PROJECT` the project where your Apigee organization is located
-* `NETWORK` the VPC network where the PSC NEG will be deployed
-* `SUBNET` the VPC subnet where the PSC NEG will be deployed
+* `REGION` the region where Cloud Run will be deployed
+* `APIGEE_ENV` the region where your Apigee instance is provisioned
+* `APIGEE_HOST` the hostname configured in the Apigee Environment Group
 
 Now source the `env.sh` file
 
@@ -62,26 +63,24 @@ Now source the `env.sh` file
 source ./env.sh
 ```
 
-Let's run the script that will create and deploy the resources necessary to test the gRPC functionality. This script will create the following:
+Let's first deploy the gRPC-Web application to Cloud Run
 
-* Deploy a sample gRPC-Web application to Cloud Run
-* Deploy an API proxy with Threat Protection policies pointing to Cloud Run deployed
+```bash
+cd ../
+cd app
+./deploy-grpc-web-cloud-run.sh
+cd ../
+```
 
- Finally it tests that the deployment and configuration has been successful.
+Once the script is complete, export the BACKEND_SERVICE variable.
 
-3. Run the deploy.sh script:
+Now that the Cloud Run service is deployed, let's build the Apigee proxy
 
 ```sh
 ./deploy.sh
 ```
 
-## Manually Testing the gRPC Proxy
-
-To manually test the proxy, make requests using grpcurl or another gRPC client:
-
-```sh
-grpcurl -H "x-apikey:$CLIENT_ID" -import-path $PWD/grpc-backend/examples/protos -proto helloworld.proto -d '{"name\":"Guest"}' <YOUR_APIGEE_GRPC_HOSTNAME>:443 helloworld.Greeter/SayHello"
-```
+Execute the cURL commands as prompted by the script.
 
 ## Cleanup
 
