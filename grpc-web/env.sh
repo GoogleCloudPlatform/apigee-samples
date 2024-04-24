@@ -14,8 +14,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-export PROJECT="<GCP_PROJECT_ID>"
-export REGION="<GCP_REGION>"
+export PROJECT="ssv-apigee-asm-demo"
+export REGION="us-west1"
 
 
 gcloud config set project $PROJECT

@@ -23,10 +23,10 @@
     <PreFlow name="PreFlow">
         <Request>
             <Step>
-                <Name>JC-ProtoDecode</Name>
+                <Name>Java-ProtoDecode</Name>
             </Step>
             <Step>
-                <Name>REP-Threat</Name>
+                <Name>REGEX-Threat</Name>
             </Step>
         </Request>
         <Response/>

@@ -11,12 +11,11 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<JavaCallout continueOnError="false" enabled="true" name="JC-ProtoDecode">
-    <DisplayName>JC-ProtoDecode</DisplayName>
-    <Properties>
-        <Property name="pb-message-ref">request</Property>
-        <Property name="pb-message-is-base64">true</Property>
-    </Properties>
-    <ClassName>com.google.apigee.callouts.ProtobufDecoder</ClassName>
-    <ResourceURL>java://apigee-callout-protobuf-decoder.jar</ResourceURL>
-</JavaCallout>
+<RegularExpressionProtection continueOnError="false" enabled="true" name="REGEX-Threat">
+    <DisplayName>REGEX-Threat</DisplayName>
+    <Properties/>
+    <IgnoreUnresolvedVariables>false</IgnoreUnresolvedVariables>
+    <Variable name="pb-decoder.message-data">
+        <Pattern><![CDATA[<[^>]*>]]></Pattern>
+    </Variable>
+</RegularExpressionProtection>
