@@ -14,6 +14,9 @@ This sample shows how to use Apigee in front of your gRPC backends using [gRPC-W
     * jq
     * npm
     * docker
+    * protoc
+    * grpcurl
+
 
 5. The following GCP APIs will be enabled:
     * Cloud Run API
@@ -44,7 +47,7 @@ Use the following GCP CloudShell tutorial, and follow the instructions.
 
 ```bash
 git clone https://github.com/GoogleCloudPlatform/apigee-samples.git
-cd apigee-samples/grpc
+cd apigee-samples/grpc-web
 ```
 
 2. Edit the `env.sh` file and configure the following variables:
@@ -61,9 +64,8 @@ source ./env.sh
 
 Let's run the script that will create and deploy the resources necessary to test the gRPC functionality. This script will create the following:
 
-* An External Loadbalancer with an HTTP2 backend
-* Deploy a sample gRPC Greeter service to Cloud Run
-* Deploy an API proxy, target server, developer, app and api product
+* Deploy a sample gRPC-Web application to Cloud Run
+* Deploy an API proxy with Threat Protection policies pointing to Cloud Run deployed
 
  Finally it tests that the deployment and configuration has been successful.
 
