@@ -73,7 +73,7 @@ grpcWebEncodeHelloRequest() {
   data="${1}"
   protocEncode="protoc --encode=helloworld.HelloRequest  ./app/pkg/grpc/greeter.proto"
   dataLength=$(echo "${data}" | $protocEncode | wc -c)
-  cat <(printf "%.2x%.8x" 0 ${dataLength} | xxd -r -p) <(echo "${data}" | $protocEncode) | base64  
+  cat <(printf "%.2x%.8x" 0 "${dataLength}" | xxd -r -p) <(echo "${data}" | $protocEncode) | base64 | tr -d '\n\r'
 }
 
 PAYLOAD_1="$(grpcWebEncodeHelloRequest 'name: "home"')"
