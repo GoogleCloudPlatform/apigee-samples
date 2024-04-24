@@ -65,4 +65,5 @@ echo ""
 
 
 echo "*** Copying Java callout Jar file to apiproxy ***"
+mkdir -p ../bundle/apiproxy/resources/java/
 cp ./target/apigee-callout-protobuf-decoder.jar ../bundle/apiproxy/resources/java/
