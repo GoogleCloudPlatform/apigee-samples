@@ -14,8 +14,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-export PROJECT="ssv-apigee-asm-demo"
-export REGION="us-west1"
-
+export PROJECT="<PROJECT>"
+export REGION="<REGION>"
+export APIGEE_ENV="<APIGEE_ENV>"
+export APIGEE_HOST="<APIGEE_HOST>"
 
 gcloud config set project $PROJECT

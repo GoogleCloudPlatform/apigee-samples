@@ -26,7 +26,7 @@
                 <Name>Java-ProtoDecode</Name>
             </Step>
             <Step>
-                <Name>REGEX-Threat</Name>
+                <Name>Regex-Threat</Name>
             </Step>
         </Request>
         <Response/>

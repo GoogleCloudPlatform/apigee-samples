@@ -11,8 +11,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<RegularExpressionProtection continueOnError="false" enabled="true" name="REGEX-Threat">
-    <DisplayName>REGEX-Threat</DisplayName>
+<RegularExpressionProtection continueOnError="false" enabled="true" name="Regex-Threat">
+    <DisplayName>Regex-Threat</DisplayName>
     <Properties/>
     <IgnoreUnresolvedVariables>false</IgnoreUnresolvedVariables>
     <Variable name="pb-decoder.message-data">

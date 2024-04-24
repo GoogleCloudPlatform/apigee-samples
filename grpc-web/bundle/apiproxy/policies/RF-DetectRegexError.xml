@@ -16,8 +16,7 @@
     <Properties/>
     <FaultResponse>
         <Set>
-            <Headers/>
-            <Payload contentType="text/plain"/>
+            <Payload contentType="application/json">{"error": "Threat Detected"}</Payload>
             <StatusCode>400</StatusCode>
             <ReasonPhrase>Bad request</ReasonPhrase>
         </Set>
