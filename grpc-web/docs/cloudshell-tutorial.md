@@ -72,20 +72,6 @@ This will compile and build the Java [callout](../callout) to create a jar file 
 
 Execute the cURL commands as prompted by the script:
 
-```sh
-curl -i https://$APIGEE_HOST/v1/samples/grpc-web/helloworld.Greeter/SayHello \
-    -H 'content-type: application/grpc-web-text' \
-    --data-raw 'AAAAAAYKBGhvbWU='
-```
-
-and
-
-```sh
-curl -i https://$APIGEE_HOST/v1/samples/grpc-web/helloworld.Greeter/SayHello \
-    -H 'content-type: application/grpc-web-text' \
-    --data-raw 'AAAAAEkKRzxsaXN0aW5nIG9ucG9pbnRlcnJhd3VwZGF0ZT1wcm9tcHQoMSkgc3R5bGU9ZGlzcGxheTpibG9jaz5YU1M8L2xpc3Rpbmc+'
-```
-
 First command should return a 200 response as its not a threat request.
 
 However the second command should return a 400 response as it is a threat request.

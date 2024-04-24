@@ -44,6 +44,16 @@ if ! [ -x "$(command -v jq)" ]; then
   exit
 fi
 
+if ! [ -x "$(command -v protoc)" ]; then
+  echo "protoc command is not on your PATH"
+  exit
+fi
+
+if ! [ -x "$(command -v xxd)" ]; then
+  echo "xxd command is not on your PATH"
+  exit
+fi
+
 replace_element_text() {
   local element_name=$1
   local backend_url=$2
@@ -58,6 +68,16 @@ replace_element_text() {
   fi
   sed "$SEDOPTION" -e "${sed_script}" "${file_name}"
 }
+
+grpcWebEncodeHelloRequest() {
+  data="${1}"
+  protocEncode="protoc --encode=helloworld.HelloRequest  ./app/pkg/grpc/greeter.proto"
+  dataLength=$(echo "${data}" | $protocEncode | wc -c)
+  cat <(printf "%.2x%.8x" 0 ${dataLength} | xxd -r -p) <(echo "${data}" | $protocEncode) | base64  
+}
+
+PAYLOAD_1="$(grpcWebEncodeHelloRequest 'name: "home"')"
+PAYLOAD_2="$(grpcWebEncodeHelloRequest 'name: "<listing onpointerrawupdate=prompt(1) style=display:block>XSS</listing>"')"
 
 echo "Setting the Backend Service in the proxy..."
 TARGET_1="./bundle/apiproxy/targets/default.xml"
@@ -98,7 +118,7 @@ echo "-----------------------------"
 echo " "
 echo "Execute the following cURL commands:"
 echo " "
-echo "curl -i https://$PROXY_URL/helloworld.Greeter/SayHello -H 'content-type: application/grpc-web-text' --data-raw 'AAAAAAYKBGhvbWU='"
+echo "curl -i https://$PROXY_URL/helloworld.Greeter/SayHello -H 'content-type: application/grpc-web-text' --data-raw '$PAYLOAD_1'"
 echo " "
-echo "curl -i https://$PROXY_URL/helloworld.Greeter/SayHello -H 'content-type: application/grpc-web-text' --data-raw 'AAAAAEkKRzxsaXN0aW5nIG9ucG9pbnRlcnJhd3VwZGF0ZT1wcm9tcHQoMSkgc3R5bGU9ZGlzcGxheTpibG9jaz5YU1M8L2xpc3Rpbmc+'"
+echo "curl -i https://$PROXY_URL/helloworld.Greeter/SayHello -H 'content-type: application/grpc-web-text' --data-raw '$PAYLOAD_2'"
 echo " "
