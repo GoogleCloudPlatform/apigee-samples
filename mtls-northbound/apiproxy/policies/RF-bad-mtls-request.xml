@@ -34,7 +34,11 @@
         "x-client-cert-uri-sans":"{request.header.x-client-cert-uri-sans}",
         "x-client-cert-spiffe":"{request.header.x-client-cert-spiffe}",
         "x-client-cert-valid-not-before":"{request.header.x-client-cert-valid-not-before}",
-        "x-client-cert-valid-not-after":"{request.header.x-client-cert-valid-not-after}"
+        "x-client-cert-valid-not-after":"{request.header.x-client-cert-valid-not-after}",
+        "x-client-cert-issuer-dn":"{request.header.x-client-cert-issuer-dn}",
+        "x-client-cert-subject-dn":"{request.header.x-client-cert-subject-dn}",
+        "x-client-cert-leaf":"{request.header.x-client-cert-leaf}",
+        "x-client-cert-chain":"{request.header.x-client-cert-chain}"
     }
 }
 </Payload>
