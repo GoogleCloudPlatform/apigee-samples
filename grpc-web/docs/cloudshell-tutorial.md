@@ -66,7 +66,7 @@ Now that the Cloud Run service is deployed, let's build the Apigee proxy
 ./deploy.sh
 ```
 
-This will compile and build the Java [callout](../callout/) to create a jar file which gets copied over to the proxy resources. The proxy will then be deployed to Apigee.
+This will compile and build the Java [callout](../grpc-web/callout) to create a jar file which gets copied over to the proxy resources. The proxy will then be deployed to Apigee.
 
 Execute the cURL commands as prompted by the script.
 
