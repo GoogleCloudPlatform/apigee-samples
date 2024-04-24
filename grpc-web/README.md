@@ -70,6 +70,8 @@ cd app
 cd ../
 ```
 
+**NOTE** This may take a few minutes to complete.
+
 Once the script is complete, export the BACKEND_SERVICE variable.
 
 Now that the Cloud Run service is deployed, let's build the Apigee proxy
@@ -80,7 +82,21 @@ Now that the Cloud Run service is deployed, let's build the Apigee proxy
 
 This will compile and build the Java [callout](../grpc-web/callout) to create a jar file which gets copied over to the proxy resources. The proxy will then be deployed to Apigee.
 
-Execute the cURL commands as prompted by the script.
+Execute the cURL commands as prompted by the script:
+
+```sh
+curl -i https://$APIGEE_HOST/v1/samples/grpc-web/helloworld.Greeter/SayHello \
+    -H 'content-type: application/grpc-web-text' \
+    --data-raw 'AAAAAAYKBGhvbWU='
+```
+
+and
+
+```sh
+curl -i https://$APIGEE_HOST/v1/samples/grpc-web/helloworld.Greeter/SayHello \
+    -H 'content-type: application/grpc-web-text' \
+    --data-raw 'AAAAAEkKRzxsaXN0aW5nIG9ucG9pbnRlcnJhd3VwZGF0ZT1wcm9tcHQoMSkgc3R5bGU9ZGlzcGxheTpibG9jaz5YU1M8L2xpc3Rpbmc+'
+```
 
 First command should return a 200 response as its not a threat request.
 

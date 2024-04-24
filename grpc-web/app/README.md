@@ -89,6 +89,8 @@ export REGION=us-west1
 ./deploy-grpc-web-cloud-run.sh
 ```
 
+**NOTE** This may take a few minutes to complete.
+
 Once build is complete, Cloud Run will give you the URL to access the container, e.g. <https://apigee-grpc-web-backend-p57ysoduga-uw.a.run.app>
 
 You can use `cURL` to verify it's working as expected.
