@@ -195,8 +195,6 @@ public class ProtobufDecoder implements Execution {
             String protoDecodedMessageRef = vars.getProp(PROP_DECODED_MESSAGE_REF);
             String protoProcessMessage = vars.getProp(PROP_MSG_REF);
             Boolean protoMessageIsBase64 = "true".equals(vars.getProp(PB_MESSAGE_IS_BASE_64));
-            //Boolean protoMessageIsBase64 = vars.getVar(vars.getProp(PB_MESSAGE_IS_BASE_64), Boolean.class, false);
-            //stdout.printf("protoMessageIsBase64 = %s\n", protoMessageIsBase64);
 
             Descriptors.MethodDescriptor method = null;
 
