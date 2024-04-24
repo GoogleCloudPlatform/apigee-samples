@@ -24,6 +24,11 @@ if [ -z "$REGION" ]; then
   exit
 fi
 
+if [ -z "$CLOUD_RUN_SERVICE" ]; then
+  echo "No CLOUD_RUN_SERVICE variable set"
+  exit
+fi
+
 #Create Load Balancer and Apigee backend
 echo "Installing apigeecli"
 curl -s https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.sh | bash
@@ -38,11 +43,11 @@ gcloud services enable \
   artifactregistry.googleapis.com \
   --project="$PROJECT" --quiet
 
-echo "Build and deploy the gRPC-Web application to Cloud Run"
-./app/deploy-grpc-web-cloud-run.sh
+#echo "Build and deploy the gRPC-Web application to Cloud Run"
+#./app/deploy-grpc-web-cloud-run.sh
 
-#echo "Installing npm dependencies..."
-#npm install
+echo "Installing npm dependencies..."
+npm install
 
-#echo "Running apigeelint..."
-#npm run lint
+echo "Running apigeelint..."
+npm run lint
