@@ -27,3 +27,10 @@ gcloud run deploy apigee-grpc-web-backend \
    --timeout 3600 \
    --region="${REGION}" \
    --source=.
+
+BACKEND_SERVICE=$(gcloud run services describe apigee-grpc-web-backend --platform managed --region $REGION --format 'value(status.url)')
+
+echo " Your gRPC-Web App is deployed to Cloud Run"
+echo " Export the following environment variable: "
+echo " export BACKEND_SERVICE=${BACKEND_SERVICE} "
+echo " "
