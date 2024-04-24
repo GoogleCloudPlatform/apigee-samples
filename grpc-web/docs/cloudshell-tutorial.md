@@ -19,47 +19,60 @@ gcloud auth login
 gcloud config list
 ```
 
-Change the directory to the grpc sample:
+Change the directory to the grpc-web sample:
 
 ```sh
-cd grpc
+cd grpc-web
 ```
 
 ---
 
-## Deploy Apigee and GCP components
+## Configure the environment
 
-1. Click <walkthrough-editor-open-file filePath="grpc/env.sh">here</walkthrough-editor-open-file> to open the `env.sh` file and set the following environment variables:
+1. Click <walkthrough-editor-open-file filePath="grpc-web/env.sh">here</walkthrough-editor-open-file> to open the `env.sh` file and set the following environment variables:
 
 * `PROJECT` the project where your Apigee organization is located
-* `NETWORK` the VPC network where the PSC NEG will be deployed
-* `SUBNET` the VPC subnet where the PSC NEG will be deployed
+* `REGION` the region where Cloud Run will be deployed
+* `APIGEE_ENV` the region where your Apigee instance is provisioned
+* `APIGEE_HOST` the hostname configured in the Apigee Environment Group
 
 2. Now source the `env.sh` file
 
 ```bash
 source ./env.sh
 ```
+---
 
-Let's run the script that will create and deploy the resources necessary to test the gRPC functionality. This script will create the following:
+## Deploy the gRPC-Web service
 
-* An External Loadbalancer with an HTTP2 backend
-* Deploy a sample gRPC Greeter service to Cloud Run
-* Deploy an API proxy, target server, developer, app and api product
+
+Let's first deploy the gRPC-Web application to Cloud Run
+
+```bash
+cd app
+./deploy-grpc-web-cloud-run.sh
+cd ../
+```
+
+Once the script is complete, export the BACKEND_SERVICE variable.
+
+---
+
+## Deploy the Apigee proxy
+
+Now that the Cloud Run service is deployed, let's build the Apigee proxy
 
 ```sh
 ./deploy.sh
 ```
 
-## Manually Testing the gRPC Proxy
+This will compile and build the Java [callout](../callout/) to create a jar file which gets copied over to the proxy resources. The proxy will then be deployed to Apigee.
 
-## Example Requests
+Execute the cURL commands as prompted by the script.
 
-To manually test the proxy, make requests using grpcurl or another gRPC client:
+First command should return a 200 response as its not a threat request. 
 
-```sh
-grpcurl -H \"x-apikey:$CLIENT_ID\" -import-path $PWD/grpc-backend/examples/protos -proto helloworld.proto -d '{\"name\":\"Guest\"}' <YOUR_APIGEE_GRPC_HOSTNAME>:443 helloworld.Greeter/SayHello"
-```
+However the second command should return a 400 response as it is a threat request.
 
 ---
 
@@ -67,7 +80,8 @@ grpcurl -H \"x-apikey:$CLIENT_ID\" -import-path $PWD/grpc-backend/examples/proto
 
 <walkthrough-conclusion-trophy></walkthrough-conclusion-trophy>
 
-Congratulations! You've successfully implemented a proxy that supports gRPC with a target gRPC server running in Cloud Run!
+Congratulations! You've successfully implemented a proxy that points to the gRPC-Web service and checks for any attacks.
+
 
 <walkthrough-inline-feedback></walkthrough-inline-feedback>
 

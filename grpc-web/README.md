@@ -66,7 +66,6 @@ source ./env.sh
 Let's first deploy the gRPC-Web application to Cloud Run
 
 ```bash
-cd ../
 cd app
 ./deploy-grpc-web-cloud-run.sh
 cd ../
@@ -80,7 +79,13 @@ Now that the Cloud Run service is deployed, let's build the Apigee proxy
 ./deploy.sh
 ```
 
+This will compile and build the Java [callout](../callout/) to create a jar file which gets copied over to the proxy resources. The proxy will then be deployed to Apigee.
+
 Execute the cURL commands as prompted by the script.
+
+First command should return a 200 response as its not a threat request. 
+
+However the second command should return a 400 response as it is a threat request.
 
 ## Cleanup
 
