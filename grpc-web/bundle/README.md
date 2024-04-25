@@ -6,18 +6,10 @@ In Apigee X, there is no out-of-the-box policy that supports inspecting gRPC mes
 to decode the gRPC messages, and encode them as JSON. This is useful if you want to apply policies that need to perform
 some action based on the gRPC payload.
 
-For this sample, the API Proxy is configured to invoke `language.googleapis.com` gRPC endpoint as the backend service.
-
-## Caveat
-
-As of October 2023, Apigee support for gRPC is in preview mode. Also, the [documentation](https://cloud.google.com/apigee/docs/api-platform/fundamentals/build-simple-api-proxy#creating-grpc-api-proxies)
-explicitly says that the gRPC payloads are opaque to Apigee. However, form a Java Callout policy it is possible to retrieve the
-binary payload and process it, which is what is being done in this example. Treat this example code as a proof-of-concept/experiment only.
-
 ## How it works
 
-The API Proxy uses a generic Java Callout policy that takes both the gRPC message, and the protobuf descriptor as input.
-The output of the Java callout policy is a new flow variable named `pb-decoder.message-json`.
+The API Proxy uses a generic Java Callout policy that takes both the gRPC message, and a boolean to determine if the message is base64 encoded.
+The output of the Java callout policy is a new flow variable named `pb-decoder.message-data`.
 
 Below is an example XML snippet for how to execute the Java Callout policy:
 
