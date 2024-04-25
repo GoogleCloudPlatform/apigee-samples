@@ -300,7 +300,11 @@ gcloud compute backend-services update ${BACKEND_SERVICE} \
   --custom-request-header="X-Client-Cert-URI-SANs:{client_cert_uri_sans}" \
   --custom-request-header="X-Client-Cert-DNSName-SANs:{client_cert_dnsname_sans}" \
   --custom-request-header="X-Client-Cert-Valid-Not-Before:{client_cert_valid_not_before}" \
-  --custom-request-header="X-Client-Cert-Valid-Not-After:{client_cert_valid_not_after}"
+  --custom-request-header="X-Client-Cert-Valid-Not-After:{client_cert_valid_not_after}", \
+  --custom-request-header='X-Client-Cert-Issuer-DN:{client_cert_issuer_dn}' \
+  --custom-request-header='X-Client-Cert-Subject-DN:{client_cert_subject_dn}' \
+  --custom-request-header='X-Client-Cert-Leaf:{client_cert_leaf}' \
+  --custom-request-header='X-Client-Cert-Chain:{client_cert_chain}'
 ```
 
 ## Deploy Apigee Proxy
@@ -345,7 +349,11 @@ curl https://$APIGEE_HOST/v1/samples/mtls
         "x-client-cert-uri-sans-decoded":"",
         "x-client-cert-spiffe":"",
         "x-client-cert-valid-not-before":"",
-        "x-client-cert-valid-not-after":""
+        "x-client-cert-valid-not-after":"",
+        "x-client-cert-issuer-dn":"",
+        "x-client-cert-subject-dn":"",
+        "x-client-cert-leaf":"",
+        "x-client-cert-chain":""
     }
 }
 ```
@@ -392,7 +400,11 @@ curl https://$APIGEE_HOST/v1/samples/mtls
         "x-client-cert-uri-sans":"",
         "x-client-cert-spiffe":"",
         "x-client-cert-valid-not-before":"",
-        "x-client-cert-valid-not-after":""
+        "x-client-cert-valid-not-after":"",
+        "x-client-cert-issuer-dn":"",
+        "x-client-cert-subject-dn":"",
+        "x-client-cert-leaf":"",
+        "x-client-cert-chain":""
     }
 }
 ```
@@ -465,7 +477,11 @@ curl https://$APIGEE_HOST/v1/samples/mtls \
         "x-client-cert-uri-sans-decoded":"https://xapi-dev.kurtkanaskie.net",
         "x-client-cert-spiffe":"",
         "x-client-cert-valid-not-before":"2023-09-12T14:55:19+00:00",
-        "x-client-cert-valid-not-after":"2023-10-12T14:55:18+00:00"
+        "x-client-cert-valid-not-after":"2023-10-12T14:55:18+00:00",
+        "x-client-cert-issuer-dn":"MCoxEjAQBgNVBAoTCVBhcnRuZXIgMTEUMBIGA1UEAxMLcGFydG5lcjEtY2E=",
+        "x-client-cert-subject-dn":"MGwxCzAJBgNVBAYTAlVTMRUwEwYDVQQIEwxQZW5uc3lsdmFuaWExETAPBgNVBAcTCE1hY3VuZ2llMRMwEQYDVQQKEwpHb29nbGUgTExDMR4wHAYDVQQDExV4YXBpLmt1cnRrYW5hc2tpZS5uZXQ=",
+        "x-client-cert-leaf":":MIIF4jCC---TRUNCATED---96lXrvmzW4Aw==:",
+        "x-client-cert-chain":":MIIFRTCC---TRUNCATED---7XmfYlTuCTL1:"
     }
 }
 ```
@@ -514,7 +530,11 @@ curl https://$APIGEE_HOST/v1/samples/mtls \
         "x-client-cert-uri-sans":"",
         "x-client-cert-spiffe":"",
         "x-client-cert-valid-not-before":"",
-        "x-client-cert-valid-not-after":""
+        "x-client-cert-valid-not-after":"",
+        "x-client-cert-issuer-dn":"",
+        "x-client-cert-subject-dn":"",
+        "x-client-cert-leaf":"",
+        "x-client-cert-chain":""
     }
 }
 ```
@@ -582,7 +602,11 @@ curl https://$APIGEE_HOST/v1/samples/mtls \
         "x-client-cert-uri-sans-decoded":"https://xapi-dev.kurtkanaskie.net",
         "x-client-cert-spiffe":"",
         "x-client-cert-valid-not-before":"2023-09-12T14:55:19+00:00",
-        "x-client-cert-valid-not-after":"2023-10-12T14:55:18+00:00"
+        "x-client-cert-valid-not-after":"2023-10-12T14:55:18+00:00",
+        "x-client-cert-issuer-dn":"MCoxEjAQBgNVBAoTCVBhcnRuZXIgMTEUMBIGA1UEAxMLcGFydG5lcjEtY2E=",
+        "x-client-cert-subject-dn":"MGwxCzAJBgNVBAYTAlVTMRUwEwYDVQQIEwxQZW5uc3lsdmFuaWExETAPBgNVBAcTCE1hY3VuZ2llMRMwEQYDVQQKEwpHb29nbGUgTExDMR4wHAYDVQQDExV4YXBpLmt1cnRrYW5hc2tpZS5uZXQ=",
+        "x-client-cert-leaf":":MIIF4jCC---TRUNCATED---96lXrvmzW4Aw==:",
+        "x-client-cert-chain":":MIIFRTCC---TRUNCATED---7XmfYlTuCTL1:"
     }
 }
 ```
