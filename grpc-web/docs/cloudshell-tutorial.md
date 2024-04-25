@@ -1,7 +1,7 @@
 # gRPC-Web in Apigee
 
 ---
-This sample shows how to use Apigee in front of your gRPC backends using [gRPC-Web](https://github.com/grpc/grpc-web). In this example, we will show how Apigee can secure your grpc workload using the Threat Protection policies that are available. This sample basically checks for HTML tags in the payload and returns a 400 error code
+This sample demonstrates how Apigee can secure your [gRPC-Web](https://github.com/grpc/grpc-web) backends. By utilizing Apigee's Threat Protection policies, this example specifically showcases how to detect and block HTML tags in payloads, returning a 400 error code to prevent potential malicious input.
 
 Let's get started!
 
