@@ -24,7 +24,7 @@ RUN mkdir bin && \
     go generate ./... && \
     go build -o ./bin/go-grpc-web ./cmd/
 
-FROM golang:1.21
+FROM golang:1.22
 
 ARG PORT=8080
 EXPOSE ${PORT}
