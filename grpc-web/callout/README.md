@@ -2,7 +2,7 @@
 
 ## Pre-Requisites
 
-- Java (9 or later), gcloud, tar, zip
+- Java (9 or later)
 - Maven (3.3.9 or later)
 
 ## Building the Java Callout Jar file
