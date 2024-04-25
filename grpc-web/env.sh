@@ -1,4 +1,6 @@
-# Copyright 2020 Google LLC
+#!/bin/bash
+
+# Copyright 2024 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,8 +14,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-ignored:
-  - DL3018  # Pin versions in apk add
-  - DL3059  # Multiple consecutive RUN instructions
-  - DL3008  # Pin versions in apt get install
-  - DL3015  # Avoid additional packages by specifying `--no-install-recommends`
+export PROJECT="<PROJECT>"
+export REGION="<REGION>"
+export APIGEE_ENV="<APIGEE_ENV>"
+export APIGEE_HOST="<APIGEE_HOST>"
+
+gcloud config set project $PROJECT
