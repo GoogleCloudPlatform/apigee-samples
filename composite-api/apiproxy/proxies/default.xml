@@ -25,6 +25,7 @@
                 </Step>
                 <Step>
                     <Name>EV-Geocode</Name>
+                    <Condition>geocodeResponse.content != null</Condition>
                 </Step>
             </Request>
             <Response/>
