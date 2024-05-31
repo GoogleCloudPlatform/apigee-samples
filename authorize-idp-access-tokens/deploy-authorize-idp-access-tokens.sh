@@ -104,7 +104,7 @@ echo "Deploying Apigee artifacts..."
 
 mkdir rendered
 cp -r ./sharedflowbundle ./rendered
-sed -i "s/REPLACEWITHIDPCLIENTIDCLAIM/$TOKEN_CLIENT_ID_CLAIM/g" ./rendered/sharedflowbundle/policies/VK-IdentifyClientApp.xml
+sed -i "s/REPLACEWITHIDPCLIENTIDCLAIM/$TOKEN_CLIENT_ID_CLAIM/g" ./rendered/sharedflowbundle/policies/VA-IdentifyClientApp.xml
 if [ -n "$PR_KEY" ]; then
   echo "Deploying public and private keys for mock oidc..."
   echo -e "jwk=$JWK\nprivate_key=$PR_KEY" >mock_configuration.properties
@@ -112,7 +112,7 @@ if [ -n "$PR_KEY" ]; then
 fi
 
 echo "Importing and Deploying Apigee authorize-idp-access-tokens sharedflow..."
-REV_SF=$(apigeecli sharedflows create -f ./rendered/sharedflowbundle -n authorize-idp-access-tokens --org "$PROJECT" --token "$TOKEN" --disable-check | jq ."revision" -r)
+REV_SF=$(apigeecli sharedflows create bundle -f ./rendered/sharedflowbundle -n authorize-idp-access-tokens --org "$PROJECT" --token "$TOKEN" --disable-check | jq ."revision" -r)
 apigeecli sharedflows deploy --name authorize-idp-access-tokens --ovr --rev "$REV_SF" --org "$PROJECT" --env "$APIGEE_ENV" --token "$TOKEN"
 rm -r ./rendered
 
