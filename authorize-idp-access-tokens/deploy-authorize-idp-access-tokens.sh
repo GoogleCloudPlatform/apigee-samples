@@ -112,7 +112,7 @@ if [ -n "$PR_KEY" ]; then
 fi
 
 echo "Importing and Deploying Apigee authorize-idp-access-tokens sharedflow..."
-REV_SF=$(apigeecli sharedflows create -f ./rendered/sharedflowbundle -n authorize-idp-access-tokens --org "$PROJECT" --token "$TOKEN" --disable-check | jq ."revision" -r)
+REV_SF=$(apigeecli sharedflows create bundle -f ./rendered/sharedflowbundle -n authorize-idp-access-tokens --org "$PROJECT" --token "$TOKEN" --disable-check | jq ."revision" -r)
 apigeecli sharedflows deploy --name authorize-idp-access-tokens --ovr --rev "$REV_SF" --org "$PROJECT" --env "$APIGEE_ENV" --token "$TOKEN"
 rm -r ./rendered
 
