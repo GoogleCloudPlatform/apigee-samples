@@ -62,7 +62,7 @@ delete_apiproxy() {
         for ((i = 0; i < NUM_DEPLOYS; i++)); do
           ENVNAME=$(jq -r ".deployments[$i].environment" "$OUTFILE")
           REV=$(jq -r ".deployments[$i].revision" "$OUTFILE")
-          apigeecli apis undeploy --name "${proxy_name}" --env "$ENVNAME" --rev "$REV" --org "$PROJECT" --token "$TOKEN" --disable-check
+          apigeecli apis undeploy --name "${proxy_name}" --env "$ENVNAME" --rev "$REV" --org "$PROJECT" --token "$TOKEN" --safeundeploy=false --disable-check
         done
       else
         printf "  There are no deployments of %s to remove.\n" "${proxy_name}"
