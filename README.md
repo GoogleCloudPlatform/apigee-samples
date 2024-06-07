@@ -14,7 +14,7 @@
 
 ## <a name="intro"></a>Intro
 
-This repository contains a collection of sample API proxies that you can deploy and run on Apigee X or [hybrid](https://cloud.google.com/apigee/docs/hybrid/v1.8/what-is-hybrid).
+This repository contains a collection of sample API proxies that you can deploy and run on Apigee X or [hybrid](https://cloud.google.com/apigee/docs/hybrid/v1.12/what-is-hybrid.html).
 
 The samples provide a jump-start for developers who wish to design and create Apigee API proxies.
 
