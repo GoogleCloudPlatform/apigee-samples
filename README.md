@@ -1,20 +1,24 @@
 # Apigee Samples
 
-* [Intro](#intro)
-* [Audience](#who)
-* [Before you begin](#before)
-* [Using the sample proxies](#using)
-* [Samples](#samples)
-* [Modifying a sample proxy](#modifying)
-* [Ask questions on the Community forum](#ask)
-* [Apigee documentation](#docs)
-* [Contributing](#contributing)
+- [Apigee Samples](#apigee-samples)
+  - [Intro](#intro)
+    - [Audience](#audience)
+  - [Before you begin](#before-you-begin)
+  - [Using the sample proxies](#using-the-sample-proxies)
+    - [Samples](#samples)
+    - [Modifying a sample proxy](#modifying-a-sample-proxy)
+  - [Ask questions on the Community Forum](#ask-questions-on-the-community-forum)
+  - [Apigee documentation](#apigee-documentation)
+  - [Contributing](#contributing)
+  - [License](#license)
+  - [Not Google Product Clause](#not-google-product-clause)
+  - [Support](#support)
 
 ---
 
 ## <a name="intro"></a>Intro
 
-This repository contains a collection of sample API proxies that you can deploy and run on Apigee X or [hybrid](https://cloud.google.com/apigee/docs/hybrid/v1.8/what-is-hybrid).
+This repository contains a collection of sample API proxies that you can deploy and run on Apigee X or [hybrid](https://cloud.google.com/apigee/docs/hybrid/latest/what-is-hybrid).
 
 The samples provide a jump-start for developers who wish to design and create Apigee API proxies.
 
