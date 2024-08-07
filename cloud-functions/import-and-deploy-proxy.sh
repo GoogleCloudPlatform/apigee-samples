@@ -17,7 +17,7 @@
 PROXY_NAME=cloud-function-http-trigger
 
 import_and_deploy_apiproxy() {
-  local proxy_name=$1 SA=$2 TOKEN REV
+  local proxy_name=$1 SA=$2 TOKEN
   TOKEN=$(gcloud auth print-access-token)
   echo "Import and deploy the proxy bundle..."
   apigeecli apis create bundle -f "./bundle/${proxy_name}/apiproxy" -n "$proxy_name" --org "$APIGEE_PROJECT" --token "$TOKEN" --sa "$SA" --disable-check --ovr --wait=true
