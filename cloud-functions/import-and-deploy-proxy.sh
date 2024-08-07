@@ -17,12 +17,10 @@
 PROXY_NAME=cloud-function-http-trigger
 
 import_and_deploy_apiproxy() {
-  local proxy_name=$1 SA=$2 TOKEN REV
+  local proxy_name=$1 SA=$2 TOKEN
   TOKEN=$(gcloud auth print-access-token)
-  echo "Importing the proxy bundle..."
-  REV=$(apigeecli apis create bundle -f "./bundle/${proxy_name}/apiproxy" -n "$proxy_name" --org "$APIGEE_PROJECT" --token "$TOKEN" --disable-check | jq ."revision" -r)
-  echo "Deploying the apiproxy..."
-  apigeecli apis deploy --wait --name "$proxy_name" --ovr --rev "$REV" --org "$APIGEE_PROJECT" --env "$APIGEE_ENV" --token "$TOKEN" --sa "$SA" --disable-check
+  echo "Import and deploy the proxy bundle..."
+  apigeecli apis create bundle -f "./bundle/${proxy_name}/apiproxy" -n "$proxy_name" --org "$APIGEE_PROJECT" --token "$TOKEN" --sa "$SA" --disable-check --ovr --wait=true
 }
 
 MISSING_ENV_VARS=()
