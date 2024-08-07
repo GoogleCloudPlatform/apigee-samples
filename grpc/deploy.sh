@@ -34,18 +34,6 @@ if ! [ -x "$(command -v jq)" ]; then
   exit
 fi
 
-function wait_for_operation() {
-  while true; do
-    STATE="$(apigeecli operations get -o "$PROJECT" -n "$1" -t "$TOKEN" | jq --raw-output '.metadata.state')"
-    if [ "$STATE" = "FINISHED" ]; then
-      echo
-      break
-    fi
-    echo -n .
-    sleep 5
-  done
-}
-
 #Create Load Balancer and Apigee backend
 echo "Installing apigeecli"
 curl -s https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.sh | bash
@@ -66,12 +54,12 @@ ENVIRONMENT_GROUP_NAME="sample-environment-group"
 
 # Create and attach a sample Apigee environment
 echo -n "Creating environment..."
-OPERATION=$(apigeecli environments create -o "$PROJECT" -e "$ENVIRONMENT_NAME" -d PROXY -p PROGRAMMABLE -t "$TOKEN" | jq --raw-output '.name' | awk -F/ '{print $4}')
-wait_for_operation "$OPERATION"
+apigeecli environments create -o "$PROJECT" -e "$ENVIRONMENT_NAME" -d PROXY -p PROGRAMMABLE --wait=true -t "$TOKEN"
+
 
 echo -n "Attaching environment to instance (may take a few minutes)..."
-OPERATION=$(apigeecli instances attachments attach -o "$PROJECT" -e "$ENVIRONMENT_NAME" -n "$INSTANCE_NAME" -t "$TOKEN" | jq --raw-output '.name' | awk -F/ '{print $4}')
-wait_for_operation "$OPERATION"
+apigeecli instances attachments attach -o "$PROJECT" -e "$ENVIRONMENT_NAME" -n "$INSTANCE_NAME" --wait=true -t "$TOKEN"
+
 
 # Enable APIs
 gcloud services enable \
@@ -88,12 +76,10 @@ RUNTIME_HOST_ALIAS="grpc".$(echo "$RUNTIME_IP" | tr '.' '-').nip.io
 
 # Create a sample Apigee environment group and attach the environment
 echo -n "Creating environment group..."
-OPERATION=$(apigeecli envgroups create -o "$PROJECT" -d "$RUNTIME_HOST_ALIAS" -n "$ENVIRONMENT_GROUP_NAME" -t "$TOKEN" | jq --raw-output '.name' | awk -F/ '{print $4}')
-wait_for_operation "$OPERATION"
+apigeecli envgroups create -o "$PROJECT" -d "$RUNTIME_HOST_ALIAS" -n "$ENVIRONMENT_GROUP_NAME" --wait=true -t "$TOKEN"
 
 echo -n "Attaching environment to group..."
-OPERATION=$(apigeecli envgroups attach -o "$PROJECT" -e "$ENVIRONMENT_NAME" -n "$ENVIRONMENT_GROUP_NAME" -t "$TOKEN" | jq --raw-output '.name' | awk -F/ '{print $4}')
-wait_for_operation "$OPERATION"
+apigeecli envgroups attach -o "$PROJECT" -e "$ENVIRONMENT_NAME" -n "$ENVIRONMENT_GROUP_NAME" --wait=true -t "$TOKEN"
 
 #Deploy gRPC backend to Cloud Run
 git clone https://github.com/grpc/grpc.git grpc-backend
