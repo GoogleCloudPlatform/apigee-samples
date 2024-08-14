@@ -49,11 +49,11 @@ echo "Deploying Apigee artifacts..."
 
 echo "Importing and Deploying Apigee semantic-cache-request-v1 sharedflow..."
 REV_SF=$(apigeecli sharedflows create bundle -f ./semantic-cache-request-v1/sharedflowbundle -n semantic-cache-request-v1 --org "$PROJECT" --token "$TOKEN" --disable-check | jq ."revision" -r)
-apigeecli sharedflows deploy --name semantic-cache-request-v1 --ovr --rev "$REV_SF" --org "$PROJECT" --env "$APIGEE_ENV" --token "$TOKEN" --sa "serviceAccount:ai-client@$PROJECT.iam.gserviceaccount.com"
+apigeecli sharedflows deploy --name semantic-cache-request-v1 --ovr --rev "$REV_SF" --org "$PROJECT" --env "$APIGEE_ENV" --token "$TOKEN" --sa "ai-client@$PROJECT.iam.gserviceaccount.com"
 
 echo "Importing and Deploying Apigee semantic-cache-response-v1 sharedflow..."
 REV_SF=$(apigeecli sharedflows create bundle -f ./semantic-cache-response-v1/sharedflowbundle -n semantic-cache-response-v1 --org "$PROJECT" --token "$TOKEN" --disable-check | jq ."revision" -r)
-apigeecli sharedflows deploy --name semantic-cache-response-v1 --ovr --rev "$REV_SF" --org "$PROJECT" --env "$APIGEE_ENV" --token "$TOKEN"  --sa "serviceAccount:ai-client@$PROJECT.iam.gserviceaccount.com"
+apigeecli sharedflows deploy --name semantic-cache-response-v1 --ovr --rev "$REV_SF" --org "$PROJECT" --env "$APIGEE_ENV" --token "$TOKEN"  --sa "ai-client@$PROJECT.iam.gserviceaccount.com"
 
 echo "Importing and Deploying Apigee llm-semantic-cache-v1 proxy..."
 REV=$(apigeecli apis create bundle -f ./apiproxy -n llm-semantic-cache-v1 --org "$PROJECT" --token "$TOKEN" --disable-check | jq ."revision" -r)
