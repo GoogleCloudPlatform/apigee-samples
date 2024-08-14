@@ -51,15 +51,24 @@ echo "Undeploying semantic-cache-request-v1 sharedflow"
 REV=$(apigeecli envs deployments get --env "$APIGEE_ENV" --org "$PROJECT" --token "$TOKEN" --sharedflows true --disable-check | jq .'deployments[]| select(.apiProxy=="semantic-cache-request-v1").revision' -r)
 apigeecli sharedflows undeploy --name semantic-cache-request-v1 --env "$APIGEE_ENV" --rev "$REV" --org "$PROJECT" --token "$TOKEN"
 
+echo "Deleting proxy semantic-cache-request-v1 sharedflow"
+apigeecli sharedflows delete --name semantic-cache-request-v1 --org "$PROJECT" --token "$TOKEN"
+
 echo "Undeploying semantic-cache-response-v1 sharedflow"
 REV=$(apigeecli envs deployments get --env "$APIGEE_ENV" --org "$PROJECT" --token "$TOKEN" --sharedflows true --disable-check | jq .'deployments[]| select(.apiProxy=="semantic-cache-response-v1").revision' -r)
 apigeecli sharedflows undeploy --name semantic-cache-response-v1 --env "$APIGEE_ENV" --rev "$REV" --org "$PROJECT" --token "$TOKEN"
+
+echo "Deleting proxy semantic-cache-response-v1 sharedflow"
+apigeecli sharedflows delete --name semantic-cache-response-v1 --org "$PROJECT" --token "$TOKEN"
+
+curl -L https://raw.githubusercontent.com/GoogleCloudPlatform/application-integration-management-toolkit/main/downloadLatest.sh | sh -
+export PATH=$PATH:$HOME/.integrationcli/bin
 
 echo "Deleting Semantic Cache Cleanup utility ..."
 integrationcli integrations delete -n cleanup-semantic-cache-v1
 
 echo "Undeploy Index Endpoint ..."
-gcloud ai index-endpoints undeploy-index $INDEX_ENDPOINT_ID --deployed-index-id=$INDEX_ID --region=$REGION --project=$PROJECT
+gcloud ai index-endpoints undeploy-index $INDEX_ENDPOINT_ID --deployed-index-id=semantic_cache --region=$REGION --project=$PROJECT
 
 echo "Delete Index Endpoint ..."
 gcloud ai index-endpoints delete $INDEX_ENDPOINT_ID --region=$REGION --project=$PROJECT
