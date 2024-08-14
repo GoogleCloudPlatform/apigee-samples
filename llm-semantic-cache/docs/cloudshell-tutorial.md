@@ -4,20 +4,21 @@ This sample performs a cache lookup of responses on Apigee's Cache layer and Vec
 
 Let's get started!
 
-## Enable Services
+## Prepare dependencies
 
 ### Select the project with an active Apigee instance
 
 <walkthrough-project-setup></walkthrough-project-setup>
 
-### Open a Cloud Shell
-
-<walkthrough-open-cloud-shell-button></walkthrough-open-cloud-shell-button>
-
 ### Ensure you have an active GCP account selected in the Cloud Shell
 
 ```sh
 gcloud auth login
+```
+
+### Ensure you have an active GCP account selected in the Cloud Shell
+
+```sh
 gcloud config set project <walkthrough-project-id/>
 ```
 
@@ -25,18 +26,6 @@ gcloud config set project <walkthrough-project-id/>
 
 ```sh
 gcloud services enable compute.googleapis.com aiplatform.googleapis.com storage.googleapis.com integrations.googleapis.com  --project <walkthrough-project-id/>
-```
-
-### Create a service account to be used by the sample
-
-```sh
-gcloud iam service-accounts create ai-client --description="semantic cache client" --display-name="ai-client"
-```
-
-### Assign Vertex AI Platform User Role to the service account
-
-```sh
-gcloud projects add-iam-policy-binding <walkthrough-project-id/> --member="serviceAccount:ai-client@<walkthrough-project-id/>.iam.gserviceaccount.com" --role="roles/aiplatform.user"
 ```
 
 ## Create and deploy a Vector Search index
@@ -81,6 +70,18 @@ gcloud ai index-endpoints deploy-index $INDEX_ENDPOINT_ID --deployed-index-id=se
 **Important:** Initial deployment of an index to an endpoint typically takes between 20 and 30 minutes.
 
 ## Deploy sample artifacts
+
+### Create a service account to be used by the sample
+
+```sh
+gcloud iam service-accounts create ai-client --description="semantic cache client" --display-name="ai-client"
+```
+
+### Assign Vertex AI Platform User Role to the service account
+
+```sh
+gcloud projects add-iam-policy-binding <walkthrough-project-id/> --member="serviceAccount:ai-client@<walkthrough-project-id/>.iam.gserviceaccount.com" --role="roles/aiplatform.user"
+```
 
 ### Edit the following variables in the provided `env.sh` file.
 
