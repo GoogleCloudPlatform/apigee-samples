@@ -45,8 +45,7 @@ Open the environment variables file <walkthrough-editor-open-file filePath="llm-
 ### Set environment variables
 
 ```sh
-cd llm-semantic-cache
-source ./env.sh
+cd llm-semantic-cache && source ./env.sh
 ```
 
 ## Create and deploy a Vector Search index
