@@ -30,6 +30,8 @@ gcloud services enable compute.googleapis.com aiplatform.googleapis.com storage.
 
 ## Set environment variables
 
+Open the environment variables file <walkthrough-editor-open-file filePath="./env.sh">env.sh</walkthrough-editor-open-file> and set the following variables:
+
 1. Set the <walkthrough-editor-select-regex filePath="./env.sh" regex="PROJECT_ID_TO_SET">PROJECT_ID</walkthrough-editor-select-regex>
 2. Set the <walkthrough-editor-select-regex filePath="./env.sh" regex="REGION_TO_SET">REGION</walkthrough-editor-select-regex> to deploy the Vector Search Index. It should be the same region as your Apigee instance.
 3. Set the <walkthrough-editor-select-regex filePath="./env.sh" regex="MODEL_ID_TO_SET">MODEL_ID</walkthrough-editor-select-regex> to send generative prompts to. For example, `gemini-1.5-pro-001`.
