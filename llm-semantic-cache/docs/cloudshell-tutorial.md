@@ -7,50 +7,53 @@ Let's get started!
 
 ## Prepare project dependencies
 
-### Select the project with an active Apigee instance
+### 1. Select the project with an active Apigee instance
 
 <walkthrough-project-setup></walkthrough-project-setup>
 
-### Ensure you have an active GCP account selected in the Cloud Shell
+### 2. Ensure you have an active GCP account selected in the Cloud Shell
 
 ```sh
 gcloud auth login
 ```
 
-### Ensure you have an active GCP account selected in the Cloud Shell
+### 3. Ensure you have an active GCP account selected in the Cloud Shell
 
 ```sh
 gcloud config set project <walkthrough-project-id/>
 ```
 
-### Enable the Services requiered to deploy this sample
+### 4. Enable the Services requiered to deploy this sample
 
 ```sh
 gcloud services enable compute.googleapis.com aiplatform.googleapis.com storage.googleapis.com integrations.googleapis.com  --project <walkthrough-project-id/>
 ```
 
-## Set environment variables
+## Edit the following variables in the provided `env.sh` file
 
 Open the environment variables file <walkthrough-editor-open-file filePath="llm-semantic-cache/env.sh">env.sh</walkthrough-editor-open-file> and set the following variables:
 
-1. Set the <walkthrough-editor-select-regex filePath="llm-semantic-cache/env.sh" regex="PROJECT_ID_TO_SET">PROJECT_ID</walkthrough-editor-select-regex>
-2. Set the <walkthrough-editor-select-regex filePath="llm-semantic-cache/env.sh" regex="REGION_TO_SET">REGION</walkthrough-editor-select-regex> to deploy the Vector Search Index. It should be the same region as your Apigee instance.
-3. Set the <walkthrough-editor-select-regex filePath="llm-semantic-cache/env.sh" regex="MODEL_ID_TO_SET">MODEL_ID</walkthrough-editor-select-regex> to send generative prompts to. For example, `gemini-1.5-pro-001`.
-4. Set the <walkthrough-editor-select-regex filePath="llm-semantic-cache/env.sh" regex="EMBEDDINGS_MODEL_ID_TO_SET">EMBEDDINGS_MODEL_ID</walkthrough-editor-select-regex> to generate embeddings with. For example, `text-embedding-004`.
-5. Set the <walkthrough-editor-select-regex filePath="llm-semantic-cache/env.sh" regex="NEAREST_NEIGHBOR_DISTANCE_TO_SET">NEAREST_NEIGHBOR_DISTANCE</walkthrough-editor-select-regex> that will be used to perform nearest neighbor lookups on an embeddings database. The bigger the number, the more closely prompts have to be related to be considered a cache hit. For exsample, `0.95`.
-6. Set the <walkthrough-editor-select-regex filePath="llm-semantic-cache/env.sh" regex="CACHE_ENTRY_TTL_SEC_TO_SET">CACHE_ENTRY_TTL_SEC</walkthrough-editor-select-regex> that will be used to assing TTL for cache entries in seconds.  For exsample, `60`.
-7. Set the <walkthrough-editor-select-regex filePath="llm-semantic-cache/env.sh" regex="APIGEE_HOST_TO_SET">APIGEE_HOST</walkthrough-editor-select-regex> of your Apigee instance. For example, `my-test.nip.io`.
-8. Set the <walkthrough-editor-select-regex filePath="llm-semantic-cache/env.sh" regex="APIGEE_ENV_TO_SET">APIGEE_ENV</walkthrough-editor-select-regex> to the deploy the sample Apigee artifacts. For exanple, `dev-env`.
+* Set the <walkthrough-editor-select-regex filePath="llm-semantic-cache/env.sh" regex="PROJECT_ID_TO_SET">PROJECT_ID</walkthrough-editor-select-regex>. The value should be <walkthrough-project-id/>.
+* Set the <walkthrough-editor-select-regex filePath="llm-semantic-cache/env.sh" regex="REGION_TO_SET">REGION</walkthrough-editor-select-regex> to deploy the Vector Search Index. It should be the same region as your Apigee instance.
+* Set the <walkthrough-editor-select-regex filePath="llm-semantic-cache/env.sh" regex="MODEL_ID_TO_SET">MODEL_ID</walkthrough-editor-select-regex> to send generative prompts to. For example, `gemini-1.5-pro-001`.
+* Set the <walkthrough-editor-select-regex filePath="llm-semantic-cache/env.sh" regex="EMBEDDINGS_MODEL_ID_TO_SET">EMBEDDINGS_MODEL_ID</walkthrough-editor-select-regex> to generate embeddings with. For example, `text-embedding-004`.
+* Set the <walkthrough-editor-select-regex filePath="llm-semantic-cache/env.sh" regex="NEAREST_NEIGHBOR_DISTANCE_TO_SET">NEAREST_NEIGHBOR_DISTANCE</walkthrough-editor-select-regex> that will be used to perform nearest neighbor lookups on an embeddings database. The bigger the number, the more closely prompts have to be related to be considered a cache hit. For exsample, `0.95`.
+* Set the <walkthrough-editor-select-regex filePath="llm-semantic-cache/env.sh" regex="CACHE_ENTRY_TTL_SEC_TO_SET">CACHE_ENTRY_TTL_SEC</walkthrough-editor-select-regex> that will be used to assing TTL for cache entries in seconds.  For exsample, `60`.
+* Set the <walkthrough-editor-select-regex filePath="llm-semantic-cache/env.sh" regex="APIGEE_HOST_TO_SET">APIGEE_HOST</walkthrough-editor-select-regex> of your Apigee instance. For example, `my-test.nip.io`.
+* Set the <walkthrough-editor-select-regex filePath="llm-semantic-cache/env.sh" regex="APIGEE_ENV_TO_SET">APIGEE_ENV</walkthrough-editor-select-regex> to the deploy the sample Apigee artifacts. For exanple, `dev-env`.
 
-### Edit the following variables in the provided `env.sh` file.
+### Set environment variables
 
 ```sh
+cd llm-semantic-cache
 source ./env.sh
 ```
 
 ## Create and deploy a Vector Search index
 
 ### Create an index
+
+The following `curl` command will create an index that will allow streaming updates.
 
 ```sh
 ACCESS_TOKEN=$(gcloud auth print-access-token)
@@ -73,13 +76,13 @@ curl --location --request POST "https://$REGION-aiplatform.googleapis.com/v1/pro
     "indexUpdateMethod": "STREAM_UPDATE"
   }'
 ```
-### Create index endpoint
+### Create an index endpoint
 
 ```sh
 gcloud ai index-endpoints create  --display-name=semantic-cache --public-endpoint-enabled --region=$REGION --project=$PROJECT
 ```
 
-### Deploy index to endpoint
+### Deploy index to the endpoint
 
 ```sh
 INDEX_ENDPOINT_ID=$(gcloud ai index-endpoints list --project=$PROJECT --region=$REGION --format="json" | jq -c -r '.[] | select(.displayName="semantic-cache") | .name | split("/") | .[5]')
