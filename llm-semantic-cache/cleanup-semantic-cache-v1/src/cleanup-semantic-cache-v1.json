@@ -1,0 +1,634 @@
+{
+  "triggerConfigs": [
+    {
+      "label": "private delete datapoints",
+      "startTasks": [
+        {
+          "taskId": "7"
+        }
+      ],
+      "properties": {
+        "Trigger name": "delete-datapoints-v1"
+      },
+      "triggerType": "PRIVATE_TRIGGER",
+      "triggerNumber": "1",
+      "triggerId": "private_trigger/delete-datapoints-v1",
+      "position": {
+        "x": -144,
+        "y": -450
+      }
+    },
+    {
+      "label": "manual cache cleanup",
+      "startTasks": [
+        {
+          "taskId": "9"
+        }
+      ],
+      "properties": {
+        "Trigger name": "cleanup-semantic-cache-v1_API_1"
+      },
+      "triggerType": "API",
+      "triggerNumber": "2",
+      "triggerId": "api_trigger/cleanup-semantic-cache-v1_API_1",
+      "position": {
+        "x": -496,
+        "y": -449
+      }
+    },
+    {
+      "label": "Cleanup cache every hour",
+      "startTasks": [
+        {
+          "taskId": "9"
+        }
+      ],
+      "properties": {
+        "Timer Name": "cleanup-semantic-cache-v1_Timer_1",
+        "Scheduled Time spec": "0 * * * *"
+      },
+      "triggerType": "CRON",
+      "triggerNumber": "3",
+      "triggerId": "cron_trigger/cleanup-semantic-cache-v1_Timer_1/0+*+*+*+*",
+      "position": {
+        "x": -829,
+        "y": -447
+      }
+    }
+  ],
+  "taskConfigs": [
+    {
+      "task": "GenericRestV2Task",
+      "taskId": "2",
+      "parameters": {
+        "throwError": {
+          "key": "throwError",
+          "value": {
+            "booleanValue": true
+          }
+        },
+        "responseBody": {
+          "key": "responseBody",
+          "value": {
+            "stringArray": {
+              "stringValues": [
+                "$`Task_2_responseBody`$"
+              ]
+            }
+          }
+        },
+        "disableSSLValidation": {
+          "key": "disableSSLValidation",
+          "value": {
+            "booleanValue": false
+          }
+        },
+        "httpParams": {
+          "key": "httpParams"
+        },
+        "authConfigName": {
+          "key": "authConfigName",
+          "value": {
+            "stringValue": "ai-cllient"
+          }
+        },
+        "authConfig": {
+          "key": "authConfig",
+          "value": {
+            "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.authconfig.AuthConfigTaskParam\"\n}"
+          }
+        },
+        "responseHeader": {
+          "key": "responseHeader",
+          "value": {
+            "stringArray": {
+              "stringValues": [
+                "$`Task_2_responseHeader`$"
+              ]
+            }
+          }
+        },
+        "userAgent": {
+          "key": "userAgent",
+          "value": {
+            "stringValue": ""
+          }
+        },
+        "httpMethod": {
+          "key": "httpMethod",
+          "value": {
+            "stringValue": "POST"
+          }
+        },
+        "responseStatus": {
+          "key": "responseStatus",
+          "value": {
+            "stringArray": {
+              "stringValues": [
+                "$`Task_2_responseStatus`$"
+              ]
+            }
+          }
+        },
+        "timeout": {
+          "key": "timeout",
+          "value": {
+            "intValue": "0"
+          }
+        },
+        "url": {
+          "key": "url",
+          "value": {
+            "stringValue": "$embeddings_db_find_neighbors_url$"
+          }
+        },
+        "useSSL": {
+          "key": "useSSL",
+          "value": {
+            "booleanValue": false
+          }
+        },
+        "urlFetchingService": {
+          "key": "urlFetchingService",
+          "value": {
+            "stringValue": "HARPOON"
+          }
+        },
+        "urlQueryStrings": {
+          "key": "urlQueryStrings"
+        },
+        "requestorId": {
+          "key": "requestorId",
+          "value": {
+            "stringValue": ""
+          }
+        },
+        "jsonAdditionalHeaders": {
+          "key": "jsonAdditionalHeaders",
+          "value": {
+            "jsonValue": "null"
+          }
+        },
+        "requestBody": {
+          "key": "requestBody",
+          "value": {
+            "stringValue": "$find_neighbors_query$"
+          }
+        },
+        "followRedirects": {
+          "key": "followRedirects",
+          "value": {
+            "booleanValue": true
+          }
+        },
+        "additionalHeaders": {
+          "key": "additionalHeaders"
+        }
+      },
+      "nextTasks": [
+        {
+          "taskId": "5"
+        }
+      ],
+      "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+      "displayName": "nearest neighbors",
+      "externalTaskType": "NORMAL_TASK",
+      "position": {
+        "x": -143,
+        "y": -37
+      }
+    },
+    {
+      "task": "JsonnetMapperTask",
+      "taskId": "3",
+      "parameters": {
+        "template": {
+          "key": "template",
+          "value": {
+            "stringValue": "local f = import \"functions\"; // Import additional functions\n\nlocal now_in_millis = f.extVar(\"now_in_millis\");\nlocal delete_from_time_unit = f.extVar(\"delete_from_time_unit\");\nlocal delete_from_value = f.extVar(\"delete_from_value\");\nlocal default_feature_vector = f.extVar(\"default_feature_vector\");\n\nlocal subtractMinutes(epochMs, minutes) = (\n  epochMs - minutes * 60 * 1000\n);\n\nlocal subtractHours(epochMs, hours) = (\n  epochMs - hours * 60 * 60 * 1000\n);\n\nlocal subtractDays(epochMs, days) = (\n  epochMs - days * 24 * 60 * 60 * 1000\n);\n\nlocal subtractYears(epochMs, years) = (\n  epochMs - years * 365 * 24 * 60 * 60 * 1000\n);\n\nlocal extractDateValue(epochMs, element) = (\n  if element == 'year' then\n   std.parseInt(f.dateFormat(epochMs/1000, 'YYYY', 'UTC', 'E'))\n  else if element == 'month' then\n   std.parseInt(f.dateFormat(epochMs/1000, 'M', 'UTC', 'E'))\n  else if element == 'day' then\n   std.parseInt(f.dateFormat(epochMs/1000, 'D', 'UTC', 'E'))\n  else if element == 'hour' then\n   std.parseInt(f.dateFormat(epochMs/1000, 'HH', 'UTC', 'E'))\n  else if element == 'minute' then\n   std.parseInt(f.dateFormat(epochMs/1000, 'm', 'UTC', 'E'))\n   else\n   0\n);\n\nlocal numericRestricts(epochMs, element, toSubtract) = [\n  {\"namespace\": \"time_millis\", \"value_int\": subtractYears(epochMs, toSubtract), \"op\": \"GREATER_EQUAL\"}\n  for n in std.range(1,1)\n  if element == 'year'\n] + [\n  {\"namespace\": \"time_millis\", \"value_int\": subtractDays(epochMs, toSubtract), \"op\": \"GREATER_EQUAL\"}\n  for n in std.range(1,1)\n  if element == 'day'\n] + [\n  {\"namespace\": \"hour\", \"value_int\": subtractHours(epochMs, toSubtract), \"op\": \"GREATER_EQUAL\"}\n  for n in std.range(1,1)\n  if element == 'hour'\n] + [\n  {\"namespace\": \"minute\", \"value_int\": subtractMinutes(epochMs, toSubtract), \"op\": \"GREATER_EQUAL\"}\n  for n in std.range(1,1)\n  if element == 'minute'\n];\n\nlocal findNeighborsQuery(epochMs, element, toSubtract) = {\n    \"deployedIndexId\": \"semantic_cache\",\n    \"queries\": [\n        {\n            \"datapoint\": {\n                \"numeric_restricts\": numericRestricts(epochMs, element, toSubtract),\n                \"featureVector\": default_feature_vector.featureVector\n            },\n            \"neighbor_count\": 1000\n        }\n    ],\n    \"returnFullDatapoint\": false\n};\n\n{\n  find_neighbors_query: findNeighborsQuery(now_in_millis, delete_from_time_unit, delete_from_value)\n}"
+          }
+        }
+      },
+      "nextTasks": [
+        {
+          "taskId": "2"
+        }
+      ],
+      "taskExecutionStrategy": "WHEN_ANY_SUCCEED",
+      "displayName": "prepare nearest neighbor request",
+      "externalTaskType": "NORMAL_TASK",
+      "position": {
+        "x": -144,
+        "y": -175
+      }
+    },
+    {
+      "task": "JsonnetMapperTask",
+      "taskId": "5",
+      "parameters": {
+        "template": {
+          "key": "template",
+          "value": {
+            "stringValue": "local f = import \"functions\"; // Import additional functions\n\nlocal neighbors_raw = std.parseJson(f.extVar(\"`Task_2_responseBody`\"));\n\nlocal getNeighbors(neighbors) = [\n    neighbor.datapoint.datapointId\n    for nearest in neighbors.nearestNeighbors\n    for neighbor in nearest.neighbors\n    if std.objectHas(neighbor, \"datapoint\")\n];\n\nlocal datapoints_to_delete = if std.objectHas(neighbors_raw, 'nearestNeighbors') then getNeighbors(neighbors_raw) else [];\n\n{\n\n    nearest_neighbors_to_delete: {\n        datapoint_ids: datapoints_to_delete\n    },\n    datapoints_to_delete_length: std.length(datapoints_to_delete)\n\n}"
+          }
+        }
+      },
+      "nextTasks": [
+        {
+          "taskId": "6"
+        }
+      ],
+      "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+      "displayName": "prepare neighbors to delete",
+      "externalTaskType": "NORMAL_TASK",
+      "position": {
+        "x": -142,
+        "y": 96
+      }
+    },
+    {
+      "task": "GenericRestV2Task",
+      "taskId": "6",
+      "parameters": {
+        "throwError": {
+          "key": "throwError",
+          "value": {
+            "booleanValue": true
+          }
+        },
+        "responseBody": {
+          "key": "responseBody",
+          "value": {
+            "stringArray": {
+              "stringValues": [
+                "$`Task_6_responseBody`$"
+              ]
+            }
+          }
+        },
+        "disableSSLValidation": {
+          "key": "disableSSLValidation",
+          "value": {
+            "booleanValue": false
+          }
+        },
+        "httpParams": {
+          "key": "httpParams"
+        },
+        "authConfigName": {
+          "key": "authConfigName",
+          "value": {
+            "stringValue": "ai-cllient"
+          }
+        },
+        "authConfig": {
+          "key": "authConfig",
+          "value": {
+            "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.authconfig.AuthConfigTaskParam\"\n}"
+          }
+        },
+        "responseHeader": {
+          "key": "responseHeader",
+          "value": {
+            "stringArray": {
+              "stringValues": [
+                "$`Task_6_responseHeader`$"
+              ]
+            }
+          }
+        },
+        "userAgent": {
+          "key": "userAgent",
+          "value": {
+            "stringValue": ""
+          }
+        },
+        "httpMethod": {
+          "key": "httpMethod",
+          "value": {
+            "stringValue": "POST"
+          }
+        },
+        "responseStatus": {
+          "key": "responseStatus",
+          "value": {
+            "stringArray": {
+              "stringValues": [
+                "$`Task_6_responseStatus`$"
+              ]
+            }
+          }
+        },
+        "timeout": {
+          "key": "timeout",
+          "value": {
+            "intValue": "0"
+          }
+        },
+        "url": {
+          "key": "url",
+          "value": {
+            "stringValue": "$embeddings_db_remove_datapoints_url$"
+          }
+        },
+        "useSSL": {
+          "key": "useSSL",
+          "value": {
+            "booleanValue": false
+          }
+        },
+        "urlFetchingService": {
+          "key": "urlFetchingService",
+          "value": {
+            "stringValue": "HARPOON"
+          }
+        },
+        "urlQueryStrings": {
+          "key": "urlQueryStrings"
+        },
+        "requestorId": {
+          "key": "requestorId",
+          "value": {
+            "stringValue": ""
+          }
+        },
+        "jsonAdditionalHeaders": {
+          "key": "jsonAdditionalHeaders",
+          "value": {
+            "jsonValue": "null"
+          }
+        },
+        "requestBody": {
+          "key": "requestBody",
+          "value": {
+            "stringValue": "$nearest_neighbors_to_delete$"
+          }
+        },
+        "followRedirects": {
+          "key": "followRedirects",
+          "value": {
+            "booleanValue": true
+          }
+        },
+        "additionalHeaders": {
+          "key": "additionalHeaders"
+        }
+      },
+      "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+      "displayName": "delete nearest neighbors",
+      "externalTaskType": "NORMAL_TASK",
+      "position": {
+        "x": -142,
+        "y": 218
+      }
+    },
+    {
+      "task": "FieldMappingTask",
+      "taskId": "7",
+      "parameters": {
+        "FieldMappingConfigTaskParameterKey": {
+          "key": "FieldMappingConfigTaskParameterKey",
+          "value": {
+            "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.FieldMappingConfig\",\n  \"mappedFields\": [{\n    \"inputField\": {\n      \"fieldType\": \"BOOLEAN_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"referenceValue\": \"$now_in_millis$\"\n        },\n        \"transformationFunctions\": [{\n          \"functionType\": {\n            \"intFunction\": {\n              \"functionName\": \"GREATER_THAN\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"literalValue\": {\n                \"intValue\": \"0\"\n              }\n            }\n          }]\n        }]\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$is_now_set$\",\n      \"fieldType\": \"BOOLEAN_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }]\n}"
+          }
+        }
+      },
+      "nextTasks": [
+        {
+          "taskId": "8",
+          "condition": "$is_now_set$ = false",
+          "displayName": "is now not set?"
+        },
+        {
+          "taskId": "3",
+          "condition": "$is_now_set$ = true",
+          "displayName": "is now set?"
+        }
+      ],
+      "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+      "displayName": "validate now in millis",
+      "externalTaskType": "NORMAL_TASK",
+      "position": {
+        "x": -145,
+        "y": -345
+      }
+    },
+    {
+      "task": "FieldMappingTask",
+      "taskId": "8",
+      "parameters": {
+        "FieldMappingConfigTaskParameterKey": {
+          "key": "FieldMappingConfigTaskParameterKey",
+          "value": {
+            "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.FieldMappingConfig\",\n  \"mappedFields\": [{\n    \"inputField\": {\n      \"fieldType\": \"INT_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"baseFunction\": {\n            \"functionType\": {\n              \"baseFunction\": {\n                \"functionName\": \"NOW_IN_MILLIS\"\n              }\n            }\n          }\n        }\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$now_in_millis$\",\n      \"fieldType\": \"INT_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }]\n}"
+          }
+        }
+      },
+      "nextTasks": [
+        {
+          "taskId": "3"
+        }
+      ],
+      "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+      "displayName": "set now",
+      "externalTaskType": "NORMAL_TASK",
+      "position": {
+        "x": 160,
+        "y": -254
+      }
+    },
+    {
+      "task": "SubWorkflowWhileLoopV2Task",
+      "taskId": "9",
+      "parameters": {
+        "triggerId": {
+          "key": "triggerId",
+          "value": {
+            "stringValue": "private_trigger/delete-datapoints-v1"
+          }
+        },
+        "aggregatorParameterMapping": {
+          "key": "aggregatorParameterMapping",
+          "value": {}
+        },
+        "loopMetadata": {
+          "key": "loopMetadata",
+          "value": {
+            "stringArray": {
+              "stringValues": [
+                "$`Task_9_loopMetadata`$"
+              ]
+            }
+          }
+        },
+        "disableEucPropagation": {
+          "key": "disableEucPropagation",
+          "value": {
+            "booleanValue": false
+          }
+        },
+        "whileCondition": {
+          "key": "whileCondition",
+          "value": {
+            "stringValue": "$datapoints_to_delete_length$ != 0"
+          }
+        },
+        "workflowName": {
+          "key": "workflowName",
+          "value": {
+            "stringValue": "cleanup-semantic-cache-v1"
+          }
+        },
+        "requestParameterMapping": {
+          "key": "requestParameterMapping",
+          "value": {
+            "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.ParameterMap\",\n  \"entries\": [{\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"delete_from_time_unit\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"delete_from_time_unit\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"delete_from_value\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"delete_from_value\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"now_in_millis\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"now_in_millis\"\n      }\n    }\n  }]\n}"
+          }
+        },
+        "overrideParameterMapping": {
+          "key": "overrideParameterMapping",
+          "value": {
+            "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.ParameterMap\",\n  \"entries\": [{\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"datapoints_to_delete_length\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"datapoints_to_delete_length\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"now_in_millis\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"now_in_millis\"\n      }\n    }\n  }]\n}"
+          }
+        }
+      },
+      "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+      "displayName": "While entries to deliete",
+      "externalTaskType": "NORMAL_TASK",
+      "position": {
+        "x": -499,
+        "y": -338
+      }
+    }
+  ],
+  "integrationParameters": [
+    {
+      "key": "`Task_2_responseHeader`",
+      "dataType": "STRING_VALUE",
+      "displayName": "`Task_2_responseHeader`",
+      "isTransient": true,
+      "producer": "1_2"
+    },
+    {
+      "key": "`Task_2_responseBody`",
+      "dataType": "STRING_VALUE",
+      "displayName": "`Task_2_responseBody`",
+      "isTransient": true,
+      "producer": "1_2"
+    },
+    {
+      "key": "`Task_2_responseStatus`",
+      "dataType": "STRING_VALUE",
+      "displayName": "`Task_2_responseStatus`",
+      "isTransient": true,
+      "producer": "1_2"
+    },
+    {
+      "key": "embeddings_db_find_neighbors_url",
+      "dataType": "STRING_VALUE",
+      "defaultValue": {
+        "stringValue": ""
+      },
+      "displayName": "embeddings_db_find_neighbors_url"
+    },
+    {
+      "key": "default_feature_vector",
+      "dataType": "JSON_VALUE",
+      "defaultValue": {
+        "jsonValue": "{\n  \"featureVector\": [-0.009183704853057861, -0.02146432176232338, -0.025441830977797508, 0.01274756621569395, -0.02704528719186783, 0.006075523793697357, -0.03218565508723259, -0.04962707683444023, 0.0019796015694737434, 5.950025515630841E-4, -0.022340649738907814, 0.05772848054766655, 0.00940897036343813, 3.7847860949113965E-4, -0.04834747686982155, -0.05854403227567673, 0.04508255422115326, -0.013860432431101799, 0.015193572267889977, 0.013230391778051853, -0.007192797493189573, -0.00522968452423811, -0.032066091895103455, 0.0038863758090883493, -0.03296217694878578, -0.005840672180056572, 0.04984243959188461, 0.01778353378176689, 0.026373984292149544, 0.012174973264336586, 0.03490041568875313, 0.026631299406290054, -0.02909383550286293, -0.051058150827884674, 0.0010310423094779253, 0.03769802674651146, 0.024511069059371948, 0.014567676931619644, 0.01173170655965805, -0.057814132422208786, -0.06297145038843155, 0.0321938581764698, -0.04789099469780922, 0.03321387618780136, 0.004655869212001562, -0.0299422238022089, 0.021458802744746208, -0.025345556437969208, -0.06523091346025467, 0.07252132147550583, 0.044668570160865784, 0.03911333531141281, 0.035239286720752716, -0.019760392606258392, 0.004481302574276924, -0.03734797239303589, -0.015180312097072601, 0.015439406037330627, 0.06560498476028442, 0.01938694342970848, -0.008002388291060925, 0.026111243292689323, -0.047253113240003586, 0.007179660256952047, -0.06906575709581375, -0.02062453329563141, 0.013697376474738121, -0.007033315021544695, -0.017137859016656876, -0.019435856491327286, -0.07784650474786758, 0.002105973893776536, -0.0038078255020081997, -0.0491364449262619, 0.03722098469734192, 0.014376531355082989, -0.023400520905852318, -0.04369097575545311, 0.02531142719089985, 0.005554444622248411, 0.0038661162834614515, 0.06120520085096359, 0.05504946783185005, -0.0015532482648268342, -0.0044215028174221516, -0.011545073240995407, -0.017946986481547356, -0.04793021082878113, -0.03454237058758736, 0.023554520681500435, 0.06361217051744461, -0.01100968848913908, -0.06340174376964569, 0.009117426350712776, 0.044327106326818466, -0.014512628316879272, -0.057740841060876846, -0.10355304181575775, 0.039185937494039536, 0.04180794209241867, 0.01422519888728857, 0.03927236795425415, 0.014889942482113838, -0.03153394162654877, 0.0446896068751812, 0.025593897327780724, -0.03874664008617401, -4.5536799007095397E-4, -0.05376451835036278, -6.0879165539518E-4, 0.015286349691450596, -0.01735030859708786, 0.08497703075408936, -0.0026298612356185913, -0.01820916309952736, 0.017118414863944054, 0.034001436084508896, 0.005472241435199976, -0.011210658587515354, -0.020850110799074173, 0.009257937781512737, 0.053800325840711594, 0.011182824149727821, 0.022222844883799553, 0.048735179007053375, -0.042989347130060196, -0.031458452343940735, -0.008284002542495728, -0.07581666111946106, -0.028917154297232628, 0.026907814666628838, -0.06102519854903221, 0.06867784261703491, -0.012308204546570778, -0.015472397208213806, 7.67054851166904E-4, 0.04471934214234352, -0.013339254073798656, 0.0034494639839977026, 0.025979449972510338, -0.041890982538461685, -0.031213995069265366, -0.07697566598653793, 0.042057182639837265, -0.04090997576713562, -0.010632304474711418, 0.005771041847765446, 0.07646256685256958, 0.022571969777345657, 0.010822799056768417, 0.017475614324212074, -0.0321868397295475, -0.03427400067448616, 0.0506063736975193, 0.001303433091379702, -0.004244936164468527, -0.03657480329275131, -0.053823452442884445, 0.027308892458677292, 0.012226574122905731, -0.06493532657623291, -0.03519213944673538, 0.020919686183333397, 0.039848294109106064, 0.03168656304478645, -0.07197361439466476, 0.004476823378354311, -0.011052836664021015, 0.029812172055244446, 0.033136337995529175, -0.0388614647090435, -0.029335210099816322, 0.008148487657308578, 0.03444375842809677, -0.05901473015546799, 0.018872320652008057, -0.011927347630262375, -0.008215059526264668, -0.05113780125975609, -0.05210042744874954, 0.12285496294498444, -0.021378928795456886, -0.022022545337677002, -0.02883823774755001, 0.056149255484342575, 0.018639445304870605, 0.004269509110599756, 0.08616010844707489, 0.04816465824842453, 9.916059207171202E-4, -0.017423102632164955, -0.07444903999567032, 0.011440327391028404, 0.038515690714120865, 0.026302454993128777, -0.0044375136494636536, -0.016958238556981087, -0.03125191107392311, -0.027687041088938713, -0.021462207660079002, 0.022139688953757286, -0.05964156240224838, -0.027904894202947617, -0.013291695155203342, -0.020489536225795746, 0.023004639893770218, 0.0017874357290565968, -0.06849801540374756, 0.02442614734172821, -0.0067231738939881325, 0.010551268234848976, 0.05347559228539467, 0.012034686282277107, -0.04316380247473717, 0.004577167797833681, 0.08471162617206573, 0.043513569980859756, 0.044676244258880615, 0.06547711789608002, -0.0187115129083395, -0.010776955634355545, -0.03326578065752983, -0.036180928349494934, -0.024382129311561584, 0.023314332589507103, 0.006466758903115988, -0.034375231713056564, -0.017764758318662643, -7.014723960310221E-4, -0.0377870611846447, 0.06929764896631241, -0.013079830445349216, -0.02971307933330536, -0.009431499056518078, -0.011413786560297012, 0.03373298794031143, 0.043954234570264816, -0.07510862499475479, -0.0048116231337189674, 0.025866670534014702, 0.016228217631578445, 0.09004060178995132, 0.027156949043273926, 0.006457975599914789, 0.0162284467369318, 0.023109102621674538, 0.0400991216301918, 0.054655857384204865, 0.03900889307260513, -0.08507110923528671, 0.013298237696290016, -0.009002153761684895, -0.058931779116392136, -0.017458463087677956, -0.08587834984064102, -0.02178320288658142, 0.02424679882824421, -0.001703734276816249, -0.0053410218097269535, -0.011497740633785725, -0.02915762923657894, -0.029503995552659035, 0.009956654161214828, -0.05473649501800537, -0.057963304221630096, -0.010466745123267174, -0.04280781373381615, -0.006262956652790308, 0.03715392202138901, -0.009848556481301785, -0.02929295040667057, -0.006274932064116001, -0.050668131560087204, -0.014312660321593285, -0.010005476884543896, 0.018654897809028625, -0.010706815868616104, -0.027298908680677414, -0.03638402000069618, -0.020939096808433533, -0.006411768030375242, -0.0015757064102217555, 0.016473645344376564, 0.027413006871938705, 0.01341781485825777, -0.08154886960983276, -0.012555945664644241, 0.002341579645872116, -0.005036649759858847, -0.046770911663770676, 0.024001454934477806, 0.01608532853424549, 0.005381307564675808, -0.059429820626974106, 0.0026560884434729815, -0.02370605431497097, 0.09309252351522446, 0.04254273325204849, -0.021982697769999504, 0.020842183381319046, 0.0848303735256195, -0.019202161580324173, -0.05058639496564865, 0.01790674403309822, 0.020473996177315712, 0.04137846827507019, -0.035683050751686096, -0.02459208481013775, -0.017699480056762695, 0.008867242373526096, 0.0159948468208313, 0.054215822368860245, -0.033912282437086105, 0.0024463278241455555, -0.00509605323895812, 0.005935230758041143, -0.12096912413835526, 0.021613944321870804, -0.03878825902938843, -0.0337522029876709, 0.0211862213909626, -0.018739324063062668, -0.003972511738538742, 0.019546017050743103, -0.0065911756828427315, 0.04047137498855591, -0.022948333993554115, 0.007294713985174894, 0.00480286218225956, 0.015199676156044006, 0.0030716240871697664, -0.011563895270228386, 0.030507681891322136, -0.04926065728068352, 0.037982597947120667, 0.02718159183859825, 0.021732022985816002, 0.012285823933780193, 0.07150313258171082, 0.015298455022275448, 0.010812555439770222, 0.00874415785074234, -0.005001968238502741, 0.029328349977731705, -0.007355669513344765, 0.012431307695806026, -0.004500279203057289, 0.02157135121524334, -0.025480477139353752, -0.007446196861565113, -0.032255396246910095, 0.020918328315019608, 0.02662903256714344, 0.01254059188067913, -0.03517817333340645, 0.06648125499486923, -0.0034304780419915915, 0.03515876084566116, -0.010287641547620296, -0.046714119613170624, -0.0024963710457086563, -0.01832239329814911, -0.004984061233699322, 0.04702336713671684, -0.023662731051445007, 0.03678455576300621, 0.05490269511938095, 0.06778392195701599, -0.028270453214645386, -0.013895048759877682, -0.03447965905070305, -0.08049288392066956, -0.002945610787719488, -0.022487251088023186, -0.006387606728821993, -0.04250651225447655, 0.013253203593194485, 0.054269127547740936, 0.05009962245821953, -0.028579792007803917, -0.015425552614033222, -0.028197189792990685, -0.009665277786552906, -0.017233092337846756, -0.004744821693748236, 0.03268605098128319, -0.06802840530872345, -0.02846542000770569, 0.024957017973065376, -0.06722182035446167, -0.013604302890598774, 0.06115388497710228, 0.012299641035497189, 0.04121135175228119, -0.01615198887884617, -0.017155339941382408, -0.005901829339563847, -0.0074041737243533134, -0.0020592722576111555, 0.002249309793114662, -0.010363847017288208, -0.007359784096479416, 0.018518978729844093, -0.03410651162266731, -0.02685738168656826, -0.007366160396486521, 0.11288955807685852, 0.00880388356745243, -0.008857008069753647, -0.00879415962845087, -0.03978799656033516, -0.014122258871793747, -0.01925504393875599, 0.029949303716421127, 0.012600127607584, -0.03233491629362106, 0.02947184070944786, -0.042976200580596924, 0.009845283813774586, 0.008780254051089287, 0.014715688303112984, 0.02019009180366993, 0.004036908037960529, -0.003172344993799925, 0.008197231218218803, -0.043842729181051254, -0.025233227759599686, -0.019262613728642464, -0.00613736268132925, -0.027294402942061424, 0.015143224038183689, -0.05466325581073761, -0.03989514708518982, 1.1639477452263236E-4, 0.011289143934845924, 0.01026062946766615, -0.028937242925167084, -0.041867759078741074, -0.03324968367815018, 0.0927496924996376, 0.04547126963734627, -0.013376377522945404, 0.0815047025680542, -0.020432475954294205, 0.0225308146327734, 0.037356793880462646, -1.6314443200826645E-4, 0.03906472399830818, -0.034292444586753845, -0.05433744192123413, -0.011730817146599293, 0.051757365465164185, 0.0010662538697943091, -0.02217145450413227, -0.07101514935493469, 0.020622868090867996, 0.009647405706346035, -0.04525099694728851, 0.0016398342559114099, 0.032608818262815475, -0.03306717425584793, 0.002113606780767441, 0.010359248146414757, 0.028722088783979416, -0.018939100205898285, -0.0031804051250219345, -0.05077720060944557, 0.07924441248178482, -0.016547370702028275, 0.0031930534169077873, 0.0290656890720129, 0.005351157858967781, -0.033532846719026566, 0.02741803042590618, -0.04715978354215622, 0.007744417991489172, 0.02916504628956318, -0.03441588580608368, -0.014234398491680622, -0.03605952486395836, 0.022671768441796303, 0.001608136110007763, -0.04135560989379883, 0.03801288455724716, 0.03318961709737778, -0.0854477509856224, 0.005373266991227865, 0.01908986270427704, 0.003765912028029561, -0.06726996600627899, 0.012433145195245743, 0.009753267280757427, -0.06662409752607346, -0.03879932686686516, -0.02955510839819908, -0.00345981540158391, 0.021106913685798645, 0.009395113214850426, 0.06619367003440857, 0.0815064087510109, 0.006875451188534498, 0.024827783927321434, 0.006457865238189697, 0.00698813097551465, 0.028522945940494537, 0.014737111516296864, 0.005658184643834829, 0.04015195369720459, 0.014744026586413383, 0.004220844246447086, 0.05334626883268356, -0.010916031897068024, -0.03702259808778763, -0.01997676119208336, -0.017831727862358093, 0.019820429384708405, -0.03324320539832115, -0.002098421100527048, -0.04636070877313614, 0.011365842074155807, -0.06217214837670326, -0.013492750935256481, 0.07184097915887833, -0.010761186480522156, -0.024604687467217445, -0.05963355675339699, -0.01351995300501585, 0.004705178551375866, 0.03477569296956062, -0.005430750548839569, -0.05386395752429962, 0.025200482457876205, 0.05232980474829674, 0.016647497192025185, 0.03340029716491699, 0.050890546292066574, 0.06303072720766068, 0.03328061103820801, 0.07921553403139114, -0.011435002088546753, -0.047158777713775635, -0.020877478644251823, 0.0498727411031723, -0.03222547471523285, 0.062342237681150436, -0.010236101225018501, -0.026103338226675987, 0.07927051931619644, -1.7952719645109028E-4, 0.03454213589429855, -0.022345444187521935, -0.036405280232429504, -0.010152974165976048, 0.05465666577219963, 0.03477088734507561, 0.008881633169949055, -0.0010648425668478012, -0.03039497323334217, 0.007319511845707893, -7.066316320560873E-4, -0.050193678587675095, -0.034322019666433334, -0.03301208093762398, -0.0256209596991539, 0.017075689509510994, -0.006957708392292261, -0.04613140597939491, 0.06486010551452637, -0.027866225689649582, -0.006090389098972082, -0.045447733253240585, 0.02299255132675171, 0.021659500896930695, -0.01175769791007042, -0.004141262732446194, 0.00809945072978735, -0.010407570749521255, 0.03309020400047302, 0.04094645380973816, -0.02046096883714199, -0.011691155843436718, 0.03796142712235451, 0.05881438031792641, -0.006076009478420019, -0.04048583284020424, 0.03222159668803215, -0.0049076988361775875, 0.05122657120227814, -0.06046747788786888, 0.025957727804780006, -0.06928513199090958, -0.04326663911342621, 0.06128731369972229, -0.06833012402057648, 0.040738388895988464, 0.02838643081486225, -0.0037971995770931244, 0.0034291257616132498, 0.007493935059756041, -0.006082440260797739, 0.03547743335366249, -0.002991248155012727, 0.03431137278676033, -0.023936238139867783, -0.05167093127965927, -0.0156150683760643, -0.004510930273681879, -0.014638575725257397, 0.01870262809097767, 0.02386302314698696, 0.015805935487151146, 0.029540088027715683, -0.023445285856723785, -0.024005351588129997, -0.043381739407777786, 0.020287256687879562, -0.0011481575202196836, 0.004241015296429396, 0.027997231110930443, 0.01625889167189598, 0.0012541351607069373, -0.005472855176776648, 0.021632961928844452, 0.0022850080858916044, -0.00504781398922205, 0.0017157604452222586, 0.010227610357105732, 0.007681821007281542, 0.06888391077518463, 0.028367768973112106, -0.04680931568145752, 0.04537387564778328, -0.028436416760087013, -0.03373756632208824, -0.016650337725877762, -0.05629578232765198, 0.02101965621113777, -0.0010823040502145886, -0.039947446435689926, -0.00641402555629611, 0.04319288581609726, -0.0019921285565942526, 0.06843017786741257, -0.021767130121588707, -0.04737545922398567, 0.02256755530834198, -0.03338351473212242, -0.01546666119247675, 0.01658223383128643, 0.07872184365987778, -0.04780722036957741, 0.09190712869167328, -0.02397637628018856, 0.07792113721370697, -0.07297514379024506, -0.03176083788275719, -0.04099225625395775, 0.02945512905716896, -0.027957119047641754, 0.04263795167207718, 0.008123567327857018, 0.018389174714684486, -0.005138172302395105, -0.003286169609054923, -0.04060943424701691, -0.047419559210538864, 0.016573332250118256, -0.002652616472914815, -7.146825664676726E-4, -0.010192845948040485, 0.017849115654826164, 0.050467599183321, 0.0010981778614223003, 0.06687067449092865, -0.01348378136754036, 0.006936152931302786, 0.010717269033193588, -0.035600967705249786, 0.03625420108437538, 0.03148725628852844, 0.020210852846503258, 0.01273086853325367, -0.03080497868359089, -0.02875049225986004, 0.0238136425614357, 0.020891010761260986, 0.008210515603423119, -0.04373253881931305, -0.0557643361389637, 0.06690817326307297, -0.03237175568938255, 2.1730914886575192E-4, -0.03556903079152107, 0.02256385050714016, 0.02281723916530609, 0.02030259743332863, -0.018352240324020386, 0.06239703297615051, -0.03391168266534805, -0.017800774425268173, 0.04335138946771622, -0.009615845046937466, -0.042486149817705154, -0.08390991389751434, -0.034916914999485016, 0.007691382430493832, 0.06242801249027252, 0.041505686938762665, -0.03410889580845833, 0.018835201859474182, -0.07265132665634155, 0.02991456910967827, 0.027876457199454308, -0.01734994165599346, -0.006925484165549278, 0.01129043847322464, 0.04745093733072281, 0.06660481542348862, 0.05512750521302223, 0.037253279238939285, 0.05994528532028198, -0.05198073759675026, 0.059234365820884705, 0.04470750689506531, 0.05914875119924545, -0.01629682444036007, 0.041985973715782166, -0.005834619048982859, 0.0021594641730189323, 0.07727369666099548, 0.015540730208158493, 0.011273609474301338, -0.016904735937714577, 0.03581094369292259, 1.528324792161584E-4, -0.030664924532175064, 8.694712305441499E-4, -0.03244384378194809, -0.058830853551626205, 0.013579930178821087, 0.05099693685770035, 0.009949011728167534, -0.03957341983914375, 0.025140002369880676, -0.00698055699467659, 0.03225873038172722, 0.007504365406930447, -0.03362231329083443, -0.03312982618808746, 0.029962770640850067, -0.07238319516181946, -0.04717334732413292, 0.011303422972559929, 0.03566526249051094, -0.010395986028015614, 0.036952339112758636, 0.010942282155156136, -0.031983327120542526, 0.0181123074144125, 0.03615584969520569, -0.06125105544924736, 0.06009989604353905, -0.05817166715860367, 0.030586285516619682, 0.009927138686180115, -0.016054997220635414, -0.006748642772436142, -0.02801504172384739]\n}"
+      },
+      "displayName": "default_feature_vector"
+    },
+    {
+      "key": "delete_from_value",
+      "dataType": "INT_VALUE",
+      "defaultValue": {
+        "intValue": "1"
+      },
+      "displayName": "delete_from_value",
+      "inputOutputType": "IN"
+    },
+    {
+      "key": "`Task_6_responseHeader`",
+      "dataType": "STRING_VALUE",
+      "displayName": "`Task_6_responseHeader`",
+      "isTransient": true,
+      "producer": "1_6"
+    },
+    {
+      "key": "`Task_6_responseBody`",
+      "dataType": "STRING_VALUE",
+      "displayName": "`Task_6_responseBody`",
+      "isTransient": true,
+      "producer": "1_6"
+    },
+    {
+      "key": "`Task_6_responseStatus`",
+      "dataType": "STRING_VALUE",
+      "displayName": "`Task_6_responseStatus`",
+      "isTransient": true,
+      "producer": "1_6"
+    },
+    {
+      "key": "nearest_neighbors_to_delete",
+      "dataType": "JSON_VALUE",
+      "displayName": "nearest_neighbors_to_delete"
+    },
+    {
+      "key": "embeddings_db_remove_datapoints_url",
+      "dataType": "STRING_VALUE",
+      "defaultValue": {
+        "stringValue": ""
+      },
+      "displayName": "embeddings_db_remove_datapoints_url"
+    },
+    {
+      "key": "datapoints_to_delete_length",
+      "dataType": "INT_VALUE",
+      "defaultValue": {
+        "intValue": "-1"
+      },
+      "displayName": "datapoints_to_delete_length",
+      "inputOutputType": "OUT"
+    },
+    {
+      "key": "find_neighbors_query",
+      "dataType": "JSON_VALUE",
+      "displayName": "find_neighbors_query"
+    },
+    {
+      "key": "delete_from_time_unit",
+      "dataType": "STRING_VALUE",
+      "defaultValue": {
+        "stringValue": "day"
+      },
+      "displayName": "delete_from_time_unit",
+      "inputOutputType": "IN"
+    },
+    {
+      "key": "now_in_millis",
+      "dataType": "INT_VALUE",
+      "defaultValue": {
+        "intValue": "-1"
+      },
+      "displayName": "now_in_millis",
+      "inputOutputType": "IN_OUT"
+    },
+    {
+      "key": "is_now_set",
+      "dataType": "BOOLEAN_VALUE",
+      "defaultValue": {
+        "booleanValue": false
+      },
+      "displayName": "is_now_set"
+    },
+    {
+      "key": "`Task_9_loopMetadata`",
+      "dataType": "JSON_VALUE",
+      "displayName": "`Task_9_loopMetadata`",
+      "isTransient": true,
+      "producer": "1_9",
+      "jsonSchema": "{\n  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\n  \"type\": \"object\",\n  \"properties\": {\n    \"sub_integration_execution_ids\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"string\"\n      }\n    },\n    \"current_iteration_count\": {\n      \"type\": \"number\"\n    },\n    \"failure_message\": {\n      \"type\": \"string\"\n    },\n    \"failure_location\": {\n      \"type\": \"string\"\n    },\n    \"current_element\": {\n      \"type\": [\"string\", \"number\", \"object\", \"array\"]\n    }\n  }\n}"
+    }
+  ]
+}

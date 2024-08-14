@@ -1,0 +1,11 @@
+{
+	"displayName": "ai-cllient",
+	"visibility": "CLIENT_VISIBLE",
+	"decryptedCredential": {
+		"credentialType": "SERVICE_ACCOUNT",
+		"serviceAccountCredentials": {
+			"serviceAccount": "SERVICE_ACCOUNT_ID",
+			"scope": "https://www.googleapis.com/auth/cloud-platform"
+		}
+	}
+}
