@@ -69,7 +69,7 @@ gcloud ai index-endpoints create  --display-name=semantic-cache --public-endpoin
 INDEX_ENDPOINT_ID=$(gcloud ai index-endpoints list --project=$PROJECT --region=$REGION --format="json" | jq -c -r '.[] | select(.displayName="semantic-cache") | .name | split("/") | .[5]') && INDEX_ID=$(gcloud ai indexes list --project=$PROJECT --region=$REGION --format="json" | jq -c -r '.[] | select(.displayName="semantic-cache") | .name | split("/") | .[5]') && gcloud ai index-endpoints deploy-index $INDEX_ENDPOINT_ID --deployed-index-id=semantic_cache --display-name=semantic-cache --index=$INDEX_ID --region=$REGION --project=$PROJECT
 ```
 
-**Important:** Initial deployment of an index to an endpoint typically takes between 20 and 30 minutes.
+**Important:** Initial deployment of an index to an endpoint typically takes between 20 and 30 minutes. You can check the status of the operation using the command provided in the output form the previous step.
 
 ## Deploy sample artifacts
 

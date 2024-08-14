@@ -47,13 +47,13 @@ apigeecli apis undeploy --name llm-semantic-cache-v1 --env "$APIGEE_ENV" --rev "
 echo "Deleting proxy llm-semantic-cache-v1 proxy"
 apigeecli apis delete --name llm-semantic-cache-v1 --org "$PROJECT" --token "$TOKEN"
 
-echo "Undeploying semmantic-cache-request-v1 sharedflow"
-REV=$(apigeecli envs deployments get --env "$APIGEE_ENV" --org "$PROJECT" --token "$TOKEN" --sharedflows true --disable-check | jq .'deployments[]| select(.apiProxy=="semmantic-cache-request-v1").revision' -r)
-apigeecli sharedflows undeploy --name semmantic-cache-request-v1 --env "$APIGEE_ENV" --rev "$REV" --org "$PROJECT" --token "$TOKEN"
+echo "Undeploying semantic-cache-request-v1 sharedflow"
+REV=$(apigeecli envs deployments get --env "$APIGEE_ENV" --org "$PROJECT" --token "$TOKEN" --sharedflows true --disable-check | jq .'deployments[]| select(.apiProxy=="semantic-cache-request-v1").revision' -r)
+apigeecli sharedflows undeploy --name semantic-cache-request-v1 --env "$APIGEE_ENV" --rev "$REV" --org "$PROJECT" --token "$TOKEN"
 
-echo "Undeploying semmantic-cache-response-v1 sharedflow"
-REV=$(apigeecli envs deployments get --env "$APIGEE_ENV" --org "$PROJECT" --token "$TOKEN" --sharedflows true --disable-check | jq .'deployments[]| select(.apiProxy=="semmantic-cache-response-v1").revision' -r)
-apigeecli sharedflows undeploy --name semmantic-cache-response-v1 --env "$APIGEE_ENV" --rev "$REV" --org "$PROJECT" --token "$TOKEN"
+echo "Undeploying semantic-cache-response-v1 sharedflow"
+REV=$(apigeecli envs deployments get --env "$APIGEE_ENV" --org "$PROJECT" --token "$TOKEN" --sharedflows true --disable-check | jq .'deployments[]| select(.apiProxy=="semantic-cache-response-v1").revision' -r)
+apigeecli sharedflows undeploy --name semantic-cache-response-v1 --env "$APIGEE_ENV" --rev "$REV" --org "$PROJECT" --token "$TOKEN"
 
 echo "Deleting Semantic Cache Cleanup utility ..."
 integrationcli integrations delete -n cleanup-semantic-cache-v1

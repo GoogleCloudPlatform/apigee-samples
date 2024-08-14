@@ -43,17 +43,17 @@ PUBLIC_ENDPOINT_SUBDOMAIN=$(gcloud ai index-endpoints list --project=$PROJECT --
 
 PRE_PROP="project_id=$PROJECT\nproject_number=$PROJECT_NUMBER\nmodel_id=$MODEL_ID\nembeddings_model_id=$EMBEDDINGS_MODEL_ID\nregion=$REGION\nindex_id=$INDEX_ID\nindex_id_name=semantic_cache\nindex_endpoint_id=$INDEX_ENDPOINT_ID\nindex_endpoint_subdomain=387635837\nindex_endpoint_subdomain=$PUBLIC_ENDPOINT_SUBDOMAIN\nnearest_neighbor_min_distance=$NEAREST_NEIGHBOR_DISTANCE\ncache_entry_ttl_sec=$CACHE_ENTRY_TTL_SEC"
 
-echo "$PRE_PROP" > ./apiproxy/resources/properties/vertex_config.properties
+touch ./apiproxy/resources/properties/vertex_config.properties && echo "$PRE_PROP" > ./apiproxy/resources/properties/vertex_config.properties
 
 echo "Deploying Apigee artifacts..."
 
-echo "Importing and Deploying Apigee semmantic-cache-request-v1 sharedflow..."
-REV_SF=$(apigeecli sharedflows create bundle -f ./semmantic-cache-request-v1/sharedflowbundle -n semmantic-cache-request-v1 --org "$PROJECT" --token "$TOKEN" --disable-check | jq ."revision" -r)
-apigeecli sharedflows deploy --name semmantic-cache-request-v1 --ovr --rev "$REV_SF" --org "$PROJECT" --env "$APIGEE_ENV" --token "$TOKEN"
+echo "Importing and Deploying Apigee semantic-cache-request-v1 sharedflow..."
+REV_SF=$(apigeecli sharedflows create bundle -f ./semantic-cache-request-v1/sharedflowbundle -n semantic-cache-request-v1 --org "$PROJECT" --token "$TOKEN" --disable-check | jq ."revision" -r)
+apigeecli sharedflows deploy --name semantic-cache-request-v1 --ovr --rev "$REV_SF" --org "$PROJECT" --env "$APIGEE_ENV" --token "$TOKEN"
 
-echo "Importing and Deploying Apigee semmantic-cache-response-v1 sharedflow..."
-REV_SF=$(apigeecli sharedflows create bundle -f ./semmantic-cache-response-v1/sharedflowbundle -n semmantic-cache-response-v1 --org "$PROJECT" --token "$TOKEN" --disable-check | jq ."revision" -r)
-apigeecli sharedflows deploy --name semmantic-cache-response-v1 --ovr --rev "$REV_SF" --org "$PROJECT" --env "$APIGEE_ENV" --token "$TOKEN"
+echo "Importing and Deploying Apigee semantic-cache-response-v1 sharedflow..."
+REV_SF=$(apigeecli sharedflows create bundle -f ./semantic-cache-response-v1/sharedflowbundle -n semantic-cache-response-v1 --org "$PROJECT" --token "$TOKEN" --disable-check | jq ."revision" -r)
+apigeecli sharedflows deploy --name semantic-cache-response-v1 --ovr --rev "$REV_SF" --org "$PROJECT" --env "$APIGEE_ENV" --token "$TOKEN"
 
 echo "Importing and Deploying Apigee llm-semantic-cache-v1 proxy..."
 REV=$(apigeecli apis create bundle -f ./apiproxy -n llm-semantic-cache-v1 --org "$PROJECT" --token "$TOKEN" --disable-check | jq ."revision" -r)
