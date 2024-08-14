@@ -28,6 +28,23 @@ gcloud config set project <walkthrough-project-id/>
 gcloud services enable compute.googleapis.com aiplatform.googleapis.com storage.googleapis.com integrations.googleapis.com  --project <walkthrough-project-id/>
 ```
 
+## Set environment variables
+
+1. Set the <walkthrough-editor-select-regex filePath="./env.sh" regex="PROJECT_ID_TO_SET">PROJECT_ID</walkthrough-editor-select-regex>
+2. Set the <walkthrough-editor-select-regex filePath="./env.sh" regex="REGION_TO_SET">REGION</walkthrough-editor-select-regex> to deploy the Vector Search Index. It should be the same region as your Apigee instance.
+3. Set the <walkthrough-editor-select-regex filePath="./env.sh" regex="MODEL_ID_TO_SET">MODEL_ID</walkthrough-editor-select-regex> to send generative prompts to. For example, `gemini-1.5-pro-001`.
+4. Set the <walkthrough-editor-select-regex filePath="./env.sh" regex="EMBEDDINGS_MODEL_ID_TO_SET">EMBEDDINGS_MODEL_ID</walkthrough-editor-select-regex> to generate embeddings with. For example, `text-embedding-004`.
+5. Set the <walkthrough-editor-select-regex filePath="./env.sh" regex="NEAREST_NEIGHBOR_DISTANCE_TO_SET">NEAREST_NEIGHBOR_DISTANCE</walkthrough-editor-select-regex> that will be used to perform nearest neighbor lookups on an embeddings database. The bigger the number, the more closely prompts have to be related to be considered a cache hit. For exsample, `0.95`.
+6. Set the <walkthrough-editor-select-regex filePath="./env.sh" regex="CACHE_ENTRY_TTL_SEC_TO_SET">CACHE_ENTRY_TTL_SEC</walkthrough-editor-select-regex> that will be used to assing TTL for cache entries in seconds.  For exsample, `60`.
+7. Set the <walkthrough-editor-select-regex filePath="./env.sh" regex="APIGEE_HOST_TO_SET">APIGEE_HOST</walkthrough-editor-select-regex> of your Apigee instance. For example, `my-test.nip.io`.
+8. Set the <walkthrough-editor-select-regex filePath="./env.sh" regex="APIGEE_ENV_TO_SET">APIGEE_ENV</walkthrough-editor-select-regex> to the deploy the sample Apigee artifacts. For exanple, `dev-env`.
+
+### Edit the following variables in the provided `env.sh` file.
+
+```sh
+source ./env.sh
+```
+
 ## Create and deploy a Vector Search index
 
 ### Create an index
@@ -81,23 +98,6 @@ gcloud iam service-accounts create ai-client --description="semantic cache clien
 
 ```sh
 gcloud projects add-iam-policy-binding <walkthrough-project-id/> --member="serviceAccount:ai-client@<walkthrough-project-id/>.iam.gserviceaccount.com" --role="roles/aiplatform.user"
-```
-
-### Edit the following variables in the provided `env.sh` file.
-
-1. Set the <walkthrough-editor-select-regex filePath="./env.sh" regex="PROJECT_ID_TO_SET">PROJECT_ID</walkthrough-editor-select-regex>
-2. Set the <walkthrough-editor-select-regex filePath="./env.sh" regex="REGION_TO_SET">REGION</walkthrough-editor-select-regex> to deploy the Vector Search Index. It should be the same region as your Apigee instance.
-3. Set the <walkthrough-editor-select-regex filePath="./env.sh" regex="MODEL_ID_TO_SET">MODEL_ID</walkthrough-editor-select-regex> to send generative prompts to. For example, `gemini-1.5-pro-001`.
-4. Set the <walkthrough-editor-select-regex filePath="./env.sh" regex="EMBEDDINGS_MODEL_ID_TO_SET">EMBEDDINGS_MODEL_ID</walkthrough-editor-select-regex> to generate embeddings with. For example, `text-embedding-004`.
-5. Set the <walkthrough-editor-select-regex filePath="./env.sh" regex="NEAREST_NEIGHBOR_DISTANCE_TO_SET">NEAREST_NEIGHBOR_DISTANCE</walkthrough-editor-select-regex> that will be used to perform nearest neighbor lookups on an embeddings database. The bigger the number, the more closely prompts have to be related to be considered a cache hit. For exsample, `0.95`.
-6. Set the <walkthrough-editor-select-regex filePath="./env.sh" regex="CACHE_ENTRY_TTL_SEC_TO_SET">CACHE_ENTRY_TTL_SEC</walkthrough-editor-select-regex> that will be used to assing TTL for cache entries in seconds.  For exsample, `60`.
-7. Set the <walkthrough-editor-select-regex filePath="./env.sh" regex="APIGEE_HOST_TO_SET">APIGEE_HOST</walkthrough-editor-select-regex> of your Apigee instance. For example, `my-test.nip.io`.
-8. Set the <walkthrough-editor-select-regex filePath="./env.sh" regex="APIGEE_ENV_TO_SET">APIGEE_ENV</walkthrough-editor-select-regex> to the deploy the sample Apigee artifacts. For exanple, `dev-env`.
-
-### Set environment variables
-
-```sh
-source ./env.sh
 ```
 
 ### Execute deployment script
