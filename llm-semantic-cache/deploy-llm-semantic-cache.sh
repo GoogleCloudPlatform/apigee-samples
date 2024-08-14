@@ -36,14 +36,14 @@ export PATH=$PATH:$HOME/.apigeecli/bin
 TOKEN=$(gcloud auth print-access-token)
 gcloud config set project $PROJECT
 
-PROJECT_NUMBER==$(gcloud projects list --filter="$(gcloud config get-value project)" --format="value(PROJECT_NUMBER)")
+PROJECT_NUMBER=$(gcloud projects list --filter="$(gcloud config get-value project)" --format="value(PROJECT_NUMBER)")
 INDEX_ID=$(gcloud ai indexes list --project=$PROJECT --region=$REGION --format="json" | jq -c -r '.[] | select(.displayName="semantic-cache") | .name | split("/") | .[5]')
 INDEX_ENDPOINT_ID=$(gcloud ai index-endpoints list --project=$PROJECT --region=$REGION --format="json" | jq -c -r '.[] | select(.displayName="semantic-cache") | .name | split("/") | .[5]')
 PUBLIC_ENDPOINT_SUBDOMAIN=$(gcloud ai index-endpoints list --project=$PROJECT --region=$REGION --format="json" | jq -c -r '.[] | select(.displayName="semantic-cache") | .publicEndpointDomainName | split(".") | .[0]')
 
 PRE_PROP="project_id=$PROJECT\nproject_number=$PROJECT_NUMBER\nmodel_id=$MODEL_ID\nembeddings_model_id=$EMBEDDINGS_MODEL_ID\nregion=$REGION\nindex_id=$INDEX_ID\nindex_id_name=semantic_cache\nindex_endpoint_id=$INDEX_ENDPOINT_ID\nindex_endpoint_subdomain=387635837\nindex_endpoint_subdomain=$PUBLIC_ENDPOINT_SUBDOMAIN\nnearest_neighbor_min_distance=$NEAREST_NEIGHBOR_DISTANCE\ncache_entry_ttl_sec=$CACHE_ENTRY_TTL_SEC"
 
-touch ./apiproxy/resources/properties/vertex_config.properties && echo "$PRE_PROP" > ./apiproxy/resources/properties/vertex_config.properties
+echo "$PRE_PROP" > ./apiproxy/resources/properties/vertex_config.properties
 
 echo "Deploying Apigee artifacts..."
 
@@ -59,8 +59,8 @@ echo "Importing and Deploying Apigee llm-semantic-cache-v1 proxy..."
 REV=$(apigeecli apis create bundle -f ./apiproxy -n llm-semantic-cache-v1 --org "$PROJECT" --token "$TOKEN" --disable-check | jq ."revision" -r)
 apigeecli apis deploy --wait --name llm-semantic-cache-v1 --ovr --rev "$REV" --org "$PROJECT" --env "$APIGEE_ENV" --token "$TOKEN"
 
-FIND_NEIGHBORS_URL="https://$PUBLIC_ENDPOINT_SUBDOMAIN.$REGION-$PROJECT_NUMBER.vdb.vertexai.goog/v1/projects/$PROJECT_NUMBER/locations/$REGION/indexEndpoints/$INDEX_ENDPOINT_ID:findNeighbors"
-REMOVE_DATAPOINTS_URL="https://$REGION-aiplatform.googleapis.com/v1/projects/$PROJECT_NUMBER/locations/$REGION/indexes/$INDEX_ID:removeDatapoints"
+FIND_NEIGHBORS_URL="https:\/\/$PUBLIC_ENDPOINT_SUBDOMAIN.$REGION-$PROJECT_NUMBER.vdb.vertexai.goog\/v1\/projects\/$PROJECT_NUMBER\/locations\/$REGION\/indexEndpoints\/$INDEX_ENDPOINT_ID:findNeighbors"
+REMOVE_DATAPOINTS_URL="https:\/\/$REGION-aiplatform.googleapis.com\/v1\/projects\/$PROJECT_NUMBER\/locations\/$REGION\/indexes\/$INDEX_ID:removeDatapoints"
 SERVICE_ACCOUNT_ID="ai-client@$PROJECT.iam.gserviceaccount.com"
 
 sed -i "s/FIND_NEIGHBORS_URL/$FIND_NEIGHBORS_URL/g" ./cleanup-semantic-cache-v1/dev/overrides/overrides.json
