@@ -77,7 +77,16 @@ sed -i "s/FIND_NEIGHBORS_URL/$FIND_NEIGHBORS_URL/g" ./cleanup-semantic-cache-v1/
 sed -i "s/REMOVE_DATAPOINTS_URL/$REMOVE_DATAPOINTS_URL/g" ./cleanup-semantic-cache-v1/dev/overrides/overrides.json
 sed -i "s/SERVICE_ACCOUNT_ID/$SERVICE_ACCOUNT_ID/g" ./cleanup-semantic-cache-v1/dev/authconfigs/ai-cllient.json
 
-echo "Installing integrationcli"
+echo "Provisioning Application Integration ..."
+curl --request POST \
+  "https://integrations.googleapis.com/v1/projects/$PROJECT/locations/$REGION/clients:provision" \
+  --header "Authorization: Bearer $TOKEN" \
+  --header 'Accept: application/json' \
+  --header 'Content-Type: application/json' \
+  --data '{"provisionGmek":false,"createSampleWorkflows":false}' \
+  --compressed
+
+echo "Installing integrationcli ..."
 curl -L https://raw.githubusercontent.com/GoogleCloudPlatform/application-integration-management-toolkit/main/downloadLatest.sh | sh -
 export PATH=$PATH:$HOME/.integrationcli/bin
 
