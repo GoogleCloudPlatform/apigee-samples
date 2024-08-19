@@ -96,3 +96,5 @@ integrationcli token cache -t $TOKEN
 echo "Deploying Semantic Cache Cleanup utility ..."
 
 integrationcli integrations apply -e dev -f ./cleanup-semantic-cache-v1/
+
+echo "You can review the deployed semantic cache cleanup utility here: https://console.cloud.google.com/integrations/edit/cleanup-semantic-cache-v1/locations/$REGION?project=$PROJECT"
