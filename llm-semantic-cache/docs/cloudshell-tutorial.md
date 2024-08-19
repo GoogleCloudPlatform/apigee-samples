@@ -28,8 +28,9 @@ gcloud config set project <walkthrough-project-id/>
 ```sh
 gcloud services enable compute.googleapis.com aiplatform.googleapis.com storage.googleapis.com integrations.googleapis.com  --project <walkthrough-project-id/>
 ```
+## Set environment variables
 
-## Edit the following variables in the provided `env.sh` file
+## 1. Edit the following variables in the `env.sh` file
 
 Open the environment variables file <walkthrough-editor-open-file filePath="llm-semantic-cache/env.sh">env.sh</walkthrough-editor-open-file> and set the following variables:
 
@@ -42,7 +43,7 @@ Open the environment variables file <walkthrough-editor-open-file filePath="llm-
 * Set the <walkthrough-editor-select-regex filePath="llm-semantic-cache/env.sh" regex="APIGEE_HOST_TO_SET">APIGEE_HOST</walkthrough-editor-select-regex> of your Apigee instance. For example, `my-test.nip.io`.
 * Set the <walkthrough-editor-select-regex filePath="llm-semantic-cache/env.sh" regex="APIGEE_ENV_TO_SET">APIGEE_ENV</walkthrough-editor-select-regex> to the deploy the sample Apigee artifacts. For exanple, `dev-env`.
 
-### Set environment variables
+### 2. Set environment variables
 
 ```sh
 cd llm-semantic-cache && source ./env.sh
@@ -50,20 +51,20 @@ cd llm-semantic-cache && source ./env.sh
 
 ## Create and deploy a Vector Search index
 
-### Create an index
+### 1. Create an index
 
 The following `curl` command will create an index that will allow streaming updates.
 
 ```sh
 ACCESS_TOKEN=$(gcloud auth print-access-token) && curl --location --request POST "https://$REGION-aiplatform.googleapis.com/v1/projects/$PROJECT/locations/$REGION/indexes" --header "Authorization: Bearer $ACCESS_TOKEN" --header 'Content-Type: application/json' --data-raw '{"displayName": "semantic-cache", "description": "semantic-cache", "metadata": {"config": {"dimensions": "768","approximateNeighborsCount": 150,"distanceMeasureType": "DOT_PRODUCT_DISTANCE","featureNormType": "NONE","algorithmConfig": {"treeAhConfig": {"leafNodeEmbeddingCount": "10000","fractionLeafNodesToSearch": 0.05}},"shardSize": "SHARD_SIZE_MEDIUM"},},"indexUpdateMethod": "STREAM_UPDATE"}'
 ```
-### Create an index endpoint
+### 2. Create an index endpoint
 
 ```sh
 gcloud ai index-endpoints create  --display-name=semantic-cache --public-endpoint-enabled --region=$REGION --project=$PROJECT
 ```
 
-### Deploy index to the endpoint
+### 3. Deploy index to the endpoint
 
 ```sh
 INDEX_ENDPOINT_ID=$(gcloud ai index-endpoints list --project=$PROJECT --region=$REGION --format="json" | jq -c -r '.[] | select(.displayName="semantic-cache") | .name | split("/") | .[5]') && INDEX_ID=$(gcloud ai indexes list --project=$PROJECT --region=$REGION --format="json" | jq -c -r '.[] | select(.displayName="semantic-cache") | .name | split("/") | .[5]') && gcloud ai index-endpoints deploy-index $INDEX_ENDPOINT_ID --deployed-index-id=semantic_cache --display-name=semantic-cache --index=$INDEX_ID --region=$REGION --project=$PROJECT
@@ -73,19 +74,25 @@ INDEX_ENDPOINT_ID=$(gcloud ai index-endpoints list --project=$PROJECT --region=$
 
 ## Deploy sample artifacts
 
-### Create a service account to be used by the sample
+### 1. Create a service account to be used by the sample
 
 ```sh
 gcloud iam service-accounts create ai-client --description="semantic cache client" --display-name="ai-client"
 ```
 
-### Assign Vertex AI Platform User Role to the service account
+### 2. Assign the Vertex AI Platform User role to the service account
 
 ```sh
 gcloud projects add-iam-policy-binding <walkthrough-project-id/> --member="serviceAccount:ai-client@<walkthrough-project-id/>.iam.gserviceaccount.com" --role="roles/aiplatform.user"
 ```
 
-### Execute deployment script
+### 3. Assign the IAM Service Account User role to the service account
+
+```sh
+gcloud projects add-iam-policy-binding <walkthrough-project-id/> --member="serviceAccount:ai-client@<walkthrough-project-id/>.iam.gserviceaccount.com" --role="roles/iam.serviceAccountUser"
+```
+
+### 4. Execute deployment script
 
 ```sh
 ./deploy-llm-semantic-cache.sh
