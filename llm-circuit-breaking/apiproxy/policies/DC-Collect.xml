@@ -12,14 +12,18 @@
  limitations under the License.
 -->
 <DataCapture name="DC-Collect" continueOnError="false" enabled="true">
-  <DisplayName>DC-Collect-</DisplayName>
+  <DisplayName>DC-Collect</DisplayName>
   <IgnoreUnresolvedVariables>false</IgnoreUnresolvedVariables>
   <Capture>
     <Collect ref="target_pool"/>
     <DataCollector>dc_target_pool</DataCollector>
   </Capture>
   <Capture>
-    <Collect ref="balanced_target"/>
-    <DataCollector>dc_balanced_target</DataCollector>
+    <Collect ref="balanced_target_project"/>
+    <DataCollector>dc_balanced_target_project</DataCollector>
+  </Capture>
+  <Capture>
+    <Collect ref="balanced_target_region"/>
+    <DataCollector>dc_balanced_target_region</DataCollector>
   </Capture>
 </DataCapture>

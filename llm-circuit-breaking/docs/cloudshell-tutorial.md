@@ -30,12 +30,15 @@ gcloud services enable aiplatform.googleapis.com tasks.googleapis.com  --project
 
 ## Set environment variables
 
-## 1. Edit the following variables in the `env.sh` file
+### 1. Edit the following variables in the `env.sh` file
 
 Open the environment variables file <walkthrough-editor-open-file filePath="llm-circuit-breaking/env.sh">env.sh</walkthrough-editor-open-file> and set the following variables:
 
 * Set the <walkthrough-editor-select-regex filePath="llm-circuit-breaking/env.sh" regex="APIGEE_PROJECT_ID_TO_SET">APIGEE_PROJECT</walkthrough-editor-select-regex>. The value should be <walkthrough-project-id/>.
-* Set the <walkthrough-editor-select-regex filePath="llm-circuit-breaking/env.sh" regex="PROJECT_ID_TO_SET">PROJECT_ID</walkthrough-editor-select-regex>. The value should be <walkthrough-project-id/>.
+* Set the <walkthrough-editor-select-regex filePath="llm-circuit-breaking/env.sh" regex="PROJECT_P1_TO_SET">PROJECT_P1</walkthrough-editor-select-regex>. The project used as Primary tenancy bucket. It can be <walkthrough-project-id/> or a different project with Gemini quota.
+* Set the <walkthrough-editor-select-regex filePath="llm-circuit-breaking/env.sh" regex="PROJECT_P2_TO_SET">PROJECT_P2</walkthrough-editor-select-regex>. The project used as Secondary tenancy bucket. It can be <walkthrough-project-id/> or a different project with Gemini quota.
+* Set the <walkthrough-editor-select-regex filePath="llm-circuit-breaking/env.sh" regex="REGION_P1_TO_SET">REGION_P1</walkthrough-editor-select-regex>. The region used as Primary tenancy bucket.
+* Set the <walkthrough-editor-select-regex filePath="llm-circuit-breaking/env.sh" regex="REGION_P2_TO_SET">REGION_P2</walkthrough-editor-select-regex>. The region used as Secondary tenancy bucket.
 * Set the <walkthrough-editor-select-regex filePath="llm-circuit-breaking/env.sh" regex="APIGEE_HOST_TO_SET">APIGEE_HOST</walkthrough-editor-select-regex> of your Apigee instance. For example, `my-test.nip.io`.
 * Set the <walkthrough-editor-select-regex filePath="llm-circuit-breaking/env.sh" regex="APIGEE_ENV_TO_SET">APIGEE_ENV</walkthrough-editor-select-regex> to the deploy the sample Apigee artifacts. For exanple, `dev-env`.
 
@@ -43,6 +46,16 @@ Open the environment variables file <walkthrough-editor-open-file filePath="llm-
 
 ```sh
 cd llm-circuit-breaking && source ./env.sh
+```
+
+## Creste a Task Queue
+
+This task queue will allow you to send concurrent request to an LLM endpoint.
+
+### 1. Create a Queue
+
+```sh
+gcloud tasks queues create ai-queue --location=$REGION_P1
 ```
 
 ## Deploy sample artifacts

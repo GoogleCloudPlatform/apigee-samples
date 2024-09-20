@@ -19,8 +19,12 @@
     <Value>secondary</Value>
   </AssignVariable>
   <AssignVariable>
-    <Name>balanced_target</Name>
+    <Name>balanced_target_project</Name>
     <Template>{propertyset.vertex_config.project_p2}</Template>
+  </AssignVariable>
+  <AssignVariable>
+    <Name>balanced_target_region</Name>
+    <Template>{propertyset.vertex_config.region_p2}</Template>
   </AssignVariable>
   <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
   <AssignTo createNew="false" transport="http" type="response"/>

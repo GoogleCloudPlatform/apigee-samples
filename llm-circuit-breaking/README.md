@@ -1,20 +1,18 @@
 # **Serving LLM Traffic with Apigee**
 
-## [Token Limits Sample](llm_token_limits.ipynb)
+## [Circuit Breaking Sample](llm_circuit_breaking.ipynb)
 
-Every interaction with an LLM consumes tokens, therefore, LLM token management plays a crutial role in maintaining platform-level control and visility over the consumption of tokens across LLM providers and consumers.
+Circuit breaking with Apigee offers significant benefits for serving Large Language Models (LLMs) in Retrieval Augmented Generation (RAG) applications, particularly in preventing the dreaded `429` HTTP errors that arise from exceeding LLM endpoint quotas. By placing Apigee between the RAG application and LLM endpoints, users gain a robust mechanism for managing traffic distribution and graceful failure handling.
 
-Apigee's API Products, when applied to token consumption, allows you to effectively manage token usage by setting limits on the number of tokens consumed per LLM consumer. This policy leverages the token usage metrics provided by an LLM, enabling real-time monitoring and enforcement of limits.
+[![architecture](./images/llm-circuit-breaking.png)](llm_circuit_breaking.ipynb)
 
-[![architecture](./images/ai-product.png)](llm_token_limits.ipynb)
+# Circuit Breaking Benefits
 
-# Benefits Token Limits with AI Products
-
-Creating Product tiers within Apigee allows for differentiated token quotas based for each consumer. This enables you to:
-
-* **Control token allocation**: Prioritize resources for high-priority consumers by allocating higher token quotas to their tiers. This will also help to manage platform-wide token budgets across multiple LLM providers.
-* **Tiered AI products**: By utilizing product tiers with granular token quotas, Apigee effectively manages LLM and empowers AI platform teams to manage costs and provide a multi-tenant platform experience.
+1. **Improved fault tolerance**: The multi-pool architecture, coupled with circuit breaking, provides inherent fault tolerance, ensuring that the RAG application remains operational even if one or more LLM endpoints fail or experience outages.
+2. **Data-driven capacity planning**: Circuit breaking provides valuable insights into endpoint performance, allowing you to monitor and adjust capacity allocations based on actual traffic patterns and usage. This enables informed capacity planning and avoids unnecessary overprovisioning.
+3. **Multitenancy**: Apigee provides a unified platform for managing and routing traffic to different LLM tenants, simplifying integration and reducing development effort.
+4. **Centralized monitoring and analytics**: Apigee offers comprehensive monitoring and analytics capabilities, allowing for real-time insights into LLM endpoint performance, quota usage, and failover events. This enables proactive identification and resolution of issues, enhancing operational efficiency.
 
 ## Get started
 
-Proceed to this [notebook](llm_token_limits.ipynb) and follow the steps in the Setup and Testing sections.
+Proceed to this [notebook](llm_circuit_breaking.ipynb) and follow the steps in the Setup and Testing sections.

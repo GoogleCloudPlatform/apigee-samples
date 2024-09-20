@@ -14,8 +14,28 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-if [ -z "$PROJECT" ]; then
-  echo "No PROJECT variable set"
+if [ -z "$APIGEE_PROJECT" ]; then
+  echo "No APIGEE_PROJECT variable set"
+  exit
+fi
+
+if [ -z "$PROJECT_P1" ]; then
+  echo "No PROJECT_P1 variable set"
+  exit
+fi
+
+if [ -z "$PROJECT_P2" ]; then
+  echo "No PROJECT_P2 variable set"
+  exit
+fi
+
+if [ -z "$REGION_P1" ]; then
+  echo "No REGION_P1 variable set"
+  exit
+fi
+
+if [ -z "$REGION_P2" ]; then
+  echo "No REGION_P2 variable set"
   exit
 fi
 
@@ -34,38 +54,31 @@ curl -s https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.s
 export PATH=$PATH:$HOME/.apigeecli/bin
 
 TOKEN=$(gcloud auth print-access-token)
-gcloud config set project $PROJECT
+gcloud config set project $APIGEE_PROJECT
 
-echo "Deleting Developer Apps"
-DEVELOPER_ID=$(apigeecli developers get --email aidev@cymbal.com --org "$PROJECT" --token "$TOKEN" --disable-check | jq .'developerId' -r)
-apigeecli apps delete --id "$DEVELOPER_ID" --name ai-consumer-app --org "$PROJECT" --token "$TOKEN"
+echo "Undeploying llm-circuit-breaking-v1 proxy"
+REV=$(apigeecli envs deployments get --env "$APIGEE_ENV" --org "$APIGEE_PROJECT" --token "$TOKEN" --disable-check | jq .'deployments[]| select(.apiProxy=="llm-circuit-breaking-v1").revision' -r)
+apigeecli apis undeploy --name llm-circuit-breaking-v1 --env "$APIGEE_ENV" --rev "$REV" --org "$APIGEE_PROJECT" --token "$TOKEN"
 
-echo "Deleting Developer"
-apigeecli developers delete --email aidev@cymbal.com --org "$PROJECT" --token "$TOKEN"
+echo "Deleting proxy llm-circuit-breaking-v1 proxy"
+apigeecli apis delete --name llm-circuit-breaking-v1 --org "$APIGEE_PROJECT" --token "$TOKEN"
 
-echo "Deleting API Products"
-apigeecli products delete --name ai-product-bronze --org "$PROJECT" --token "$TOKEN"
-apigeecli products delete --name ai-product-silver --org "$PROJECT" --token "$TOKEN"
+echo "Deleting LLM Target Report"
 
-echo "Undeploying llm-token-limits-v1 proxy"
-REV=$(apigeecli envs deployments get --env "$APIGEE_ENV" --org "$PROJECT" --token "$TOKEN" --disable-check | jq .'deployments[]| select(.apiProxy=="llm-token-limits-v1").revision' -r)
-apigeecli apis undeploy --name llm-token-limits-v1 --env "$APIGEE_ENV" --rev "$REV" --org "$PROJECT" --token "$TOKEN"
-
-echo "Deleting proxy llm-token-limits-v1 proxy"
-apigeecli apis delete --name llm-token-limits-v1 --org "$PROJECT" --token "$TOKEN"
-
-echo "Deleting Token Consumption Report"
-
-REPORT_NAME=$(curl "https://apigee.googleapis.com/v1/organizations/$PROJECT/reports?expand=true" --header "Authorization: Bearer $TOKEN" --header 'Accept: application/json' --compressed | jq .'qualifier[]| select(.displayName="Tokens Consumption Report").name' -r)
+REPORT_NAME=$(curl "https://apigee.googleapis.com/v1/organizations/$APIGEE_PROJECT/reports?expand=true" --header "Authorization: Bearer $TOKEN" --header 'Accept: application/json' --compressed | jq .'qualifier[]| select(.displayName="LLM Target Report").name' -r)
 
 curl --request DELETE \
-  "https://apigee.googleapis.com/v1/organizations/$PROJECT/reports/$REPORT_NAME" \
+  "https://apigee.googleapis.com/v1/organizations/$APIGEE_PROJECT/reports/$REPORT_NAME" \
   --header "Authorization: Bearer $TOKEN" \
   --header 'Accept: application/json' \
   --compressed
 
 echo "Deleting Data Collectors"
 
-apigeecli datacollectors delete -n dc_candidates_token_count --org "$PROJECT" --token "$TOKEN"
-apigeecli datacollectors delete -n dc_prompt_token_count --org "$PROJECT" --token "$TOKEN"
-apigeecli datacollectors delete -n dc_total_token_count --org "$PROJECT" --token "$TOKEN"
+apigeecli datacollectors delete -n dc_target_pool --org "$APIGEE_PROJECT" --token "$TOKEN"
+apigeecli datacollectors delete -n dc_balanced_target_project --org "$APIGEE_PROJECT" --token "$TOKEN"
+apigeecli datacollectors delete -n dc_balanced_target_region --org "$APIGEE_PROJECT" --token "$TOKEN"
+
+echo "Deleting Task Queue"
+
+gcloud tasks queues delete ai-queue --location=$REGION_P1
