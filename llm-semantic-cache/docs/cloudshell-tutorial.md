@@ -30,7 +30,7 @@ gcloud services enable compute.googleapis.com aiplatform.googleapis.com storage.
 ```
 ## Set environment variables
 
-## 1. Edit the following variables in the `env.sh` file
+### 1. Edit the following variables in the `env.sh` file
 
 Open the environment variables file <walkthrough-editor-open-file filePath="llm-semantic-cache/env.sh">env.sh</walkthrough-editor-open-file> and set the following variables:
 
