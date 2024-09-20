@@ -67,9 +67,9 @@ echo "Deploying Apigee artifacts..."
 
 echo "Creating Data collectors..."
 
-apigeecli datacollectors create -d "Target pool" -n dc_target_pool -p INTEGER --org "$APIGEE_PROJECT" --token "$TOKEN"
-apigeecli datacollectors create -d "Balanced target project" -n dc_balanced_target_project -p INTEGER --org "$APIGEE_PROJECT" --token "$TOKEN"
-apigeecli datacollectors create -d "Balanced target region" -n dc_balanced_target_region -p INTEGER --org "$APIGEE_PROJECT" --token "$TOKEN"
+apigeecli datacollectors create -d "Target pool" -n dc_target_pool -p STRING --org "$APIGEE_PROJECT" --token "$TOKEN"
+apigeecli datacollectors create -d "Balanced target project" -n dc_balanced_target_project -p STRING --org "$APIGEE_PROJECT" --token "$TOKEN"
+apigeecli datacollectors create -d "Balanced target region" -n dc_balanced_target_region -p STRING --org "$APIGEE_PROJECT" --token "$TOKEN"
 
 echo "Creating LLM Target Report...."
 
@@ -78,7 +78,7 @@ curl --request POST \
   --header "Authorization: Bearer $TOKEN" \
   --header 'Accept: application/json' \
   --header 'Content-Type: application/json' \
-  --data '{"name":"llm-target-report","displayName":"LLM Target Report","metrics":[{"name":"message_count","function":"sum"}],"dimensions":["apiproxy","dc_target_pool","dc_balanced_target_project","dc_balanced_target_region"],"filter":"(apiproxy eq 'llm-circuit-breaking')","properties":[{"value":[{}]}],"chartType":"line"}' \
+  --data '{"name":"llm-target-report","displayName":"LLM Target Report","metrics":[{"name":"message_count","function":"sum"}],"dimensions":["apiproxy","dc_target_pool","dc_balanced_target_project","dc_balanced_target_region"],"filter":"(apiproxy like 'llm-circuit-breaking-v1')","properties":[{"value":[{}]}],"chartType":"line"}' \
   --compressed
 
 echo "Importing and Deploying Apigee llm-circuit-breaking-v1 proxy..."
@@ -87,4 +87,4 @@ apigeecli apis deploy --wait --name llm-circuit-breaking-v1 --ovr --rev "$REV" -
 
 echo " "
 echo "All the Apigee artifacts are successfully deployed!"
-echo "You can now go back to the Colab noteboo kto test the sample."
+echo "You can now go back to the Colab notebook to test the sample."
