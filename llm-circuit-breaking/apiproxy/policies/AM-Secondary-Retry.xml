@@ -19,7 +19,7 @@
     <Value>secondary</Value>
   </AssignVariable>
   <AssignVariable>
-    <Name>balanced_target</Name>
+    <Name>balanced_target_project</Name>
     <Template>{propertyset.vertex_config.project_p2}</Template>
   </AssignVariable>
   <AssignVariable>

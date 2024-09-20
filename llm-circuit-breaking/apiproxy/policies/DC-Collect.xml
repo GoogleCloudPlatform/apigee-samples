@@ -13,7 +13,7 @@
 -->
 <DataCapture name="DC-Collect" continueOnError="false" enabled="true">
   <DisplayName>DC-Collect</DisplayName>
-  <IgnoreUnresolvedVariables>false</IgnoreUnresolvedVariables>
+  <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
   <Capture>
     <Collect ref="target_pool"/>
     <DataCollector>dc_target_pool</DataCollector>
