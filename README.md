@@ -86,8 +86,6 @@ Apigee X plays a crucial role in LLM serving by acting as an intermediary betwee
 * **Observability:** Logging, monitoring, and tracing for troubleshooting and analysis.
 * **Governance:** API lifecycle management, versioning, and productization.
 
-### Samples
-
 This repository explores common LLM serving patterns using Apigee X as a robust and feature-rich API maanagement platform. While the primary focus is on serving Gemini models, the principles and patterns discussed here can be adapted for other LLMs.
 
 |    | Sample                      | Description                                                            | Cloud Shell Tutorial |
