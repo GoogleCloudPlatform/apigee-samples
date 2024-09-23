@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<APIProxy revision="6" name="llm-logging-v1">
+  <DisplayName/>
+  <Description/>
+  <CreatedAt>1727054257025</CreatedAt>
+  <LastModifiedAt>1727054257025</LastModifiedAt>
+  <BasePaths>/llm-logging</BasePaths>
+  <Policies>
+    <Policy>AM-Path-Suffix</Policy>
+    <Policy>EV-Path-Suffix</Policy>
+    <Policy>FC-ExtractPrompts</Policy>
+    <Policy>FC-LLMLoggerPrompts</Policy>
+    <Policy>FC-ExtractCandidates</Policy>
+    <Policy>FC-LLMLoggerCandidates</Policy>
+  </Policies>
+  <ProxyEndpoints>
+    <ProxyEndpoint>default</ProxyEndpoint>
+  </ProxyEndpoints>
+  <Resources>
+    <Resource>properties://vertex_config.properties</Resource>
+  </Resources>
+  <TargetEndpoints>
+    <TargetEndpoint>primary</TargetEndpoint>
+  </TargetEndpoints>
+</APIProxy>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<FlowCallout continueOnError="false" enabled="true" name="FC-LLMLoggerPrompts">
+  <DisplayName>FC-LLMLoggerPrompts</DisplayName>
+  <Parameters>
+    <Parameter name="log_type">prompt</Parameter>
+    <Parameter name="contents_0">{prompt_contents_0}</Parameter>
+    <Parameter name="contents_1">{prompt_contents_1}</Parameter>
+    <Parameter name="contents_2">{prompt_contents_2}</Parameter>
+    <Parameter name="contents_3">{prompt_contents_3}</Parameter>
+    <Parameter name="contents_4">{prompt_contents_4}</Parameter>
+  </Parameters>
+  <SharedFlowBundle>llm-logger-v1</SharedFlowBundle>
+</FlowCallout>

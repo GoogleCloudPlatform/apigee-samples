@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<FlowCallout continueOnError="false" enabled="true" name="FC-ExtractPrompts">
+  <DisplayName>FC-ExtractPrompts</DisplayName>
+  <Parameters/>
+  <SharedFlowBundle>llm-extract-prompts-v1</SharedFlowBundle>
+</FlowCallout>

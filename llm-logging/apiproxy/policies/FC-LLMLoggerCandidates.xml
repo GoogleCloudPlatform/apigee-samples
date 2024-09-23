@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<FlowCallout continueOnError="false" enabled="true" name="FC-LLMLoggerCandidates">
+  <DisplayName>FC-LLMLoggerCandidates</DisplayName>
+  <Parameters>
+    <Parameter name="log_type">candidate</Parameter>
+    <Parameter name="contents_0">{candidate_contents_0}</Parameter>
+    <Parameter name="contents_1">{candidate_contents_1}</Parameter>
+    <Parameter name="contents_2">{candidate_contents_2}</Parameter>
+    <Parameter name="contents_3">{candidate_contents_3}</Parameter>
+    <Parameter name="contents_4">{candidate_contents_4}</Parameter>
+  </Parameters>
+  <SharedFlowBundle>llm-logger-v1</SharedFlowBundle>
+</FlowCallout>
