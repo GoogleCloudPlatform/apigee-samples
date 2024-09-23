@@ -1,4 +1,4 @@
-# **Serving LLM Traffic with Apigee**
+# **LLM Serving with Apigee**
 
 ## [Circuit Breaking Sample](llm_circuit_breaking.ipynb)
 

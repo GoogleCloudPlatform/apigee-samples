@@ -1,4 +1,4 @@
-# **Serving LLM Traffic with Apigee**
+# **LLM Serving with Apigee**
 
 ## [Token Limits Sample](llm_token_limits.ipynb)
 

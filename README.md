@@ -74,6 +74,29 @@ Most developers begin by identifying an interesting sample based on a specific u
 
 You can find video walkthroughs of many of these samples in this [YouTube playlist](https://goo.gle/ApigeeAcceleratorSeries)
 
+## Samples for LLM Serving with Apigee
+
+The rise of Large Language Models (LLMs) presents an unparalleled opportunity for AI productization, but also necessitates a robust platform to manage, scale, secure, and govern acess to them. While specialized tools and platforms are emerging, organizations can leverage their existing investment in a best-in-class API Management platform like Apigee to effectively handle all their LLM serving needs.
+
+Apigee X plays a crucial role in LLM serving by acting as an intermediary between clients and the LLM endpoints. It provides a secure, reliable, and scalable way to expose LLMs as APIs while offering essential features like:
+
+* **Security:** Authentication, authorization, rate limiting, and protection against attacks.
+* **Reliability:** Load balancing, circuit breaking, and failover mechanisms.
+* **Performance:** Caching, request/response transformation, and optimized routing.
+* **Observability:** Logging, monitoring, and tracing for troubleshooting and analysis.
+* **Governance:** API lifecycle management, versioning, and productization.
+
+### Samples
+
+This repository explores common LLM serving patterns using Apigee X as a robust and feature-rich API maanagement platform. While the primary focus is on serving Gemini models, the principles and patterns discussed here can be adapted for other LLMs.
+
+|    | Sample                      | Description                                                            | Cloud Shell Tutorial |
+|-----|-----------------------------|------------------------------------------------------------------------|----------------------|
+|1| [llm-token-limits](llm-token-limits) | Apigee's API Products provide real-time monitoring and enforcement of token usage limits for LLMs, enabling effective management of token consumption across different providers and consumers. | [![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/apigee-samples&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=llm-token-limits/docs/cloudshell-tutorial.md)|
+|2| [llm-semantic-cache](llm-semantic-cache) | This sample performs a cache lookup of responses on Apigee's Cache layer and Vector Search as an embeddings database. | [![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/apigee-samples&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=llm-semantic-cache/docs/cloudshell-tutorial.md)|
+|3| [llm-circuit-breaking](llm-circuit-breaking) | Apigee enhances the resilience and prevents outages in Retrieval Augmented Generation applications that utilize multiple Large Language Models by intelligently managing traffic and implementing circuit breaking to avoid exceeding endpoint quotas. | [![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/apigee-samples&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=llm-circuit-breaking/docs/cloudshell-tutorial.md)|
+|4| [llm-logging](llm-logging) | Logging prompts and responses of large language models facilitates performance analysis, security monitoring, and bias detection, ultimately enabling model improvement and risk mitigation. | [![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/apigee-samples&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=llm-logging/docs/cloudshell-tutorial.md)|
+
 ### <a name="modifying"></a>Modifying a sample proxy
 
 Feel free to modify and build upon the sample proxies. You can make changes in the Apigee [management UI](https://cloud.google.com/apigee/docs/api-platform/develop/ui-edit-proxy) or by using our Cloud Code [extension for local development](https://cloud.google.com/apigee/docs/api-platform/local-development/setup) in Visual Studio Code. Whichever approach is comfortable for you.

@@ -71,7 +71,7 @@ cd llm-logging && source ./env.sh
 
 You're all set!
 
-You can now go back to the [Colab notebook](https://github.com/ra2085/apigee-samples/blob/main/llm-logging/llm_logging_v1.ipynb) to test the sample.
+You can now go back to the [Colab notebook](https://github.com/GoogleCloudPlatform/apigee-samples/blob/main/llm-logging/llm_logging_v1.ipynb) to test the sample.
 
 **Don't forget to clean up after yourself**. Execute the following script to undeploy and delete all sample resources.
 ```sh

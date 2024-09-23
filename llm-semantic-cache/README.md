@@ -1,4 +1,4 @@
-# **Apigee as AI Gateway**
+# **LLM Serving with Apigee**
 
 ## [Semantic Cache Sample](llm_semantic_cache_v1.ipynb)
 
