@@ -39,7 +39,7 @@
   </PostClientFlow>
   <Flows/>
   <HTTPProxyConnection>
-    <BasePath>/llm-logging</BasePath>
+    <BasePath>/v1/samples/llm-logging</BasePath>
     <Properties/>
     <VirtualHost>default</VirtualHost>
   </HTTPProxyConnection>

@@ -15,15 +15,15 @@
   <DisplayName>DC-CollectTokenCounts</DisplayName>
   <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
   <Capture>
-    <Collect ref="candidates_token_count"/>
+    <Collect ref="candidates_token_count" default="0"/>
     <DataCollector>dc_candidates_token_count</DataCollector>
   </Capture>
   <Capture>
-    <Collect ref="prompt_token_count"/>
+    <Collect ref="prompt_token_count" default="0"/>
     <DataCollector>dc_prompt_token_count</DataCollector>
   </Capture>
   <Capture>
-    <Collect ref="total_token_count"/>
+    <Collect ref="total_token_count" default="0"/>
     <DataCollector>dc_total_token_count</DataCollector>
   </Capture>
 </DataCapture>

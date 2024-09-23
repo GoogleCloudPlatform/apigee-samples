@@ -35,7 +35,7 @@
   </PostFlow>
   <Flows/>
   <HTTPProxyConnection>
-    <BasePath>/llm-circuit-breaking</BasePath>
+    <BasePath>/v1/samples/llm-circuit-breaking</BasePath>
     <Properties/>
     <VirtualHost>default</VirtualHost>
   </HTTPProxyConnection>

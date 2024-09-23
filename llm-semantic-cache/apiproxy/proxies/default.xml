@@ -42,7 +42,7 @@
       <Property name="response.streaming.enabled">true</Property>
       <Property name="request.streaming.enabled">true</Property>
     </Properties>
-    <BasePath>/llm-semantic-cache</BasePath>
+    <BasePath>/v1/samples/llm-semantic-cache</BasePath>
   </HTTPProxyConnection>
   <RouteRule name="CacheHit">
     <Condition>lookupcache.LC-LookupDatapoint.cachehit = true</Condition>

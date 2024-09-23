@@ -15,15 +15,15 @@
   <DisplayName>DC-Collect</DisplayName>
   <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
   <Capture>
-    <Collect ref="target_pool"/>
+    <Collect ref="target_pool" default="Not set"/>
     <DataCollector>dc_target_pool</DataCollector>
   </Capture>
   <Capture>
-    <Collect ref="balanced_target_project"/>
+    <Collect ref="balanced_target_project" default="Not set"/>
     <DataCollector>dc_balanced_target_project</DataCollector>
   </Capture>
   <Capture>
-    <Collect ref="balanced_target_region"/>
+    <Collect ref="balanced_target_region" default="Not set"/>
     <DataCollector>dc_balanced_target_region</DataCollector>
   </Capture>
 </DataCapture>

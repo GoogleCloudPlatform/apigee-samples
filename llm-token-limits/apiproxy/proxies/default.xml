@@ -39,7 +39,7 @@
       <Property name="response.streaming.enabled">true</Property>
       <Property name="request.streaming.enabled">true</Property>
     </Properties>
-    <BasePath>/llm-token-limits</BasePath>
+    <BasePath>/v1/samples/llm-token-limits</BasePath>
   </HTTPProxyConnection>
   <RouteRule name="default">
     <TargetEndpoint>default</TargetEndpoint>
