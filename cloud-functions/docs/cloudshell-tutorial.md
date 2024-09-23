@@ -83,10 +83,15 @@ project.  The projects are those you set in the prior step, in your modified
 
 Let's create the service accounts now.
 
-First, the Service Account that will provide the identity for the Cloud Function:
+First, set the name of the Service Account that will provide the identity for the Cloud Function:
 
 ```sh
 CF_SA_NAME=cf-apigee-sample-sa-1
+```
+
+Create the  Service Account:
+
+```sh
 gcloud iam service-accounts create "$CF_SA_NAME" --project "$CLOUD_FUNCTIONS_PROJECT"
 ```
 
@@ -96,10 +101,15 @@ Capture the email address of that service account:
 CF_SA_EMAIL="${CF_SA_NAME}@${CLOUD_FUNCTIONS_PROJECT}.iam.gserviceaccount.com"
 ```
 
-Now, create the Service Account that will provide the identity of the Apigee proxy:
+Now, set the name of the Service Account that will provide the identity of the Apigee proxy:
 
 ```sh
 PROXY_SA_NAME=proxy-apigee-sample-sa-1
+```
+
+Create that Service Account:
+
+```sh
 gcloud iam service-accounts create "$PROXY_SA_NAME" --project "$APIGEE_PROJECT"
 ```
 
@@ -238,6 +248,13 @@ SA_ID_TOKEN=$(curl -s -X POST \
     "https://iamcredentials.googleapis.com/v1/projects/-/serviceAccounts/${PROXY_SA_EMAIL}:generateIdToken" | jq -r '.token')
 ```
 
+You can examine that Identity token if you wish:
+```sh
+echo $SA_ID_TOKEN
+```
+
+It should look like a JWT.
+
 And now, pass that token in the invocation of the cloud function:
 
 ```sh
@@ -245,7 +262,15 @@ curl -i -H "Authorization: Bearer $SA_ID_TOKEN" "$CF_URL/hello-sample"
 ```
 
 What happens?  You should again see a 403 response code, with a www-authenticate
-header telling you the caller has insufficient scope. Why? The request included
+header telling you the caller has insufficient scope.
+
+```
+HTTP/2 403
+www-authenticate: Bearer error="insufficient_scope"
+```
+
+
+Why? The request included
 an ID token with the correct audience. What's missing?
 
 We need to grant permission to the Proxy Service Account, to invoke the Cloud
