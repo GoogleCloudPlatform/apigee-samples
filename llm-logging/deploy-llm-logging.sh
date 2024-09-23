@@ -44,7 +44,7 @@ curl -s https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.s
 export PATH=$PATH:$HOME/.apigeecli/bin
 
 TOKEN=$(gcloud auth print-access-token)
-gcloud config set project $APIGEE_PROJECT
+gcloud config set project "$APIGEE_PROJECT"
 
 PRE_PROP="project_p1=$PROJECT_P1
 region_p1=$REGION_P1"

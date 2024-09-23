@@ -2,7 +2,7 @@
 
 ## [Token Limits Sample](llm_token_limits.ipynb)
 
-Every interaction with an LLM consumes tokens, therefore, LLM token management plays a crutial role in maintaining platform-level control and visility over the consumption of tokens across LLM providers and consumers.
+Every interaction with an LLM consumes tokens, therefore, LLM token management plays a crucial role in maintaining platform-level control and visibility over the consumption of tokens across LLM providers and consumers.
 
 Apigee's API Products, when applied to token consumption, allows you to effectively manage token usage by setting limits on the number of tokens consumed per LLM consumer. This policy leverages the token usage metrics provided by an LLM, enabling real-time monitoring and enforcement of limits.
 

@@ -34,7 +34,7 @@ curl -s https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.s
 export PATH=$PATH:$HOME/.apigeecli/bin
 
 TOKEN=$(gcloud auth print-access-token)
-gcloud config set project $PROJECT
+gcloud config set project "$PROJECT"
 
 echo "Deleting Developer Apps"
 DEVELOPER_ID=$(apigeecli developers get --email aidev@cymbal.com --org "$PROJECT" --token "$TOKEN" --disable-check | jq .'developerId' -r)

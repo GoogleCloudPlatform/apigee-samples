@@ -54,7 +54,7 @@ curl -s https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.s
 export PATH=$PATH:$HOME/.apigeecli/bin
 
 TOKEN=$(gcloud auth print-access-token)
-gcloud config set project $APIGEE_PROJECT
+gcloud config set project "$APIGEE_PROJECT"
 
 echo "Undeploying llm-circuit-breaking-v1 proxy"
 REV=$(apigeecli envs deployments get --env "$APIGEE_ENV" --org "$APIGEE_PROJECT" --token "$TOKEN" --disable-check | jq .'deployments[]| select(.apiProxy=="llm-circuit-breaking-v1").revision' -r)
@@ -81,4 +81,4 @@ apigeecli datacollectors delete -n dc_balanced_target_region --org "$APIGEE_PROJ
 
 echo "Deleting Task Queue"
 
-gcloud tasks queues delete ai-queue --location=$REGION_P1
+gcloud tasks queues delete ai-queue --location="$REGION_P1"

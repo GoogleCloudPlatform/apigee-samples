@@ -34,11 +34,11 @@ curl -s https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.s
 export PATH=$PATH:$HOME/.apigeecli/bin
 
 TOKEN=$(gcloud auth print-access-token)
-gcloud config set project $PROJECT
+gcloud config set project "$PROJECT"
 
 PROJECT_NUMBER=$(gcloud projects list --filter="$(gcloud config get-value project)" --format="value(PROJECT_NUMBER)")
-INDEX_ID=$(gcloud ai indexes list --project=$PROJECT --region=$REGION --format="json" | jq -c -r '.[] | select(.displayName="semantic-cache") | .name | split("/") | .[5]')
-INDEX_ENDPOINT_ID=$(gcloud ai index-endpoints list --project=$PROJECT --region=$REGION --format="json" | jq -c -r '.[] | select(.displayName="semantic-cache") | .name | split("/") | .[5]')
+INDEX_ID=$(gcloud ai indexes list --project="$PROJECT" --region="$REGION"--format="json" | jq -c -r '.[] | select(.displayName="semantic-cache") | .name | split("/") | .[5]')
+INDEX_ENDPOINT_ID=$(gcloud ai index-endpoints list --project="$PROJECT" --region="$REGION" --format="json" | jq -c -r '.[] | select(.displayName="semantic-cache") | .name | split("/") | .[5]')
 
 echo "Undeploying llm-semantic-cache-v1 proxy"
 REV=$(apigeecli envs deployments get --env "$APIGEE_ENV" --org "$PROJECT" --token "$TOKEN" --disable-check | jq .'deployments[]| select(.apiProxy=="llm-semantic-cache-v1").revision' -r)
@@ -68,10 +68,10 @@ echo "Deleting Semantic Cache Cleanup utility ..."
 integrationcli integrations delete -n cleanup-semantic-cache-v1
 
 echo "Undeploy Index Endpoint ..."
-gcloud ai index-endpoints undeploy-index $INDEX_ENDPOINT_ID --deployed-index-id=semantic_cache --region=$REGION --project=$PROJECT
+gcloud ai index-endpoints undeploy-index "$INDEX_ENDPOINT_ID" --deployed-index-id=semantic_cache --region="$REGION" --project="$PROJECT"
 
 echo "Delete Index Endpoint ..."
-gcloud ai index-endpoints delete $INDEX_ENDPOINT_ID --region=$REGION --project=$PROJECT
+gcloud ai index-endpoints delete "$INDEX_ENDPOINT_ID" --region="$REGION" --project="$PROJECT"
 
 echo "Delete Index ..."
-gcloud ai indexes delete $INDEX_ID --region=$REGION --project=$PROJECT
+gcloud ai indexes delete "$INDEX_ID" --region="$REGION" --project="$PROJECT"

@@ -34,12 +34,12 @@ curl -s https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.s
 export PATH=$PATH:$HOME/.apigeecli/bin
 
 TOKEN=$(gcloud auth print-access-token)
-gcloud config set project $PROJECT
+gcloud config set project "$PROJECT"
 
 PROJECT_NUMBER=$(gcloud projects list --filter="$(gcloud config get-value project)" --format="value(PROJECT_NUMBER)")
-INDEX_ID=$(gcloud ai indexes list --project=$PROJECT --region=$REGION --format="json" | jq -c -r '.[] | select(.displayName="semantic-cache") | .name | split("/") | .[5]')
-INDEX_ENDPOINT_ID=$(gcloud ai index-endpoints list --project=$PROJECT --region=$REGION --format="json" | jq -c -r '.[] | select(.displayName="semantic-cache") | .name | split("/") | .[5]')
-PUBLIC_ENDPOINT_SUBDOMAIN=$(gcloud ai index-endpoints list --project=$PROJECT --region=$REGION --format="json" | jq -c -r '.[] | select(.displayName="semantic-cache") | .publicEndpointDomainName | split(".") | .[0]')
+INDEX_ID=$(gcloud ai indexes list --project="$PROJECT" --region="$REGION" --format="json" | jq -c -r '.[] | select(.displayName="semantic-cache") | .name | split("/") | .[5]')
+INDEX_ENDPOINT_ID=$(gcloud ai index-endpoints list --project="$PROJECT" --region="$REGION" --format="json" | jq -c -r '.[] | select(.displayName="semantic-cache") | .name | split("/") | .[5]')
+PUBLIC_ENDPOINT_SUBDOMAIN=$(gcloud ai index-endpoints list --project="$PROJECT" --region="$REGION" --format="json" | jq -c -r '.[] | select(.displayName="semantic-cache") | .publicEndpointDomainName | split(".") | .[0]')
 
 PRE_PROP="project_id=$PROJECT
 project_number=$PROJECT_NUMBER
@@ -90,8 +90,8 @@ echo "Installing integrationcli ..."
 curl -L https://raw.githubusercontent.com/GoogleCloudPlatform/application-integration-management-toolkit/main/downloadLatest.sh | sh -
 export PATH=$PATH:$HOME/.integrationcli/bin
 
-integrationcli prefs set --reg=$REGION --proj=$PROJECT
-integrationcli token cache -t $TOKEN
+integrationcli prefs set --reg="$REGION" --proj="$PROJECT"
+integrationcli token cache -t "$TOKEN"
 
 echo "Deploying Semantic Cache Cleanup utility ..."
 

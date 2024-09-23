@@ -22,7 +22,7 @@ gcloud auth login
 ```sh
 gcloud config set project <walkthrough-project-id/>
 ```
-### 4. Enable the Services requiered to deploy this sample
+### 4. Enable the Services required to deploy this sample
 
 ```sh
 gcloud services enable aiplatform.googleapis.com tasks.googleapis.com  --project <walkthrough-project-id/>
@@ -40,7 +40,7 @@ Open the environment variables file <walkthrough-editor-open-file filePath="llm-
 * Set the <walkthrough-editor-select-regex filePath="llm-circuit-breaking/env.sh" regex="REGION_P1_TO_SET">REGION_P1</walkthrough-editor-select-regex>. The region used as Primary tenancy bucket.
 * Set the <walkthrough-editor-select-regex filePath="llm-circuit-breaking/env.sh" regex="REGION_P2_TO_SET">REGION_P2</walkthrough-editor-select-regex>. The region used as Secondary tenancy bucket.
 * Set the <walkthrough-editor-select-regex filePath="llm-circuit-breaking/env.sh" regex="APIGEE_HOST_TO_SET">APIGEE_HOST</walkthrough-editor-select-regex> of your Apigee instance. For example, `my-test.nip.io`.
-* Set the <walkthrough-editor-select-regex filePath="llm-circuit-breaking/env.sh" regex="APIGEE_ENV_TO_SET">APIGEE_ENV</walkthrough-editor-select-regex> to the deploy the sample Apigee artifacts. For exanple, `dev-env`.
+* Set the <walkthrough-editor-select-regex filePath="llm-circuit-breaking/env.sh" regex="APIGEE_ENV_TO_SET">APIGEE_ENV</walkthrough-editor-select-regex> to the deploy the sample Apigee artifacts. For example, `dev-env`.
 
 ### 2. Set environment variables
 
@@ -48,7 +48,7 @@ Open the environment variables file <walkthrough-editor-open-file filePath="llm-
 cd llm-circuit-breaking && source ./env.sh
 ```
 
-## Creste a Task Queue
+## Create a Task Queue
 
 This task queue will allow you to send concurrent request to an LLM endpoint.
 

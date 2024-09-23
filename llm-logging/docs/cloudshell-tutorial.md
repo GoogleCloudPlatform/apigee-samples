@@ -1,6 +1,6 @@
 # Logging
 
-This sample creates and deploys an LLM proxy that logs prompts and candidate responses. It wull also create and deploy helper shared flows that allow for core logging logic to be reused.
+This sample creates and deploys an LLM proxy that logs prompts and candidate responses. It will also create and deploy helper sharedflows with core logging logic to be reused.
 
 Let's get started!
 ---
@@ -22,7 +22,7 @@ gcloud auth login
 ```sh
 gcloud config set project <walkthrough-project-id/>
 ```
-### 4. Enable the Services requiered to deploy this sample
+### 4. Enable the Services required to deploy this sample
 
 ```sh
 gcloud services enable aiplatform.googleapis.com logging.googleapis.com  --project <walkthrough-project-id/>
@@ -71,7 +71,7 @@ cd llm-logging && source ./env.sh
 
 You're all set!
 
-You can now go back to the [Colab notebook](https://github.com/GoogleCloudPlatform/apigee-samples/blob/main/llm-logging/llm_logging_v1.ipynb) to test the sample.
+You can now go back to the [notebook](https://github.com/GoogleCloudPlatform/apigee-samples/blob/main/llm-logging/llm_logging_v1.ipynb) to test the sample.
 
 **Don't forget to clean up after yourself**. Execute the following script to undeploy and delete all sample resources.
 ```sh

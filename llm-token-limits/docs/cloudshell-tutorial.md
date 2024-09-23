@@ -1,6 +1,6 @@
 # Token Limits
 
-This sample creates tiered Products to limit and control the token consumption. It also camptures token metrics that are aggregated on a report.
+This sample creates tiered Products to limit and control the token consumption. It also captures token metrics that are aggregated on a report.
 
 Let's get started!
 ---
@@ -30,7 +30,7 @@ Open the environment variables file <walkthrough-editor-open-file filePath="llm-
 
 * Set the <walkthrough-editor-select-regex filePath="llm-token-limits/env.sh" regex="PROJECT_ID_TO_SET">PROJECT_ID</walkthrough-editor-select-regex>. The value should be <walkthrough-project-id/>.
 * Set the <walkthrough-editor-select-regex filePath="llm-token-limits/env.sh" regex="APIGEE_HOST_TO_SET">APIGEE_HOST</walkthrough-editor-select-regex> of your Apigee instance. For example, `my-test.nip.io`.
-* Set the <walkthrough-editor-select-regex filePath="llm-token-limits/env.sh" regex="APIGEE_ENV_TO_SET">APIGEE_ENV</walkthrough-editor-select-regex> to the deploy the sample Apigee artifacts. For exanple, `dev-env`.
+* Set the <walkthrough-editor-select-regex filePath="llm-token-limits/env.sh" regex="APIGEE_ENV_TO_SET">APIGEE_ENV</walkthrough-editor-select-regex> to the deploy the sample Apigee artifacts. For example, `dev-env`.
 
 ### 2. Set environment variables
 
@@ -52,7 +52,7 @@ cd llm-token-limits && source ./env.sh
 
 You're all set!
 
-You can now go back to the [Colab notebook](https://github.com/GoogleCloudPlatform/apigee-samples/blob/main/llm-token-limits/llm_token_limits.ipynb) to test the sample.
+You can now go back to the [notebook](https://github.com/GoogleCloudPlatform/apigee-samples/blob/main/llm-token-limits/llm_token_limits.ipynb) to test the sample.
 
 **Don't forget to clean up after yourself**. Execute the following script to undeploy and delete all sample resources.
 ```sh

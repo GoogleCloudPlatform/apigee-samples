@@ -44,7 +44,7 @@ curl -s https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.s
 export PATH=$PATH:$HOME/.apigeecli/bin
 
 TOKEN=$(gcloud auth print-access-token)
-gcloud config set project $APIGEE_PROJECT
+gcloud config set project "$APIGEE_PROJECT"
 
 echo "Undeploying llm-logging-v1 proxy"
 REV=$(apigeecli envs deployments get --env "$APIGEE_ENV" --org "$APIGEE_PROJECT" --token "$TOKEN" --disable-check | jq .'deployments[]| select(.apiProxy=="llm-logging-v1").revision' -r)
