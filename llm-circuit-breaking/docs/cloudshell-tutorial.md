@@ -25,7 +25,7 @@ gcloud config set project <walkthrough-project-id/>
 ### 4. Enable the Services required to deploy this sample
 
 ```sh
-gcloud services enable aiplatform.googleapis.com tasks.googleapis.com  --project <walkthrough-project-id/>
+gcloud services enable aiplatform.googleapis.com cloudtasks.googleapis.com  --project <walkthrough-project-id/>
 ```
 
 ## Set environment variables
