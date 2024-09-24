@@ -78,7 +78,7 @@ curl --request POST \
   --header "Authorization: Bearer $TOKEN" \
   --header 'Accept: application/json' \
   --header 'Content-Type: application/json' \
-  --data '{"name":"llm-target-report","displayName":"LLM Target Report","metrics":[{"name":"message_count","function":"sum"}],"dimensions":["apiproxy","dc_target_pool","dc_balanced_target_project","dc_balanced_target_region"],"filter":"(apiproxy like 'llm-circuit-breaking-v1')","properties":[{"value":[{}]}],"chartType":"line"}' \
+  --data "{\"name\":\"llm-target-report\",\"displayName\":\"LLM Target Report\",\"metrics\":[{\"name\":\"message_count\",\"function\":\"sum\"}],\"dimensions\":[\"apiproxy\",\"dc_target_pool\",\"dc_balanced_target_project\",\"dc_balanced_target_region\"],\"filter\":\"(apiproxy like 'llm-circuit-breaking-v1')\",\"properties\":[{\"value\":[{}]}],\"chartType\":\"line\"}" \
   --compressed
 
 echo "Importing and Deploying Apigee llm-circuit-breaking-v1 proxy..."

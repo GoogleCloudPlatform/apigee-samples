@@ -65,7 +65,7 @@ apigeecli apis delete --name llm-circuit-breaking-v1 --org "$APIGEE_PROJECT" --t
 
 echo "Deleting LLM Target Report"
 
-REPORT_NAME=$(curl "https://apigee.googleapis.com/v1/organizations/$APIGEE_PROJECT/reports?expand=true" --header "Authorization: Bearer $TOKEN" --header 'Accept: application/json' --compressed | jq .'qualifier[]| select(.displayName="LLM Target Report").name' -r)
+REPORT_NAME=$(curl "https://apigee.googleapis.com/v1/organizations/$APIGEE_PROJECT/reports?expand=true" --header "Authorization: Bearer $TOKEN" --header 'Accept: application/json' --compressed | jq .'qualifier[]| select(.displayName=="LLM Target Report").name' -r)
 
 curl --request DELETE \
   "https://apigee.googleapis.com/v1/organizations/$APIGEE_PROJECT/reports/$REPORT_NAME" \

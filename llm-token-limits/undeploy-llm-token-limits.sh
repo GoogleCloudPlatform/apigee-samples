@@ -56,7 +56,7 @@ apigeecli apis delete --name llm-token-limits-v1 --org "$PROJECT" --token "$TOKE
 
 echo "Deleting Token Consumption Report"
 
-REPORT_NAME=$(curl "https://apigee.googleapis.com/v1/organizations/$PROJECT/reports?expand=true" --header "Authorization: Bearer $TOKEN" --header 'Accept: application/json' --compressed | jq .'qualifier[]| select(.displayName="Tokens Consumption Report").name' -r)
+REPORT_NAME=$(curl "https://apigee.googleapis.com/v1/organizations/$PROJECT/reports?expand=true" --header "Authorization: Bearer $TOKEN" --header 'Accept: application/json' --compressed | jq .'qualifier[]| select(.displayName=="Tokens Consumption Report").name' -r)
 
 curl --request DELETE \
   "https://apigee.googleapis.com/v1/organizations/$PROJECT/reports/$REPORT_NAME" \
