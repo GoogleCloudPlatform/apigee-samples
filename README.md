@@ -7,6 +7,7 @@
   - [Using the sample proxies](#using-the-sample-proxies)
     - [Samples](#samples)
     - [Modifying a sample proxy](#modifying-a-sample-proxy)
+  - [Samples for LLM Serving with Apigee](#llm-samples) 
   - [Ask questions on the Community Forum](#ask-questions-on-the-community-forum)
   - [Apigee documentation](#apigee-documentation)
   - [Contributing](#contributing)
@@ -74,7 +75,7 @@ Most developers begin by identifying an interesting sample based on a specific u
 
 You can find video walkthroughs of many of these samples in this [YouTube playlist](https://goo.gle/ApigeeAcceleratorSeries)
 
-## Samples for LLM Serving with Apigee
+## <a name="llm-samples"></a>Samples for LLM Serving with Apigee
 
 The rise of Large Language Models (LLMs) presents an unparalleled opportunity for AI productization, but also necessitates a robust platform to manage, scale, secure, and govern access to them. While specialized tools and platforms are emerging, organizations can leverage their existing investment in a best-in-class API Management platform like Apigee to effectively handle all their LLM serving needs.
 
