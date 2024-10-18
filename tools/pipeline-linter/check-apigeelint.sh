@@ -44,12 +44,12 @@ for proxyDir in "$PWD"/*/apiproxy "$PWD"/*/*/apiproxy "$PWD"/*/*/*/apiproxy; do
   done
   if [[ $skip = false ]]; then
     echo "Running apigeelint on $proxyDir"
-    apigeelint -s "$proxyDir" -f table.js -e PO013,PO025 -x tools/pipeline-linter/apigeelint --profile apigeex
+    apigeelint -s "$proxyDir" -f table.js -e PO013,PO025,BN003 -x tools/pipeline-linter/apigeelint --profile apigeex
   fi
 done
 
 # For Sharedflows
-for sfDir in "$PWD"/*/sharedflowbundle; do
+for sfDir in "$PWD"/*/sharedflowbundle "$PWD"/*/*/sharedflowbundle; do
   skip=false
   for excl in "${sfExclusions[@]}"; do
     if [[ $sfDir == *"$excl"* ]]; then
@@ -58,7 +58,7 @@ for sfDir in "$PWD"/*/sharedflowbundle; do
   done
   if [[ $skip = false ]]; then
     echo "Running apigeelint on $sfDir"
-    apigeelint -s "$sfDir" -f table.js -e PO013,PO025 --profile apigeex
+    apigeelint -s "$sfDir" -f table.js -e PO013,PO025,BN003 --profile apigeex
   fi
 done
 

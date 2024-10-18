@@ -37,6 +37,6 @@
   </PostFlow>
   <Flows/>
   <HTTPTargetConnection>
-    <URL>https://{propertyset.vertex_config.region_p1}-aiplatform.googleapis.com/v1beta1/projects/{propertyset.vertex_config.project_p1}/locations/{propertyset.vertex_config.region_p1}/publishers/google/models/{request_model_id}</URL>
+    <URL>https://{propertyset.vertex_config.region_p1}-aiplatform.googleapis.com/v1/projects/{propertyset.vertex_config.project_p1}/locations/{propertyset.vertex_config.region_p1}/publishers/google/models/{request_model_id}</URL>
   </HTTPTargetConnection>
 </TargetEndpoint>

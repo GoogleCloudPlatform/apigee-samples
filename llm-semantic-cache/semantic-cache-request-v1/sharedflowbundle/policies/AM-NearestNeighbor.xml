@@ -16,7 +16,7 @@
   <Properties/>
   <AssignVariable>
     <Name>brackets_regex</Name>
-    <Template>\[\"{0,1}|\"{0,1}\]</Template>
+    <Value>\[\"{0,1}|\"{0,1}\]</Value>
   </AssignVariable>
   <AssignVariable>
     <Name>nearest_neighbor_distance</Name>
