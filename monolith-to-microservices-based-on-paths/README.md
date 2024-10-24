@@ -10,7 +10,7 @@ A common strategy for modernizing services is to use the [strangling fig pattern
 
 Overtime, more microservices will be created for each of the paths - and this should be fully transparent for the apps that are clients to the "original" API - and the traffic flow should get dynamically routed to the appropriate microservice.
 
-Eventually, the monolith will be fully decomissioned.
+Eventually, the monolith will be fully decommissioned.
 
 ## Challenges in this scenario
 
