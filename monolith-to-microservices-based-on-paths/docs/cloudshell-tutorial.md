@@ -32,7 +32,7 @@ Let's get started!
    source ./env.sh
    ```
 
-## Deploy Apigee Proxy and KVM
+## Deploy Apigee Proxy
 
 Now, let's deploy the sample proxy with the script below. It will also create the proxy-scoped KVM - but empty.
 
@@ -43,15 +43,36 @@ Now, let's deploy the sample proxy with the script below. It will also create th
 Check the output of the script. Notice it won't populate the KVM file for you. In the local folder, you can see a sample KVM content file (ending with \_sample). Feel free to copy
 the contents of it if you are just testing. Consider adding your own paths for your real use-case.
 
-After the local KVM file is updated, import it to Apigee with the command from the output script. You can also use the list command to verify the actual contents of the KVM.
+After you are done, please execute the following command to import the file into the KVM in Apigee:
+
+```bash
+TOKEN=$(gcloud auth print-access-token)
+export PATH=$PATH:$HOME/.apigeecli/bin
+
+apigeecli kvms entries import -p custom-routing -m routing-rules -f ./proxy__custom-routing__routing-rules__kvmfile__0.json -o $PROJECT_ID -t \$TOKEN > /dev/null 2>&1
+
+```
+
+Now, you can go check the state of the KVM in Apigee with:
+
+```bash
+
+apigeecli kvms entries list -p custom-routing -m routing-rules -o $PROJECT_ID -t \$TOKEN "
+```
 
 As you migrate new paths, the idea is to update this file, adding a new entry for the migrated path, and re-importing the KVM.
 
-This can be done with re-deploying the proxy! This is the power of Apigee KVMs.
+This can be done without re-deploying the proxy! This is the power of Apigee KVMs.
 
 ## Test the functionality
 
-The setup script also shows you a few curl examples with invalid, monolith and microservice-migrated paths. Few free to adapt and experiment, use the Apigee Debug for details and more!
+Now, let's test with a few curl calls - invalid paths, migrated paths and legacy paths. Adapt the paths for your own where needed.
+
+```bash
+curl -i https://${APIGEE_HOST}/v1/samples/custom-routing/invalid-path
+curl -i https://${APIGEE_HOST}/v1/samples/custom-routing/migrated
+curl -i https://${APIGEE_HOST}/v1/samples/custom-routing/still/legacy
+```
 
 ## Conclusion & Cleanup
 
