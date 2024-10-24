@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<CORS continueOnError="false" enabled="true" name="CORS-CheckCORS">
+  <DisplayName>CORS-CheckCORS</DisplayName>
+  <AllowOrigins>{request.header.origin}</AllowOrigins>
+  <AllowMethods>GET, PUT, POST, DELETE</AllowMethods>
+  <AllowHeaders>origin, x-requested-with, accept, content-type</AllowHeaders>
+  <ExposeHeaders>*</ExposeHeaders>
+  <MaxAge>3628800</MaxAge>
+  <AllowCredentials>false</AllowCredentials>
+  <GeneratePreflightResponse>true</GeneratePreflightResponse>
+  <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+</CORS>

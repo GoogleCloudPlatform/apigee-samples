@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ProxyEndpoint name="default">
+  <FaultRules />
+  <PreFlow name="PreFlow">
+    <Request>
+      <Step>
+        <Name>CORS-CheckCORS</Name>
+      </Step>
+      <Step>
+        <Name>KVM-GetAllPaths</Name>
+      </Step>
+      <Step>
+        <Name>JS-ExtractPath</Name>
+      </Step>
+      <Step>
+        <Name>RF-404</Name>
+        <Condition>(searchKey = "") or (searchKey = null)</Condition>
+      </Step>
+      <Step>
+        <Name>KVM-GetBackend</Name>
+      </Step>
+    </Request>
+    <Response />
+  </PreFlow>
+  <Flows>
+  </Flows>
+  <PostFlow name="PostFlow">
+    <Request>
+    </Request>
+    <Response />
+  </PostFlow>
+  <HTTPProxyConnection>
+    <BasePath>/v1/samples/custom-routing</BasePath>
+    <Properties />
+    <VirtualHost>default</VirtualHost>
+  </HTTPProxyConnection>
+  <RouteRule name="Microservice">
+    <TargetEndpoint>Microservice</TargetEndpoint>
+    <Condition>(backend = "microservice")</Condition>
+  </RouteRule>
+  <RouteRule name="Monolith">
+    <TargetEndpoint>Monolith</TargetEndpoint>
+  </RouteRule>
+  <PostClientFlow>
+    <Response>
+    </Response>
+  </PostClientFlow>
+</ProxyEndpoint>

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<APIProxy revision="18" name="custom-routing">
+  <DisplayName> Demonstrates Custom Routing based on paths</DisplayName>
+</APIProxy>
