@@ -51,7 +51,7 @@ And basically, using Apigee Routing Rules, we'll decide which Target Server to r
 
 Use the following GCP CloudShell tutorial, and follow the instructions in Cloud Shell. Alternatively, follow the instructions below.
 
-[![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/carlosmscabral/apigee-samples&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=monolith-to-microservices-based-on-paths/docs/cloudshell-tutorial.md)
+[![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/apigee-samples&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=monolith-to-microservices-based-on-paths/docs/cloudshell-tutorial.md)
 
 ## Setup instructions
 
@@ -99,7 +99,7 @@ After you are done, please execute the following command to import the file into
 TOKEN=$(gcloud auth print-access-token)
 export PATH=$PATH:$HOME/.apigeecli/bin
 
-apigeecli kvms entries import -p custom-routing -m routing-rules -f ./proxy__custom-routing__routing-rules__kvmfile__0.json -o $PROJECT_ID -t \$TOKEN > /dev/null 2>&1
+apigeecli kvms entries import -p custom-routing -m routing-rules -f ./proxy__custom-routing__routing-rules__kvmfile__0.json -o $PROJECT_ID -t $TOKEN > /dev/null 2>&1
 
 ```
 
@@ -107,7 +107,7 @@ Now, you can go check the state of the KVM in Apigee with:
 
 ```bash
 
-apigeecli kvms entries list -p custom-routing -m routing-rules -o $PROJECT_ID -t \$TOKEN "
+apigeecli kvms entries list -p custom-routing -m routing-rules -o $PROJECT_ID -t $TOKEN
 ```
 
 As you migrate new paths, the idea is to update this file, adding a new entry for the migrated path, and re-importing the KVM.
@@ -120,7 +120,13 @@ Now, let's test with a few curl calls - invalid paths, migrated paths and legacy
 
 ```bash
 curl -i https://${APIGEE_HOST}/v1/samples/custom-routing/invalid-path
+```
+
+```bash
 curl -i https://${APIGEE_HOST}/v1/samples/custom-routing/migrated
+```
+
+```bash
 curl -i https://${APIGEE_HOST}/v1/samples/custom-routing/still/legacy
 ```
 

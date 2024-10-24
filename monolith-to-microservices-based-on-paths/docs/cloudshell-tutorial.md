@@ -49,7 +49,7 @@ After you are done, please execute the following command to import the file into
 TOKEN=$(gcloud auth print-access-token)
 export PATH=$PATH:$HOME/.apigeecli/bin
 
-apigeecli kvms entries import -p custom-routing -m routing-rules -f ./proxy__custom-routing__routing-rules__kvmfile__0.json -o $PROJECT_ID -t \$TOKEN > /dev/null 2>&1
+apigeecli kvms entries import -p custom-routing -m routing-rules -f ./proxy__custom-routing__routing-rules__kvmfile__0.json -o $PROJECT_ID -t $TOKEN > /dev/null 2>&1
 
 ```
 
@@ -57,7 +57,7 @@ Now, you can go check the state of the KVM in Apigee with:
 
 ```bash
 
-apigeecli kvms entries list -p custom-routing -m routing-rules -o $PROJECT_ID -t \$TOKEN "
+apigeecli kvms entries list -p custom-routing -m routing-rules -o $PROJECT_ID -t $TOKEN
 ```
 
 As you migrate new paths, the idea is to update this file, adding a new entry for the migrated path, and re-importing the KVM.
@@ -70,8 +70,14 @@ Now, let's test with a few curl calls - invalid paths, migrated paths and legacy
 
 ```bash
 curl -i https://${APIGEE_HOST}/v1/samples/custom-routing/invalid-path
+```
+
+```bash
 curl -i https://${APIGEE_HOST}/v1/samples/custom-routing/migrated
-curl -i https://${APIGEE_HOST}/v1/samples/custom-routing/still/legacy
+```
+
+```bash
+curl
 ```
 
 ## Conclusion & Cleanup
