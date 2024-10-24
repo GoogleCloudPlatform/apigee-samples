@@ -55,10 +55,10 @@ REV=$(apigeecli apis create bundle -f apiproxy -n custom-routing --org "$PROJECT
 apigeecli apis deploy --wait --name custom-routing --ovr --rev "$REV" --org "$PROJECT_ID" --env "$APIGEE_ENV" --token "$TOKEN"
 
 echo "Create proxy-scoped KVM"
-apigeecli apis kvm create -o ${PROJECT_ID} -t $TOKEN -n routing-rules -p custom-routing
+apigeecli apis kvm create -o "${PROJECT_ID}" -t "$TOKEN" -n routing-rules -p custom-routing
 
 echo "Export the empty KVM to local file."
-apigeecli kvms entries export -p custom-routing -m routing-rules -o ${PROJECT_ID} -t $TOKEN
+apigeecli kvms entries export -p custom-routing -m routing-rules -o "${PROJECT_ID}" -t "$TOKEN"
 
 echo " "
 echo "Now, please edit the exported file, adding the necessary entries. There's a sample file in this repo. Feel free to copy its contents to your local file for a simple test."

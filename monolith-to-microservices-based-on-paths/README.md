@@ -1,6 +1,6 @@
 # Monolith to Microservice Migration based on Paths
 
-This sample shows how Apigee can be used as a façade to facilitate the migration from a monolith to a microservice architecture.
+This sample shows how Apigee can be used as a facade to facilitate the migration from a monolith to a microservice architecture.
 
 ## About the migration scenario
 
@@ -20,11 +20,11 @@ Also notice that there might be complexities in the actual paths being migrated 
 
 From the perspective of the development team that is actually migrating the service, being able to rollback the routing quickly is important in case of any issues.
 
-The façade strategy implement with Apigee in this sample aims to achieve exactly that.
+The facade strategy implement with Apigee in this sample aims to achieve exactly that.
 
 ## Implementation in Apigee
 
-This implementation will basically leverage a proxy (named custom-routing) that implements the façade strategy. It also depends on a local, apiproxy-scoped KVM (named routing-rules) where our routing rules will be defined.
+This implementation will basically leverage a proxy (named custom-routing) that implements the facade strategy. It also depends on a local, apiproxy-scoped KVM (named routing-rules) where our routing rules will be defined.
 
 This implementation considers that the number of paths can be quite large - that is, the customer can be migrating 100's of paths. While creating individual flows for each of them is feasible, it becomes quite challenging to manage them all overtime. This implementation takes a more programatic approach to defining the routing rules based on the KVM then.
 
@@ -73,8 +73,8 @@ Use the following GCP CloudShell tutorial, and follow the instructions in Cloud 
    - `PROJECT_ID` the project where your Apigee organization is located.
    - `APIGEE_HOST` the externally reachable hostname of the Apigee environment group that contains APIGEE_ENV without https://
    - `APIGEE_ENV` the Apigee environment where the demo resources should be created.
-   - `MICROSERVICE_PATH` is the destination URL (preceed with http:// or https://) of the modern, new destination. If just testing, you can use https://httpbin.org/get
-   - `LEGACY_PATH` is the destination URL (preceed with http:// or https://) of the monolith, legacy destination. If just testing, you can use https://httpbin.org/get
+   - `MICROSERVICE_PATH` is the destination URL (preceded with http:// or https://) of the modern, new destination. If just testing, you can use https://httpbin.org/get
+   - `LEGACY_PATH` is the destination URL (preceded with http:// or https://) of the monolith, legacy destination. If just testing, you can use https://httpbin.org/get
 
    Now source the `env.sh` file
 

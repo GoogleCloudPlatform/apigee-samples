@@ -20,4 +20,4 @@ export APIGEE_ENV= # e.g.dev or prod
 export MICROSERVICE_PATH= # add your own. Or use https://httpbin.org/get for experimentation
 export LEGACY_PATH= # add your own. Or use https://mocktarget.apigee.net for experimentation
 
-gcloud config set project $PROJECT_ID
+gcloud config set project "$PROJECT_ID"
