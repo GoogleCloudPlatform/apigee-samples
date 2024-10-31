@@ -33,10 +33,10 @@ delete_api(){
   local api_name=$1
   echo "Undeploying $api_name"
   REV=$(apigeecli envs deployments get --env "$APIGEE_ENV" --org "$PROJECT_ID" --token "$TOKEN" --disable-check | jq .'deployments[]| select(.apiProxy=="'"$api_name"'").revision' -r)
-  apigeecli apis undeploy --name $api_name --env "$APIGEE_ENV" --rev "$REV" --org "$PROJECT_ID" --token "$TOKEN"
+  apigeecli apis undeploy --name "$api_name" --env "$APIGEE_ENV" --rev "$REV" --org "$PROJECT_ID" --token "$TOKEN"
 
   echo "Deleting proxy $api_name"
-  apigeecli apis delete --name $api_name --org "$PROJECT_ID" --token "$TOKEN"
+  apigeecli apis delete --name "$api_name" --org "$PROJECT_ID" --token "$TOKEN"
 
 }
 
@@ -46,7 +46,7 @@ export PATH=$PATH:$HOME/.apigeecli/bin
 
 echo "Deleting Developer App"
 DEVELOPER_ID=$(apigeecli developers get --email llm-routing-developer@acme.com --org "$PROJECT_ID" --token "$TOKEN" --disable-check | jq .'developerId' -r)
-apigeecli apps delete --id llm-routing-developer@acme.com --name llm-routing-app --org "$PROJECT_ID" --token "$TOKEN"
+apigeecli apps delete --id $DEVELOPER_ID --name llm-routing-app --org "$PROJECT_ID" --token "$TOKEN"
 
 echo "Deleting Developer"
 apigeecli developers delete --email llm-routing-developer@acme.com --org "$PROJECT_ID" --token "$TOKEN"
