@@ -39,7 +39,18 @@ Every provider has its own payload. You just need to pass the entire payload req
 
 `logPayload` is a flag you can use for Apigee to log the payloads to Cloud Logging.
 
-Similarly, the response sent from the provider is returned in the `promptResponse` field of the payload. Along with that, you will also get `usageMetadata` that includes the number of tokens used.
+Similarly, the response sent from the provider is returned in the `promptResponse` field of the payload. Along with that, you will also get `usageMetadata` that includes the number of tokens used. See below for example
+
+```json
+{
+   "promptResponse": ".....", 
+   "usageMetadata":{
+      "promptTokenCount": 10,
+      "generatedTokenCount": 150,
+      "totalTokenCount": 160
+   }
+}
+```
 
 ## Routing Logic
 

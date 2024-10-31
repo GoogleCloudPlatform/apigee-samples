@@ -219,7 +219,7 @@ components:
       properties:
         promptResponse:
           description: Response from the model
-          type: object
+          type: string
         usageMetadata:
           description: Usage Metadata
           type: object
