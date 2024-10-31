@@ -126,7 +126,7 @@ You can test the sample with the following curl commands:
 
 To Gemini
 
-```bash
+```sh
 curl --location "https://$APIGEE_HOST/v1/samples/llm-routing/providers/google/models/gemini-1.5-flash-001:generateText" \
 --header "Content-Type: application/json" \
 --header "x-apikey: $APP_CLIENT_ID" \
@@ -145,7 +145,7 @@ curl --location "https://$APIGEE_HOST/v1/samples/llm-routing/providers/google/mo
 }'
 ```
 
-```bash
+```sh
 curl --location "https://$APIGEE_HOST/v1/samples/llm-routing/providers/google/models/gemini-1.5-flash-001:generateText" \
 --header "Content-Type: application/json" \
 --header "x-apikey: $APP_CLIENT_ID" \
@@ -172,7 +172,7 @@ curl --location "https://$APIGEE_HOST/v1/samples/llm-routing/providers/google/mo
 
 To Hugging Face
 
-```bash
+```sh
 curl --location "https://$APIGEE_HOST/v1/samples/llm-routing/providers/hugging_face/models/gpt2:generateText" \
 --header "Content-Type: application/json" \
 --header "x-apikey: $APP_CLIENT_ID" \
@@ -184,7 +184,7 @@ curl --location "https://$APIGEE_HOST/v1/samples/llm-routing/providers/hugging_f
 }'
 ```
 
-```bash
+```sh
 curl --location "https://$APIGEE_HOST/v1/samples/llm-routing/providers/hugging_face/models/distilbert/distilgpt2:generateText" \
 --header "Content-Type: application/json" \
 --header "x-apikey: $APP_CLIENT_ID" \
