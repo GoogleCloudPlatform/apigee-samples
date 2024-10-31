@@ -1,0 +1,16 @@
+{
+    "keyValueEntries": [
+      {
+        "name": "hugging_face__text-generation",
+        "value": "{\"targetUrl\": \"https://api-inference.huggingface.co/models/{org}/{model}\",\"auth_type\": \"oauth\", \"auth_token_type\": \"Bearer\", \"auth_token\": \"HUGGING_FACE_TOKEN\", \"request_jsonpath\": \"$.promptRequest.inputs\", \"response_jsonpath\": \"$.[0].generated_text\"}"
+      },
+      {
+          "name": "google__text-generation",
+          "value": "{\"targetUrl\": \"https://VERTEX_AI_REGION-aiplatform.googleapis.com/v1/projects/VERTEX_AI_PROJECT_ID/locations/VERTEX_AI_REGION/publishers/google/models/{model}:generateContent\",\"auth_type\": \"service_account\", \"auth_token_type\": \"Bearer\", \"auth_token\": null, \"request_jsonpath\": \"$.promptRequest.contents.parts[*].text\", \"response_jsonpath\": \"$.candidates[0].content.parts[*].text\"}"
+      },
+      {
+          "name": "google__image-generation",
+          "value": "{\"targetUrl\": \"https://VERTEX_AI_REGION-aiplatform.googleapis.com/v1/projects/VERTEX_AI_PROJECT_ID/locations/VERTEX_AI_REGION/publishers/google/models/{model}:predict\",\"auth_type\": \"service_account\", \"auth_token_type\": \"Bearer\", \"auth_token\": null, \"request_jsonpath\": \"$.promptRequest.instances[*].prompt\"}"
+      }
+    ]
+  }
