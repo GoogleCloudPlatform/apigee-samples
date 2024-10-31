@@ -1,9 +1,10 @@
 # llm-routing
 
+---
 - This is a sample Apigee proxy to demonstrate the routing capabilities of Apigee across different LLM providers. In this sample we will use Google VertexAI and Hugging Face as the LLM providers
 - The framework will easily help onboarding other providers using configurations
 
-![architecture](./images/arch.jpg)
+![architecture](../images/arch.jpg)
 
 ## Pre-Requisites
 
@@ -17,6 +18,10 @@
     * unzip
     * curl
     * jq
+
+Let's get started!
+
+---
 
 ## Payloads
 
@@ -58,39 +63,49 @@ A sample KVM entry for Google Vertex AI is as follows:
 }
 ```
   
-You can refer to this sample [keyvalue map file](./config/env__envname__llm-routing-config__kvmfile__0.json) that contains the configurations for each provider. 
+You can refer to this sample <walkthrough-editor-open-file filePath="llm-routing/config/env__envname__llm-routing-config__kvmfile__0.json">keyvalue map file</walkthrough-editor-open-file> that contains the configurations for each provider. 
 
+---
 
-## (QuickStart) Setup using CloudShell
+## Setup environment
 
-Use the following GCP CloudShell tutorial, and follow the instructions.
+Ensure you have an active GCP account selected in the Cloud shell
 
-[![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/ssvaidyanathan/apigee-samples&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=llm-routing/docs/cloudshell-tutorial.md)
-
-## Setup instructions
-
-1. Clone this repo, and switch the cloud-logging directory
-
-```bash
-git clone https://github.com/ssvaidyanathan/apigee-samples.git
-cd apigee-samples/llm-routing
+```sh
+gcloud auth login
 ```
 
-2. Edit the `env.sh` and configure all the ENV variables
+Navigate to the 'llm-routing' directory in the Cloud shell.
 
-Now source the `env.sh` file
+```sh
+cd llm-routing
+```
 
-```bash
+Edit the provided sample `env.sh` file, and set the environment variables there.
+
+Click <walkthrough-editor-open-file filePath="llm-routing/env.sh">here</walkthrough-editor-open-file> to open the file in the editor
+
+Then, source the `env.sh` file in the Cloud shell.
+
+```sh
 source ./env.sh
 ```
 
-## Deploy Apigee artifacts
+---
+
+## Deploy Apigee configurations
+
+Next, let's deploy the sample to Apigee. Just run
 
 ```bash
 ./deploy-llm-routing.sh
 ```
 
-## Test the API
+Export the `APP_CLIENT_ID` variable as mentioned in the command output
+
+---
+
+### Verification
 
 You can test the sample with the following curl commands:
 
@@ -153,6 +168,16 @@ curl --location "https://$APIGEE_HOST/v1/samples/llm-routing/providers/hugging_f
     "logPayload": true
 }'
 ```
+
+---
+
+## Conclusion
+
+<walkthrough-conclusion-trophy></walkthrough-conclusion-trophy>
+
+Congratulations! You've successfully deployed Apigee proxy to route calls to different LLM providers
+
+<walkthrough-inline-feedback></walkthrough-inline-feedback>
 
 ## Cleanup
 

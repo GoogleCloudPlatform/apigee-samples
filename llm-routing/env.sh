@@ -15,10 +15,9 @@
 # limitations under the License.
 
 export PROJECT_ID="PROJECT_ID_TO_SET"
-export PROJECT_NUMBER=$(gcloud projects describe $PROJECT_ID --format="value(projectNumber)")
 export APIGEE_ENV="APIGEE_ENV_TO_SET"
 export APIGEE_HOST="APIGEE_HOST_TO_SET"
-export SERVICE_ACCOUNT_NAME="llm-unified-svc-acct"
+export SERVICE_ACCOUNT_NAME="llm-routing-svc-acct"
 
 # HuggingFace configuration
 export HUGGING_FACE_TOKEN="HUGGING_FACE_TOKEN_TO_SET"

@@ -14,3 +14,4 @@
 .vscode
 .DS_Store
 *.jar
+**/env1.sh
