@@ -55,7 +55,7 @@ Use the following GCP CloudShell tutorial, and follow the instructions in Cloud 
 
 ## Setup instructions
 
-1. Clone the apigee-samples repo, and switch to the mtls-northbound directory
+1. Clone the apigee-samples repo, and switch to the monolith-to-microservices-based-on-paths directory
 
    ```bash
    git clone https://github.com/GoogleCloudPlatform/apigee-samples.git
