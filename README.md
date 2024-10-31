@@ -7,7 +7,7 @@
   - [Using the sample proxies](#using-the-sample-proxies)
     - [Samples](#samples)
   - [Samples for LLM Serving with Apigee](#samples-for-llm-serving-with-apigee)
-    - [Modifying a sample proxy](#modifying-a-sample-proxy)
+  - [Modifying a sample proxy](#modifying-a-sample-proxy)
   - [Ask questions on the Community Forum](#ask-questions-on-the-community-forum)
   - [Apigee documentation](#apigee-documentation)
   - [Contributing](#contributing)
@@ -97,7 +97,7 @@ This repository explores common LLM serving patterns using Apigee X as a robust 
 |4| [llm-logging](llm-logging) | Logging prompts and responses of large language models facilitates performance analysis, security monitoring, and bias detection, ultimately enabling model improvement and risk mitigation. |  [![notebook](https://cloud.google.com/ml-engine/images/colab-logo-32px.png)](./llm-logging/llm_logging_v1.ipynb) |
 |5| [llm-routing](llm-routing) | Sample to route to different LLM providers using Apigee's routing capabilities. |  [![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/ssvaidyanathan/apigee-samples&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=llm-routing/docs/cloudshell-tutorial.md) |
 
-### <a name="modifying"></a>Modifying a sample proxy
+## <a name="modifying"></a>Modifying a sample proxy
 
 Feel free to modify and build upon the sample proxies. You can make changes in the Apigee [management UI](https://cloud.google.com/apigee/docs/api-platform/develop/ui-edit-proxy) or by using our Cloud Code [extension for local development](https://cloud.google.com/apigee/docs/api-platform/local-development/setup) in Visual Studio Code. Whichever approach is comfortable for you.
 
