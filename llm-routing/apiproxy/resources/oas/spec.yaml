@@ -1,0 +1,240 @@
+# Copyright 2024 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+openapi: 3.0.1
+info:
+  title: LLM Routing
+  description: Spec for the LLM Routing Sample API
+
+  termsOfService: https://example.com/
+  contact:
+    email: someteam@example.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+externalDocs:
+  description: Find out more about this sample
+  url: https://github.com/GoogleCloudPlatform/apigee-samples/tree/main?tab=readme-ov-file#llm-samples
+servers:
+  - url: https://HOST/v1/samples/llm-routing
+tags:
+  - name: text-generation
+    description: Text Generation
+    externalDocs:
+      description: Find out more
+      url: https://github.com
+paths:
+  /providers/{modelProvider}/models/{org}/{model}:generateText:
+    post:
+      tags:
+        - text-generation
+      summary: Generate Text using a prompt
+      description: Submit a prompt to generate text
+      operationId: text-generation1
+      parameters:
+        - name: modelProvider
+          in: path
+          description: Model Provider like hugging_face, google
+          example: google
+          required: true
+          schema:
+            type: string
+        - name: org
+          in: path
+          description: Model Provider Org like distilbert, google
+          example: google
+          required: true
+          schema:
+            type: string
+        - name: model
+          in: path
+          description: Model names like distilgpt2, byt5-small, gemini-1.5-flash-001
+          example: gemini-1.5-flash-001
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Submit a prompt to generate text
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Model'
+            examples:
+              text-generation-gpt2:
+                value:
+                  {"promptRequest": {"inputs": "Suggest name for a flower shop"}, "logPayload": true}
+              text-generation-vertex:
+                value:
+                  {"promptRequest":{"contents":{"role":"user", "parts":[{"text":"Suggest name for a flower shop"}]}}, "logPayload":true}
+              text-generation-vertex2:
+                value:
+                  {"promptRequest":{"contents":{"role":"user", "parts":[{"fileData":{"mimeType":"image/jpeg", "fileUri":"gs://generativeai-downloads/images/scones.jpg"}}, {"text":"Describe this picture."}]}}, "logPayload":true}
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TextResponse'
+        '400':
+          description: Invalid request supplied
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Uanuthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - api_key: []
+  /providers/{modelProvider}/models/{model}:generateText:
+    post:
+      tags:
+        - text-generation
+      summary: Generate Text using a prompt
+      description: Submit a prompt to generate text
+      operationId: text-generation2
+      parameters:
+        - name: modelProvider
+          in: path
+          description: Model Provider like hugging_face, google
+          example: google
+          required: true
+          schema:
+            type: string
+        - name: model
+          in: path
+          description: Model names like distilbert/distilgpt2, google/byt5-small, gemini-1.5-flash-001
+          example: gemini-1.5-flash-001
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Submit a prompt to generate text
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Model'
+            examples:
+              text-generation-gpt2:
+                value:
+                  {"promptRequest": {"inputs": "Suggest name for a flower shop"}, "logPayload": true}
+              text-generation-vertex:
+                value:
+                  {"promptRequest":{"contents":{"role":"user", "parts":[{"text":"Suggest name for a flower shop"}]}}, "logPayload":true}
+              text-generation-vertex2:
+                value:
+                  {"promptRequest":{"contents":{"role":"user", "parts":[{"fileData":{"mimeType":"image/jpeg", "fileUri":"gs://generativeai-downloads/images/scones.jpg"}}, {"text":"Describe this picture."}]}}, "logPayload":true}
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TextResponse'
+        '400':
+          description: Invalid request supplied
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Uanuthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - api_key: []
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        code:
+          description: error code
+          type: integer
+          example: 400
+        reason:
+          description: error reason
+          type: string
+          example: Bad Request
+        message:
+          description: error message
+          type: string
+          example: Invalid request supplied
+    Model:
+      type: object
+      properties:
+        promptRequest:
+          description: Provide the appropriate prompt payload supported by the model
+          type: object
+        logPayload:
+          type: boolean
+          example: false
+      required:
+        - promptRequest
+        - logPayload
+    TextResponse:
+      type: object
+      properties:
+        promptResponse:
+          description: Response from the model
+          type: string
+        usageMetadata:
+          description: Usage Metadata
+          type: object
+          properties:
+            promptTokenCount:
+              description: Token count from the prompt
+              type: integer
+            generatedTokenCount:
+              description: Token count from the model
+              type: integer
+            totalTokenCount:
+              description: Total Token count
+              type: integer
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: x-apikey
+      in: header

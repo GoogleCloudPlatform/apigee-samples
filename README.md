@@ -6,8 +6,8 @@
   - [Before you begin](#before-you-begin)
   - [Using the sample proxies](#using-the-sample-proxies)
     - [Samples](#samples)
-    - [Modifying a sample proxy](#modifying-a-sample-proxy)
-  - [Samples for LLM Serving with Apigee](#llm-samples) 
+  - [Samples for LLM Serving with Apigee](#samples-for-llm-serving-with-apigee)
+  - [Modifying a sample proxy](#modifying-a-sample-proxy)
   - [Ask questions on the Community Forum](#ask-questions-on-the-community-forum)
   - [Apigee documentation](#apigee-documentation)
   - [Contributing](#contributing)
@@ -89,14 +89,15 @@ Apigee X plays a crucial role in LLM serving by acting as an intermediary betwee
 
 This repository explores common LLM serving patterns using Apigee X as a robust and feature-rich API management platform. While the primary focus is on serving Gemini models, the principles and patterns discussed here can be adapted for other LLMs.
 
-|    | Sample                      | Description                                                            | Open Notebook |
+|    | Sample                      | Description                                                            | Open using |
 |-----|-----------------------------|------------------------------------------------------------------------|----------------------|
 |1| [llm-token-limits](llm-token-limits) | Apigee's API Products provide real-time monitoring and enforcement of token usage limits for LLMs, enabling effective management of token consumption across different providers and consumers. | [![notebook](https://cloud.google.com/ml-engine/images/colab-logo-32px.png)](./llm-token-limits/llm_token_limits.ipynb) |
 |2| [llm-semantic-cache](llm-semantic-cache) | This sample performs a cache lookup of responses on Apigee's Cache layer and Vector Search as an embeddings database. | [![notebook](https://cloud.google.com/ml-engine/images/colab-logo-32px.png)](./llm-semantic-cache/llm_semantic_cache_v1.ipynb) |
 |3| [llm-circuit-breaking](llm-circuit-breaking) | Apigee enhances the resilience and prevents outages in Retrieval Augmented Generation applications that utilize multiple Large Language Models by intelligently managing traffic and implementing circuit breaking to avoid exceeding endpoint quotas. |  [![notebook](https://cloud.google.com/ml-engine/images/colab-logo-32px.png)](./llm-circuit-breaking/llm_circuit_breaking.ipynb) |
 |4| [llm-logging](llm-logging) | Logging prompts and responses of large language models facilitates performance analysis, security monitoring, and bias detection, ultimately enabling model improvement and risk mitigation. |  [![notebook](https://cloud.google.com/ml-engine/images/colab-logo-32px.png)](./llm-logging/llm_logging_v1.ipynb) |
+|5| [llm-routing](llm-routing) | Sample to route to different LLM providers using Apigee's routing capabilities. |  [![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/ssvaidyanathan/apigee-samples&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=llm-routing/docs/cloudshell-tutorial.md) |
 
-### <a name="modifying"></a>Modifying a sample proxy
+## <a name="modifying"></a>Modifying a sample proxy
 
 Feel free to modify and build upon the sample proxies. You can make changes in the Apigee [management UI](https://cloud.google.com/apigee/docs/api-platform/develop/ui-edit-proxy) or by using our Cloud Code [extension for local development](https://cloud.google.com/apigee/docs/api-platform/local-development/setup) in Visual Studio Code. Whichever approach is comfortable for you.
 
