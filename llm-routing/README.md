@@ -167,6 +167,18 @@ curl --location "https://$APIGEE_HOST/v1/samples/llm-routing/providers/hugging_f
 }'
 ```
 
+```bash
+curl --location "https://$APIGEE_HOST/v1/samples/llm-routing/providers/hugging_face/models/distilbert/distilgpt2:generateText" \
+--header "Content-Type: application/json" \
+--header "x-apikey: $APP_CLIENT_ID" \
+--data '{
+    "promptRequest": {
+        "inputs": "Suggest name for a flower shop"
+    },
+    "logPayload": true
+}'
+```
+
 ## Cleanup
 
 If you want to clean up the artifacts from this example in your Apigee Organization, first source your `env.sh` script, and then run
