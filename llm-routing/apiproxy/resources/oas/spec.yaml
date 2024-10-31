@@ -44,43 +44,43 @@ paths:
       description: Submit a prompt to generate text
       operationId: text-generation1
       parameters:
-      - name: modelProvider
-        in: path
-        description: Model Provider like hugging_face, google
-        example: google
-        required: true
-        schema:
-          type: string
-      - name: org
-        in: path
-        description: Model Provider Org like distilbert, google
-        example: google
-        required: true
-        schema:
-          type: string
-      - name: model
-        in: path
-        description: Model names like distilgpt2, byt5-small, gemini-1.5-flash-001
-        example: gemini-1.5-flash-001
-        required: true
-        schema:
-          type: string
+        - name: modelProvider
+          in: path
+          description: Model Provider like hugging_face, google
+          example: google
+          required: true
+          schema:
+            type: string
+        - name: org
+          in: path
+          description: Model Provider Org like distilbert, google
+          example: google
+          required: true
+          schema:
+            type: string
+        - name: model
+          in: path
+          description: Model names like distilgpt2, byt5-small, gemini-1.5-flash-001
+          example: gemini-1.5-flash-001
+          required: true
+          schema:
+            type: string
       requestBody:
         description: Submit a prompt to generate text
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Model'
-            examples: 
+            examples:
               text-generation-gpt2:
                 value:
-                  {"promptRequest": {"inputs": "Suggest name for a flower shop"},"logPayload": true}
+                  {"promptRequest": {"inputs": "Suggest name for a flower shop"}, "logPayload": true}
               text-generation-vertex:
                 value:
-                  {"promptRequest":{"contents":{"role":"user","parts":[{"text":"Suggest name for a flower shop"}]}},"logPayload":true}
+                  {"promptRequest":{"contents":{"role":"user", "parts":[{"text":"Suggest name for a flower shop"}]}}, "logPayload":true}
               text-generation-vertex2:
                 value:
-                  {"promptRequest":{"contents":{"role":"user","parts":[{"fileData":{"mimeType":"image/jpeg","fileUri":"gs://generativeai-downloads/images/scones.jpg"}},{"text":"Describe this picture."}]}},"logPayload":true}
+                  {"promptRequest":{"contents":{"role":"user", "parts":[{"fileData":{"mimeType":"image/jpeg", "fileUri":"gs://generativeai-downloads/images/scones.jpg"}}, {"text":"Describe this picture."}]}}, "logPayload":true}
       responses:
         '200':
           description: successful operation
@@ -122,36 +122,36 @@ paths:
       description: Submit a prompt to generate text
       operationId: text-generation2
       parameters:
-      - name: modelProvider
-        in: path
-        description: Model Provider like hugging_face, google
-        example: google
-        required: true
-        schema:
-          type: string
-      - name: model
-        in: path
-        description: Model names like distilbert/distilgpt2, google/byt5-small, gemini-1.5-flash-001
-        example: gemini-1.5-flash-001
-        required: true
-        schema:
-          type: string
+        - name: modelProvider
+          in: path
+          description: Model Provider like hugging_face, google
+          example: google
+          required: true
+          schema:
+            type: string
+        - name: model
+          in: path
+          description: Model names like distilbert/distilgpt2, google/byt5-small, gemini-1.5-flash-001
+          example: gemini-1.5-flash-001
+          required: true
+          schema:
+            type: string
       requestBody:
         description: Submit a prompt to generate text
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Model'
-            examples: 
+            examples:
               text-generation-gpt2:
                 value:
-                  {"promptRequest": {"inputs": "Suggest name for a flower shop"},"logPayload": true}
+                  {"promptRequest": {"inputs": "Suggest name for a flower shop"}, "logPayload": true}
               text-generation-vertex:
                 value:
-                  {"promptRequest":{"contents":{"role":"user","parts":[{"text":"Suggest name for a flower shop"}]}},"logPayload":true}
+                  {"promptRequest":{"contents":{"role":"user", "parts":[{"text":"Suggest name for a flower shop"}]}}, "logPayload":true}
               text-generation-vertex2:
                 value:
-                  {"promptRequest":{"contents":{"role":"user","parts":[{"fileData":{"mimeType":"image/jpeg","fileUri":"gs://generativeai-downloads/images/scones.jpg"}},{"text":"Describe this picture."}]}},"logPayload":true}
+                  {"promptRequest":{"contents":{"role":"user", "parts":[{"fileData":{"mimeType":"image/jpeg", "fileUri":"gs://generativeai-downloads/images/scones.jpg"}}, {"text":"Describe this picture."}]}}, "logPayload":true}
       responses:
         '200':
           description: successful operation
@@ -219,20 +219,20 @@ components:
       properties:
         promptResponse:
           description: Response from the model
-          type: string
+          type: object
         usageMetadata:
           description: Usage Metadata
           type: object
           properties:
-              promptTokenCount:
-                description: Token count from the prompt
-                type: integer
-              generatedTokenCount:
-                description: Token count from the model
-                type: integer
-              totalTokenCount:
-                description: Total Token count
-                type: integer
+            promptTokenCount:
+              description: Token count from the prompt
+              type: integer
+            generatedTokenCount:
+              description: Token count from the model
+              type: integer
+            totalTokenCount:
+              description: Total Token count
+              type: integer
   securitySchemes:
     api_key:
       type: apiKey

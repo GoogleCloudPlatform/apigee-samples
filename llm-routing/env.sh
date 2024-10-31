@@ -23,8 +23,5 @@ export SERVICE_ACCOUNT_NAME="llm-routing-svc-acct"
 export HUGGING_FACE_TOKEN="HUGGING_FACE_TOKEN_TO_SET"
 
 # Vertex AI configuration
-export VERTEX_AI_REGION="VERTEX_AI_REGION_TO_SET" # could be same as Apigee region
+export VERTEX_AI_REGION="VERTEX_AI_REGION_TO_SET"         # could be same as Apigee region
 export VERTEX_AI_PROJECT_ID="VERTEX_AI_PROJECT_ID_TO_SET" # could be same as Apigee project
-
-# Others
-export TOKEN=$(gcloud auth print-access-token)

@@ -15,7 +15,7 @@
  */
 
 var config = JSON.parse(context.getVariable("model.config"));
-setVariable("targetUrl", config);
+setVariable("target_url", config);
 setVariable("auth_type", config);
 setVariable("auth_token_type", config);
 setVariable("auth_token", config);
@@ -31,7 +31,7 @@ function replaceFunction (str, key, value){
   return str.replace(key, value);
 }
 
-var targetUrlTempl = context.getVariable("config.targetUrl");
+var targetUrlTempl = context.getVariable("config.target_url");
 
 //if org does not exist in the target url, replace it from the url template
 if(context.getVariable("reqPrefix.org"))

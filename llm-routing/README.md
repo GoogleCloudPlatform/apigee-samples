@@ -12,11 +12,11 @@
 3. Enable Vertex AI in your project
 4. Create a Hugging Face Account and generate a token
 5. Make sure the following tools are available in your terminal's $PATH (Cloud Shell has these preconfigured)
-    * [gcloud SDK](https://cloud.google.com/sdk/docs/install)
-    * [apigeecli](https://github.com/apigee/apigeecli)
-    * unzip
-    * curl
-    * jq
+    - [gcloud SDK](https://cloud.google.com/sdk/docs/install)
+    - [apigeecli](https://github.com/apigee/apigeecli)
+    - unzip
+    - curl
+    - jq
 
 ## Payloads
 
@@ -38,18 +38,21 @@ Similarly, the response sent from the provider is returned in the `promptRespons
 ## Routing Logic
 
 The sample uses the [Key Value Map](https://cloud.google.com/apigee/docs/api-platform/cache/key-value-maps) to store the different LLM provider configurations. In this sample, we will create a KVM called `llm-routing-config` which will contain the following configurations for each provider. Each entry (for each provider) will contain the following attributes:
-   * `targetUrl` - The URL of the actual API (for ex: https://us-east1-aiplatform.googleapis.com/v1/projects/apigee-ai/locations/us-east1/publishers/google/models/{model}:generateContent)
-   * `auth_type` - Authentication type. Valid values are  `oauth` or `service_account`. `service_account` is used for Google based services which can use the in-built Google Auth within Apigee
-   * `auth_token_type` - Authentiction type. Valid values are `Bearer` or `Basic`
-   * `auth_token` - The token to be used for authentication. For ex Hugging Face token. If you are using `service_account` auth_type, then you can pass `null` for this field
-   * `request_jsonpath` - Provide the JSON path within the request payload that contains the actual prompt. Every LLM provider has its own structure for the request payload. For Apigee to extract that, this needs to be passed. For example, the path for Hugging Face is `$.promptRequest.inputs` and for Google VertexAI is `$.promptRequest.contents.parts[*].text`
-   * `response_jsonpath` - Provide the JSON path within the response payload that contains the actual prompt. Similar to the request above, each LLM provider sends different payloads as part of text generation. To extract that, this field is required. For example, the path for Hugging Face is `$.[0].generated_text` and for Google VertexAI is `$.candidates[0].content.parts[*].text`
+
+| Attribute | Description |
+|---|---|
+| target_url | The URL of the actual API (for ex: <https://us-east1-aiplatform.googleapis.com/v1/projects/apigee-ai/locations/us-east1/publishers/google/models/{model}:generateContent>) |
+| auth_type | Authentication type. Valid values are  `oauth` or `service_account`. `service_account` is used for Google based services which can use the in-built Google Auth within Apigee |
+| auth_token_type | Authentication Token type. Valid values are `Bearer` or `Basic` |
+| auth_token | The token to be used for authentication. For ex Hugging Face token. If you are using  `service_account` auth_type, then you can pass `null` for this field |
+| request_jsonpath | Provide the JSON path within the request payload that contains the actual prompt. Every LLM provider has its own structure for the request payload. For Apigee to extract that, this needs to be passed. For example, the path for Hugging Face is `$.promptRequest.inputs` and for Google VertexAI is `$.promptRequest.contents.parts[*].text` |
+| response_jsonpath | Provide the JSON path within the response payload that contains the actual prompt. Similar to the request above, each LLM provider sends different payloads as part of text generation. To extract that, this field is required. For example, the path for Hugging Face is `$.[0].generated_text` and for Google VertexAI is `$.candidates[0].content.parts[*].text` |
 
 A sample KVM entry for Google Vertex AI is as follows:
 
 ```json
 {
-   "targetUrl":"https:/$REGION-aiplatform.googleapis.com/v1/projects/$PROJECT_ID/locations/$REGION/publishers/google/models/$MODEL_NAME:generateContent",
+   "target_url":"https:/$REGION-aiplatform.googleapis.com/v1/projects/$PROJECT_ID/locations/$REGION/publishers/google/models/$MODEL_NAME:generateContent",
    "auth_type":"service_account",
    "auth_token_type":"Bearer",
    "auth_token":null,
@@ -58,8 +61,7 @@ A sample KVM entry for Google Vertex AI is as follows:
 }
 ```
   
-You can refer to this sample [keyvalue map file](./config/env__envname__llm-routing-config__kvmfile__0.json) that contains the configurations for each provider. 
-
+You can refer to this sample [keyvalue map file](./config/env__envname__llm-routing-config__kvmfile__0.json) that contains the configurations for each provider.
 
 ## (QuickStart) Setup using CloudShell
 
