@@ -24,34 +24,6 @@ Let's get started!
 
 ---
 
-## Payloads
-
-The payload consists of `promptRequest` and `logPayload` fields. See below for example
-
-```json
-{
-   "promptRequest":{},
-   "logPayload":true
-}
-```
-
-Every provider has its own payload. You just need to pass the entire payload required for the provider within the `promptRequest` field. If there are any fields missing within that, the provider will return an error.
-
-`logPayload` is a flag you can use for Apigee to log the payloads to Cloud Logging.
-
-Similarly, the response sent from the provider is returned in the `promptResponse` field of the payload. Along with that, you will also get `usageMetadata` that includes the number of tokens used. See below for example
-
-```json
-{
-   "promptResponse": ".....", 
-   "usageMetadata":{
-      "promptTokenCount": 10,
-      "generatedTokenCount": 150,
-      "totalTokenCount": 160
-   }
-}
-```
-
 ## Routing Logic
 
 The sample uses the [Key Value Map](https://cloud.google.com/apigee/docs/api-platform/cache/key-value-maps) to store the different LLM provider configurations. In this sample, we will create a KVM called `llm-routing-config` which will contain the following configurations for each provider. Each entry (for each provider) will contain the following attributes:
@@ -79,6 +51,37 @@ A sample KVM entry for Google Vertex AI is as follows:
 ```
   
 You can refer to this sample <walkthrough-editor-open-file filePath="llm-routing/config/env__envname__llm-routing-config__kvmfile__0.json">keyvalue map file</walkthrough-editor-open-file> that contains the configurations for each provider.
+
+## Payload
+
+The path of the API consists of the provider and the model, for example `/providers/google/models/gemini-1.5-flash-001` or `/providers/hugging_face/models/distilbert/distilgpt2` which is used by proxy to do the config lookup and route the calls to the actual provider.
+
+
+The payload consists of `promptRequest` and `logPayload` fields. See below for example
+
+```json
+{
+   "promptRequest":{},
+   "logPayload":true
+}
+```
+
+Every provider has its own payload. You just need to pass the entire payload required for the provider within the `promptRequest` field. If there are any fields missing within that, the provider will return an error.
+
+`logPayload` is a flag you can use for Apigee to log the payloads to Cloud Logging.
+
+Similarly, the response sent from the provider is returned in the `promptResponse` field of the payload. Along with that, you will also get `usageMetadata` that includes the number of tokens used. See below for example
+
+```json
+{
+   "promptResponse": ".....", 
+   "usageMetadata":{
+      "promptTokenCount": 10,
+      "generatedTokenCount": 150,
+      "totalTokenCount": 160
+   }
+}
+```
 
 ---
 
@@ -120,11 +123,11 @@ Export the `APP_CLIENT_ID` variable as mentioned in the command output
 
 ---
 
-### Verification
+## Verification
 
 You can test the sample with the following curl commands:
 
-To Gemini
+### To Gemini
 
 ```sh
 curl --location "https://$APIGEE_HOST/v1/samples/llm-routing/providers/google/models/gemini-1.5-flash-001:generateText" \
@@ -170,7 +173,7 @@ curl --location "https://$APIGEE_HOST/v1/samples/llm-routing/providers/google/mo
 }'
 ```
 
-To Hugging Face
+### To Hugging Face
 
 ```sh
 curl --location "https://$APIGEE_HOST/v1/samples/llm-routing/providers/hugging_face/models/gpt2:generateText" \
