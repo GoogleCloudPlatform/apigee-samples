@@ -142,6 +142,8 @@ curl --location "https://$APIGEE_HOST/v1/samples/llm-routing/providers/$PROVIDER
 
 Congratulations! You've successfully deployed Apigee proxy to route calls to different LLM providers
 
+You can now go back to the [notebook](https://github.com/ssvaidyanathan/apigee-samples/blob/main/llm-routing/llm_routing_v1.ipynb) to test the sample.
+
 <walkthrough-inline-feedback></walkthrough-inline-feedback>
 
 ## Cleanup
