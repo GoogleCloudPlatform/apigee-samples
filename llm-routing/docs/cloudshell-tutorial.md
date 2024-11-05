@@ -5,8 +5,6 @@
 - This is a sample Apigee proxy to demonstrate the routing capabilities of Apigee across different LLM providers. In this sample we will use Google VertexAI and Anthropic as the LLM providers
 - The framework will easily help onboarding other providers using configurations
 
-![architecture](../images/arch.jpg)
-
 ## Pre-Requisites
 
 1. [Provision Apigee X](https://cloud.google.com/apigee/docs/api-platform/get-started/provisioning-intro)
