@@ -32,7 +32,7 @@ The URL path of the API consists of the provider and the model params, for examp
 
 The request payload must match to the provider's specification. 
 
-`x-log-payload` is a header you can use for Apigee to log the calls to Cloud Logging.
+`x-log-payload` is a header you can use for Apigee to log the calls to Cloud Logging. To log pass the header value as `true`
 
 Similarly, the response sent from the provider is returned as is and Apigee just forwards the response back to the calling client
 
