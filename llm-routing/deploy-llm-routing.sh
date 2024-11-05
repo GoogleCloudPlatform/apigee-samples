@@ -167,7 +167,7 @@ echo "curl --location \"https://$APIGEE_HOST/v1/samples/llm-routing/providers/an
     \"stream\": false
 }'"
 echo " "
-echo "You can now go back to the Colab notebook to test the sample. You will need the following Keys during your test."
+echo "You can now go back to the Colab notebook to test the sample. You will need the following variables during your test."
 echo "Your PROJECT_ID is: $PROJECT_ID"
 echo "Your APIGEE_HOST is: $APIGEE_HOST"
 echo "Your APIKEY is: $APP_CLIENT_ID"
