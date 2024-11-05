@@ -17,13 +17,8 @@
     <LogName>projects/{organization.name}/logs/{apiproxy.name}</LogName>
     <Message contentType="application/json">
             {
-                "modelProvider": "{reqPrefix.modelProvider}",
-                "model": "{reqPrefix.model}",
-                "taskType": "{reqPrefix.taskType}",
-                "prompt": {
-                    "input": "{escapeJSON(request_prompt_value)}",
-                    "output": "{escapeJSON(response_prompt_value)}"
-                }
+                "modelProvider": "{modelProvider}",
+                "model": "{model}"
             }
         </Message>
   </CloudLogging>

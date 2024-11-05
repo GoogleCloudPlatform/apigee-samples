@@ -15,21 +15,8 @@
   <DisplayName>EV-ExtractFields</DisplayName>
   <Properties/>
   <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
-  <Header name="x-request.apikey">
-    <Pattern ignoreCase="true">{client_id}</Pattern>
-  </Header>
   <URIPath>
     <Pattern ignoreCase="false">/providers/{modelProvider}/models/{model}:generateText</Pattern>
-    <Pattern ignoreCase="false">/providers/{modelProvider}/models/{org}/{model}:generateText</Pattern>
   </URIPath>
-  <JSONPayload>
-    <Variable name="promptRequest" type="nodeset">
-      <JSONPath>$.promptRequest</JSONPath>
-    </Variable>
-    <Variable name="logPayload" type="boolean">
-      <JSONPath>$.logPayload</JSONPath>
-    </Variable>
-  </JSONPayload>
   <Source clearPayload="false">request</Source>
-  <VariablePrefix>reqPrefix</VariablePrefix>
 </ExtractVariables>

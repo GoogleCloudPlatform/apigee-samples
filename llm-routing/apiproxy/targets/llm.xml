@@ -11,7 +11,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<TargetEndpoint name="google">
+<TargetEndpoint name="llm">
     <Description/>
     <FaultRules/>
     <PreFlow name="PreFlow">
@@ -21,7 +21,10 @@
     <PostFlow name="PostFlow">
         <Request>
             <Step>
-                <Name>AM-SetRequestForGoogleTarget</Name>
+                <Name>KVM-ConfigLookup</Name>
+            </Step>
+            <Step>
+                <Name>AM-SetTargetURL</Name>
             </Step>
         </Request>
         <Response/>

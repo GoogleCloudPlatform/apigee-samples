@@ -34,11 +34,6 @@ if [ -z "$SERVICE_ACCOUNT_NAME" ]; then
   exit
 fi
 
-if [ -z "$HUGGING_FACE_TOKEN" ]; then
-  echo "No HUGGING_FACE_TOKEN variable set"
-  exit
-fi
-
 if [ -z "$VERTEX_AI_REGION" ]; then
   echo "No VERTEX_AI_REGION variable set"
   exit
@@ -46,6 +41,16 @@ fi
 
 if [ -z "$VERTEX_AI_PROJECT_ID" ]; then
   echo "No VERTEX_AI_PROJECT_ID variable set"
+  exit
+fi
+
+if [ -z "$ANTHROPIC_AI_REGION" ]; then
+  echo "No ANTHROPIC_AI_REGION variable set"
+  exit
+fi
+
+if [ -z "$ANTHROPIC_PROJECT_ID" ]; then
+  echo "No ANTHROPIC_PROJECT_ID variable set"
   exit
 fi
 
@@ -71,9 +76,11 @@ gcloud services enable aiplatform.googleapis.com --project "$PROJECT_ID"
 echo "Updating KVM configurations"
 
 cp config/env__envname__llm-routing-config__kvmfile__0.json config/env__"${APIGEE_ENV}"__llm-routing-config__kvmfile__0.json
-sed -i "s/HUGGING_FACE_TOKEN/$HUGGING_FACE_TOKEN/g" config/env__"${APIGEE_ENV}"__llm-routing-config__kvmfile__0.json
 sed -i "s/VERTEX_AI_REGION/$VERTEX_AI_REGION/g" config/env__"${APIGEE_ENV}"__llm-routing-config__kvmfile__0.json
 sed -i "s/VERTEX_AI_PROJECT_ID/$VERTEX_AI_PROJECT_ID/g" config/env__"${APIGEE_ENV}"__llm-routing-config__kvmfile__0.json
+sed -i "s/ANTHROPIC_PROJECT_ID/$ANTHROPIC_PROJECT_ID/g" config/env__"${APIGEE_ENV}"__llm-routing-config__kvmfile__0.json
+sed -i "s/ANTHROPIC_AI_REGION/$ANTHROPIC_AI_REGION/g" config/env__"${APIGEE_ENV}"__llm-routing-config__kvmfile__0.json
+
 
 echo "Installing apigeecli"
 curl -s https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.sh | bash
@@ -126,9 +133,9 @@ echo "Run the following commands to test the API"
 echo " "
 echo "curl --location \"https://$APIGEE_HOST/v1/samples/llm-routing/providers/google/models/gemini-1.5-flash-001:generateText\" \
 --header \"Content-Type: application/json\" \
+--header \"x-log-payload: false\" \
 --header \"x-apikey: $APP_CLIENT_ID\" \
 --data '{
-   \"promptRequest\":{
       \"contents\":{
          \"role\":\"user\",
          \"parts\":[
@@ -137,16 +144,30 @@ echo "curl --location \"https://$APIGEE_HOST/v1/samples/llm-routing/providers/go
             }
          ]
       }
-   },
-   \"logPayload\":true
 }'"
 echo " "
-echo "curl --location \"https://$APIGEE_HOST/v1/samples/llm-routing/providers/hugging_face/models/gpt2:generateText\" \
+echo "curl --location \"https://$APIGEE_HOST/v1/samples/llm-routing/providers/anthropic/models/claude-3-5-sonnet-v2@20241022:generateText\" \
 --header \"Content-Type: application/json\" \
+--header \"x-log-payload: false\" \
 --header \"x-apikey: $APP_CLIENT_ID\" \
 --data '{
-    \"promptRequest\": {
-        \"inputs\": \"Suggest name for a flower shop\"
-    },
-    \"logPayload\": true
+    \"anthropic_version\": \"vertex-2023-10-16\",
+    \"messages\": [
+        {
+            \"role\": \"user\",
+            \"content\": [
+                {
+                    \"type\": \"text\",
+                    \"text\": \"Suggest name for a flower shop\"
+                }
+            ]
+        }
+    ],
+    \"max_tokens\": 256,
+    \"stream\": false
 }'"
+echo " "
+echo "You can now go back to the Colab notebook to test the sample. You will need the following Keys during your test."
+echo "Your PROJECT_ID is: $PROJECT_ID"
+echo "Your APIGEE_HOST is: $APIGEE_HOST"
+echo "Your APIKEY is: $APP_CLIENT_ID"
