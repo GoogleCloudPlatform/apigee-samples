@@ -72,7 +72,9 @@ You can test the sample with the following curl commands:
 ### To Gemini
 
 ```sh
-curl --location "https://$APIGEE_HOST//v1/samples/llm-routing/providers/google/models/gemini-1.5-flash-001:generateText" \
+PROVIDER=google
+MODEL=gemini-1.5-flash-001
+curl --location "https://$APIGEE_HOST//v1/samples/llm-routing/providers/$PROVIDER/models/$MODEL:generateText" \
 --header "Content-Type: application/json" \
 --header "x-log-payload: false" \
 --header "x-apikey: $APP_CLIENT_ID" \
@@ -91,7 +93,9 @@ curl --location "https://$APIGEE_HOST//v1/samples/llm-routing/providers/google/m
 ### To Anthropic
 
 ```sh
-curl --location "https://$APIGEE_HOST/v1/samples/llm-routing/providers/anthropic/models/claude-3-5-sonnet-v2@20241022:generateText" \
+PROVIDER=anthropic
+MODEL=claude-3-5-sonnet-v2@20241022
+curl --location "https://$APIGEE_HOST/v1/samples/llm-routing/providers/$PROVIDER/models/$MODEL:generateText" \
 --header "Content-Type: application/json" \
 --header "x-log-payload: false" \
 --header "x-apikey: $APP_CLIENT_ID" \
