@@ -11,8 +11,13 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<Javascript continueOnError="false" enabled="true" timeLimit="200" name="JS-ParseConfig">
-  <DisplayName>JS-ParseConfig</DisplayName>
-  <Properties/>
-  <ResourceURL>jsc://JS-ParseConfig.js</ResourceURL>
-</Javascript>
+ <AssignMessage continueOnError="false" enabled="true" name="AM-SetTargetURL">
+    <DisplayName>AM-SetTargetURL</DisplayName>
+    <Properties/>
+    <AssignVariable>
+        <Name>target.url</Name>
+        <Template ref="targetUrlTempl"/>
+    </AssignVariable>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+    <AssignTo createNew="false" transport="http" type="request"/>
+</AssignMessage>

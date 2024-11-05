@@ -19,8 +19,9 @@ export APIGEE_ENV="APIGEE_ENV_TO_SET"
 export APIGEE_HOST="APIGEE_HOST_TO_SET"
 export SERVICE_ACCOUNT_NAME="llm-routing-svc-acct"
 
-# HuggingFace configuration
-export HUGGING_FACE_TOKEN="HUGGING_FACE_TOKEN_TO_SET"
+# Anthropic configuration
+export ANTHROPIC_AI_REGION="ANTHROPIC_AI_REGION_TO_SET" # could be same as Apigee region
+export ANTHROPIC_PROJECT_ID="ANTHROPIC_PROJECT_ID_TO_SET" # could be same as Apigee region
 
 # Vertex AI configuration
 export VERTEX_AI_REGION="VERTEX_AI_REGION_TO_SET"         # could be same as Apigee region

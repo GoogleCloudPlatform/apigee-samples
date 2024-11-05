@@ -36,7 +36,7 @@ tags:
       description: Find out more
       url: https://github.com
 paths:
-  /providers/{modelProvider}/models/{org}/{model}:generateText:
+  /providers/{modelProvider}/models/{model}:generateText:
     post:
       tags:
         - text-generation
@@ -46,25 +46,25 @@ paths:
       parameters:
         - name: modelProvider
           in: path
-          description: Model Provider like hugging_face, google
-          example: google
-          required: true
-          schema:
-            type: string
-        - name: org
-          in: path
-          description: Model Provider Org like distilbert, google
+          description: Model Provider like anthropic, google
           example: google
           required: true
           schema:
             type: string
         - name: model
           in: path
-          description: Model names like distilgpt2, byt5-small, gemini-1.5-flash-001
+          description: Model names like gemini-1.5-flash-001, claude-3-5-sonnet-v2@20241022
           example: gemini-1.5-flash-001
           required: true
           schema:
             type: string
+        - name: x-log-payload
+          in: header
+          description: Model Provider like hugging_face, google
+          example: true
+          required: false
+          schema:
+            type: boolean
       requestBody:
         description: Submit a prompt to generate text
         content:
@@ -74,84 +74,13 @@ paths:
             examples:
               text-generation-gpt2:
                 value:
-                  {"promptRequest": {"inputs": "Suggest name for a flower shop"}, "logPayload": true}
+                  {"inputs": "Suggest name for a flower shop"}
               text-generation-vertex:
                 value:
-                  {"promptRequest":{"contents":{"role":"user", "parts":[{"text":"Suggest name for a flower shop"}]}}, "logPayload":true}
+                  {"contents":{"role":"user", "parts":[{"text":"Suggest name for a flower shop"}]}}
               text-generation-vertex2:
                 value:
-                  {"promptRequest":{"contents":{"role":"user", "parts":[{"fileData":{"mimeType":"image/jpeg", "fileUri":"gs://generativeai-downloads/images/scones.jpg"}}, {"text":"Describe this picture."}]}}, "logPayload":true}
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TextResponse'
-        '400':
-          description: Invalid request supplied
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '401':
-          description: Uanuthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '403':
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-      security:
-        - api_key: []
-  /providers/{modelProvider}/models/{model}:generateText:
-    post:
-      tags:
-        - text-generation
-      summary: Generate Text using a prompt
-      description: Submit a prompt to generate text
-      operationId: text-generation2
-      parameters:
-        - name: modelProvider
-          in: path
-          description: Model Provider like hugging_face, google
-          example: google
-          required: true
-          schema:
-            type: string
-        - name: model
-          in: path
-          description: Model names like distilbert/distilgpt2, google/byt5-small, gemini-1.5-flash-001
-          example: gemini-1.5-flash-001
-          required: true
-          schema:
-            type: string
-      requestBody:
-        description: Submit a prompt to generate text
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Model'
-            examples:
-              text-generation-gpt2:
-                value:
-                  {"promptRequest": {"inputs": "Suggest name for a flower shop"}, "logPayload": true}
-              text-generation-vertex:
-                value:
-                  {"promptRequest":{"contents":{"role":"user", "parts":[{"text":"Suggest name for a flower shop"}]}}, "logPayload":true}
-              text-generation-vertex2:
-                value:
-                  {"promptRequest":{"contents":{"role":"user", "parts":[{"fileData":{"mimeType":"image/jpeg", "fileUri":"gs://generativeai-downloads/images/scones.jpg"}}, {"text":"Describe this picture."}]}}, "logPayload":true}
+                  {"contents":{"role":"user", "parts":[{"fileData":{"mimeType":"image/jpeg", "fileUri":"gs://generativeai-downloads/images/scones.jpg"}}, {"text":"Describe this picture."}]}}
       responses:
         '200':
           description: successful operation
@@ -189,50 +118,10 @@ components:
   schemas:
     ErrorResponse:
       type: object
-      properties:
-        code:
-          description: error code
-          type: integer
-          example: 400
-        reason:
-          description: error reason
-          type: string
-          example: Bad Request
-        message:
-          description: error message
-          type: string
-          example: Invalid request supplied
     Model:
       type: object
-      properties:
-        promptRequest:
-          description: Provide the appropriate prompt payload supported by the model
-          type: object
-        logPayload:
-          type: boolean
-          example: false
-      required:
-        - promptRequest
-        - logPayload
     TextResponse:
       type: object
-      properties:
-        promptResponse:
-          description: Response from the model
-          type: string
-        usageMetadata:
-          description: Usage Metadata
-          type: object
-          properties:
-            promptTokenCount:
-              description: Token count from the prompt
-              type: integer
-            generatedTokenCount:
-              description: Token count from the model
-              type: integer
-            totalTokenCount:
-              description: Total Token count
-              type: integer
   securitySchemes:
     api_key:
       type: apiKey

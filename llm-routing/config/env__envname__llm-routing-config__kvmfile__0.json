@@ -1,12 +1,12 @@
 {
     "keyValueEntries": [
       {
-        "name": "hugging_face",
-        "value": "{\"target_url\": \"https://api-inference.huggingface.co/models/{org}/{model}\",\"auth_type\": \"oauth\", \"auth_token_type\": \"Bearer\", \"auth_token\": \"HUGGING_FACE_TOKEN\", \"request_jsonpath\": \"$.promptRequest.inputs\", \"response_jsonpath\": \"$.[0].generated_text\"}"
+        "name": "google",
+        "value": "https://VERTEX_AI_REGION-aiplatform.googleapis.com/v1/projects/VERTEX_AI_PROJECT_ID/locations/VERTEX_AI_REGION/publishers/google/models/{model}:generateContent"
       },
       {
-          "name": "google",
-          "value": "{\"target_url\": \"https://VERTEX_AI_REGION-aiplatform.googleapis.com/v1/projects/VERTEX_AI_PROJECT_ID/locations/VERTEX_AI_REGION/publishers/google/models/{model}:generateContent\",\"auth_type\": \"service_account\", \"auth_token_type\": \"Bearer\", \"auth_token\": null, \"request_jsonpath\": \"$.promptRequest.contents.parts[*].text\", \"response_jsonpath\": \"$.candidates[0].content.parts[*].text\"}"
+        "name": "anthropic",
+        "value": "https://ANTHROPIC_AI_REGION-aiplatform.googleapis.com/v1/projects/ANTHROPIC_PROJECT_ID/locations/ANTHROPIC_AI_REGION/publishers/anthropic/models/{model}:rawPredict"
       }
     ]
-  }
+}

@@ -22,10 +22,6 @@
             <Step>
                 <Name>OAS-Verify</Name>
             </Step>
-            <Step>
-                <Name>EV-ExtractFields</Name>
-                <Condition>request.content != null</Condition>
-            </Step>
         </Request>
         <Response/>
     </PreFlow>
@@ -34,27 +30,11 @@
             <Description/>
             <Request>
                 <Step>
-                    <Name>KVM-ConfigLookup</Name>
-                </Step>
-                <Step>
-                    <Name>JS-ParseConfig</Name>
-                </Step>
-                <Step>
-                    <Name>AM-ExtractRequestPrompt</Name>
+                    <Name>EV-ExtractFields</Name>
                 </Step>
             </Request>
-            <Response>
-                <Step>
-                    <Name>AM-ExtractResponsePrompt</Name>
-                </Step>
-                <Step>
-                    <Name>JS-ParseTokenCounts</Name>
-                </Step>
-                <Step>
-                    <Name>AM-SetResponse</Name>
-                </Step>
-            </Response>
-            <Condition>(proxy.pathsuffix Matches "/providers/{provider}/models/{model}:generateText") and (request.verb = "POST")</Condition>
+            <Response/>
+            <Condition>(proxy.pathsuffix Matches "/providers/{modelProvider}/models/{model}:generateText") and (request.verb = "POST")</Condition>
         </Flow>
     </Flows>
     <PostFlow name="PostFlow">
@@ -62,7 +42,7 @@
         <Response>
             <Step>
                 <Name>ML-CloudLogging</Name>
-                <Condition>reqPrefix.logPayload = "true"</Condition>
+                <Condition>request.header.x-log-payload = "true"</Condition>
             </Step>
         </Response>
     </PostFlow>
@@ -70,11 +50,7 @@
         <BasePath>/v1/samples/llm-routing</BasePath>
         <Properties/>
     </HTTPProxyConnection>
-    <RouteRule name="google">
-        <Condition>reqPrefix.modelProvider = "google"</Condition>
-        <TargetEndpoint>google</TargetEndpoint>
-    </RouteRule>
-    <RouteRule name="others">
-        <TargetEndpoint>others</TargetEndpoint>
+    <RouteRule name="llm">
+        <TargetEndpoint>llm</TargetEndpoint>
     </RouteRule>
 </ProxyEndpoint>
