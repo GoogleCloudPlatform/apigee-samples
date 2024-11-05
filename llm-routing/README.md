@@ -88,6 +88,8 @@ curl --location "https://$APIGEE_HOST//v1/samples/llm-routing/providers/google/m
 }'
 ```
 
+### To Anthropic
+
 ```sh
 curl --location "https://$APIGEE_HOST/v1/samples/llm-routing/providers/anthropic/models/claude-3-5-sonnet-v2@20241022:generateText" \
 --header "Content-Type: application/json" \
@@ -108,32 +110,6 @@ curl --location "https://$APIGEE_HOST/v1/samples/llm-routing/providers/anthropic
     ],
     "max_tokens": 256,
     "stream": false
-}'
-```
-
-### To Hugging Face
-
-```sh
-curl --location "https://$APIGEE_HOST/v1/samples/llm-routing/providers/hugging_face/models/gpt2:generateText" \
---header "Content-Type: application/json" \
---header "x-apikey: $APP_CLIENT_ID" \
---data '{
-    "promptRequest": {
-        "inputs": "Suggest name for a flower shop"
-    },
-    "logPayload": true
-}'
-```
-
-```sh
-curl --location "https://$APIGEE_HOST/v1/samples/llm-routing/providers/hugging_face/models/distilbert/distilgpt2:generateText" \
---header "Content-Type: application/json" \
---header "x-apikey: $APP_CLIENT_ID" \
---data '{
-    "promptRequest": {
-        "inputs": "Suggest name for a flower shop"
-    },
-    "logPayload": true
 }'
 ```
 
