@@ -40,6 +40,13 @@ delete_api() {
 
 }
 
+remove_role_from_service_account() {
+  local role=$1
+  gcloud projects remove-iam-policy-binding "$PROJECT_ID" \
+    --member="serviceAccount:${SERVICE_ACCOUNT_NAME}@${PROJECT_ID}.iam.gserviceaccount.com" \
+    --role="$role"
+}
+
 TOKEN=$(gcloud auth print-access-token)
 
 echo "Installing apigeecli"
@@ -60,6 +67,12 @@ delete_api "llm-routing"
 
 echo "Deleting KVMs"
 apigeecli kvms delete --name llm-routing-config --env "$APIGEE_ENV" --org "$PROJECT_ID" --token "$TOKEN"
+
+echo "Removing assigned roles from Service Account"
+remove_role_from_service_account "roles/apigee.analyticsEditor"
+remove_role_from_service_account "roles/logging.logWriter"
+remove_role_from_service_account "roles/aiplatform.user"
+remove_role_from_service_account "roles/iam.serviceAccountUser"
 
 echo "Deleting Service Account"
 gcloud iam service-accounts delete "${SERVICE_ACCOUNT_NAME}@${PROJECT_ID}.iam.gserviceaccount.com" --project "$PROJECT_ID" --quiet
