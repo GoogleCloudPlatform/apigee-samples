@@ -22,26 +22,6 @@ Let's get started!
 
 ---
 
-## Routing Logic
-
-The sample uses the [Key Value Map](https://cloud.google.com/apigee/docs/api-platform/cache/key-value-maps) to store the different LLM provider configurations. In this sample, we will create a KVM called `llm-routing-config` which will contain the following target URL configurations for each provider.
-  
-You can refer to this sample [keyvalue map file](../config/env__envname__llm-routing-config__kvmfile__0.json) that contains the configurations for each provider.
-
-**NOTE:** The `{model}` in the Key Value Map is automically replaced with the model passed in the request by Apigee using Message Template
-
-## Payload
-
-The URL path of the API consists of the provider and the model params, for example `/providers/google/models/gemini-1.5-flash-001` or `/anthropic/models/claude-3-5-sonnet-v2@20241022` which is used by the proxy to do the config lookup and route the calls to the actual provider.
-
-The request payload must match to the provider's specification. 
-
-`x-log-payload` is a header you can use for Apigee to log the calls to Cloud Logging. To log pass the header value as `true`
-
-Similarly, the response sent from the provider is returned as is and Apigee just forwards the response back to the calling client
-
----
-
 ## Setup environment
 
 Ensure you have an active GCP account selected in the Cloud shell
@@ -89,7 +69,7 @@ You can test the sample with the following curl commands:
 ```sh
 PROVIDER=google
 MODEL=gemini-1.5-flash-001
-curl --location "https://$APIGEE_HOST//v1/samples/llm-routing/providers/$PROVIDER/models/$MODEL:generateText" \
+curl --location "https://$APIGEE_HOST/v1/samples/llm-routing/v1/projects/apigee-ai/locations/us-east1/publishers/$PROVIDER/models/$MODEL:generateContent" \
 --header "Content-Type: application/json" \
 --header "x-log-payload: false" \
 --header "x-apikey: $APP_CLIENT_ID" \
@@ -110,7 +90,7 @@ curl --location "https://$APIGEE_HOST//v1/samples/llm-routing/providers/$PROVIDE
 ```sh
 PROVIDER=anthropic
 MODEL=claude-3-5-sonnet-v2@20241022
-curl --location "https://$APIGEE_HOST/v1/samples/llm-routing/providers/$PROVIDER/models/$MODEL:generateText" \
+curl --location "https://$APIGEE_HOST/v1/samples/llm-routing/v1/projects/apigee-ai/locations/us-east5/publishers/$PROVIDER/models/$MODEL:rawPredict" \
 --header "Content-Type: application/json" \
 --header "x-log-payload: false" \
 --header "x-apikey: $APP_CLIENT_ID" \
@@ -140,7 +120,7 @@ curl --location "https://$APIGEE_HOST/v1/samples/llm-routing/providers/$PROVIDER
 
 Congratulations! You've successfully deployed Apigee proxy to route calls to different LLM providers
 
-You can now go back to the [notebook](https://github.com/ssvaidyanathan/apigee-samples/blob/main/llm-routing/llm_routing_v1.ipynb) to test the sample.
+You can now go back to the [notebook](../llm_routing_v1.ipynb) to test the sample.
 
 <walkthrough-inline-feedback></walkthrough-inline-feedback>
 
