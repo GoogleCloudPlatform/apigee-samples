@@ -79,16 +79,7 @@ curl --location "https://$APIGEE_HOST/v1/samples/llm-routing/v1/projects/$PROJEC
 --header "Content-Type: application/json" \
 --header "x-log-payload: false" \
 --header "x-apikey: $APP_CLIENT_ID" \
---data '{
-      "contents":{
-         "role":"user",
-         "parts":[
-            {
-               "text":"Suggest name for a flower shop"
-            }
-         ]
-      }
-}'
+--data '{"contents":{"role":"user","parts":[{"text":"Suggest name for a flower shop"}]}}'
 ```
 
 ### To Anthropic
@@ -107,22 +98,7 @@ curl --location "https://$APIGEE_HOST/v1/samples/llm-routing/v1/projects/$PROJEC
 --header "Content-Type: application/json" \
 --header "x-log-payload: false" \
 --header "x-apikey: $APP_CLIENT_ID" \
---data '{
-    "anthropic_version": "vertex-2023-10-16",
-    "messages": [
-        {
-            "role": "user",
-            "content": [
-                {
-                    "type": "text",
-                    "text": "Suggest name for a flower shop"
-                }
-            ]
-        }
-    ],
-    "max_tokens": 256,
-    "stream": false
-}'
+--data '{"anthropic_version": "vertex-2023-10-16","messages": [{"role": "user","content": [{"type": "text","text": "Suggest name for a flower shop"}]}],"max_tokens": 256,"stream": false}'
 ```
 
 ---
