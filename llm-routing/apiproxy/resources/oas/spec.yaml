@@ -101,7 +101,7 @@ paths:
                   {"contents":{"role":"user", "parts":[{"text":"Suggest name for a flower shop"}]}}
               anthropic:
                 value:
-                  {"anthropic_version": "vertex-2023-10-16","messages": [{"role": "user","content": [{"type": "text","text": "Suggest name for a flower shop"}]}],"max_tokens": 256,"stream": false}
+                  {"anthropic_version": "vertex-2023-10-16", "messages": [{"role": "user", "content": [{"type": "text", "text": "Suggest name for a flower shop"}]}], "max_tokens": 256, "stream": false}
       responses:
         '200':
           description: successful operation
