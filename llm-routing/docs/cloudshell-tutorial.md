@@ -69,7 +69,7 @@ You can test the sample with the following curl commands:
 ```sh
 PROVIDER=google
 MODEL=gemini-1.5-flash-001
-curl --location "https://$APIGEE_HOST/v1/samples/llm-routing/v1/projects/apigee-ai/locations/us-east1/publishers/$PROVIDER/models/$MODEL:generateContent" \
+curl --location "https://$APIGEE_HOST/v1/samples/llm-routing/v1/projects/$PROJECT_ID/locations/us-east1/publishers/$PROVIDER/models/$MODEL:generateContent" \
 --header "Content-Type: application/json" \
 --header "x-log-payload: false" \
 --header "x-apikey: $APP_CLIENT_ID" \
@@ -90,7 +90,7 @@ curl --location "https://$APIGEE_HOST/v1/samples/llm-routing/v1/projects/apigee-
 ```sh
 PROVIDER=anthropic
 MODEL=claude-3-5-sonnet-v2@20241022
-curl --location "https://$APIGEE_HOST/v1/samples/llm-routing/v1/projects/apigee-ai/locations/us-east5/publishers/$PROVIDER/models/$MODEL:rawPredict" \
+curl --location "https://$APIGEE_HOST/v1/samples/llm-routing/v1/projects/$PROJECT_ID/locations/us-east5/publishers/$PROVIDER/models/$MODEL:rawPredict" \
 --header "Content-Type: application/json" \
 --header "x-log-payload: false" \
 --header "x-apikey: $APP_CLIENT_ID" \
