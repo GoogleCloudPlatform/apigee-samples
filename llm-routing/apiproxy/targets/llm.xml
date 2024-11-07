@@ -24,7 +24,6 @@
                 <Name>JS-DecodeURI</Name>
             </Step>
         </Request>
-        <Request/>
         <Response/>
     </PostFlow>
     <HTTPTargetConnection>
