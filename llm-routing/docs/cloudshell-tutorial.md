@@ -66,9 +66,15 @@ You can test the sample with the following curl commands:
 
 ### To Gemini
 
+Provide your Provide and Model names in the follow variables:
+
 ```sh
 PROVIDER=google
 MODEL=gemini-1.5-flash-001
+```
+Run this curl command
+
+```sh
 curl --location "https://$APIGEE_HOST/v1/samples/llm-routing/v1/projects/$PROJECT_ID/locations/us-east1/publishers/$PROVIDER/models/$MODEL:generateContent" \
 --header "Content-Type: application/json" \
 --header "x-log-payload: false" \
@@ -87,9 +93,16 @@ curl --location "https://$APIGEE_HOST/v1/samples/llm-routing/v1/projects/$PROJEC
 
 ### To Anthropic
 
+Similarly now for Anthropic, provide your model name
+
 ```sh
 PROVIDER=anthropic
 MODEL=claude-3-5-sonnet-v2@20241022
+```
+
+and execute the curl command
+
+```sh
 curl --location "https://$APIGEE_HOST/v1/samples/llm-routing/v1/projects/$PROJECT_ID/locations/us-east5/publishers/$PROVIDER/models/$MODEL:rawPredict" \
 --header "Content-Type: application/json" \
 --header "x-log-payload: false" \
