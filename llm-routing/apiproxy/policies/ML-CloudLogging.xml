@@ -12,14 +12,15 @@
  limitations under the License.
 -->
 <MessageLogging continueOnError="false" enabled="true" name="ML-CloudLogging">
-  <DisplayName>ML-CloudLogging</DisplayName>
-  <CloudLogging>
-    <LogName>projects/{organization.name}/logs/{apiproxy.name}</LogName>
-    <Message contentType="application/json">
+    <DisplayName>ML-CloudLogging</DisplayName>
+    <CloudLogging>
+        <LogName>projects/{organization.name}/logs/{apiproxy.name}</LogName>
+        <Message contentType="application/json">
             {
                 "modelProvider": "{modelProvider}",
-                "model": "{model}"
+                "model": "{model}",
+                "region": "{region}"
             }
         </Message>
-  </CloudLogging>
+    </CloudLogging>
 </MessageLogging>

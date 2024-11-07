@@ -11,15 +11,12 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<KeyValueMapOperations continueOnError="false" enabled="true" name="KVM-ConfigLookup" mapIdentifier="llm-routing-config">
-  <DisplayName>KVM-ConfigLookup</DisplayName>
+<Javascript continueOnError="false" enabled="true" timeLimit="200" name="JS-DecodeURI">
+  <DisplayName>JS-DecodeURI</DisplayName>
   <Properties/>
-  <ExclusiveCache>false</ExclusiveCache>
-  <ExpiryTimeInSecs>300</ExpiryTimeInSecs>
-  <Get assignTo="targetUrlTempl">
-    <Key>
-      <Parameter ref="modelProvider"/>
-    </Key>
-  </Get>
-  <Scope>environment</Scope>
-</KeyValueMapOperations>
+  <Source>
+    var host = "https://"+context.getVariable("region")+"-aiplatform.googleapis.com";
+    var proxyPathSuffix = decodeURIComponent(context.getVariable("proxy.pathsuffix"));
+    context.setVariable("target.url", host+proxyPathSuffix);
+  </Source>
+</Javascript>

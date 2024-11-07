@@ -21,12 +21,10 @@
     <PostFlow name="PostFlow">
         <Request>
             <Step>
-                <Name>KVM-ConfigLookup</Name>
-            </Step>
-            <Step>
-                <Name>AM-SetTargetURL</Name>
+                <Name>JS-DecodeURI</Name>
             </Step>
         </Request>
+        <Request/>
         <Response/>
     </PostFlow>
     <HTTPTargetConnection>

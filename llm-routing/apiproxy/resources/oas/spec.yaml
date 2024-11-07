@@ -36,29 +36,52 @@ tags:
       description: Find out more
       url: https://github.com
 paths:
-  /providers/{modelProvider}/models/{model}:generateText:
+  /v1/projects/{projectId}/locations/{region}/publishers/{modelProvider}/models/{model-operation}:
     post:
       tags:
         - text-generation
       summary: Generate Text using a prompt
-      description: Submit a prompt to generate text
+      description: |
+         Submit a prompt to generate text
       operationId: text-generation1
       parameters:
+        - name: projectId
+          in: path
+          description: Vertex AI Project Id
+          example: foo
+          required: true
+          schema:
+            type: string
+        - name: region
+          in: path
+          description: Vertex AI Region
+          example: us-east1
+          required: true
+          schema:
+            type: string
+            enum: [us-east1, us-east5]
         - name: modelProvider
           in: path
-          description: Model Provider like anthropic, google
+          description: Model Provider like google, anthropic
           example: google
           required: true
           schema:
             type: string
-        - name: model
+            enum: [google, anthropic]
+        - name: model-operation
           in: path
-          description: Model names like gemini-1.5-flash-001, claude-3-5-sonnet-v2@20241022
-          example: gemini-1.5-flash-001
+          description: Operations that can be performed for each model
+          #example: gemini-1.5-flash-001:generateContent
+          examples:
+            gemini-1.5-flash-001:generateContent:
+              value: "gemini-1.5-flash-001:generateContent"
+            claude-3-5-sonnet-v2@20241022:rawPredict:
+              value: "claude-3-5-sonnet-v2@20241022:rawPredict"
           required: true
           schema:
             type: string
-        - name: x-log-payload
+          allowReserved: true
+        - name: x-logpayload
           in: header
           description: Log payload to Cloud Logging
           example: true
@@ -66,21 +89,19 @@ paths:
           schema:
             type: boolean
       requestBody:
-        description: Submit a prompt to generate text
+        description: |
+         Submit a prompt to generate text
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/Model'
             examples:
-              text-generation-gpt2:
-                value:
-                  {"inputs": "Suggest name for a flower shop"}
-              text-generation-vertex:
+              gemini:
                 value:
                   {"contents":{"role":"user", "parts":[{"text":"Suggest name for a flower shop"}]}}
-              text-generation-vertex2:
+              anthropic:
                 value:
-                  {"contents":{"role":"user", "parts":[{"fileData":{"mimeType":"image/jpeg", "fileUri":"gs://generativeai-downloads/images/scones.jpg"}}, {"text":"Describe this picture."}]}}
+                  {"anthropic_version": "vertex-2023-10-16","messages": [{"role": "user","content": [{"type": "text","text": "Suggest name for a flower shop"}]}],"max_tokens": 256,"stream": false}
       responses:
         '200':
           description: successful operation

@@ -11,13 +11,14 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
- <AssignMessage continueOnError="false" enabled="true" name="AM-SetTargetURL">
-    <DisplayName>AM-SetTargetURL</DisplayName>
-    <Properties/>
-    <AssignVariable>
-        <Name>target.url</Name>
-        <Template ref="targetUrlTempl"/>
-    </AssignVariable>
+ <CORS continueOnError="false" enabled="true" name="CORS">
+    <DisplayName>CORS</DisplayName>
+    <AllowOrigins>{request.header.origin}</AllowOrigins>
+    <AllowMethods>GET, PUT, POST, DELETE</AllowMethods>
+    <AllowHeaders>origin, x-requested-with, accept, content-type, x-apikey, x-logpayload</AllowHeaders>
+    <ExposeHeaders>*</ExposeHeaders>
+    <MaxAge>3628800</MaxAge>
+    <AllowCredentials>false</AllowCredentials>
+    <GeneratePreflightResponse>true</GeneratePreflightResponse>
     <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
-    <AssignTo createNew="false" transport="http" type="request"/>
-</AssignMessage>
+</CORS>

@@ -17,32 +17,27 @@
     <PreFlow name="PreFlow">
         <Request>
             <Step>
+                <Name>CORS</Name>
+            </Step>
+            <Step>
                 <Name>VA-Key</Name>
             </Step>
             <Step>
                 <Name>OAS-Verify</Name>
             </Step>
+            <Step>
+                <Name>EV-ExtractFields</Name>
+            </Step>
         </Request>
         <Response/>
     </PreFlow>
-    <Flows>
-        <Flow name="text-generation">
-            <Description/>
-            <Request>
-                <Step>
-                    <Name>EV-ExtractFields</Name>
-                </Step>
-            </Request>
-            <Response/>
-            <Condition>(proxy.pathsuffix Matches "/providers/{modelProvider}/models/{model}:generateText") and (request.verb = "POST")</Condition>
-        </Flow>
-    </Flows>
+    <Flows/>
     <PostFlow name="PostFlow">
         <Request/>
         <Response>
             <Step>
                 <Name>ML-CloudLogging</Name>
-                <Condition>request.header.x-log-payload = "true"</Condition>
+                <Condition>request.header.x-logpayload = "true"</Condition>
             </Step>
         </Response>
     </PostFlow>

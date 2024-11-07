@@ -63,10 +63,7 @@ apigeecli developers delete --email llm-routing-developer@acme.com --org "$PROJE
 echo "Deleting API Products"
 apigeecli products delete --name llm-routing-product --org "$PROJECT_ID" --token "$TOKEN"
 
-delete_api "llm-routing"
-
-echo "Deleting KVMs"
-apigeecli kvms delete --name llm-routing-config --env "$APIGEE_ENV" --org "$PROJECT_ID" --token "$TOKEN"
+delete_api "llm-routing-v1"
 
 echo "Removing assigned roles from Service Account"
 remove_role_from_service_account "roles/apigee.analyticsEditor"

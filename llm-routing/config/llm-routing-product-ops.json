@@ -1,7 +1,7 @@
 {
     "operationConfigs": [
       {
-        "apiSource": "llm-routing",
+        "apiSource": "llm-routing-v1",
         "operations": [
           {
             "resource": "/",

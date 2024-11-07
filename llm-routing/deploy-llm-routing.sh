@@ -34,26 +34,6 @@ if [ -z "$SERVICE_ACCOUNT_NAME" ]; then
   exit
 fi
 
-if [ -z "$VERTEX_AI_REGION" ]; then
-  echo "No VERTEX_AI_REGION variable set"
-  exit
-fi
-
-if [ -z "$VERTEX_AI_PROJECT_ID" ]; then
-  echo "No VERTEX_AI_PROJECT_ID variable set"
-  exit
-fi
-
-if [ -z "$ANTHROPIC_AI_REGION" ]; then
-  echo "No ANTHROPIC_AI_REGION variable set"
-  exit
-fi
-
-if [ -z "$ANTHROPIC_PROJECT_ID" ]; then
-  echo "No ANTHROPIC_PROJECT_ID variable set"
-  exit
-fi
-
 add_role_to_service_account() {
   local role=$1
   gcloud projects add-iam-policy-binding "$PROJECT_ID" \
@@ -73,27 +53,14 @@ add_role_to_service_account "roles/iam.serviceAccountUser"
 
 gcloud services enable aiplatform.googleapis.com --project "$PROJECT_ID"
 
-echo "Updating KVM configurations"
-
-cp config/env__envname__llm-routing-config__kvmfile__0.json config/env__"${APIGEE_ENV}"__llm-routing-config__kvmfile__0.json
-sed -i "s/VERTEX_AI_REGION/$VERTEX_AI_REGION/g" config/env__"${APIGEE_ENV}"__llm-routing-config__kvmfile__0.json
-sed -i "s/VERTEX_AI_PROJECT_ID/$VERTEX_AI_PROJECT_ID/g" config/env__"${APIGEE_ENV}"__llm-routing-config__kvmfile__0.json
-sed -i "s/ANTHROPIC_PROJECT_ID/$ANTHROPIC_PROJECT_ID/g" config/env__"${APIGEE_ENV}"__llm-routing-config__kvmfile__0.json
-sed -i "s/ANTHROPIC_AI_REGION/$ANTHROPIC_AI_REGION/g" config/env__"${APIGEE_ENV}"__llm-routing-config__kvmfile__0.json
-
-
 echo "Installing apigeecli"
 curl -s https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.sh | bash
 export PATH=$PATH:$HOME/.apigeecli/bin
 
-echo "Importing KVMs to Apigee environment"
-apigeecli kvms import -f config/env__"${APIGEE_ENV}"__llm-routing-config__kvmfile__0.json --org "$PROJECT_ID" --token "$TOKEN"
-rm config/env__"${APIGEE_ENV}"__llm-routing-config__kvmfile__0.json
-
 echo "Deploying the Proxy"
 sed -i "s/HOST/$APIGEE_HOST/g" apiproxy/resources/oas/spec.yaml
 
-apigeecli apis create bundle -n llm-routing \
+apigeecli apis create bundle -n llm-routing-v1 \
   -f apiproxy -e "$APIGEE_ENV" \
   --token "$TOKEN" -o "$PROJECT_ID" \
   -s "${SERVICE_ACCOUNT_NAME}@${PROJECT_ID}.iam.gserviceaccount.com" \
@@ -131,7 +98,7 @@ echo "export APP_CLIENT_ID=$APP_CLIENT_ID"
 echo " "
 echo "Run the following commands to test the API"
 echo " "
-echo "curl --location \"https://$APIGEE_HOST/v1/samples/llm-routing/providers/google/models/gemini-1.5-flash-001:generateText\" \
+echo "curl --location \"https://$APIGEE_HOST/v1/samples/llm-routing/v1/projects/apigee-ai/locations/us-east1/publishers/google/models/gemini-1.5-flash-001:generateContent\" \
 --header \"Content-Type: application/json\" \
 --header \"x-log-payload: false\" \
 --header \"x-apikey: $APP_CLIENT_ID\" \
@@ -146,7 +113,7 @@ echo "curl --location \"https://$APIGEE_HOST/v1/samples/llm-routing/providers/go
       }
 }'"
 echo " "
-echo "curl --location \"https://$APIGEE_HOST/v1/samples/llm-routing/providers/anthropic/models/claude-3-5-sonnet-v2@20241022:generateText\" \
+echo "curl --location \"https://$APIGEE_HOST/v1/samples/llm-routing/v1/projects/apigee-ai/locations/us-east5/publishers/anthropic/models/claude-3-5-sonnet-v2@20241022:rawPredict\" \
 --header \"Content-Type: application/json\" \
 --header \"x-log-payload: false\" \
 --header \"x-apikey: $APP_CLIENT_ID\" \

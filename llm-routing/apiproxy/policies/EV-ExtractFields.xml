@@ -12,11 +12,11 @@
  limitations under the License.
 -->
 <ExtractVariables continueOnError="false" enabled="true" name="EV-ExtractFields">
-  <DisplayName>EV-ExtractFields</DisplayName>
-  <Properties/>
-  <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
-  <URIPath>
-    <Pattern ignoreCase="false">/providers/{modelProvider}/models/{model}:generateText</Pattern>
-  </URIPath>
-  <Source clearPayload="false">request</Source>
+    <DisplayName>EV-ExtractFields</DisplayName>
+    <Properties/>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+    <URIPath>
+        <Pattern ignoreCase="false">/v1/projects/{projectId}/locations/{region}/publishers/{modelProvider}/models/{model-operation}</Pattern>
+    </URIPath>
+    <Source clearPayload="false">request</Source>
 </ExtractVariables>
