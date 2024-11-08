@@ -1,3 +1,4 @@
+#!/bin/bash
 # Copyright 2024 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,17 +18,19 @@ is_directory_changed() {
     # previous checksum, to determine if any change has been made. This can help
     # avoid an unnecessary re-import and re-deploy, when modifying the proxy and
     # deploying iteratively.
-    local dir_of_interest=$1
-    local parent_name=$(dirname "${dir_of_interest}")
-    local short_name=$(basename "${dir_of_interest}")
-    local NEW_SHASUM_FILE=$(mktemp /tmp/${scriptid}.out.XXXXXX)
+    local dir_of_interest; dir_of_interest=$1
+    local parent_name; parent_name=$(dirname "${dir_of_interest}")
+    local short_name; short_name=$(basename "${dir_of_interest}")
+    local NEW_SHASUM_FILE; NEW_SHASUM_FILE=$(mktemp "/tmp/${scriptid}.out.XXXXXX")
     # https://stackoverflow.com/a/5431932
-    tar -cf - --exclude='*.*~' --exclude='*~' $dir_of_interest | shasum >"$NEW_SHASUM_FILE"
+    tar -cf - --exclude='*.*~' --exclude='*~' "$dir_of_interest" | shasum >"$NEW_SHASUM_FILE"
     local PERM_SHASUM_FILE="${parent_name}/.${short_name}.shasum"
     if [[ -f "${PERM_SHASUM_FILE}" ]]; then
-        local current_value=$(<"$NEW_SHASUM_FILE")
+        local current_value
+        current_value=$(<"$NEW_SHASUM_FILE")
         current_value="${current_value//[$'\t\r\n ']/}"
-        local previous_value=$(<"$PERM_SHASUM_FILE")
+        local previous_value
+        previous_value=$(<"$PERM_SHASUM_FILE")
         previous_value="${previous_value//[$'\t\r\n ']/}"
         if [[ "$current_value" == "$previous_value" ]]; then
             false
@@ -42,35 +45,37 @@ is_directory_changed() {
 }
 
 maybe_import_and_deploy() {
-    local dirpath=$1
-    local sa_email=$2
-    local force="$3"
-    local ORG="$PROJECT"
+    local dirpath sa_email force ORG asset_type object files name SA_PARAMS
+    dirpath="$1"
+    sa_email="$2"
+    force="$3"
+    ORG="$PROJECT"
 
     [[ -z "$APIGEE_ENV" ]] && printf "missing APIGEE_ENV\n" && exit 1
     [[ -z "$PROJECT" ]] && printf "missing PROJECT\n" && exit 1
 
-    local asset_type=$(basename $dirpath)
-    local object
+    asset_type=$(basename "$dirpath")
     if [[ ${asset_type} = "sharedflowbundle" ]]; then
         object="sharedflows"
     else
         object="apis"
     fi
 
-    local files=(${dirpath}/*.xml)
+    files=(${dirpath}/*.xml)
     if [[ ${#files[@]} -eq 1 ]]; then
-        local name="${files[0]}"
+        name="${files[0]}"
         name=$(basename "${name%.*}")
-        if [[ "$force" = "force" ]] || is_directory_changed $dirpath; then
+        if [[ "$force" = "force" ]] || is_directory_changed "$dirpath"; then
             # import only if the dir has changed
             printf "will import a new revision of %s [%s]\n" "$asset_type" "$name"
-            apigeecli $object create bundle -f $dirpath --name "${name}" -o $ORG --token $TOKEN
-            local SA_PARAMS=""
+            apigeecli "$object" create bundle -f "$dirpath" --name "${name}" -o "$ORG" --token "$TOKEN"
+            sa_params=""
             if [[ ! -z "$sa_email" ]]; then
-                SA_PARAMS="--sa ${SA_EMAIL}"
+                sa_params="--sa ${SA_EMAIL}"
             fi
-            apigeecli $object deploy --wait --name "$name" --ovr --org $ORG --env "$APIGEE_ENV" --token $TOKEN $SA_PARAMS &
+            # shellcheck disable=SC2086
+            apigeecli "$object" deploy --wait --name "$name" --ovr --org "$ORG" --env "$APIGEE_ENV" --token "$TOKEN" $sa_params &
+            # shellcheck disable=SC2034
             need_wait=1
         else
             printf "no update needed for %s [%s]\n" "$asset_type" "$name"
@@ -81,15 +86,16 @@ maybe_import_and_deploy() {
 }
 
 create_service_account_and_grant_logWriter_role() {
-    local sa_name="$1"
-    local role
+    local sa_name role ROLES_OF_INTEREST
+    sa_name="$1"
     printf "Creating API Proxy Service Account %s...\n" "$sa_name"
     gcloud iam service-accounts create "$sa_name"
     printf "%s\n" "$sa_name" >./.sa_name
 
-    local ROLES_OF_INTEREST=( "roles/logging.logWriter" )
+    ROLES_OF_INTEREST=( "roles/logging.logWriter" )
     for role in "${ROLES_OF_INTEREST[@]}"; do
         printf "Granting role %s to that SA...\n" "$role"
+        # shellcheck disable=SC2034
         SA_EMAIL="${sa_name}@${PROJECT}.iam.gserviceaccount.com"
         gcloud projects add-iam-policy-binding "$PROJECT" \
                --member="serviceAccount:$SA_EMAIL" \
@@ -98,8 +104,8 @@ create_service_account_and_grant_logWriter_role() {
 }
 
 maybe_install_apigeecli() {
-    if [[ ! -d $HOME/.apigeecli/bin ]]; then
-        echo "Installing apigeecli\n"
+    if [[ ! -d "$HOME/.apigeecli/bin" ]]; then
+        printf "Installing apigeecli\n"
         curl -s https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.sh | bash
     fi
     export PATH=$PATH:$HOME/.apigeecli/bin

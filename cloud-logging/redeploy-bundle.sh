@@ -15,7 +15,9 @@
 # limitations under the License.
 
 SA_BASE="example-cloudlogger-sa-"
+# shellcheck disable=SC2034
 PROXY_NAME="sample-cloud-logging"
+# shellcheck disable=SC2034
 scriptid="redeploy-bundle"
 
 source ./lib/utils.sh
@@ -37,6 +39,7 @@ TOKEN=$(gcloud auth print-access-token)
 
 maybe_install_apigeecli
 
+# shellcheck disable=SC2034
 SA_NAME=$(<./.sa_name)
 need_sa=0
 if [[ -z "$SA_NAME" ]]; then
@@ -51,6 +54,7 @@ else
 fi
 
 if [[ $need_sa -eq 1 ]]; then
+    # shellcheck disable=SC2002
     rand_string=$(cat /dev/urandom | LC_CTYPE=C tr -cd '[:alnum:]' | head -c 6)
     SA_NAME="${SA_BASE}${rand_string}"
     create_service_account_and_grant_logWriter_role "$SA_NAME"
@@ -61,6 +65,7 @@ printf "Checking if proxy needs to be redeployed...\n"
 maybe_import_and_deploy ./apiproxy "$SA_EMAIL"
 
 # wait outside of the fn, in case there were multiple deploys
+# shellcheck disable=SC2154
 if [[ $need_wait -eq 1 ]]; then
     printf "Waiting...\n"
     wait

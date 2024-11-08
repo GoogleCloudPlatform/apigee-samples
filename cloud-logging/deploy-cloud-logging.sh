@@ -15,7 +15,9 @@
 # limitations under the License.
 
 SA_BASE="example-cloudlogger-sa-"
+# shellcheck disable=SC2034
 PROXY_NAME="sample-cloud-logging"
+# shellcheck disable=SC2034
 scriptid="deploy-cloud-logging"
 
 source ./lib/utils.sh
@@ -24,12 +26,13 @@ source ./lib/utils.sh
 
 check_shell_variables
 
+# shellcheck disable=SC2034
 TOKEN=$(gcloud auth print-access-token)
 
 # check and maybe enable services
 SERVICES_OF_INTEREST=( "logging.googleapis.com" )
 for svc in "${SERVICES_OF_INTEREST[@]}"; do
-    if gcloud services list --enabled --project $PROJECT --format="value(config.name)" --filter="config.name=$svc" > /dev/null ; then
+    if gcloud services list --enabled --project "$PROJECT" --format="value(config.name)" --filter="config.name=$svc" > /dev/null ; then
         printf "%s is already enabled in the project...\n" "$svc"
     else
         printf "Attempting to enable %s...\n" "$svc"
@@ -58,6 +61,7 @@ printf "Creating and Deploying Apigee sample-cloud-logging proxy...\n"
 maybe_import_and_deploy ./apiproxy "$SA_EMAIL" "force"
 
 # wait outside of the fn, in case there were multiple deploys
+# shellcheck disable=SC2154
 if [[ $need_wait -eq 1 ]]; then
     printf "Waiting...\n"
     wait
@@ -65,6 +69,6 @@ fi
 
 printf "\nAll the Apigee artifacts are successfully deployed!\n\n"
 printf "Generate some calls with:\n"
-printf "  curl -i https://$APIGEE_HOST/v1/samples/cloud-logging\n\n"
+printf "  curl -i https://%s/v1/samples/cloud-logging\n\n" "$APIGEE_HOST"
 printf "After that, make sure you read the logs from Cloud Logging with\n"
-printf "  gcloud logging read \"logName=projects/$PROJECT/logs/apigee\"\n"
+printf "  gcloud logging read \"logName=projects/%s/logs/apigee\"\n" "$PROJECT"
