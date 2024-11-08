@@ -1,0 +1,21 @@
+{
+  "keyValueEntries": [
+    {
+      "name": "/migrated",
+      "value": "microservice"
+    },
+    {
+      "name": "/address/*",
+      "value": "microservice"
+    },
+    {
+      "name": "/*/json",
+      "value": "microservice"
+    },
+    {
+      "name": "allPaths",
+      "value" : "/*/json,/address/*,/migrated,/still/legacy, /checking/*/*"
+    }
+  ],
+  "nextPageToken": ""
+}
