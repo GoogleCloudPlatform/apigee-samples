@@ -89,7 +89,7 @@ Apigee X plays a crucial role in LLM serving by acting as an intermediary betwee
 
 This repository explores common LLM serving patterns using Apigee X as a robust and feature-rich API management platform. While the primary focus is on serving Gemini models, the principles and patterns discussed here can be adapted for other LLMs.
 
-|    | Sample                      | Description                                                            | Open using |
+|    | Sample                      | Description                                                            | Open Notebook |
 |-----|-----------------------------|------------------------------------------------------------------------|----------------------|
 |1| [llm-token-limits](llm-token-limits) | Apigee's API Products provide real-time monitoring and enforcement of token usage limits for LLMs, enabling effective management of token consumption across different providers and consumers. | [![notebook](https://cloud.google.com/ml-engine/images/colab-logo-32px.png)](./llm-token-limits/llm_token_limits.ipynb) |
 |2| [llm-semantic-cache](llm-semantic-cache) | This sample performs a cache lookup of responses on Apigee's Cache layer and Vector Search as an embeddings database. | [![notebook](https://cloud.google.com/ml-engine/images/colab-logo-32px.png)](./llm-semantic-cache/llm_semantic_cache_v1.ipynb) |
