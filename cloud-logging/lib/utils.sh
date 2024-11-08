@@ -21,8 +21,9 @@ is_directory_changed() {
     local dir_of_interest; dir_of_interest=$1
     local parent_name; parent_name=$(dirname "${dir_of_interest}")
     local short_name; short_name=$(basename "${dir_of_interest}")
+    local NEW_SHASUM_FILE
     # shellcheck disable=SC2154
-    local NEW_SHASUM_FILE; NEW_SHASUM_FILE=$(mktemp "/tmp/${scriptid}.out.XXXXXX")
+    NEW_SHASUM_FILE=$(mktemp "/tmp/${scriptid}.out.XXXXXX")
     # https://stackoverflow.com/a/5431932
     tar -cf - --exclude='*.*~' --exclude='*~' "$dir_of_interest" | shasum >"$NEW_SHASUM_FILE"
     local PERM_SHASUM_FILE="${parent_name}/.${short_name}.shasum"
