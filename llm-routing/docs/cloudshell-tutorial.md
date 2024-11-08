@@ -84,7 +84,7 @@ curl --location "https://$APIGEE_HOST/v1/samples/llm-routing/v1/projects/$PROJEC
 
 ### To Anthropic
 
-Similarly now for Anthropic, provide your model name
+Similarly now for Anthropic, provide the model you have deployed (for example `claude-3-5-sonnet-v2@20241022`)
 
 ```sh
 PROVIDER=anthropic
