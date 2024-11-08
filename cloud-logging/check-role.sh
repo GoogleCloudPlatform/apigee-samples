@@ -1,5 +1,6 @@
-#!/bin/sh
-# Copyright 2023-2024 Google LLC
+#!/bin/bash
+
+# Copyright 2024 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,8 +14,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-export PROJECT="<GCP_PROJECT_ID>"
-export APIGEE_ENV="<APIGEE_ENVIRONMENT_NAME>"
-export APIGEE_HOST="<APIGEE_DOMAIN_NAME>"
+source ./lib/utils.sh
 
-gcloud config set project $PROJECT
+check_shell_variables
+
+# shellcheck disable=SC2002
+gwho=$(gcloud auth list --filter=status:ACTIVE --format="value(account)")
+
+printf "Google Cloud identity: %s\n\n" "$gwho"
+
+gcloud projects get-iam-policy "$PROJECT" \
+--flatten="bindings[].members" \
+--format='table(bindings.role)' \
+--filter="bindings.members:user:$gwho"

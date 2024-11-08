@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright 2023 Google LLC
+# Copyright 2023-2024 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,46 +14,57 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-if [ -z "$PROJECT" ]; then
-  echo "No PROJECT variable set"
-  exit
-fi
+SA_BASE="example-cloudlogger-sa-"
+PROXY_NAME="sample-cloud-logging"
+scriptid="deploy-cloud-logging"
 
-if [ -z "$APIGEE_ENV" ]; then
-  echo "No APIGEE_ENV variable set"
-  exit
-fi
+source ./lib/utils.sh
 
-if [ -z "$APIGEE_HOST" ]; then
-  echo "No APIGEE_HOST variable set"
-  exit
-fi
+# ====================================================================
+
+check_shell_variables
 
 TOKEN=$(gcloud auth print-access-token)
-SA_NAME=apigee-proxy-service-account
 
-echo "Enabling APIs..."
-gcloud services enable logging --project="$PROJECT"
+# check and maybe enable services
+SERVICES_OF_INTEREST=( "logging.googleapis.com" )
+for svc in "${SERVICES_OF_INTEREST[@]}"; do
+    if gcloud services list --enabled --project $PROJECT --format="value(config.name)" --filter="config.name=$svc" > /dev/null ; then
+        printf "%s is already enabled in the project...\n" "$svc"
+    else
+        printf "Attempting to enable %s...\n" "$svc"
+        if gcloud services enable logging --project="$PROJECT" ; then
+            printf "  done.\n"
+        else
+            printf "%s is not enabled, and the attempt to enable it failed. Cannot proceed.\n" "$svc"
+            exit 1
+        fi
+    fi
+done
 
-echo "Installing apigeecli"
-curl -s https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.sh | bash
-export PATH=$PATH:$HOME/.apigeecli/bin
 
-echo "Creating API Proxy Service Account and granting Cloud Logging role to it"
-gcloud iam service-accounts create $SA_NAME
-gcloud projects add-iam-policy-binding "$PROJECT" \
-  --member="serviceAccount:${SA_NAME}@${PROJECT}.iam.gserviceaccount.com" \
-  --role="roles/logging.logWriter"
+# Creating and deleting an SA by the same name, repeatedly, can cause problems.
+# This uses a random factor to uniquify the SA name.
+# shellcheck disable=SC2002
+rand_string=$(cat /dev/urandom | LC_CTYPE=C tr -cd '[:alnum:]' | head -c 6)
+SA_NAME="${SA_BASE}${rand_string}"
 
-echo "Creating and Deploying Apigee sample-cloud-logging proxy..."
-REV=$(apigeecli apis create bundle -f apiproxy -n sample-cloud-logging --org "$PROJECT" --token "$TOKEN" --disable-check | jq ."revision" -r)
-apigeecli apis deploy --wait --name sample-cloud-logging --ovr --rev "$REV" --org "$PROJECT" --env "$APIGEE_ENV" --token "$TOKEN" --sa ${SA_NAME}@"${PROJECT}".iam.gserviceaccount.com
+create_service_account_and_grant_logWriter_role "$SA_NAME"
+# the above implicitly sets SA_EMAIL
 
-echo " "
-echo "All the Apigee artifacts are successfully deployed!"
+maybe_install_apigeecli
 
-echo " "
-echo "Generate some calls with:"
-echo "curl  https://$APIGEE_HOST/v1/samples/cloud-logging "
-echo "After that, make sure you read the logs from Cloud Logging with "
-echo "gcloud logging read \"logName=projects/$PROJECT/logs/apigee\" "
+printf "Creating and Deploying Apigee sample-cloud-logging proxy...\n"
+maybe_import_and_deploy ./apiproxy "$SA_EMAIL" "force"
+
+# wait outside of the fn, in case there were multiple deploys
+if [[ $need_wait -eq 1 ]]; then
+    printf "Waiting...\n"
+    wait
+fi
+
+printf "\nAll the Apigee artifacts are successfully deployed!\n\n"
+printf "Generate some calls with:\n"
+printf "  curl -i https://$APIGEE_HOST/v1/samples/cloud-logging\n\n"
+printf "After that, make sure you read the logs from Cloud Logging with\n"
+printf "  gcloud logging read \"logName=projects/$PROJECT/logs/apigee\"\n"
