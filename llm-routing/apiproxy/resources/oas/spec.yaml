@@ -1,0 +1,150 @@
+# Copyright 2024 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+openapi: 3.0.1
+info:
+  title: LLM Routing
+  description: Spec for the LLM Routing Sample API
+
+  termsOfService: https://example.com/
+  contact:
+    email: someteam@example.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+externalDocs:
+  description: Find out more about this sample
+  url: https://github.com/GoogleCloudPlatform/apigee-samples/tree/main?tab=readme-ov-file#llm-samples
+servers:
+  - url: https://HOST/v1/samples/llm-routing
+tags:
+  - name: text-generation
+    description: Text Generation
+    externalDocs:
+      description: Find out more
+      url: https://github.com
+paths:
+  /v1/projects/{projectId}/locations/{region}/publishers/{modelProvider}/models/{model-operation}:
+    post:
+      tags:
+        - text-generation
+      summary: Generate Text using a prompt
+      description: |
+         Submit a prompt to generate text
+      operationId: text-generation1
+      parameters:
+        - name: projectId
+          in: path
+          description: Vertex AI Project Id
+          example: foo
+          required: true
+          schema:
+            type: string
+        - name: region
+          in: path
+          description: Vertex AI Region
+          example: us-east1
+          required: true
+          schema:
+            type: string
+            enum: [us-east1, us-east5]
+        - name: modelProvider
+          in: path
+          description: Model Provider like google, anthropic
+          example: google
+          required: true
+          schema:
+            type: string
+            enum: [google, anthropic]
+        - name: model-operation
+          in: path
+          description: Operations that can be performed for each model
+          #example: gemini-1.5-flash-001:generateContent
+          examples:
+            gemini-1.5-flash-001:generateContent:
+              value: "gemini-1.5-flash-001:generateContent"
+            claude-3-5-sonnet-v2@20241022:rawPredict:
+              value: "claude-3-5-sonnet-v2@20241022:rawPredict"
+          required: true
+          schema:
+            type: string
+          allowReserved: true
+        - name: x-logpayload
+          in: header
+          description: Log payload to Cloud Logging
+          example: true
+          required: false
+          schema:
+            type: boolean
+      requestBody:
+        description: |
+         Submit a prompt to generate text
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Model'
+            examples:
+              gemini:
+                value:
+                  {"contents":{"role":"user", "parts":[{"text":"Suggest name for a flower shop"}]}}
+              anthropic:
+                value:
+                  {"anthropic_version": "vertex-2023-10-16", "messages": [{"role": "user", "content": [{"type": "text", "text": "Suggest name for a flower shop"}]}], "max_tokens": 256, "stream": false}
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TextResponse'
+        '400':
+          description: Invalid request supplied
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Uanuthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - api_key: []
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+    Model:
+      type: object
+    TextResponse:
+      type: object
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: x-apikey
+      in: header
