@@ -35,6 +35,7 @@ MISSING_ENV_VARS=()
     exit 1
 }
 
+# shellcheck disable=SC2034
 TOKEN=$(gcloud auth print-access-token)
 
 maybe_install_apigeecli

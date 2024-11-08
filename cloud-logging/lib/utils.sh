@@ -21,6 +21,7 @@ is_directory_changed() {
     local dir_of_interest; dir_of_interest=$1
     local parent_name; parent_name=$(dirname "${dir_of_interest}")
     local short_name; short_name=$(basename "${dir_of_interest}")
+    # shellcheck disable=SC2154
     local NEW_SHASUM_FILE; NEW_SHASUM_FILE=$(mktemp "/tmp/${scriptid}.out.XXXXXX")
     # https://stackoverflow.com/a/5431932
     tar -cf - --exclude='*.*~' --exclude='*~' "$dir_of_interest" | shasum >"$NEW_SHASUM_FILE"
@@ -45,7 +46,7 @@ is_directory_changed() {
 }
 
 maybe_import_and_deploy() {
-    local dirpath sa_email force ORG asset_type object files name SA_PARAMS
+    local dirpath sa_email force ORG asset_type object files name sa_params
     dirpath="$1"
     sa_email="$2"
     force="$3"
@@ -61,7 +62,7 @@ maybe_import_and_deploy() {
         object="apis"
     fi
 
-    files=(${dirpath}/*.xml)
+    files=("${dirpath}"/*.xml)
     if [[ ${#files[@]} -eq 1 ]]; then
         name="${files[0]}"
         name=$(basename "${name%.*}")
@@ -70,7 +71,7 @@ maybe_import_and_deploy() {
             printf "will import a new revision of %s [%s]\n" "$asset_type" "$name"
             apigeecli "$object" create bundle -f "$dirpath" --name "${name}" -o "$ORG" --token "$TOKEN"
             sa_params=""
-            if [[ ! -z "$sa_email" ]]; then
+            if [[ -n "$sa_email" ]]; then
                 sa_params="--sa ${SA_EMAIL}"
             fi
             # shellcheck disable=SC2086
