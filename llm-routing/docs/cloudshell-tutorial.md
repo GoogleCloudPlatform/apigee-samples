@@ -10,7 +10,7 @@
 1. [Provision Apigee X](https://cloud.google.com/apigee/docs/api-platform/get-started/provisioning-intro)
 2. Configure [external access](https://cloud.google.com/apigee/docs/api-platform/get-started/configure-routing#external-access) for API traffic to your Apigee X instance
 3. Enable Vertex AI in your project
-4. Enable Anthropic in your [Vertex AI Model Garden](https://cloud.google.com/model-garden) and provision any model for example `claude-3-5-sonnet-v2@20241022`
+4. Enable Anthropic's `claude-3-5-sonnet-v2@20241022` model in your [Vertex AI Model Garden](https://console.cloud.google.com/vertex-ai/publishers/anthropic/model-garden/claude-3-5-sonnet-v2)
 5. Make sure the following tools are available in your terminal's $PATH (Cloud Shell has these preconfigured)
     - [gcloud SDK](https://cloud.google.com/sdk/docs/install)
     - [apigeecli](https://github.com/apigee/apigeecli)
@@ -109,7 +109,7 @@ curl --location "https://$APIGEE_HOST/v1/samples/llm-routing/v1/projects/$PROJEC
 
 Congratulations! You've successfully deployed Apigee proxy to route calls to different LLM providers
 
-You can now go back to the [notebook](https://github.com/ssvaidyanathan/apigee-samples/blob/main/llm-routing/llm_routing_v1.ipynb) to test the sample.
+You can now go back to the [notebook](https://github.com/GoogleCloudPlatform/apigee-samples/blob/main/llm-routing/llm_routing_v1.ipynb) to test the sample.
 
 <walkthrough-inline-feedback></walkthrough-inline-feedback>
 
