@@ -55,7 +55,7 @@ Next, let's deploy the sample to Apigee. Just run
 ./deploy-llm-routing.sh
 ```
 
-Export the `APP_CLIENT_ID` variable as mentioned in the command output
+Export the `APIKEY` variable as mentioned in the command output
 
 ---
 
@@ -77,7 +77,7 @@ Run this curl command
 curl --location "https://$APIGEE_HOST/v1/samples/llm-routing/v1/projects/$PROJECT_ID/locations/us-east1/publishers/$PROVIDER/models/$MODEL:generateContent" \
 --header "Content-Type: application/json" \
 --header "x-log-payload: false" \
---header "x-apikey: $APP_CLIENT_ID" \
+--header "x-apikey: $APIKEY" \
 --data '{"contents":{"role":"user","parts":[{"text":"Suggest name for a flower shop"}]}}'
 ```
 
@@ -96,7 +96,7 @@ and execute the curl command
 curl --location "https://$APIGEE_HOST/v1/samples/llm-routing/v1/projects/$PROJECT_ID/locations/us-east5/publishers/$PROVIDER/models/$MODEL:rawPredict" \
 --header "Content-Type: application/json" \
 --header "x-log-payload: false" \
---header "x-apikey: $APP_CLIENT_ID" \
+--header "x-apikey: $APIKEY" \
 --data '{"anthropic_version": "vertex-2023-10-16","messages": [{"role": "user","content": [{"type": "text","text": "Suggest name for a flower shop"}]}],"max_tokens": 256,"stream": false}'
 ```
 
