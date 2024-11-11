@@ -82,26 +82,26 @@ echo "Creating Developer App"
 apigeecli apps create --name llm-routing-app --email "llm-routing-developer@acme.com" \
   --prods "llm-routing-product" --org "$PROJECT_ID" --token "$TOKEN" --disable-check
 
-APP_CLIENT_ID=$(apigeecli apps get --name "llm-routing-app" --org "$PROJECT_ID" --token "$TOKEN" --disable-check | jq ."[0].credentials[0].consumerKey" -r)
+APIKEY=$(apigeecli apps get --name "llm-routing-app" --org "$PROJECT_ID" --token "$TOKEN" --disable-check | jq ."[0].credentials[0].consumerKey" -r)
 
-export APP_CLIENT_ID
+export APIKEY
 export PROXY_URL="$APIGEE_HOST/v1/samples/llm-routing"
 
 echo " "
 echo "All the Apigee artifacts are successfully deployed!"
 echo " "
 echo "Your Proxy URL is: https://$PROXY_URL"
-echo "Your API Key is: $APP_CLIENT_ID"
+echo "Your API Key is: $APIKEY"
 echo " "
 echo "Run the following commands to test the API"
 echo " "
 echo "PROVIDER=google"
 echo "MODEL=gemini-1.5-flash-001"
 echo " "
-echo "curl --location \"https://$APIGEE_HOST/v1/samples/llm-routing/v1/projects/$PROJECT_ID/locations/us-east1/publishers/$PROVIDER/models/$MODEL:generateContent\" \
+echo "curl --location \"https://$APIGEE_HOST/v1/samples/llm-routing/v1/projects/$PROJECT_ID/locations/us-east1/publishers/\$PROVIDER/models/\$MODEL:generateContent\" \
 --header \"Content-Type: application/json\" \
 --header \"x-log-payload: false\" \
---header \"x-apikey: $APP_CLIENT_ID\" \
+--header \"x-apikey: $APIKEY\" \
 --data '{
       \"contents\":{
          \"role\":\"user\",
@@ -113,13 +113,13 @@ echo "curl --location \"https://$APIGEE_HOST/v1/samples/llm-routing/v1/projects/
       }
 }'"
 echo " "
-PROVIDER=anthropic
-MODEL=claude-3-5-sonnet-v2@20241022
+echo "PROVIDER=anthropic"
+echo "MODEL=claude-3-5-sonnet-v2@20241022"
 echo " "
-echo "curl --location \"https://$APIGEE_HOST/v1/samples/llm-routing/v1/projects/$PROJECT_ID/locations/us-east5/publishers/$PROVIDER/models/$MODEL:rawPredict\" \
+echo "curl --location \"https://$APIGEE_HOST/v1/samples/llm-routing/v1/projects/$PROJECT_ID/locations/us-east5/publishers/\$PROVIDER/models/\$MODEL:rawPredict\" \
 --header \"Content-Type: application/json\" \
 --header \"x-log-payload: false\" \
---header \"x-apikey: $APP_CLIENT_ID\" \
+--header \"x-apikey: $APIKEY\" \
 --data '{
     \"anthropic_version\": \"vertex-2023-10-16\",
     \"messages\": [
@@ -138,9 +138,9 @@ echo "curl --location \"https://$APIGEE_HOST/v1/samples/llm-routing/v1/projects/
 }'"
 echo " "
 echo "Export these variables"
-echo "export APP_CLIENT_ID=$APP_CLIENT_ID"
+echo "export APIKEY=$APIKEY"
 echo " "
 echo "You can now go back to the Colab notebook to test the sample. You will need the following variables during your test."
 echo "Your PROJECT_ID is: $PROJECT_ID"
 echo "Your APIGEE_HOST is: $APIGEE_HOST"
-echo "Your APIKEY is: $APP_CLIENT_ID"
+echo "Your APIKEY is: $APIKEY"
