@@ -98,7 +98,7 @@ echo " "
 echo "PROVIDER=google"
 echo "MODEL=gemini-1.5-flash-001"
 echo " "
-echo "curl --location \"https://$APIGEE_HOST/v1/samples/llm-routing/v1/projects/$PROJECT_ID/locations/us-east1/publishers/$PROVIDER/models/$MODEL:generateContent\" \
+echo "curl --location \"https://$APIGEE_HOST/v1/samples/llm-routing/v1/projects/$PROJECT_ID/locations/us-east1/publishers/\$PROVIDER/models/\$MODEL:generateContent\" \
 --header \"Content-Type: application/json\" \
 --header \"x-log-payload: false\" \
 --header \"x-apikey: $APP_CLIENT_ID\" \
@@ -113,10 +113,10 @@ echo "curl --location \"https://$APIGEE_HOST/v1/samples/llm-routing/v1/projects/
       }
 }'"
 echo " "
-PROVIDER=anthropic
-MODEL=claude-3-5-sonnet-v2@20241022
+echo "PROVIDER=anthropic"
+echo "MODEL=claude-3-5-sonnet-v2@20241022"
 echo " "
-echo "curl --location \"https://$APIGEE_HOST/v1/samples/llm-routing/v1/projects/$PROJECT_ID/locations/us-east5/publishers/$PROVIDER/models/$MODEL:rawPredict\" \
+echo "curl --location \"https://$APIGEE_HOST/v1/samples/llm-routing/v1/projects/$PROJECT_ID/locations/us-east5/publishers/\$PROVIDER/models/\$MODEL:rawPredict\" \
 --header \"Content-Type: application/json\" \
 --header \"x-log-payload: false\" \
 --header \"x-apikey: $APP_CLIENT_ID\" \
