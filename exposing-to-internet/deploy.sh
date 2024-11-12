@@ -62,7 +62,7 @@ ENVIRONMENT_GROUP_NAME="sample-environment-group"
 
 # Create and attach a sample Apigee environment
 echo -n "Creating environment..."
-OPERATION=$(apigeecli environments create -o "$PROJECT" -e "$ENVIRONMENT_NAME" -d PROXY -p PROGRAMMABLE -t "$TOKEN" | jq --raw-output '.name' | awk -F/ '{print $4}')
+OPERATION=$(apigeecli environments create -o "$PROJECT" -e "$ENVIRONMENT_NAME" --deptype PROXY -t "$TOKEN" | jq --raw-output '.name' | awk -F/ '{print $4}')
 wait_for_operation "$OPERATION"
 
 echo -n "Attaching environment to instance (may take a few minutes)..."
