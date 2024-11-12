@@ -11,7 +11,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<MessageLogging continueOnError="false" enabled="true" name="ML-CloudLogging">
+<MessageLogging name="ML-CloudLogging">
     <DisplayName>ML-CloudLogging</DisplayName>
     <CloudLogging>
         <LogName>projects/{organization.name}/logs/apigee</LogName>
