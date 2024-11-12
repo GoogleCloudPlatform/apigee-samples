@@ -30,9 +30,9 @@ MISSING_ENV_VARS=()
 [[ -z "$APIGEE_HOST" ]] && MISSING_ENV_VARS+=('APIGEE_HOST')
 
 [[ ${#MISSING_ENV_VARS[@]} -ne 0 ]] && {
-    printf -v joined '%s,' "${MISSING_ENV_VARS[@]}"
-    printf "You must set these environment variables: %s\n" "${joined%,}"
-    exit 1
+  printf -v joined '%s,' "${MISSING_ENV_VARS[@]}"
+  printf "You must set these environment variables: %s\n" "${joined%,}"
+  exit 1
 }
 
 # shellcheck disable=SC2034
@@ -44,22 +44,22 @@ maybe_install_apigeecli
 SA_NAME=$(<./.sa_name)
 need_sa=0
 if [[ -z "$SA_NAME" ]]; then
-    need_sa=1
+  need_sa=1
 else
-    SA_EMAIL="${SA_NAME}@${PROJECT}.iam.gserviceaccount.com"
-    if gcloud iam service-accounts describe "$SA_EMAIL" > /dev/null ; then
-        printf "Found existing SA [%s]\n" "$SA_EMAIL"
-    else
-        need_sa=1
-    fi
+  SA_EMAIL="${SA_NAME}@${PROJECT}.iam.gserviceaccount.com"
+  if gcloud iam service-accounts describe "$SA_EMAIL" >/dev/null; then
+    printf "Found existing SA [%s]\n" "$SA_EMAIL"
+  else
+    need_sa=1
+  fi
 fi
 
 if [[ $need_sa -eq 1 ]]; then
-    # shellcheck disable=SC2002
-    rand_string=$(cat /dev/urandom | LC_CTYPE=C tr -cd '[:alnum:]' | head -c 6)
-    SA_NAME="${SA_BASE}${rand_string}"
-    create_service_account_and_grant_logWriter_role "$SA_NAME"
-    # the above implicitly sets SA_EMAIL
+  # shellcheck disable=SC2002
+  rand_string=$(cat /dev/urandom | LC_CTYPE=C tr -cd '[:alnum:]' | head -c 6)
+  SA_NAME="${SA_BASE}${rand_string}"
+  create_service_account_and_grant_logWriter_role "$SA_NAME"
+  # the above implicitly sets SA_EMAIL
 fi
 
 printf "Checking if proxy needs to be redeployed...\n"
@@ -68,9 +68,9 @@ maybe_import_and_deploy ./apiproxy "$SA_EMAIL"
 # wait outside of the fn, in case there were multiple deploys
 # shellcheck disable=SC2154
 if [[ $need_wait -eq 1 ]]; then
-    printf "Waiting...\n"
-    wait
-    printf "redeployed...\n"
+  printf "Waiting...\n"
+  wait
+  printf "redeployed...\n"
 else
-    printf "redeploy was not necessary...\n"
+  printf "redeploy was not necessary...\n"
 fi

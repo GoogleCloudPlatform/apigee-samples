@@ -30,21 +30,20 @@ check_shell_variables
 TOKEN=$(gcloud auth print-access-token)
 
 # check and maybe enable services
-SERVICES_OF_INTEREST=( "logging.googleapis.com" )
+SERVICES_OF_INTEREST=("logging.googleapis.com")
 for svc in "${SERVICES_OF_INTEREST[@]}"; do
-    if gcloud services list --enabled --project "$PROJECT" --format="value(config.name)" --filter="config.name=$svc" > /dev/null ; then
-        printf "%s is already enabled in the project...\n" "$svc"
+  if gcloud services list --enabled --project "$PROJECT" --format="value(config.name)" --filter="config.name=$svc" >/dev/null; then
+    printf "%s is already enabled in the project...\n" "$svc"
+  else
+    printf "Attempting to enable %s...\n" "$svc"
+    if gcloud services enable logging --project="$PROJECT"; then
+      printf "  done.\n"
     else
-        printf "Attempting to enable %s...\n" "$svc"
-        if gcloud services enable logging --project="$PROJECT" ; then
-            printf "  done.\n"
-        else
-            printf "%s is not enabled, and the attempt to enable it failed. Cannot proceed.\n" "$svc"
-            exit 1
-        fi
+      printf "%s is not enabled, and the attempt to enable it failed. Cannot proceed.\n" "$svc"
+      exit 1
     fi
+  fi
 done
-
 
 # Creating and deleting an SA by the same name, repeatedly, can cause problems.
 # This uses a random factor to uniquify the SA name.
@@ -63,8 +62,8 @@ maybe_import_and_deploy ./apiproxy "$SA_EMAIL" "force"
 # wait outside of the fn, in case there were multiple deploys
 # shellcheck disable=SC2154
 if [[ $need_wait -eq 1 ]]; then
-    printf "Waiting...\n"
-    wait
+  printf "Waiting...\n"
+  wait
 fi
 
 printf "\nAll the Apigee artifacts are successfully deployed!\n\n"

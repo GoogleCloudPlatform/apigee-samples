@@ -53,9 +53,9 @@ MISSING_ENV_VARS=()
 [[ -z "$APIGEE_ENV" ]] && MISSING_ENV_VARS+=('APIGEE_ENV')
 
 [[ ${#MISSING_ENV_VARS[@]} -ne 0 ]] && {
-    printf -v joined '%s,' "${MISSING_ENV_VARS[@]}"
-    printf "You must set these environment variables: %s\n" "${joined%,}"
-    exit 1
+  printf -v joined '%s,' "${MISSING_ENV_VARS[@]}"
+  printf "You must set these environment variables: %s\n" "${joined%,}"
+  exit 1
 }
 
 TOKEN=$(gcloud auth print-access-token)
@@ -64,9 +64,8 @@ maybe_install_apigeecli
 
 delete_apiproxy "${PROXY_NAME}"
 
-
 printf "Removing IAM Policy Bindings\n"
-ROLES_OF_INTEREST=( "roles/logging.logWriter" )
+ROLES_OF_INTEREST=("roles/logging.logWriter")
 for role in "${ROLES_OF_INTEREST[@]}"; do
   printf "Checking role %s\n" "$role"
   # shellcheck disable=SC2207
@@ -81,15 +80,14 @@ for role in "${ROLES_OF_INTEREST[@]}"; do
   done
 done
 
-
 printf "Checking service account(s)\n"
-mapfile -t ARR < <(gcloud iam service-accounts list --project "$PROJECT" --format="value(email)" | grep $SA_BASE )
+mapfile -t ARR < <(gcloud iam service-accounts list --project "$PROJECT" --format="value(email)" | grep $SA_BASE)
 if [[ ${#ARR[@]} -gt 0 ]]; then
-    for sa in "${ARR[@]}"; do
-      printf "Deleting service account %s\n" "${sa}"
-      gcloud --quiet iam service-accounts delete "${sa}" --project "$PROJECT"
-    done
+  for sa in "${ARR[@]}"; do
+    printf "Deleting service account %s\n" "${sa}"
+    gcloud --quiet iam service-accounts delete "${sa}" --project "$PROJECT"
+  done
 else
-    printf "  No service accounts to delete.\n"
+  printf "  No service accounts to delete.\n"
 fi
 [[ -f "./.sa_name" ]] && rm -f ./.sa_name

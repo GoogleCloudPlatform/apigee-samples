@@ -67,7 +67,6 @@ directly to the sample proxy.
 
 5. You should ensure the Cloud Logging API is enabled in your GCP project, or that you have the permissions to enable the API in your project.
 
-
 ## (QuickStart) Setup using CloudShell
 
 Use the following GCP CloudShell tutorial, and follow the instructions.
@@ -86,11 +85,11 @@ your own.
    cd apigee-samples/cloud-logging
    ```
 
-2. Edit the `env.sh` and configure the ENV vars
+2. Edit the `env.sh` and configure the required environment variables:
 
    * `PROJECT` the project where your Apigee organization is located
-   * `APIGEE_HOST` the externally reachable hostname of the Apigee environment group that contains APIGEE_ENV
    * `APIGEE_ENV` the Apigee environment where the demo resources should be created
+   * `APIGEE_HOST` the externally reachable hostname of the Apigee environment group that contains APIGEE_ENV
 
    Now source the `env.sh` file
 
@@ -99,11 +98,13 @@ your own.
    ```
 
 3. Authenticate to Google Cloud, if you have not already done so in this shell.
+
    ```bash
    gcloud auth login
    ```
 
 4. Check the roles on your account:
+
    ```bash
    ./check-role.sh
    ```
@@ -117,19 +118,23 @@ your own.
     * `roles/apigee.apiAdminV2`
 
    ...then you can use this sample, but you need to insure some other person has enabled the Cloud
-   Logging API on your project.
+   Logging API on your project. We will check that the Logging API is enabled in the next step.
 
 5. Check that the logging API is enabled.
+
+Owners or Editors on a Google Cloud Project must enable individual services, for
+them to be available.  Let's check that the Logging API is enabled.
+
    ```bash
    ./check-required-services.sh
    ```
 
-   - If this indicates that the logging API is already enabled on the project, you can proceed.
+   * If this indicates that the logging API is already enabled on the project, you can proceed.
 
-   - If the logging API is not enabled, but you have editor or owner role (as shown in the previous
+   * If the logging API is not enabled, but you have editor or owner role (as shown in the previous
      step), then you will enable the logging API in the next step.
 
-   - If the logging API is not enabled, and you do not have editor or owner role, then you need to
+   * If the logging API is not enabled, and you do not have editor or owner role, then you need to
      stop, and find someone who can enable that API on your GCP project, before proceeding here.
 
 5. Deploy Apigee API proxy

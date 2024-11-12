@@ -18,11 +18,11 @@ source ./lib/utils.sh
 
 check_shell_variables
 
-SERVICES_OF_INTEREST=( "logging.googleapis.com" )
+SERVICES_OF_INTEREST=("logging.googleapis.com")
 for svc in "${SERVICES_OF_INTEREST[@]}"; do
-    if gcloud services list --enabled --project "$PROJECT" --format="value(config.name)" --filter="config.name=$svc" > /dev/null ; then
-        printf "%s ENABLED\n" "$svc"
-    else
-        printf "%s NOT ENABLED\n" "$svc"
-    fi
+  if gcloud services list --enabled --project "$PROJECT" --format="value(config.name)" --filter="config.name=$svc" >/dev/null; then
+    printf "%s ENABLED\n" "$svc"
+  else
+    printf "%s NOT ENABLED\n" "$svc"
+  fi
 done

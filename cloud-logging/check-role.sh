@@ -24,6 +24,6 @@ gwho=$(gcloud auth list --filter=status:ACTIVE --format="value(account)")
 printf "Google Cloud identity: %s\n\n" "$gwho"
 
 gcloud projects get-iam-policy "$PROJECT" \
---flatten="bindings[].members" \
---format='table(bindings.role)' \
---filter="bindings.members:user:$gwho"
+  --flatten="bindings[].members" \
+  --format='table(bindings.role)' \
+  --filter="bindings.members:user:$gwho"
