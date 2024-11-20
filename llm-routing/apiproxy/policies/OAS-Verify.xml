@@ -12,11 +12,11 @@
  limitations under the License.
 -->
 <OASValidation continueOnError="false" enabled="true" name="OAS-Verify">
-  <DisplayName>OAS-Verify</DisplayName>
-  <Properties/>
-  <Source>request</Source>
-  <Options>
-    <ValidateMessageBody>true</ValidateMessageBody>
-  </Options>
-  <OASResource>oas://spec.yaml</OASResource>
+    <DisplayName>OAS-Verify</DisplayName>
+    <Properties/>
+    <Source>request</Source>
+    <Options>
+        <ValidateMessageBody>true</ValidateMessageBody>
+    </Options>
+    <OASResource>oas://spec.yaml</OASResource>
 </OASValidation>

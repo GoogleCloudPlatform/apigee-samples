@@ -12,7 +12,7 @@
  limitations under the License.
 -->
 <VerifyAPIKey continueOnError="false" enabled="true" name="VA-Key">
-  <DisplayName>VA-Key</DisplayName>
-  <Properties/>
-  <APIKey ref="request.header.x-apikey"/>
+    <DisplayName>VA-Key</DisplayName>
+    <Properties/>
+    <APIKey ref="request.header.x-apikey"/>
 </VerifyAPIKey>

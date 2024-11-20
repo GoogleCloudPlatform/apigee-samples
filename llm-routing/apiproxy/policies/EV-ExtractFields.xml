@@ -15,8 +15,16 @@
     <DisplayName>EV-ExtractFields</DisplayName>
     <Properties/>
     <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
-    <URIPath>
-        <Pattern ignoreCase="false">/v1/projects/{projectId}/locations/{region}/publishers/{modelProvider}/models/{model-operation}</Pattern>
-    </URIPath>
+    <Header name="x-llm-provider">
+        <Pattern ignoreCase="true">{modelProvider}</Pattern>
+    </Header>
+    <Header name="x-logpayload">
+        <Pattern ignoreCase="true">{logPayload}</Pattern>
+    </Header>
+    <JSONPayload>
+        <Variable name="model">
+            <JSONPath>$.model</JSONPath>
+        </Variable>
+    </JSONPayload>
     <Source clearPayload="false">request</Source>
 </ExtractVariables>
