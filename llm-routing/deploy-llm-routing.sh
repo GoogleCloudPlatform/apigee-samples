@@ -74,11 +74,11 @@ add_role_to_service_account "roles/iam.serviceAccountUser"
 gcloud services enable aiplatform.googleapis.com --project "$PROJECT_ID"
 
 echo "Updating KVM configurations"
-cp config/env__envname__llm-routing-v1-modelprovider-config__kvmfile__0.json config/env__${APIGEE_ENV}__llm-routing-v1-modelprovider-config__kvmfile__0.json
-sed -i "s/MISTRAL_TOKEN/$MISTRAL_TOKEN/g" config/env__${APIGEE_ENV}__llm-routing-v1-modelprovider-config__kvmfile__0.json
-sed -i "s/HUGGINGFACE_TOKEN/$HUGGINGFACE_TOKEN/g" config/env__${APIGEE_ENV}__llm-routing-v1-modelprovider-config__kvmfile__0.json
-sed -i "s/VERTEXAI_REGION/$VERTEXAI_REGION/g" config/env__${APIGEE_ENV}__llm-routing-v1-modelprovider-config__kvmfile__0.json
-sed -i "s/VERTEXAI_PROJECT_ID/$VERTEXAI_PROJECT_ID/g" config/env__${APIGEE_ENV}__llm-routing-v1-modelprovider-config__kvmfile__0.json
+cp config/env__envname__llm-routing-v1-modelprovider-config__kvmfile__0.json config/env__"${APIGEE_ENV}"__llm-routing-v1-modelprovider-config__kvmfile__0.json
+sed -i "s/MISTRAL_TOKEN/$MISTRAL_TOKEN/g" config/env__"${APIGEE_ENV}"__llm-routing-v1-modelprovider-config__kvmfile__0.json
+sed -i "s/HUGGINGFACE_TOKEN/$HUGGINGFACE_TOKEN/g" config/env__"${APIGEE_ENV}"__llm-routing-v1-modelprovider-config__kvmfile__0.json
+sed -i "s/VERTEXAI_REGION/$VERTEXAI_REGION/g" config/env__"${APIGEE_ENV}"__llm-routing-v1-modelprovider-config__kvmfile__0.json
+sed -i "s/VERTEXAI_PROJECT_ID/$VERTEXAI_PROJECT_ID/g" config/env__"${APIGEE_ENV}"__llm-routing-v1-modelprovider-config__kvmfile__0.json
 
 
 echo "Installing apigeecli"
@@ -86,8 +86,8 @@ curl -s https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.s
 export PATH=$PATH:$HOME/.apigeecli/bin
 
 echo "Importing KVMs to Apigee environment"
-apigeecli kvms import -f config/env__${APIGEE_ENV}__llm-routing-v1-modelprovider-config__kvmfile__0.json --org $PROJECT_ID --token $TOKEN
-rm config/env__${APIGEE_ENV}__llm-routing-v1-modelprovider-config__kvmfile__0.json
+apigeecli kvms import -f config/env__"${APIGEE_ENV}"__llm-routing-v1-modelprovider-config__kvmfile__0.json --org "$PROJECT_ID" --token "$TOKEN"
+rm config/env__"${APIGEE_ENV}"__llm-routing-v1-modelprovider-config__kvmfile__0.json
 
 echo "Deploying the Proxy"
 sed -i "s/HOST/$APIGEE_HOST/g" apiproxy/resources/oas/spec.yaml

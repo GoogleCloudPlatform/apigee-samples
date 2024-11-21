@@ -77,7 +77,7 @@ paths:
                             "type": "image_url",
                             "image_url": {
                               "url": "gs://generativeai-downloads/images/character.jpg"
-                          }
+                            }
                           },
                           {
                             "type": "text",
@@ -187,7 +187,7 @@ components:
           example: "user"
         content:
           type: array
-          items: 
+          items:
             $ref: '#/components/schemas/ContentObj'
     ContentObj:
       type: object
@@ -221,7 +221,7 @@ components:
           format: int32
         choices:
           type: array
-          items: 
+          items:
             $ref: '#/components/schemas/ChoiceObj'
         usage:
           $ref: '#/components/schemas/UsageObj'
