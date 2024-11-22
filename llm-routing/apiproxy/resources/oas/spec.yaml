@@ -87,7 +87,11 @@ paths:
                       }
                     ],
                     "max_tokens": 250,
-                    "stream": false
+                    "stream": false,
+                    "top_p": 0.5,
+                    "safe_prompt": false,
+                    "temperature": 0.7,
+                    "n": 1
                   }
               mistral:
                 value:
@@ -105,7 +109,11 @@ paths:
                       }
                     ],
                     "max_tokens": 250,
-                    "stream": false
+                    "stream": false,
+                    "top_p": 0.5,
+                    "safe_prompt": false,
+                    "temperature": 0.7,
+                    "n": 1
                   }
               huggingface:
                 value:
@@ -123,7 +131,11 @@ paths:
                       }
                     ],
                     "max_tokens": 250,
-                    "stream": false
+                    "stream": false,
+                    "top_p": 0.5,
+                    "safe_prompt": false,
+                    "temperature": 0.7,
+                    "n": 1
                   }
       responses:
         '200':
@@ -176,6 +188,16 @@ components:
         stream:
           type: boolean
           example: false
+        top_p:
+          type: number
+          format: float
+        safe_prompt:
+          type: boolean
+        temperature:
+          type: number
+          format: float
+        n:
+          type: number
       required:
         - model
         - messages
