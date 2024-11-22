@@ -65,6 +65,9 @@ apigeecli products delete --name llm-routing-product --org "$PROJECT_ID" --token
 
 delete_api "llm-routing-v1"
 
+echo "Deleting KVMs"
+apigeecli kvms delete --name llm-routing-v1-modelprovider-config --env "$APIGEE_ENV" --org "$PROJECT_ID" --token "$TOKEN"
+
 echo "Removing assigned roles from Service Account"
 remove_role_from_service_account "roles/apigee.analyticsEditor"
 remove_role_from_service_account "roles/logging.logWriter"

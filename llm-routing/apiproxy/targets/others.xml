@@ -11,7 +11,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<TargetEndpoint name="llm">
+<TargetEndpoint name="others">
     <Description/>
     <FaultRules/>
     <PreFlow name="PreFlow">
@@ -21,19 +21,13 @@
     <PostFlow name="PostFlow">
         <Request>
             <Step>
-                <Name>JS-DecodeURI</Name>
+                <Name>AM-SetTarget</Name>
             </Step>
         </Request>
         <Response/>
     </PostFlow>
+    <Flows/>
     <HTTPTargetConnection>
-        <Authentication>
-            <GoogleAccessToken>
-                <Scopes>
-                    <Scope>https://www.googleapis.com/auth/cloud-platform</Scope>
-                </Scopes>
-            </GoogleAccessToken>
-        </Authentication>
         <Properties/>
         <URL>https://{target.url}</URL>
     </HTTPTargetConnection>

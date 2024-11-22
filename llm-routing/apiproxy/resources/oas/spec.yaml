@@ -30,57 +30,26 @@ externalDocs:
 servers:
   - url: https://HOST/v1/samples/llm-routing
 tags:
-  - name: text-generation
-    description: Text Generation
-    externalDocs:
-      description: Find out more
-      url: https://github.com
+  - name: chat
+    description: Chat
 paths:
-  /v1/projects/{projectId}/locations/{region}/publishers/{modelProvider}/models/{model-operation}:
+  /chat/completions:
     post:
       tags:
-        - text-generation
-      summary: Generate Text using a prompt
+        - chat
+      summary: Generate Content using a prompt
       description: |
-         Submit a prompt to generate text
-      operationId: text-generation1
+         Creates a model response for the given chat conversation
+      operationId: chat
       parameters:
-        - name: projectId
-          in: path
-          description: Vertex AI Project Id
-          example: foo
+        - name: x-llm-provider
+          in: header
+          description: LLM Provider
           required: true
           schema:
             type: string
-        - name: region
-          in: path
-          description: Vertex AI Region
-          example: us-east1
-          required: true
-          schema:
-            type: string
-            enum: [us-east1, us-east5]
-        - name: modelProvider
-          in: path
-          description: Model Provider like google, anthropic
-          example: google
-          required: true
-          schema:
-            type: string
-            enum: [google, anthropic]
-        - name: model-operation
-          in: path
-          description: Operations that can be performed for each model
-          #example: gemini-1.5-flash-001:generateContent
-          examples:
-            gemini-1.5-flash-001:generateContent:
-              value: "gemini-1.5-flash-001:generateContent"
-            claude-3-5-sonnet-v2@20241022:rawPredict:
-              value: "claude-3-5-sonnet-v2@20241022:rawPredict"
-          required: true
-          schema:
-            type: string
-          allowReserved: true
+            enum: [google, mistral, huggingface]
+            example: "google"
         - name: x-logpayload
           in: header
           description: Log payload to Cloud Logging
@@ -94,21 +63,87 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Model'
+              $ref: '#/components/schemas/ChatRequest'
             examples:
-              gemini:
+              google:
                 value:
-                  {"contents":{"role":"user", "parts":[{"text":"Suggest name for a flower shop"}]}}
-              anthropic:
+                  {
+                    "model": "google/gemini-1.5-flash",
+                    "messages": [
+                      {
+                        "role": "user",
+                        "content": [
+                          {
+                            "type": "image_url",
+                            "image_url": {
+                              "url": "gs://generativeai-downloads/images/character.jpg"
+                            }
+                          },
+                          {
+                            "type": "text",
+                            "text": "Describe this image in one sentence."
+                          }
+                        ]
+                      }
+                    ],
+                    "max_tokens": 250,
+                    "stream": false,
+                    "top_p": 0.5,
+                    "safe_prompt": false,
+                    "temperature": 0.7,
+                    "n": 1
+                  }
+              mistral:
                 value:
-                  {"anthropic_version": "vertex-2023-10-16", "messages": [{"role": "user", "content": [{"type": "text", "text": "Suggest name for a flower shop"}]}], "max_tokens": 256, "stream": false}
+                  {
+                    "model": "open-mistral-nemo",
+                    "messages": [
+                      {
+                        "role": "user",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Suggest few names for a flower shop"
+                          }
+                        ]
+                      }
+                    ],
+                    "max_tokens": 250,
+                    "stream": false,
+                    "top_p": 0.5,
+                    "safe_prompt": false,
+                    "temperature": 0.7,
+                    "n": 1
+                  }
+              huggingface:
+                value:
+                  {
+                    "model": "meta-llama/Llama-3.2-11B-Vision-Instruct",
+                    "messages": [
+                      {
+                        "role": "user",
+                        "content": [
+                          {
+                            "type": "text",
+                            "text": "Suggest few names for a flower shop"
+                          }
+                        ]
+                      }
+                    ],
+                    "max_tokens": 250,
+                    "stream": false,
+                    "top_p": 0.5,
+                    "safe_prompt": false,
+                    "temperature": 0.7,
+                    "n": 1
+                  }
       responses:
         '200':
           description: successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TextResponse'
+                $ref: '#/components/schemas/ChatResponse'
         '400':
           description: Invalid request supplied
           content:
@@ -137,12 +172,106 @@ paths:
         - api_key: []
 components:
   schemas:
+    ChatRequest:
+      type: object
+      properties:
+        model:
+          type: string
+          example: "google/gemini-1.5-flash"
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/MessageObj'
+        max_tokens:
+          type: integer
+          example: 250
+        stream:
+          type: boolean
+          example: false
+        top_p:
+          type: number
+          format: float
+        safe_prompt:
+          type: boolean
+        temperature:
+          type: number
+          format: float
+        n:
+          type: number
+      required:
+        - model
+        - messages
+    MessageObj:
+      type: object
+      properties:
+        role:
+          type: string
+          example: "user"
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContentObj'
+    ContentObj:
+      type: object
+      properties:
+        type:
+          type: string
+          example: "text"
+        text:
+          type: string
+          example: "Suggest me something"
+        image_url:
+          type: object
+          properties:
+            url:
+              type: string
     ErrorResponse:
       type: object
-    Model:
+    ChatResponse:
       type: object
-    TextResponse:
+      properties:
+        id:
+          type: string
+        model:
+          type: string
+        object:
+          type: string
+        system_fingerprint:
+          type: string
+        created:
+          type: integer
+          format: int32
+        choices:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChoiceObj'
+        usage:
+          $ref: '#/components/schemas/UsageObj'
+    ChoiceObj:
       type: object
+      properties:
+        finish_reason:
+          type: string
+        index:
+          type: integer
+        logprobs:
+          type: integer
+        message:
+          type: object
+          properties:
+            content:
+              type: string
+            role:
+              type: string
+    UsageObj:
+      type: object
+      properties:
+        completion_tokens:
+          type: integer
+        prompt_tokens:
+          type: integer
+        total_tokens:
+          type: integer
   securitySchemes:
     api_key:
       type: apiKey
