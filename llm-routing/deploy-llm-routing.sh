@@ -132,7 +132,7 @@ echo " "
 echo "curl --location \"https://$APIGEE_HOST/v1/samples/llm-routing/chat/completions\" \
 --header \"Content-Type: application/json\" \
 --header \"x-llm-provider: google\" \
---header \"x-log-payload: false\" \
+--header \"x-logpayload: false\" \
 --header \"x-apikey: $APIKEY\" \
 --data '{
   \"model\": \"google/gemini-1.5-flash\",
@@ -162,7 +162,7 @@ echo " "
 echo "curl --location \"https://$APIGEE_HOST/v1/samples/llm-routing/chat/completions\" \
 --header \"Content-Type: application/json\" \
 --header \"x-llm-provider: mistral\" \
---header \"x-log-payload: false\" \
+--header \"x-logpayload: false\" \
 --header \"x-apikey: $APIKEY\" \
 --data '{
   \"model\": \"open-mistral-nemo\",
@@ -186,7 +186,7 @@ echo " "
 echo "curl --location \"https://$APIGEE_HOST/v1/samples/llm-routing/chat/completions\" \
 --header \"Content-Type: application/json\" \
 --header \"x-llm-provider: huggingface\" \
---header \"x-log-payload: false\" \
+--header \"x-logpayload: false\" \
 --header \"x-apikey: $APIKEY\" \
 --data '{
   \"model\": \"meta-llama/Llama-3.2-11B-Vision-Instruct\",

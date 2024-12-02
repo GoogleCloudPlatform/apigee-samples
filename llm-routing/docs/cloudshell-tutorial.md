@@ -74,7 +74,7 @@ Run this curl command
 curl --location "https://$APIGEE_HOST/v1/samples/llm-routing/chat/completions" \
 --header "Content-Type: application/json" \
 --header "x-llm-provider: google" \
---header "x-log-payload: false" \
+--header "x-logpayload: false" \
 --header "x-apikey: $APIKEY" \
 --data '{"model": "google/gemini-1.5-flash","messages": [{"role": "user","content": [{"type": "image_url","image_url": {"url": "gs://generativeai-downloads/images/character.jpg"}},{"type": "text","text": "Describe this image in one sentence."}]}],"max_tokens": 250,"stream": false}'
 ```
@@ -87,7 +87,7 @@ Execute the following curl command
 curl --location "https://$APIGEE_HOST/v1/samples/llm-routing/chat/completions" \
 --header "Content-Type: application/json" \
 --header "x-llm-provider: mistral" \
---header "x-log-payload: false" \
+--header "x-logpayload: false" \
 --header "x-apikey: $APIKEY" \
 --data '{"model": "open-mistral-nemo","messages": [{"role": "user","content": [{"type": "text","text": "Suggest few names for a flower shop"}]}],"max_tokens": 250,"stream": false}'
 ```
@@ -100,7 +100,7 @@ Execute the following curl command
 curl --location "https://$APIGEE_HOST/v1/samples/llm-routing/chat/completions" \
 --header "Content-Type: application/json" \
 --header "x-llm-provider: huggingface" \
---header "x-log-payload: false" \
+--header "x-logpayload: false" \
 --header "x-apikey: $APIKEY" \
 --data '{"model": "meta-llama/Llama-3.2-11B-Vision-Instruct","messages": [{"role": "user","content": [{"type": "text","text": "Suggest few names for a flower shop"}]}],"max_tokens": 250,"stream": false}'
 ```
