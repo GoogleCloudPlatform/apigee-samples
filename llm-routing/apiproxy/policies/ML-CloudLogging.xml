@@ -19,7 +19,7 @@
             {
                 "modelProvider": "{modelProvider}",
                 "model": "{model}",
-                "region": "{region}"
+                "payload": "{request.content}"
             }
         </Message>
     </CloudLogging>

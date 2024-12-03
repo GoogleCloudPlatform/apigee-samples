@@ -28,24 +28,34 @@
             <Step>
                 <Name>EV-ExtractFields</Name>
             </Step>
+            <Step>
+                <Name>KVM-GetModelProviderConfig</Name>
+            </Step>
         </Request>
         <Response/>
     </PreFlow>
     <Flows/>
     <PostFlow name="PostFlow">
         <Request/>
+        <Response/>
+    </PostFlow>
+    <PostClientFlow>
         <Response>
             <Step>
                 <Name>ML-CloudLogging</Name>
-                <Condition>request.header.x-logpayload = "true"</Condition>
+                <Condition>logPayload = "true"</Condition>
             </Step>
         </Response>
-    </PostFlow>
+    </PostClientFlow>
     <HTTPProxyConnection>
         <BasePath>/v1/samples/llm-routing</BasePath>
         <Properties/>
     </HTTPProxyConnection>
-    <RouteRule name="llm">
-        <TargetEndpoint>llm</TargetEndpoint>
+    <RouteRule name="google">
+        <TargetEndpoint>google</TargetEndpoint>
+        <Condition>modelProvider = "google"</Condition>
+    </RouteRule>
+    <RouteRule name="others">
+        <TargetEndpoint>others</TargetEndpoint>
     </RouteRule>
 </ProxyEndpoint>

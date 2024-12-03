@@ -34,6 +34,26 @@ if [ -z "$SERVICE_ACCOUNT_NAME" ]; then
   exit
 fi
 
+if [ -z "$VERTEXAI_REGION" ]; then
+  echo "No VERTEXAI_REGION variable set"
+  exit
+fi
+
+if [ -z "$VERTEXAI_PROJECT_ID" ]; then
+  echo "No VERTEXAI_PROJECT_ID variable set"
+  exit
+fi
+
+if [ -z "$HUGGINGFACE_TOKEN" ]; then
+  echo "No HUGGINGFACE_TOKEN variable set"
+  exit
+fi
+
+if [ -z "$MISTRAL_TOKEN" ]; then
+  echo "No MISTRAL_TOKEN variable set"
+  exit
+fi
+
 add_role_to_service_account() {
   local role=$1
   gcloud projects add-iam-policy-binding "$PROJECT_ID" \
@@ -53,9 +73,21 @@ add_role_to_service_account "roles/iam.serviceAccountUser"
 
 gcloud services enable aiplatform.googleapis.com --project "$PROJECT_ID"
 
+echo "Updating KVM configurations"
+cp config/env__envname__llm-routing-v1-modelprovider-config__kvmfile__0.json config/env__"${APIGEE_ENV}"__llm-routing-v1-modelprovider-config__kvmfile__0.json
+sed -i "s/MISTRAL_TOKEN/$MISTRAL_TOKEN/g" config/env__"${APIGEE_ENV}"__llm-routing-v1-modelprovider-config__kvmfile__0.json
+sed -i "s/HUGGINGFACE_TOKEN/$HUGGINGFACE_TOKEN/g" config/env__"${APIGEE_ENV}"__llm-routing-v1-modelprovider-config__kvmfile__0.json
+sed -i "s/VERTEXAI_REGION/$VERTEXAI_REGION/g" config/env__"${APIGEE_ENV}"__llm-routing-v1-modelprovider-config__kvmfile__0.json
+sed -i "s/VERTEXAI_PROJECT_ID/$VERTEXAI_PROJECT_ID/g" config/env__"${APIGEE_ENV}"__llm-routing-v1-modelprovider-config__kvmfile__0.json
+
+
 echo "Installing apigeecli"
 curl -s https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.sh | bash
 export PATH=$PATH:$HOME/.apigeecli/bin
+
+echo "Importing KVMs to Apigee environment"
+apigeecli kvms import -f config/env__"${APIGEE_ENV}"__llm-routing-v1-modelprovider-config__kvmfile__0.json --org "$PROJECT_ID" --token "$TOKEN"
+rm config/env__"${APIGEE_ENV}"__llm-routing-v1-modelprovider-config__kvmfile__0.json
 
 echo "Deploying the Proxy"
 sed -i "s/HOST/$APIGEE_HOST/g" apiproxy/resources/oas/spec.yaml
@@ -95,46 +127,82 @@ echo "Your API Key is: $APIKEY"
 echo " "
 echo "Run the following commands to test the API"
 echo " "
-echo "PROVIDER=google"
-echo "MODEL=gemini-1.5-flash-001"
+echo "Gemini: "
 echo " "
-echo "curl --location \"https://$APIGEE_HOST/v1/samples/llm-routing/v1/projects/$PROJECT_ID/locations/us-east1/publishers/\$PROVIDER/models/\$MODEL:generateContent\" \
+echo "curl --location \"https://$APIGEE_HOST/v1/samples/llm-routing/chat/completions\" \
 --header \"Content-Type: application/json\" \
---header \"x-log-payload: false\" \
+--header \"x-llm-provider: google\" \
+--header \"x-logpayload: false\" \
 --header \"x-apikey: $APIKEY\" \
 --data '{
-      \"contents\":{
-         \"role\":\"user\",
-         \"parts\":[
-            {
-               \"text\":\"Suggest name for a flower shop\"
-            }
-         ]
-      }
+  \"model\": \"google/gemini-1.5-flash\",
+  \"messages\": [
+    {
+      \"role\": \"user\",
+      \"content\": [
+        {
+          \"type\": \"image_url\",
+          \"image_url\": {
+            \"url\": \"gs://generativeai-downloads/images/character.jpg\"
+          }
+        },
+        {
+          \"type\": \"text\",
+          \"text\": \"Describe this image in one sentence.\"
+        }
+      ]
+    }
+  ],
+  \"max_tokens\": 250,
+  \"stream\": false
 }'"
 echo " "
-echo "PROVIDER=anthropic"
-echo "MODEL=claude-3-5-sonnet-v2@20241022"
+echo "Mistral: "
 echo " "
-echo "curl --location \"https://$APIGEE_HOST/v1/samples/llm-routing/v1/projects/$PROJECT_ID/locations/us-east5/publishers/\$PROVIDER/models/\$MODEL:rawPredict\" \
+echo "curl --location \"https://$APIGEE_HOST/v1/samples/llm-routing/chat/completions\" \
 --header \"Content-Type: application/json\" \
---header \"x-log-payload: false\" \
+--header \"x-llm-provider: mistral\" \
+--header \"x-logpayload: false\" \
 --header \"x-apikey: $APIKEY\" \
 --data '{
-    \"anthropic_version\": \"vertex-2023-10-16\",
-    \"messages\": [
+  \"model\": \"open-mistral-nemo\",
+  \"messages\": [
+    {
+      \"role\": \"user\",
+      \"content\": [
         {
-            \"role\": \"user\",
-            \"content\": [
-                {
-                    \"type\": \"text\",
-                    \"text\": \"Suggest name for a flower shop\"
-                }
-            ]
+          \"type\": \"text\",
+          \"text\": \"Suggest few names for a flower shop\"
         }
-    ],
-    \"max_tokens\": 256,
-    \"stream\": false
+      ]
+    }
+  ],
+  \"max_tokens\": 250,
+  \"stream\": false
+}'"
+echo " "
+echo "HuggingFace: "
+echo " "
+echo "curl --location \"https://$APIGEE_HOST/v1/samples/llm-routing/chat/completions\" \
+--header \"Content-Type: application/json\" \
+--header \"x-llm-provider: huggingface\" \
+--header \"x-logpayload: false\" \
+--header \"x-apikey: $APIKEY\" \
+--data '{
+  \"model\": \"meta-llama/Llama-3.2-11B-Vision-Instruct\",
+  \"messages\": [
+    {
+      \"role\": \"user\",
+      \"content\": [
+        {
+          \"type\": \"text\",
+          \"text\": \"Suggest few names for a flower shop\"
+        }
+      ]
+    }
+  ],
+  \"max_tokens\": 250,
+  \"stream\": false
 }'"
 echo " "
 echo "Export these variables"

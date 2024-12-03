@@ -11,14 +11,26 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<CORS continueOnError="false" enabled="true" name="CORS">
-    <DisplayName>CORS</DisplayName>
-    <AllowOrigins>{request.header.origin}</AllowOrigins>
-    <AllowMethods>GET, PUT, POST, DELETE</AllowMethods>
-    <AllowHeaders>origin, x-requested-with, accept, content-type, x-apikey, x-llm-provider, x-logpayload</AllowHeaders>
-    <ExposeHeaders>*</ExposeHeaders>
-    <MaxAge>3628800</MaxAge>
-    <AllowCredentials>false</AllowCredentials>
-    <GeneratePreflightResponse>true</GeneratePreflightResponse>
+<AssignMessage continueOnError="false" enabled="true" name="AM-SetTarget">
+    <DisplayName>AM-SetTarget</DisplayName>
+    <Properties/>
+    <Remove>
+        <Headers>
+            <Header name="x-apikey"/>
+            <Header name="x-llm-provider"/>
+            <Header name="x-logpayload"/>
+            <Header name="accept-encoding"/>
+        </Headers>
+    </Remove>
+    <Set>
+        <Headers>
+            <Header name="Authorization"> Bearer {token}</Header>
+        </Headers>
+    </Set>
+    <AssignVariable>
+        <Name>target.url</Name>
+        <Template ref="targetUrl"/>
+    </AssignVariable>
     <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
-</CORS>
+    <AssignTo createNew="false" transport="http" type="request"/>
+</AssignMessage>
