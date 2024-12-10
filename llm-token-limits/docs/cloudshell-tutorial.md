@@ -22,9 +22,12 @@ gcloud auth login
 ```sh
 gcloud config set project <walkthrough-project-id/>
 ```
+
+---
+
 ## Set environment variables
 
-## 1. Edit the following variables in the `env.sh` file
+### 1. Edit the following variables in the `env.sh` file
 
 Open the environment variables file <walkthrough-editor-open-file filePath="llm-token-limits/env.sh">env.sh</walkthrough-editor-open-file> and set the following variables:
 
@@ -37,6 +40,8 @@ Open the environment variables file <walkthrough-editor-open-file filePath="llm-
 ```sh
 cd llm-token-limits && source ./env.sh
 ```
+
+---
 
 ## Deploy sample artifacts
 
