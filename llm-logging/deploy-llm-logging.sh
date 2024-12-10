@@ -71,4 +71,8 @@ apigeecli apis deploy --wait --name llm-logging-v1 --ovr --rev "$REV" --org "$AP
 
 echo " "
 echo "All the Apigee artifacts are successfully deployed!"
-echo "You can now go back to the Colab notebook to test the sample."
+echo "You can now go back to the Colab notebook to test the sample. You will need the following variables during your test."
+echo " "
+echo "Your PROJECT_ID is: $PROJECT_ID"
+echo "Your LOCATION is: $REGION"
+echo "Your API_ENDPOINT is: https://$APIGEE_HOST/v1/samples/llm-logging"
