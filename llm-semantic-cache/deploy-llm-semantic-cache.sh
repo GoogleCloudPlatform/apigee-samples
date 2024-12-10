@@ -100,6 +100,6 @@ integrationcli integrations apply -e dev -f ./cleanup-semantic-cache-v1/
 echo "You can review the deployed semantic cache cleanup utility here: https://console.cloud.google.com/integrations/edit/cleanup-semantic-cache-v1/locations/$REGION?project=$PROJECT"
 echo " "
 echo "You can now go back to the Colab notebook to test the sample. You will need the following variables during your test."
-echo "Your PROJECT_ID is: $PROJECT_ID"
+echo "Your PROJECT_ID is: $PROJECT"
 echo "Your REGION is: $REGION"
 echo "Your API_ENDPOINT is: https://$APIGEE_HOST/v1/samples/llm-semantic-cache"

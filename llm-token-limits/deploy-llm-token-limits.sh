@@ -80,6 +80,6 @@ echo "You can now go back to the Colab notebook to test the sample. You will nee
 echo "Your BRONZE API Key is: $BRONZE_KEY"
 echo "Your SILVER API Key is: $SILVER_KEY"
 echo " "
-echo "Your PROJECT_ID is: $PROJECT_ID"
+echo "Your PROJECT_ID is: $PROJECT"
 echo "Your LOCATION is: $REGION"
 echo "Your API_ENDPOINT is: https://$APIGEE_HOST/v1/samples/llm-token-limits"
