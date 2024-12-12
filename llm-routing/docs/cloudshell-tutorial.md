@@ -9,7 +9,7 @@ This is a sample Apigee proxy to demonstrate the routing capabilities of Apigee 
 1. [Provision Apigee X](https://cloud.google.com/apigee/docs/api-platform/get-started/provisioning-intro)
 2. Configure [external access](https://cloud.google.com/apigee/docs/api-platform/get-started/configure-routing#external-access) for API traffic to your Apigee X instance
 3. Enable Vertex AI in your project
-4. Create a [HuggingFace Account](https://huggingface.co/) and create an API Key
+4. Create a [HuggingFace Account](https://huggingface.co/) and create an Access Token. When [creating](https://huggingface.co/docs/hub/en/security-tokens) the token choose 'Read' for the token type.
 5. Similar to HuggingFace, create a [Mistral Account](https://console.mistral.ai/) and create an API Key
 6. Make sure the following tools are available in your terminal's $PATH (Cloud Shell has these preconfigured)
     - [gcloud SDK](https://cloud.google.com/sdk/docs/install)
