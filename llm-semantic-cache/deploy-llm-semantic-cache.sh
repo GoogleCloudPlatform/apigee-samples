@@ -90,8 +90,7 @@ echo "Installing integrationcli ..."
 curl -L https://raw.githubusercontent.com/GoogleCloudPlatform/application-integration-management-toolkit/main/downloadLatest.sh | sh -
 export PATH=$PATH:$HOME/.integrationcli/bin
 
-integrationcli prefs set --reg="$REGION" --proj="$PROJECT"
-integrationcli token cache -t "$TOKEN"
+integrationcli prefs set --reg="$REGION" --proj="$PROJECT" -t "$TOKEN"
 
 echo "Deploying Semantic Cache Cleanup utility ..."
 
