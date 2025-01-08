@@ -54,14 +54,16 @@ if [ -z "$MISTRAL_TOKEN" ]; then
   exit
 fi
 
+if [ -z "$TOKEN" ]; then
+  TOKEN=$(gcloud auth print-access-token)
+fi
+
 add_role_to_service_account() {
   local role=$1
   gcloud projects add-iam-policy-binding "$PROJECT_ID" \
     --member="serviceAccount:${SERVICE_ACCOUNT_NAME}@${PROJECT_ID}.iam.gserviceaccount.com" \
     --role="$role"
 }
-
-TOKEN=$(gcloud auth print-access-token)
 
 echo "Creating Service Account and assigning permissions"
 gcloud iam service-accounts create "$SERVICE_ACCOUNT_NAME" --project "$PROJECT_ID"

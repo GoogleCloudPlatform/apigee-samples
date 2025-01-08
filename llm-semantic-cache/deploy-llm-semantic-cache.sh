@@ -29,11 +29,14 @@ if [ -z "$APIGEE_HOST" ]; then
   exit
 fi
 
+if [ -z "$TOKEN" ]; then
+  TOKEN=$(gcloud auth print-access-token)
+fi
+
 echo "Installing apigeecli"
 curl -s https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.sh | bash
 export PATH=$PATH:$HOME/.apigeecli/bin
 
-TOKEN=$(gcloud auth print-access-token)
 gcloud config set project "$PROJECT"
 
 PROJECT_NUMBER=$(gcloud projects list --filter="$(gcloud config get-value project)" --format="value(PROJECT_NUMBER)")
