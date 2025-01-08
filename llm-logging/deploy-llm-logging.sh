@@ -14,8 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set -x
-
 if [ -z "$APIGEE_PROJECT" ]; then
   echo "No APIGEE_PROJECT variable set"
   exit
