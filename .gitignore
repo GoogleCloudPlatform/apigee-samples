@@ -1,1 +1,17 @@
+**/node_modules/**
+**/generated/**
+**/target/**
+**/megalinter-reports/**
+
+**/#*.*#
+**/*.*~
+**/#*#
+**/*~
+
+.settings
+.project
+.classpath
+.vscode
 .DS_Store
+*.jar
+**/env1.sh
