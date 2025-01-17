@@ -24,7 +24,7 @@ info:
     url: http://www.apache.org/licenses/LICENSE-2.0.html
   version: 1.0.0
 servers:
-  - url: https://{APIGEE_HOST}/v1/samples/llm-vertexai-agent
+  - url: https://HOST/v1/samples/llm-vertexai-agent
 tags:
   - name: products
     description: Products
