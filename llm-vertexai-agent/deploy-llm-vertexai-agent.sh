@@ -49,6 +49,25 @@ apigeecli apis create bundle -n llm-vertexai-agent-v1 \
 
 sed -i "s/$APIGEE_HOST/HOST/g" apiproxy/resources/oas/spec.yaml
 
+echo "Creating API Products"
+apigeecli products create --name "llm-vertexai-agent-product" --display-name "llm-vertexai-agent-product" \
+  --opgrp ./config/llm-vertexai-agent-product.ops.json --envs "$APIGEE_ENV" \
+  --approval auto --org "$PROJECT_ID" --token "$TOKEN"
+
+echo "Creating Developer"
+apigeecli developers create --user llm-vertexai-agent-developer \
+  --email "llm-vertexai-agent-developer@acme.com" --first="LLM VerteAI Agent" \
+  --last="Sample User" --org "$PROJECT_ID" --token "$TOKEN"
+
+echo "Creating Developer App"
+apigeecli apps create --name llm-vertexai-agent-app --email "llm-vertexai-agent-developer@acme.com" \
+  --prods "llm-vertexai-agent-product" --org "$PROJECT_ID" --token "$TOKEN" --disable-check
+
+APIKEY=$(apigeecli apps get --name "llm-vertexai-agent-app" --org "$PROJECT_ID" --token "$TOKEN" --disable-check | jq ."[0].credentials[0].consumerKey" -r)
+
+export APIKEY
+export PROXY_URL="$APIGEE_HOST/v1/samples/llm-vertexai-agent-v1"
+
 echo " "
 echo "All the Apigee artifacts are successfully deployed!"
 echo " "
@@ -56,8 +75,14 @@ echo "Your Proxy URL is: https://$PROXY_URL"
 echo " "
 echo "Run the following commands to test the API"
 echo " "
-echo "curl --location \"https://$APIGEE_HOST/v1/samples/llm-vertexai-agent/products\" "
+echo "curl --location \"https://$APIGEE_HOST/v1/samples/llm-vertexai-agent-v1/products\" \
+--header \"Content-Type: application/json\" \
+--header \"x-apikey: $APIKEY\" "
+echo " "
+echo "Export these variables"
+echo "export APIKEY=$APIKEY"
 echo " "
 echo "You can now go back to the Colab notebook to test the sample. You will need the following variables during your test."
 echo "Your PROJECT_ID is: $PROJECT_ID"
 echo "Your APIGEE_HOST is: $APIGEE_HOST"
+echo "Your APIKEY is: $APIKEY"

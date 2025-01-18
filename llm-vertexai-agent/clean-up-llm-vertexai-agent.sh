@@ -41,4 +41,14 @@ echo "Installing apigeecli"
 curl -s https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.sh | bash
 export PATH=$PATH:$HOME/.apigeecli/bin
 
+echo "Deleting Developer App"
+DEVELOPER_ID=$(apigeecli developers get --email llm-vertexai-agent-developer@acme.com --org "$PROJECT_ID" --token "$TOKEN" --disable-check | jq .'developerId' -r)
+apigeecli apps delete --id "$DEVELOPER_ID" --name llm-vertexai-agent-app --org "$PROJECT_ID" --token "$TOKEN"
+
+echo "Deleting Developer"
+apigeecli developers delete --email llm-vertexai-agent-developer@acme.com --org "$PROJECT_ID" --token "$TOKEN"
+
+echo "Deleting API Products"
+apigeecli products delete --name llm-vertexai-agent-product --org "$PROJECT_ID" --token "$TOKEN"
+
 delete_api "llm-vertexai-agent-v1"
