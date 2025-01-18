@@ -66,7 +66,7 @@ apigeecli apps create --name llm-vertexai-agent-app --email "llm-vertexai-agent-
 APIKEY=$(apigeecli apps get --name "llm-vertexai-agent-app" --org "$PROJECT_ID" --token "$TOKEN" --disable-check | jq ."[0].credentials[0].consumerKey" -r)
 
 export APIKEY
-export PROXY_URL="$APIGEE_HOST/v1/samples/llm-vertexai-agent-v1"
+export PROXY_URL="$APIGEE_HOST/v1/samples/llm-vertexai-agent"
 
 echo " "
 echo "All the Apigee artifacts are successfully deployed!"
@@ -75,7 +75,7 @@ echo "Your Proxy URL is: https://$PROXY_URL"
 echo " "
 echo "Run the following commands to test the API"
 echo " "
-echo "curl --location \"https://$APIGEE_HOST/v1/samples/llm-vertexai-agent-v1/products\" \
+echo "curl --location \"https://$APIGEE_HOST/v1/samples/llm-vertexai-agent/products\" \
 --header \"Content-Type: application/json\" \
 --header \"x-apikey: $APIKEY\" "
 echo " "
