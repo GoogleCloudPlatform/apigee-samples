@@ -19,6 +19,9 @@
       <Step>
         <Name>CORS</Name>
       </Step>
+      <Step>
+          <Name>VA-Key</Name>
+      </Step>
     </Request>
     <Response/>
   </PreFlow>
