@@ -22,7 +22,7 @@ Ensure you have an active GCP account selected in the Cloud shell
 gcloud auth login
 ```
 
-Navigate to the 'llm-routing' directory in the Cloud shell.
+Navigate to the 'llm-vertexai-agent' directory in the Cloud shell.
 
 ```sh
 cd llm-vertexai-agent
