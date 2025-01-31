@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+ Copyright 2024 Google LLC
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+      http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<ServiceCallout continueOnError="false" enabled="true" name="SC-CallModelArmor-ResponsePrompt">
+  <DisplayName>SC-CallModelArmor-ResponsePrompt</DisplayName>
+  <Properties/>
+  <Request clearPayload="true" variable="modelArmorRequest">
+    <Set>
+      <Payload contentType="application/json">
+                        {
+                            "model_response_data": { 
+                                "text": "{escapeJSON(promptText)}"
+                                }, 
+                            "user_prompt": "{escapeJSON(userPromptText)}"
+                        }
+            </Payload>
+    </Set>
+    <IgnoreUnresolvedVariables>false</IgnoreUnresolvedVariables>
+  </Request>
+  <Response>modelArmorResponse</Response>
+  <HTTPTargetConnection>
+    <Authentication>
+      <GoogleAccessToken>
+        <Scopes>
+          <Scope>https://www.googleapis.com/auth/cloud-platform</Scope>
+        </Scopes>
+      </GoogleAccessToken>
+    </Authentication>
+    <Verb>POST</Verb>
+    <URL>https://{modelArmorUrl}/{templateId}:sanitizeModelResponse</URL>
+  </HTTPTargetConnection>
+</ServiceCallout>
