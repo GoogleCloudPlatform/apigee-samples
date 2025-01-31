@@ -13,7 +13,7 @@
 4. Enable Model Armor in your project and create a template. This template ID is needed to deploy the proxy. If you do not have a template, you can run the following commands
    
 ```sh
-PROJECT_ID=<walkthrough-project-id/>
+PROJECT_ID=<project-id>
 MODEL_ARMOR_REGION=<region> #https://cloud.google.com/security-command-center/docs/model-armor-overview#regional_endpoints
 TEMPLATE_ID=apigee-modelarmor-template
 ```
