@@ -16,7 +16,7 @@
 PROJECT_ID=<walkthrough-project-id/>
 MODEL_ARMOR_REGION=<region> #https://cloud.google.com/security-command-center/docs/model-armor-overview#regional_endpoints
 TEMPLATE_ID=apigee-modelarmor-template
-```sh
+```
 
 ```sh
 gcloud services enable modelarmor.googleapis.com --project="$PROJECT_ID"
