@@ -90,7 +90,10 @@ if [ -z "$IDP_APP_CLIENT_SECRET" ]; then
   gen_key_pairs
 fi
 
-TOKEN=$(gcloud auth print-access-token)
+if [ -z "$TOKEN" ]; then
+  TOKEN=$(gcloud auth print-access-token)
+fi
+
 APP_NAME=authz-idp-acccess-tokens-sample-app
 
 echo "Installing apigeecli"
