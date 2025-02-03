@@ -8,7 +8,7 @@ This is a sample on how to deploy a sample Apigee proxy and configure it as a to
 
 1. [Provision Apigee X](https://cloud.google.com/apigee/docs/api-platform/get-started/provisioning-intro)
 2. Configure [external access](https://cloud.google.com/apigee/docs/api-platform/get-started/configure-routing#external-access) for API traffic to your Apigee X instance
-3. Enable Vertex AI in your project
+3. Enable Vertex AI and DialogFlow in your project
 
 ## Get started
 
