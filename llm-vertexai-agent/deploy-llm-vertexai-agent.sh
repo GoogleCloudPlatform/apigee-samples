@@ -33,7 +33,7 @@ if [ -z "$TOKEN" ]; then
   TOKEN=$(gcloud auth print-access-token)
 fi
 
-gcloud services enable aiplatform.googleapis.com --project "$PROJECT_ID"
+gcloud services enable aiplatform.googleapis.com dialogflow.googleapis.com --project "$PROJECT_ID"
 
 echo "Installing apigeecli"
 curl -s https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.sh | bash
