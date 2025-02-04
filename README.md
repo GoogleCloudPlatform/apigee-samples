@@ -97,8 +97,8 @@ This repository explores common LLM serving patterns using Apigee X as a robust 
 |3| [llm-circuit-breaking](llm-circuit-breaking) | Apigee enhances the resilience and prevents outages in Retrieval Augmented Generation applications that utilize multiple Large Language Models by intelligently managing traffic and implementing circuit breaking to avoid exceeding endpoint quotas. |  [![notebook](https://cloud.google.com/ml-engine/images/colab-logo-32px.png)](./llm-circuit-breaking/llm_circuit_breaking.ipynb) |
 |4| [llm-logging](llm-logging) | Logging prompts and responses of large language models facilitates performance analysis, security monitoring, and bias detection, ultimately enabling model improvement and risk mitigation. |  [![notebook](https://cloud.google.com/ml-engine/images/colab-logo-32px.png)](./llm-logging/llm_logging_v1.ipynb) |
 |5| [llm-routing](llm-routing) | Sample to route to different LLM providers using Apigee's routing capabilities. |  [![notebook](https://cloud.google.com/ml-engine/images/colab-logo-32px.png)](./llm-routing/llm_routing_v1.ipynb) |
-|6| [llm-security](llm-security) | Sample to deploy an agent using Vertex Agent Builder and point to an Apigee proxy |  [![notebook](https://cloud.google.com/ml-engine/images/colab-logo-32px.png)](./llm-security/llm_security_v1.ipynb) |
-|7| [llm-vertexai-agent](llm-vertexai-agent) | Sample to demonstrate the security capabilities of Apigee with Model Armor to secure the user prompts |  [![notebook](https://cloud.google.com/ml-engine/images/colab-logo-32px.png)](./llm-vertexai-agent/llm_vertexai_agent.ipynb) |
+|6| [llm-security](llm-security) | Sample to demonstrate the security capabilities of Apigee with Model Armor to secure the user prompts |  [![notebook](https://cloud.google.com/ml-engine/images/colab-logo-32px.png)](./llm-security/llm_security_v1.ipynb) |
+|7| [llm-vertexai-agent](llm-vertexai-agent) | Sample to deploy an agent using Vertex Agent Builder and point to an Apigee proxy |  [![notebook](https://cloud.google.com/ml-engine/images/colab-logo-32px.png)](./llm-vertexai-agent/llm_vertexai_agent.ipynb) |
 
 ## <a name="modifying"></a>Modifying a sample proxy
 
