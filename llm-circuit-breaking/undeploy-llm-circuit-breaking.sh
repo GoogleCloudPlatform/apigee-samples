@@ -81,4 +81,4 @@ apigeecli datacollectors delete -n dc_balanced_target_region --org "$APIGEE_PROJ
 
 echo "Deleting Task Queue"
 
-gcloud tasks queues delete ai-queue --location="$REGION_P1"
+gcloud tasks queues delete ai-queue --location="$REGION_P1" -q

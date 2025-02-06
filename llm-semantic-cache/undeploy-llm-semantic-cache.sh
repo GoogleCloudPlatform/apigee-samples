@@ -64,6 +64,7 @@ curl -L https://raw.githubusercontent.com/GoogleCloudPlatform/application-integr
 export PATH=$PATH:$HOME/.integrationcli/bin
 
 echo "Deleting Semantic Cache Cleanup utility ..."
+integrationcli prefs set --reg="$REGION" --proj="$PROJECT" -t "$TOKEN"
 integrationcli integrations delete -n cleanup-semantic-cache-v1
 
 echo "Undeploy Index Endpoint ..."

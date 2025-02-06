@@ -29,11 +29,14 @@ if [ -z "$APIGEE_HOST" ]; then
   exit
 fi
 
+if [ -z "$TOKEN" ]; then
+  TOKEN=$(gcloud auth print-access-token)
+fi
+
 echo "Installing apigeecli"
 curl -s https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.sh | bash
 export PATH=$PATH:$HOME/.apigeecli/bin
 
-TOKEN=$(gcloud auth print-access-token)
 gcloud config set project "$PROJECT"
 
 PROJECT_NUMBER=$(gcloud projects list --filter="$(gcloud config get-value project)" --format="value(PROJECT_NUMBER)")
@@ -90,11 +93,15 @@ echo "Installing integrationcli ..."
 curl -L https://raw.githubusercontent.com/GoogleCloudPlatform/application-integration-management-toolkit/main/downloadLatest.sh | sh -
 export PATH=$PATH:$HOME/.integrationcli/bin
 
-integrationcli prefs set --reg="$REGION" --proj="$PROJECT"
-integrationcli token cache -t "$TOKEN"
+integrationcli prefs set --reg="$REGION" --proj="$PROJECT" -t "$TOKEN"
 
 echo "Deploying Semantic Cache Cleanup utility ..."
 
 integrationcli integrations apply -e dev -f ./cleanup-semantic-cache-v1/
 
 echo "You can review the deployed semantic cache cleanup utility here: https://console.cloud.google.com/integrations/edit/cleanup-semantic-cache-v1/locations/$REGION?project=$PROJECT"
+echo " "
+echo "You can now go back to the Colab notebook to test the sample. You will need the following variables during your test."
+echo "Your PROJECT_ID is: $PROJECT"
+echo "Your REGION is: $REGION"
+echo "Your API_ENDPOINT is: https://$APIGEE_HOST/v1/samples/llm-semantic-cache"

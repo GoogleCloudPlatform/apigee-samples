@@ -15,7 +15,7 @@
   <DisplayName>EV-Path-Suffix</DisplayName>
   <Properties/>
   <URIPath>
-    <Pattern ignoreCase="true">/v1beta1/projects/{request_project}/locations/{request_region}/publishers/google/models/{request_model_id}</Pattern>
+    <Pattern ignoreCase="true">/v1/projects/{request_project}/locations/{request_region}/publishers/google/models/{request_model_id}</Pattern>
   </URIPath>
   <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
   <Source clearPayload="false">request</Source>

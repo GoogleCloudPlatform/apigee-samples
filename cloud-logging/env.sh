@@ -1,5 +1,5 @@
 #!/bin/sh
-# Copyright 2023 Google LLC
+# Copyright 2023-2024 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
 # limitations under the License.
 
 export PROJECT="<GCP_PROJECT_ID>"
-export APIGEE_HOST="<APIGEE_DOMAIN_NAME>"
 export APIGEE_ENV="<APIGEE_ENVIRONMENT_NAME>"
+export APIGEE_HOST="<APIGEE_DOMAIN_NAME>"
 
 gcloud config set project $PROJECT

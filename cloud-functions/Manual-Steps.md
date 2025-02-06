@@ -262,7 +262,7 @@ The configuration files for the Apigee API Proxy, which are stored in the
 filesystem, already contain the appropriate configuration that tells Apigee to
 use the identity of a service account for calls to the upstream.
 
-If you open the file [target-1.xml](./bundle/apiproxy/targets/target-1.xml) in
+If you open the file [target-1.xml](./bundle/cloud-function-http-trigger/apiproxy/targets/target-1.xml) in
 your favorite text editor, you can see the relevant configuration.
 
 Scroll down to view the `Audience` element and the `URL` elements. It should look something like this:

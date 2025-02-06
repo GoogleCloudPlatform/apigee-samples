@@ -29,11 +29,14 @@ if [ -z "$APIGEE_HOST" ]; then
   exit
 fi
 
+if [ -z "$TOKEN" ]; then
+  TOKEN=$(gcloud auth print-access-token)
+fi
+
 echo "Installing apigeecli"
 curl -s https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.sh | bash
 export PATH=$PATH:$HOME/.apigeecli/bin
 
-TOKEN=$(gcloud auth print-access-token)
 gcloud config set project "$PROJECT"
 
 PRE_PROP="region=$REGION"
@@ -76,6 +79,10 @@ BRONZE_KEY=$(apigeecli apps get --name ai-consumer-app --org "$PROJECT" --token 
 SILVER_KEY=$(apigeecli apps get --name ai-consumer-app --org "$PROJECT" --token "$TOKEN" --disable-check | jq .'[0].credentials[]| select(.apiProducts[0].apiproduct=="ai-product-silver").consumerKey' -r)
 echo " "
 echo "All the Apigee artifacts are successfully deployed!"
-echo "You can now go back to the Colab noteboo kto test the sample. You will need the following Keys during your test."
+echo "You can now go back to the Colab notebook to test the sample. You will need the following Keys and variables during your test."
 echo "Your BRONZE API Key is: $BRONZE_KEY"
 echo "Your SILVER API Key is: $SILVER_KEY"
+echo " "
+echo "Your PROJECT_ID is: $PROJECT"
+echo "Your LOCATION is: $REGION"
+echo "Your API_ENDPOINT is: https://$APIGEE_HOST/v1/samples/llm-token-limits"

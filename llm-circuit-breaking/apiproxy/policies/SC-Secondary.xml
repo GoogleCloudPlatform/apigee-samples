@@ -24,6 +24,6 @@
     <Properties>
       <Property name="request.streaming.enabled">true</Property>
     </Properties>
-    <URL>https://{propertyset.vertex_config.region_p2}-aiplatform.googleapis.com/v1beta1/projects/{propertyset.vertex_config.project_p2}/locations/{propertyset.vertex_config.region_p2}/publishers/google/models/{request_model_id}</URL>
+    <URL>https://{propertyset.vertex_config.region_p2}-aiplatform.googleapis.com/v1/projects/{propertyset.vertex_config.project_p2}/locations/{propertyset.vertex_config.region_p2}/publishers/google/models/{request_model_id}</URL>
   </HTTPTargetConnection>
 </ServiceCallout>

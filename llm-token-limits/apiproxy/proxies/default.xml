@@ -27,7 +27,7 @@
       </Request>
       <Response>
       </Response>
-      <Condition>(proxy.pathsuffix MatchesPath "/v1beta1/projects/*/locations/*/publishers/google/models/*") and (request.verb = "POST")</Condition>
+      <Condition>(proxy.pathsuffix MatchesPath "/v1/projects/*/locations/*/publishers/google/models/*") and (request.verb = "POST")</Condition>
     </Flow>
   </Flows>
   <PostFlow name="PostFlow">

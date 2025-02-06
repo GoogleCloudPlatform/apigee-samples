@@ -15,6 +15,8 @@
 name: Apigee Samples Static Checks Pipeline
 on: # yamllint disable-line rule:truthy
   push:
+    branches-ignore:
+      - 'genai-workshop'
   pull_request:
     branches:
       - main
@@ -27,7 +29,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Check File License Headers
         uses: ./tools/pipeline-linter
         with:
@@ -38,7 +40,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Run Mega Linter
         uses: oxsecurity/megalinter@v7
         env:
@@ -46,7 +48,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Archive production artifacts
         if: ${{ success() }} || ${{ failure() }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: MegaLinter reports
           path: |
@@ -57,7 +59,7 @@ jobs:
     name: Conventional Commits Lint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - uses: wagoid/commitlint-github-action@v5
@@ -70,7 +72,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Check README
         uses: ./tools/pipeline-linter
         with:
@@ -81,7 +83,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Install Linter dependencies
         run: npm install apigeelint -g
       - name: Run Apigeelint
