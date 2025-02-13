@@ -18,7 +18,7 @@ WORKDIR /app
 
 COPY grpc-backend/examples/python/helloworld .
 
-RUN pip install --upgrade grpcio protobuf
+RUN pip install --no-cache-dir grpcio==1.70.0 protobuf==5.29.3
 
 EXPOSE 50051
 
