@@ -12,13 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM python:3.7
+FROM python:3.8
 
 WORKDIR /app
 
 COPY grpc-backend/examples/python/helloworld .
 
-RUN pip install --no-cache-dir grpcio==1.58.0 protobuf==4.24.3
+RUN pip install --upgrade grpcio protobuf
 
 EXPOSE 50051
 
