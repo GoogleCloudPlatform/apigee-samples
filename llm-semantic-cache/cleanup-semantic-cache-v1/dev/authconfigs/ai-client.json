@@ -1,5 +1,5 @@
 {
-	"displayName": "ai-cllient",
+	"displayName": "ai-client",
 	"visibility": "CLIENT_VISIBLE",
 	"decryptedCredential": {
 		"credentialType": "SERVICE_ACCOUNT",
