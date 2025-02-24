@@ -56,18 +56,18 @@ cd llm-semantic-cache && source ./env.sh
 The following `curl` command will create an index that will allow streaming updates.
 
 ```sh
-ACCESS_TOKEN=$(gcloud auth print-access-token) && curl --location --request POST "https://$REGION-aiplatform.googleapis.com/v1/projects/$PROJECT/locations/$REGION/indexes" --header "Authorization: Bearer $ACCESS_TOKEN" --header 'Content-Type: application/json' --data-raw '{"displayName": "semantic-cache", "description": "semantic-cache", "metadata": {"config": {"dimensions": "768","approximateNeighborsCount": 150,"distanceMeasureType": "DOT_PRODUCT_DISTANCE","featureNormType": "NONE","algorithmConfig": {"treeAhConfig": {"leafNodeEmbeddingCount": "10000","fractionLeafNodesToSearch": 0.05}},"shardSize": "SHARD_SIZE_MEDIUM"},},"indexUpdateMethod": "STREAM_UPDATE"}'
+ACCESS_TOKEN=$(gcloud auth print-access-token) && curl --location --request POST "https://$REGION-aiplatform.googleapis.com/v1/projects/$PROJECT/locations/$REGION/indexes" --header "Authorization: Bearer $ACCESS_TOKEN" --header 'Content-Type: application/json' --data-raw '{"displayName": "semantic-cache-index", "description": "semantic-cache-index", "metadata": {"config": {"dimensions": "768","approximateNeighborsCount": 150,"distanceMeasureType": "DOT_PRODUCT_DISTANCE","featureNormType": "NONE","algorithmConfig": {"treeAhConfig": {"leafNodeEmbeddingCount": "10000","fractionLeafNodesToSearch": 0.05}},"shardSize": "SHARD_SIZE_MEDIUM"},},"indexUpdateMethod": "STREAM_UPDATE"}'
 ```
 ### 2. Create an index endpoint
 
 ```sh
-gcloud ai index-endpoints create  --display-name=semantic-cache --public-endpoint-enabled --region=$REGION --project=$PROJECT
+gcloud ai index-endpoints create  --display-name=semantic-cache-index-endpoint --public-endpoint-enabled --region=$REGION --project=$PROJECT
 ```
 
 ### 3. Deploy index to the endpoint
 
 ```sh
-INDEX_ENDPOINT_ID=$(gcloud ai index-endpoints list --project=$PROJECT --region=$REGION --format="json" | jq -c -r '.[] | select(.displayName="semantic-cache") | .name | split("/") | .[5]') && INDEX_ID=$(gcloud ai indexes list --project=$PROJECT --region=$REGION --format="json" | jq -c -r '.[] | select(.displayName="semantic-cache") | .name | split("/") | .[5]') && gcloud ai index-endpoints deploy-index $INDEX_ENDPOINT_ID --deployed-index-id=semantic_cache --display-name=semantic-cache --index=$INDEX_ID --region=$REGION --project=$PROJECT
+INDEX_ENDPOINT_ID=$(gcloud ai index-endpoints list --project=$PROJECT --region=$REGION --format="json" | jq -c -r '.[] | select(.displayName="semantic-cache-index-endpoint") | .name | split("/") | .[5]') && INDEX_ID=$(gcloud ai indexes list --project=$PROJECT --region=$REGION --format="json" | jq -c -r '.[] | select(.displayName="semantic-cache-index") | .name | split("/") | .[5]') && gcloud ai index-endpoints deploy-index $INDEX_ENDPOINT_ID --deployed-index-id=semantic_cache_index_endpoint_deployment --display-name=semantic-cache-index-endpoint-deployment --index=$INDEX_ID --region=$REGION --project=$PROJECT
 ```
 
 **Important:** Initial deployment of an index to an endpoint typically takes between 20 and 30 minutes. You can check the status of the operation using the command provided in the output form the previous step.

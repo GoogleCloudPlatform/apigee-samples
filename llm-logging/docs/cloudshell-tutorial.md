@@ -28,13 +28,13 @@ gcloud config set project <walkthrough-project-id/>
 gcloud services enable aiplatform.googleapis.com logging.googleapis.com  --project <walkthrough-project-id/>
 ```
 
-### 4. Create a service account to be used by the sample
+### 5. Create a service account to be used by the sample
 
 ```sh
 gcloud iam service-accounts create ai-logger --description="Logging client" --display-name="ai-logger"
 ```
 
-### 5. Assign the Logging Writer role to the service account
+### 6. Assign the Logging Writer role to the service account
 
 ```sh
 gcloud projects add-iam-policy-binding <walkthrough-project-id/> --member="serviceAccount:ai-logger@<walkthrough-project-id/>.iam.gserviceaccount.com" --role="roles/logging.logWriter"

@@ -89,7 +89,7 @@
         "authConfigName": {
           "key": "authConfigName",
           "value": {
-            "stringValue": "ai-cllient"
+            "stringValue": "ai-client"
           }
         },
         "authConfig": {
@@ -278,7 +278,7 @@
         "authConfigName": {
           "key": "authConfigName",
           "value": {
-            "stringValue": "ai-cllient"
+            "stringValue": "ai-client"
           }
         },
         "authConfig": {
