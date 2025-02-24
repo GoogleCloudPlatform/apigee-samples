@@ -39,10 +39,10 @@ export PATH=$PATH:$HOME/.apigeecli/bin
 
 gcloud config set project "$PROJECT"
 
-PROJECT_NUMBER=$(gcloud projects list --filter="$(gcloud config get-value project)" --format="value(PROJECT_NUMBER)")
-INDEX_ID=$(gcloud ai indexes list --project="$PROJECT" --region="$REGION" --format="json" | jq -c -r '.[] | select(.displayName="semantic-cache") | .name | split("/") | .[5]')
-INDEX_ENDPOINT_ID=$(gcloud ai index-endpoints list --project="$PROJECT" --region="$REGION" --format="json" | jq -c -r '.[] | select(.displayName="semantic-cache") | .name | split("/") | .[5]')
-PUBLIC_ENDPOINT_SUBDOMAIN=$(gcloud ai index-endpoints list --project="$PROJECT" --region="$REGION" --format="json" | jq -c -r '.[] | select(.displayName="semantic-cache") | .publicEndpointDomainName | split(".") | .[0]')
+PROJECT_NUMBER="$(gcloud projects describe "$PROJECT" --format="value(projectNumber)")"
+INDEX_ID=$(gcloud ai indexes list --project="$PROJECT" --region="$REGION" --format="json" | jq -c -r '.[] | select(.displayName="semantic-cache-index") | .name | split("/") | .[5]')
+INDEX_ENDPOINT_ID=$(gcloud ai index-endpoints list --project="$PROJECT" --region="$REGION" --format="json" | jq -c -r '.[] | select(.displayName="semantic-cache-index-endpoint") | .name | split("/") | .[5]')
+PUBLIC_ENDPOINT_SUBDOMAIN=$(gcloud ai index-endpoints list --project="$PROJECT" --region="$REGION" --format="json" | jq -c -r '.[] | select(.displayName="semantic-cache-index-endpoint") | .publicEndpointDomainName | split(".") | .[0]')
 
 PRE_PROP="project_id=$PROJECT
 project_number=$PROJECT_NUMBER
@@ -50,7 +50,7 @@ model_id=$MODEL_ID
 embeddings_model_id=$EMBEDDINGS_MODEL_ID
 region=$REGION
 index_id=$INDEX_ID
-index_id_name=semantic_cache
+index_id_name=semantic_cache_index_endpoint_deployment
 index_endpoint_id=$INDEX_ENDPOINT_ID
 index_endpoint_subdomain=$PUBLIC_ENDPOINT_SUBDOMAIN
 nearest_neighbor_min_distance=$NEAREST_NEIGHBOR_DISTANCE
@@ -78,7 +78,7 @@ SERVICE_ACCOUNT_ID="ai-client@$PROJECT.iam.gserviceaccount.com"
 
 sed -i "s/FIND_NEIGHBORS_URL/$FIND_NEIGHBORS_URL/g" ./cleanup-semantic-cache-v1/dev/overrides/overrides.json
 sed -i "s/REMOVE_DATAPOINTS_URL/$REMOVE_DATAPOINTS_URL/g" ./cleanup-semantic-cache-v1/dev/overrides/overrides.json
-sed -i "s/SERVICE_ACCOUNT_ID/$SERVICE_ACCOUNT_ID/g" ./cleanup-semantic-cache-v1/dev/authconfigs/ai-cllient.json
+sed -i "s/SERVICE_ACCOUNT_ID/$SERVICE_ACCOUNT_ID/g" ./cleanup-semantic-cache-v1/dev/authconfigs/ai-client.json
 
 echo "Provisioning Application Integration ..."
 curl --request POST \
