@@ -36,8 +36,8 @@ export PATH=$PATH:$HOME/.apigeecli/bin
 TOKEN=$(gcloud auth print-access-token)
 gcloud config set project "$PROJECT"
 
-INDEX_ID=$(gcloud ai indexes list --project="$PROJECT" --region="$REGION" --format="json" | jq -c -r '.[] | select(.displayName="semantic-cache") | .name | split("/") | .[5]')
-INDEX_ENDPOINT_ID=$(gcloud ai index-endpoints list --project="$PROJECT" --region="$REGION" --format="json" | jq -c -r '.[] | select(.displayName="semantic-cache") | .name | split("/") | .[5]')
+INDEX_ID=$(gcloud ai indexes list --project="$PROJECT" --region="$REGION" --format="json" | jq -c -r '.[] | select(.displayName="semantic-cache-index") | .name | split("/") | .[5]')
+INDEX_ENDPOINT_ID=$(gcloud ai index-endpoints list --project="$PROJECT" --region="$REGION" --format="json" | jq -c -r '.[] | select(.displayName="semantic-cache-index-endpoint") | .name | split("/") | .[5]')
 
 echo "Undeploying llm-semantic-cache-v1 proxy"
 REV=$(apigeecli envs deployments get --env "$APIGEE_ENV" --org "$PROJECT" --token "$TOKEN" --disable-check | jq .'deployments[]| select(.apiProxy=="llm-semantic-cache-v1").revision' -r)
@@ -68,7 +68,7 @@ integrationcli prefs set --reg="$REGION" --proj="$PROJECT" -t "$TOKEN"
 integrationcli integrations delete -n cleanup-semantic-cache-v1
 
 echo "Undeploy Index Endpoint ..."
-gcloud ai index-endpoints undeploy-index "$INDEX_ENDPOINT_ID" --deployed-index-id=semantic_cache --region="$REGION" --project="$PROJECT"
+gcloud ai index-endpoints undeploy-index "$INDEX_ENDPOINT_ID" --deployed-index-id=semantic_cache_index_endpoint_deployment --region="$REGION" --project="$PROJECT"
 
 echo "Delete Index Endpoint ..."
 gcloud ai index-endpoints delete "$INDEX_ENDPOINT_ID" --region="$REGION" --project="$PROJECT"
