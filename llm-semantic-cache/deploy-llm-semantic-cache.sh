@@ -39,7 +39,7 @@ export PATH=$PATH:$HOME/.apigeecli/bin
 
 gcloud config set project "$PROJECT"
 
-PROJECT_NUMBER=$(gcloud projects list --filter="projectId=$(gcloud config get-value project)" --format="value(PROJECT_NUMBER)")
+PROJECT_NUMBER="$(gcloud projects describe "$PROJECT" --format="value(projectNumber)")"
 INDEX_ID=$(gcloud ai indexes list --project="$PROJECT" --region="$REGION" --format="json" | jq -c -r '.[] | select(.displayName="semantic-cache-index") | .name | split("/") | .[5]')
 INDEX_ENDPOINT_ID=$(gcloud ai index-endpoints list --project="$PROJECT" --region="$REGION" --format="json" | jq -c -r '.[] | select(.displayName="semantic-cache-index-endpoint") | .name | split("/") | .[5]')
 PUBLIC_ENDPOINT_SUBDOMAIN=$(gcloud ai index-endpoints list --project="$PROJECT" --region="$REGION" --format="json" | jq -c -r '.[] | select(.displayName="semantic-cache-index-endpoint") | .publicEndpointDomainName | split(".") | .[0]')
