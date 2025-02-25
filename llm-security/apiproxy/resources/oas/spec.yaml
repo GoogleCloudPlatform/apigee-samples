@@ -28,7 +28,7 @@ externalDocs:
   description: Find out more about this sample
   url: https://github.com/GoogleCloudPlatform/apigee-samples/tree/main?tab=readme-ov-file#llm-samples
 servers:
-  - url: https://34.54.87.114.nip.io/v1/samples/llm-security
+  - url: https://HOST/v1/samples/llm-security
 tags:
   - name: text-generation
     description: Text Generation
