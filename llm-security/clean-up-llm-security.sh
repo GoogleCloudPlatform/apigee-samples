@@ -73,6 +73,9 @@ apigeecli developers delete --email llm-security-developer@acme.com --org "$PROJ
 echo "Deleting API Products"
 apigeecli products delete --name llm-security-product --org "$PROJECT_ID" --token "$TOKEN"
 
+echo "Deleting KVM"
+apigeecli kvms delete -n model-armor-config --env "$APIGEE_ENV" --org "$PROJECT_ID" --token "$TOKEN"
+
 delete_api "llm-security-v1"
 delete_sharedflow "ModelArmor-v1"
 
