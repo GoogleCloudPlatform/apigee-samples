@@ -38,9 +38,11 @@
         <Response>
             <Step>
                 <Name>AM-ExtractResponsePrompt</Name>
+                <Condition>request.verb != "OPTIONS"</Condition>
             </Step>
             <Step>
                 <Name>FC-SanitizeModelResponse</Name>
+                <Condition>request.verb != "OPTIONS"</Condition>
             </Step>
         </Response>
     </PreFlow>
