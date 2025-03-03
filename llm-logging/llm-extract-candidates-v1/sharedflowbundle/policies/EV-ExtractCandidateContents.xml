@@ -17,7 +17,7 @@
   <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
   <JSONPayload>
     <Variable name="candidate_parts" type="string">
-      <JSONPath>$.[*].candidates[*].content.parts[*].text</JSONPath>
+      <JSONPath>$.candidates[*].content.parts[*].text</JSONPath>
     </Variable>
   </JSONPayload>
   <Source clearPayload="false">response</Source>
