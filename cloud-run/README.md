@@ -76,8 +76,8 @@ To invoke cloud run from Apigee Proxy requires a service account with run.invoke
 gcloud iam service-accounts create run-mock-target-sa \
           --project "$PROJECT_ID" || true
 
-gcloud run services add-iam-policy-binding ${_SERVICE} \
-          --region ${_REGION} \
+gcloud run services add-iam-policy-binding ${CLOUD_RUN_SERVICE} \
+          --region ${CLOUD_RUN_REGION} \
           --member serviceAccount:run-mock-target-sa@"$PROJECT_ID".iam.gserviceaccount.com \
           --role roles/run.invoker \
           --platform managed
