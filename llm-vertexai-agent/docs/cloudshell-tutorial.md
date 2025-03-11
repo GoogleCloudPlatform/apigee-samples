@@ -54,7 +54,7 @@ Next, let's deploy the sample to Apigee. Just run
 Run this curl command
 
 ```sh
-curl --location "https://$APIGEE_HOST/v1/samples/llm-vertexai-agent/products -H \"Content-Type: application/json\" -H \"x-apikey: $APIKEY\"" 
+curl --location "https://$APIGEE_HOST/v1/samples/llm-vertexai-agent/products -H "Content-Type: application/json" -H "x-apikey: $APIKEY" 
 ```
 
 ---
