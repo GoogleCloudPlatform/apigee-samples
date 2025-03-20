@@ -1,0 +1,174 @@
+# Copyright 2025 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+openapi: 3.0.1
+info:
+  title: Cymbal Products Catalog
+  description: Product service
+
+  termsOfService: https://cymbal.com/terms
+  contact:
+    email: someteam@cymbal.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+servers:
+  - url: https://HOST/v1/samples/llm-function-calling
+tags:
+  - name: products
+    description: Products
+paths:
+  '/products':
+    get:
+      tags:
+        - products
+      summary: Get Products
+      description: Get Products
+      operationId: get-all-products
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Products'
+        '400':
+          description: Invalid request supplied
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '429':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - api_key: []
+  '/products/{id}':
+    get:
+      tags:
+        - products
+      summary: Get a Product
+      description: Get a Product
+      operationId: get-product
+      parameters:
+        - name: id
+          in: path
+          description: ProductId
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Products'
+        '400':
+          description: Invalid request supplied
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '429':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - api_key: []
+components:
+  schemas:
+    Products:
+      type: object
+      properties:
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'
+    Product:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Daily Sunglasses
+        description:
+          type: string
+          example: "Seriously coolMen's Daily Sunglasses for only $19.90"
+        categories:
+          type: array
+          items:
+            type: string
+            example: "Style"
+        price:
+          type: number
+          example: 19
+    ErrorResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: Forbidden
+        message:
+          type: string
+          example: Forbidden
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: x-apikey
+      in: header
