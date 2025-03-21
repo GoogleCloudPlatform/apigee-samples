@@ -40,14 +40,11 @@ curl -s https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.s
 export PATH=$PATH:$HOME/.apigeecli/bin
 
 echo "Deploying the Proxy"
-sed -i "s/HOST/$APIGEE_HOST/g" apiproxy/resources/oas/spec.yaml
 
 apigeecli apis create bundle -n llm-function-calling-v1 \
   -f apiproxy -e "$APIGEE_ENV" \
   --token "$TOKEN" -o "$PROJECT_ID" \
   --ovr --wait
-
-sed -i "s/$APIGEE_HOST/HOST/g" apiproxy/resources/oas/spec.yaml
 
 echo "Creating API Products"
 apigeecli products create --name "llm-function-calling-product" --display-name "llm-function-calling-product" \
