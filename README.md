@@ -99,7 +99,7 @@ This repository explores common LLM serving patterns using Apigee X as a robust 
 |5| [llm-routing](llm-routing) | Sample to route to different LLM providers using Apigee's routing capabilities. |  [![notebook](https://cloud.google.com/ml-engine/images/colab-logo-32px.png)](./llm-routing/llm_routing_v1.ipynb) |
 |6| [llm-security](llm-security) | Sample to demonstrate the security capabilities of Apigee with Model Armor to secure the user prompts |  [![notebook](https://cloud.google.com/ml-engine/images/colab-logo-32px.png)](./llm-security/llm_security_v1.ipynb) |
 |7| [llm-vertexai-agent](llm-vertexai-agent) | Sample to deploy an agent using Vertex Agent Builder and point to an Apigee proxy |  [![notebook](https://cloud.google.com/ml-engine/images/colab-logo-32px.png)](./llm-vertexai-agent/llm_vertexai_agent.ipynb) |
-|8| [llm-function-calling](llm-function-calling) | Sample to deploy a proxy and configure it as a function calling |  [![notebook](https://cloud.google.com/ml-engine/images/colab-logo-32px.png)](./llm-function-calling/llm_function_calling.ipynb) |
+|8| [llm-function-calling](llm-function-calling) | Sample to deploy a proxy and configure it as a function call |  [![notebook](https://cloud.google.com/ml-engine/images/colab-logo-32px.png)](./llm-function-calling/llm_function_calling.ipynb) |
 
 ## <a name="modifying"></a>Modifying a sample proxy
 
