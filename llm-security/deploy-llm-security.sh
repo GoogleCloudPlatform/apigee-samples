@@ -134,7 +134,6 @@ echo "Run the following commands to test the API"
 echo " "
 echo "curl --location \"https://$APIGEE_HOST/v1/samples/llm-security/v1/projects/apigee-ai/locations/us-east1/publishers/google/models/gemini-1.5-flash-001:generateContent\" \
 --header \"Content-Type: application/json\" \
---header \"x-log-payload: false\" \
 --header \"x-apikey: $APIKEY\" \
 --data '{
       \"contents\":[{
@@ -152,7 +151,6 @@ echo "curl --location \"https://$APIGEE_HOST/v1/samples/llm-security/v1/projects
 echo " "
 echo "curl --location \"https://$APIGEE_HOST/v1/samples/llm-security/v1/projects/apigee-ai/locations/us-east1/publishers/google/models/gemini-1.5-flash-001:generateContent\" \
 --header \"Content-Type: application/json\" \
---header \"x-log-payload: false\" \
 --header \"x-apikey: $APIKEY\" \
 --data '{
       \"contents\":[{
