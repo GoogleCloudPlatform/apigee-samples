@@ -137,7 +137,7 @@ echo "curl --location \"https://$APIGEE_HOST/v1/samples/llm-routing/chat/complet
 --header \"x-logpayload: false\" \
 --header \"x-apikey: $APIKEY\" \
 --data '{
-  \"model\": \"google/gemini-1.5-flash\",
+  \"model\": \"google/gemini-2.0-flash\",
   \"messages\": [
     {
       \"role\": \"user\",
