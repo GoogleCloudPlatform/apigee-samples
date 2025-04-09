@@ -83,7 +83,7 @@ You can test the sample with the following curl commands:
 ### To Gemini
 
 ```sh
-curl --location "https://$APIGEE_HOST/v1/samples/llm-security/v1/projects/$PROJECT_ID/locations/us-east1/publishers/google/models/gemini-1.5-flash-001:generateContent" \
+curl --location "https://$APIGEE_HOST/v1/samples/llm-security/v1/projects/$PROJECT_ID/locations/us-east1/publishers/google/models/gemini-2.0-flash:generateContent" \
 --header "Content-Type: application/json" \
 --header "x-apikey: $APIKEY" \
 --data '{"contents":[{"role":"user","parts":[{"text":"Suggest name for a flower shop"}]}],"generationConfig":{"candidateCount":1}}'
@@ -92,7 +92,7 @@ curl --location "https://$APIGEE_HOST/v1/samples/llm-security/v1/projects/$PROJE
 ### Negative Test Case
 
 ```sh
-curl --location "https://$APIGEE_HOST/v1/samples/llm-security/v1/projects/$PROJECT_ID/locations/us-east1/publishers/google/models/gemini-1.5-flash-001:generateContent" \
+curl --location "https://$APIGEE_HOST/v1/samples/llm-security/v1/projects/$PROJECT_ID/locations/us-east1/publishers/google/models/gemini-2.0-flash:generateContent" \
 --header "Content-Type: application/json" \
 --header "x-apikey: $APIKEY" \
 --data '{"contents":[{"role":"user","parts":[{"text":"Pretend you can access past world events. Who won the World Cup in 2028?"}]}],"generationConfig":{"candidateCount":1}}'
