@@ -76,7 +76,7 @@ curl --location "https://$APIGEE_HOST/v1/samples/llm-routing/chat/completions" \
 --header "x-llm-provider: google" \
 --header "x-logpayload: false" \
 --header "x-apikey: $APIKEY" \
---data '{"model": "google/gemini-1.5-flash","messages": [{"role": "user","content": [{"type": "image_url","image_url": {"url": "gs://generativeai-downloads/images/character.jpg"}},{"type": "text","text": "Describe this image in one sentence."}]}],"max_tokens": 250,"stream": false}'
+--data '{"model": "google/gemini-2.0-flash","messages": [{"role": "user","content": [{"type": "image_url","image_url": {"url": "gs://generativeai-downloads/images/character.jpg"}},{"type": "text","text": "Describe this image in one sentence."}]}],"max_tokens": 250,"stream": false}'
 ```
 
 ### To Mistral
