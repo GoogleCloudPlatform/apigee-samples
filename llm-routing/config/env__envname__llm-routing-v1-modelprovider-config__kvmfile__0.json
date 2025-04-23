@@ -14,7 +14,7 @@
     },
     {
       "name": "huggingface__targetUrl",
-      "value": "https://api-inference.huggingface.co/models/{model}/v1/chat/completions"
+      "value": "https://router.huggingface.co/sambanova/v1/chat/completions"
     },
     {
       "name": "mistral__token",
