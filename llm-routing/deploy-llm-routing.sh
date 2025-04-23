@@ -191,7 +191,7 @@ echo "curl --location \"https://$APIGEE_HOST/v1/samples/llm-routing/chat/complet
 --header \"x-logpayload: false\" \
 --header \"x-apikey: $APIKEY\" \
 --data '{
-  \"model\": \"meta-llama/Llama-3.2-11B-Vision-Instruct\",
+  \"model\": \"Meta-Llama-3.1-8B-Instruct\",
   \"messages\": [
     {
       \"role\": \"user\",
