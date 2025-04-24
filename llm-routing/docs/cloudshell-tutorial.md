@@ -102,7 +102,7 @@ curl --location "https://$APIGEE_HOST/v1/samples/llm-routing/chat/completions" \
 --header "x-llm-provider: huggingface" \
 --header "x-logpayload: false" \
 --header "x-apikey: $APIKEY" \
---data '{"model": "meta-llama/Llama-3.2-11B-Vision-Instruct","messages": [{"role": "user","content": [{"type": "text","text": "Suggest few names for a flower shop"}]}],"max_tokens": 250,"stream": false}'
+--data '{"model": "Meta-Llama-3.1-8B-Instruct","messages": [{"role": "user","content": [{"type": "text","text": "Suggest few names for a flower shop"}]}],"max_tokens": 250,"stream": false}'
 ```
 
 ---
