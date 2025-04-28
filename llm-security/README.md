@@ -1,6 +1,6 @@
 # llm-security
 
-- This is a sample Apigee proxy to demonstrate the security capabilities of Apigee with Model Armor to secure the user prompts
+- This is a sample Apigee proxy to demonstrate the security capabilities of Apigee with Model Armor to secure the user prompts. In this sample, we are using Service callout policies to invoke Model Armor. You can bring your own service and integrate with Apigee using these callout policies
 
 ![architecture](./images/arch.png)
 
