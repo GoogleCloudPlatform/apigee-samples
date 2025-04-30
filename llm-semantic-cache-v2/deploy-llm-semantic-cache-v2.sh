@@ -67,8 +67,8 @@ sed -i "s/CACHE_ENTRY_TTL_SEC/$CACHE_ENTRY_TTL_SEC/g" ./tmp/apiproxy/policies/SC
 echo "Deploying Apigee artifacts..."
 
 echo "Importing and Deploying Apigee llm-semantic-cache-v2 proxy..."
-REV=$(apigeecli apis create bundle -f ./tmp/apiproxy -n llm-semantic-cache-v2 --org "$PROJECT" --token "$TOKEN" --disable-check --api autopush | jq ."revision" -r)
-apigeecli apis deploy --wait --name llm-semantic-cache-v2 --ovr --rev "$REV" --org "$PROJECT" --env "$APIGEE_ENV" --token "$TOKEN" --sa "ai-client@$PROJECT.iam.gserviceaccount.com" --api autopush
+REV=$(apigeecli apis create bundle -f ./tmp/apiproxy -n llm-semantic-cache-v2 --org "$PROJECT" --token "$TOKEN" --disable-check | jq ."revision" -r)
+apigeecli apis deploy --wait --name llm-semantic-cache-v2 --ovr --rev "$REV" --org "$PROJECT" --env "$APIGEE_ENV" --token "$TOKEN" --sa "ai-client@$PROJECT.iam.gserviceaccount.com"
 
 FIND_NEIGHBORS_URL="https:\/\/$PUBLIC_ENDPOINT_SUBDOMAIN.$REGION-$PROJECT_NUMBER.vdb.vertexai.goog\/v1\/projects\/$PROJECT_NUMBER\/locations\/$REGION\/indexEndpoints\/$INDEX_ENDPOINT_ID:findNeighbors"
 REMOVE_DATAPOINTS_URL="https:\/\/$REGION-aiplatform.googleapis.com\/v1\/projects\/$PROJECT_NUMBER\/locations\/$REGION\/indexes\/$INDEX_ID:removeDatapoints"
