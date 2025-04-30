@@ -14,29 +14,17 @@
 <ProxyEndpoint name="default">
   <PreFlow name="PreFlow">
     <Request>
+      <Step>
+        <Name>SCL-Semantic-Cache-Lookup</Name>
+      </Step>
     </Request>
     <Response/>
   </PreFlow>
-  <Flows>
-    <Flow name="/">
-      <Description>Predictions</Description>
-      <Request>
-        <Step>
-          <Name>SCL-Semantic-Cache-Lookup</Name>
-        </Step>
-      </Request>
-      <Response>
-        <Step>
-          <Name>SCP-Semantic-Cache-Populate</Name>
-        </Step>
-      </Response>
-      <Condition>(proxy.pathsuffix MatchesPath "/v1/projects/*/locations/*/publishers/google/models/*") and (request.verb = "POST")</Condition>
-    </Flow>
-  </Flows>
   <PostFlow name="PostFlow">
     <Request/>
     <Response/>
   </PostFlow>
+  <Flows/>
   <HTTPProxyConnection>
     <Properties/>
     <BasePath>/v2/samples/llm-semantic-cache</BasePath>

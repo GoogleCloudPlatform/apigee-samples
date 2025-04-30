@@ -14,7 +14,11 @@
 <TargetEndpoint name="default">
   <PreFlow name="PreFlow">
     <Request/>
-    <Response/>
+    <Response>
+      <Step>
+        <Name>SCP-Semantic-Cache-Populate</Name>
+      </Step>
+    </Response>
   </PreFlow>
   <Flows/>
   <PostFlow name="PostFlow">
