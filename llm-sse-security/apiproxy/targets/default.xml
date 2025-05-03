@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+ Copyright 2025 Google LLC
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+      http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<TargetEndpoint name="default">
+  <Description/>
+  <FaultRules/>
+  <PreFlow name="PreFlow">
+    <Request/>
+    <Response/>
+  </PreFlow>
+  <PostFlow name="PostFlow">
+    <Request/>
+    <Response/>
+  </PostFlow>
+  <Flows/>
+  <EventFlow name="EventFlow" content-type="text/event-stream">
+    <Response>
+      <Step>
+        <Name>JS-Parse-Events</Name>
+      </Step>
+      <Step>
+        <Name>SMR-SantizeModelResponse</Name>
+        <!-- uncomment below line if you do not want to call Model Armor on every event -->
+        <!-- <Condition> buff_ready == true </Condition>  -->
+      </Step>
+      <Step>
+        <Name>JS-SetErrorEvent</Name>
+        <Condition>SanitizeModelResponse.SMR-SantizeModelResponse.filterMatchState = "MATCH_FOUND"</Condition>
+      </Step>
+    </Response>
+  </EventFlow>
+  <HTTPTargetConnection>
+    <Authentication>
+      <GoogleAccessToken>
+        <Scopes>
+          <Scope>https://www.googleapis.com/auth/cloud-platform</Scope>
+        </Scopes>
+      </GoogleAccessToken>
+    </Authentication>
+    <Properties/>
+    <URL>https://{region}-aiplatform.googleapis.com</URL>
+  </HTTPTargetConnection>
+</TargetEndpoint>
