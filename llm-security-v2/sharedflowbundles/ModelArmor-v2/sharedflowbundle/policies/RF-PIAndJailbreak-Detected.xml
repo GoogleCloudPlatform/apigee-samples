@@ -16,16 +16,26 @@
   <Properties/>
   <FaultResponse>
     <Set>
-      <Payload contentType="application/json">{
-        "error": {
-          "code": 400,
-          "message": "PI and JailBreak Threat Detected",
-          "status": "BAD_REQUEST"
-        }
-      }
+      <Payload contentType="application/json">
+      {
+        "candidates": [
+            {
+                "content": {
+                    "role": "model",
+                    "parts": [
+                        {
+                            "text": "Your prompt has been flagged as abusive. An administrative review has been submitted for your account."
+                        }
+                    ]
+                },
+                "finishReason": "STOP"
+            }
+        ],
+        "modelVersion": "{model}"
+    }
       </Payload>
-      <StatusCode>400</StatusCode>
-      <ReasonPhrase>Bad Request</ReasonPhrase>
+      <StatusCode>200</StatusCode>
+      <ReasonPhrase>OK</ReasonPhrase>
     </Set>
   </FaultResponse>
   <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>

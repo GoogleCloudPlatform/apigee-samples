@@ -16,16 +16,26 @@
   <Properties/>
   <FaultResponse>
     <Set>
-      <Payload contentType="application/json">{
-        "error": {
-          "code": 400,
-          "message": "Malicious URL Threat Detected",
-          "status": "BAD_REQUEST"
-        }
-      }
+      <Payload contentType="application/json">
+      {
+        "candidates": [
+            {
+                "content": {
+                    "role": "model",
+                    "parts": [
+                        {
+                            "text": "Your prompt has a malicious URL in it. Please review and try again."
+                        }
+                    ]
+                },
+                "finishReason": "STOP"
+            }
+        ],
+        "modelVersion": "{model}"
+    }
       </Payload>
-      <StatusCode>400</StatusCode>
-      <ReasonPhrase>Bad Request</ReasonPhrase>
+      <StatusCode>200</StatusCode>
+      <ReasonPhrase>OK</ReasonPhrase>
     </Set>
   </FaultResponse>
   <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
