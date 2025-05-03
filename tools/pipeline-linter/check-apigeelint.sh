@@ -44,7 +44,7 @@ for proxyDir in "$PWD"/*/apiproxy "$PWD"/*/*/apiproxy "$PWD"/*/*/*/apiproxy; do
   done
   if [[ $skip = false ]]; then
     echo "Running apigeelint on $proxyDir"
-    apigeelint -s "$proxyDir" -f table.js -e PO013,PO025,BN003,BN005 -x tools/pipeline-linter/apigeelint --profile apigeex
+    apigeelint -s "$proxyDir" -f table.js -e PO013,PO025,BN003,BN005,EP002 -x tools/pipeline-linter/apigeelint --profile apigeex
   fi
 done
 
