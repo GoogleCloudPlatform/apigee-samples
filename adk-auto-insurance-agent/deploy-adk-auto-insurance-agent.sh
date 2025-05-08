@@ -59,15 +59,15 @@ add_api_to_hub(){
   local api=$1
   local id="1_0_0"
   echo "Registering the $api API"
-  apigeecli apihub apis create --id ${api}_api \
-  -f tmp/${api}/${api}-api.json \
-  -r $APIGEE_APIHUB_REGION -o $APIGEE_APIHUB_PROJECT_ID -t $TOKEN
+  apigeecli apihub apis create --id "${api}_api" \
+  -f "tmp/${api}/${api}-api.json" \
+  -r "$APIGEE_APIHUB_REGION" -o "$APIGEE_APIHUB_PROJECT_ID" -t "$TOKEN"
 
-  apigeecli apihub apis versions create --api-id ${api}_api --id $id \
-  -f tmp/${api}/${api}-api-ver.json -r $APIGEE_APIHUB_REGION -o $APIGEE_APIHUB_PROJECT_ID -t $TOKEN
+  apigeecli apihub apis versions create --api-id "${api}_api" --id $id \
+  -f "tmp/${api}/${api}-api-ver.json"  -r "$APIGEE_APIHUB_REGION" -o "$APIGEE_APIHUB_PROJECT_ID" -t "$TOKEN"
 
-  apigeecli apihub apis versions specs create --api-id ${api}_api -i $id --version $id \
-  -d openapi.yaml -f tmp/${api}/${api}.yaml -r $APIGEE_APIHUB_REGION -o $APIGEE_APIHUB_PROJECT_ID -t $TOKEN
+  apigeecli apihub apis versions specs create --api-id "${api}_api" -i $id --version $id \
+  -d openapi.yaml -f "tmp/${api}/${api}.yaml"  -r "$APIGEE_APIHUB_REGION" -o "$APIGEE_APIHUB_PROJECT_ID" -t "$TOKEN"
 }
 
 PRE_PROP="project_id=$PROJECT
