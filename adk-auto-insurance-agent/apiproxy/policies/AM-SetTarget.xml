@@ -15,6 +15,10 @@
   <DisplayName>AM-SetTarget</DisplayName>
   <Properties/>
   <AssignVariable>
+    <Name>target.copy.queryparams</Name>
+    <Value>false</Value>
+  </AssignVariable>
+  <AssignVariable>
     <Name>target.copy.pathsuffix</Name>
     <Value>false</Value>
   </AssignVariable>
