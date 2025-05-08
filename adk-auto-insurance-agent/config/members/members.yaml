@@ -30,35 +30,35 @@ security:
 paths:
   /members:
     get:
-        description: Returns a list of members.
-        operationId: listMembers
-        responses:
-          '200':
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/MemberList'
-            description: A list of members
-          '400':
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/error'
-            description: Invalid input
-          '401':
-            description: Unauthorized.
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/error'
-          '500':
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/error'
-            description: Internal server error
-        tags:
-          - members
+      description: Returns a list of members.
+      operationId: listMembers
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MemberList'
+          description: A list of members
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Invalid input
+        '401':
+          description: Unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Internal server error
+      tags:
+        - members
     post:
       description: Creates a new member account.
       operationId: createMember
@@ -233,7 +233,7 @@ components:
     MemberList:
       type: array
       items:
-        $ref: '#/components/schemas/Member'        
+        $ref: '#/components/schemas/Member'
     Member:
       description: Represents a member account.
       properties:

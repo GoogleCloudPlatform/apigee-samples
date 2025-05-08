@@ -30,35 +30,35 @@ security:
 paths:
   /tows:
     get:
-        description: Returns a list of towing requests.
-        operationId: listTows
-        responses:
-          '200':
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/towList'
-            description: A list of tows
-          '400':
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/error'
-            description: Invalid input
-          '401':
-            description: Unauthorized.
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/error'
-          '500':
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/error'
-            description: Internal server error
-        tags:
-          - tows
+      description: Returns a list of towing requests.
+      operationId: listTows
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/towList'
+          description: A list of tows
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Invalid input
+        '401':
+          description: Unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Internal server error
+      tags:
+        - tows
     post:
       description: Creates a new tow request.
       operationId: createTow
@@ -217,7 +217,7 @@ components:
     towList:
       type: array
       items:
-        $ref: '#/components/schemas/tow'        
+        $ref: '#/components/schemas/tow'       
     tow:
       description: Represents a tow request.
       properties:

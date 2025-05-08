@@ -15,7 +15,7 @@ openapi: 3.0.0
 info:
   title: Rewards API
   description: >-
-    This API returns information about reward offers from 
+    This API returns information about reward offers from
     participating partner companies based on a given location.
   version: 1.0.0
   contact:
@@ -29,49 +29,49 @@ security:
 paths:
   /rewards:
     get:
-        description: Returns a list of reward offers.
-        operationId: listRewards
-        parameters:
-          - in: query
-            name: location
-            schema:
-              type: string
-            description: The location to search for nearby rewards.        
-            required: true
-        responses:
-          '200':
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/rewardList'
-            description: A list of rewards
-          '400':
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/error'
-            description: Invalid input
-          '401':
-            description: Unauthorized.
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/error'
-          '500':
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/error'
-            description: Internal server error
-        tags:
-          - rewards
+      description: Returns a list of reward offers.
+      operationId: listRewards
+      parameters:
+        - in: query
+          name: location
+          schema:
+            type: string
+          description: The location to search for nearby rewards.
+          required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rewardList'
+          description: A list of rewards
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Invalid input
+        '401':
+          description: Unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Internal server error
+      tags:
+        - rewards
 components:
   schemas:
     rewardList:
       description: A list of rewards.
       type: array
       items:
-        $ref: '#/components/schemas/reward'        
+        $ref: '#/components/schemas/reward'
     reward:
       description: Represents a reward.
       properties:
