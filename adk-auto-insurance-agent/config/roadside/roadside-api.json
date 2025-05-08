@@ -1,5 +1,5 @@
 {
-    "displayName": "Rewards API",
+    "displayName": "Roadside Assistance API",
     "description": "This API manages roadside assistance requests, allowing for creation, retrieval, updates, and deletion of individual records. The API allows roadside assistance to be created, updated and deleted.",
     "documentation": {
             "externalUri": "https://developer.cymbal-auto.com/docs/reference/apis/roadside-assistance"
