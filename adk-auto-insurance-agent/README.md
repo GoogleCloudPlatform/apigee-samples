@@ -15,6 +15,11 @@ A virtual assistant for auto insurance that uses API hub to provide APIs as tool
     - curl
     - jq
 
+## (QuickStart) Setup using CloudShell
+
+Use the following GCP CloudShell tutorial, and follow the instructions.
+
+[![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/apigee-samples&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=adk-auto-insurance-agent/docs/cloudshell-tutorial.md)
 
 ## Setup environment
 
