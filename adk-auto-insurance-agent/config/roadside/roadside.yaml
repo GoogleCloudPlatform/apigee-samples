@@ -1,0 +1,263 @@
+# Copyright 2025 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+openapi: 3.0.0
+info:
+  title: Roadside Assistance API
+  description: >-
+    This API manages roadside assistance requests, allowing for creation, retrieval, updates,
+    and deletion of individual records. The API allows roadside assistance to be
+    created, updated and deleted.
+  version: 1.0.0
+  contact:
+    name: Cymbal Auto Insurance
+    url: https://cymbal-auto.com
+  termsOfService: https://cymbal-auto/terms/
+servers:
+  - url: https://APIGEE_HOST/v1/samples/adk-cymbal-auto
+security:
+  - ApiKeyAuth: []
+paths:
+  /tows:
+    get:
+        description: Returns a list of towing requests.
+        operationId: listTows
+        responses:
+          '200':
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/towList'
+            description: A list of tows
+          '400':
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/error'
+            description: Invalid input
+          '401':
+            description: Unauthorized.
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/error'
+          '500':
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/error'
+            description: Internal server error
+        tags:
+          - tows
+    post:
+      description: Creates a new tow request.
+      operationId: createTow
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/tow'
+        description: Tow request object that needs to be created
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/tow'
+          description: Tow created successfully
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Invalid input
+        '401':
+          description: Unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Internal server error
+      tags:
+        - tows
+  /tows/{id}:
+    delete:
+      description: Deletes a specific tow request by ID.
+      operationId: deleteTowById
+      responses:
+        '204':
+          description: Tow deleted successfully
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Invalid input
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Tow not found
+        '401':
+          description: Unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Internal server error
+      tags:
+        - tows
+    get:
+      description: Retrieves a specific tow request by ID.
+      operationId: getTowById
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/tow'
+          description: Successful operation
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Invalid input
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Tow not found
+        '401':
+          description: Unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Internal server error
+      tags:
+        - tows
+    parameters:
+      - description: ID of the tow request to be updated
+        in: path
+        name: id
+        required: true
+        schema:
+          format: int64
+          type: integer
+    put:
+      description: Updates a specific tow request by ID.
+      operationId: updateTowById
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/tow'
+        description: Tow object that needs to be updated
+        required: true
+      responses:
+        '204':
+          description: Tow updated successfully
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Invalid input
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Tow not found
+        '401':
+          description: Unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Internal server error
+      tags:
+        - tows
+components:
+  schemas:
+    towList:
+      type: array
+      items:
+        $ref: '#/components/schemas/tow'        
+    tow:
+      description: Represents a tow request.
+      properties:
+        id:
+          description: The tow request's ID. Generated by the server.
+          type: string
+          readOnly: true
+        memberId:
+          description: The member ID associated with the tow request.
+          type: string
+        location:
+          description: The location where the member requires the tow.
+          type: string
+        eta:
+          description: The estimated time of arrival for the tow request.
+          type: string
+          format: date-time
+          readOnly: true
+        status:
+          type: string
+          description: The status of the tow request.
+          enum:
+            - IN_PROGRESS
+            - COMPLETED
+          readOnly: true
+      required:
+        - memberId
+        - location
+      type: object
+    error:
+      properties:
+        code:
+          format: int32
+          type: integer
+        message:
+          type: string
+      type: object
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      description: API key to authorize requests.
+      name: apikey
+      in: query

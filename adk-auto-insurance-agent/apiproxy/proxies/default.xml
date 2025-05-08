@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+ Copyright 2025 Google LLC
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+      http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<ProxyEndpoint name="default">
+  <Description/>
+  <FaultRules/>
+  <PreFlow name="PreFlow">
+    <Request>
+      <Step>
+        <Name>CORS</Name>
+      </Step>
+      <Step>
+        <Name>VA-VerifyKey</Name>
+      </Step>
+    </Request>
+    <Response/>
+  </PreFlow>
+  <PostFlow name="PostFlow">
+    <Request/>
+    <Response/>
+  </PostFlow>
+  <Flows>
+    <Flow name="listRewards">
+      <Description>Returns a list of rewards.</Description>
+      <Request>
+        <Step>
+          <Name>AM-ListRewards</Name>
+        </Step>
+      </Request>
+      <Response/>
+      <Condition>(proxy.pathsuffix MatchesPath "/rewards") and (request.verb = "GET")</Condition>
+    </Flow>
+    <Flow name="listTows">
+      <Description>Returns a list of tows.</Description>
+      <Request>
+        <Step>
+          <Name>AM-ListTows</Name>
+        </Step>
+      </Request>
+      <Response/>
+      <Condition>(proxy.pathsuffix MatchesPath "/tows") and (request.verb = "GET")</Condition>
+    </Flow>
+    <Flow name="createTow">
+      <Description>Creates a new tow request.</Description>
+      <Request>
+        <Step>
+          <Name>AM-CreateTow</Name>
+        </Step>
+      </Request>
+      <Response/>
+      <Condition>(proxy.pathsuffix MatchesPath "/tows") and (request.verb = "POST")</Condition>
+    </Flow>
+    <Flow name="getTow">
+      <Description>Retrieves a specific tow by ID.</Description>
+      <Request>
+        <Step>
+          <Name>EV-FetchID</Name>
+        </Step>
+        <Step>
+          <Name>AM-GetTowById</Name>
+        </Step>
+      </Request>
+      <Response/>
+      <Condition>(proxy.pathsuffix MatchesPath "/tows/{id}") and (request.verb = "GET")</Condition>
+    </Flow>
+    <Flow name="updateTow">
+      <Description>Updates a specific tow by ID.</Description>
+      <Request>
+        <Step>
+          <Name>EV-FetchID</Name>
+        </Step>
+      </Request>
+      <Response>
+        <Step>
+          <Name>AM-SetNoContent</Name>
+        </Step>
+      </Response>
+      <Condition>(proxy.pathsuffix MatchesPath "/tows/{id}") and (request.verb = "PUT")</Condition>
+    </Flow>
+    <Flow name="deleteTow">
+      <Description>Deletes a specific tow by ID.</Description>
+      <Request>
+        <Step>
+          <Name>EV-FetchID</Name>
+        </Step>
+      </Request>
+      <Response>
+        <Step>
+          <Name>AM-SetNoContent</Name>
+        </Step>
+      </Response>
+      <Condition>(proxy.pathsuffix MatchesPath "/tows/{id}") and (request.verb = "DELETE")</Condition>
+    </Flow>
+    <Flow name="listMembers">
+      <Description>Returns a list of members.</Description>
+      <Request>
+        <Step>
+          <Name>AM-ListMembers</Name>
+        </Step>
+      </Request>
+      <Response/>
+      <Condition>(proxy.pathsuffix MatchesPath "/members") and (request.verb = "GET")</Condition>
+    </Flow>
+    <Flow name="createMember">
+      <Description>Creates a new member.</Description>
+      <Request>
+        <Step>
+          <Name>AM-CreateMember</Name>
+        </Step>
+      </Request>
+      <Response/>
+      <Condition>(proxy.pathsuffix MatchesPath "/members") and (request.verb = "POST")</Condition>
+    </Flow>
+    <Flow name="getMember">
+      <Description>Retrieves a specific member by ID.</Description>
+      <Request>
+        <Step>
+          <Name>EV-FetchID</Name>
+        </Step>
+        <Step>
+          <Name>AM-GetMemberById</Name>
+        </Step>
+      </Request>
+      <Response/>
+      <Condition>(proxy.pathsuffix MatchesPath "/members/{id}") and (request.verb = "GET")</Condition>
+    </Flow>
+    <Flow name="updateMember">
+      <Description>Updates a specific member by ID.</Description>
+      <Request>
+        <Step>
+          <Name>EV-FetchID</Name>
+        </Step>
+      </Request>
+      <Response>
+        <Step>
+          <Name>AM-SetNoContent</Name>
+        </Step>
+      </Response>
+      <Condition>(proxy.pathsuffix MatchesPath "/members/{id}") and (request.verb = "PUT")</Condition>
+    </Flow>
+    <Flow name="deleteMember">
+      <Description>Deletes a specific member by ID.</Description>
+      <Request>
+        <Step>
+          <Name>EV-FetchID</Name>
+        </Step>
+      </Request>
+      <Response>
+        <Step>
+          <Name>AM-SetNoContent</Name>
+        </Step>
+      </Response>
+      <Condition>(proxy.pathsuffix MatchesPath "/members/{id}") and (request.verb = "DELETE")</Condition>
+    </Flow>
+    <Flow name="listClaims">
+      <Description>Returns a list of claims.</Description>
+      <Request>
+        <Step>
+          <Name>AM-ListClaims</Name>
+        </Step>
+      </Request>
+      <Response/>
+      <Condition>(proxy.pathsuffix MatchesPath "/claims") and (request.verb = "GET")</Condition>
+    </Flow>
+    <Flow name="createClaim">
+      <Description>Creates a new claim.</Description>
+      <Request>
+        <Step>
+          <Name>AM-CreateClaim</Name>
+        </Step>
+      </Request>
+      <Response/>
+      <Condition>(proxy.pathsuffix MatchesPath "/claims") and (request.verb = "POST")</Condition>
+    </Flow>
+    <Flow name="getClaim">
+      <Description>Retrieves a specific claim by ID.</Description>
+      <Request>
+        <Step>
+          <Name>EV-FetchID</Name>
+        </Step>
+        <Step>
+          <Name>AM-GetClaimById</Name>
+        </Step>
+      </Request>
+      <Response/>
+      <Condition>(proxy.pathsuffix MatchesPath "/claims/{id}") and (request.verb = "GET")</Condition>
+    </Flow>
+    <Flow name="updateClaim">
+      <Description>Updates a specific claim by ID.</Description>
+      <Request>
+        <Step>
+          <Name>EV-FetchID</Name>
+        </Step>
+      </Request>
+      <Response>
+        <Step>
+          <Name>AM-SetNoContent</Name>
+        </Step>
+      </Response>
+      <Condition>(proxy.pathsuffix MatchesPath "/claims/{id}") and (request.verb = "PUT")</Condition>
+    </Flow>
+    <Flow name="deleteClaim">
+      <Description>Deletes a specific claim by ID.</Description>
+      <Request>
+        <Step>
+          <Name>EV-FetchID</Name>
+        </Step>
+      </Request>
+      <Response>
+        <Step>
+          <Name>AM-SetNoContent</Name>
+        </Step>
+      </Response>
+      <Condition>(proxy.pathsuffix MatchesPath "/claims/{id}") and (request.verb = "DELETE")</Condition>
+    </Flow>
+  </Flows>
+  <HTTPProxyConnection>
+    <BasePath>/v1/samples/adk-cymbal-auto</BasePath>
+    <Properties/>
+  </HTTPProxyConnection>
+  <RouteRule name="noRoute">
+    <Condition>request.verb = "PUT" or request.verb = "DELETE"</Condition>
+  </RouteRule>
+  <RouteRule name="default">
+    <TargetEndpoint>default</TargetEndpoint>
+  </RouteRule>
+</ProxyEndpoint>

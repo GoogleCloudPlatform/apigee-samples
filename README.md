@@ -7,6 +7,8 @@
   - [Using the sample proxies](#using-the-sample-proxies)
     - [Samples](#samples)
   - [Samples for LLM Serving with Apigee](#samples-for-llm-serving-with-apigee)
+  - [ADK Samples with Apigee](#adk-samples-with-apigee)
+    - [Prerequisites](#prerequisites)
   - [Modifying a sample proxy](#modifying-a-sample-proxy)
   - [Ask questions on the Community Forum](#ask-questions-on-the-community-forum)
   - [Apigee documentation](#apigee-documentation)
@@ -100,6 +102,24 @@ This repository explores common LLM serving patterns using Apigee X as a robust 
 |6| [llm-security](llm-security) | Sample to demonstrate the security capabilities of Apigee with Model Armor to secure the user prompts |  [![notebook](https://cloud.google.com/ml-engine/images/colab-logo-32px.png)](./llm-security/llm_security_v1.ipynb) |
 |7| [llm-vertexai-agent](llm-vertexai-agent) | Sample to deploy an agent using Vertex Agent Builder and point to an Apigee proxy |  [![notebook](https://cloud.google.com/ml-engine/images/colab-logo-32px.png)](./llm-vertexai-agent/llm_vertexai_agent.ipynb) |
 |8| [llm-function-calling](llm-function-calling) | Sample to deploy a proxy and configure it as a function call |  [![notebook](https://cloud.google.com/ml-engine/images/colab-logo-32px.png)](./llm-function-calling/llm_function_calling.ipynb) |
+
+## <a name="adk-samples"></a>ADK Samples with Apigee
+
+This is a collection of sample AI agents created using Google's [Agent Development Kit](https://google.github.io/adk-docs/) that show how to use ADK's built-in tooling to connect to APIs from [Apigee API hub](https://cloud.google.com/apigee/docs/apihub/what-is-api-hub), or integrations from [Application Integration](https://cloud.google.com/application-integration/docs/overview).
+
+### Prerequisites
+
+You will need a GCP project with the following services enabled and provisioned:
+- Vertex AI
+- Apigee API hub
+- Apigee
+
+
+| Agent | Description |
+|---|---|
+| [auto_insurance_agent](./auto_insurance_agent) | A virtual assistant for auto insurance that uses API hub to provide APIs as tools. |
+
+For more information on ADK's API Hub and Application Integration toolsets, see the [documentation](https://google.github.io/adk-docs/tools/google-cloud-tools/).
 
 ## <a name="modifying"></a>Modifying a sample proxy
 
