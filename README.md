@@ -119,7 +119,7 @@ You will need a GCP project with the following services enabled and provisioned:
 
 | Agent | Description |
 |---|---|
-| [auto_insurance_agent](auto_insurance_agent) | A virtual assistant for auto insurance that uses API hub to provide APIs as tools. |
+| [adk-auto-insurance-agent](adk-auto-insurance-agent) | A virtual assistant for auto insurance that uses API hub to provide APIs as tools. |
 
 For more information on ADK's API Hub and Application Integration toolsets, see the [documentation](https://google.github.io/adk-docs/tools/google-cloud-tools/).
 
