@@ -217,7 +217,7 @@ components:
     towList:
       type: array
       items:
-        $ref: '#/components/schemas/tow'       
+        $ref: '#/components/schemas/tow'
     tow:
       description: Represents a tow request.
       properties:
