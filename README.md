@@ -8,6 +8,8 @@
     - [Samples](#samples)
   - [Samples for LLM Serving with Apigee](#samples-for-llm-serving-with-apigee)
   - [ADK Samples with Apigee](#adk-samples-with-apigee)
+    - [Prerequisites](#prerequisites)
+    - [Samples](#samples-1)
   - [Modifying a sample proxy](#modifying-a-sample-proxy)
   - [Ask questions on the Community Forum](#ask-questions-on-the-community-forum)
   - [Apigee documentation](#apigee-documentation)
@@ -106,13 +108,14 @@ This repository explores common LLM serving patterns using Apigee X as a robust 
 
 This is a collection of sample AI agents created using Google's [Agent Development Kit](https://google.github.io/adk-docs/) that show how to use ADK's built-in tooling to connect to APIs from [Apigee API hub](https://cloud.google.com/apigee/docs/apihub/what-is-api-hub), or integrations from [Application Integration](https://cloud.google.com/application-integration/docs/overview).
 
-Prerequisites:
+### Prerequisites
 
 You will need a GCP project with the following services enabled and provisioned:
 - Vertex AI
 - Apigee API hub
 - Apigee
 
+### Samples
 
 | Agent | Description |
 |---|---|
