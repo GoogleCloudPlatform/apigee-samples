@@ -1,6 +1,20 @@
-# Auto Insurance Agent
+# Auto Insurance Agent APIs
 
-A virtual assistant for auto insurance that uses API hub to provide APIs as tools.
+This sample provides a set of APIs designed to act as tools for an [AI agent](https://cloud.google.com/discover/what-are-ai-agents) for auto insurance.
+
+The agent implementation that accompanies this sample was built using Google's [Agent Development Kit (ADK)](https://google.github.io/adk-docs/). The agent code can be found in the main ADK sample repo [here](https://github.com/google/adk-samples/tree/main/python/agents/apihub-auto-insurance-agent).
+
+This repo contains the following:
+
+1. API specifications which act as the [tools](https://google.github.io/adk-docs/tools/) used by the agent.
+    * These APIs are imported to [API hub](https://cloud.google.com/apigee/docs/apihub/what-is-api-hub) and then referenced in the agent code using ADK's built-in [ApiHubToolset](https://google.github.io/adk-docs/tools/google-cloud-tools/#apigee-api-hub-tools). This lets agent developers easily turn any existing API from their organization's API catalog into a tool with just a few lines of code.
+2. An Apigee [Proxy](https://cloud.google.com/apigee/docs/api-platform/fundamentals/understanding-apis-and-api-proxies#whatisanapiproxy) implementation that serves the API responses to the agent.
+    * This sample proxy implementation returns mock data generated using Gemini.
+
+![architecture](./images/arch.png)
+
+To try the sample, first follow the instructions below to deploy the API specs and proxies. Then clone the [agent implementation](https://github.com/google/adk-samples/tree/main/python/agents/apihub-auto-insurance-agent) and run it by following the instructions in that repo.
+
 
 ## Pre-Requisites
 
