@@ -1,5 +1,3 @@
-#!/bin/bash
-
 # Copyright 2025 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,8 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-export PROJECT="<GCP_PROJECT_ID>"
-export APIGEE_HOST="<APIGEE_DOMAIN_NAME>"
-export APIGEE_ENV="<APIGEE_ENVIRONMENT_NAME>"
+Feature:
+  As an Apigee platform explorer
+  I want to experiment with Java callouts
+  So that I can understand how it can be implemented
 
-gcloud config set project $PROJECT
+Scenario: Verfiy response body has been set correctly from within Java Callout policy
+  When I GET /java-hello
+  Then response body should contain Hello, World!

@@ -31,23 +31,23 @@ fi
 
 echo "This script downloads Apigee JAR files and installs them into the local Maven repo."
 
-mkdir java-callout/lib
-mkdir apiproxy/resources/java
+mkdir callout/lib
+mkdir -p apiproxy/resources/java
 
-curl "https://us-maven.pkg.dev/apigee-release/apigee-java-callout-dependencies/com/apigee/gateway/libraries/message-flow/1.0.0/message-flow-1.0.0.jar" -v -L -o java-callout/lib/message-flow-1.0.0.jar
+curl "https://us-maven.pkg.dev/apigee-release/apigee-java-callout-dependencies/com/apigee/gateway/libraries/message-flow/1.0.0/message-flow-1.0.0.jar" -v -L -o callout/lib/message-flow-1.0.0.jar
 
 mvn install:install-file \
-    -Dfile=java-callout/lib/message-flow-1.0.0.jar \
+    -Dfile=callout/lib/message-flow-1.0.0.jar \
     -DgroupId=com.apigee.gateway.libraries \
     -DartifactId=message-flow \
     -Dversion=1.0.0 \
     -Dpackaging=jar \
     -DgeneratePom=true
 
-curl "https://us-maven.pkg.dev/apigee-release/apigee-java-callout-dependencies/com/apigee/infra/libraries/expressions/1.0.0/expressions-1.0.0.jar" -v -L -o java-callout/lib/expressions-1.0.0.jar
+curl "https://us-maven.pkg.dev/apigee-release/apigee-java-callout-dependencies/com/apigee/infra/libraries/expressions/1.0.0/expressions-1.0.0.jar" -v -L -o callout/lib/expressions-1.0.0.jar
 
 mvn install:install-file \
-    -Dfile=java-callout/lib/expressions-1.0.0.jar \
+    -Dfile=callout/lib/expressions-1.0.0.jar \
     -DgroupId=com.apigee.infra.libraries \
     -DartifactId=expressions \
     -Dversion=1.0.0 \
@@ -56,7 +56,7 @@ mvn install:install-file \
 
 echo "Apigee JAR files have been installed into the local Maven repo."
 
-cd java-callout
+cd callout || exit
 echo "Compiling the custom jar file."
 
 mvn clean package
@@ -78,16 +78,15 @@ npm run lint
 
 echo "Deploying Apigee artifacts..."
 
-echo "Importing and Deploying Apigee java-hello proxy..."
-REV=$(apigeecli apis create bundle -f apiproxy -n java-hello --org "$PROJECT" --token "$TOKEN" --disable-check | jq ."revision" -r)
+echo "Importing and Deploying Apigee java-callout proxy..."
+REV=$(apigeecli apis create bundle -f apiproxy -n java-callout --org "$PROJECT" --token "$TOKEN" --disable-check | jq ."revision" -r)
 
-apigeecli apis deploy --wait --name java-hello --ovr --rev "$REV" --org "$PROJECT" --env "$APIGEE_ENV" --token "$TOKEN"
+apigeecli apis deploy --wait --name java-callout --ovr --rev "$REV" --org "$PROJECT" --env "$APIGEE_ENV" --token "$TOKEN"
 
 # var is expected by integration test (apickli)
-export PROXY_URL="$APIGEE_HOST/v1/samples/java-hello"
+export PROXY_URL="$APIGEE_HOST/v1/samples/java-callout"
 
 # integration tests
-
 npm run test
 
 echo " "

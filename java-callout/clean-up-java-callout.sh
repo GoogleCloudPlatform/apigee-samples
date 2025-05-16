@@ -38,9 +38,9 @@ echo "Installing apigeecli"
 curl -s https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.sh | bash
 export PATH=$PATH:$HOME/.apigeecli/bin
 
-echo "Undeploying java-hello"
-REV=$(apigeecli envs deployments get --env "$APIGEE_ENV" --org "$PROJECT" --token "$TOKEN" --disable-check | jq .'deployments[]| select(.apiProxy=="java-hello").revision' -r)
-apigeecli apis undeploy --name java-hello --env "$APIGEE_ENV" --rev "$REV" --org "$PROJECT" --token "$TOKEN"
+echo "Undeploying java-callout"
+REV=$(apigeecli envs deployments get --env "$APIGEE_ENV" --org "$PROJECT" --token "$TOKEN" --disable-check | jq .'deployments[]| select(.apiProxy=="java-callout").revision' -r)
+apigeecli apis undeploy --name java-callout --env "$APIGEE_ENV" --rev "$REV" --org "$PROJECT" --token "$TOKEN"
 
-echo "Deleting proxy java-hello"
-apigeecli apis delete --name java-hello --org "$PROJECT" --token "$TOKEN"
+echo "Deleting proxy java-callout"
+apigeecli apis delete --name java-callout --org "$PROJECT" --token "$TOKEN"
