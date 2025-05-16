@@ -126,6 +126,12 @@ apigeecli apps create --name adk-auto-insurance-app --email "adk-auto-insurance-
 
 APIKEY=$(apigeecli apps get --name "adk-auto-insurance-app" --org "$PROJECT_ID" --token "$TOKEN" --disable-check | jq ."[0].credentials[0].consumerKey" -r)
 
+SECRET_ID="cymbal-auto-apikey"
+echo "Creating a Secret that will be used by ADK"
+gcloud secrets create "$SECRET_ID" --replication-policy="automatic" --project "$PROJECT_ID"
+echo -n "$APIKEY" | gcloud secrets versions add "$SECRET_ID" --project "$PROJECT_ID" --data-file=- 
+echo "Secret $SECRET_ID created successfully"
+
 export APIKEY
 export PROXY_URL="$APIGEE_HOST/v1/samples/adk-cymbal-auto"
 

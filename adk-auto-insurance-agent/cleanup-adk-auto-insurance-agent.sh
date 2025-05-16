@@ -85,3 +85,7 @@ remove_role_from_service_account "roles/iam.serviceAccountUser"
 
 echo "Deleting Service Account"
 gcloud iam service-accounts delete "${SERVICE_ACCOUNT_NAME}@${PROJECT_ID}.iam.gserviceaccount.com" --project "$PROJECT_ID" --quiet
+
+echo "Deleting the Secret"
+SECRET_ID="cymbal-auto-apikey"
+gcloud secrets delete "$SECRET_ID" --project "$PROJECT_ID" --quiet
