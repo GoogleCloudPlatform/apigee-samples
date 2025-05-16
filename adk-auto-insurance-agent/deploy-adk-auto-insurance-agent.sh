@@ -70,9 +70,9 @@ add_api_to_hub(){
   -d openapi.yaml -f "tmp/${api}/${api}.yaml"  -r "$APIGEE_APIHUB_REGION" -o "$APIGEE_APIHUB_PROJECT_ID" -t "$TOKEN"
 }
 
-PRE_PROP="project_id=$PROJECT
+PRE_PROP="project_id=$VERTEXAI_PROJECT_ID
 model_id=$MODEL_ID
-region=$REGION"
+region=$VERTEXAI_REGION"
 
 echo "$PRE_PROP" > ./apiproxy/resources/properties/vertex_config.properties
 
