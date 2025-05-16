@@ -14,7 +14,8 @@
 
 module github.com/GoogleCloudPlatform/apigee-samples/grpc-web/app
 
-go 1.22
+go 1.23.0
+
 toolchain go1.24.1
 
 require (
