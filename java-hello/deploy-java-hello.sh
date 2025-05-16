@@ -32,6 +32,7 @@ fi
 echo "This script downloads Apigee JAR files and installs them into the local Maven repo."
 
 mkdir java-callout/lib
+mkdir apiproxy/resources/java
 
 curl "https://us-maven.pkg.dev/apigee-release/apigee-java-callout-dependencies/com/apigee/gateway/libraries/message-flow/1.0.0/message-flow-1.0.0.jar" -v -L -o java-callout/lib/message-flow-1.0.0.jar
 
