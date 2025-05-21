@@ -186,4 +186,4 @@ curl --location --request DELETE "https://$APIGEE_HOST/v1/samples/adk-cymbal-aut
 --header "x-apikey: $APIKEY"
 ```
 
-Once its deployed, you can follow the steps in the [README](https://github.com/ssvaidyanathan/adk-samples/tree/main/python/agents/auto-insurance-agent) to configure and run the agent.
+Once its deployed, you can follow the steps in the [README](https://github.com/GoogleCloudPlatform/adk-samples/tree/main/python/agents/auto-insurance-agent) to configure and run the agent.
