@@ -1,0 +1,292 @@
+# Copyright 2025 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+openapi: 3.0.0
+info:
+  title: Member Account Management API
+  description: >-
+    This API manages member accounts, allowing for creation, retrieval, updates,
+    and deletion of individual member records. The API allows accounts to be
+    created, updated and deleted.
+  version: 1.0.0
+  contact:
+    name: Cymbal Auto Insurance
+    url: https://cymbal-auto.com
+  termsOfService: https://cymbal-auto/terms/
+servers:
+  - url: https://APIGEE_HOST/v1/samples/adk-cymbal-auto
+security:
+  - ApiKeyAuth: []
+paths:
+  /members:
+    get:
+      description: Returns a list of members.
+      operationId: listMembers
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MemberList'
+          description: A list of members
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Invalid input
+        '401':
+          description: Unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Internal server error
+      tags:
+        - members
+    post:
+      description: Creates a new member account.
+      operationId: createMember
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Member'
+        description: Member object that needs to be created
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Member'
+          description: Member created successfully
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Invalid input
+        '401':
+          description: Unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Internal server error
+      tags:
+        - members
+  /members/{id}:
+    delete:
+      description: Deletes a specific member account by ID.
+      operationId: deleteMemberById
+      parameters:
+        - description: ID of the member to be deleted
+          in: path
+          name: id
+          required: true
+          schema:
+            format: int64
+            type: integer
+      responses:
+        '204':
+          description: Member deleted successfully
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Invalid input
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Member not found
+        '401':
+          description: Unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Internal server error
+      tags:
+        - members
+    get:
+      description: Retrieves a specific member account by ID.
+      operationId: getMemberById
+      parameters:
+        - description: ID of the member to be retrieved
+          in: path
+          name: id
+          required: true
+          schema:
+            format: int64
+            type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Member'
+          description: Successful operation
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Invalid input
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Member not found
+        '401':
+          description: Unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Internal server error
+      tags:
+        - members
+    put:
+      description: Updates a specific member account by ID.
+      operationId: updateMemberById
+      parameters:
+        - description: ID of the member to be updated
+          in: path
+          name: id
+          required: true
+          schema:
+            format: int64
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Member'
+        description: Member object that needs to be updated
+        required: true
+      responses:
+        '204':
+          description: Member updated successfully
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Invalid input
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Member not found
+        '401':
+          description: Unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Internal server error
+      tags:
+        - members
+components:
+  schemas:
+    MemberList:
+      type: array
+      items:
+        $ref: '#/components/schemas/Member'
+    Member:
+      description: Represents a member account.
+      properties:
+        id:
+          description: The member's ID. Generated by the server.
+          type: string
+          readOnly: true
+        address:
+          description: The member's street address.
+          type: string
+        city:
+          description: The member's city.
+          type: string
+        email:
+          description: The member's email address.
+          format: email
+          type: string
+        firstName:
+          description: The member's first name.
+          type: string
+        lastName:
+          description: The member's last name.
+          type: string
+        phoneNumber:
+          description: The member's phone number.
+          type: string
+        state:
+          description: The member's state.
+          type: string
+        zip:
+          description: The member's zip code.
+          type: string
+      required:
+        - firstName
+        - lastName
+        - address
+        - city
+        - state
+        - zip
+        - phoneNumber
+        - email
+      type: object
+    error:
+      properties:
+        code:
+          format: int32
+          type: integer
+        message:
+          type: string
+      type: object
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      description: API key to authorize requests.
+      name: apikey
+      in: query

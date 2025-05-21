@@ -1,0 +1,16 @@
+{
+    "operationConfigs": [
+      {
+        "apiSource": "adk-auto-insurance-v1",
+        "operations": [
+          {
+            "resource": "/",
+            "methods": [
+              "GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS"
+            ]
+          }
+        ]
+      }
+    ],
+    "operationConfigType": "proxy"
+  }

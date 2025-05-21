@@ -1,4 +1,6 @@
-# Copyright 2020 Google LLC
+#!/bin/bash
+
+# Copyright 2025 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,8 +14,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-ignored:
-  - DL3018  # Pin versions in apk add
-  - DL3059  # Multiple consecutive RUN instructions
-  - DL3008  # Pin versions in apt get install
-  - DL3015  # Avoid additional packages by specifying `--no-install-recommends`
+export PROJECT_ID="PROJECT_ID_TO_SET"
+export APIGEE_ENV="APIGEE_ENV_TO_SET"
+export APIGEE_HOST="APIGEE_HOST_TO_SET"
+export SERVICE_ACCOUNT_NAME="llm-auto-insurance-agent"
+
+export APIGEE_APIHUB_PROJECT_ID="APIGEE_APIHUB_PROJECT_ID_TO_SET"
+export APIGEE_APIHUB_REGION="APIGEE_APIHUB_REGION_TO_SET"
+
+export VERTEXAI_REGION="VERTEXAI_REGION_TO_SET"
+export VERTEXAI_PROJECT_ID="VERTEXAI_PROJECT_ID_TO_SET"
+export MODEL_ID="gemini-2.0-flash"

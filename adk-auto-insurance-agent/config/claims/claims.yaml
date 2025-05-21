@@ -1,0 +1,320 @@
+# Copyright 2025 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+openapi: 3.0.0
+info:
+  title: Claims API
+  description: >-
+    This API manages insurance claims, allowing for creation, retrieval,
+    updates, and deletion of individual claim records. The API allows claims to
+    be created, updated and deleted.
+  version: 1.0.0
+  contact:
+    name: Cymbal Auto Insurance
+    url: https://cymbal-auto.com
+  termsOfService: https://cymbal-auto/terms/
+servers:
+  - url: https://APIGEE_HOST/v1/samples/adk-cymbal-auto
+security:
+  - ApiKeyAuth: []
+paths:
+  /claims:
+    get:
+      description: Returns a list of claims.
+      operationId: listClaims
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/claimList'
+          description: A list of claims
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Invalid input
+        '401':
+          description: Unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Internal server error
+      tags:
+        - claims
+    post:
+      description: Creates a new claim.
+      operationId: createClaim
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/claim'
+        description: Claim object that needs to be created
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/claimResponse'
+          description: Claim created successfully
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Invalid input
+        '401':
+          description: Unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Internal server error
+      tags:
+        - claims
+  /claims/{id}:
+    delete:
+      description: Deletes a specific claim by ID.
+      operationId: deleteClaimById
+      responses:
+        '204':
+          description: Claim deleted successfully
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Invalid input
+        '401':
+          description: Unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Claim not found
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Internal server error
+      tags:
+        - claims
+    get:
+      description: Retrieves a specific claim by ID.
+      operationId: getClaimById
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/claimResponse'
+          description: Successful operation
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Invalid input
+        '401':
+          description: Unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Claim not found
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Internal server error
+      tags:
+        - claims
+    parameters:
+      - description: ID of the claim to be updated
+        in: path
+        name: id
+        required: true
+        schema:
+          format: int64
+          type: integer
+    put:
+      description: Updates a specific claim by ID.
+      operationId: updateClaimById
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/claim'
+        description: Claim object that needs to be updated
+        required: true
+      responses:
+        '204':
+          description: Claim updated successfully
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Invalid input
+        '401':
+          description: Unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Claim not found
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Internal server error
+      tags:
+        - claims
+components:
+  schemas:
+    claimList:
+      type: array
+      items:
+        $ref: '#/components/schemas/claimResponse'
+    claim:
+      description: Represents a claim.
+      properties:
+        id:
+          description: The claim's ID. Generated by the server.
+          type: string
+          readOnly: true
+        memberId:
+          description: The member ID associated with the claim.
+          type: string
+        status:
+          type: string
+          description: The status of the claim.
+          enum:
+            - IN_PROGRESS
+            - COMPLETED
+            - DENIED
+          readOnly: true
+        reason:
+          type: string
+          description: The type of the claim.
+          enum:
+            - ACCIDENT
+            - HAIL_DAMAGE
+            - OTHER
+        description:
+          description: Description of the claim.
+          type: string
+        location:
+          description: Location where the reason occurred.
+          type: string
+        vehicle:
+          description: The vehicle the claim applies to.
+          type: string
+      required:
+        - memberId
+        - reason
+        - vehicle
+        - description
+        - location
+      type: object
+    claimResponse:
+      description: Represents a claim.
+      properties:
+        id:
+          description: The claim's ID. Generated by the server.
+          type: string
+          readOnly: true
+        memberId:
+          description: The member ID associated with the claim.
+          type: string
+        status:
+          type: string
+          description: The status of the claim.
+          enum:
+            - IN_PROGRESS
+            - COMPLETED
+            - DENIED
+          readOnly: true
+        reason:
+          type: string
+          description: The type of the claim.
+          enum:
+            - ACCIDENT
+            - HAIL_DAMAGE
+            - OTHER
+        description:
+          description: Description of the claim.
+          type: string
+        location:
+          description: Location where the reason occurred.
+          type: string
+        vehicle:
+          description: The vehicle the claim applies to.
+          type: string
+      required:
+        - id
+        - memberId
+        - reason
+        - vehicle
+        - description
+        - location
+      type: object
+    error:
+      properties:
+        code:
+          format: int32
+          type: integer
+        message:
+          type: string
+      required:
+        - code
+        - message
+      type: object
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      description: API key to authorize requests.
+      name: apikey
+      in: query

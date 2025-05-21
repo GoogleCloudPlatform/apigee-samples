@@ -1,0 +1,102 @@
+# Copyright 2025 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+openapi: 3.0.0
+info:
+  title: Rewards API
+  description: >-
+    This API returns information about reward offers from
+    participating partner companies based on a given location.
+  version: 1.0.0
+  contact:
+    name: Cymbal Auto Insurance
+    url: https://cymbal-auto.com
+  termsOfService: https://cymbal-auto/terms/
+servers:
+  - url: https://APIGEE_HOST/v1/samples/adk-cymbal-auto
+security:
+  - ApiKeyAuth: []
+paths:
+  /rewards:
+    get:
+      description: Returns a list of reward offers.
+      operationId: listRewards
+      parameters:
+        - in: query
+          name: location
+          schema:
+            type: string
+          description: The location to search for nearby rewards.
+          required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rewardList'
+          description: A list of rewards
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Invalid input
+        '401':
+          description: Unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Internal server error
+      tags:
+        - rewards
+components:
+  schemas:
+    rewardList:
+      description: A list of rewards.
+      type: array
+      items:
+        $ref: '#/components/schemas/reward'
+    reward:
+      description: Represents a reward.
+      properties:
+        company:
+          description: The company or business that is offering the reward.
+          type: string
+        description:
+          description: A description of the reward.
+          type: string
+        expiry:
+          description: The date and time when the reward offer expires.
+          type: string
+          format: date-time
+      type: object
+    error:
+      properties:
+        code:
+          format: int32
+          type: integer
+        message:
+          type: string
+      type: object
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      description: API key to authorize requests.
+      name: apikey
+      in: query
