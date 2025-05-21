@@ -106,7 +106,7 @@ This repository explores common LLM serving patterns using Apigee X as a robust 
 
 ## <a name="adk-samples"></a>ADK Samples with Apigee
 
-This is a collection of sample AI agents created using Google's [Agent Development Kit](https://google.github.io/adk-docs/) that show how to use ADK's built-in tooling to connect to APIs from [Apigee API hub](https://cloud.google.com/apigee/docs/apihub/what-is-api-hub), or integrations from [Application Integration](https://cloud.google.com/application-integration/docs/overview).
+This is a collection of sample AI agents created using Google's [Agent Development Kit](https://google.github.io/adk-docs/) that show how to use ADK's built-in tooling to connect to APIs from [Apigee API hub](https://cloud.google.com/apigee/docs/apihub/what-is-api-hub).
 
 ### Prerequisites
 
