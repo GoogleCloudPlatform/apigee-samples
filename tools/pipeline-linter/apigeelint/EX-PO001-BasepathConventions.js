@@ -10,7 +10,8 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 */
-const basepathConvention="/v1/samples/"
+
+const regex = /\/v\d\/samples\//;
 const plugin = {
   ruleId: "EX-001",
   name: "Basepath convention",
@@ -28,13 +29,13 @@ const onProxyEndpoint = function (ep, cb) {
   if (httpProxyConnection) {
     //console.log("basepath:" + httpProxyConnection.getBasePath());
     let basepath = httpProxyConnection.getBasePath();
-    if (basepath && !basepath.startsWith(basepathConvention)) {
+    if (basepath && !regex.test(basepath)) {
       ep.addMessage({
         plugin,
         source: httpProxyConnection.getSource(),
         line: httpProxyConnection.getElement().lineNumber,
         column: httpProxyConnection.getElement().columnNumber,
-        message: `Basepath not following "${basepathConvention}" convention`
+        message: `Basepath not following "${regex.toString()}" convention`
       });
       hadError = true;
     }
