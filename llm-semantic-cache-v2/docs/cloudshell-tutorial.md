@@ -3,6 +3,7 @@
 This sample performs a cache lookup of responses on Apigee's Cache layer and Vector Search as an embeddings database. It operates by comparing the vector proximity of the prompt to prior requests and using a configurable similarity score threshold. In this sample, we will use Apigee's out of the box semantic caching policies
 
 Let's get started!
+
 ---
 
 ## Prepare project dependencies

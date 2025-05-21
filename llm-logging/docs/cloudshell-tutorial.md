@@ -3,6 +3,7 @@
 This sample creates and deploys an LLM proxy that logs prompts and candidate responses. It will also create and deploy helper sharedflows with core logging logic to be reused.
 
 Let's get started!
+
 ---
 
 ## Prepare project dependencies

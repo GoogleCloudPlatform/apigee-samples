@@ -72,7 +72,7 @@ In this step, let's create a new **GCP External Global Load Balancer** that uses
 
 The initial architecture will look like this:
 
-<img src="images/cloud-load-balancer-request-response.png" width="550"/>
+<img src="images/cloud-load-balancer-request-response.png" alt="architecture" width="550"/>
 
 1.  **Run the script:**
     ```bash
@@ -120,9 +120,9 @@ Next, let's modify the External Global Load Balancer by adding a Service Extensi
 
 The new architecture will look like this:
 
-<img src="images/extension-processor-request.png" width="600"/>
+<img src="images/extension-processor-request.png" alt="architecture" width="600"/>
 
-<img src="images/extension-processor-response.png" width="600"/>
+<img src="images/extension-processor-response.png" alt="architecture" width="600"/>
 
 1.  **Add Service Extension:**  
     Run the script:
