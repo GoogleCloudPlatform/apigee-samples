@@ -41,6 +41,6 @@
   </Step>
   <Step>
     <Name>RF-SDP-Detected</Name>
-    <Condition>SanitizeUserPrompt.SUP-Sanitize-User-Prompt.sdpFilterResult.inspectResult.matchState = "MATCH_FOUND" or SanitizeModelResponse.SMR-Sanitize-Model-Response.sdpFilterResult.inspectResult.matchState = "MATCH_FOUND</Condition>
+    <Condition>SanitizeUserPrompt.SUP-Sanitize-User-Prompt.sdpFilterResult.inspectResult.matchState = "MATCH_FOUND" or SanitizeModelResponse.SMR-Sanitize-Model-Response.sdpFilterResult.inspectResult.matchState = "MATCH_FOUND"</Condition>
   </Step>
 </SharedFlow>
