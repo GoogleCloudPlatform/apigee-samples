@@ -79,7 +79,8 @@ The initial architecture will look like this:
     ./1-create-load-balancer.sh
     ```
     This script outputs the load balancer's hostname (`$LB_HOSTNAME`).<br />
-    ⏳ **Deployment takes about 15 minutes** (due to external certificate provisioning).<br />
+    ⏳ **Deployment takes about 15 minutes** due to google managed certificate provisioning. <br />
+    The certificate hostname uses the nip.io DNS service. (i.e. `{IP}.nip.io`, where `{IP}`is the Load Balancer IP address.)<br />
 2.  **Test the load balancer:**  
     Execute the following cURL command:
     ```bash
