@@ -2,7 +2,7 @@
 
 This sample provides a set of APIs designed to act as tools for an [AI agent](https://cloud.google.com/discover/what-are-ai-agents) for auto insurance.
 
-The agent implementation that accompanies this sample was built using Google's [Agent Development Kit (ADK)](https://google.github.io/adk-docs/). The agent code can be found in the main ADK sample repo [here](https://github.com/google/adk-samples/tree/main/python/agents/apihub-auto-insurance-agent).
+The agent implementation that accompanies this sample was built using Google's [Agent Development Kit (ADK)](https://google.github.io/adk-docs/). The agent code can be found in the main ADK sample repo [here](https://github.com/google/adk-samples/tree/main/python/agents/auto-insurance-agent).
 
 This repo contains the following:
 
@@ -13,7 +13,7 @@ This repo contains the following:
 
 ![architecture](./images/arch.png)
 
-To try the sample, first follow the instructions below to deploy the API specs and proxies. Then clone the [agent implementation](https://github.com/google/adk-samples/tree/main/python/agents/apihub-auto-insurance-agent) and run it by following the instructions in that repo.
+To try the sample, first follow the instructions below to deploy the API specs and proxies. Then clone the [agent implementation](https://github.com/google/adk-samples/tree/main/python/agents/auto-insurance-agent) and run it by following the instructions in that repo.
 
 
 ## Pre-Requisites
@@ -186,4 +186,4 @@ curl --location --request DELETE "https://$APIGEE_HOST/v1/samples/adk-cymbal-aut
 --header "x-apikey: $APIKEY"
 ```
 
-Once its deployed, you can follow the steps in the [README](https://github.com/ssvaidyanathan/adk-samples/tree/main/python/agents/apihub-auto-insurance-agent) to configure and run the agent.
+Once its deployed, you can follow the steps in the [README](https://github.com/ssvaidyanathan/adk-samples/tree/main/python/agents/auto-insurance-agent) to configure and run the agent.
