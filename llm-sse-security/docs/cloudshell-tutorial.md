@@ -14,7 +14,7 @@
    
 ```sh
 PROJECT_ID=<project-id>
-MODEL_ARMOR_REGION=<region> #https://cloud.google.com/security-command-center/docs/model-armor-overview#regional_endpoints
+MODEL_ARMOR_REGION=<region>
 TEMPLATE_ID=apigee-modelarmor-template
 ```
 
