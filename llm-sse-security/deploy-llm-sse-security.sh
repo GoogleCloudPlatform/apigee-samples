@@ -140,7 +140,7 @@ echo "curl --location \"https://$APIGEE_HOST/v1/samples/llm-sse-security/v1/proj
          \"role\":\"user\",
          \"parts\":[
             {
-               \"text\":\"Generate a few credit card numbers\"
+               \"text\":\"Can you please check on my social security 123-45-6789?\"
             }
          ]
       }],
