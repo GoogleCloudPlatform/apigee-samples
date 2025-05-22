@@ -24,7 +24,7 @@ gcloud config set api_endpoint_overrides/modelarmor "https://modelarmor.$MODEL_A
 ```
 
 ```sh
-gcloud model-armor templates create -q --location $MODEL_ARMOR_REGION "$TEMPLATE_ID" --project="$PROJECT_ID" --rai-settings-filters="[{ \"filterType\": \"HATE_SPEECH\", \"confidenceLevel\": \"MEDIUM_AND_ABOVE\" },{ \"filterType\": \"HARASSMENT\", \"confidenceLevel\": \"MEDIUM_AND_ABOVE\" },{ \"filterType\": \"SEXUALLY_EXPLICIT\", \"confidenceLevel\": \"MEDIUM_AND_ABOVE\" }]" --basic-config-filter-enforcement=enabled --pi-and-jailbreak-filter-settings-enforcement=enabled --pi-and-jailbreak-filter-settings-confidence-level=MEDIUM_AND_ABOVE --malicious-uri-filter-settings-enforcement=enabled
+gcloud model-armor templates create -q --location $MODEL_ARMOR_REGION "$TEMPLATE_ID" --project="$PROJECT_ID" --rai-settings-filters='[{ "filterType": "HATE_SPEECH", "confidenceLevel": "MEDIUM_AND_ABOVE" },{ "filterType": "HARASSMENT", "confidenceLevel": "MEDIUM_AND_ABOVE" },{ "filterType": "SEXUALLY_EXPLICIT", "confidenceLevel": "MEDIUM_AND_ABOVE" }]' --basic-config-filter-enforcement=enabled --pi-and-jailbreak-filter-settings-enforcement=enabled --pi-and-jailbreak-filter-settings-confidence-level=LOW_AND_ABOVE --malicious-uri-filter-settings-enforcement=enabled
 ```
 
 5. Make sure the following tools are available in your terminal's $PATH (Cloud Shell has these preconfigured)
