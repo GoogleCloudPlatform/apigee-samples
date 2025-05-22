@@ -31,7 +31,7 @@
       <Step>
         <Name>SMR-SantizeModelResponse</Name>
         <!-- uncomment below line if you do not want to call Model Armor on every event -->
-        <!-- <Condition> buff_ready == true </Condition>  -->
+        <!-- <Condition> buff_ready = true </Condition>  -->
       </Step>
       <Step>
         <Name>JS-SetErrorEvent</Name>
