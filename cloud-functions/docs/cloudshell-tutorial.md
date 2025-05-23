@@ -264,7 +264,7 @@ curl -i -H "Authorization: Bearer $SA_ID_TOKEN" "$CF_URL/hello-sample"
 What happens?  You should again see a 403 response code, with a www-authenticate
 header telling you the caller has insufficient scope.
 
-```
+```sh
 HTTP/2 403
 www-authenticate: Bearer error="insufficient_scope"
 ```

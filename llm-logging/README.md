@@ -8,11 +8,11 @@ Additionally, logging the generated candidates provides insights into the LLM's 
 
 [![architecture](./images/llm-logging.png)](llm_logging_v1.ipynb)
 
-# Benefits of Logging with Apigee and Google Cloud Logging
+### Benefits of Logging with Apigee and Google Cloud Logging
 
 * **Seamless logging**: Effortlessly capture prompts, candidate responses, and metadata without complex coding.
 * **Scalable and secure**: Leverage Google Cloud's infrastructure for reliable and secure log management.
 
-## Get started
+### Get started
 
 Proceed to this [notebook](llm_logging_v1.ipynb) and follow the steps in the Setup and Testing sections.

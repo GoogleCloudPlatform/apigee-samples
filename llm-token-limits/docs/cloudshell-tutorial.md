@@ -3,6 +3,7 @@
 This sample creates tiered Products to limit and control the token consumption. It also captures token metrics that are aggregated on a report.
 
 Let's get started!
+
 ---
 
 ## Prepare project dependencies

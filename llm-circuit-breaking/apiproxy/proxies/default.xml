@@ -37,7 +37,6 @@
   <HTTPProxyConnection>
     <BasePath>/v1/samples/llm-circuit-breaking</BasePath>
     <Properties/>
-    <VirtualHost>default</VirtualHost>
   </HTTPProxyConnection>
   <RouteRule name="primary">
     <Condition>ratelimit.Q-LLM-Failover.failed=false</Condition>

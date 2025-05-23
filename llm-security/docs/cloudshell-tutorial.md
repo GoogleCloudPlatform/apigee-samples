@@ -2,8 +2,7 @@
 
 ---
 
-- This is a sample Apigee proxy to demonstrate the security capabilities of Apigee with Model Armor to secure the user prompts
-
+- This is a sample Apigee proxy to demonstrate the security capabilities of Apigee with Model Armor to secure the user prompts. In this sample, we are using Service callout policies to invoke Model Armor. You can bring your own service and integrate with Apigee using these callout policies
 
 ## Pre-Requisites
 
@@ -14,7 +13,7 @@
    
 ```sh
 PROJECT_ID=<project-id>
-MODEL_ARMOR_REGION=<region> #https://cloud.google.com/security-command-center/docs/model-armor-overview#regional_endpoints
+MODEL_ARMOR_REGION=<region>
 TEMPLATE_ID=apigee-modelarmor-template
 ```
 
@@ -24,7 +23,7 @@ gcloud config set api_endpoint_overrides/modelarmor "https://modelarmor.$MODEL_A
 ```
 
 ```sh
-gcloud alpha model-armor templates create -q --location $MODEL_ARMOR_REGION "$TEMPLATE_ID" --project="$PROJECT_ID" --rai-settings-filters="[{ \"filterType\": \"HATE_SPEECH\", \"confidenceLevel\": \"MEDIUM_AND_ABOVE\" },{ \"filterType\": \"HARASSMENT\", \"confidenceLevel\": \"MEDIUM_AND_ABOVE\" },{ \"filterType\": \"SEXUALLY_EXPLICIT\", \"confidenceLevel\": \"MEDIUM_AND_ABOVE\" }]" --basic-config-filter-enforcement=enabled --pi-and-jailbreak-filter-settings-enforcement=enabled --pi-and-jailbreak-filter-settings-confidence-level=LOW_AND_ABOVE --malicious-uri-filter-settings-enforcement=enabled
+gcloud model-armor templates create -q --location $MODEL_ARMOR_REGION "$TEMPLATE_ID" --project="$PROJECT_ID" --rai-settings-filters='[{ "filterType": "HATE_SPEECH", "confidenceLevel": "MEDIUM_AND_ABOVE" },{ "filterType": "HARASSMENT", "confidenceLevel": "MEDIUM_AND_ABOVE" },{ "filterType": "SEXUALLY_EXPLICIT", "confidenceLevel": "MEDIUM_AND_ABOVE" }]' --basic-config-filter-enforcement=enabled --pi-and-jailbreak-filter-settings-enforcement=enabled --pi-and-jailbreak-filter-settings-confidence-level=LOW_AND_ABOVE --malicious-uri-filter-settings-enforcement=enabled
 ```
 
 5. Make sure the following tools are available in your terminal's $PATH (Cloud Shell has these preconfigured)

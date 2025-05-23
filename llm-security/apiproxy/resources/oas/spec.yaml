@@ -139,7 +139,7 @@ components:
               example: 400
             message:
               type: string
-              example: "RAI Threat Detected"
+              example: "Bad Request"
             status:
               type: "string"
               example: "BAD_REQUEST"

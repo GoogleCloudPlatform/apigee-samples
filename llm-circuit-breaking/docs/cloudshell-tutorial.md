@@ -3,6 +3,7 @@
 This sample creates an LLM proxy with 2 target pools: Primary and Secondary. Each target represents a distinct GCP project with its own Gemini quota. It will also create a Cloud Task queue to simulate a burst of API calls intended to reach and exceed the Primary target quota. the LLM proxy will automatically retry the overflowing calls to the Secondary target pool.
 
 Let's get started!
+
 ---
 
 ## Prepare project dependencies
