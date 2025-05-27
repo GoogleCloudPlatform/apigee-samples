@@ -124,6 +124,14 @@ You will need a GCP project with the following services enabled and provisioned:
 
 For more information on ADK's API Hub and Application Integration toolsets, see the [documentation](https://google.github.io/adk-docs/tools/google-cloud-tools/).
 
+## <a name="apigee-mcp-samples"></a>Apigee and Model Context Protocol (MCP)
+
+The [Model Context Protocol (MCP)](https://github.com/modelcontext/specification) standardizes how Large Language Models (LLMs) interact with external tools and APIs. Apigee can act as a powerful MCP provider, exposing managed APIs as tools for LLMs. This allows AI agents to leverage existing enterprise APIs securely and reliably through Apigee's governance and traffic management capabilities. The sample in this section demonstrates how to integrate Apigee with MCP.
+
+|    | Sample                      | Description                                                                                                                                                              | Open Notebook |
+|----|-----------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------|
+| 1  | [apigee-mcp](apigee-mcp)    | Illustrates Apigee's role in the MCP ecosystem. Features an MCP server that discovers API specs from API Hub (via Apigee), dynamically creates tools for LLMs, and exposes them through Apigee. An example CRM agent notebook demonstrates consuming these tools. | [![notebook](https://cloud.google.com/ml-engine/images/colab-logo-32px.png)](./apigee-mcp/notebooks/crm-agent-mcp.ipynb) |
+
 ## <a name="modifying"></a>Modifying a sample proxy
 
 Feel free to modify and build upon the sample proxies. You can make changes in the Apigee [management UI](https://cloud.google.com/apigee/docs/api-platform/develop/ui-edit-proxy) or by using our Cloud Code [extension for local development](https://cloud.google.com/apigee/docs/api-platform/local-development/setup) in Visual Studio Code. Whichever approach is comfortable for you.
