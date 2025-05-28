@@ -51,16 +51,16 @@ if [ "$BILLING_TYPE" == "null" ] || [ -z "$BILLING_TYPE" ]; then
      exit 1
 fi
 
-ENV_TYPE_PARAM=""
+ENV_TYPE_PARAM=()
 if [ "$BILLING_TYPE" == "PAYG" ]; then
-  ENV_TYPE_PARAM='--envtype "COMPREHENSIVE"'
+  ENV_TYPE_PARAM+=(--envtype "COMPREHENSIVE")
 fi
 
 apigeecli environments create \
   --deptype "PROXY" \
   --env "$ENV_NAME" \
   --org "$APIGEE_ORG" \
-  "${ENV_TYPE_PARAM}" \
+  "${ENV_TYPE_PARAM[@]}" \
   --token "$TOKEN" \
   --wait
 
