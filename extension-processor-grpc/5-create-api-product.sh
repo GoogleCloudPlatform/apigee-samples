@@ -41,7 +41,6 @@ echo ""
 echo "🔄 Step 1: Create API Product '$PRODUCT_NAME' ..."
 
 OPS_GROUP_FILE=$(mktemp)
-export OPP_SGROUP_FILE
 
 cat << EOF > "$OPS_GROUP_FILE"
 {

@@ -16,25 +16,6 @@
 
 set -e
 
-
-#!/bin/bash
-
-# Copyright 2023 Google LLC
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-set -e
-
 # Source default values
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 source "$SCRIPT_DIR/defaults.sh"
@@ -79,14 +60,13 @@ CLOUD_RUN_ALREADY_DEPLOYED=$(gcloud run services list --format "json" --project 
 if [[ "${CLOUD_RUN_ALREADY_DEPLOYED}" == "1" ]] ; then
  echo "✅ gRPC service already deployed to Cloud Run ..."
 else
-  cd backend
   echo ""
   echo "🔄 2. Deploying gRPC Cloud Run  ..."
   gcloud run deploy "$CLOUD_RUN_NAME" \
      --timeout 3600 \
      --region="${INSTANCE_LOCATION}" \
      --set-custom-audiences "extproc-sample-audience" \
-     --source=. \
+     --source=./backend \
      --quiet \
      --project "$PROJECT_ID"
 

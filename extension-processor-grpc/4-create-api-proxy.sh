@@ -46,13 +46,6 @@ if [ "$INSTANCE_LOCATION" == "null" ] || [ -z "$INSTANCE_LOCATION" ]; then
 fi
 export INSTANCE_LOCATION
 
-
-echo "🔄 Installing apigeecli ..."
-curl -s https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.sh | bash
-export PATH=$HOME/.apigeecli/bin:$PATH
-echo "✅ apigeecli installed."
-
-
 echo "⚙️ Starting script to create API Proxy for httpbin.org ..."
 
 echo ""
