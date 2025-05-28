@@ -100,11 +100,6 @@ gcloud compute backend-services add-backend "$SERVICE_BACKEND_SERVICE_NAME" \
     --network-endpoint-group="$SERVICE_NEG_NAME" \
     --network-endpoint-group-region="$INSTANCE_LOCATION" \
     --global
-
-gcloud compute backend-services update "$SERVICE_BACKEND_SERVICE_NAME" \
-    --project="$PROJECT_ID" \
-    --protocol "HTTP2" \
-    --global
 echo "✅ Successfully created backend service and added NEG."
 
 echo ""
