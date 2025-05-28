@@ -22,6 +22,18 @@ export PROJECT_ID="<YOUR_GCP_PROJECT_ID>"
 # This is the name of the Apigee Runtime instance you will use for this tutorial
 export APIGEE_INSTANCE_NAME="<YOUR_APIGEE_INSTANCE_NAME>"
 
+# if you don't have PSC-only subnet, please copy paste the below command and run it in cloudshell.
+#  Ensure the region specified in the command (--region) is the same as your Apigee instance region
+# (i.e., ${INSTANCE_LOCATION}).,
+# and decide the range as per your requirement, ensuring it doesn't conflict with other subnet ranges.
+
+# gcloud compute networks subnets create "$VPC_PSC_SUBNET_NAME" \
+#   --network="${VPC_NETWORK_NAME}" \
+#   --region="${INSTANCE_LOCATION}" \
+#   --range="192.168.1.0/24" \
+#   --purpose=PRIVATE_SERVICE_CONNECT \
+#   --project "${PROJECT_ID}"
+
 # This is the name of a PSC-only subnet in the same region as your Apigee Runtime instance
 export VPC_PSC_SUBNET_NAME="<YOUR_SUBNET_NAME>"
 
