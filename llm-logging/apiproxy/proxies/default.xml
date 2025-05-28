@@ -41,7 +41,6 @@
   <HTTPProxyConnection>
     <BasePath>/v1/samples/llm-logging</BasePath>
     <Properties/>
-    <VirtualHost>default</VirtualHost>
   </HTTPProxyConnection>
   <RouteRule name="primary">
     <TargetEndpoint>primary</TargetEndpoint>
