@@ -53,6 +53,12 @@ The `deploy-all.sh` script in the root of this repository is designed to:
 3.  Configure Apigee artifacts (API Proxies, Products, Developer Apps) to proxy these Cloud Run services and set up the "MCP API" endpoint.
 4.  Set up API Hub entries that the `McpApi` will discover.
 
+### Cloud Shell Tutorial
+
+Alternatively, you can use this cloud shell tutorial to deploy the solution:
+
+[![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/ra2085/apigee-samples&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=apigee-mcp/docs/cloudshell-tutorial.md)
+
 Once deployed, the [CRM Agent Jupyter notebook](notebooks/crm-agent-mcp.ipynb) can be used to test the end-to-end solution. The notebook demonstrates how an ADK agent can connect to the deployed MCP server, discover the dynamically generated tools (which correspond to your Apigee API Products), and invoke them.
 
 ![CRM Agent](img/crm_agent.png)
