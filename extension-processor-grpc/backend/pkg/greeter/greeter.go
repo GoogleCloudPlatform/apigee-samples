@@ -19,7 +19,7 @@ package greeter
 import (
 	"context"
 	"fmt"
-	"github.com/micovery/extension-processor-grpc/backend/pkg/greeter/generated/pb"
+	"github.com/GoogleCloudPlatform/apigee-samples/extension-processor-grpc/backend/pkg/greeter/generated/pb"
 	"time"
 )
 

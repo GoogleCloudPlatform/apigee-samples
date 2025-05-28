@@ -16,9 +16,9 @@ package main
 
 import (
 	"fmt"
+	"github.com/GoogleCloudPlatform/apigee-samples/extension-processor-grpc/backend/pkg/greeter"
+	"github.com/GoogleCloudPlatform/apigee-samples/extension-processor-grpc/backend/pkg/greeter/generated/pb"
 	"github.com/labstack/echo/v4"
-	"github.com/micovery/extension-processor-grpc/backend/pkg/greeter"
-	"github.com/micovery/extension-processor-grpc/backend/pkg/greeter/generated/pb"
 	"golang.org/x/net/http2"
 	"golang.org/x/net/http2/h2c"
 	"google.golang.org/grpc"
