@@ -67,8 +67,8 @@ gcloud iam service-accounts create "${SERVICE_ACCOUNT_NAME}" \
 ```
 # Grant the service account the Run Invoker role
 ```sh
-gcloud projects add-iam-policy-binding "" \
---member="serviceAccount:${SERVICE_ACCOUNT_NAME}@.iam.gserviceaccount.com" \
+gcloud projects add-iam-policy-binding <walkthrough-project-id/> \
+--member="serviceAccount:${SERVICE_ACCOUNT_NAME}@<walkthrough-project-id/>.iam.gserviceaccount.com" \
 --role="roles/run.invoker"
 ```
 After creating the service account, its email will be apigee-mcp-sa@<walkthrough-project-id/>.iam.gserviceaccount.com. You will use this for the SA_EMAIL variable in the next step.
