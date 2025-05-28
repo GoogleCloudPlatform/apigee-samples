@@ -22,7 +22,7 @@ export PROJECT_ID="<YOUR_GCP_PROJECT_ID>"
 # This is the name of the Apigee Runtime instance you will use for this tutorial
 export APIGEE_INSTANCE_NAME="<YOUR_APIGEE_INSTANCE_NAME>"
 
-# if you don't have PSC-only subnet, please copy paste the below command and run it in cloudshell.
+# If you don't have PSC-only subnet, please copy paste the below command and run it in cloudshell.
 #  Ensure the region specified in the command (--region) is the same as your Apigee instance region
 # (i.e., ${INSTANCE_LOCATION}).,
 # and decide the range as per your requirement, ensuring it doesn't conflict with other subnet ranges.
