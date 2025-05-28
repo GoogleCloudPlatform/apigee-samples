@@ -12,13 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-module github.com/micovery/extension-processor-grpc/backend
+module github.com/GoogleCloudPlatform/apigee-samples/extension-processor-grpc/backend
 
 go 1.18
 
 require (
 	github.com/labstack/echo/v4 v4.11.1
-	github.com/micovery/apigee-grpc v0.0.0-20240508120222-12ccfd78e369
 	golang.org/x/net v0.12.0
 	google.golang.org/grpc v1.55.0-dev
 	google.golang.org/protobuf v1.31.0

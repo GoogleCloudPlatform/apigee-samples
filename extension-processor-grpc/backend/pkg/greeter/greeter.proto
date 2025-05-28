@@ -14,7 +14,7 @@
 
 syntax = "proto3";
 
-option go_package = "github.com/micovery/apigee-samples/extension-processor-grpc/backend/pkg/greeter/generated/pb";
+option go_package = "github.com/GoogleCloudPlatform/apigee-samples/extension-processor-grpc/backend/pkg/greeter/generated/pb";
 
 package helloworld;
 
