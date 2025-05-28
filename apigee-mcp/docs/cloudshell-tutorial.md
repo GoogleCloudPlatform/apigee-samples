@@ -54,10 +54,7 @@ gcloud services enable \
 ### 1. Clone the Repository & Navigate to Project Directory
 Make sure you are in your Cloud Shell home directory before cloning.
 ```sh
-cd ~
-```sh
-git clone https://github.com/GoogleCloudPlatform/apigee-samples.git
-cd apigee-samples/apigee-mcp
+cd apigee-mcp
 ```
 
 ### 2. Create a Service Account for Apigee Proxies
@@ -66,8 +63,7 @@ This service account will be used by Apigee proxies to invoke the Cloud Run serv
 ```sh 
 SERVICE_ACCOUNT_NAME="apigee-mcp-sa" 
 gcloud iam service-accounts create "${SERVICE_ACCOUNT_NAME}" \
---display-name="Apigee MCP Service Account" \
---project=<walkthrough-project-id/>
+--display-name "Apigee MCP Service Account"
 ```
 # Grant the service account the Run Invoker role
 ```sh
@@ -120,7 +116,7 @@ All deployments and configurations complete.
 You can now go to the Jupyter notebook to test the sample.
 The notebook is located at `apigee-mcp/notebooks/crm-agent-mcp.ipynb`.
 
-<walkthrough-editor-open-file filePath="apigee-mcp/notebooks/crm-agent-mcp.ipynb">Open `crm-agent-mcp.ipynb` in the Cloud Shell editor</walkthrough-editor-open-file>, or open it in your preferred Jupyter environment (e.g., Google Colab, Vertex AI Workbench).
+Open [`crm-agent-mcp.ipynb`](https://github.com/ra2085/apigee-samples/blob/main/apigee-mcp/notebooks/crm-agent-mcp.ipynb) in your preferred Jupyter environment (e.g., Google Colab, Vertex AI Workbench).
 
 **Note:** Before running the notebook, ensure you update the following placeholder values within it:
 *   `GCP_PROJECT_ID`: Use the Project ID you configured in `env.sh` (variable `$PROJECT`).
