@@ -62,6 +62,14 @@ cat << EOF > "$OPS_GROUP_FILE"
       ],
       "quota": {},
       "service": "grpc.reflection.v1alpha.ServerReflection"
+    },
+     {
+      "apiSource": "extproc-proxy",
+      "methods": [
+        "ServerReflectionInfo"
+      ],
+      "quota": {},
+      "service": "grpc.reflection.v1.ServerReflection"
     }
   ]
 }

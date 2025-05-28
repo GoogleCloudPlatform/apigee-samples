@@ -27,7 +27,7 @@ if [[ "${OS}" == "darwin" ]] ; then
 fi
 
 export TOOL="grpcurl"
-export TOOL_VERSION=1.8.6
+export TOOL_VERSION=1.9.3
 export TOOL_TARGZ="https://github.com/fullstorydev/grpcurl/releases/download/v${TOOL_VERSION}/grpcurl_${TOOL_VERSION}_${OS}_${ARCH}.tar.gz"
 export INSTALL_PATH="${HOME}/.grpcurl/bin"
 
