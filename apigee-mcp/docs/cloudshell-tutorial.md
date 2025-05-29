@@ -114,9 +114,8 @@ All deployments and configurations complete.
 ## Test the Solution
 
 You can now go to the Jupyter notebook to test the sample.
-The notebook is located at `apigee-mcp/notebooks/crm-agent-mcp.ipynb`.
 
-Open [`crm-agent-mcp.ipynb`](https://github.com/ra2085/apigee-samples/blob/main/apigee-mcp/notebooks/crm-agent-mcp.ipynb) in your preferred Jupyter environment (e.g., Google Colab, Vertex AI Workbench).
+Open [`crm-agent-mcp`](https://github.com/ra2085/apigee-samples/blob/main/apigee-mcp/notebooks/crm-agent-mcp.ipynb) in your preferred Jupyter environment.
 
 **Note:** Before running the notebook, ensure you update the following placeholder values within it:
 *   `GCP_PROJECT_ID`: Use the Project ID you configured in `env.sh` (variable `$PROJECT`).
@@ -135,7 +134,7 @@ Ensure your environment variables from `env.sh` are still set (if in a new termi
 chmod +x undeploy-all.sh
 ```
 
-### 2. Run the undeployment script
+### 2. Run the undeploy script
 ```sh
 ./undeploy-all.sh
 ```
