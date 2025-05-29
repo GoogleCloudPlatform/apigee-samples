@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+ Copyright 2025 Google LLC
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+      http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<SemanticCacheLookup async="false" continueOnError="false" enabled="true" name="SCL-Semantic-Cache-Lookup">
+    <DisplayName>SCL-Semantic-Cache-Lookup</DisplayName>
+    <IgnoreUnresolvedVariables>false</IgnoreUnresolvedVariables>
+    <UserPromptSource>{jsonPath($.contents[-1].parts[-1].text,request.content,true)}</UserPromptSource>
+    <Embeddings>
+      <VertexAI>
+        <URL>https://REGION-aiplatform.googleapis.com/v1/projects/PROJECT_ID/locations/REGION/publishers/google/models/EMBEDDINGS_MODEL_ID:predict</URL>
+      </VertexAI>
+    </Embeddings>
+    <SimilaritySearch>
+      <VertexAI>
+        <URL>https://PUBLIC_ENDPOINT_SUBDOMAIN.REGION-PROJECT_NUMBER.vdb.vertexai.goog/v1/projects/PROJECT_NUMBER/locations/REGION/indexEndpoints/INDEX_ENDPOINT_ID:findNeighbors</URL>
+        <DeployedIndexID>INDEX_ID_NAME</DeployedIndexID>
+        <Threshold>NEAREST_NEIGHBOR_DISTANCE</Threshold>
+      </VertexAI>
+    </SimilaritySearch>
+  </SemanticCacheLookup>
+  
