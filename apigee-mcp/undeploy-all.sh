@@ -27,7 +27,7 @@ undeploy_all_revisions() {
   # Attempt to get revisions. Suppress stderr for listdeploy in case proxy or deployments don't exist.
   # jq will output nothing if .deployments is null or empty, or if .revision is not found.
   local revisions
-  revisions=$(apigeecli apis listdeploy --name "${proxy_name}" --org "${org}" --env "${env}" --token "${token}" --disable-check 2>/dev/null | jq -r '.deployments[].revision // empty')
+  revisions=$(apigeecli envs deployments get --org "${org}" --env "${env}" --token "${token}" --disable-check | jq --arg proxy_name "$proxy_name" '.deployments[] | select(.apiProxy==$proxy_name).revision' -r)
 
   if [ -z "$revisions" ]; then
     echo "INFO: No deployed revisions found for proxy '${proxy_name}' in env '${env}', or proxy not deployed."
@@ -80,13 +80,6 @@ if [ -z "$TOKEN" ]; then
   echo "INFO: If the script takes longer than the token's validity (typically 1 hour), you may need to re-run it with a fresh token."
 fi
 
-if ! command -v apigeecli &> /dev/null; then
-    echo "ERROR: apigeecli command not found. Please ensure it is installed and in your PATH."
-    echo "The original deploy script installs it to \$HOME/.apigeecli/bin. You might need to run:"
-    echo "export PATH=\$PATH:\$HOME/.apigeecli/bin"
-    exit 1
-fi
-
 if ! command -v jq &> /dev/null; then
     echo "ERROR: jq command not found. Please ensure it is installed and in your PATH."
     exit 1
@@ -104,6 +97,15 @@ echo "--------------------------------------------------"
 
 # --- Main Undeployment Script ---
 
+echo "Installing apigeecli..."
+curl -s https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.sh | bash
+if [ $? -ne 0 ]; then
+    echo "ERROR: Failed to download/install apigeecli."
+    exit 1
+fi
+export PATH=$PATH:$HOME/.apigeecli/bin
+echo "apigeecli installed and PATH updated."
+
 # 1. Cloud Run Service `crm-mcp-service`
 echo "Attempting to delete Cloud Run service 'crm-mcp-service'..."
 gcloud run services delete "crm-mcp-service" \
@@ -114,6 +116,18 @@ if [ $? -ne 0 ]; then
     echo "WARNING: Failed to delete Cloud Run service 'crm-mcp-service'. It might not exist or another error occurred."
 else
     echo "INFO: Cloud Run service 'crm-mcp-service' deleted or did not exist."
+fi
+echo "--------------------------------------------------"
+
+# 3. Apigee Developer App `crm-consumer-app`
+DEVELOPER_EMAIL="mcpconsumer@cymbal.com"
+APP_NAME="crm-consumer-app"
+echo "Attempting to delete Apigee Developer App '${APP_NAME}' for developer '${DEVELOPER_EMAIL}'..."
+apigeecli developers apps delete --email "${DEVELOPER_EMAIL}" --name "${APP_NAME}" --org "$PROJECT" --token "$TOKEN" --disable-check
+if [ $? -ne 0 ]; then
+    echo "WARNING: Failed to delete Apigee Developer App '${APP_NAME}'. It might not exist or an error occurred."
+else
+    echo "INFO: Apigee Developer App '${APP_NAME}' deleted."
 fi
 echo "--------------------------------------------------"
 
@@ -132,18 +146,6 @@ if [ $? -ne 0 ]; then
     echo "WARNING: Failed to delete Apigee Product 'mcp-product'. It might not exist or an error occurred."
 else
     echo "INFO: Apigee Product 'mcp-product' deleted."
-fi
-echo "--------------------------------------------------"
-
-# 3. Apigee Developer App `crm-consumer-app`
-DEVELOPER_EMAIL="mcpconsumer@cymbal.com"
-APP_NAME="crm-consumer-app"
-echo "Attempting to delete Apigee Developer App '${APP_NAME}' for developer '${DEVELOPER_EMAIL}'..."
-apigeecli developers apps delete --email "${DEVELOPER_EMAIL}" --name "${APP_NAME}" --org "$PROJECT" --token "$TOKEN" --disable-check
-if [ $? -ne 0 ]; then
-    echo "WARNING: Failed to delete Apigee Developer App '${APP_NAME}'. It might not exist or an error occurred."
-else
-    echo "INFO: Apigee Developer App '${APP_NAME}' deleted."
 fi
 echo "--------------------------------------------------"
 

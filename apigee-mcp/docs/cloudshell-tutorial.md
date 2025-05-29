@@ -34,17 +34,11 @@ gcloud services enable \
   monitoring.googleapis.com \
   artifactregistry.googleapis.com \
   run.googleapis.com \
-  pubsub.googleapis.com \
-  eventarc.googleapis.com \
-  eventarcpublishing.googleapis.com \
-  cloudfunctions.googleapis.com \
-  secretmanager.googleapis.com \
   cloudbuild.googleapis.com \
   serviceusage.googleapis.com \
   cloudresourcemanager.googleapis.com \
-  apikeys.googleapis.com \
   aiplatform.googleapis.com \
-  apigeeregistry.googleapis.com \
+  dataform.googleapis.com \
   --project <walkthrough-project-id/>
 ```
 (Ensure your Apigee organization and API Hub are provisioned in this project.)
@@ -65,7 +59,7 @@ export SERVICE_ACCOUNT_NAME="apigee-mcp-sa"
 gcloud iam service-accounts create "${SERVICE_ACCOUNT_NAME}" \
 --display-name "Apigee MCP Service Account"
 ```
-# Grant the service account the Run Invoker role
+### 3. Grant the service account the Run Invoker role
 ```sh
 gcloud projects add-iam-policy-binding <walkthrough-project-id/> \
 --member="serviceAccount:${SERVICE_ACCOUNT_NAME}@<walkthrough-project-id/>.iam.gserviceaccount.com" \
@@ -73,7 +67,7 @@ gcloud projects add-iam-policy-binding <walkthrough-project-id/> \
 ```
 After creating the service account, its email will be apigee-mcp-sa@<walkthrough-project-id/>.iam.gserviceaccount.com. You will use this for the SA_EMAIL variable in the next step.
 
-### 3. Configure `env.sh`
+### 4. Configure `env.sh`
 
 Update the following placeholder values in<walkthrough-editor-open-file filePath="apigee-mcp/env.sh">env.sh</walkthrough-editor-open-file> with your specific configuration.
 
@@ -83,7 +77,7 @@ Update the following placeholder values in<walkthrough-editor-open-file filePath
 *   Set the <walkthrough-editor-select-regex filePath="apigee-mcp/env.sh" regex="APIGEE_HOST_TO_SET">APIGEE_HOST</walkthrough-editor-select-regex> for your Apigee instance.
 *   Set the <walkthrough-editor-select-regex filePath="apigee-mcp/env.sh" regex="SA_EMAIL_TO_SET">SA_EMAIL</walkthrough-editor-select-regex>. This service account will be used by Apigee proxies and needs `roles/run.invoker` on the deployed Cloud Run services. Use the email of the service account you just created: apigee-mcp-sa@<walkthrough-project-id/>.iam.gserviceaccount.com.
 
-### 4. Set environment variables
+### 5. Set environment variables
 Make the script executable and source it:
 ```sh
 source ./env.sh
@@ -98,9 +92,9 @@ The `deploy-all.sh` script automates the deployment of all components.
 ```
 This script will deploy Cloud Run services, Apigee proxies, API Products, and other necessary resources.
 
-### 3. Review Deployment Output
+### 2. Review Deployment Output
 At the end of the script execution, you will see output similar to this:
-```
+```sh
 --------------------------------------------------
 CRM Consumer Client ID: <SOME_API_KEY>
 CRM Consumer Client Secret: <SOME_SECRET> # Note: Secret not used by notebook
@@ -129,12 +123,7 @@ Follow the instructions within the notebook to execute the cells and observe the
 To avoid incurring charges, clean up the resources created during this tutorial.
 Ensure your environment variables from `env.sh` are still set (if in a new terminal session, `source ./env.sh` again from the `apigee-mcp` directory).
 
-### 1. Make the undeploy script executable
-```sh
-chmod +x undeploy-all.sh
-```
-
-### 2. Run the undeploy script
+### 1. Run the undeploy script
 ```sh
 ./undeploy-all.sh
 ```
