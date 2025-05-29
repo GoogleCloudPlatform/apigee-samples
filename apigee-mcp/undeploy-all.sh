@@ -97,8 +97,7 @@ echo "--------------------------------------------------"
 # --- Main Undeployment Script ---
 
 echo "Installing apigeecli..."
-curl -s https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.sh | bash
-if [ $? -ne 0 ]; then
+if ! curl -s https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.sh | bash; then
     echo "ERROR: Failed to download/install apigeecli."
     exit 1
 fi

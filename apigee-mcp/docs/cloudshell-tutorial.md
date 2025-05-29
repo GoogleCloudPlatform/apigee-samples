@@ -2,8 +2,6 @@
 
 This tutorial walks you through deploying and testing the Apigee Model Context Protocol (MCP) Server reference implementation. This solution demonstrates how Apigee can expose backend APIs as "tools" for an AI agent.
 
-Let's get started!
----
 The solution consists of:
 *   A stub **Customers API** backend (deployed as a Cloud Run service).
 *   An Apigee API Proxy (`customers-api`) exposing the Customers API.
@@ -11,6 +9,10 @@ The solution consists of:
 *   **Apigee MCP Server** (deployed as a Cloud Run service - `crm-mcp-service`) that uses `mcp-spec-tools` to find available APIs, generates corresponding tools for an AI agent, and executes them.
 *   An Apigee API Proxy (`crm-mcp-proxy`) that exposes the Node.js MCP Server, secured with an API Key.
 *   An Agent Development Kit (ADK) agent (run via a Jupyter notebook) that connects to the `crm-mcp-proxy` to interact with the available tools.
+
+Let's get started!
+
+---
 
 ## Prepare project dependencies
 
