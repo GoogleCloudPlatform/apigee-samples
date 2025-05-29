@@ -1,0 +1,800 @@
+openapi: 3.0.0
+info:
+  title: Customer API
+  description: >-
+    Handles customer registration, profile management (addresses, saved payment
+    methods). Retrieves customer details for pre-filling forms.
+  version: 1.0.0
+  contact: {}
+servers:
+  - url: https://@APIGEE_HOST@/customer-api
+paths:
+  /customers:
+    post:
+      description: This endpoint creates a new customer record in the system.
+      operationId: createCustomer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                email:
+                  description: The customer's email address
+                  type: string
+                firstName:
+                  description: The customer's first name
+                  type: string
+                lastName:
+                  description: The customer's last name
+                  type: string
+                password:
+                  description: The customer's password
+                  type: string
+                username:
+                  description: The customer's username
+                  type: string
+              required:
+                - username
+                - password
+                - email
+                - firstName
+                - lastName
+              type: object
+        description: Customer object to be created
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+          description: Successful registration
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Bad request
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Internal server error
+      summary: Registers a new customer account
+      tags:
+        - customers
+  /customers/{customerId}:
+    delete:
+      description: This endpoint permanently removes a customer's data from the system.
+      operationId: deleteCustomer
+      responses:
+        '204':
+          description: Customer successfully deleted
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Bad Request
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Customer not found
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Internal Server Error
+      summary: Deletes a customer account
+      tags:
+        - customers
+    get:
+      description: >-
+        This endpoint provides comprehensive information about a specific
+        customer.
+      operationId: getCustomerById
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+          description: Successful operation
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Bad Request
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Customer not found
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Internal Server Error
+      summary: Retrieves a customer's profile details by their customer ID
+      tags:
+        - customers
+    parameters:
+      - description: The ID of the customer
+        in: path
+        name: customerId
+        required: true
+        schema:
+          type: string
+    put:
+      description: This endpoint allows modifications to existing customer information.
+      operationId: updateCustomer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                email:
+                  description: The customer's email address.
+                  type: string
+                firstName:
+                  description: The customer's first name.
+                  type: string
+                lastName:
+                  description: The customer's last name.
+                  type: string
+                username:
+                  description: The customer's username.
+                  type: string
+              type: object
+        description: Customer object to update
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+          description: Successful operation
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Invalid customer ID supplied
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Customer not found
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Internal server error
+      summary: Updates a customer's profile details
+      tags:
+        - customers
+  /customers/{customerId}/addresses:
+    get:
+      description: This endpoint returns all saved addresses for a given customer.
+      operationId: getCustomerAddresses
+      parameters:
+        - description: The number of items to return per API request.
+          in: query
+          name: pageSize
+          schema:
+            type: integer
+        - description: >-
+            A page token received from a previous API request, used to request a
+            subsequent page.
+          in: query
+          name: pageToken
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    items:
+                      $ref: '#/components/schemas/shippingaddress'
+                    type: array
+                  nextPageToken:
+                    type: string
+                type: object
+          description: A list of addresses associated with the customer.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Bad Request
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Customer not found
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Internal Server Error
+      summary: Retrieves a list of addresses associated with a specific customer
+      tags:
+        - customers
+    parameters:
+      - description: The ID of the customer to retrieve addresses for.
+        in: path
+        name: customerId
+        required: true
+        schema:
+          type: string
+    post:
+      description: This endpoint allows customers to save new addresses to their account.
+      operationId: addCustomerAddress
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                city:
+                  description: The city.
+                  type: string
+                country:
+                  description: The country.
+                  type: string
+                state:
+                  description: The state.
+                  type: string
+                streetAddress:
+                  description: The street address.
+                  type: string
+                zipCode:
+                  description: The zip code.
+                  type: string
+              required:
+                - streetAddress
+                - city
+                - state
+                - zipCode
+                - country
+              type: object
+        description: The address to add to the customer's profile.
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/shippingaddress'
+          description: Address created successfully.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Bad Request
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Customer not found.
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Internal Server Error
+      summary: Adds a new address to a customer's profile.
+      tags:
+        - customers
+  /customers/{customerId}/addresses/{addressId}:
+    delete:
+      description: This endpoint removes a single address from the customer's profile.
+      operationId: deleteCustomerAddress
+      parameters:
+        - description: The ID of the address to delete.
+          in: path
+          name: addressId
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Address successfully deleted
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Bad Request
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Address not found
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Internal Server Error
+      summary: Deletes a specific address associated with a customer
+      tags:
+        - customers
+    get:
+      description: >-
+        Retrieves a specific address associated with a customer. This endpoint
+        returns the details of a single address.
+      operationId: getCustomerAddress
+      parameters:
+        - description: The ID of the address to retrieve.
+          in: path
+          name: addressId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/shippingaddress'
+          description: Successful operation
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Bad Request
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Address not found
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Internal Server Error
+      summary: Retrieves a specific address associated with a customer
+      tags:
+        - customers
+    parameters:
+      - description: The ID of the customer.
+        in: path
+        name: customerId
+        required: true
+        schema:
+          type: string
+      - description: The ID of the address to retrieve.
+        in: path
+        name: addressId
+        required: true
+        schema:
+          type: string
+    put:
+      description: >-
+        This endpoint allows modifications to an existing address for a
+        customer.
+      operationId: updateCustomerAddress
+      parameters:
+        - description: The ID of the address to update.
+          in: path
+          name: addressId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/shippingaddress'
+        description: Address object to update.
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/shippingaddress'
+          description: Successful update of the address.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Bad Request - Invalid input.
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Not Found - Customer or address not found.
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Internal Server Error.
+      summary: Updates a specific address associated with a customer.
+      tags:
+        - customers
+  /customers/{customerId}/paymentMethods:
+    get:
+      description: >-
+        This endpoint returns all payment methods associated with the customer's
+        account.
+      parameters:
+        - description: The number of items to return per API request.
+          in: query
+          name: pageSize
+          schema:
+            type: integer
+        - description: >-
+            A page token received from a previous API request, used to request a
+            subsequent page.
+          in: query
+          name: pageToken
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    items:
+                      $ref: '#/components/schemas/PaymentMethod'
+                    type: array
+                  nextPageToken:
+                    type: string
+                type: object
+          description: A list of payment methods.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Bad Request
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Customer not found
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Internal Server Error
+      summary: Retrieves a list of saved payment methods for a customer
+      tags:
+        - customers
+    parameters:
+      - description: The ID of the customer.
+        in: path
+        name: customerId
+        required: true
+        schema:
+          type: string
+    post:
+      description: This endpoint allows customers to save new payment methods.
+      operationId: addCustomerPaymentMethod
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                billingAddressId:
+                  description: >-
+                    The ID of the billing address associated with this payment
+                    method.
+                  type: string
+                cardNumber:
+                  description: The credit card number (masked).
+                  type: string
+                cardholderName:
+                  description: The name of the cardholder.
+                  type: string
+                expirationDate:
+                  description: The expiration date of the credit card.
+                  format: date
+                  type: string
+              required:
+                - cardholderName
+                - cardNumber
+                - expirationDate
+                - billingAddressId
+              type: object
+        description: Payment method details to add.
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentMethod'
+          description: Payment method created successfully.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Bad Request
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Customer not found.
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Internal Server Error
+      summary: Adds a new payment method to a customer's profile.
+      tags:
+        - customers
+  /customers/{customerId}/paymentMethods/{paymentMethodId}:
+    delete:
+      description: >-
+        This endpoint removes a single payment method from the customer's
+        profile.
+      operationId: deleteCustomerPaymentMethod
+      parameters:
+        - description: The ID of the payment method to delete.
+          in: path
+          name: paymentMethodId
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: No content. The payment method was successfully deleted.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Bad Request
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Not Found
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Internal Server Error
+      summary: Deletes a specific payment method associated with a customer
+      tags:
+        - customers
+    get:
+      description: >-
+        Retrieves a specific payment method associated with a customer. This
+        endpoint returns the details of a single payment method.
+      operationId: getCustomerPaymentMethod
+      parameters:
+        - description: The ID of the payment method.
+          in: path
+          name: paymentMethodId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentMethod'
+          description: Successful operation
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Bad Request
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Payment method not found
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Internal Server Error
+      summary: Retrieves a specific payment method associated with a customer.
+      tags:
+        - customers
+    parameters:
+      - description: The ID of the customer.
+        in: path
+        name: customerId
+        required: true
+        schema:
+          type: string
+      - description: The ID of the payment method to delete.
+        in: path
+        name: paymentMethodId
+        required: true
+        schema:
+          type: string
+    put:
+      description: >-
+        This endpoint allows modifications to an existing payment method for a
+        customer.
+      operationId: updateCustomerPaymentMethod
+      parameters:
+        - description: The ID of the payment method to update.
+          in: path
+          name: paymentMethodId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentMethod'
+        description: Payment method details to update.
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentMethod'
+          description: Successful update of the payment method.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Bad Request - Invalid input.
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Payment method not found.
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: Internal Server Error.
+      summary: Updates a specific payment method associated with a customer.
+      tags:
+        - customers
+components:
+  schemas:
+    PaymentMethod:
+      description: Represents a customer's saved payment method.
+      properties:
+        billingAddressId:
+          description: The ID of the billing address associated with this payment method.
+          type: string
+        cardNumber:
+          description: The credit card number (masked).
+          type: string
+        cardholderName:
+          description: The name of the cardholder.
+          type: string
+        expirationDate:
+          description: The expiration date of the credit card.
+          format: date
+          type: string
+        paymentMethodId:
+          description: Unique identifier for the payment method.
+          type: string
+      required:
+        - paymentMethodId
+        - cardholderName
+        - cardNumber
+        - expirationDate
+        - billingAddressId
+      type: object
+    Customer:
+      description: Represents a customer account.
+      properties:
+        email:
+          description: The customer's email address.
+          type: string
+        firstName:
+          description: The customer's first name.
+          type: string
+        lastName:
+          description: The customer's last name.
+          type: string
+        registrationDate:
+          description: The date the customer registered.
+          format: date-time
+          type: string
+        customerId:
+          description: Unique identifier for the customer.
+          type: string
+        username:
+          description: The customer's username.
+          type: string
+      required:
+        - customerId
+        - username
+        - email
+        - firstName
+        - lastName
+        - registrationDate
+      type: object
+    error:
+      description: >-
+        Error object containing details about errors encountered during order
+        processing.
+      properties:
+        code:
+          description: Error code indicating the type of error.
+          type: string
+        field:
+          description: The field that caused the error, if applicable.
+          type: string
+        message:
+          description: Human-readable error message.
+          type: string
+      required:
+        - code
+        - message
+      type: object
+    shippingaddress:
+      description: Represents a customer's address.
+      properties:
+        addressId:
+          description: Unique identifier for the address.
+          type: string
+        streetAddress:
+          description: The street address.
+          type: string
+        city:
+          description: The city.
+          type: string
+        state:
+          description: The state.
+          type: string
+        zipCode:
+          description: The zip code.
+          type: string
+        country:
+          description: The country.
+          type: string
+      required:
+        - addressId
+        - streetAddress
+        - city
+        - state
+        - zipCode
+        - country
+      type: object

@@ -1,0 +1,45 @@
+{
+    "operationConfigs": [
+      {
+        "apiSource": "customers-api",
+        "operations": [
+          {
+            "resource": "/"
+          }
+        ],
+        "quota": {
+          "limit": "2000",
+          "interval": "5",
+          "timeUnit": "minute"
+        },
+        "attributes": [
+          {
+            "name": "hub_api",
+            "value": "customers-api"
+          },
+          {
+            "name": "hub_version",
+            "value": "1_0_0"
+          },
+          {
+            "name": "hub_spec",
+            "value": "customers-api"
+          }
+        ]
+      },
+      {
+        "apiSource": "crm-mcp-proxy",
+        "operations": [
+          {
+            "resource": "/"
+          }
+        ],
+        "quota": {
+          "limit": "2000",
+          "interval": "5",
+          "timeUnit": "minute"
+        }
+      }
+    ],
+    "operationConfigType": "proxy"
+}
