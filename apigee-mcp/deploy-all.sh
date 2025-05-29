@@ -19,15 +19,13 @@
 gen_key_pairs() {
   if [ -z "$PR_KEY" ]; then
     echo "INFO: PR_KEY not set. Generating new RSA key pair (4096-bit)."
-    PR_KEY=$(openssl genrsa 4096)
-    if [ $? -ne 0 ] || [ -z "$PR_KEY" ]; then
+    if ! PR_KEY=$(openssl genrsa 4096) || [ -z "$PR_KEY" ]; then
         echo "ERROR: Failed to generate private key."
         exit 1
     fi
     echo "INFO: Private key generated."
     
-    PU_KEY=$(printf '%s\n' "$PR_KEY" | openssl rsa -outform PEM -pubout)
-    if [ $? -ne 0 ] || [ -z "$PU_KEY" ]; then
+    if ! PU_KEY=$(printf '%s\n' "$PR_KEY" | openssl rsa -outform PEM -pubout) || [ -z "$PU_KEY" ]; then
         echo "ERROR: Failed to generate public key from private key."
         exit 1
     fi
@@ -58,17 +56,13 @@ deploy_stub_service() {
     exit 1
   fi
   
-  pushd "$stub_dir_path" > /dev/null
-  if [ $? -ne 0 ]; then
-    echo "ERROR: Failed to navigate to directory $stub_dir_path."
-    exit 1
-  fi
-
+  pushd "$stub_dir_path" > /dev/null || exit 1
+  
   local default_service_name="${service_dir_name}-service"
   local target_service_name=""
   if [ -z "$REGION" ]; then
     echo "ERROR: REGION variable not set. Required for Cloud Run deployment of ${friendly_service_name}."
-    popd > /dev/null
+    popd > /dev/null || exit 1
     exit 1
   fi
 
@@ -93,9 +87,9 @@ deploy_stub_service() {
       --no-allow-unauthenticated \
       --port=5001 \
       --quiet
-  if [ $? -ne 0 ]; then
+  if ! gcloud run deploy "${target_service_name}" --source . --platform="managed" --region="${REGION}" --no-allow-unauthenticated --port=5001 --quiet; then
     echo "ERROR: gcloud run deploy failed for service '${target_service_name}' (${friendly_service_name})."
-    popd > /dev/null
+    popd > /dev/null || exit 1
     exit 1
   fi
 
@@ -110,7 +104,7 @@ deploy_stub_service() {
 
   if [ -z "$service_url" ]; then
     echo "ERROR: Failed to fetch service URL for '${target_service_name}' (${friendly_service_name})."
-    popd > /dev/null
+    popd > /dev/null || exit 1
     exit 1
   fi
 
@@ -119,7 +113,7 @@ deploy_stub_service() {
   echo "${friendly_service_name} Service URL: ${service_url}"
   echo "The service URL has also been exported as ${output_url_env_var_name}."
 
-  popd > /dev/null
+  popd > /dev/null || exit 1
   echo "--------------------------------------------------"
   echo "${friendly_service_name} Stub Service deployment complete."
   echo "--------------------------------------------------"
@@ -161,8 +155,7 @@ fi
 # --- Main Script ---
 
 echo "Installing apigeecli..."
-curl -s https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.sh | bash
-if [ $? -ne 0 ]; then
+if ! curl -s https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.sh | bash; then
     echo "ERROR: Failed to download/install apigeecli."
     exit 1
 fi
@@ -183,7 +176,7 @@ fi
 echo "Key pairs are ready."
 
 
-gcloud config set project $PROJECT
+gcloud config set project "$PROJECT"
 # Deploy Stub Services
 deploy_stub_service "customers" "CUSTOMERS" "CUSTOMERS_API_CR_URL" "Customers"
 
@@ -265,7 +258,7 @@ export MCP_CLIENT_SECRET_VALUE="$CRM_SECRET"
 gcloud run deploy ${SERVICE_NAME} \
   --source . \
   --platform managed \
-  --region ${REGION} \
+  --region "${REGION}" \
   --no-allow-unauthenticated \
   --set-env-vars "NODE_ENV=production" \
   --set-env-vars "MCP_MODE=SSE" \
@@ -274,10 +267,12 @@ gcloud run deploy ${SERVICE_NAME} \
   --set-env-vars "MCP_BASE_URL=${MCP_BASE_URL_VALUE}" \
   --set-env-vars "BASE_PATH=${BASE_PATH}"
 
-export CRM_PROXY_CR_URL=$(gcloud run services describe "${SERVICE_NAME}" \
+CRM_PROXY_CR_URL=$(gcloud run services describe "${SERVICE_NAME}" \
       --platform="managed" \
       --region="${REGION}" \
       --format="value(status.url)")
+export CRM_PROXY_CR_URL
+
 
 echo "Configuring Apigee MCP proxies target URLs..."
 export CRM_PROXY_CR_URL="${CRM_PROXY_CR_URL#https://}"
