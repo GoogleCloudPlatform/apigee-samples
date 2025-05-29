@@ -61,7 +61,7 @@ cd apigee-mcp
 
 This service account will be used by Apigee proxies to invoke the Cloud Run services. 
 ```sh 
-SERVICE_ACCOUNT_NAME="apigee-mcp-sa" 
+export SERVICE_ACCOUNT_NAME="apigee-mcp-sa" 
 gcloud iam service-accounts create "${SERVICE_ACCOUNT_NAME}" \
 --display-name "Apigee MCP Service Account"
 ```
