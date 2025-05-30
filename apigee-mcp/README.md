@@ -1,8 +1,8 @@
 # Apigee Model Context Protocol (MCP) Server Implementation
 
-As agents and Large Language Models (LLMs) become more sophisticated, their ability to interact with external systems and APIs becomes crucial for performing meaningful actions. The Model Context Protocol (MCP) provides a standardized way for these AI models to discover and invoke tools, which are essentially capabilities exposed by external services.
+As agents and Large Language Models (LLMs) become more sophisticated, their ability to interact with external systems and APIs becomes crucial for performing meaningful actions. The [Model Context Protocol (MCP)](https://modelcontextprotocol.io/introduction) provides a standardized way for these AI models to discover and invoke tools, which are essentially capabilities exposed by external services.
 
-This sample demonstrates how Apigee, Google Cloud's API management platform, can serve as a powerful enabler for MCP. It provides an MCP server implementation that dynamically discovers your existing Apigee-managed API Products and their underlying OpenAPI specifications. These are then exposed as MCP tools, allowing AI agents (e.g., those built with Google's Agent Development Kit - ADK) to seamlessly and securely interact with your enterprise APIs.
+This sample demonstrates how Apigee, Google Cloud's API management platform, can serve as a powerful enabler for MCP. It provides an MCP server implementation that dynamically discovers your existing Apigee-managed API Products and their underlying OpenAPI specifications. These are then exposed as MCP tools, allowing AI agents (e.g., those built with Google's [Agent Development Kit - ADK](https://google.github.io/adk-docs/)) to seamlessly and securely interact with your enterprise APIs.
 
 ![AI Architecture](img/ai_arch.png)
 
@@ -19,7 +19,7 @@ Integrating Apigee with MCP offers significant advantages for AI-driven applicat
 This MCP implementation demonstrates Apigee's capability to securely and efficiently expose a broader set of enterprise APIs to AI agents. It's about making your existing services "AI-ready" with the governance and control Apigee provides.
 
 The server in this sample specifically:
-*   Connects to an "MCP API" (typically an Apigee proxy) to discover API Products and their OpenAPI specifications, often sourced from API Hub.
+*   Connects to an "MCP API" (typically an Apigee proxy) to discover API Products and their OpenAPI specifications, often sourced from [API Hub](https://cloud.google.com/apigee/docs/apihub/what-is-api-hub).
 *   Dynamically generates MCP tools from these OpenAPI specifications.
 *   Exposes these tools for AI agents to consume.
 *   Handles the secure execution of these tools by calling the backend APIs managed by Apigee.
@@ -57,7 +57,7 @@ The `deploy-all.sh` script in the root of this repository is designed to:
 
 Alternatively, you can use this cloud shell tutorial to deploy the solution:
 
-[![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/ra2085/apigee-samples&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=apigee-mcp/docs/cloudshell-tutorial.md)
+[![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.png)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/apigee-samples&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=apigee-mcp/docs/cloudshell-tutorial.md)
 
 Once deployed, the [CRM Agent Jupyter notebook](notebooks/crm-agent-mcp.ipynb) can be used to test the end-to-end solution. The notebook demonstrates how an ADK agent can connect to the deployed MCP server, discover the dynamically generated tools (which correspond to your Apigee API Products), and invoke them.
 

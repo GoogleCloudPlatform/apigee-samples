@@ -111,7 +111,7 @@ All deployments and configurations complete.
 
 You can now go to the Jupyter notebook to test the sample.
 
-Open [`crm-agent-mcp`](https://github.com/ra2085/apigee-samples/blob/main/apigee-mcp/notebooks/crm-agent-mcp.ipynb) in your preferred Jupyter environment.
+Open [`crm-agent-mcp`](https://github.com/GoogleCloudPlatform/apigee-samples/blob/main/apigee-mcp/notebooks/crm-agent-mcp.ipynb) in your preferred Jupyter environment.
 
 **Note:** Before running the notebook, ensure you update the following placeholder values within it:
 *   `GCP_PROJECT_ID`: Use the Project ID you configured in `env.sh` (variable `$PROJECT`).
