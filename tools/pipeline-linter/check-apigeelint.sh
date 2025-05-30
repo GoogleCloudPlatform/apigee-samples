@@ -21,7 +21,7 @@ set -e
 
 #add any proxy that needs to be excluded. Needs review before adding any exclusions
 proxyExclusions=(
-  'grpc'
+  'grpc' 'apigee-mcp'
 )
 
 #add any sharedflow that needs to be excluded. Needs review before adding any exclusions
