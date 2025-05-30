@@ -202,38 +202,38 @@ echo "All stub service URLs verified. Proceeding with Apigee deployment."
 
 echo "Creating HUB resources ..."
 
-sed "${sedi_args[@]}" "s/@APIGEE_HOST@/$APIGEE_HOST/g" ./apigee_bundles/specs/customers-api/spec.yaml
+sed "${sedi_args[@]}" "s/@APIGEE_HOST@/$APIGEE_HOST/g" ./apigee_resources/specs/customers-api/spec.yaml
 
-apigeecli apihub apis create -i customers-api -f ./apigee_bundles/specs/customers-api/api.json --org "$PROJECT" -r "$REGION" --token "$TOKEN"
-apigeecli apihub apis versions create --api-id customers-api -i 1_0_0 -f ./apigee_bundles/specs/customers-api/version.json --org "$PROJECT" -r "$REGION" --token "$TOKEN"
-apigeecli apihub apis versions specs create --api-id customers-api -d customers-api.yaml -i customers-api -v 1_0_0 -f ./apigee_bundles/specs/customers-api/spec.yaml --org "$PROJECT" -r "$REGION" --token "$TOKEN"
+apigeecli apihub apis create -i customers-api -f ./apigee_resources/specs/customers-api/api.json --org "$PROJECT" -r "$REGION" --token "$TOKEN"
+apigeecli apihub apis versions create --api-id customers-api -i 1_0_0 -f ./apigee_resources/specs/customers-api/version.json --org "$PROJECT" -r "$REGION" --token "$TOKEN"
+apigeecli apihub apis versions specs create --api-id customers-api -d customers-api.yaml -i customers-api -v 1_0_0 -f ./apigee_resources/specs/customers-api/spec.yaml --org "$PROJECT" -r "$REGION" --token "$TOKEN"
 
 TOKEN=$(gcloud auth print-access-token)
 
 echo "Configuring Apigee proxy target URLs..."
 export CUSTOMERS_API_CR_URL="${CUSTOMERS_API_CR_URL#https://}"
 
-sed "${sedi_args[@]}" "s/TARGETURL/$CUSTOMERS_API_CR_URL/g" ./apigee_bundles/apigee-mcp-products/customers-api/apiproxy/targets/default.xml
+sed "${sedi_args[@]}" "s/TARGETURL/$CUSTOMERS_API_CR_URL/g" ./apigee_resources/bundles/customers-api/apiproxy/targets/default.xml
 
 echo "Deploying keypair configuration..."
 echo -e "public_key=$PU_KEY\nprivate_key=$PR_KEY" >oauth_configuration.properties
 apigeecli res create --org "$PROJECT" --env "$APIGEE_ENV" --token "$TOKEN" --name oauth_configuration --type properties --respath oauth_configuration.properties
 
 echo "Importing and Deploying mcp-spec-tools ..."
-REV=$(apigeecli apis create bundle -f ./apigee_bundles/apigee-mcp-products/mcp-spec-tools/apiproxy -n mcp-spec-tools --org "$PROJECT" --token "$TOKEN" --disable-check | jq ."revision" -r)
+REV=$(apigeecli apis create bundle -f ./apigee_resources/bundles/mcp-spec-tools/apiproxy -n mcp-spec-tools --org "$PROJECT" --token "$TOKEN" --disable-check | jq ."revision" -r)
 apigeecli apis deploy --wait --name mcp-spec-tools --ovr --rev "$REV" --org "$PROJECT" --env "$APIGEE_ENV" --token "$TOKEN" --sa "$SA_EMAIL"
 
 echo "Importing and Deploying customers-api ..."
-REV=$(apigeecli apis create bundle -f ./apigee_bundles/apigee-mcp-products/customers-api/apiproxy -n customers-api --org "$PROJECT" --token "$TOKEN" --disable-check | jq ."revision" -r)
+REV=$(apigeecli apis create bundle -f ./apigee_resources/bundles/customers-api/apiproxy -n customers-api --org "$PROJECT" --token "$TOKEN" --disable-check | jq ."revision" -r)
 apigeecli apis deploy --wait --name customers-api --ovr --rev "$REV" --org "$PROJECT" --env "$APIGEE_ENV" --token "$TOKEN" --sa "$SA_EMAIL"
 
 TOKEN=$(gcloud auth print-access-token)
 
 echo "Creating MCP Product"
-apigeecli products create --name mcp-product --display-name "MCP Product" --envs "$APIGEE_ENV" --approval auto --quota 50 --interval 1 --unit minute --opgrp ./apigee_bundles/mcp-product-opgroup.json --org "$PROJECT" --token "$TOKEN"
+apigeecli products create --name mcp-product --display-name "MCP Product" --envs "$APIGEE_ENV" --approval auto --quota 50 --interval 1 --unit minute --opgrp ./apigee_resources/mcp-product-opgroup.json --org "$PROJECT" --token "$TOKEN"
 
 echo "Creating CRM Product"
-apigeecli products create --name crm-product --display-name "CRM Product" --envs "$APIGEE_ENV" --approval auto --quota 50 --interval 1 --unit minute --opgrp ./apigee_bundles/crm-product-opgroup.json --attrs "hub_location=projects/$PROJECT/locations/$REGION" --org "$PROJECT" --token "$TOKEN"
+apigeecli products create --name crm-product --display-name "CRM Product" --envs "$APIGEE_ENV" --approval auto --quota 50 --interval 1 --unit minute --opgrp ./apigee_resources/crm-product-opgroup.json --attrs "hub_location=projects/$PROJECT/locations/$REGION" --org "$PROJECT" --token "$TOKEN"
 
 echo "Creating Developer"
 apigeecli developers create --user consumer --email mcpconsumer@cymbal.com --first Consumer --last Doe --org "$PROJECT" --token "$TOKEN"
@@ -277,12 +277,12 @@ export CRM_PROXY_CR_URL
 echo "Configuring Apigee MCP proxies target URLs..."
 export CRM_PROXY_CR_URL="${CRM_PROXY_CR_URL#https://}"
 
-sed "${sedi_args[@]}" "s/TARGETURL/$CRM_PROXY_CR_URL/g" ./apigee_bundles/apigee-mcp-products/crm-mcp-proxy/apiproxy/targets/default.xml
+sed "${sedi_args[@]}" "s/TARGETURL/$CRM_PROXY_CR_URL/g" ./apigee_resources/bundles/crm-mcp-proxy/apiproxy/targets/default.xml
 
 TOKEN=$(gcloud auth print-access-token)
 
 echo "Importing and Deploying crm-mcp-proxy ..."
-REV=$(apigeecli apis create bundle -f ./apigee_bundles/apigee-mcp-products/crm-mcp-proxy/apiproxy -n crm-mcp-proxy --org "$PROJECT" --token "$TOKEN" --disable-check | jq ."revision" -r)
+REV=$(apigeecli apis create bundle -f ./apigee_resources/bundles/crm-mcp-proxy/apiproxy -n crm-mcp-proxy --org "$PROJECT" --token "$TOKEN" --disable-check | jq ."revision" -r)
 apigeecli apis deploy --wait --name crm-mcp-proxy --ovr --rev "$REV" --org "$PROJECT" --env "$APIGEE_ENV" --token "$TOKEN" --sa "$SA_EMAIL"
 
 echo "--------------------------------------------------"

@@ -33,7 +33,7 @@ echo "Running using Apigeelint version - $(apigeelint --version)"
 echo ""
 
 # For API Proxies
-for proxyDir in "$PWD"/*/apiproxy "$PWD"/*/*/apiproxy "$PWD"/*/*/*/apiproxy; do
+for proxyDir in "$PWD"/*/apiproxy "$PWD"/*/*/apiproxy "$PWD"/*/*/*/apiproxy "$PWD"/*/*/*/*/apiproxy; do
   skip=false
   for excl in "${proxyExclusions[@]}"; do
     if [[ $proxyDir == *"grpc-web"* ]]; then # adding this condition to skip the "grpc" exclusion
