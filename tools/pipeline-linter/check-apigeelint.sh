@@ -21,7 +21,7 @@ set -e
 
 #add any proxy that needs to be excluded. Needs review before adding any exclusions
 proxyExclusions=(
-  'grpc'
+  'grpc' 'apigee-mcp'
 )
 
 #add any sharedflow that needs to be excluded. Needs review before adding any exclusions
@@ -33,7 +33,7 @@ echo "Running using Apigeelint version - $(apigeelint --version)"
 echo ""
 
 # For API Proxies
-for proxyDir in "$PWD"/*/apiproxy "$PWD"/*/*/apiproxy "$PWD"/*/*/*/apiproxy; do
+for proxyDir in "$PWD"/*/apiproxy "$PWD"/*/*/apiproxy "$PWD"/*/*/*/apiproxy "$PWD"/*/*/*/*/apiproxy; do
   skip=false
   for excl in "${proxyExclusions[@]}"; do
     if [[ $proxyDir == *"grpc-web"* || $proxyDir == *"extension-processor-grpc"* ]]; then # adding this condition to skip the "grpc" exclusion
