@@ -67,6 +67,12 @@ gcloud projects add-iam-policy-binding <walkthrough-project-id/> \
 --member="serviceAccount:${SERVICE_ACCOUNT_NAME}@<walkthrough-project-id/>.iam.gserviceaccount.com" \
 --role="roles/run.invoker"
 ```
+### 4. Grant the service account the API Hub Admin role
+```sh
+gcloud projects add-iam-policy-binding <walkthrough-project-id/> \
+--member="serviceAccount:${SERVICE_ACCOUNT_NAME}@<walkthrough-project-id/>.iam.gserviceaccount.com" \
+--role="roles/apihub.admin"
+```
 After creating the service account, its email will be apigee-mcp-sa@<walkthrough-project-id/>.iam.gserviceaccount.com. You will use this for the SA_EMAIL variable in the next step.
 
 ### 4. Configure `env.sh`
