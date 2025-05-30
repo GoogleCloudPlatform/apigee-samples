@@ -36,7 +36,7 @@ echo ""
 for proxyDir in "$PWD"/*/apiproxy "$PWD"/*/*/apiproxy "$PWD"/*/*/*/apiproxy; do
   skip=false
   for excl in "${proxyExclusions[@]}"; do
-    if [[ $proxyDir == *"grpc-web"* ]]; then # adding this condition to skip the "grpc" exclusion
+    if [[ $proxyDir == *"grpc-web"* || $proxyDir == *"extension-processor-grpc"* ]]; then # adding this condition to skip the "grpc" exclusion
       skip=false
     elif [[ $proxyDir == *"$excl"* ]]; then
       skip=true
