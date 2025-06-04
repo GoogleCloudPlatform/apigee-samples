@@ -31,5 +31,4 @@
     <Template>{replaceAll(total_token_count_raw,brackets_regex,'')}</Template>
   </AssignVariable>
   <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
-  <AssignTo createNew="false" transport="http" type="response"/>
 </AssignMessage>
