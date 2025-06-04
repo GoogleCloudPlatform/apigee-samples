@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+Copyright 2025 Google LLC
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    https://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+ 
+-->
+<ProxyEndpoint name="default">
+  <PreFlow name="PreFlow">
+    <Request>
+      <Step>
+        <Name>OAuth-VerifyAccessToken</Name>
+      </Step>
+    </Request>
+  </PreFlow>
+  <Flows>
+    <Flow name="createCustomer">
+      <Condition>(proxy.pathsuffix MatchesPath "/customers") and (request.verb = "POST")</Condition>
+    </Flow>
+    <Flow name="deleteCustomer">
+      <Condition>(proxy.pathsuffix MatchesPath "/customers/*") and (request.verb = "DELETE")</Condition>
+    </Flow>
+    <Flow name="getCustomerById">
+      <Condition>(proxy.pathsuffix MatchesPath "/customers/*") and (request.verb = "GET")</Condition>
+    </Flow>
+    <Flow name="updateCustomer">
+      <Condition>(proxy.pathsuffix MatchesPath "/customers/*") and (request.verb = "PUT")</Condition>
+    </Flow>
+    <Flow name="getCustomerAddresses">
+      <Condition>(proxy.pathsuffix MatchesPath "/customers/*/addresses") and (request.verb = "GET")</Condition>
+    </Flow>
+    <Flow name="addCustomerAddress">
+      <Condition>(proxy.pathsuffix MatchesPath "/customers/*/addresses") and (request.verb = "POST")</Condition>
+    </Flow>
+    <Flow name="deleteCustomerAddress">
+      <Condition>(proxy.pathsuffix MatchesPath "/customers/*/addresses/*") and (request.verb = "DELETE")</Condition>
+    </Flow>
+    <Flow name="getCustomerAddress">
+      <Condition>(proxy.pathsuffix MatchesPath "/customers/*/addresses/*") and (request.verb = "GET")</Condition>
+    </Flow>
+    <Flow name="updateCustomerAddress">
+      <Condition>(proxy.pathsuffix MatchesPath "/customers/*/addresses/*") and (request.verb = "PUT")</Condition>
+    </Flow>
+    <Flow name="&lt;no value&gt;">
+      <Condition>(proxy.pathsuffix MatchesPath "/customers/*/paymentMethods") and (request.verb = "GET")</Condition>
+    </Flow>
+    <Flow name="addCustomerPaymentMethod">
+      <Condition>(proxy.pathsuffix MatchesPath "/customers/*/paymentMethods") and (request.verb = "POST")</Condition>
+    </Flow>
+    <Flow name="deleteCustomerPaymentMethod">
+      <Condition>(proxy.pathsuffix MatchesPath "/customers/*/paymentMethods/*") and (request.verb = "DELETE")</Condition>
+    </Flow>
+    <Flow name="getCustomerPaymentMethod">
+      <Condition>(proxy.pathsuffix MatchesPath "/customers/*/paymentMethods/*") and (request.verb = "GET")</Condition>
+    </Flow>
+    <Flow name="updateCustomerPaymentMethod">
+      <Condition>(proxy.pathsuffix MatchesPath "/customers/*/paymentMethods/*") and (request.verb = "PUT")</Condition>
+    </Flow>
+    <Flow name="CatchAll">
+      <Request>
+        <Step>
+          <Name>RF-CatchAll</Name>
+        </Step>
+      </Request>
+    </Flow>
+  </Flows>
+  <PostClientFlow name="PostClientFlow">
+    <Description>Processed after the response is sent back to the client.</Description>
+    <Response/>
+  </PostClientFlow>
+  <HTTPProxyConnection>
+    <BasePath>/customer-api</BasePath>
+  </HTTPProxyConnection>
+  <RouteRule name="default">
+    <TargetEndpoint>default</TargetEndpoint>
+  </RouteRule>
+</ProxyEndpoint>
