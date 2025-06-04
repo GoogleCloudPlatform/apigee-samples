@@ -29,5 +29,4 @@
     <Template>{replaceAll(prompt_parts,prompt_parts_match,prompt_contents_replace)}</Template>
   </AssignVariable>
   <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
-  <AssignTo createNew="false" transport="http" type="request"/>
 </AssignMessage>
