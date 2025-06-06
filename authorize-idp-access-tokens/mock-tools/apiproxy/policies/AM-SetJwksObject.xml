@@ -22,5 +22,4 @@ limitations under the License.
         <Payload contentType="application/json">{propertyset.mock_configuration.jwk}</Payload>
     </Set>
     <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
-    <AssignTo createNew="false" transport="http" type="response"/>
 </AssignMessage>

@@ -16,6 +16,6 @@
     <Name>EV-ExtractCandidateContents</Name>
   </Step>
   <Step>
-    <Name>AM-SetCandidaContents</Name>
+    <Name>AM-SetCandidateContents</Name>
   </Step>
 </SharedFlow>
