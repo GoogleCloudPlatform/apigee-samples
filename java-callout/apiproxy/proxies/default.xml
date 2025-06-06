@@ -34,8 +34,6 @@
   <HTTPProxyConnection>
     <BasePath>/v1/samples/java-callout</BasePath>
     <Properties/>
-    <VirtualHost>default</VirtualHost>
-    <VirtualHost>secure</VirtualHost>
   </HTTPProxyConnection>
   <RouteRule name="noroute"/>
 </ProxyEndpoint>

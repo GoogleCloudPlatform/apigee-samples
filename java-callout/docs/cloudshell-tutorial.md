@@ -1,7 +1,7 @@
 # Apigee Java Callout Tutorial
 
 ---
-This sample lets you configure an Apigee Proxy with a Hello World Java Callout Policy
+This sample helps you configure an Apigee Proxy with a Java Callout Policy
 
 Let's get started!
 
@@ -35,28 +35,9 @@ Then source the `env.sh` file in the Cloud shell.
 source ./env.sh
 ```
 
----
-## Check your role
-
-Check that your account has the necessary roles for this sample.
-
-```bash
-./check-role.sh
-```
-
-This script will show your identity and the roles associated to your identity.
-
-If you have editor or owner roles, you will be able to proceed. If you do not have these roles, but
-you have these roles:
- * `roles/iam.serviceAccountCreator`
- * `roles/resourcemanager.projectIamAdmin`
- * `roles/apigee.apiAdminV2`
-
----
-
 ## Deploy Apigee components
 
-Next, let's create the service account, make sure it has the proper role for writing into Cloud Logging and then deploy the actual Apigee proxy.
+Next, let's create and deploy the Apigee proxy.
 
 ```sh
 ./deploy-java-callout.sh
