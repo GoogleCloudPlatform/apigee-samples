@@ -23,5 +23,4 @@ limitations under the License.
         <Template>https://{request.header.host}/</Template>
     </AssignVariable>
     <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
-    <AssignTo createNew="false" transport="http" type="request"/>
 </AssignMessage>

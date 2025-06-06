@@ -1,0 +1,26 @@
+# Node.js
+node_modules
+npm-debug.log
+yarn-error.log
+
+# TypeScript build output (if it exists locally, it will be built in the Docker image)
+dist
+
+# Docker specific files
+Dockerfile
+.dockerignore
+
+# Git specific files
+.git
+.gitignore
+
+# OS specific files
+.DS_Store
+Thumbs.db
+
+# Editor/IDE specific files
+.vscode
+.idea
+
+# Other development files
+*.md

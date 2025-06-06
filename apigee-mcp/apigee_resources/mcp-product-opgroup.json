@@ -1,0 +1,18 @@
+{
+    "operationConfigs": [
+      {
+        "apiSource": "mcp-spec-tools",
+        "operations": [
+          {
+            "resource": "/"
+          }
+        ],
+        "quota": {
+          "limit": "2000",
+          "interval": "5",
+          "timeUnit": "minute"
+        }
+      }
+    ],
+    "operationConfigType": "proxy"
+  }

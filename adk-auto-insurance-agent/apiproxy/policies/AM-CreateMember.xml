@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+ Copyright 2025 Google LLC
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+      http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<AssignMessage continueOnError="false" enabled="true" name="AM-CreateMember">
+  <DisplayName>AM-CreateMember</DisplayName>
+  <Properties/>
+  <AssignVariable>
+    <Name>statusCode</Name>
+    <Value>201</Value>
+  </AssignVariable>
+  <AssignVariable>
+    <Name>reasonPhrase</Name>
+    <Value>Created</Value>
+  </AssignVariable>
+  <Set>
+    <Payload contentType="application/json">
+    {
+    "contents": [
+        {
+            "parts": [
+                {
+                    "text": "{escapeJSON(request.content)}. Generate a random number and assign it to the \"id\" field."
+                }
+            ],
+            "role": "user"
+        }
+    ],
+    "generationConfig": { 
+        "response_mime_type": "application/json"
+    }
+  }
+    </Payload>
+  </Set>
+  <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+</AssignMessage>

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+Copyright 2025 Google LLC
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    https://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+ 
+-->
+<ProxyEndpoint name="default">
+  <PreFlow name="PreFlow">
+    <Request/>
+    <Response/>
+  </PreFlow>
+  <Flows>
+    <Flow name="POST /token">
+      <Condition>(proxy.pathsuffix MatchesPath "/token") and (request.verb = "POST")</Condition>
+      <Request>
+        <Step>
+          <Name>OAuth-GenerateToken</Name>
+        </Step>
+      </Request>
+      <Response/>
+    </Flow>
+    <Flow name="GET /products">
+      <Condition>(proxy.pathsuffix MatchesPath "/products") and (request.verb = "GET")</Condition>
+      <Request>
+        <Step>
+          <Name>OAuth-VerifyAccessToken</Name>
+        </Step>
+        <Step>
+          <Name>AccessEntity-App</Name>
+        </Step>
+        <Step>
+          <Name>EV-ExtractProduct</Name>
+        </Step>
+      </Request>
+      <Response>
+        <Step>
+          <Name>AM-SetProductsResponse</Name>
+        </Step>
+        <Step>
+          <Name>XMLtoJSON-Products</Name>
+        </Step>
+      </Response>
+    </Flow>
+    <Flow name="GET /products/{product_name}/specs/projects/{project_id}/locations/{location_id}/apis/{api_id}/versions/{version_id}/specs/{spec_id}">
+    <Condition>(proxy.pathsuffix MatchesPath "/products/*/specs/projects/*/locations/*/apis/*/versions/*/specs/*") and (request.verb = "GET")</Condition>
+    <Request>
+      <Step>
+        <Name>OAuth-VerifyAccessToken</Name>
+      </Step>
+      <Step>
+        <Name>EV-ExtractSpecId</Name>
+      </Step>
+      <Step>
+        <Name>AccessEntity-App</Name>
+      </Step>
+      <Step>
+        <Name>AM-VerifyProductName</Name>
+      </Step>
+      <Step>
+          <Condition>(found_product_name = null) or (found_product_name = "")</Condition>
+          <Name>RF-Unauthorized</Name>
+      </Step>
+      <Step>
+        <Name>AccessEntity-Product</Name>
+      </Step>
+      <Step>
+        <Name>AM-VerifySpecId</Name>
+      </Step>
+      <Step>
+          <Condition>((found_spec_location = null) or (found_spec_location = "") and (found_api_id = null) or (found_api_id = "") and (found_version_id = null) or (found_version_id = "") and (found_spec_id = null) or (found_spec_id = ""))</Condition>
+          <Name>RF-Unauthorized</Name>
+      </Step>
+    </Request>
+    <Response/>
+    </Flow>
+    <Flow name="GET /products/{product_name}/specs">
+      <Condition>(proxy.pathsuffix MatchesPath "/products/*/specs") and (request.verb = "GET")</Condition>
+      <Request>
+        <Step>
+          <Name>OAuth-VerifyAccessToken</Name>
+        </Step>
+        <Step>
+          <Name>EV-ExtractProductName</Name>
+        </Step>
+        <Step>
+          <Name>AccessEntity-App</Name>
+        </Step>
+        <Step>
+          <Name>AM-VerifyProductName</Name>
+        </Step>
+        <Step>
+          <Condition>(found_product_name = null) or (found_product_name = "")</Condition>
+          <Name>RF-Unauthorized</Name>
+        </Step>
+        <Step>
+          <Name>AccessEntity-Product</Name>
+        </Step>
+        <Step>
+          <Name>EV-ExtractSpecs</Name>
+        </Step>
+      </Request>
+      <Response>
+        <Step>
+          <Name>AM-SetSpecsResponse</Name>
+        </Step>
+        <Step>
+          <Name>XMLtoJSON-Specs</Name>
+        </Step>
+      </Response>
+    </Flow>
+    <Flow>
+      <Request>
+        <Step>
+          <Name>RF-Unauthorized</Name>
+        </Step>
+      </Request>
+      <Response/>
+    </Flow>
+  </Flows>
+  <PostFlow name="PostFlow">
+    <Request/>
+    <Response/>
+  </PostFlow>
+  <HTTPProxyConnection>
+    <BasePath>/mcp</BasePath>
+  </HTTPProxyConnection>
+  <RouteRule name="specs">
+    <Condition>(proxy.pathsuffix MatchesPath "/products/*/specs/projects/*/locations/*/apis/*/versions/*/specs/*") and (request.verb = "GET")</Condition>
+    <TargetEndpoint>default</TargetEndpoint>
+  </RouteRule>
+  <RouteRule name="noRoute"/>
+</ProxyEndpoint>

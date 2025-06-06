@@ -1,0 +1,8 @@
+{
+    "displayName": "Customers API",
+    "description": "Handles user registration, profile management (addresses, saved payment methods). Retrieves customer details for pre-filling forms.",
+    "owner": {
+            "displayName": "CRM Dev",
+            "email": "crm@cymbal.com"
+    }
+}
