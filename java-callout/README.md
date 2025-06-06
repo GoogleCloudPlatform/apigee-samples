@@ -59,27 +59,7 @@ Use the following GCP CloudShell tutorial, and follow the instructions.
    source ./env.sh
    ```
 
-3. Authenticate to Google Cloud, if you have not already done so in this shell.
-
-   ```bash
-   gcloud auth login
-   ```
-   
-4. Check the roles on your account:
-
-   ```bash
-   ./check-role.sh
-   ```
-
-   This script will show your identity and the roles associated to your identity.
-
-   If you have editor or owner roles, you will be able to proceed. If you do not have these roles, but
-   you have these roles:
-    * `roles/iam.serviceAccountCreator`
-    * `roles/resourcemanager.projectIamAdmin`
-    * `roles/apigee.apiAdminV2`
-
-5. Deploy Apigee API proxy
+3. Deploy Apigee API proxy
 
    ```bash
    ./deploy-java-callout.sh
