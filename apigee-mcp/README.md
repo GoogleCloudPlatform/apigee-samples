@@ -34,7 +34,7 @@ Before deploying and running this solution, ensure the following prerequisites a
     *   The Vertex AI API and Cloud Run API must be enabled in the same Google Cloud Project where your Apigee organization resides.
 3.  **API Hub**: Google Cloud API Hub must be enabled and provisioned within the same GCP project. API Hub is used as the source of truth for discovering API Products and their specifications.
 
-## Core Functionality
+### Core Functionality
 
 The server performs the following key functions:
 
@@ -44,7 +44,7 @@ The server performs the following key functions:
 4.  **Secure API Execution**: When an MCP tool is invoked, the server translates the call back into an HTTP request to the original API endpoint defined in the OpenAPI specification. It handles authentication, primarily using the client credentials configured for the server itself to obtain an OAuth 2.0 token for the "MCP API". For the target APIs (your actual backend services fronted by Apigee), the system can be configured to:
     *   Use server-level credentials (if the target API uses the same OAuth as the MCP API).
 
-### Cloud Shell Tutorial
+#### Cloud Shell Tutorial
 
 Alternatively, you can use this cloud shell tutorial to deploy the solution:
 
@@ -54,7 +54,7 @@ Once deployed, the [CRM Agent Jupyter notebook](notebooks/crm-agent-mcp.ipynb) c
 
 ![CRM Agent](img/crm_agent.png)
 
-## Deployment and Testing
+#### Deployment and Testing
 
 The `deploy-all.sh` script in the root of this repository is designed to:
 
@@ -63,7 +63,7 @@ The `deploy-all.sh` script in the root of this repository is designed to:
 3.  Configure Apigee artifacts (API Proxies, Products, Developer Apps) to proxy these Cloud Run services and set up the "MCP API" endpoint.
 4.  Set up API Hub entries that the `McpApi` will discover.
 
-## Configuration
+#### Configuration
 
 The server is configured primarily through environment variables:
 
