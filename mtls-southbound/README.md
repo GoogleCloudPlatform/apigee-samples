@@ -41,7 +41,7 @@ apt -y install nginx
 sudo chmod -R 777 /etc/nginx'
 ```
 
-Now set the envariable `export VM_IP=YOUR_VM_EXTERNAL_IP` with the EXTERNAL IP that is displayed in the VM create output, or update and source your `.env` file if you created one.
+Now set the environment variable `export VM_IP=YOUR_VM_EXTERNAL_IP` with the EXTERNAL IP that is displayed in the VM create output, or update and source your `.env` file if you created one.
 
 ## Step 3: Create self-signed certificate and key
 
