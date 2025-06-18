@@ -39,5 +39,4 @@
     <Template>{substring(prompt_contents_0,800000)}</Template>
   </AssignVariable>
   <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
-  <AssignTo createNew="false" transport="http" type="request"/>
 </AssignMessage>

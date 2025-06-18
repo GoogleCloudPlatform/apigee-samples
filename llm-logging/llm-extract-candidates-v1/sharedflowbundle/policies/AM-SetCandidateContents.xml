@@ -11,7 +11,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<AssignMessage async="false" continueOnError="false" enabled="true" name="AM-SetCandidaContents">
+<AssignMessage async="false" continueOnError="false" enabled="true" name="AM-SetCandidateContents">
   <DisplayName>AM-SetCandidateContents</DisplayName>
   <Properties/>
   <AssignVariable>
@@ -39,5 +39,4 @@
     <Template>{substring(candidate_contents_0,800000)}</Template>
   </AssignVariable>
   <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
-  <AssignTo createNew="false" transport="http" type="response"/>
 </AssignMessage>

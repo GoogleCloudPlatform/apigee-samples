@@ -27,5 +27,4 @@
     <Template>{propertyset.vertex_config.region_p2}</Template>
   </AssignVariable>
   <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
-  <AssignTo createNew="false" transport="http" type="response"/>
 </AssignMessage>

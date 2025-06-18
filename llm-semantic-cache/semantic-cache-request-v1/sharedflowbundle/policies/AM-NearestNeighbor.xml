@@ -27,5 +27,4 @@
     <Template>{replaceAll(nearest_neighbor_datapoint_id_ext,brackets_regex,'')}</Template>
   </AssignVariable>
   <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
-  <AssignTo createNew="false" transport="http" type="request"/>
 </AssignMessage>

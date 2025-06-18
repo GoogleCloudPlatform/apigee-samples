@@ -23,5 +23,4 @@ limitations under the License.
         <Name>oauth_response_type</Name>
         <Value>code</Value>
     </AssignVariable>
-    <AssignTo createNew="false" transport="http" type="request"/>
 </AssignMessage>
