@@ -118,6 +118,21 @@ curl -v https://ssl.test.local:8080 --resolve ssl.test.local:8080:127.0.0.1 --ca
 curl -v https://ssl.test.local:8080 --resolve ssl.test.local:8080:127.0.0.1 --cacert cert.pem --key key.pem --cert cert.pem
 ```
 
+## Step 9: Cleanup resources
+
+Don't forget to cleanup all of our resources.
+
+```sh
+# delete VM
+gcloud compute instances delete $VM_NAME --zone $ZONE --project $PROJECT_ID
+# undeploy and delete Apigee proxy
+apigeecli apis undeploy -e $APIGEE_ENV -n SecureBackendProxy-v1 -o $PROJECT_ID -t $(gcloud auth print-access-token)
+apigeecli apis delete -n SecureBackendProxy-v1 -o $PROJECT_ID -t $(gcloud auth print-access-token)
+# delete Apigee Target and Keystore
+apigeecli targetservers delete -n mtls-service -e $APIGEE_ENV -o $PROJECT_ID -t $(gcloud auth print-access-token)
+apigeecli keystores delete -n mtls-keystore1 -o $PROJECT_ID -e $APIGEE_ENV -o $PROJECT_ID -t $(gcloud auth print-access-token)
+```
+
 ## References
 - Very helpful gist on setting up mTLS in nginx with a self-signed cert: https://gist.github.com/jeduardo/8a4c4465e87767c42ffcdc6b3e9e8396
 - Great article on setting up southbound mTLS in Apigee - https://medium.com/google-cloud/configuring-mtls-for-apigee-x-southbound-traffic-flow-eb91f381b60f
