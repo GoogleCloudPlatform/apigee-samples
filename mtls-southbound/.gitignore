@@ -1,0 +1,4 @@
+.env
+cert.pem
+client.p12
+key.pem

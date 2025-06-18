@@ -1,0 +1,13 @@
+<APIProxy revision="5" name="SecureBackend-v1">
+    <DisplayName></DisplayName>
+    <Description>An API for a backend secured by southbound mTLS.</Description>
+    <CreatedAt>1750249715694</CreatedAt>
+    <LastModifiedAt>1750249769318</LastModifiedAt>
+    <BasePaths>/v1/securebackend</BasePaths>
+    <ProxyEndpoints>
+        <ProxyEndpoint>default</ProxyEndpoint>
+    </ProxyEndpoints>
+    <TargetEndpoints>
+        <TargetEndpoint>Backend</TargetEndpoint>
+    </TargetEndpoints>
+</APIProxy>
