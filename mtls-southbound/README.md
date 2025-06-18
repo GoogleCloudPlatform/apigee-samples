@@ -9,13 +9,8 @@ This sample shows how to configure mTLS for southbound services from Apigee.
 - [Apigee Docs on TLS](https://cloud.google.com/apigee/docs/api-platform/system-administration/options-configuring-tls)
 
 ## Prerequisites
-- [gcloud CLI](https://cloud.google.com/sdk/docs/install) will be used for automating GCP tasks, see the docs site above for installation instructions.
-- [apigeecli](https://github.com/apigee/apigeecli) will be used for Apigee automation, and can easily be installed like this (see apigeecli docs for more information):
-```sh
-curl -L https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.sh | sh -
-echo $'\nPATH=$PATH:$HOME/.apigeecli/bin' >> ~/.bashrc
-source ~/.bashrc
-```
+- [gcloud CLI](https://cloud.google.com/sdk/docs/install) will be used for automating GCP tasks, see the docs site for installation instructions.
+- [apigeecli](https://github.com/apigee/apigeecli) will be used for Apigee automation, see the docs site for installation instructions.
 - GCP roles needed:
   - roles/compute.instanceAdmin - needed to create a VM.
   - roles/compute.networkAdmin - needed to create a firewall rule to allow the VM to get scp commands on port 22.

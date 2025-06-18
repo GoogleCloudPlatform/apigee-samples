@@ -8,17 +8,17 @@ Let's get started!
 
 ## Prepare project dependencies
 
-### 1. Ensure that prerequisite tools are installed
+### 1. Ensure that prerequisite tools are installed, and that you have needed permissions.
 
-We will be using the [apigeecli](https://github.com/apigee/apigeecli) for an Apigee deployment, you can make sure it is installed in your Cloud Shell with this script
+- [gcloud CLI](https://cloud.google.com/sdk/docs/install) will be used for automating GCP tasks, see the docs site for installation instructions.
+- [apigeecli](https://github.com/apigee/apigeecli) will be used for Apigee automation, see the docs site for installation instructions.
+- GCP roles needed:
+  - roles/compute.instanceAdmin - needed to create a VM.
+  - roles/compute.networkAdmin - needed to create a firewall rule to allow the VM to get scp commands on port 22.
+  - roles/apigee.apiAdminV2 - needed to deploy an Apigee proxy.
+  - roles/apigee.environmentAdmin - needed to manage the Keystore and Target configuration.
 
-```sh
-curl -L https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.sh | sh -
-echo $'\nPATH=$PATH:$HOME/.apigeecli/bin' >> ~/.bashrc
-source ~/.bashrc
-```
-
-### 2. Ensure you have an active GCP account selected in the Cloud Shell
+### 2. Ensure you have an active GCP account selected in the Cloud Shell.
 
 ```sh
 gcloud auth login
@@ -44,7 +44,7 @@ Now open the file, and set *PROJECT_ID* to your GCP project, and optionally *REG
 
 <walkthrough-editor-open-file filePath="mtls-southbound/.env">here</walkthrough-editor-open-file>
 
-Now source the .env file.
+After saving, source the .env file.
 
 ```sh
 source .env
