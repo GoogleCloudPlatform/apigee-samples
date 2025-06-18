@@ -17,7 +17,7 @@
 set -e
 
 # Source default values
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
 source "$SCRIPT_DIR/defaults.sh"
 
 echo "🔄 Installing apigeecli ..."
@@ -30,7 +30,6 @@ if [ -z "$PROJECT_ID" ]; then
   exit 1
 fi
 
-
 echo "🔄 Generating GCP access token..."
 TOKEN=$(gcloud auth print-access-token --project "${PROJECT_ID}")
 export TOKEN
@@ -39,10 +38,10 @@ echo "✅ Token generated."
 APIGEE_ORG="${PROJECT_ID}"
 
 # Use the same region as the Apigee runtime instance
-INSTANCE_LOCATION=$(apigeecli instances get --name "$APIGEE_INSTANCE_NAME" --org "${PROJECT_ID}" --token "$TOKEN" 2> /dev/null | jq -e -r '.location')
+INSTANCE_LOCATION=$(apigeecli instances get --name "$APIGEE_INSTANCE_NAME" --org "${PROJECT_ID}" --token "$TOKEN" 2>/dev/null | jq -e -r '.location')
 if [ "$INSTANCE_LOCATION" == "null" ] || [ -z "$INSTANCE_LOCATION" ]; then
-     echo "❌ Error: could not get location for Apigee runtime instance"
-     exit 1
+  echo "❌ Error: could not get location for Apigee runtime instance"
+  exit 1
 fi
 export INSTANCE_LOCATION
 
@@ -57,30 +56,27 @@ sleep 10
 echo ""
 echo "🔄 2. Creating IAM Policy Binding ..."
 gcloud run services add-iam-policy-binding "$CLOUD_RUN_NAME" \
-          --region "$INSTANCE_LOCATION" \
-          --member "serviceAccount:${CLOUD_RUN_SERVICE_ACCOUNT_NAME}@${PROJECT_ID}.iam.gserviceaccount.com" \
-          --role roles/run.invoker \
-          --platform managed \
-          --project "${PROJECT_ID}"
+  --region "$INSTANCE_LOCATION" \
+  --member "serviceAccount:${CLOUD_RUN_SERVICE_ACCOUNT_NAME}@${PROJECT_ID}.iam.gserviceaccount.com" \
+  --role roles/run.invoker \
+  --platform managed \
+  --project "${PROJECT_ID}"
 echo "✅ Successfully created IAM policy binding"
 sleep 10
 
 echo ""
 echo "🔄 2: Deploy API proxy '$PROXY_NAME' from to environment '$ENV_NAME'..."
-apigeecli apis create bundle  \
-   --name "$PROXY_NAME" \
-   --proxy-folder "$PROXY_BUNDLE_DIR" \
-   --org "$APIGEE_ORG" \
-   --env "$ENV_NAME" \
-   --token "$TOKEN" \
-   --sa "${CLOUD_RUN_SERVICE_ACCOUNT_NAME}@${PROJECT_ID}.iam.gserviceaccount.com" \
-   --ovr \
-   --wait
+apigeecli apis create bundle \
+  --name "$PROXY_NAME" \
+  --proxy-folder "$PROXY_BUNDLE_DIR" \
+  --org "$APIGEE_ORG" \
+  --env "$ENV_NAME" \
+  --token "$TOKEN" \
+  --sa "${CLOUD_RUN_SERVICE_ACCOUNT_NAME}@${PROJECT_ID}.iam.gserviceaccount.com" \
+  --ovr \
+  --wait
 echo "✅ Successfully created API Proxy '$PROXY_NAME' "
 
 echo "--------------------------------------------------------------------------"
 echo "🎉 Apigee API Proxy '$PROXY_NAME' configured!"
 echo "--------------------------------------------------------------------------"
-
-
-

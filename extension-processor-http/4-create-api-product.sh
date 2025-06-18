@@ -22,7 +22,7 @@ if [ -z "$PROJECT_ID" ]; then
 fi
 
 # Source default values
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
 source "$SCRIPT_DIR/defaults.sh"
 
 echo "🔄 Installing apigeecli ..."
@@ -35,7 +35,6 @@ TOKEN=$(gcloud auth print-access-token)
 export TOKEN
 echo "✅ Token generated."
 
-
 echo "Starting script to create API Proxy for httpbin.org ..."
 echo "Using Project ID: $PROJECT_ID"
 
@@ -45,7 +44,7 @@ echo "🔄 Step 1: Create API Product '$PRODUCT_NAME' ..."
 OPS_GROUP_FILE=$(mktemp)
 export OPP_SGROUP_FILE
 
-cat << EOF > "$OPS_GROUP_FILE"
+cat <<EOF >"$OPS_GROUP_FILE"
 {
   "operationConfigs": [
     {
@@ -63,19 +62,16 @@ cat << EOF > "$OPS_GROUP_FILE"
 }
 EOF
 
-apigeecli products create   \
-   --name "$PRODUCT_NAME" \
-   --display-name "$PRODUCT_NAME" \
-   --approval "auto" \
-   --opgrp "$OPS_GROUP_FILE" \
-   --org "$APIGEE_ORG" \
-   --envs "$ENV_NAME" \
-   --token "$TOKEN"
+apigeecli products create \
+  --name "$PRODUCT_NAME" \
+  --display-name "$PRODUCT_NAME" \
+  --approval "auto" \
+  --opgrp "$OPS_GROUP_FILE" \
+  --org "$APIGEE_ORG" \
+  --envs "$ENV_NAME" \
+  --token "$TOKEN"
 echo "✅ Successfully created API Product '$PRODUCT_NAME' "
 
 echo "--------------------------------------------------------------------------"
 echo "🎉 Apigee API Product '$PRODUCT_NAME' configured!"
 echo "--------------------------------------------------------------------------"
-
-
-

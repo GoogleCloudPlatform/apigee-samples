@@ -55,26 +55,26 @@ add_role_to_service_account() {
     --role="$role"
 }
 
-add_api_to_hub(){
+add_api_to_hub() {
   local api=$1
   local id="1_0_0"
   echo "Registering the $api API"
   apigeecli apihub apis create --id "${api}_api" \
-  -f "tmp/${api}/${api}-api.json" \
-  -r "$APIGEE_APIHUB_REGION" -o "$APIGEE_APIHUB_PROJECT_ID" -t "$TOKEN"
+    -f "tmp/${api}/${api}-api.json" \
+    -r "$APIGEE_APIHUB_REGION" -o "$APIGEE_APIHUB_PROJECT_ID" -t "$TOKEN"
 
   apigeecli apihub apis versions create --api-id "${api}_api" --id $id \
-  -f "tmp/${api}/${api}-api-ver.json"  -r "$APIGEE_APIHUB_REGION" -o "$APIGEE_APIHUB_PROJECT_ID" -t "$TOKEN"
+    -f "tmp/${api}/${api}-api-ver.json" -r "$APIGEE_APIHUB_REGION" -o "$APIGEE_APIHUB_PROJECT_ID" -t "$TOKEN"
 
   apigeecli apihub apis versions specs create --api-id "${api}_api" -i $id --version $id \
-  -d openapi.yaml -f "tmp/${api}/${api}.yaml"  -r "$APIGEE_APIHUB_REGION" -o "$APIGEE_APIHUB_PROJECT_ID" -t "$TOKEN"
+    -d openapi.yaml -f "tmp/${api}/${api}.yaml" -r "$APIGEE_APIHUB_REGION" -o "$APIGEE_APIHUB_PROJECT_ID" -t "$TOKEN"
 }
 
 PRE_PROP="project_id=$VERTEXAI_PROJECT_ID
 model_id=$MODEL_ID
 region=$VERTEXAI_REGION"
 
-echo "$PRE_PROP" > ./apiproxy/resources/properties/vertex_config.properties
+echo "$PRE_PROP" >./apiproxy/resources/properties/vertex_config.properties
 
 echo "Creating Service Account and assigning permissions"
 gcloud iam service-accounts create "$SERVICE_ACCOUNT_NAME" --project "$PROJECT_ID"
@@ -129,7 +129,7 @@ APIKEY=$(apigeecli apps get --name "adk-auto-insurance-app" --org "$PROJECT_ID" 
 SECRET_ID="cymbal-auto-apikey"
 echo "Creating a Secret that will be used by ADK"
 gcloud secrets create "$SECRET_ID" --replication-policy="automatic" --project "$PROJECT_ID"
-echo -n "$APIKEY" | gcloud secrets versions add "$SECRET_ID" --project "$PROJECT_ID" --data-file=- 
+echo -n "$APIKEY" | gcloud secrets versions add "$SECRET_ID" --project "$PROJECT_ID" --data-file=-
 echo "Secret $SECRET_ID created successfully"
 
 export APIKEY

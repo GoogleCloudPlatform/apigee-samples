@@ -19,9 +19,8 @@ if [ -z "$PROJECT_ID" ]; then
   exit 1
 fi
 
-
 # Source default values
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
 source "$SCRIPT_DIR/defaults.sh"
 
 echo "🔄 Installing apigeecli ..."
@@ -34,18 +33,17 @@ TOKEN=$(gcloud auth print-access-token)
 export TOKEN
 echo "✅ Token generated."
 
-
 echo ""
 echo "🧹 Starting cleanup script for API Product"
 
 echo ""
 echo "🗑️ Deleting API Product '$PRODUCT_NAME' from environment '$ENV_NAME'..."
 
-apigeecli products delete   \
-   --name "$PRODUCT_NAME" \
-   --org "$APIGEE_ORG" \
-   --token "$TOKEN" && \
-   echo "✅ API Product '$PRODUCT_NAME' deleted from organization '$APIGEE_ORG' "
+apigeecli products delete \
+  --name "$PRODUCT_NAME" \
+  --org "$APIGEE_ORG" \
+  --token "$TOKEN" &&
+  echo "✅ API Product '$PRODUCT_NAME' deleted from organization '$APIGEE_ORG' "
 
 echo ""
 echo "🎉 Apigee API Product cleanup completed."

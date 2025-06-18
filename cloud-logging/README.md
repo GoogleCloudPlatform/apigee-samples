@@ -129,12 +129,12 @@ them to be available.  Let's check that the Logging API is enabled.
    ./check-required-services.sh
    ```
 
-   * If this indicates that the logging API is already enabled on the project, you can proceed.
+* If this indicates that the logging API is already enabled on the project, you can proceed.
 
-   * If the logging API is not enabled, but you have editor or owner role (as shown in the previous
+* If the logging API is not enabled, but you have editor or owner role (as shown in the previous
      step), then you will enable the logging API in the next step.
 
-   * If the logging API is not enabled, and you do not have editor or owner role, then you need to
+* If the logging API is not enabled, and you do not have editor or owner role, then you need to
      stop, and find someone who can enable that API on your GCP project, before proceeding here.
 
 5. Deploy Apigee API proxy

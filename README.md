@@ -118,6 +118,7 @@ This is a collection of sample AI agents created using Google's [Agent Developme
 ### Prerequisites
 
 You will need a GCP project with the following services enabled and provisioned:
+
 - Vertex AI
 - Apigee API hub
 - Apigee
@@ -137,7 +138,6 @@ The [Model Context Protocol (MCP)](https://github.com/modelcontext/specification
 |    | Sample                      | Description                                                                                                                                                              | Open Notebook |
 |----|-----------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------|
 | 1  | [apigee-mcp](apigee-mcp)    | Illustrates Apigee's role in the MCP ecosystem. Features an MCP server that discovers API specs from API Hub (via Apigee), dynamically creates tools for LLMs, and exposes them through Apigee. An example CRM agent notebook demonstrates consuming these tools. | [![notebook](https://github.com/GoogleCloudPlatform/apigee-samples/blob/main/images/icon32.png?raw=true)](./apigee-mcp/notebooks/crm-agent-mcp.ipynb) |
-
 
 ## <a name="modifying"></a>Modifying a sample proxy
 

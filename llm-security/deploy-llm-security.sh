@@ -55,10 +55,10 @@ import_and_deploy_sharedflow() {
   local sharedflow_name=$1
   echo "Deploying Shared Flow: $sharedflow_name"
   apigeecli sharedflows create bundle -n "$sharedflow_name" \
-  -f sharedflowbundles/"$sharedflow_name"/sharedflowbundle \
-  -e "$APIGEE_ENV" --token "$TOKEN" -o "$PROJECT_ID" \
-  -s "${SERVICE_ACCOUNT_NAME}"@"${PROJECT_ID}".iam.gserviceaccount.com \
-  --ovr --wait
+    -f sharedflowbundles/"$sharedflow_name"/sharedflowbundle \
+    -e "$APIGEE_ENV" --token "$TOKEN" -o "$PROJECT_ID" \
+    -s "${SERVICE_ACCOUNT_NAME}"@"${PROJECT_ID}".iam.gserviceaccount.com \
+    --ovr --wait
 }
 
 TOKEN=$(gcloud auth print-access-token)
@@ -87,7 +87,6 @@ sed -i "s/MODEL_ARMOR_TEMPLATE_ID/$MODEL_ARMOR_TEMPLATE_ID/g" config/env__"${API
 apigeecli kvms import -f config/env__"${APIGEE_ENV}"__model-armor-config__kvmfile__0.json --org "$PROJECT_ID" --token "$TOKEN"
 
 rm config/env__"${APIGEE_ENV}"__model-armor-config__kvmfile__0.json
-
 
 import_and_deploy_sharedflow "ModelArmor-v1"
 

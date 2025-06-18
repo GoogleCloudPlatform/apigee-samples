@@ -17,7 +17,7 @@
 set -e
 
 # Source default values
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
 source "$SCRIPT_DIR/defaults.sh"
 
 echo "🔄 Installing apigeecli ..."
@@ -30,62 +30,56 @@ if [ -z "$PROJECT_ID" ]; then
   exit 1
 fi
 
-
 echo "🔄 Generating GCP access token..."
 TOKEN=$(gcloud auth print-access-token --project "${PROJECT_ID}")
 export TOKEN
 echo "✅ Token generated."
 
-
-INSTANCE_SERVICE_ATTACHMENT=$(apigeecli instances get --name "$APIGEE_INSTANCE_NAME" --org "${PROJECT_ID}" --token "$TOKEN" 2> /dev/null | jq -e -r '.serviceAttachment' || echo "null")
+INSTANCE_SERVICE_ATTACHMENT=$(apigeecli instances get --name "$APIGEE_INSTANCE_NAME" --org "${PROJECT_ID}" --token "$TOKEN" 2>/dev/null | jq -e -r '.serviceAttachment' || echo "null")
 if [ "$INSTANCE_SERVICE_ATTACHMENT" == "null" ] || [ -z "$INSTANCE_SERVICE_ATTACHMENT" ]; then
-     echo "❌ Error: could not get serviceAttachment for Apigee runtime instance"
-     exit 1
+  echo "❌ Error: could not get serviceAttachment for Apigee runtime instance"
+  exit 1
 fi
 export INSTANCE_SERVICE_ATTACHMENT
 
-
-INSTANCE_LOCATION=$(apigeecli instances get --name "$APIGEE_INSTANCE_NAME" --org "${PROJECT_ID}" --token "$TOKEN" 2> /dev/null | jq -e -r '.location' || echo "null")
+INSTANCE_LOCATION=$(apigeecli instances get --name "$APIGEE_INSTANCE_NAME" --org "${PROJECT_ID}" --token "$TOKEN" 2>/dev/null | jq -e -r '.location' || echo "null")
 if [ "$INSTANCE_LOCATION" == "null" ] || [ -z "$INSTANCE_LOCATION" ]; then
-     echo "❌ Error: could not get location for Apigee runtime instance"
-     exit 1
+  echo "❌ Error: could not get location for Apigee runtime instance"
+  exit 1
 fi
 export INSTANCE_LOCATION
-
 
 echo "⚙️ Starting script to create Service Extension for GLobal External Load Balancer ..."
 
 echo ""
 echo "🔄 1. Creating PSC Network Endpoint Group (NEG) for Apigee runtime ..."
 gcloud compute network-endpoint-groups create "$RUNTIME_NEG_NAME" \
-    --psc-target-service="$INSTANCE_SERVICE_ATTACHMENT" \
-    --region="$INSTANCE_LOCATION" \
-    --network="$VPC_NETWORK_NAME" \
-    --subnet="$VPC_PSC_SUBNET_NAME" \
-    --network-endpoint-type="PRIVATE_SERVICE_CONNECT" \
-    --producer-port=443 \
-    --project "$PROJECT_ID"
-
+  --psc-target-service="$INSTANCE_SERVICE_ATTACHMENT" \
+  --region="$INSTANCE_LOCATION" \
+  --network="$VPC_NETWORK_NAME" \
+  --subnet="$VPC_PSC_SUBNET_NAME" \
+  --network-endpoint-type="PRIVATE_SERVICE_CONNECT" \
+  --producer-port=443 \
+  --project "$PROJECT_ID"
 
 echo "✅ PSC NEG '$RUNTIME_NEG_NAME' created successfully."
 
 echo ""
 echo "🔄 2. Creating Global Backend Service pointing to the PSC NEG ..."
 gcloud compute backend-services create "$RUNTIME_BACKEND_SERVICE_NAME" \
-    --load-balancing-scheme="EXTERNAL_MANAGED" \
-    --protocol=HTTP2 \
-    --project "$PROJECT_ID" \
-    --global
+  --load-balancing-scheme="EXTERNAL_MANAGED" \
+  --protocol=HTTP2 \
+  --project "$PROJECT_ID" \
+  --global
 echo "✅ Global Backend Service '$RUNTIME_BACKEND_SERVICE_NAME' created successfully."
 
 echo ""
 echo "🔄 3. Adding PSC NEG to the Global Backend Service ..."
 gcloud compute backend-services add-backend "$RUNTIME_BACKEND_SERVICE_NAME" \
-    --network-endpoint-group="$RUNTIME_NEG_NAME" \
-    --network-endpoint-group-region="$INSTANCE_LOCATION" \
-    --project "$PROJECT_ID" \
-    --global
-
+  --network-endpoint-group="$RUNTIME_NEG_NAME" \
+  --network-endpoint-group-region="$INSTANCE_LOCATION" \
+  --project "$PROJECT_ID" \
+  --global
 
 gcloud compute backend-services update "$RUNTIME_BACKEND_SERVICE_NAME" \
   --global \
@@ -96,7 +90,6 @@ gcloud compute backend-services update "$RUNTIME_BACKEND_SERVICE_NAME" \
 echo "✅ PSC NEG '$RUNTIME_NEG_NAME' added to '$RUNTIME_BACKEND_SERVICE_NAME' successfully."
 echo ""
 
-
 echo ""
 echo "🔄 4. Creating Service Extension ..."
 
@@ -104,28 +97,26 @@ gcloud services enable networkservices.googleapis.com --project "$PROJECT_ID"
 
 FORWARDING_RULE_SELF_LINK=$(gcloud compute forwarding-rules describe "$FORWARDING_RULE_NAME" --global --format=json --project "$PROJECT_ID" 2>/dev/null | jq -e -r ".selfLink" || echo "null")
 if [ "$FORWARDING_RULE_SELF_LINK" == "null" ] || [ -z "$FORWARDING_RULE_SELF_LINK" ]; then
-     echo "❌ Error: could not get selfLink for global forwarding rule named '$FORWARDING_RULE_NAME' "
-     exit 1
+  echo "❌ Error: could not get selfLink for global forwarding rule named '$FORWARDING_RULE_NAME' "
+  exit 1
 fi
 export FORWARDING_RULE_SELF_LINK
 
 FORWARDING_RULE_IP_ADDRESS=$(gcloud compute forwarding-rules describe "$FORWARDING_RULE_NAME" --global --format=json --project "$PROJECT_ID" 2>/dev/null | jq -e -r ".IPAddress" || echo "null")
 if [ "$FORWARDING_RULE_IP_ADDRESS" == "null" ] || [ -z "$FORWARDING_RULE_IP_ADDRESS" ]; then
-     echo "❌ Error: could not get IPAddress for global forwarding rule named '$FORWARDING_RULE_NAME' "
-     exit 1
+  echo "❌ Error: could not get IPAddress for global forwarding rule named '$FORWARDING_RULE_NAME' "
+  exit 1
 fi
 export FORWARDING_RULE_IP_ADDRESS
 
-
 BACKEND_SERVICE_SELF_LINK=$(gcloud compute backend-services describe "$RUNTIME_BACKEND_SERVICE_NAME" --format=json --project "$PROJECT_ID" --global 2>/dev/null | jq -e -r ".selfLink" || echo "null")
 if [ "$BACKEND_SERVICE_SELF_LINK" == "null" ] || [ -z "$BACKEND_SERVICE_SELF_LINK" ]; then
-     echo "❌ Error: could not get selfLink for global backend service named '$BACKEND_SERVICE_SELF_LINK' "
-     exit 1
+  echo "❌ Error: could not get selfLink for global backend service named '$BACKEND_SERVICE_SELF_LINK' "
+  exit 1
 fi
 export BACKEND_SERVICE_SELF_LINK
 
-
-cat << EOF > service-extension.yaml
+cat <<EOF >service-extension.yaml
 name: $SERVICE_EXTENSION_NAME
 metadata:
     apigee-extension-processor: $PROXY_NAME
@@ -146,8 +137,6 @@ extensionChains:
     - REQUEST_HEADERS
     - RESPONSE_HEADERS
 EOF
-
-
 
 gcloud service-extensions lb-traffic-extensions import "$SERVICE_EXTENSION_NAME" \
   --source=service-extension.yaml \

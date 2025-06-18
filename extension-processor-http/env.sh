@@ -29,4 +29,3 @@ export VPC_PSC_SUBNET_NAME="<YOUR_SUBNET_NAME>"
 export VPC_NETWORK_NAME="<YOUR_VPC_NAME>"
 
 gcloud config set project $PROJECT_ID
-

@@ -40,7 +40,7 @@ delete_api() {
 
 }
 
-delete_sharedflow(){
+delete_sharedflow() {
   local sharedflow_name=$1
   echo "Undeploying $sharedflow_name sharedflow"
   REV=$(apigeecli envs deployments get --env "$APIGEE_ENV" --org "$PROJECT_ID" --token "$TOKEN" --sharedflows true --disable-check | jq .'deployments[]| select(.apiProxy=="'"$sharedflow_name"'").revision' -r)

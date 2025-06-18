@@ -64,7 +64,7 @@ project_p2=$PROJECT_P2
 region_p1=$REGION_P1
 region_p2=$REGION_P2"
 
-echo "$PRE_PROP" > ./apiproxy/resources/properties/vertex_config.properties
+echo "$PRE_PROP" >./apiproxy/resources/properties/vertex_config.properties
 
 echo "Deploying Apigee artifacts..."
 

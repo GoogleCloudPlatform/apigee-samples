@@ -2,7 +2,7 @@
 
 ---
 
-This is a sample on how to deploy a sample Apigee proxy and configure it as a tool in [Conversational Agents](https://cloud.google.com/dialogflow/cx/docs). 
+This is a sample on how to deploy a sample Apigee proxy and configure it as a tool in [Conversational Agents](https://cloud.google.com/dialogflow/cx/docs).
 
 ## Pre-Requisites
 
@@ -47,6 +47,7 @@ Next, let's deploy the sample to Apigee. Just run
 ```bash
 ./deploy-llm-vertexai-agent.sh
 ```
+
 ---
 
 ## Verification

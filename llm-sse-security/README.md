@@ -11,7 +11,7 @@
 2. Configure [external access](https://cloud.google.com/apigee/docs/api-platform/get-started/configure-routing#external-access) for API traffic to your Apigee X instance
 3. Enable Vertex AI in your project
 4. Enable Model Armor in your project and create a template. This template ID is needed to deploy the proxy. If you do not have a template, you can run the following commands
-   
+
 ```sh
 PROJECT_ID=<project-id>
 MODEL_ARMOR_REGION=<region>

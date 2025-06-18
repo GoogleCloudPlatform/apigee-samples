@@ -25,24 +25,24 @@ MISSING_ENV_VARS=()
 [[ -z "$CLOUD_FUNCTION_NAME" ]] && MISSING_ENV_VARS+=('CLOUD_FUNCTION_NAME')
 
 [[ ${#MISSING_ENV_VARS[@]} -ne 0 ]] && {
-    printf -v joined '%s,' "${MISSING_ENV_VARS[@]}"
-    printf "You must set these environment variables: %s\n" "${joined%,}"
-    exit 1
+  printf -v joined '%s,' "${MISSING_ENV_VARS[@]}"
+  printf "You must set these environment variables: %s\n" "${joined%,}"
+  exit 1
 }
 
 replace_element_text() {
-    local element_name=$1
-    local cf_url=$2
-    local file_name=$3
-    local match_pattern="<${element_name}>.\\+</${element_name}>"
-    local replace_pattern="<${element_name}>${cf_url}</${element_name}>"
-    local sed_script="s#${match_pattern}#${replace_pattern}#"
-    #  in-place editing
-    local SEDOPTION="-i"
-    if [[ "$OSTYPE" == "darwin"* ]]; then
-        SEDOPTION='-i \x27\x27'
-    fi
-    sed "$SEDOPTION" -e "${sed_script}" "${file_name}"
+  local element_name=$1
+  local cf_url=$2
+  local file_name=$3
+  local match_pattern="<${element_name}>.\\+</${element_name}>"
+  local replace_pattern="<${element_name}>${cf_url}</${element_name}>"
+  local sed_script="s#${match_pattern}#${replace_pattern}#"
+  #  in-place editing
+  local SEDOPTION="-i"
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+    SEDOPTION='-i \x27\x27'
+  fi
+  sed "$SEDOPTION" -e "${sed_script}" "${file_name}"
 }
 
 echo "Installing dependencies, including apigeelint"

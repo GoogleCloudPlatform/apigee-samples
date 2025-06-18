@@ -17,7 +17,7 @@
 set -e
 
 # Source default values
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
 source "$SCRIPT_DIR/defaults.sh"
 
 if [ -z "$PROJECT_ID" ]; then
@@ -42,13 +42,12 @@ TOKEN=$(gcloud auth print-access-token --project "${PROJECT_ID}")
 export TOKEN
 echo "✅ Token generated."
 
-
 echo ""
 echo "🔄 Step 1: Creating new environment '$ENV_NAME' in organization '$APIGEE_ORG'..."
-BILLING_TYPE=$(apigeecli organizations get --org "${PROJECT_ID}" --token "${TOKEN}" 2> /dev/null | jq -e  -r ".billingType")
+BILLING_TYPE=$(apigeecli organizations get --org "${PROJECT_ID}" --token "${TOKEN}" 2>/dev/null | jq -e -r ".billingType")
 if [ "$BILLING_TYPE" == "null" ] || [ -z "$BILLING_TYPE" ]; then
-     echo "❌ Error: could not get .billingType for Apigee org '${PROJECT_ID}' "
-     exit 1
+  echo "❌ Error: could not get .billingType for Apigee org '${PROJECT_ID}' "
+  exit 1
 fi
 
 ENV_TYPE_PARAM=()
@@ -72,18 +71,17 @@ apigeecli environments set \
   --token "$TOKEN"
 echo "✅ Successfully created environment '$ENV_NAME'."
 
-
 echo ""
 echo "🔄 Step 2: Creating environment group '$GROUP_NAME'..."
 
 FORWARDING_RULE_IP_ADDRESS=$(gcloud compute forwarding-rules describe "$FORWARDING_RULE_NAME" --global --format=json --project "$PROJECT_ID" 2>/dev/null | jq -e -r ".IPAddress" || echo "null")
 if [ "$FORWARDING_RULE_IP_ADDRESS" == "null" ] || [ -z "$FORWARDING_RULE_IP_ADDRESS" ]; then
-     echo "❌ Error: could not get IPAddress for global forwarding rule named '$FORWARDING_RULE_NAME' "
-     exit 1
+  echo "❌ Error: could not get IPAddress for global forwarding rule named '$FORWARDING_RULE_NAME' "
+  exit 1
 fi
 export FORWARDING_RULE_IP_ADDRESS
 
-apigeecli envgroups create  \
+apigeecli envgroups create \
   --name "$GROUP_NAME" \
   --hosts "${FORWARDING_RULE_IP_ADDRESS}.nip.io" \
   --org "$APIGEE_ORG" \
@@ -112,6 +110,3 @@ echo "✅ Successfully attached environment '$ENV_NAME' to runtime instance"
 echo "---------------------------------------------"
 echo "🎉 Apigee environment '$ENV_NAME' configured!"
 echo "---------------------------------------------"
-
-
-

@@ -25,7 +25,7 @@ if [ -z "$APIGEE_INSTANCE_NAME" ]; then
 fi
 
 # Source default values
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
 source "$SCRIPT_DIR/defaults.sh"
 
 echo "🔄 Installing apigeecli ..."
@@ -38,7 +38,6 @@ TOKEN=$(gcloud auth print-access-token)
 export TOKEN
 echo "✅ Token generated."
 
-
 echo ""
 echo "🧹 Starting cleanup script for Apigee Environment"
 
@@ -49,7 +48,7 @@ apigeecli instances attachments detach \
   --env "$ENV_NAME" \
   --org "$APIGEE_ORG" \
   --token "$TOKEN" \
-  --wait && \
+  --wait &&
   echo "✅ Environment '$ENV_NAME' detached from instance '$APIGEE_INSTANCE_NAME' "
 
 echo ""
@@ -57,7 +56,7 @@ echo "🗑️ Deleting environment group '$GROUP_NAME'..."
 apigeecli envgroups delete \
   --name "$GROUP_NAME" \
   --org "$APIGEE_ORG" \
-  --token "$TOKEN" && \
+  --token "$TOKEN" &&
   echo "✅ Environment '$ENV_NAME' deleted from from organization '$APIGEE_ORG' "
 
 echo ""
@@ -66,7 +65,7 @@ apigeecli environments delete \
   --env "$ENV_NAME" \
   --org "$APIGEE_ORG" \
   --token "$TOKEN" \
-  --wait && \
+  --wait &&
   echo "✅ Environment '$ENV_NAME' deleted from from organization '$APIGEE_ORG' "
 
 echo ""

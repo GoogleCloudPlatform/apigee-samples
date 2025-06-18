@@ -24,7 +24,6 @@ if [ -z "$APIGEE_ENV" ]; then
   exit
 fi
 
-
 TOKEN=$(gcloud auth print-access-token)
 
 echo "Installing apigeecli"

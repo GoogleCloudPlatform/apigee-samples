@@ -39,6 +39,3 @@ export VPC_PSC_SUBNET_NAME="<YOUR_SUBNET_NAME>"
 
 # This is the name of the VPC hosting the PSC-only subnet (above)
 export VPC_NETWORK_NAME="<YOUR_VPC_NAME>"
-
-
-

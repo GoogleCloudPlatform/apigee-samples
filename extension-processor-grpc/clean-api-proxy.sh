@@ -14,9 +14,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 # Source default values
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
 source "$SCRIPT_DIR/defaults.sh"
 
 echo "🔄 Installing apigeecli ..."
@@ -37,33 +36,32 @@ echo "✅ Token generated."
 APIGEE_ORG="${PROJECT_ID}"
 
 # Use the same region as the Apigee runtime instance
-INSTANCE_LOCATION=$(apigeecli instances get --name "$APIGEE_INSTANCE_NAME" --org "${PROJECT_ID}" --token "$TOKEN" 2> /dev/null | jq -e -r '.location')
+INSTANCE_LOCATION=$(apigeecli instances get --name "$APIGEE_INSTANCE_NAME" --org "${PROJECT_ID}" --token "$TOKEN" 2>/dev/null | jq -e -r '.location')
 if [ "$INSTANCE_LOCATION" == "null" ] || [ -z "$INSTANCE_LOCATION" ]; then
-     echo "❌ Error: could not get location for Apigee runtime instance"
-     exit 1
+  echo "❌ Error: could not get location for Apigee runtime instance"
+  exit 1
 fi
 export INSTANCE_LOCATION
-
 
 echo ""
 echo "🧹 Starting cleanup script for API Proxy"
 
 echo ""
 echo "🗑️ Delete IAM Binding  ..."
-gcloud run services remove-iam-policy-binding "$CLOUD_RUN_NAME"  \
-  --region "$INSTANCE_LOCATION"  \
+gcloud run services remove-iam-policy-binding "$CLOUD_RUN_NAME" \
+  --region "$INSTANCE_LOCATION" \
   --member "serviceAccount:${CLOUD_RUN_SERVICE_ACCOUNT_NAME}@${PROJECT_ID}.iam.gserviceaccount.com" \
   --role roles/run.invoker \
   --quiet \
-  --project "$PROJECT_ID" && \
+  --project "$PROJECT_ID" &&
   echo "✅ Successfully removed IAM policy binding."
 
 echo ""
 echo "🗑️ Delete Service Account for Cloud Run  ..."
 gcloud iam service-accounts delete "$CLOUD_RUN_SERVICE_ACCOUNT_NAME@${PROJECT_ID}.iam.gserviceaccount.com" \
-    --quiet \
-    --project "$PROJECT_ID" && \
-    echo "✅ Successfully deleted Service Account."
+  --quiet \
+  --project "$PROJECT_ID" &&
+  echo "✅ Successfully deleted Service Account."
 
 echo ""
 echo "🗑️ Undeploying and deleting API proxy '$PROXY_NAME' from environment '$ENV_NAME'..."
@@ -71,13 +69,13 @@ apigeecli apis undeploy \
   --name "$PROXY_NAME" \
   --env "$ENV_NAME" \
   --org "$APIGEE_ORG" \
-  --token "$TOKEN" && \
+  --token "$TOKEN" &&
   echo "✅ API Proxy '$PROXY_NAME' undeployed and from environment '$ENV_NAME' "
 
 apigeecli apis delete \
   --name "$PROXY_NAME" \
   --org "$APIGEE_ORG" \
-  --token "$TOKEN" && \
+  --token "$TOKEN" &&
   echo "✅ API Proxy '$PROXY_NAME' deleted from organization '$APIGEE_ORG'"
 
 echo ""

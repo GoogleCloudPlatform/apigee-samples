@@ -249,6 +249,7 @@ SA_ID_TOKEN=$(curl -s -X POST \
 ```
 
 You can examine that Identity token if you wish:
+
 ```sh
 echo $SA_ID_TOKEN
 ```
@@ -268,7 +269,6 @@ header telling you the caller has insufficient scope.
 HTTP/2 403
 www-authenticate: Bearer error="insufficient_scope"
 ```
-
 
 Why? The request included
 an ID token with the correct audience. What's missing?

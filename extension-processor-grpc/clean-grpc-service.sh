@@ -15,7 +15,7 @@
 # limitations under the License.
 
 # Source default values
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
 source "$SCRIPT_DIR/defaults.sh"
 
 echo "🔄 Installing apigeecli ..."
@@ -36,21 +36,20 @@ TOKEN=$(gcloud auth print-access-token --project "${PROJECT_ID}")
 export TOKEN
 echo "✅ Token generated."
 
-
 # Use the same region as the Apigee runtime instance
-INSTANCE_LOCATION=$(apigeecli instances get --name "$APIGEE_INSTANCE_NAME" --org "${PROJECT_ID}" --token "$TOKEN" 2> /dev/null | jq -e -r '.location')
+INSTANCE_LOCATION=$(apigeecli instances get --name "$APIGEE_INSTANCE_NAME" --org "${PROJECT_ID}" --token "$TOKEN" 2>/dev/null | jq -e -r '.location')
 if [ "$INSTANCE_LOCATION" == "null" ] || [ -z "$INSTANCE_LOCATION" ]; then
-     echo "❌ Error: could not get location for Apigee runtime instance"
-     exit 1
+  echo "❌ Error: could not get location for Apigee runtime instance"
+  exit 1
 fi
 export INSTANCE_LOCATION
 
 echo ""
 echo "🗑️ Delete gRPC Cloud Run  ..."
 gcloud run services delete "$CLOUD_RUN_NAME" \
-   --region="${INSTANCE_LOCATION}" \
-   --quiet \
-   --project "$PROJECT_ID" && \
+  --region="${INSTANCE_LOCATION}" \
+  --quiet \
+  --project "$PROJECT_ID" &&
   echo "✅ Successfully deleted gRPC Cloud Run."
 
 echo ""

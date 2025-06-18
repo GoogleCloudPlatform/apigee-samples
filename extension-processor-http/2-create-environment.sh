@@ -27,9 +27,8 @@ if [ -z "$APIGEE_INSTANCE_NAME" ]; then
 fi
 
 # Source default values
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
 source "$SCRIPT_DIR/defaults.sh"
-
 
 echo "🔄 Installing apigeecli ..."
 curl -s https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.sh | bash
@@ -40,7 +39,6 @@ echo "🔄 Generating GCP access token..."
 TOKEN=$(gcloud auth print-access-token)
 export TOKEN
 echo "✅ Token generated."
-
 
 echo "Starting script to create Apigee Extension Processor Environment and API Proxy ..."
 echo "Using Project ID: $PROJECT_ID"
@@ -62,18 +60,17 @@ apigeecli environments set \
   --token "$TOKEN"
 echo "✅ Successfully created environment '$ENV_NAME'."
 
-
 echo ""
 echo "🔄 Step 2: Creating environment group '$GROUP_NAME'..."
 
 FORWARDING_RULE_IP_ADDRESS=$(gcloud compute forwarding-rules describe "$FORWARDING_RULE_NAME" --global --format=json 2>/dev/null | jq -e -r ".IPAddress" || echo "null")
 if [ "$FORWARDING_RULE_IP_ADDRESS" == "null" ] || [ -z "$FORWARDING_RULE_IP_ADDRESS" ]; then
-     echo "❌ Error: could not get IPAddress for global forwarding rule named '$FORWARDING_RULE_NAME' "
-     exit 1
+  echo "❌ Error: could not get IPAddress for global forwarding rule named '$FORWARDING_RULE_NAME' "
+  exit 1
 fi
 export FORWARDING_RULE_IP_ADDRESS
 
-apigeecli envgroups create  \
+apigeecli envgroups create \
   --name "$GROUP_NAME" \
   --hosts "${FORWARDING_RULE_IP_ADDRESS}.nip.io" \
   --org "$APIGEE_ORG" \
@@ -102,6 +99,3 @@ echo "✅ Successfully attached environment '$ENV_NAME' to runtime instance"
 echo "---------------------------------------------"
 echo "🎉 Apigee environment '$ENV_NAME' configured!"
 echo "---------------------------------------------"
-
-
-

@@ -23,9 +23,9 @@ cd cloud-logging
 
 Edit the provided sample `env.sh` file, and set the environment variables there.
 
-   * `PROJECT` the project where your Apigee organization is located
-   * `APIGEE_ENV` the Apigee environment where the demo resources should be created
-   * `APIGEE_HOST` the externally reachable hostname of the Apigee environment group that contains APIGEE_ENV
+* `PROJECT` the project where your Apigee organization is located
+* `APIGEE_ENV` the Apigee environment where the demo resources should be created
+* `APIGEE_HOST` the externally reachable hostname of the Apigee environment group that contains APIGEE_ENV
 
 Click <walkthrough-editor-open-file filePath="cloud-logging/env.sh">here</walkthrough-editor-open-file> to open the file in the editor
 
@@ -49,9 +49,10 @@ This script will show your identity and the roles associated to your identity.
 
 If you have editor or owner roles, you will be able to proceed. If you do not have these roles, but
 you have these roles:
- * `roles/iam.serviceAccountCreator`
- * `roles/resourcemanager.projectIamAdmin`
- * `roles/apigee.apiAdminV2`
+
+* `roles/iam.serviceAccountCreator`
+* `roles/resourcemanager.projectIamAdmin`
+* `roles/apigee.apiAdminV2`
 
 ...then you can use this sample, but you need to insure some other person has enabled the Cloud
 Logging API on your project. We will check that the Logging API is enabled in the next step.
@@ -62,7 +63,6 @@ Logging API on your project. We will check that the Logging API is enabled in th
 
 Owners or Editors on a Google Cloud Project must enable individual services, for
 them to be available.  Let's check that the Logging API is enabled.
-
 
 ```bash
 ./check-required-services.sh

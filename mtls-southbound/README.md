@@ -1,10 +1,13 @@
 # Apigee Mutual TLS Southbound Security
+
 This sample shows how to configure mTLS for southbound services from Apigee.
 
 ## About mTLS for Apigee southbound connections
+
 - [Apigee Docs on TLS](https://cloud.google.com/apigee/docs/api-platform/system-administration/options-configuring-tls)
 
 ## Step 1: Set your GCP project environment variables
+
 To begin, set your environment variables to be used, or put them in an `.env` file and source them with `source .env`. You can ignore VM_IP until after you create the VM, and you can update it with the VM external IP address.
 
 ```sh
@@ -17,6 +20,7 @@ export VM_IP= # fill this in after creating the VM
 ```
 
 ## Step 2: Create a VM with nginx using mTLS
+
 If you already have an mTLS endpoint with certificate and key, you can skip this step. First we will create two firewall rules to allow traffic to the VM, and then we will create a small VM with [nginx](https://nginx.org/) running to handle the mTLS backend requests.
 
 ```sh
@@ -40,6 +44,7 @@ sudo chmod -R 777 /etc/nginx'
 Now set the envariable `export VM_IP=YOUR_VM_EXTERNAL_IP` with the EXTERNAL IP that is displayed in the VM create output, or update and source your `.env` file if you created one.
 
 ## Step 3: Create self-signed certificate and key
+
 Now we will create a self-signed certificate and key to test with.
 
 ```sh
@@ -54,6 +59,7 @@ openssl verify -CAfile cert.pem cert.pem
 ```
 
 ## Step 4: Set VM cert and nginx config
+
 Now we will sync the cert and key to the VM, and set the nginx config file as well.
 
 ```sh
@@ -65,6 +71,7 @@ gcloud compute ssh $VM_NAME --zone=$ZONE --project=$PROJECT_ID --command="sudo n
 ```
 
 ## Step 5: Test calling VM directly with cert and key
+
 Now that our nginx is running with our cert and key, we can call it using `curl`.
 
 ```sh
@@ -101,7 +108,7 @@ apigeecli apis create bundle -f apiproxy --name SecureBackendProxy-v1 -o $PROJEC
 HOSTNAME=$(apigeecli envgroups list -o $PROJECT_ID | jq --raw-output '.environmentGroups[0].hostnames[0]')
 
 # call Apigee API proxy
-curl https://$HOSTNAME/v1/securebackend
+curl https://$HOSTNAME/v1/samples/mtls-service
 # you should get back the message "access to mTLS-protected resource" since Apigee has the mTLS cert and key. Yay!
 ```
 
@@ -134,5 +141,6 @@ apigeecli keystores delete -n mtls-keystore1 -o $PROJECT_ID -e $APIGEE_ENV -o $P
 ```
 
 ## References
-- Very helpful gist on setting up mTLS in nginx with a self-signed cert: https://gist.github.com/jeduardo/8a4c4465e87767c42ffcdc6b3e9e8396
-- Great article on setting up southbound mTLS in Apigee - https://medium.com/google-cloud/configuring-mtls-for-apigee-x-southbound-traffic-flow-eb91f381b60f
+
+- Very helpful gist on setting up mTLS in nginx with a self-signed cert: <https://gist.github.com/jeduardo/8a4c4465e87767c42ffcdc6b3e9e8396>
+- Great article on setting up southbound mTLS in Apigee - <https://medium.com/google-cloud/configuring-mtls-for-apigee-x-southbound-traffic-flow-eb91f381b60f>

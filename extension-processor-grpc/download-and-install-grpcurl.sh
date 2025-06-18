@@ -22,7 +22,7 @@ ARCH="$(uname -m | tr '[:upper:]' '[:lower:]')"
 export OS
 export ARCH
 
-if [[ "${OS}" == "darwin" ]] ; then
+if [[ "${OS}" == "darwin" ]]; then
   export OS="osx"
 fi
 
@@ -32,11 +32,11 @@ export TOOL_TARGZ="https://github.com/fullstorydev/grpcurl/releases/download/v${
 export INSTALL_PATH="${HOME}/.grpcurl/bin"
 
 TEMP_DIR=$(mktemp -d)
-pushd "${TEMP_DIR}" &> /dev/null || exit
+pushd "${TEMP_DIR}" &>/dev/null || exit
 
 echo "*** Downloading ${TOOL} (${TOOL_VERSION}) tar ball ... "
 curl -o tool.tar.gz -sfL "${TOOL_TARGZ}"
-tar -xvf "tool.tar.gz" &> /dev/null
+tar -xvf "tool.tar.gz" &>/dev/null
 rm -f tool.tar.gz
 
 echo "*** Installing ${TOOL} to ${INSTALL_PATH} ..."
@@ -44,8 +44,7 @@ mkdir -p "${INSTALL_PATH}"
 cp "./${TOOL}" "${INSTALL_PATH}/"
 chmod a+x "${INSTALL_PATH}/${TOOL}"
 
-popd &> /dev/null || exit
-
+popd &>/dev/null || exit
 
 echo "*** Tool ${TOOL_VERSION} installed to ${INSTALL_PATH}, add it to your path:"
 echo ""

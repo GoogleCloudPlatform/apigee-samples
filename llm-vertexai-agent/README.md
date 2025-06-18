@@ -1,6 +1,6 @@
 # llm-vertexai-agent
 
-This is a sample on how to deploy a sample Apigee proxy and configure it as a tool in [Conversational Agents](https://cloud.google.com/dialogflow/cx/docs). 
+This is a sample on how to deploy a sample Apigee proxy and configure it as a tool in [Conversational Agents](https://cloud.google.com/dialogflow/cx/docs).
 
 ![architecture](./images/arch.png)
 

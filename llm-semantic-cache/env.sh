@@ -16,9 +16,9 @@
 
 export PROJECT="PROJECT_ID_TO_SET"
 export REGION="REGION_TO_SET"
-export MODEL_ID="MODEL_ID_TO_SET" # Example, gemini-2.0-flash
-export EMBEDDINGS_MODEL_ID="EMBEDDINGS_MODEL_ID_TO_SET" # Example, text-embedding-005
+export MODEL_ID="MODEL_ID_TO_SET"                                   # Example, gemini-2.0-flash
+export EMBEDDINGS_MODEL_ID="EMBEDDINGS_MODEL_ID_TO_SET"             # Example, text-embedding-005
 export NEAREST_NEIGHBOR_DISTANCE="NEAREST_NEIGHBOR_DISTANCE_TO_SET" # Example, 0.95
-export CACHE_ENTRY_TTL_SEC="CACHE_ENTRY_TTL_SEC_TO_SET" # Example, 60
+export CACHE_ENTRY_TTL_SEC="CACHE_ENTRY_TTL_SEC_TO_SET"             # Example, 60
 export APIGEE_HOST="APIGEE_HOST_TO_SET"
 export APIGEE_ENV="APIGEE_ENV_TO_SET"

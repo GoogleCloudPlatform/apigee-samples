@@ -17,40 +17,40 @@
 PROXY_NAME=cloud-function-http-trigger
 
 delete_service_account() {
-    local sa_email="$1" project="$2"
-    if gcloud iam service-accounts describe "$sa_email" --project="$project" >/dev/null 2>&1; then
-        gcloud iam service-accounts delete "$sa_email" --project="$project" --quiet
-    else
-        printf "  That service account does not exist.\n"
-    fi
+  local sa_email="$1" project="$2"
+  if gcloud iam service-accounts describe "$sa_email" --project="$project" >/dev/null 2>&1; then
+    gcloud iam service-accounts delete "$sa_email" --project="$project" --quiet
+  else
+    printf "  That service account does not exist.\n"
+  fi
 }
 
 delete_apiproxy() {
-    local proxy_name=$1
-    printf "Checking Proxy %s\n" "${proxy_name}"
-    if apigeecli apis get --name "$proxy_name" --org "$APIGEE_PROJECT" --token "$TOKEN" --disable-check >/dev/null 2>&1; then
-        OUTFILE=$(mktemp /tmp/apigee-samples.apigeecli.out.XXXXXX)
-        if apigeecli apis listdeploy --name "$proxy_name" --org "$APIGEE_PROJECT" --token "$TOKEN" --disable-check >"$OUTFILE" 2>&1; then
-            NUM_DEPLOYS=$(jq -r '.deployments | length' "$OUTFILE")
-            if [[ $NUM_DEPLOYS -ne 0 ]]; then
-                echo "Undeploying ${proxy_name}"
-                for ((i = 0; i < NUM_DEPLOYS; i++)); do
-                    ENVNAME=$(jq -r ".deployments[$i].environment" "$OUTFILE")
-                    REV=$(jq -r ".deployments[$i].revision" "$OUTFILE")
-                    apigeecli apis undeploy --name "${proxy_name}" --env "$ENVNAME" --rev "$REV" --org "$APIGEE_PROJECT" --token "$TOKEN" --disable-check
-                done
-            else
-                printf "  There are no deployments of %s to remove.\n" "${proxy_name}"
-            fi
-        fi
-        [[ -f "$OUTFILE" ]] && rm "$OUTFILE"
-
-        echo "Deleting proxy ${proxy_name}"
-        apigeecli apis delete --name "${proxy_name}" --org "$APIGEE_PROJECT" --token "$TOKEN" --disable-check
-
-    else
-        printf "  The proxy %s does not exist.\n" "${proxy_name}"
+  local proxy_name=$1
+  printf "Checking Proxy %s\n" "${proxy_name}"
+  if apigeecli apis get --name "$proxy_name" --org "$APIGEE_PROJECT" --token "$TOKEN" --disable-check >/dev/null 2>&1; then
+    OUTFILE=$(mktemp /tmp/apigee-samples.apigeecli.out.XXXXXX)
+    if apigeecli apis listdeploy --name "$proxy_name" --org "$APIGEE_PROJECT" --token "$TOKEN" --disable-check >"$OUTFILE" 2>&1; then
+      NUM_DEPLOYS=$(jq -r '.deployments | length' "$OUTFILE")
+      if [[ $NUM_DEPLOYS -ne 0 ]]; then
+        echo "Undeploying ${proxy_name}"
+        for ((i = 0; i < NUM_DEPLOYS; i++)); do
+          ENVNAME=$(jq -r ".deployments[$i].environment" "$OUTFILE")
+          REV=$(jq -r ".deployments[$i].revision" "$OUTFILE")
+          apigeecli apis undeploy --name "${proxy_name}" --env "$ENVNAME" --rev "$REV" --org "$APIGEE_PROJECT" --token "$TOKEN" --disable-check
+        done
+      else
+        printf "  There are no deployments of %s to remove.\n" "${proxy_name}"
+      fi
     fi
+    [[ -f "$OUTFILE" ]] && rm "$OUTFILE"
+
+    echo "Deleting proxy ${proxy_name}"
+    apigeecli apis delete --name "${proxy_name}" --org "$APIGEE_PROJECT" --token "$TOKEN" --disable-check
+
+  else
+    printf "  The proxy %s does not exist.\n" "${proxy_name}"
+  fi
 }
 
 MISSING_ENV_VARS=()
@@ -62,9 +62,9 @@ MISSING_ENV_VARS=()
 [[ -z "$CLOUD_FUNCTION_NAME" ]] && MISSING_ENV_VARS+=('CLOUD_FUNCTION_NAME')
 
 [[ ${#MISSING_ENV_VARS[@]} -ne 0 ]] && {
-    printf -v joined '%s,' "${MISSING_ENV_VARS[@]}"
-    printf "You must set these environment variables: %s\n" "${joined%,}"
-    exit 1
+  printf -v joined '%s,' "${MISSING_ENV_VARS[@]}"
+  printf "You must set these environment variables: %s\n" "${joined%,}"
+  exit 1
 }
 
 TOKEN=$(gcloud auth print-access-token)
@@ -82,12 +82,12 @@ delete_service_account "$PROXY_SA_EMAIL" "$APIGEE_PROJECT"
 
 printf "Deleting the cloud function...\n"
 if gcloud functions describe "$CLOUD_FUNCTION_NAME" --region="$CLOUD_FUNCTIONS_REGION" --project="$CLOUD_FUNCTIONS_PROJECT" >/dev/null 2>&1; then
-    gcloud functions delete "$CLOUD_FUNCTION_NAME" \
-        --region="$CLOUD_FUNCTIONS_REGION" \
-        --project="$CLOUD_FUNCTIONS_PROJECT" \
-        --quiet
+  gcloud functions delete "$CLOUD_FUNCTION_NAME" \
+    --region="$CLOUD_FUNCTIONS_REGION" \
+    --project="$CLOUD_FUNCTIONS_PROJECT" \
+    --quiet
 else
-    printf "  That Cloud function does not exist.\n"
+  printf "  That Cloud function does not exist.\n"
 fi
 
 printf "Deleting the cloud function service account...\n"

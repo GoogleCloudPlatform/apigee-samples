@@ -47,6 +47,3 @@ export RUNTIME_BACKEND_SERVICE_NAME="${PREFIX}-be-svc-runtime"
 # Cloud Run Config
 export CLOUD_RUN_NAME="${PREFIX}-grpc-backend"
 export CLOUD_RUN_SERVICE_ACCOUNT_NAME="${PREFIX}-sa1"
-
-
-

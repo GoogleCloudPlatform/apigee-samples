@@ -19,9 +19,8 @@ if [ -z "$PROJECT_ID" ]; then
   exit 1
 fi
 
-
 # Source default values
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
 source "$SCRIPT_DIR/defaults.sh"
 
 echo "🔄 Installing apigeecli ..."
@@ -34,7 +33,6 @@ TOKEN=$(gcloud auth print-access-token)
 export TOKEN
 echo "✅ Token generated."
 
-
 echo ""
 echo "🧹 Starting cleanup script for API Proxy"
 
@@ -44,15 +42,14 @@ apigeecli apis undeploy \
   --name "$PROXY_NAME" \
   --env "$ENV_NAME" \
   --org "$APIGEE_ORG" \
-  --token "$TOKEN" && \
+  --token "$TOKEN" &&
   echo "✅ API Proxy '$PROXY_NAME' undeployed and from environment '$ENV_NAME' "
 
 apigeecli apis delete \
   --name "$PROXY_NAME" \
   --org "$APIGEE_ORG" \
-  --token "$TOKEN" && \
+  --token "$TOKEN" &&
   echo "✅ API Proxy '$PROXY_NAME' deleted from organization '$APIGEE_ORG'"
-
 
 echo ""
 echo "🎉 Apigee API Proxy cleanup completed."

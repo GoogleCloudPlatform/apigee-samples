@@ -17,7 +17,7 @@
 set -e
 
 # Source default values
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
 source "$SCRIPT_DIR/defaults.sh"
 
 echo "🔄 Installing apigeecli ..."
@@ -36,10 +36,10 @@ export TOKEN
 echo "✅ Token generated."
 
 # Use the same region as the Apigee runtime instance
-INSTANCE_LOCATION=$(apigeecli instances get --name "$APIGEE_INSTANCE_NAME" --org "${PROJECT_ID}" --token "$TOKEN" 2> /dev/null | jq -e -r '.location')
+INSTANCE_LOCATION=$(apigeecli instances get --name "$APIGEE_INSTANCE_NAME" --org "${PROJECT_ID}" --token "$TOKEN" 2>/dev/null | jq -e -r '.location')
 if [ "$INSTANCE_LOCATION" == "null" ] || [ -z "$INSTANCE_LOCATION" ]; then
-     echo "❌ Error: could not get location for Apigee runtime instance"
-     exit 1
+  echo "❌ Error: could not get location for Apigee runtime instance"
+  exit 1
 fi
 export INSTANCE_LOCATION
 
@@ -57,25 +57,25 @@ sleep 10
 
 CLOUD_RUN_ALREADY_DEPLOYED=$(gcloud run services list --format "json" --project "${PROJECT_ID}" | jq -e -r ".[].metadata.name" | grep -c "$CLOUD_RUN_NAME" || true)
 
-if [[ "${CLOUD_RUN_ALREADY_DEPLOYED}" == "1" ]] ; then
- echo "✅ gRPC service already deployed to Cloud Run ..."
+if [[ "${CLOUD_RUN_ALREADY_DEPLOYED}" == "1" ]]; then
+  echo "✅ gRPC service already deployed to Cloud Run ..."
 else
   echo ""
   echo "🔄 2. Deploying gRPC Cloud Run  ..."
   gcloud run deploy "$CLOUD_RUN_NAME" \
-     --timeout 3600 \
-     --region="${INSTANCE_LOCATION}" \
-     --set-custom-audiences "extproc-sample-audience" \
-     --source=./backend \
-     --quiet \
-     --project "$PROJECT_ID"
+    --timeout 3600 \
+    --region="${INSTANCE_LOCATION}" \
+    --set-custom-audiences "extproc-sample-audience" \
+    --source=./backend \
+    --quiet \
+    --project "$PROJECT_ID"
 
   echo "✅ Successfully deployed gRPC Cloud Run"
 fi
 
 CLOUD_RUN_URL=$(gcloud run services describe "$CLOUD_RUN_NAME" --region "${INSTANCE_LOCATION}" --project "${PROJECT_ID}" --format json | jq -e -r ".status.url")
 
-if [[ "$CLOUD_RUN_URL" == "null" || -z "${CLOUD_RUN_URL}" ]] ; then
+if [[ "$CLOUD_RUN_URL" == "null" || -z "${CLOUD_RUN_URL}" ]]; then
   echo "❌ Error: could not get URL for Cloud Run ${CLOUD_RUN_NAME}"
   exit 1
 fi

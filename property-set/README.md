@@ -78,8 +78,8 @@ This same policy is used to set HTTP response headers using the accessed values.
 
 [![Alt text](https://img.youtube.com/vi/4qo_9V_eO30/0.jpg)](https://www.youtube.com/watch?v=4qo_9V_eO30)
 
-
 =======
+
 ## Prerequisites
 
 1. [Provision Apigee X](https://cloud.google.com/apigee/docs/api-platform/get-started/provisioning-intro)

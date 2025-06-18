@@ -6,7 +6,7 @@ This sample performs a cache lookup of responses on Apigee's Cache layer and Vec
 
 [![architecture](./images/arch-1.png)](llm_semantic_cache_v2.ipynb)
 
-## Benefits of a Semantic Cache Layer with Apigee:
+## Benefits of a Semantic Cache Layer with Apigee
 
 * Reduced Response Times: The cache layer significantly reduces response times for repeated queries, as Apigee efficiently stores and retrieves frequently accessed data.
 * Improved Efficiency: By leveraging the caching capabilities of Apigee, unnecessary calls to the underlying model will be minimized, leading to optimized LLM costs.

@@ -43,8 +43,8 @@ delete_api() {
 delete_api_from_hub() {
   local api=$1
   apigeecli apihub apis delete --id "${api}_api" \
-  --force true \
-  -r "$APIGEE_APIHUB_REGION" -o "$APIGEE_APIHUB_PROJECT_ID" -t "$TOKEN"
+    --force true \
+    -r "$APIGEE_APIHUB_REGION" -o "$APIGEE_APIHUB_PROJECT_ID" -t "$TOKEN"
 }
 
 remove_role_from_service_account() {

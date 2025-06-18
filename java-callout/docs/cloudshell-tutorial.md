@@ -23,9 +23,9 @@ cd java-callout
 
 Edit the provided sample `env.sh` file, and set the environment variables there.
 
-   * `PROJECT` the project where your Apigee organization is located
-   * `APIGEE_ENV` the Apigee environment where the demo resources should be created
-   * `APIGEE_HOST` the externally reachable hostname of the Apigee environment group that contains APIGEE_ENV
+* `PROJECT` the project where your Apigee organization is located
+* `APIGEE_ENV` the Apigee environment where the demo resources should be created
+* `APIGEE_HOST` the externally reachable hostname of the Apigee environment group that contains APIGEE_ENV
 
 Click <walkthrough-editor-open-file filePath="java-callout/env.sh">here</walkthrough-editor-open-file> to open the file in the editor
 

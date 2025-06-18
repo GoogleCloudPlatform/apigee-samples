@@ -22,7 +22,7 @@ if [ -z "$PROJECT_ID" ]; then
 fi
 
 # Source default values
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
 source "$SCRIPT_DIR/defaults.sh"
 
 echo "🔄 Installing apigeecli ..."
@@ -34,7 +34,6 @@ echo "🔄 Generating GCP access token..."
 TOKEN=$(gcloud auth print-access-token)
 export TOKEN
 echo "✅ Token generated."
-
 
 echo "Starting script to create API Developer App ..."
 echo "Using Project ID: $PROJECT_ID"
@@ -62,13 +61,11 @@ apigeecli apps create \
   --disable-check
 echo "✅ Successfully created Developer App '$DEVELOPER_APP_NAME' "
 
-
-
 DEVELOPER_APP_API_KEY=$(apigeecli apps get --name "$DEVELOPER_APP_NAME" --org "$APIGEE_ORG" --token "$TOKEN" 2>/dev/null | jq -e -r '.[0].credentials[0].consumerKey' || echo "null")
 
 if [ "$DEVELOPER_APP_API_KEY" == "null" ] || [ -z "$DEVELOPER_APP_API_KEY" ]; then
-     echo "❌ Error: could not get consumerKey for Developer App '$DEVELOPER_APP_NAME' "
-     exit 1
+  echo "❌ Error: could not get consumerKey for Developer App '$DEVELOPER_APP_NAME' "
+  exit 1
 fi
 export DEVELOPER_APP_API_KEY
 
@@ -77,6 +74,3 @@ echo "🎉 Apigee Developer App '$DEVELOPER_APP_NAME' configured!"
 echo " API Key:"
 echo "   export DEVELOPER_APP_API_KEY=\"${DEVELOPER_APP_API_KEY}\""
 echo "--------------------------------------------------------------------------"
-
-
-

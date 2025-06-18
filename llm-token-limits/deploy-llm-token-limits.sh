@@ -41,7 +41,7 @@ gcloud config set project "$PROJECT"
 
 PRE_PROP="region=$REGION"
 
-echo "$PRE_PROP" > ./apiproxy/resources/properties/vertex_config.properties
+echo "$PRE_PROP" >./apiproxy/resources/properties/vertex_config.properties
 
 echo "Deploying Apigee artifacts..."
 
@@ -74,7 +74,7 @@ apigeecli developers create --user testuser --email aidev@cymbal.com --first Tes
 
 echo "Creating Developer App"
 apigeecli apps create --name ai-consumer-app --email aidev@cymbal.com --prods ai-product-bronze --callback https://developers.google.com/oauthplayground/ --org "$PROJECT" --token "$TOKEN" --disable-check
-apigeecli apps genkey --name ai-consumer-app -d aidev@cymbal.com  --prods ai-product-silver --org "$PROJECT" --token "$TOKEN" --disable-check
+apigeecli apps genkey --name ai-consumer-app -d aidev@cymbal.com --prods ai-product-silver --org "$PROJECT" --token "$TOKEN" --disable-check
 BRONZE_KEY=$(apigeecli apps get --name ai-consumer-app --org "$PROJECT" --token "$TOKEN" --disable-check | jq .'[0].credentials[]| select(.apiProducts[0].apiproduct=="ai-product-bronze").consumerKey' -r)
 SILVER_KEY=$(apigeecli apps get --name ai-consumer-app --org "$PROJECT" --token "$TOKEN" --disable-check | jq .'[0].credentials[]| select(.apiProducts[0].apiproduct=="ai-product-silver").consumerKey' -r)
 echo " "

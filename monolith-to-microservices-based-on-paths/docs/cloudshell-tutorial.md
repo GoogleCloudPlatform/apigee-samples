@@ -23,8 +23,8 @@ Let's get started!
    - `PROJECT_ID` the project where your Apigee organization is located.
    - `APIGEE_HOST` the externally reachable hostname of the Apigee environment group that contains APIGEE_ENV without https://
    - `APIGEE_ENV` the Apigee environment where the demo resources should be created.
-   - `MICROSERVICE_PATH` is the destination URL (preceded with http:// or https://) of the modern, new destination. If just testing, you can use https://httpbin.org/get
-   - `LEGACY_PATH` is the destination URL (preceded with http:// or https://) of the monolith, legacy destination. If just testing, you can use https://httpbin.org/get
+   - `MICROSERVICE_PATH` is the destination URL (preceded with http:// or https://) of the modern, new destination. If just testing, you can use <https://httpbin.org/get>
+   - `LEGACY_PATH` is the destination URL (preceded with http:// or https://) of the monolith, legacy destination. If just testing, you can use <https://httpbin.org/get>
 
    Now source the `env.sh` file
 

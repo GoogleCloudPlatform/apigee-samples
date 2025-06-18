@@ -82,7 +82,6 @@ sed -i "s/HUGGINGFACE_TOKEN/$HUGGINGFACE_TOKEN/g" config/env__"${APIGEE_ENV}"__l
 sed -i "s/VERTEXAI_REGION/$VERTEXAI_REGION/g" config/env__"${APIGEE_ENV}"__llm-routing-v1-modelprovider-config__kvmfile__0.json
 sed -i "s/VERTEXAI_PROJECT_ID/$VERTEXAI_PROJECT_ID/g" config/env__"${APIGEE_ENV}"__llm-routing-v1-modelprovider-config__kvmfile__0.json
 
-
 echo "Installing apigeecli"
 curl -s https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.sh | bash
 export PATH=$PATH:$HOME/.apigeecli/bin

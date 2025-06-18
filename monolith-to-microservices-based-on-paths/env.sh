@@ -14,10 +14,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-export PROJECT_ID= # project/org where apigee is hosted
-export APIGEE_HOST= # e.g. api.mydomain.com
-export APIGEE_ENV= # e.g.dev or prod
+export PROJECT_ID=        # project/org where apigee is hosted
+export APIGEE_HOST=       # e.g. api.mydomain.com
+export APIGEE_ENV=        # e.g.dev or prod
 export MICROSERVICE_PATH= # add your own. Or use https://httpbin.org/get for experimentation
-export LEGACY_PATH= # add your own. Or use https://mocktarget.apigee.net for experimentation
+export LEGACY_PATH=       # add your own. Or use https://mocktarget.apigee.net for experimentation
 
 gcloud config set project "$PROJECT_ID"

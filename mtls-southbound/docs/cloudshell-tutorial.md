@@ -27,6 +27,7 @@ gcloud auth login
 ## Set environment variables
 
 First create an `.env` file to store the environment variables.
+
 ```sh
 cd ./mtls-southbound
 cat > .env <<EOF
@@ -59,13 +60,13 @@ gcloud compute firewall-rules create allow22 --allow tcp:22 --project $PROJECT_I
 
 # create our backend VM, with a startup script to install nginx and let us write files to the /etc/nginx dir.
 gcloud compute instances create $VM_NAME \
-	--project=$PROJECT_ID \
+ --project=$PROJECT_ID \
   --zone=$ZONE \
   --image=debian-12-bookworm-v20250610 \
   --image-project=debian-cloud \
   --machine-type=e2-medium \
   --tags=https-server,allow22 \
-	--metadata=startup-script='#! /bin/bash
+ --metadata=startup-script='#! /bin/bash
 apt update
 apt -y install nginx
 sudo chmod -R 777 /etc/nginx'
@@ -150,7 +151,7 @@ Let's do a test call to the Apigee API proxy to see if we can reach our mTLS bac
 HOSTNAME=$(apigeecli envgroups list -o $PROJECT_ID | jq --raw-output '.environmentGroups[0].hostnames[0]')
 
 # call Apigee API proxy
-curl https://$HOSTNAME/v1/securebackend
+curl https://$HOSTNAME/v1/samples/mtls-service
 # you should get back the message "access to mTLS-protected resource" since Apigee has the mTLS cert and key. Yay!
 ```
 

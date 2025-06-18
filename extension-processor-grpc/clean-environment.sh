@@ -15,7 +15,7 @@
 # limitations under the License.
 
 # Source default values
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
 source "$SCRIPT_DIR/defaults.sh"
 
 if [ -z "$PROJECT_ID" ]; then
@@ -28,8 +28,6 @@ if [ -z "$APIGEE_INSTANCE_NAME" ]; then
   exit 1
 fi
 
-
-
 echo "🔄 Installing apigeecli ..."
 curl -s https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.sh | bash
 export PATH=$HOME/.apigeecli/bin:$PATH
@@ -39,7 +37,6 @@ echo "🔄 Generating GCP access token..."
 TOKEN=$(gcloud auth print-access-token --project "${PROJECT_ID}")
 export TOKEN
 echo "✅ Token generated."
-
 
 echo ""
 echo "🧹 Starting cleanup script for Apigee Environment"
@@ -51,7 +48,7 @@ apigeecli instances attachments detach \
   --env "$ENV_NAME" \
   --org "$APIGEE_ORG" \
   --token "$TOKEN" \
-  --wait && \
+  --wait &&
   echo "✅ Environment '$ENV_NAME' detached from instance '$APIGEE_INSTANCE_NAME' "
 
 echo ""
@@ -59,7 +56,7 @@ echo "🗑️ Deleting environment group '$GROUP_NAME'..."
 apigeecli envgroups delete \
   --name "$GROUP_NAME" \
   --org "$APIGEE_ORG" \
-  --token "$TOKEN" && \
+  --token "$TOKEN" &&
   echo "✅ Environment '$ENV_NAME' deleted from from organization '$APIGEE_ORG' "
 
 echo ""
@@ -68,7 +65,7 @@ apigeecli environments delete \
   --env "$ENV_NAME" \
   --org "$APIGEE_ORG" \
   --token "$TOKEN" \
-  --wait && \
+  --wait &&
   echo "✅ Environment '$ENV_NAME' deleted from from organization '$APIGEE_ORG' "
 
 echo ""

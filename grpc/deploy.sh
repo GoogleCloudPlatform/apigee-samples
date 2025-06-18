@@ -56,10 +56,8 @@ ENVIRONMENT_GROUP_NAME="sample-environment-group"
 echo -n "Creating environment..."
 apigeecli environments create -o "$PROJECT" -e "$ENVIRONMENT_NAME" -d PROXY --wait=true -t "$TOKEN"
 
-
 echo -n "Attaching environment to instance (may take a few minutes)..."
 apigeecli instances attachments attach -o "$PROJECT" -e "$ENVIRONMENT_NAME" -n "$INSTANCE_NAME" --wait=true -t "$TOKEN"
-
 
 # Enable APIs
 gcloud services enable \

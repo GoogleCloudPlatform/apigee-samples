@@ -17,7 +17,7 @@
 set -e
 
 # Source default values
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
 source "$SCRIPT_DIR/defaults.sh"
 
 if [ -z "$PROJECT_ID" ]; then
@@ -42,7 +42,7 @@ echo "🔄 Step 1: Create API Product '$PRODUCT_NAME' ..."
 
 OPS_GROUP_FILE=$(mktemp)
 
-cat << EOF > "$OPS_GROUP_FILE"
+cat <<EOF >"$OPS_GROUP_FILE"
 {
   "operationConfigs": [
     {
@@ -74,19 +74,16 @@ cat << EOF > "$OPS_GROUP_FILE"
 }
 EOF
 
-apigeecli products create   \
-   --name "$PRODUCT_NAME" \
-   --display-name "$PRODUCT_NAME" \
-   --approval "auto" \
-   --grpcopgrp "$OPS_GROUP_FILE" \
-   --org "$APIGEE_ORG" \
-   --envs "$ENV_NAME" \
-   --token "$TOKEN"
+apigeecli products create \
+  --name "$PRODUCT_NAME" \
+  --display-name "$PRODUCT_NAME" \
+  --approval "auto" \
+  --grpcopgrp "$OPS_GROUP_FILE" \
+  --org "$APIGEE_ORG" \
+  --envs "$ENV_NAME" \
+  --token "$TOKEN"
 echo "✅ Successfully created API Product '$PRODUCT_NAME' "
 
 echo "--------------------------------------------------------------------------"
 echo "🎉 Apigee API Product '$PRODUCT_NAME' configured!"
 echo "--------------------------------------------------------------------------"
-
-
-

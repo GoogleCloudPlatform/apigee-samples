@@ -52,7 +52,7 @@ gcloud config set project "$APIGEE_PROJECT"
 PRE_PROP="project_p1=$PROJECT_P1
 region_p1=$REGION_P1"
 
-echo "$PRE_PROP" > ./apiproxy/resources/properties/vertex_config.properties
+echo "$PRE_PROP" >./apiproxy/resources/properties/vertex_config.properties
 
 echo "Deploying Apigee artifacts..."
 

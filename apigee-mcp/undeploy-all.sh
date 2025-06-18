@@ -48,11 +48,11 @@ undeploy_all_revisions() {
 # --- Variable Checks ---
 echo "Performing environment variable checks for undeployment..."
 REQUIRED_VARS=(
-    "PROJECT"
-    "REGION"
-    "APIGEE_ENV"
-    "APIGEE_HOST" # Though not directly used in all delete commands, kept for consistency
-    "SA_EMAIL"    # Though not directly used in all delete commands, kept for consistency
+  "PROJECT"
+  "REGION"
+  "APIGEE_ENV"
+  "APIGEE_HOST" # Though not directly used in all delete commands, kept for consistency
+  "SA_EMAIL"    # Though not directly used in all delete commands, kept for consistency
 )
 ALL_VARS_SET=true
 for var_name in "${REQUIRED_VARS[@]}"; do
@@ -79,9 +79,9 @@ if [ -z "$TOKEN" ]; then
   echo "INFO: If the script takes longer than the token's validity (typically 1 hour), you may need to re-run it with a fresh token."
 fi
 
-if ! command -v jq &> /dev/null; then
-    echo "ERROR: jq command not found. Please ensure it is installed and in your PATH."
-    exit 1
+if ! command -v jq &>/dev/null; then
+  echo "ERROR: jq command not found. Please ensure it is installed and in your PATH."
+  exit 1
 fi
 
 echo "--------------------------------------------------"
@@ -98,8 +98,8 @@ echo "--------------------------------------------------"
 
 echo "Installing apigeecli..."
 if ! curl -s https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.sh | bash; then
-    echo "ERROR: Failed to download/install apigeecli."
-    exit 1
+  echo "ERROR: Failed to download/install apigeecli."
+  exit 1
 fi
 export PATH=$PATH:$HOME/.apigeecli/bin
 echo "apigeecli installed and PATH updated."
@@ -107,12 +107,12 @@ echo "apigeecli installed and PATH updated."
 # 1. Cloud Run Service `crm-mcp-service`
 echo "Attempting to delete Cloud Run service 'crm-mcp-service'..."
 if ! gcloud run services delete "crm-mcp-service" \
-    --platform="managed" \
-    --region="${REGION}" \
-    --quiet; then
-    echo "WARNING: Failed to delete Cloud Run service 'crm-mcp-service'. It might not exist or another error occurred."
+  --platform="managed" \
+  --region="${REGION}" \
+  --quiet; then
+  echo "WARNING: Failed to delete Cloud Run service 'crm-mcp-service'. It might not exist or another error occurred."
 else
-    echo "INFO: Cloud Run service 'crm-mcp-service' deleted or did not exist."
+  echo "INFO: Cloud Run service 'crm-mcp-service' deleted or did not exist."
 fi
 echo "--------------------------------------------------"
 
@@ -121,34 +121,34 @@ DEVELOPER_EMAIL="mcpconsumer@cymbal.com"
 APP_NAME="crm-consumer-app"
 echo "Attempting to delete Apigee Developer App '${APP_NAME}' for developer '${DEVELOPER_EMAIL}'..."
 if ! apigeecli developers apps delete --email "${DEVELOPER_EMAIL}" --name "${APP_NAME}" --org "$PROJECT" --token "$TOKEN" --disable-check; then
-    echo "WARNING: Failed to delete Apigee Developer App '${APP_NAME}'. It might not exist or an error occurred."
+  echo "WARNING: Failed to delete Apigee Developer App '${APP_NAME}'. It might not exist or an error occurred."
 else
-    echo "INFO: Apigee Developer App '${APP_NAME}' deleted."
+  echo "INFO: Apigee Developer App '${APP_NAME}' deleted."
 fi
 echo "--------------------------------------------------"
 
 # 5. Apigee Products
 echo "Attempting to delete Apigee Product 'crm-product'..."
 if ! apigeecli products delete --name "crm-product" --org "$PROJECT" --token "$TOKEN" --disable-check; then
-    echo "WARNING: Failed to delete Apigee Product 'crm-product'. It might not exist or an error occurred."
+  echo "WARNING: Failed to delete Apigee Product 'crm-product'. It might not exist or an error occurred."
 else
-    echo "INFO: Apigee Product 'crm-product' deleted."
+  echo "INFO: Apigee Product 'crm-product' deleted."
 fi
 
 echo "Attempting to delete Apigee Product 'mcp-product'..."
 if ! apigeecli products delete --name "mcp-product" --org "$PROJECT" --token "$TOKEN" --disable-check; then
-    echo "WARNING: Failed to delete Apigee Product 'mcp-product'. It might not exist or an error occurred."
+  echo "WARNING: Failed to delete Apigee Product 'mcp-product'. It might not exist or an error occurred."
 else
-    echo "INFO: Apigee Product 'mcp-product' deleted."
+  echo "INFO: Apigee Product 'mcp-product' deleted."
 fi
 echo "--------------------------------------------------"
 
 # 4. Apigee Developer `consumer`
 echo "Attempting to delete Apigee Developer '${DEVELOPER_EMAIL}'..."
 if ! apigeecli developers delete --email "${DEVELOPER_EMAIL}" --org "$PROJECT" --token "$TOKEN" --disable-check; then
-    echo "WARNING: Failed to delete Apigee Developer '${DEVELOPER_EMAIL}'. It might not exist or an error occurred (e.g., apps still associated if app deletion failed)."
+  echo "WARNING: Failed to delete Apigee Developer '${DEVELOPER_EMAIL}'. It might not exist or an error occurred (e.g., apps still associated if app deletion failed)."
 else
-    echo "INFO: Apigee Developer '${DEVELOPER_EMAIL}' deleted."
+  echo "INFO: Apigee Developer '${DEVELOPER_EMAIL}' deleted."
 fi
 echo "--------------------------------------------------"
 
@@ -156,9 +156,9 @@ echo "--------------------------------------------------"
 echo "Attempting to undeploy and delete Apigee API Proxy 'crm-mcp-proxy'..."
 undeploy_all_revisions "crm-mcp-proxy" "$PROJECT" "$APIGEE_ENV" "$TOKEN"
 if ! apigeecli apis delete --name "crm-mcp-proxy" --org "$PROJECT" --token "$TOKEN" --disable-check; then
-    echo "WARNING: Failed to delete Apigee API Proxy 'crm-mcp-proxy'. It might not exist or an error occurred during deletion."
+  echo "WARNING: Failed to delete Apigee API Proxy 'crm-mcp-proxy'. It might not exist or an error occurred during deletion."
 else
-    echo "INFO: Apigee API Proxy 'crm-mcp-proxy' undeployed (if previously deployed) and deleted (if existed)."
+  echo "INFO: Apigee API Proxy 'crm-mcp-proxy' undeployed (if previously deployed) and deleted (if existed)."
 fi
 echo "--------------------------------------------------"
 
@@ -166,9 +166,9 @@ echo "--------------------------------------------------"
 echo "Attempting to undeploy and delete Apigee API Proxy 'customers-api'..."
 undeploy_all_revisions "customers-api" "$PROJECT" "$APIGEE_ENV" "$TOKEN"
 if ! apigeecli apis delete --name "customers-api" --org "$PROJECT" --token "$TOKEN" --disable-check; then
-    echo "WARNING: Failed to delete Apigee API Proxy 'customers-api'. It might not exist or an error occurred."
+  echo "WARNING: Failed to delete Apigee API Proxy 'customers-api'. It might not exist or an error occurred."
 else
-    echo "INFO: Apigee API Proxy 'customers-api' undeployed (if previously deployed) and deleted (if existed)."
+  echo "INFO: Apigee API Proxy 'customers-api' undeployed (if previously deployed) and deleted (if existed)."
 fi
 echo "--------------------------------------------------"
 
@@ -176,9 +176,9 @@ echo "--------------------------------------------------"
 echo "Attempting to undeploy and delete Apigee API Proxy 'mcp-spec-tools'..."
 undeploy_all_revisions "mcp-spec-tools" "$PROJECT" "$APIGEE_ENV" "$TOKEN"
 if ! apigeecli apis delete --name "mcp-spec-tools" --org "$PROJECT" --token "$TOKEN" --disable-check; then
-    echo "WARNING: Failed to delete Apigee API Proxy 'mcp-spec-tools'. It might not exist or an error occurred."
+  echo "WARNING: Failed to delete Apigee API Proxy 'mcp-spec-tools'. It might not exist or an error occurred."
 else
-    echo "INFO: Apigee API Proxy 'mcp-spec-tools' undeployed (if previously deployed) and deleted (if existed)."
+  echo "INFO: Apigee API Proxy 'mcp-spec-tools' undeployed (if previously deployed) and deleted (if existed)."
 fi
 echo "--------------------------------------------------"
 
@@ -187,9 +187,9 @@ RESOURCE_NAME="oauth_configuration"
 RESOURCE_TYPE="properties"
 echo "Attempting to delete Apigee Resource '${RESOURCE_NAME}' (type: ${RESOURCE_TYPE}) from env '${APIGEE_ENV}'..."
 if ! apigeecli res delete --name "${RESOURCE_NAME}" --type "${RESOURCE_TYPE}" --org "$PROJECT" --env "$APIGEE_ENV" --token "$TOKEN" --disable-check; then
-    echo "WARNING: Failed to delete Apigee Resource '${RESOURCE_NAME}'. It might not exist or an error occurred."
+  echo "WARNING: Failed to delete Apigee Resource '${RESOURCE_NAME}'. It might not exist or an error occurred."
 else
-    echo "INFO: Apigee Resource '${RESOURCE_NAME}' deleted."
+  echo "INFO: Apigee Resource '${RESOURCE_NAME}' deleted."
 fi
 echo "--------------------------------------------------"
 
@@ -200,23 +200,23 @@ APIHUB_SPEC_ID="customers-api" # This was the spec ID used in 'specs create -i c
 
 echo "Attempting to delete ApiHub Spec '${APIHUB_SPEC_ID}' for API '${APIHUB_API_ID}', version '${APIHUB_API_VERSION}'..."
 if ! apigeecli apihub apis versions specs delete --api-id "${APIHUB_API_ID}" -v "${APIHUB_API_VERSION}" -i "${APIHUB_SPEC_ID}" --org "$PROJECT" -r "$REGION" --token "$TOKEN"; then
-    echo "WARNING: Failed to delete ApiHub Spec '${APIHUB_SPEC_ID}'. It might not exist or an error occurred."
+  echo "WARNING: Failed to delete ApiHub Spec '${APIHUB_SPEC_ID}'. It might not exist or an error occurred."
 else
-    echo "INFO: ApiHub Spec '${APIHUB_SPEC_ID}' deleted."
+  echo "INFO: ApiHub Spec '${APIHUB_SPEC_ID}' deleted."
 fi
 
 echo "Attempting to delete ApiHub Version '${APIHUB_API_VERSION}' for API '${APIHUB_API_ID}'..."
 if ! apigeecli apihub apis versions delete --api-id "${APIHUB_API_ID}" -i "${APIHUB_API_VERSION}" --org "$PROJECT" -r "$REGION" --token "$TOKEN"; then
-    echo "WARNING: Failed to delete ApiHub Version '${APIHUB_API_VERSION}'. It might not exist or an error occurred (e.g., spec still present if spec deletion failed)."
+  echo "WARNING: Failed to delete ApiHub Version '${APIHUB_API_VERSION}'. It might not exist or an error occurred (e.g., spec still present if spec deletion failed)."
 else
-    echo "INFO: ApiHub Version '${APIHUB_API_VERSION}' deleted."
+  echo "INFO: ApiHub Version '${APIHUB_API_VERSION}' deleted."
 fi
 
 echo "Attempting to delete ApiHub API '${APIHUB_API_ID}'..."
 if ! apigeecli apihub apis delete -i "${APIHUB_API_ID}" --org "$PROJECT" -r "$REGION" --token "$TOKEN"; then
-    echo "WARNING: Failed to delete ApiHub API '${APIHUB_API_ID}'. It might not exist or an error occurred (e.g., versions still present if version deletion failed)."
+  echo "WARNING: Failed to delete ApiHub API '${APIHUB_API_ID}'. It might not exist or an error occurred (e.g., versions still present if version deletion failed)."
 else
-    echo "INFO: ApiHub API '${APIHUB_API_ID}' deleted."
+  echo "INFO: ApiHub API '${APIHUB_API_ID}' deleted."
 fi
 echo "--------------------------------------------------"
 
@@ -232,12 +232,12 @@ fi
 
 echo "Attempting to delete Cloud Run service '${CUSTOMERS_STUB_SERVICE_NAME}' (Customers Stub)..."
 if ! gcloud run services delete "${CUSTOMERS_STUB_SERVICE_NAME}" \
-    --platform="managed" \
-    --region="${REGION}" \
-    --quiet; then
-    echo "WARNING: Failed to delete Cloud Run service '${CUSTOMERS_STUB_SERVICE_NAME}'. It might not exist or another error occurred."
+  --platform="managed" \
+  --region="${REGION}" \
+  --quiet; then
+  echo "WARNING: Failed to delete Cloud Run service '${CUSTOMERS_STUB_SERVICE_NAME}'. It might not exist or another error occurred."
 else
-    echo "INFO: Cloud Run service '${CUSTOMERS_STUB_SERVICE_NAME}' deleted or did not exist."
+  echo "INFO: Cloud Run service '${CUSTOMERS_STUB_SERVICE_NAME}' deleted or did not exist."
 fi
 echo "--------------------------------------------------"
 

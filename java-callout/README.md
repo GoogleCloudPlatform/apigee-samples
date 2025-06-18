@@ -1,14 +1,17 @@
 # Java Callout
+
 This example provides a simple Apigee Proxy that uses a Java Callout [Policy](https://cloud.google.com/apigee/docs/api-platform/reference/policies/java-callout-policy).
 
 ## About the Java Callout Policy
-The Java Callout Policy offers a way to extend the capabilities of your API proxies by allowing you to execute custom Java code within the proxy flow. This policy enables users to implement specialized logic that isn't covered by built-in Apigee policies using Java Code. You can leverage a Java Callout to manipulate request and response messages, read and set flow variables, perform custom error handling, or specific calculations. 
+
+The Java Callout Policy offers a way to extend the capabilities of your API proxies by allowing you to execute custom Java code within the proxy flow. This policy enables users to implement specialized logic that isn't covered by built-in Apigee policies using Java Code. You can leverage a Java Callout to manipulate request and response messages, read and set flow variables, perform custom error handling, or specific calculations.
 
 You'll package your custom Java code into a JAR file and then deploy it to Apigee. The Java Callout policy then references this JAR, allowing your code to interact with the current API proxy context.
 
 Refer to Java Callout Policy Documentation for supported Java version information: [Java Callout Policy Documentation](https://cloud.google.com/apigee/docs/api-platform/reference/policies/java-callout-policy#what)
 
 ## Prerequisites
+
 1. [Provision Apigee X](https://cloud.google.com/apigee/docs/api-platform/get-started/provisioning-intro)
 
 2. Configure [external access](https://cloud.google.com/apigee/docs/api-platform/get-started/configure-routing#external-access) for API traffic to your Apigee X instance
@@ -41,7 +44,9 @@ Use the following GCP CloudShell tutorial, and follow the instructions.
 [![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.svg)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/apigee-samples&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=java-callout/docs/cloudshell-tutorial.md)
 
 ## Setup Instructions
+
 1. Clone the apigee-samples repo, and switch the java-callout directory
+
   ```bash
   git clone https://github.com/GoogleCloudPlatform/apigee-samples.git
   cd apigee-samples/java-callout
@@ -66,17 +71,22 @@ Use the following GCP CloudShell tutorial, and follow the instructions.
    ```
 
 ## Test the API
+
 Make a call to the deployed java-callout proxy
+
   ```bash
    curl -i https://$APIGEE_HOST/v1/samples/java-callout
    ```
+
 > _If you want, consider also checking the call in the [Debug](https://cloud.google.com/apigee/docs/api-platform/debug/trace) view_
 
-***Successful deployment of the proxy will return a “Hello, World!” response.***
+_**Successful deployment of the proxy will return a “Hello, World!” response.**_
 
 ## Cleanup
+
 If you want to clean up the artifacts from this example in your Apigee Organization, first source your
 `env.sh` script, and then run
+
 ```bash
 ./clean-up-java-callout.sh
 ```

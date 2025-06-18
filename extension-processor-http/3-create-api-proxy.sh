@@ -22,7 +22,7 @@ if [ -z "$PROJECT_ID" ]; then
 fi
 
 # Source default values
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
 source "$SCRIPT_DIR/defaults.sh"
 
 echo "🔄 Installing apigeecli ..."
@@ -35,25 +35,21 @@ TOKEN=$(gcloud auth print-access-token)
 export TOKEN
 echo "✅ Token generated."
 
-
 echo "Starting script to create API Proxy for httpbin.org ..."
 echo "Using Project ID: $PROJECT_ID"
 
 echo ""
 echo "🔄 Step 1: Deploy API proxy '$PROXY_NAME' from to environment '$ENV_NAME'..."
-apigeecli apis create bundle  \
-   --name "$PROXY_NAME" \
-   --proxy-folder "$PROXY_BUNDLE_DIR" \
-   --org "$APIGEE_ORG" \
-   --env "$ENV_NAME" \
-   --token "$TOKEN" \
-   --ovr \
-   --wait
+apigeecli apis create bundle \
+  --name "$PROXY_NAME" \
+  --proxy-folder "$PROXY_BUNDLE_DIR" \
+  --org "$APIGEE_ORG" \
+  --env "$ENV_NAME" \
+  --token "$TOKEN" \
+  --ovr \
+  --wait
 echo "✅ Successfully created API Proxy '$PROXY_NAME' "
 
 echo "--------------------------------------------------------------------------"
 echo "🎉 Apigee API Proxy '$PROXY_NAME' configured!"
 echo "--------------------------------------------------------------------------"
-
-
-

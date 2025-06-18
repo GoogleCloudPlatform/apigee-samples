@@ -29,6 +29,7 @@ gcloud config set project <walkthrough-project-id/>
 ```sh
 gcloud services enable compute.googleapis.com aiplatform.googleapis.com storage.googleapis.com integrations.googleapis.com  --project <walkthrough-project-id/>
 ```
+
 ## Set environment variables
 
 ### 1. Edit the following variables in the `env.sh` file
@@ -59,6 +60,7 @@ The following `curl` command will create an index that will allow streaming upda
 ```sh
 ACCESS_TOKEN=$(gcloud auth print-access-token) && curl --location --request POST "https://$REGION-aiplatform.googleapis.com/v1/projects/$PROJECT/locations/$REGION/indexes" --header "Authorization: Bearer $ACCESS_TOKEN" --header 'Content-Type: application/json' --data-raw '{"displayName": "semantic-cache-index", "description": "semantic-cache-index", "metadata": {"config": {"dimensions": "768","approximateNeighborsCount": 150,"distanceMeasureType": "DOT_PRODUCT_DISTANCE","featureNormType": "NONE","algorithmConfig": {"treeAhConfig": {"leafNodeEmbeddingCount": "10000","fractionLeafNodesToSearch": 0.05}},"shardSize": "SHARD_SIZE_MEDIUM"},},"indexUpdateMethod": "STREAM_UPDATE"}'
 ```
+
 ### 2. Create an index endpoint
 
 ```sh
@@ -108,6 +110,7 @@ You're all set!
 You can now go back to the [notebook](https://github.com/GoogleCloudPlatform/apigee-samples/blob/main/llm-semantic-cache/llm_semantic_cache_v1.ipynb) to test the sample.
 
 **Don't forget to clean up after yourself**. Execute the following script to undeploy and delete all sample resources.
+
 ```sh
 ./undeploy-llm-semantic-cache.sh
 ```

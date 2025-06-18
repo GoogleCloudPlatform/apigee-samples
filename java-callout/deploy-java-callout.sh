@@ -37,22 +37,22 @@ mkdir -p apiproxy/resources/java
 curl "https://us-maven.pkg.dev/apigee-release/apigee-java-callout-dependencies/com/apigee/gateway/libraries/message-flow/1.0.0/message-flow-1.0.0.jar" -v -L -o callout/lib/message-flow-1.0.0.jar
 
 mvn install:install-file \
-    -Dfile=callout/lib/message-flow-1.0.0.jar \
-    -DgroupId=com.apigee.gateway.libraries \
-    -DartifactId=message-flow \
-    -Dversion=1.0.0 \
-    -Dpackaging=jar \
-    -DgeneratePom=true
+  -Dfile=callout/lib/message-flow-1.0.0.jar \
+  -DgroupId=com.apigee.gateway.libraries \
+  -DartifactId=message-flow \
+  -Dversion=1.0.0 \
+  -Dpackaging=jar \
+  -DgeneratePom=true
 
 curl "https://us-maven.pkg.dev/apigee-release/apigee-java-callout-dependencies/com/apigee/infra/libraries/expressions/1.0.0/expressions-1.0.0.jar" -v -L -o callout/lib/expressions-1.0.0.jar
 
 mvn install:install-file \
-    -Dfile=callout/lib/expressions-1.0.0.jar \
-    -DgroupId=com.apigee.infra.libraries \
-    -DartifactId=expressions \
-    -Dversion=1.0.0 \
-    -Dpackaging=jar \
-    -DgeneratePom=true
+  -Dfile=callout/lib/expressions-1.0.0.jar \
+  -DgroupId=com.apigee.infra.libraries \
+  -DartifactId=expressions \
+  -Dversion=1.0.0 \
+  -Dpackaging=jar \
+  -DgeneratePom=true
 
 echo "Apigee JAR files have been installed into the local Maven repo."
 

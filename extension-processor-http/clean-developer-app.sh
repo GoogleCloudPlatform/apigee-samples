@@ -20,7 +20,7 @@ if [ -z "$PROJECT_ID" ]; then
 fi
 
 # Source default values
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
 source "$SCRIPT_DIR/defaults.sh"
 
 echo "🔄 Installing apigeecli ..."
@@ -33,8 +33,6 @@ TOKEN=$(gcloud auth print-access-token)
 export TOKEN
 echo "✅ Token generated."
 
-
-
 echo ""
 echo "🧹 Starting cleanup script for Developer App"
 
@@ -44,18 +42,16 @@ apigeecli apps delete \
   --name "$DEVELOPER_APP_NAME" \
   --id "$DEVELOPER_NAME@acme.com" \
   --org "$APIGEE_ORG" \
-  --token "$TOKEN" && \
+  --token "$TOKEN" &&
   echo "✅ Successfully deleted Developer App."
-
 
 echo ""
 echo "🗑️  Delete App Developer '$DEVELOPER_NAME' ..."
 apigeecli developers delete \
   --email "$DEVELOPER_NAME@acme.com" \
   --org "$APIGEE_ORG" \
-  --token "$TOKEN" && \
+  --token "$TOKEN" &&
   echo "✅ Successfully deleted App Developer."
 
 echo ""
 echo "🎉 Apigee Developer App cleanup completed."
-

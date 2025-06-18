@@ -23,6 +23,7 @@ gcloud auth login
 ```sh
 gcloud config set project <walkthrough-project-id/>
 ```
+
 ### 4. Enable the Services required to deploy this sample
 
 ```sh
@@ -58,6 +59,7 @@ Open the environment variables file <walkthrough-editor-open-file filePath="llm-
 ```sh
 cd llm-logging && source ./env.sh
 ```
+
 ## Deploy sample artifacts
 
 ### Execute deployment script
@@ -75,6 +77,7 @@ You're all set!
 You can now go back to the [notebook](https://github.com/GoogleCloudPlatform/apigee-samples/blob/main/llm-logging/llm_logging_v1.ipynb) to test the sample.
 
 **Don't forget to clean up after yourself**. Execute the following script to undeploy and delete all sample resources.
+
 ```sh
 ./undeploy-llm-logging.sh
 ```

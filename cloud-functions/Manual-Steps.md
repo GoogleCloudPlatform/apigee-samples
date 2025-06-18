@@ -172,7 +172,6 @@ When deployment completes, invoke the function again, in the same way, with no a
 curl -i $CF_URL/hello-sample
 ```
 
-
 Because the Cloud Function now requires authentication, and because this request
 didn't pass any credentials, you will expect to see a response with a 403 status
 code and a "Forbidden" error message.  But the request may succeed!  [Updating IAM policy

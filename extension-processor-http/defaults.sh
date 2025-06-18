@@ -43,6 +43,3 @@ export PROXY_BUNDLE_DIR="bundle/apiproxy"
 export SERVICE_EXTENSION_NAME="${PREFIX}-callout-extension"
 export RUNTIME_NEG_NAME="${PREFIX}-neg-runtime"
 export RUNTIME_BACKEND_SERVICE_NAME="${PREFIX}-be-svc-runtime"
-
-
-
