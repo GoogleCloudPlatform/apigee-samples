@@ -79,6 +79,7 @@ Most developers begin by identifying an interesting sample based on a specific u
 | 29 | [extension-processor-http](extension-processor-http)                                 | This sample demonstrates how to use [Apigee API Management](https://cloud.google.com/apigee/docs/api-platform/get-started/what-apigee) with Google Cloud Load Balancer [Service Extensions](https://cloud.google.com/service-extensions/docs/overview). | [![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.svg)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/apigee-samples&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=extension-processor-http/docs/cloudshell-tutorial.md)                 |
 | 30 | [extension-processor-grpc](extension-processor-grpc)                                 | This sample demonstrates how to use [Apigee API Management](https://cloud.google.com/apigee/docs/api-platform/get-started/what-apigee) with Google Cloud Load Balancer [Service Extensions](https://cloud.google.com/service-extensions/docs/overview). | [![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.svg)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/apigee-samples&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=extension-processor-grpc/docs/cloudshell-tutorial.md)                 |
 | 31 | [java-callout](java-callout)                                                         | This sample demonstrates how to use the [Java Callout policy](https://cloud.google.com/apigee/docs/api-platform/reference/policies/java-callout-policy).                                                                                                | [![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.svg)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/apigee-samples&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=java-callout/docs/cloudshell-tutorial.md)                             |
+| 31 | [mtls-southbound](mtls-southbound)                                                   | This sample shows how to configure an mTLS southbound service in an Apigee proxy using a test nginx VM.                                                                                                                       | [![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.svg)](https://ssh.cloud.google.com/cloudshell/open?cloudshell_git_repo=https://github.com/GoogleCloudPlatform/apigee-samples&cloudshell_git_branch=main&cloudshell_workspace=.&cloudshell_tutorial=mtls-southbound/docs/cloudshell-tutorial.md)                          |
 
 You can find video walkthroughs of many of these samples in this [YouTube playlist](https://goo.gle/ApigeeAcceleratorSeries)
 
@@ -117,6 +118,7 @@ This is a collection of sample AI agents created using Google's [Agent Developme
 ### Prerequisites
 
 You will need a GCP project with the following services enabled and provisioned:
+
 - Vertex AI
 - Apigee API hub
 - Apigee
@@ -136,7 +138,6 @@ The [Model Context Protocol (MCP)](https://github.com/modelcontext/specification
 |    | Sample                      | Description                                                                                                                                                              | Open Notebook |
 |----|-----------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------|
 | 1  | [apigee-mcp](apigee-mcp)    | Illustrates Apigee's role in the MCP ecosystem. Features an MCP server that discovers API specs from API Hub (via Apigee), dynamically creates tools for LLMs, and exposes them through Apigee. An example CRM agent notebook demonstrates consuming these tools. | [![notebook](https://github.com/GoogleCloudPlatform/apigee-samples/blob/main/images/icon32.png?raw=true)](./apigee-mcp/notebooks/crm-agent-mcp.ipynb) |
-
 
 ## <a name="modifying"></a>Modifying a sample proxy
 
