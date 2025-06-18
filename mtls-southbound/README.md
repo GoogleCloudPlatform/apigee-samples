@@ -25,13 +25,13 @@ gcloud compute firewall-rules create allow22 --allow tcp:22 --project $PROJECT_I
 
 # create our backend VM, with a startup script to install nginx and let us write files to the /etc/nginx dir.
 gcloud compute instances create $VM_NAME \
-	--project=$PROJECT_ID \
+  --project=$PROJECT_ID \
   --zone=$ZONE \
   --image=debian-12-bookworm-v20250610 \
   --image-project=debian-cloud \
   --machine-type=e2-medium \
   --tags=https-server,allow22 \
-	--metadata=startup-script='#! /bin/bash
+  --metadata=startup-script='#! /bin/bash
 apt update
 apt -y install nginx
 sudo chmod -R 777 /etc/nginx'
