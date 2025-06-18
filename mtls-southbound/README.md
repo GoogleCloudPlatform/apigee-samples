@@ -42,7 +42,7 @@ EOF
 
 Now open the `.env` file, and set *PROJECT_ID* to your GCP project, and optionally *REGION*, *APIGEE_ENV*, *ZONE*, and *VM_NAME* to different values if you prefer.
 
-## Step 2: Create a VM with nginx using mTLS
+### Step 2: Create a VM with nginx using mTLS
 
 If you already have an mTLS endpoint with certificate and key, you can skip this step. First we will create two firewall rules to allow traffic to the VM, and then we will create a small VM with [nginx](https://nginx.org/) running to handle the mTLS backend requests.
 
@@ -66,7 +66,7 @@ sudo chmod -R 777 /etc/nginx'
 
 Now set the environment variable `export VM_IP=YOUR_VM_EXTERNAL_IP` with the EXTERNAL IP that is displayed in the VM create output, or update and source your `.env` file if you created one.
 
-## Step 3: Create self-signed certificate and key
+### Step 3: Create self-signed certificate and key
 
 Now we will create a self-signed certificate and key to test with.
 
@@ -81,7 +81,7 @@ openssl pkcs12 -export -out client.p12 -inkey key.pem -in cert.pem
 openssl verify -CAfile cert.pem cert.pem
 ```
 
-## Step 4: Set VM cert and nginx config
+### Step 4: Set VM cert and nginx config
 
 Now we will sync the cert and key to the VM, and set the nginx config file as well.
 
@@ -93,7 +93,7 @@ gcloud compute scp cert.pem key.pem nginx.conf $VM_NAME:/etc/nginx --zone=$ZONE 
 gcloud compute ssh $VM_NAME --zone=$ZONE --project=$PROJECT_ID --command="sudo nginx -s reload"
 ```
 
-## Step 5: Test calling VM directly with cert and key
+### Step 5: Test calling VM directly with cert and key
 
 Now that our nginx is running with our cert and key, we can call it using `curl`.
 
@@ -105,7 +105,7 @@ curl -v https://$VM_IP --cacert cert.pem
 curl -v https://$VM_IP --cacert cert.pem --key key.pem --cert cert.pem
 ```
 
-## Step 6: Create Apigee Keystore for cert and key to use in a proxy
+### Step 6: Create Apigee Keystore for cert and key and deploy proxy
 
 ```sh
 # create Apigee keystore
@@ -124,7 +124,7 @@ apigeecli targetservers create -c true -s "$VM_IP" -i true --keyalias test-key1 
 apigeecli apis create bundle -f apiproxy --name SecureBackendProxy-v1 -o $PROJECT_ID -e $APIGEE_ENV --ovr -t $(gcloud auth print-access-token)
 ```
 
-## Step 7: Test Apigee API proxy
+### Step 7: Test Apigee API proxy
 
 ```sh
 # get Apigee hostname, this will get the first one from the first envgroup, if not correct then adjust..
@@ -135,7 +135,7 @@ curl https://$HOSTNAME/v1/samples/mtls-service
 # you should get back the message "access to mTLS-protected resource" since Apigee has the mTLS cert and key. Yay!
 ```
 
-## Step 8 (Optional): Test nginx service locally with Docker
+### Step 8 (Optional): Test nginx service locally with Docker
 
 In case you would like to test the nginx configuration and mTLS access locally with Docker, this can easily be done with the [nginx Docker image](https://hub.docker.com/_/nginx).
 
@@ -150,7 +150,7 @@ curl -v https://ssl.test.local:8080 --resolve ssl.test.local:8080:127.0.0.1 --ca
 curl -v https://ssl.test.local:8080 --resolve ssl.test.local:8080:127.0.0.1 --cacert cert.pem --key key.pem --cert cert.pem
 ```
 
-## Step 9: Cleanup resources
+### Step 9: Cleanup resources
 
 Don't forget to cleanup all of our resources.
 
