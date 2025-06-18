@@ -2,22 +2,42 @@
 
 This sample shows how to configure mTLS for southbound services from Apigee.
 
+![Apigee mTLS Southbound Sample](./img/architecture.png)
+
 ## About mTLS for Apigee southbound connections
 
 - [Apigee Docs on TLS](https://cloud.google.com/apigee/docs/api-platform/system-administration/options-configuring-tls)
 
+## Prerequisites
+- [gcloud CLI](https://cloud.google.com/sdk/docs/install) will be used for automating GCP tasks, see the docs site above for installation instructions.
+- [apigeecli](https://github.com/apigee/apigeecli) will be used for Apigee automation, and can easily be installed like this (see apigeecli docs for more information):
+```sh
+curl -L https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.sh | sh -
+echo $'\nPATH=$PATH:$HOME/.apigeecli/bin' >> ~/.bashrc
+source ~/.bashrc
+```
+- GCP roles needed:
+  - roles/compute.instanceAdmin - needed to create a VM.
+  - roles/compute.networkAdmin - needed to create a firewall rule to allow the VM to get scp commands on port 22.
+  - roles/apigee.apiAdminV2 - needed to deploy an Apigee proxy.
+  - roles/apigee.environmentAdmin - needed to manage the Keystore and Target configuration.
+
 ## Step 1: Set your GCP project environment variables
 
-To begin, set your environment variables to be used, or put them in an `.env` file and source them with `source .env`. You can ignore VM_IP until after you create the VM, and you can update it with the VM external IP address.
+To begin, set your environment variables to be used by creating an `.env` file, and filling your variables in.
 
 ```sh
+cat > .env <<EOF
 export PROJECT_ID=YOUR_PROJECT_ID # an existing GCP project id that you have rights to use
-export REGION=YOUR_REGION # for example europe-west1
-export APIGEE_ENV=YOUR_APIGEE_ENV # for example dev or eval
-export ZONE=YOUR_ZONE # for example europe-west1-c
+export REGION=europe-west1 # for example europe-west1
+export APIGEE_ENV=dev # for example dev or eval
+export ZONE=europe-west1-c # for example europe-west1-c
 export VM_NAME=mtls-vm1 # or change to any name
-export VM_IP= # fill this in after creating the VM
+export VM_IP=YOUR_VM_EXTERNAL_IP # fill this in after creating the VM
+EOF
 ```
+
+Now open the `.env` file, and set *PROJECT_ID* to your GCP project, and optionally *REGION*, *APIGEE_ENV*, *ZONE*, and *VM_NAME* to different values if you prefer.
 
 ## Step 2: Create a VM with nginx using mTLS
 
@@ -113,6 +133,8 @@ curl https://$HOSTNAME/v1/samples/mtls-service
 ```
 
 ## Step 8 (Optional): Test nginx service locally with Docker
+
+In case you would like to test the nginx configuration and mTLS access locally with Docker, this can easily be done with the [nginx Docker image](https://hub.docker.com/_/nginx).
 
 ```sh
 # start nginx container
