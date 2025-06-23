@@ -50,7 +50,7 @@ Run this script to deploy the sample VM with [nginx](https://nginx.org/) running
 ./deploy-sample.sh
 ```
 
-### Test Apigee API proxy to reach mTLS service
+## Test Apigee API proxy to reach mTLS service
 
 Now start a debug session for the proxy `mtls-southbound-v1` and do a test call to the service. It should successfully respond "access to mTLS-protected resource".
 
