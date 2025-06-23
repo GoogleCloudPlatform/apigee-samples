@@ -35,7 +35,7 @@ First update the `env.sh` file with your environment variables. Click <walkthrou
 * `ZONE` the GCP zone where a test southbound mtls VM should be deployed.
 * `VM_NAME` the name of the test VM to be created.
 
-After saving, switch to the `mlts-southbound` directory and source the env file.
+After saving, switch to the `mtls-southbound` directory and source the env file.
 
 ```sh
 cd mtls-southbound
