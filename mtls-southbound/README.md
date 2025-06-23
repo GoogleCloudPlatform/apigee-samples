@@ -27,20 +27,20 @@ Use the following GCP CloudShell tutorial, and follow the instructions in Cloud 
 
 ### Step 1: Set your GCP project environment variables
 
-To begin, set your environment variables to be used by creating an `.env` file, and filling your variables in.
+To begin, set your environment variables to be used in the `env.sh` file.
+
+* `PROJECT_ID` the project where your Apigee organization is located.
+* `REGION` the externally reachable hostname of the Apigee environment group that contains APIGEE_ENV.
+* `APIGEE_ENV` the Apigee environment where the demo resources should be created.
+* `APIGEE_HOST` the Apigee host of the environment / environment group to reach the proxy
+* `ZONE` the GCP zone where a test southbound mtls VM should be deployed.
+* `VM_NAME` the name of the test VM to be created.
+
+Now source the file.
 
 ```sh
-cat > .env <<EOF
-export PROJECT_ID=YOUR_PROJECT_ID # an existing GCP project id that you have rights to use
-export REGION=europe-west1 # for example europe-west1
-export APIGEE_ENV=dev # for example dev or eval
-export ZONE=europe-west1-c # for example europe-west1-c
-export VM_NAME=mtls-vm1 # or change to any name
-export VM_IP=YOUR_VM_EXTERNAL_IP # fill this in after creating the VM
-EOF
+source env.sh
 ```
-
-Now open the `.env` file, and set *PROJECT_ID* to your GCP project, and optionally *REGION*, *APIGEE_ENV*, *ZONE*, and *VM_NAME* to different values if you prefer.
 
 ### Step 2: Create a VM with nginx using mTLS
 
@@ -61,10 +61,16 @@ gcloud compute instances create $VM_NAME \
   --metadata=startup-script='#! /bin/bash
 apt update
 apt -y install nginx
-sudo chmod -R 777 /etc/nginx'
-```
+sudo chmod -R 077 /etc/nginx'
 
-Now set the environment variable `export VM_IP=YOUR_VM_EXTERNAL_IP` with the EXTERNAL IP that is displayed in the VM create output, or update and source your `.env` file if you created one.
+sleep 10
+
+echo "Update VM ip address in env file..."
+VM_IP=$(gcloud compute instances describe $VM_NAME --project=$PROJECT_ID --zone=$ZONE --format="value(networkInterfaces[0].accessConfigs[0].natIP)")
+# update the VM_IP variable with the ip address of the VM
+sed -i "/export VM_IP=/c\export VM_IP=\"$VM_IP\"" env.sh
+source env.sh
+```
 
 ### Step 3: Create self-signed certificate and key
 
@@ -121,17 +127,14 @@ apigeecli keyaliases create -s test-cert1 -f keycertfile -k mtls-keystore1 --cer
 apigeecli targetservers create -c true -s "$VM_IP" -i true --keyalias test-key1 --keystore mtls-keystore1 -n mtls-service -p 443 --tls true --tlsenforce false --truststore mtls-keystore1 -e $APIGEE_ENV -o $PROJECT_ID -t $(gcloud auth print-access-token)
 
 # deploy Apigee proxy
-apigeecli apis create bundle -f apiproxy --name SecureBackendProxy-v1 -o $PROJECT_ID -e $APIGEE_ENV --ovr -t $(gcloud auth print-access-token)
+apigeecli apis create bundle -f apiproxy --name mtls-southbound-v1 -o $PROJECT_ID -e $APIGEE_ENV --ovr -t $(gcloud auth print-access-token)
 ```
 
 ### Step 7: Test Apigee API proxy
 
 ```sh
-# get Apigee hostname, this will get the first one from the first envgroup, if not correct then adjust..
-HOSTNAME=$(apigeecli envgroups list -o $PROJECT_ID | jq --raw-output '.environmentGroups[0].hostnames[0]')
-
 # call Apigee API proxy
-curl https://$HOSTNAME/v1/samples/mtls-service
+curl https://$APIGEE_HOST/v1/samples/mtls-service
 # you should get back the message "access to mTLS-protected resource" since Apigee has the mTLS cert and key. Yay!
 ```
 

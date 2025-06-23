@@ -14,6 +14,6 @@
  limitations under the License.
 -->
 
-<APIProxy revision="1" name="SecureBackend-v1">
+<APIProxy revision="1" name="mtls-southbound-v1">
     <Description>An API for a backend secured by southbound mTLS.</Description>
 </APIProxy>
