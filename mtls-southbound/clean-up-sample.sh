@@ -14,8 +14,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-gcloud compute instances delete $VM_NAME --zone $ZONE --project $PROJECT_ID --quiet
-apigeecli apis undeploy -e $APIGEE_ENV -n mtls-southbound-v1 -o $PROJECT_ID -t $(gcloud auth print-access-token)
-apigeecli apis delete -n mtls-southbound-v1 -o $PROJECT_ID -t $(gcloud auth print-access-token)
-apigeecli targetservers delete -n mtls-service -e $APIGEE_ENV -o $PROJECT_ID -t $(gcloud auth print-access-token)
-apigeecli keystores delete -n mtls-keystore1 -o $PROJECT_ID -e $APIGEE_ENV -o $PROJECT_ID -t $(gcloud auth print-access-token)
+gcloud compute instances delete "$VM_NAME" --zone "$ZONE" --project "$PROJECT_ID" --quiet
+apigeecli apis undeploy -e "$APIGEE_ENV" -n mtls-southbound-v1 -o "$PROJECT_ID" -t $(gcloud auth print-access-token)
+apigeecli apis delete -n mtls-southbound-v1 -o "$PROJECT_ID" -t $(gcloud auth print-access-token)
+apigeecli targetservers delete -n mtls-service -e "$APIGEE_ENV" -o "$PROJECT_ID" -t $(gcloud auth print-access-token)
+apigeecli keystores delete -n mtls-keystore1 -o "$PROJECT_ID" -e "$APIGEE_ENV" -o "$PROJECT_ID" -t $(gcloud auth print-access-token)
