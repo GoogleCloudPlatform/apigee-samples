@@ -35,10 +35,11 @@ First update the `env.sh` file with your environment variables. Click <walkthrou
 * `ZONE` the GCP zone where a test southbound mtls VM should be deployed.
 * `VM_NAME` the name of the test VM to be created.
 
-After saving, source the .env file.
+After saving, switch to the `mlts-southbound` directory and source the env file.
 
 ```sh
-source .env
+cd mtls-southbound
+source env.sh
 ```
 
 ## Deploy sample
@@ -46,7 +47,7 @@ source .env
 Run this script to deploy the sample VM with [nginx](https://nginx.org/) running to handle the mTLS backend requests, and an Apigee proxy with Truststore to access the mTLS service.
 
 ```sh
-./deploy-sample-vm.sh
+./deploy-sample.sh
 ```
 
 ### Test Apigee API proxy to reach mTLS service
