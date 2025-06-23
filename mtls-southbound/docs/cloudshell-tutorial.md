@@ -50,6 +50,8 @@ Run this script to deploy the sample VM with [nginx](https://nginx.org/) running
 ./deploy-sample.sh
 ```
 
+<walkthrough-cloud-shell-editor-icon></walkthrough-cloud-shell-editor-icon> The creation of keys as well as ssh to the VM will ask for passphrases. Just press ENTER if you don't want any passphrases, or if you have previously configured a passphrase for SSH, then enter that.
+
 ## Test Apigee API proxy to reach mTLS service
 
 Now start a debug session for the proxy `mtls-southbound-v1` and do a test call to the service. It should successfully respond "access to mTLS-protected resource".
