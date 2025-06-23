@@ -28,7 +28,7 @@
   </PostFlow>
   <Flows/>
   <HTTPProxyConnection>
-    <BasePath>/v1/samples/mtls-service</BasePath>
+    <BasePath>/v1/samples/mtls-southbound</BasePath>
     <Properties/>
   </HTTPProxyConnection>
   <RouteRule name="default">
