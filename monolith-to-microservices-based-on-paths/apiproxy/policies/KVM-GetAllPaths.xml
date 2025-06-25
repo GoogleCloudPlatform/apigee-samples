@@ -15,7 +15,6 @@
   mapIdentifier="routing-rules">
   <DisplayName>KVM-GetAllPaths</DisplayName>
   <Properties />
-  <ExclusiveCache>false</ExclusiveCache>
   <ExpiryTimeInSecs>300</ExpiryTimeInSecs>
   <Get assignTo="allowedPaths">
     <Key>

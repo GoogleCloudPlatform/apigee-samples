@@ -21,6 +21,7 @@
     <Response>
       <Step>
         <Name>EV-ExtractTokenCounts</Name>
+        <Condition>response.content != null</Condition>
       </Step>
       <Step>
         <Name>AM-SetTokenCountVars</Name>
