@@ -2,7 +2,7 @@
 
 ![Architecture](./docs/architecture.jpg)
 
-This sample shows how unmanaged APIs can be registered in API Hub, on-ramped as a managed API in Apigee with documentation in an [Apigee developer portal](https://cloud.google.com/apigee/docs/api-platform/publish/portal/build-integrated-portal), and finally offered through Apigee to developers and agents as a secure, managed API.
+This sample shows how unmanaged APIs can be registered in API Hub, on-ramped as a managed API in Apigee with documentation in an [Apigee developer portal](https://cloud.google.com/apigee/docs/api-platform/publish/portal/build-integrated-portal), synced back to API Hub as a managed deployment, and finally offered through Apigee to developers and agents as a secure, managed API.
 
 ## Prerequisites
 - [gcloud CLI](https://cloud.google.com/sdk/docs/install) will be used for automating GCP tasks, see the docs site for installation instructions.
