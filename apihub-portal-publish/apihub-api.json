@@ -1,0 +1,76 @@
+{
+	"displayName": "Apigee Sample API",
+	"description": "Offers Apigee sample data to apigeeks everywhere.",
+	"documentation": {
+		"externalUri": "https://mocktarget.apigee.net/help"
+	},
+	"owner": {
+		"displayName": "Test User",
+		"email": "test@example.com"
+	},
+	"versions": [],
+	"createTime": "2025-06-25T03:33:03.361631Z",
+	"updateTime": "2025-06-25T03:33:03.361631Z",
+	"targetUser": {
+		"attribute": "projects/PROJECT_ID/locations/REGION/attributes/system-target-user",
+		"enumValues": {
+			"values": [
+				{
+					"id": "team",
+					"displayName": "Team",
+					"description": "Team target user",
+					"immutable": true
+				}
+			]
+		}
+	},
+	"team": {
+		"attribute": "projects/PROJECT_ID/locations/REGION/attributes/system-team",
+		"enumValues": {
+			"values": [
+				{
+					"id": "example-team",
+					"displayName": "Example Team Name",
+					"description": "Example team name"
+				}
+			]
+		}
+	},
+	"businessUnit": {
+		"attribute": "projects/PROJECT_ID/locations/REGION/attributes/system-business-unit",
+		"enumValues": {
+			"values": [
+				{
+					"id": "example-business-unit",
+					"displayName": "Example Business Unit Name",
+					"description": "Example Business Unit Name"
+				}
+			]
+		}
+	},
+	"maturityLevel": {
+		"attribute": "projects/PROJECT_ID/locations/REGION/attributes/system-maturity-level",
+		"enumValues": {
+			"values": [
+				{
+					"id": "level-3",
+					"displayName": "Level 3",
+					"description": "Level 3"
+				}
+			]
+		}
+	},
+	"apiStyle": {
+		"attribute": "projects/PROJECT_ID/locations/REGION/attributes/system-api-style",
+		"enumValues": {
+			"values": [
+				{
+					"id": "rest",
+					"displayName": "REST",
+					"description": "REST",
+					"immutable": true
+				}
+			]
+		}
+	}
+}

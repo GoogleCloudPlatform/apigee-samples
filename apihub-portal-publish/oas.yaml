@@ -1,0 +1,59 @@
+openapi: 3.0.0
+info:
+  title: Apigee.net Sample API
+  version: 1.0.0
+  description: API for retrieving sample data
+servers:
+  - url: https://mocktarget.apigee.net
+    description: Apigee mock target server
+paths:
+  /:
+    get:
+      summary: Get hello information
+      description: Returns Hello, Guest response
+      responses:
+        '200':
+          description: Successful response
+          content:
+            text/plain:
+              schema:
+                type: string
+  /ip:
+    get:
+      summary: Get IP address information
+      description: Returns the user's IP address as JSON
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ip:
+                    type: string
+                    example: John
+  /json:
+    get:
+      summary: Get user information
+      description: Returns the first name, last name, city, and state of a user.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  firstName:
+                    type: string
+                    example: John
+                  lastName:
+                    type: string
+                    example: Doe
+                  city:
+                    type: string
+                    example: San Jose
+                  state:
+                    type: string
+                    example: CA
