@@ -1,3 +1,19 @@
+#!/bin/bash
+
+# Copyright 2025 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 if [ -z "$PROJECT_ID" ]; then
   echo "No PROJECT_ID variable set"
   exit
@@ -18,8 +34,8 @@ if [ -z "$APIGEE_HOST" ]; then
   exit
 fi
 
-if [ -z "$APIGEE_PORTAL_ID" ]; then
-  echo "No APIGEE_PORTAL_ID variable set"
+if [ -z "$APIGEE_PORTAL_URL" ]; then
+  echo "No APIGEE_PORTAL_URL variable set"
   exit
 fi
 
@@ -43,9 +59,9 @@ curl -X POST "https://apihub.googleapis.com/v1/projects/$PROJECT_ID/locations/$R
   --data "@apihub-api-deployment.local.json"
 
 # create api, version and spec in api hub
-apigeecli apihub apis create -i "apigee-sample-api" -f apihub-api.local.json -r "$REGION" -o "$PROJECT_ID" -t $(gcloud auth print-access-token)
-apigeecli apihub apis versions create -i "apigee-sample-api-v1" --api-id "apigee-sample-api" -f apihub-api-version.local.json -r "$REGION" -o "$PROJECT_ID" -t $(gcloud auth print-access-token)
-apigeecli apihub apis versions specs create -i "apigee-sample-unmanaged-api-v1-spec" --api-id "apigee-sample-api" --version "apigee-sample-api-v1" -d "Apigee Sample Unmanaged API v1 Spec" -f "./oas.yaml" -r $REGION -o $PROJECT_ID -t $(gcloud auth print-access-token)
+apigeecli apihub apis create -i "apigee-sample-api" -f apihub-api.local.json -r "$REGION" -o "$PROJECT_ID" -t "$(gcloud auth print-access-token)"
+apigeecli apihub apis versions create -i "apigee-sample-api-v1" --api-id "apigee-sample-api" -f apihub-api-version.local.json -r "$REGION" -o "$PROJECT_ID" -t "$(gcloud auth print-access-token)"
+apigeecli apihub apis versions specs create -i "apigee-sample-unmanaged-api-v1-spec" --api-id "apigee-sample-api" --version "apigee-sample-api-v1" -d "Apigee Sample Unmanaged API v1 Spec" -f "./oas.yaml" -r "$REGION" -o "$PROJECT_ID" -t "$(gcloud auth print-access-token)"
 
 echo "🎊 Finished unmanaged Apigee sample API registration to API Hub!"
 echo "🎊 Visit API Hub here to see results: https://console.cloud.google.com/apigee/api-hub/apis"

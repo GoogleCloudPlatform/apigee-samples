@@ -8,7 +8,7 @@ Let's get started!
 
 ## Prepare project dependencies
 
-### 1. Ensure that prerequisite tools are installed, and that you have needed permissions.
+### 1. Ensure that prerequisite tools are installed, and that you have needed permissions
 
 - [gcloud CLI](https://cloud.google.com/sdk/docs/install) will be used for automating GCP tasks, see the docs site for installation instructions.
 - [apigeecli](https://github.com/apigee/apigeecli) will be used for Apigee automation, see the docs site for installation instructions.
@@ -19,7 +19,7 @@ Let's get started!
   - roles/apihub.editor - needed to manage API Hub data
 - An [Apigee Integrated Developer Portal](https://cloud.google.com/apigee/docs/api-platform/publish/portal/build-integrated-portal) needs to be provisioned and visible at in the [Apigee Portals Console](https://console.cloud.google.com/apigee/portals)
 
-### 2. Ensure you have an active GCP account selected in the Cloud Shell.
+### 2. Ensure you have an active GCP account selected in the Cloud Shell
 
 ```sh
 gcloud auth login
