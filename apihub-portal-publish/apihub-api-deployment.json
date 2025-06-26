@@ -1,0 +1,50 @@
+{
+  "displayName": "Apigee Sample API Deployment",
+  "description": "Deployment of Apigee Sample API ",
+  "documentation": {
+    "externalUri": "https://mocktarget.apigee.net/help"
+  },
+  "deploymentType": {
+    "attribute": "projects/PROJECT_ID/locations/REGION/attributes/system-deployment-type",
+    "enumValues": {
+      "values": [
+        {
+          "id": "unmanaged",
+          "displayName": "Unmanaged",
+          "description": "Unmanaged",
+          "immutable": true
+        }
+      ]
+    }
+  },
+  "resourceUri": "https://mocktarget.apigee.net",
+  "endpoints": [
+    "https://mocktarget.apigee.net"
+  ],
+  "apiVersions": [],
+  "slo": {
+    "attribute": "projects/PROJECT_ID/locations/REGION/attributes/system-slo",
+    "enumValues": {
+      "values": [
+        {
+          "id": "99-5",
+          "displayName": "99.5%",
+          "description": "99.5% SLO"
+        }
+      ]
+    }
+  },
+  "environment": {
+    "attribute": "projects/PROJECT_ID/locations/REGION/attributes/system-environment",
+    "enumValues": {
+      "values": [
+        {
+          "id": "test",
+          "displayName": "Test",
+          "description": "Test"
+        }
+      ]
+    }
+  },
+  "attributes": {}
+}
