@@ -30,9 +30,9 @@ gcloud auth login
 First update the `env.sh` file with your environment variables. Click <walkthrough-editor-open-file filePath="apihub-portal-publish/env.sh">here</walkthrough-editor-open-file> to open the file in the editor.
 
 * `PROJECT_ID` the project where your Apigee organization is located.
-* `REGION` the externally reachable hostname of the Apigee environment group that contains APIGEE_ENV.
+* `APIHUB_REGION` the region where Apigee API hub is provisioned.
 * `APIGEE_ENV` the Apigee environment where the demo resources should be created.
-* `APIGEE_HOST` the Apigee host of the environment / environment group to reach the proxy
+* `APIGEE_HOST` the Apigee host of the environment / environment group to reach the proxy.
 * `APIGEE_PORTAL_URL` the Apigee integrated portal URL (visible under Location [here](https://console.cloud.google.com/apigee/portals)), must be the `*.apigee.io` URL, not a custom domain.
 
 After saving, switch to the `apihub-portal-publish` directory and source the env file.

@@ -15,7 +15,6 @@
 # limitations under the License.
 
 export PROJECT_ID="YOUR_PROJECT_ID" # the GCP project where apigee is provisioned
-export REGION="europe-west1" # the region where Apigee is provisioned
 export APIHUB_REGION="europe-west1" # the region where Apigee API hub is provisioned
 export APIGEE_ENV="dev" # the name of your apigee environment, for example dev or eval
 export APIGEE_HOST="YOUR_APIGEE_HOST" # the hostname of your apigee environment group
