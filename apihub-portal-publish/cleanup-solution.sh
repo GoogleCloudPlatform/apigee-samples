@@ -16,13 +16,13 @@
 
 echo "👉 Starting clean-up of resources..."
 
-# delete API Hub API
-apigeecli apihub apis delete --id "apigee-sample-api" -o "$PROJECT_ID" -r "$REGION" -t "$(gcloud auth print-access-token)" --force
+# delete Apigee API hub API
+apigeecli apihub apis delete --id "apigee-sample-api" -o "$PROJECT_ID" -r "$APIHUB_REGION" -t "$(gcloud auth print-access-token)" --force
 
-# delete API Hub deployments
-apigeecli apihub deployments delete -i "apigee-sample-unmanaged-v1-deployment" -o "$PROJECT_ID" -r "$REGION" -t "$(gcloud auth print-access-token)"
+# delete Apigee API hub deployments
+apigeecli apihub deployments delete -i "apigee-sample-unmanaged-v1-deployment" -o "$PROJECT_ID" -r "$APIHUB_REGION" -t "$(gcloud auth print-access-token)"
 
-apigeecli apihub deployments delete -i "apigee-sample-managed-v1-deployment" -o "$PROJECT_ID" -r "$REGION" -t "$(gcloud auth print-access-token)"
+apigeecli apihub deployments delete -i "apigee-sample-managed-v1-deployment" -o "$PROJECT_ID" -r "$APIHUB_REGION" -t "$(gcloud auth print-access-token)"
 
 # delete portal doc
 CATALOG_ID=$(apigeecli apidocs list -s "$APIGEE_PORTAL_ID" -o "$PROJECT_ID" -t "$(gcloud auth print-access-token)" | jq --raw-output '.data[] | select(.apiProductName=="apihub-portal-product") | 

@@ -1,17 +1,17 @@
-# API Hub Portal Publishing Sample
+# Apigee API hub Portal Publishing Sample
 
 ![Architecture](./docs/architecture.jpg)
 
-This sample shows how unmanaged APIs can be registered in API Hub, on-ramped as a managed API in Apigee with documentation in an [Apigee developer portal](https://cloud.google.com/apigee/docs/api-platform/publish/portal/build-integrated-portal), synced back to API Hub as a managed deployment, and finally offered through Apigee to developers and agents as a secure, managed API.
+This sample shows how **[Apigee API hub](https://cloud.google.com/apigee/docs/apihub/what-is-api-hub)** can easily onboard an unmanaged API, deploy a managed Apigee proxy for secure access, and then publish the documentation to an Apigee integrated developer portal.
 
 ## Prerequisites
 - [gcloud CLI](https://cloud.google.com/sdk/docs/install) will be used for automating GCP tasks, see the docs site for installation instructions.
 - [apigeecli](https://github.com/apigee/apigeecli) will be used for Apigee automation, see the docs site for installation instructions.
-- [Apigee](https://cloud.google.com/apigee/docs/api-platform/get-started/provisioning-intro) and [Apigee API Hub](https://cloud.google.com/apigee/docs/apihub/what-is-api-hub) provisioned in a GCP region.
+- [Apigee](https://cloud.google.com/apigee/docs/api-platform/get-started/provisioning-intro) and [Apigee Apigee API hub](https://cloud.google.com/apigee/docs/apihub/what-is-api-hub) provisioned in a GCP region.
 - GCP roles needed:
   - roles/apigee.apiAdminV2 - needed to deploy an Apigee proxy.
   - roles/apigee.portalAdmin - needed to manage the Apigee integrated developer portal.
-  - roles/apihub.editor - needed to manage API Hub data
+  - roles/apihub.editor - needed to manage Apigee API hub data
 - An [Apigee Integrated Developer Portal](https://cloud.google.com/apigee/docs/api-platform/publish/portal/build-integrated-portal) needs to be provisioned and visible at in the [Apigee Portals Console](https://console.cloud.google.com/apigee/portals)
 
 ## (QuickStart) Setup using CloudShell
@@ -38,15 +38,15 @@ Now source the environment variables file.
 source env.sh
 ```
 
-### Step 2: Register an unmanaged API in API Hub
+### Step 2: Register an unmanaged API in Apigee API hub
 
-To begin, you will register the **unmanaged** API at [https://mocktarget.apigee.net/help](https://mocktarget.apigee.net/help) to API Hub. This makes the API visible, and is the first step to adding management and official documentation for the API.
+To begin, you will register the **unmanaged** API at [https://mocktarget.apigee.net/help](https://mocktarget.apigee.net/help) to Apigee API hub. This makes the API visible, and is the first step to adding management and official documentation for the API.
 
 ```sh
 ./deploy-unmanaged-api.sh
 ```
 
-Now open the [API Hub Console](https://console.cloud.google.com/apigee/api-hub/apis) to see the registered API, version, deployment and spec. Notice how the deployment is tagged as **Unmanaged** since it is not secured or running on an API platform. The API version is also labled as **Test** in the Lifecycle attribute, and the deployment documentation link opens the static [HTML site](https://mocktarget.apigee.net/help).
+Now open the [Apigee API hub Console](https://console.cloud.google.com/apigee/api-hub/apis) to see the registered API, version, deployment and spec. Notice how the deployment is tagged as **Unmanaged** since it is not secured or running on an API platform. The API version is also labled as **Test** in the Lifecycle attribute, and the deployment documentation link opens the static [HTML site](https://mocktarget.apigee.net/help).
 
 ### Step 3: Create a managed Apigee proxy for unmanaged API
 
@@ -56,7 +56,7 @@ This step will deploy an Apigee proxy to make the API managed, and add it as an 
 ./deploy-managed-api.sh
 ```
 
-Open the [API Hub Console](https://console.cloud.google.com/apigee/api-hub/apis) to see the updated API, version, and the new managed deployment and spec, this time in **Apigee**. Notice how the new Apigee deployment links to the Apigee portal with testable documentation and user registration, and connected to an [Apigee product](https://cloud.google.com/apigee/docs/api-platform/publish/what-api-product) for access & user management.
+Open the [Apigee API hub Console](https://console.cloud.google.com/apigee/api-hub/apis) to see the updated API, version, and the new managed deployment and spec, this time in **Apigee**. Notice how the new Apigee deployment links to the Apigee portal with testable documentation and user registration, and connected to an [Apigee product](https://cloud.google.com/apigee/docs/api-platform/publish/what-api-product) for access & user management.
 
 ### Step 4: Clean up resources
 
@@ -66,4 +66,4 @@ Clean up all of the resources.
 ./cleanup-solution.sh
 ```
 
-Congrats, you registered an unmanaged API to API Hub, created a managed proxy and developer portal documentation for the API thereby making it managed, and then updated API Hub with the new deployment and documentation information.
+Congrats, you registered an unmanaged API to Apigee API hub, created a managed proxy and developer portal documentation for the API thereby making it managed, and then updated Apigee API hub with the new deployment and documentation information.
