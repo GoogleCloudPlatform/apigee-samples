@@ -27,6 +27,7 @@
             </Step>
             <Step>
                 <Name>EV-ExtractFields</Name>
+                <Condition>request.content != null</Condition>
             </Step>
             <Step>
                 <Name>KVM-GetModelProviderConfig</Name>

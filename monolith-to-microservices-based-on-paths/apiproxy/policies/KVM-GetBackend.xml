@@ -15,7 +15,6 @@
   mapIdentifier="routing-rules">
   <DisplayName>KVM-GetBackend</DisplayName>
   <Properties />
-  <ExclusiveCache>false</ExclusiveCache>
   <ExpiryTimeInSecs>300</ExpiryTimeInSecs>
   <Get assignTo="backend">
     <Key>

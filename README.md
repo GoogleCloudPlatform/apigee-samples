@@ -10,6 +10,7 @@
   - [ADK Samples with Apigee](#adk-samples-with-apigee)
     - [Prerequisites](#prerequisites)
     - [Samples](#samples-1)
+  - [Apigee and Model Context Protocol (MCP)](#apigee-and-model-context-protocol-mcp)
   - [Modifying a sample proxy](#modifying-a-sample-proxy)
   - [Ask questions on the Community Forum](#ask-questions-on-the-community-forum)
   - [Apigee documentation](#apigee-documentation)
@@ -128,9 +129,9 @@ You will need a GCP project with the following services enabled and provisioned:
 
 | Agent | Description |
 |---|---|
-| [adk-auto-insurance-agent](adk-auto-insurance-agent) | A virtual assistant for auto insurance that uses API hub to provide APIs as tools. |
+| [adk-auto-insurance-agent](adk-auto-insurance-agent) | A virtual assistant for auto insurance that uses Apigee API hub to provide APIs as tools. |
 
-For more information on ADK's API Hub and Application Integration toolsets, see the [documentation](https://google.github.io/adk-docs/tools/google-cloud-tools/).
+For more information on ADK's Apigee API hub and Application Integration toolsets, see the [documentation](https://google.github.io/adk-docs/tools/google-cloud-tools/).
 
 ## <a name="apigee-mcp-samples"></a>Apigee and Model Context Protocol (MCP)
 
@@ -138,7 +139,7 @@ The [Model Context Protocol (MCP)](https://github.com/modelcontext/specification
 
 |    | Sample                      | Description                                                                                                                                                              | Open Notebook |
 |----|-----------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------|
-| 1  | [apigee-mcp](apigee-mcp)    | Illustrates Apigee's role in the MCP ecosystem. Features an MCP server that discovers API specs from API Hub (via Apigee), dynamically creates tools for LLMs, and exposes them through Apigee. An example CRM agent notebook demonstrates consuming these tools. | [![notebook](https://github.com/GoogleCloudPlatform/apigee-samples/blob/main/images/icon32.png?raw=true)](./apigee-mcp/notebooks/crm-agent-mcp.ipynb) |
+| 1  | [apigee-mcp](apigee-mcp)    | Illustrates Apigee's role in the MCP ecosystem. Features an MCP server that discovers API specs from Apigee API hub, dynamically creates tools for LLMs, and exposes them through Apigee. An example CRM agent notebook demonstrates consuming these tools. | [![notebook](https://github.com/GoogleCloudPlatform/apigee-samples/blob/main/images/icon32.png?raw=true)](./apigee-mcp/notebooks/crm-agent-mcp.ipynb) |
 
 ## <a name="modifying"></a>Modifying a sample proxy
 
