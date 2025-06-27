@@ -1,0 +1,26 @@
+{
+  "displayName": "Apigee Sample API v1",
+  "description": "Version 1 of the Apigee Sample API",
+  "documentation": {
+    "externalUri": "https://mocktarget.apigee.net/help"
+  },
+  "specs": [],
+  "apiOperations": [],
+  "deployments": [
+    "projects/PROJECT_ID/locations/REGION/deployments/apigee-sample-unmanaged-v1-deployment"
+  ],
+  "createTime": "2025-06-25T03:38:43.883850Z",
+  "updateTime": "2025-06-25T03:43:07.299289Z",
+  "lifecycle": {
+    "attribute": "projects/PROJECT_ID/locations/REGION/attributes/system-lifecycle",
+    "enumValues": {
+      "values": [
+        {
+          "id": "develop",
+          "displayName": "Develop",
+          "description": "Develop"
+        }
+      ]
+    }
+  }
+}
