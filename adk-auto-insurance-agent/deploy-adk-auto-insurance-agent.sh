@@ -90,7 +90,7 @@ echo "Installing apigeecli"
 curl -s https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.sh | bash
 export PATH=$PATH:$HOME/.apigeecli/bin
 
-echo "Registering APIs in API hub"
+echo "Registering APIs in Apigee API hub"
 cp -rf config tmp/
 sed -i '' "s/APIGEE_HOST/$APIGEE_HOST/g" tmp/*/*.yaml
 sed -i '' "s/APIGEE_APIHUB_PROJECT_ID/$APIGEE_APIHUB_PROJECT_ID/g" tmp/*/*.json

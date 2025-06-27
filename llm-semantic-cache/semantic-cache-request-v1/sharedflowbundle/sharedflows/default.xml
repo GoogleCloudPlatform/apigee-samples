@@ -14,6 +14,7 @@
 <SharedFlow name="default">
   <Step>
     <Name>EV-ExtractPromptContents</Name>
+    <Condition>request.content != null</Condition>
   </Step>
   <Step>
     <Name>AM-SetPromptContents</Name>
@@ -23,12 +24,14 @@
   </Step>
   <Step>
     <Name>EV-ExtractEmbeddings</Name>
+    <Condition>embeddings_response.content != null</Condition>
   </Step>
   <Step>
     <Name>SC-QueryNearestNeighbor</Name>
   </Step>
   <Step>
     <Name>EV-ExtractNearestNeighbor</Name>
+    <Condition>nearest_neighbor_response.content != null</Condition>
   </Step>
   <Step>
     <Condition>nearest_neighbor_datapoint_id_ext != null</Condition>

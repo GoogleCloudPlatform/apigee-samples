@@ -14,7 +14,6 @@
 <KeyValueMapOperations continueOnError="false" enabled="true" name="KVM-GetModelArmorConfig" mapIdentifier="llm-sse-security-config">
   <DisplayName>KVM-GetModelArmorConfig</DisplayName>
   <Properties/>
-  <ExclusiveCache>false</ExclusiveCache>
   <ExpiryTimeInSecs>300</ExpiryTimeInSecs>
   <Get assignTo="modelArmorTemplate">
     <Key>
