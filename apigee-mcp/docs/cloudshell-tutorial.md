@@ -5,7 +5,7 @@ This tutorial walks you through deploying and testing the Apigee Model Context P
 The solution consists of:
 *   A stub **Customers API** backend (deployed as a Cloud Run service).
 *   An Apigee API Proxy (`customers-api`) exposing the Customers API.
-*   An Apigee API Proxy (`mcp-spec-tools`) that allows discovery of API Products and their OpenAPI specifications from API Hub, and also issues OAuth tokens.
+*   An Apigee API Proxy (`mcp-spec-tools`) that allows discovery of API Products and their OpenAPI specifications from Apigee API hub, and also issues OAuth tokens.
 *   **Apigee MCP Server** (deployed as a Cloud Run service - `crm-mcp-service`) that uses `mcp-spec-tools` to find available APIs, generates corresponding tools for an AI agent, and executes them.
 *   An Apigee API Proxy (`crm-mcp-proxy`) that exposes the Node.js MCP Server, secured with an API Key.
 *   An Agent Development Kit (ADK) agent (run via a Jupyter notebook) that connects to the `crm-mcp-proxy` to interact with the available tools.
@@ -43,7 +43,7 @@ gcloud services enable \
   dataform.googleapis.com \
   --project <walkthrough-project-id/>
 ```
-(Ensure your Apigee organization and API Hub are provisioned in this project.)
+(Ensure your Apigee organization and Apigee API hub are provisioned in this project.)
 
 ## Set environment variables
 
@@ -67,7 +67,7 @@ gcloud projects add-iam-policy-binding <walkthrough-project-id/> \
 --member="serviceAccount:${SERVICE_ACCOUNT_NAME}@<walkthrough-project-id/>.iam.gserviceaccount.com" \
 --role="roles/run.invoker"
 ```
-### 4. Grant the service account the API Hub Admin role
+### 4. Grant the service account the Apigee API hub Admin role
 ```sh
 gcloud projects add-iam-policy-binding <walkthrough-project-id/> \
 --member="serviceAccount:${SERVICE_ACCOUNT_NAME}@<walkthrough-project-id/>.iam.gserviceaccount.com" \
@@ -135,7 +135,7 @@ Ensure your environment variables from `env.sh` are still set (if in a new termi
 ```sh
 ./undeploy-all.sh
 ```
-This script will attempt to delete the Cloud Run services, Apigee artifacts, API Hub resources, and other components deployed by the sample.
+This script will attempt to delete the Cloud Run services, Apigee artifacts, Apigee API hub resources, and other components deployed by the sample.
 
 ## Congratulations!
 
