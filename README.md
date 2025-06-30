@@ -111,7 +111,8 @@ This repository explores common LLM serving patterns using Apigee X as a robust 
 |8| [llm-security-v2](llm-security-v2) | Sample to demonstrate the security capabilities of Apigee with out of the box Model Armor policies to secure the user prompts |  [![notebook](https://github.com/GoogleCloudPlatform/apigee-samples/blob/main/images/icon32.png?raw=true)](./llm-security-v2/llm_security_v2.ipynb) |
 |9| [llm-vertexai-agent](llm-vertexai-agent) | Sample to deploy an agent using Vertex Agent Builder and point to an Apigee proxy |  [![notebook](https://github.com/GoogleCloudPlatform/apigee-samples/blob/main/images/icon32.png?raw=true)](./llm-vertexai-agent/llm_vertexai_agent.ipynb) |
 |10| [llm-function-calling](llm-function-calling) | Sample to deploy a proxy and configure it as a function call |  [![notebook](https://github.com/GoogleCloudPlatform/apigee-samples/blob/main/images/icon32.png?raw=true)](./llm-function-calling/llm_function_calling.ipynb) |
-|11| [llm-sse-security](llm-sse-security) | Sample to deploy a proxy that streams server-side events (SSE) |  [![notebook](https://github.com/GoogleCloudPlatform/apigee-samples/blob/main/images/icon32.png?raw=true)](./llm-sse-security/llm_sse_security_v1.ipynb) |
+|11| [llm-sse-security](llm-sse-security) | Sample to deploy a proxy that streams server-side events (SSE) and use Model Armor to inspect the response |  [![notebook](https://github.com/GoogleCloudPlatform/apigee-samples/blob/main/images/icon32.png?raw=true)](./llm-sse-security/llm_sse_security_v1.ipynb) |
+|12| [llm-sse-logging](llm-sse-logging) | Sample to deploy a proxy that streams server-side events (SSE) and log the response to Cloud Logging |  [![notebook](https://github.com/GoogleCloudPlatform/apigee-samples/blob/main/images/icon32.png?raw=true)](./llm-sse-logging/llm_sse_logging_v1.ipynb) |
 
 ## <a name="adk-samples"></a>ADK Samples with Apigee
 
