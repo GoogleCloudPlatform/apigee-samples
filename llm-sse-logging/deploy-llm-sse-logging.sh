@@ -46,6 +46,8 @@ add_role_to_service_account() {
     --role="$role"
 }
 
+gcloud services enable logging.googleapis.com --project="$PROJECT_ID"
+
 TOKEN=$(gcloud auth print-access-token)
 
 echo "Creating Service Account and assigning permissions"
