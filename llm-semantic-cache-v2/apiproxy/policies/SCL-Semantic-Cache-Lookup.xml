@@ -14,7 +14,7 @@
 <SemanticCacheLookup async="false" continueOnError="false" enabled="true" name="SCL-Semantic-Cache-Lookup">
     <DisplayName>SCL-Semantic-Cache-Lookup</DisplayName>
     <IgnoreUnresolvedVariables>false</IgnoreUnresolvedVariables>
-    <UserPromptSource>{jsonPath($.contents[-1].parts[-1].text,request.content,true)}</UserPromptSource>
+    <UserPromptSource>{jsonPath('$.contents[-1].parts[-1].text',request.content,true)}</UserPromptSource>
     <Embeddings>
       <VertexAI>
         <URL>https://REGION-aiplatform.googleapis.com/v1/projects/PROJECT_ID/locations/REGION/publishers/google/models/EMBEDDINGS_MODEL_ID:predict</URL>
