@@ -1,0 +1,69 @@
+{
+  "apiMetadataList": {
+    "apiMetadata": [
+      {
+        "api": {
+          "name": "projects/api-hub-demo-5/locations/us-central1/apis/api-hub-demo-5-Products-API",
+          "displayName": "Products-API",
+          "fingerprint": "products-api"
+        },
+        "versions": [
+          {
+            "version": {
+              "name": "projects/api-hub-demo-5/locations/us-central1/apis/api-hub-demo-5-Products-API/versions/version-1",
+              "displayName": "version-1"
+            },
+            "deployments": [
+              {
+                "deployment": {
+                  "displayName": "Products-API",
+                  "description": "API for managing product inventory. This API allows for the creation, retrieval, update, and deletion of product records.",
+                  "deploymentType": {
+                    "enumValues": {
+                      "values": [
+                        {
+                          "id": "apigee"
+                        }
+                      ]
+                    },
+                    "attribute": "projects/api-hub-demo-5/locations/us-central1/attributes/system-deployment-type"
+                  },
+                  "resourceUri": "organizations/api-hub-demo-5/apis/Products-API/revisions/1/environments/test-env",
+                  "endpoints": [
+                    "https://googleapis.com/products-api"
+                  ],
+                  "attributes": {
+                    "projects/api-hub-demo-5/locations/us-central1/attributes/plugin-system-apigee-x-and-hybrid-environment": {
+                      "stringValues": {
+                        "values": [
+                          "test-env"
+                        ]
+                      },
+                      "attribute": "projects/api-hub-demo-5/locations/us-central1/attributes/plugin-system-apigee-x-and-hybrid-environment"
+                    },
+                    "projects/api-hub-demo-5/locations/us-central1/attributes/plugin-system-apigee-x-and-hybrid-organization": {
+                      "stringValues": {
+                        "values": [
+                          "api-hub-demo-5"
+                        ]
+                      },
+                      "attribute": "projects/api-hub-demo-5/locations/us-central1/attributes/plugin-system-apigee-x-and-hybrid-organization"
+                    }
+                  }
+                },
+                "originalId": "apis/Products-API/revisions/1/environments/test-env",
+                "originalCreateTime": "2025-07-07T05:23:51.617Z",
+                "originalUpdateTime": "2025-07-07T05:23:51.617Z"
+              }
+            ],
+            "originalId": "apis/Products-API/revisions/1",
+            "originalCreateTime": "2025-07-07T05:23:47.982Z",
+            "originalUpdateTime": "2025-07-07T05:23:47.982Z"
+          }
+        ],
+        "originalId": "apis/Products-API",
+        "originalUpdateTime": "2025-07-07T05:23:47.982Z"
+      }
+    ]
+  }
+}

@@ -1,0 +1,165 @@
+openapi: 3.0.0
+info:
+  title: Orders API
+  version: 1.0.0
+  description: API for managing customer orders and their associated items. This includes creating new orders and retrieving existing order details.
+servers:
+  - url: https://api.example.com/orders/v1
+    description: Order processing production server.
+paths:
+  /orders:
+    get:
+      summary: Get all orders
+      operationId: getAllOrders
+      responses:
+        '200':
+          description: A list of orders successfully retrieved.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+    post:
+      summary: Create a new order
+      operationId: createOrder
+      requestBody:
+        required: true
+        description: Order data to be created.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderInput'
+      responses:
+        '201':
+          description: Order successfully created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '400':
+          description: Invalid order data provided.
+  /orders/{orderId}:
+    get:
+      summary: Get an order by ID
+      operationId: getOrderById
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          description: Unique identifier of the order to retrieve.
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Order details successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '404':
+          description: Order not found with the given ID.
+  /orders/{orderId}/items:
+    get:
+      summary: Get items for a specific order
+      operationId: getOrderItems
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          description: Unique identifier of the order to retrieve items for.
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: A list of items in the order successfully retrieved.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrderItem'
+components:
+  schemas:
+    Order:
+      type: object
+      required:
+        - id
+        - userId
+        - status
+        - orderDate
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique order identifier.
+        userId:
+          type: string
+          format: uuid
+          description: ID of the user who placed the order.
+        orderDate:
+          type: string
+          format: date-time
+          description: Date and time the order was placed.
+        status:
+          type: string
+          enum: [pending, processing, shipped, delivered, cancelled]
+          description: Current status of the order.
+          default: pending
+        totalAmount:
+          type: number
+          format: float
+          description: Total amount of the order.
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderItem'
+          description: List of items in the order.
+    OrderItem:
+      type: object
+      required:
+        - productId
+        - quantity
+        - priceAtOrder
+      properties:
+        productId:
+          type: string
+          format: uuid
+          description: ID of the product ordered.
+        quantity:
+          type: integer
+          minimum: 1
+          description: Quantity of the product ordered.
+        priceAtOrder:
+          type: number
+          format: float
+          description: Price of the product at the time of order.
+    OrderInput:
+      type: object
+      required:
+        - userId
+        - items
+      properties:
+        userId:
+          type: string
+          format: uuid
+          description: ID of the user placing the order.
+        items:
+          type: array
+          minItems: 1
+          items:
+            type: object
+            required:
+              - productId
+              - quantity
+            properties:
+              productId:
+                type: string
+                format: uuid
+                description: ID of the product to add to the order.
+              quantity:
+                  type: integer
+                  minimum: 1
+                  description: Quantity of the product.

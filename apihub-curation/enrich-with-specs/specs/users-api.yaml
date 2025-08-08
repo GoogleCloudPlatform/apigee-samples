@@ -1,0 +1,138 @@
+openapi: 3.0.0
+info:
+  title: Users API
+  version: 2.0.0
+  description: API for managing user accounts and profiles within the system. It supports operations like retrieving, creating, and viewing individual users.
+servers:
+  - url: https://api.example.com/users/v2
+    description: User management production server.
+paths:
+  /users:
+    get:
+      summary: Retrieve all users
+      operationId: getAllUsers
+      parameters:
+        - name: limit
+          in: query
+          description: Maximum number of users to return.
+          required: false
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+            maximum: 100
+        - name: offset
+          in: query
+          description: Number of users to skip for pagination.
+          required: false
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+      responses:
+        '200':
+          description: A list of users successfully retrieved.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+    post:
+      summary: Create a new user
+      operationId: createUser
+      requestBody:
+        required: true
+        description: User data to be created.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserInput'
+      responses:
+        '201':
+          description: User successfully created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Invalid user data provided for creation.
+  /users/{userId}:
+    get:
+      summary: Retrieve a user by ID
+      operationId: getUserById
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: Unique identifier of the user to retrieve.
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: User details successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: User not found with the given ID.
+components:
+  schemas:
+    User:
+      type: object
+      required:
+        - id
+        - username
+        - email
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique user identifier.
+        username:
+          type: string
+          description: User's chosen username.
+        email:
+          type: string
+          format: email
+          description: User's email address.
+        firstName:
+          type: string
+          nullable: true
+          description: User's first name.
+        lastName:
+          type: string
+          nullable: true
+          description: User's last name.
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp of user creation.
+    UserInput:
+      type: object
+      required:
+        - username
+        - email
+        - password
+      properties:
+        username:
+          type: string
+          description: User's chosen username.
+        email:
+          type: string
+          format: email
+          description: User's email address.
+        password:
+          type: string
+          format: password
+          description: User's password (should be hashed in real systems).
+        firstName:
+          type: string
+          nullable: true
+          description: User's first name.
+        lastName:
+          type: string
+          nullable: true
+          description: User's last name.
