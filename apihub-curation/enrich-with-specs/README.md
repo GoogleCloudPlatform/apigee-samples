@@ -20,8 +20,10 @@ This sample shows how **Apigee API hub** can be configured with custom curation 
     *   `roles/storage.admin`
 *   The Cloud Storage API enabled in your project 
 *   Sample files from the tutorial downloaded to your local machine:
-    *   ![Integration JSON] (enrich-with-spec.json)
-    *   API Specs: ![Orders] (specs/orders-api.yaml), ![Products] (specs/products-api.yaml), ![Users] (specs/users-api.yaml)
+    *   enrich-with-spec.json
+    *   specs/orders-api.yaml
+    *   specs/products-api.yaml
+    *   specs/users-api.yaml
 
 ## Setup instructions
 
