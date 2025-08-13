@@ -1,0 +1,3021 @@
+{
+  "name": "projects/project_number/locations/location_name/integrations/integration_name/versions/version_name",
+  "updateTime": "updateTime",
+  "createTime": "createTime",
+  "lastModifierEmail": "useremail@gmail.com",
+  "triggerConfigs": [{
+    "label": "Fetch Revisions of the API-ID",
+    "startTasks": [{
+      "taskId": "21"
+    }],
+    "properties": {
+      "Trigger name": "onramping-data_API_6"
+    },
+    "triggerType": "API",
+    "triggerNumber": "6",
+    "triggerId": "api_trigger/onramping-data_API_6",
+    "position": {
+      "x": 885,
+      "y": -514
+    },
+    "inputVariables": {
+      "names": ["in_client_id", "in_client_secret", "in_subscription_id", "in_tenant_id", "out_bearer_token", "cached_access_token", "new_token", "apims-list", "current_apims", "servicename", "resourcenames", "current_apim_value", "apis-list", "in_api_id", "apis-array-list", "current_service_value", "in_service_name", "api_id-list", "current_api_id", "api-operations-list", "operations-list", "revisions_list", "openaispecs-list", "api-policies-list", "deployments-list", "deploymenturl", "respomsebodyforsenfing", "apiDescription", "apiDisplayName", "apijsondesccription", "versionnumber", "publisherEmail", "publisherName", "deloymentenvironment", "deploymentcreatedAt", "deploymentlastUpdatedTime", "specJson", "finalBase64Content", "speccJsonstring"]
+    },
+    "outputVariables": {
+      "names": ["out_bearer_token", "cached_token_expiry_timestamp_ms", "new_token", "apims-list", "current_apims", "servicename", "resourcenames", "current_apim_value", "apis-list", "in_api_id", "apis-array-list", "current_service_value", "in_service_name", "api_id-list", "current_api_id", "api-operations-list", "operations-list", "numberOfapiIds", "revisions_list", "openaispecs-list", "api-policies-list", "deployments-list", "deploymenturl", "respomsebodyforsenfing", "apiDescription", "apiDisplayName", "apijsondesccription", "versionnumber", "publisherEmail", "publisherName", "deloymentenvironment", "deploymentcreatedAt", "deploymentlastUpdatedTime", "specJson", "finalBase64Content", "speccJsonstring"]
+    }
+  }, {
+    "label": "Fetch OpenAI Specs",
+    "startTasks": [{
+      "taskId": "24"
+    }],
+    "properties": {
+      "Trigger name": "onramping-data_API_7"
+    },
+    "triggerType": "API",
+    "triggerNumber": "7",
+    "triggerId": "api_trigger/onramping-data_API_7",
+    "position": {
+      "x": 1198,
+      "y": -523
+    },
+    "inputVariables": {
+      "names": ["in_client_id", "in_client_secret", "in_subscription_id", "in_tenant_id", "out_bearer_token", "cached_access_token", "new_token", "apims-list", "current_apims", "servicename", "resourcenames", "current_apim_value", "apis-list", "in_api_id", "apis-array-list", "current_service_value", "in_service_name", "api_id-list", "current_api_id", "api-operations-list", "operations-list", "revisions_list", "openaispecs-list", "api-policies-list", "deployments-list", "deploymenturl", "respomsebodyforsenfing", "apiDescription", "apiDisplayName", "apijsondesccription", "versionnumber", "publisherEmail", "publisherName", "deloymentenvironment", "deploymentcreatedAt", "deploymentlastUpdatedTime", "specJson", "finalBase64Content", "speccJsonstring"]
+    },
+    "outputVariables": {
+      "names": ["out_bearer_token", "cached_token_expiry_timestamp_ms", "new_token", "apims-list", "current_apims", "servicename", "resourcenames", "current_apim_value", "apis-list", "in_api_id", "apis-array-list", "current_service_value", "in_service_name", "api_id-list", "current_api_id", "api-operations-list", "operations-list", "numberOfapiIds", "revisions_list", "openaispecs-list", "api-policies-list", "deployments-list", "deploymenturl", "respomsebodyforsenfing", "apiDescription", "apiDisplayName", "apijsondesccription", "versionnumber", "publisherEmail", "publisherName", "deloymentenvironment", "deploymentcreatedAt", "deploymentlastUpdatedTime", "specJson", "finalBase64Content", "speccJsonstring"]
+    }
+  }, {
+    "label": "Initiate the retrieval of APIM instances",
+    "startTasks": [{
+      "taskId": "6"
+    }],
+    "properties": {
+      "Trigger name": "onramping-data_API_2"
+    },
+    "triggerType": "API",
+    "triggerNumber": "2",
+    "triggerId": "api_trigger/onramping-data_API_2",
+    "position": {
+      "x": -376,
+      "y": -489
+    },
+    "inputVariables": {
+      "names": ["in_client_id", "in_client_secret", "in_subscription_id", "in_tenant_id", "cached_access_token", "new_token", "apims-list", "api-operations-list", "operations-list", "revisions_list", "openaispecs-list", "api-policies-list", "deployments-list", "deploymenturl", "respomsebodyforsenfing", "apiDescription", "apiDisplayName", "apijsondesccription", "versionnumber", "publisherEmail", "publisherName", "deloymentenvironment", "deploymentcreatedAt", "deploymentlastUpdatedTime", "specJson", "finalBase64Content", "speccJsonstring"]
+    },
+    "outputVariables": {
+      "names": ["out_bearer_token", "cached_token_expiry_timestamp_ms", "new_token", "apims-list", "current_apims", "servicename", "resourcenames", "current_apim_value", "apis-list", "in_api_id", "apis-array-list", "current_service_value", "in_service_name", "api_id-list", "current_api_id", "api-operations-list", "operations-list", "numberOfapiIds", "revisions_list", "openaispecs-list", "api-policies-list", "deployments-list", "deploymenturl", "respomsebodyforsenfing", "apiDescription", "apiDisplayName", "apijsondesccription", "versionnumber", "publisherEmail", "publisherName", "deloymentenvironment", "deploymentcreatedAt", "deploymentlastUpdatedTime", "specJson", "finalBase64Content", "speccJsonstring"]
+    }
+  }, {
+    "label": "Make a call to fetch the resource and service names",
+    "startTasks": [{
+      "taskId": "9"
+    }],
+    "properties": {
+      "Trigger name": "onramping-data_API_3"
+    },
+    "triggerType": "API",
+    "triggerNumber": "3",
+    "triggerId": "api_trigger/onramping-data_API_3",
+    "position": {
+      "x": -68,
+      "y": -500
+    },
+    "inputVariables": {
+      "names": ["in_client_id", "in_client_secret", "in_subscription_id", "in_tenant_id", "out_bearer_token", "cached_access_token", "new_token", "apims-list", "current_apims", "servicename", "resourcenames", "current_apim_value", "apis-list", "in_api_id", "apis-array-list", "current_service_value", "in_service_name", "api_id-list", "current_api_id", "api-operations-list", "operations-list", "revisions_list", "openaispecs-list", "api-policies-list", "deployments-list", "deploymenturl", "respomsebodyforsenfing", "apiDescription", "apiDisplayName", "apijsondesccription", "versionnumber", "publisherEmail", "publisherName", "deloymentenvironment", "deploymentcreatedAt", "deploymentlastUpdatedTime", "specJson", "finalBase64Content", "speccJsonstring"]
+    },
+    "outputVariables": {
+      "names": ["out_bearer_token", "cached_token_expiry_timestamp_ms", "new_token", "apims-list", "current_apims", "servicename", "resourcenames", "current_apim_value", "apis-list", "in_api_id", "apis-array-list", "current_service_value", "in_service_name", "api_id-list", "current_api_id", "api-operations-list", "operations-list", "numberOfapiIds", "revisions_list", "openaispecs-list", "api-policies-list", "deployments-list", "deploymenturl", "respomsebodyforsenfing", "apiDescription", "apiDisplayName", "apijsondesccription", "versionnumber", "publisherEmail", "publisherName", "deloymentenvironment", "deploymentcreatedAt", "deploymentlastUpdatedTime", "specJson", "finalBase64Content", "speccJsonstring"]
+    }
+  }, {
+    "label": "Get API operations for corresponding API ID",
+    "startTasks": [{
+      "taskId": "18"
+    }],
+    "properties": {
+      "Trigger name": "onramping-data_API_5"
+    },
+    "triggerType": "API",
+    "triggerNumber": "5",
+    "triggerId": "api_trigger/onramping-data_API_5",
+    "position": {
+      "x": 569,
+      "y": -510
+    },
+    "inputVariables": {
+      "names": ["in_client_id", "in_client_secret", "in_subscription_id", "in_tenant_id", "out_bearer_token", "cached_access_token", "new_token", "apims-list", "current_apims", "servicename", "resourcenames", "current_apim_value", "apis-list", "in_api_id", "apis-array-list", "current_service_value", "in_service_name", "api_id-list", "current_api_id", "api-operations-list", "operations-list", "revisions_list", "openaispecs-list", "api-policies-list", "deployments-list", "deploymenturl", "respomsebodyforsenfing", "apiDescription", "apiDisplayName", "apijsondesccription", "versionnumber", "publisherEmail", "publisherName", "deloymentenvironment", "deploymentcreatedAt", "deploymentlastUpdatedTime", "specJson", "finalBase64Content", "speccJsonstring"]
+    },
+    "outputVariables": {
+      "names": ["out_bearer_token", "cached_token_expiry_timestamp_ms", "new_token", "apims-list", "current_apims", "servicename", "resourcenames", "current_apim_value", "apis-list", "in_api_id", "apis-array-list", "current_service_value", "in_service_name", "api_id-list", "current_api_id", "api-operations-list", "operations-list", "numberOfapiIds", "revisions_list", "openaispecs-list", "api-policies-list", "deployments-list", "deploymenturl", "respomsebodyforsenfing", "apiDescription", "apiDisplayName", "apijsondesccription", "versionnumber", "publisherEmail", "publisherName", "deloymentenvironment", "deploymentcreatedAt", "deploymentlastUpdatedTime", "specJson", "finalBase64Content", "speccJsonstring"]
+    }
+  }, {
+    "label": "Initiate the Deployments fetch.",
+    "startTasks": [{
+      "taskId": "30"
+    }],
+    "properties": {
+      "Trigger name": "onramping-data_API_9"
+    },
+    "triggerType": "API",
+    "triggerNumber": "9",
+    "triggerId": "api_trigger/onramping-data_API_9",
+    "position": {
+      "x": 1535,
+      "y": -523
+    },
+    "inputVariables": {
+      "names": ["in_client_id", "in_client_secret", "in_subscription_id", "in_tenant_id", "out_bearer_token", "cached_access_token", "new_token", "apims-list", "current_apims", "servicename", "resourcenames", "current_apim_value", "apis-list", "in_api_id", "apis-array-list", "current_service_value", "in_service_name", "api_id-list", "current_api_id", "api-operations-list", "operations-list", "revisions_list", "openaispecs-list", "api-policies-list", "deployments-list", "deploymenturl", "respomsebodyforsenfing", "apiDescription", "apiDisplayName", "apijsondesccription", "versionnumber", "publisherEmail", "publisherName", "deloymentenvironment", "deploymentcreatedAt", "deploymentlastUpdatedTime", "specJson", "finalBase64Content", "speccJsonstring"]
+    },
+    "outputVariables": {
+      "names": ["out_bearer_token", "cached_token_expiry_timestamp_ms", "new_token", "apims-list", "current_apims", "servicename", "resourcenames", "current_apim_value", "apis-list", "in_api_id", "apis-array-list", "current_service_value", "in_service_name", "api_id-list", "current_api_id", "api-operations-list", "operations-list", "numberOfapiIds", "revisions_list", "openaispecs-list", "api-policies-list", "deployments-list", "deploymenturl", "respomsebodyforsenfing", "apiDescription", "apiDisplayName", "apijsondesccription", "versionnumber", "publisherEmail", "publisherName", "deloymentenvironment", "deploymentcreatedAt", "deploymentlastUpdatedTime", "specJson", "finalBase64Content", "speccJsonstring"]
+    }
+  }, {
+    "label": "Get all the APIs present in the service",
+    "startTasks": [{
+      "taskId": "15"
+    }],
+    "properties": {
+      "Trigger name": "onramping-data_API_4"
+    },
+    "triggerType": "API",
+    "triggerNumber": "4",
+    "triggerId": "api_trigger/onramping-data_API_4",
+    "position": {
+      "x": 229,
+      "y": -511
+    },
+    "inputVariables": {
+      "names": ["in_client_id", "in_client_secret", "in_subscription_id", "in_tenant_id", "out_bearer_token", "cached_access_token", "new_token", "apims-list", "current_apims", "servicename", "resourcenames", "current_apim_value", "apis-list", "in_api_id", "apis-array-list", "current_service_value", "in_service_name", "api_id-list", "current_api_id", "api-operations-list", "operations-list", "revisions_list", "openaispecs-list", "api-policies-list", "deployments-list", "deploymenturl", "respomsebodyforsenfing", "apiDescription", "apiDisplayName", "apijsondesccription", "versionnumber", "publisherEmail", "publisherName", "deloymentenvironment", "deploymentcreatedAt", "deploymentlastUpdatedTime", "specJson", "finalBase64Content", "speccJsonstring"]
+    },
+    "outputVariables": {
+      "names": ["out_bearer_token", "cached_token_expiry_timestamp_ms", "new_token", "apims-list", "current_apims", "servicename", "resourcenames", "current_apim_value", "apis-list", "in_api_id", "apis-array-list", "current_service_value", "in_service_name", "api_id-list", "current_api_id", "api-operations-list", "operations-list", "numberOfapiIds", "revisions_list", "openaispecs-list", "api-policies-list", "deployments-list", "deploymenturl", "respomsebodyforsenfing", "apiDescription", "apiDisplayName", "apijsondesccription", "versionnumber", "publisherEmail", "publisherName", "deloymentenvironment", "deploymentcreatedAt", "deploymentlastUpdatedTime", "specJson", "finalBase64Content", "speccJsonstring"]
+    }
+  }, {
+    "label": "Initiate the ingestion to the HUB by calling Collect API",
+    "startTasks": [{
+      "taskId": "37"
+    }],
+    "properties": {
+      "Trigger name": "onramping-data_API_10"
+    },
+    "triggerType": "API",
+    "triggerNumber": "10",
+    "triggerId": "api_trigger/onramping-data_API_10",
+    "position": {
+      "x": 1832,
+      "y": -533
+    },
+    "inputVariables": {
+      "names": ["in_client_id", "in_client_secret", "in_subscription_id", "in_tenant_id", "out_bearer_token", "cached_access_token", "new_token", "apims-list", "current_apims", "servicename", "resourcenames", "current_apim_value", "apis-list", "in_api_id", "apis-array-list", "current_service_value", "in_service_name", "api_id-list", "current_api_id", "api-operations-list", "operations-list", "revisions_list", "openaispecs-list", "api-policies-list", "deployments-list", "deploymenturl", "respomsebodyforsenfing", "apiDescription", "apiDisplayName", "apijsondesccription", "versionnumber", "publisherEmail", "publisherName", "deloymentenvironment", "deploymentcreatedAt", "deploymentlastUpdatedTime", "specJson", "finalBase64Content", "speccJsonstring"]
+    },
+    "outputVariables": {
+      "names": ["out_bearer_token", "cached_token_expiry_timestamp_ms", "new_token", "apims-list", "current_apims", "servicename", "resourcenames", "current_apim_value", "apis-list", "in_api_id", "apis-array-list", "current_service_value", "in_service_name", "api_id-list", "current_api_id", "api-operations-list", "operations-list", "numberOfapiIds", "revisions_list", "openaispecs-list", "api-policies-list", "deployments-list", "deploymenturl", "respomsebodyforsenfing", "apiDescription", "apiDisplayName", "apijsondesccription", "versionnumber", "publisherEmail", "publisherName", "deloymentenvironment", "deploymentcreatedAt", "deploymentlastUpdatedTime", "specJson", "finalBase64Content", "speccJsonstring"]
+    }
+  }, {
+    "label": "Trigger import of data from azure APIM to API hub",
+    "startTasks": [{
+      "taskId": "1"
+    }],
+    "properties": {
+      "Trigger name": "onramping-data_API_1"
+    },
+    "triggerType": "API",
+    "triggerNumber": "1",
+    "triggerId": "api_trigger/onramping-data_API_1",
+    "description": "Fetch Access Token from Azure AD",
+    "position": {
+      "x": -895,
+      "y": -474
+    },
+    "inputVariables": {
+      "names": ["in_client_id", "in_client_secret", "in_subscription_id", "in_tenant_id"]
+    },
+    "outputVariables": {
+      "names": ["out_bearer_token", "cached_token_expiry_timestamp_ms", "new_token", "apims-list", "current_apims", "servicename", "resourcenames", "current_apim_value", "apis-list", "in_api_id", "apis-array-list", "current_service_value", "in_service_name", "api_id-list", "current_api_id", "api-operations-list", "operations-list", "numberOfapiIds", "revisions_list", "openaispecs-list", "api-policies-list", "deployments-list", "deploymenturl", "respomsebodyforsenfing", "apiDescription", "apiDisplayName", "apijsondesccription", "versionnumber", "publisherEmail", "publisherName", "deloymentenvironment", "deploymentcreatedAt", "deploymentlastUpdatedTime", "specJson", "finalBase64Content", "speccJsonstring"]
+    }
+  }],
+  "taskConfigs": [{
+    "task": "FieldMappingTask",
+    "taskId": "1",
+    "parameters": {
+      "FieldMappingConfigTaskParameterKey": {
+        "key": "FieldMappingConfigTaskParameterKey",
+        "value": {
+          "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.FieldMappingConfig\",\n  \"mappedFields\": [{\n    \"inputField\": {\n      \"fieldType\": \"BOOLEAN_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"referenceValue\": \"$cached_token_expiry_timestamp_ms$\"\n        },\n        \"transformationFunctions\": [{\n          \"functionType\": {\n            \"intFunction\": {\n              \"functionName\": \"GREATER_THAN\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"baseFunction\": {\n                \"functionType\": {\n                  \"baseFunction\": {\n                    \"functionName\": \"NOW_IN_MILLIS\"\n                  }\n                }\n              }\n            }\n          }]\n        }]\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$token_validate$\",\n      \"fieldType\": \"BOOLEAN_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }]\n}"
+        }
+      }
+    },
+    "nextTasks": [{
+      "taskId": "2",
+      "condition": "$token_validate$ \u003d FALSE"
+    }, {
+      "taskId": "12",
+      "condition": "$token_validate$ \u003d TRUE"
+    }],
+    "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+    "displayName": "Validate the Acess Token internally",
+    "externalTaskType": "NORMAL_TASK",
+    "position": {
+      "x": -893,
+      "y": -386
+    }
+  }, {
+    "task": "FieldMappingTask",
+    "taskId": "10",
+    "parameters": {
+      "FieldMappingConfigTaskParameterKey": {
+        "key": "FieldMappingConfigTaskParameterKey",
+        "value": {
+          "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.FieldMappingConfig\",\n  \"mappedFields\": [{\n    \"inputField\": {\n      \"fieldType\": \"STRING_ARRAY\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"referenceValue\": \"$`Task_9_responseBody`$\"\n        },\n        \"transformationFunctions\": [{\n          \"functionType\": {\n            \"stringFunction\": {\n              \"functionName\": \"TO_JSON\"\n            }\n          }\n        }, {\n          \"functionType\": {\n            \"jsonFunction\": {\n              \"functionName\": \"GET_PROPERTY\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"literalValue\": {\n                \"stringValue\": \"value.name\"\n              }\n            }\n          }]\n        }, {\n          \"functionType\": {\n            \"jsonFunction\": {\n              \"functionName\": \"TO_STRING_ARRAY\"\n            }\n          }\n        }]\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$servicename$\",\n      \"fieldType\": \"STRING_ARRAY\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }, {\n    \"inputField\": {\n      \"fieldType\": \"JSON_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"referenceValue\": \"$`Task_9_responseBody`$\"\n        },\n        \"transformationFunctions\": [{\n          \"functionType\": {\n            \"stringFunction\": {\n              \"functionName\": \"TO_JSON\"\n            }\n          }\n        }, {\n          \"functionType\": {\n            \"jsonFunction\": {\n              \"functionName\": \"GET_PROPERTY\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"literalValue\": {\n                \"stringValue\": \"value.id\"\n              }\n            }\n          }]\n        }]\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$RESOURCENAME-TEMP$\",\n      \"fieldType\": \"STRING_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }, {\n    \"inputField\": {\n      \"fieldType\": \"STRING_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"referenceValue\": \"$RESOURCENAME-TEMP$\"\n        },\n        \"transformationFunctions\": [{\n          \"functionType\": {\n            \"stringFunction\": {\n              \"functionName\": \"SPLIT\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"literalValue\": {\n                \"stringValue\": \"/\"\n              }\n            }\n          }]\n        }, {\n          \"functionType\": {\n            \"stringArrayFunction\": {\n              \"functionName\": \"GET\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"literalValue\": {\n                \"intValue\": \"4\"\n              }\n            }\n          }]\n        }]\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$resourcenames$\",\n      \"fieldType\": \"STRING_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }, {\n    \"inputField\": {\n      \"fieldType\": \"STRING_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"referenceValue\": \"$RESOURCENAME-TEMP$\"\n        },\n        \"transformationFunctions\": [{\n          \"functionType\": {\n            \"stringFunction\": {\n              \"functionName\": \"SPLIT\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"literalValue\": {\n                \"stringValue\": \"/\"\n              }\n            }\n          }]\n        }, {\n          \"functionType\": {\n            \"stringArrayFunction\": {\n              \"functionName\": \"GET\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"literalValue\": {\n                \"intValue\": \"8\"\n              }\n            }\n          }]\n        }]\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$SERVICE-TEMP$\",\n      \"fieldType\": \"STRING_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }, {\n    \"inputField\": {\n      \"fieldType\": \"INT_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"referenceValue\": \"$SERVICE-TEMP$\"\n        },\n        \"transformationFunctions\": [{\n          \"functionType\": {\n            \"stringFunction\": {\n              \"functionName\": \"LENGTH\"\n            }\n          }\n        }, {\n          \"functionType\": {\n            \"intFunction\": {\n              \"functionName\": \"SUBTRACT\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"literalValue\": {\n                \"intValue\": \"2\"\n              }\n            }\n          }]\n        }]\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$SERVICELENGTH$\",\n      \"fieldType\": \"INT_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }, {\n    \"inputField\": {\n      \"fieldType\": \"STRING_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"referenceValue\": \"$SERVICE-TEMP$\"\n        },\n        \"transformationFunctions\": [{\n          \"functionType\": {\n            \"stringFunction\": {\n              \"functionName\": \"SUBSTRING\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"literalValue\": {\n                \"intValue\": \"0\"\n              }\n            }\n          }, {\n            \"initialValue\": {\n              \"referenceValue\": \"$SERVICELENGTH$\"\n            }\n          }]\n        }]\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$in_service_name$\",\n      \"fieldType\": \"STRING_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }]\n}"
+        }
+      }
+    },
+    "nextTasks": [{
+      "taskId": "17"
+    }],
+    "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+    "displayName": "Data Mapping to retrieve the resource and service names",
+    "externalTaskType": "NORMAL_TASK",
+    "position": {
+      "x": -64,
+      "y": -304
+    }
+  }, {
+    "task": "FieldMappingTask",
+    "taskId": "12",
+    "parameters": {
+      "FieldMappingConfigTaskParameterKey": {
+        "key": "FieldMappingConfigTaskParameterKey",
+        "value": {
+          "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.FieldMappingConfig\",\n  \"mappedFields\": [{\n    \"inputField\": {\n      \"fieldType\": \"JSON_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"referenceValue\": \"$`Task_2_responseBody`$\"\n        },\n        \"transformationFunctions\": [{\n          \"functionType\": {\n            \"stringFunction\": {\n              \"functionName\": \"TO_JSON\"\n            }\n          }\n        }, {\n          \"functionType\": {\n            \"jsonFunction\": {\n              \"functionName\": \"GET_PROPERTY\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"literalValue\": {\n                \"stringValue\": \"access_token\"\n              }\n            }\n          }]\n        }]\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$out_bearer_token$\",\n      \"fieldType\": \"STRING_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }, {\n    \"inputField\": {\n      \"fieldType\": \"JSON_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"referenceValue\": \"$`Task_2_responseBody`$\"\n        },\n        \"transformationFunctions\": [{\n          \"functionType\": {\n            \"stringFunction\": {\n              \"functionName\": \"TO_JSON\"\n            }\n          }\n        }, {\n          \"functionType\": {\n            \"jsonFunction\": {\n              \"functionName\": \"GET_PROPERTY\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"literalValue\": {\n                \"stringValue\": \"access_token\"\n              }\n            }\n          }]\n        }]\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$cached_access_token$\",\n      \"fieldType\": \"STRING_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }, {\n    \"inputField\": {\n      \"fieldType\": \"INT_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"baseFunction\": {\n            \"functionType\": {\n              \"baseFunction\": {\n                \"functionName\": \"NOW_IN_MILLIS\"\n              }\n            }\n          }\n        },\n        \"transformationFunctions\": [{\n          \"functionType\": {\n            \"intFunction\": {\n              \"functionName\": \"ADD\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"referenceValue\": \"$`Task_2_responseBody`$\"\n            },\n            \"transformationFunctions\": [{\n              \"functionType\": {\n                \"stringFunction\": {\n                  \"functionName\": \"TO_JSON\"\n                }\n              }\n            }, {\n              \"functionType\": {\n                \"jsonFunction\": {\n                  \"functionName\": \"GET_PROPERTY\"\n                }\n              },\n              \"parameters\": [{\n                \"initialValue\": {\n                  \"literalValue\": {\n                    \"stringValue\": \"expires_in\"\n                  }\n                }\n              }]\n            }, {\n              \"functionType\": {\n                \"jsonFunction\": {\n                  \"functionName\": \"TO_INT\"\n                }\n              }\n            }, {\n              \"functionType\": {\n                \"intFunction\": {\n                  \"functionName\": \"MULTIPLY\"\n                }\n              },\n              \"parameters\": [{\n                \"initialValue\": {\n                  \"literalValue\": {\n                    \"intValue\": \"1000\"\n                  }\n                }\n              }]\n            }]\n          }]\n        }, {\n          \"functionType\": {\n            \"intFunction\": {\n              \"functionName\": \"SUBTRACT\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"literalValue\": {\n                \"intValue\": \"60000\"\n              }\n            }\n          }]\n        }]\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$cached_token_expiry_timestamp_ms$\",\n      \"fieldType\": \"INT_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }, {\n    \"inputField\": {\n      \"fieldType\": \"STRING_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"literalValue\": {\n            \"stringValue\": \"Bearer \"\n          }\n        },\n        \"transformationFunctions\": [{\n          \"functionType\": {\n            \"stringFunction\": {\n              \"functionName\": \"CONCAT\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"referenceValue\": \"$out_bearer_token$\"\n            }\n          }]\n        }]\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$new_token$\",\n      \"fieldType\": \"STRING_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }]\n}"
+        }
+      }
+    },
+    "nextTasks": [{
+      "taskId": "13"
+    }],
+    "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+    "displayName": "Persist the details for the further process",
+    "externalTaskType": "NORMAL_TASK",
+    "position": {
+      "x": -693,
+      "y": -246
+    }
+  }, {
+    "task": "SubWorkflowExecutorV2Task",
+    "taskId": "13",
+    "parameters": {
+      "disableEUCPropagation": {
+        "key": "disableEUCPropagation",
+        "value": {
+          "booleanValue": false
+        }
+      },
+      "executionIds": {
+        "key": "executionIds",
+        "value": {
+          "stringArray": {
+            "stringValues": ["$`Task_13_executionIds`$"]
+          }
+        }
+      },
+      "timeInMsToSchedule": {
+        "key": "timeInMsToSchedule",
+        "value": {
+          "intValue": "0"
+        }
+      },
+      "triggerId": {
+        "key": "triggerId",
+        "value": {
+          "stringValue": "api_trigger/onramping-data_API_2"
+        }
+      },
+      "executionStrategy": {
+        "key": "executionStrategy",
+        "value": {
+          "stringValue": "SYNC"
+        }
+      },
+      "requestParamsMap": {
+        "key": "requestParamsMap",
+        "value": {
+          "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.ParameterMap\",\n  \"entries\": [{\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_client_id\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_client_id\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_client_secret\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_client_secret\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_subscription_id\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_subscription_id\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_tenant_id\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_tenant_id\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"new_token\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"new_token\"\n      }\n    }\n  }]\n}"
+        }
+      },
+      "workflowName": {
+        "key": "workflowName",
+        "value": {
+          "stringValue": "onramping-data"
+        }
+      },
+      "inputMap": {
+        "key": "inputMap",
+        "value": {
+          "stringArray": {
+          }
+        }
+      },
+      "overrideParamsMap": {
+        "key": "overrideParamsMap",
+        "value": {
+          "stringArray": {
+          }
+        }
+      },
+      "responseParamsMap": {
+        "key": "responseParamsMap",
+        "value": {
+          "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.ParameterMap\",\n  \"entries\": [{\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"cached_token_expiry_timestamp_ms\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"cached_token_expiry_timestamp_ms\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"new_token\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"new_token\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"out_bearer_token\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"out_bearer_token\"\n      }\n    }\n  }]\n}"
+        }
+      }
+    },
+    "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+    "displayName": "Start by calling Fetch APIM instances.",
+    "externalTaskType": "NORMAL_TASK",
+    "position": {
+      "x": -691,
+      "y": -158
+    }
+  }, {
+    "task": "SubWorkflowScatterGatherTask",
+    "taskId": "14",
+    "parameters": {
+      "ignoreIndividualFailures": {
+        "key": "ignoreIndividualFailures",
+        "value": {
+          "booleanValue": false
+        }
+      },
+      "maxParallelScatters": {
+        "key": "maxParallelScatters",
+        "value": {
+          "intValue": "50"
+        }
+      },
+      "timeInMsToSchedule": {
+        "key": "timeInMsToSchedule",
+        "value": {
+          "intValue": "0"
+        }
+      },
+      "listToScatter": {
+        "key": "listToScatter",
+        "value": {
+          "stringValue": "$apims-list$"
+        }
+      },
+      "subworkflowInput": {
+        "key": "subworkflowInput",
+        "value": {
+          "stringValue": "current_apim_value"
+        }
+      },
+      "triggerId": {
+        "key": "triggerId",
+        "value": {
+          "stringValue": "api_trigger/onramping-data_API_3"
+        }
+      },
+      "staggeredScheduleByBatch": {
+        "key": "staggeredScheduleByBatch",
+        "value": {
+          "intValue": "0"
+        }
+      },
+      "workflowName": {
+        "key": "workflowName",
+        "value": {
+          "stringValue": "onramping-data"
+        }
+      },
+      "scatterResponseJson": {
+        "key": "scatterResponseJson",
+        "value": {
+          "stringArray": {
+            "stringValues": ["$`Task_14_scatterResponseJson`$"]
+          }
+        }
+      },
+      "executionStrategy": {
+        "key": "executionStrategy",
+        "value": {
+          "stringValue": "SYNC"
+        }
+      },
+      "disableEucPropagation": {
+        "key": "disableEucPropagation",
+        "value": {
+          "booleanValue": false
+        }
+      },
+      "requestParamsMap": {
+        "key": "requestParamsMap",
+        "value": {
+          "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.ParameterMap\",\n  \"entries\": [{\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_client_secret\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_client_secret\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_client_id\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_client_id\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"cached_access_token\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"cached_access_token\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_subscription_id\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_subscription_id\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_tenant_id\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_tenant_id\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"new_token\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"new_token\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"resourcenames\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"resourcenames\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"servicename\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"servicename\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"current_apim_value\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"current_apim_value\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"api-operations-list\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"api-operations-list\"\n      }\n    }\n  }]\n}"
+        }
+      },
+      "responseAggregatorMap": {
+        "key": "responseAggregatorMap",
+        "value": {
+          "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.ParameterMap\",\n  \"entries\": [{\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"apims-list\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"apims-list\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"servicename\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"servicename\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"operations-list\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"operations-list\"\n      }\n    }\n  }]\n}"
+        }
+      },
+      "scatterElementParam": {
+        "key": "scatterElementParam",
+        "value": {
+          "stringValue": ""
+        }
+      },
+      "inputMap": {
+        "key": "inputMap",
+        "value": {
+          "stringArray": {
+          }
+        }
+      },
+      "aggregatorMap": {
+        "key": "aggregatorMap",
+        "value": {
+          "stringArray": {
+          }
+        }
+      }
+    },
+    "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+    "displayName": "For Each APIM",
+    "externalTaskType": "NORMAL_TASK",
+    "position": {
+      "x": -373,
+      "y": -217
+    }
+  }, {
+    "task": "GenericRestV2Task",
+    "taskId": "15",
+    "parameters": {
+      "throwError": {
+        "key": "throwError",
+        "value": {
+          "booleanValue": true
+        }
+      },
+      "responseBody": {
+        "key": "responseBody",
+        "value": {
+          "stringArray": {
+            "stringValues": ["$`Task_15_responseBody`$"]
+          }
+        }
+      },
+      "disableSSLValidation": {
+        "key": "disableSSLValidation",
+        "value": {
+          "booleanValue": false
+        }
+      },
+      "httpParams": {
+        "key": "httpParams",
+        "value": {
+          "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.ParameterMap\",\n  \"entries\": [{\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"authorization\"\n      }\n    },\n    \"value\": {\n      \"referenceKey\": \"$new_token$\"\n    }\n  }]\n}"
+        }
+      },
+      "authConfigName": {
+        "key": "authConfigName",
+        "value": {
+          "stringValue": ""
+        }
+      },
+      "responseHeader": {
+        "key": "responseHeader",
+        "value": {
+          "stringArray": {
+            "stringValues": ["$`Task_15_responseHeader`$"]
+          }
+        }
+      },
+      "userAgent": {
+        "key": "userAgent",
+        "value": {
+          "stringValue": ""
+        }
+      },
+      "httpMethod": {
+        "key": "httpMethod",
+        "value": {
+          "stringValue": "GET"
+        }
+      },
+      "responseStatus": {
+        "key": "responseStatus",
+        "value": {
+          "stringArray": {
+            "stringValues": ["$`Task_15_responseStatus`$"]
+          }
+        }
+      },
+      "timeout": {
+        "key": "timeout",
+        "value": {
+          "intValue": "0"
+        }
+      },
+      "url": {
+        "key": "url",
+        "value": {
+          "stringValue": "https://management.azure.com/subscriptions/$in_subscription_id$/resourceGroups/$resourcenames$/providers/Microsoft.ApiManagement/service/$in_service_name$/apis?api-version\u003d2021-08-01"
+        }
+      },
+      "useSSL": {
+        "key": "useSSL",
+        "value": {
+          "booleanValue": false
+        }
+      },
+      "urlFetchingService": {
+        "key": "urlFetchingService",
+        "value": {
+          "stringValue": "HARPOON"
+        }
+      },
+      "urlQueryStrings": {
+        "key": "urlQueryStrings"
+      },
+      "requestorId": {
+        "key": "requestorId",
+        "value": {
+          "stringValue": ""
+        }
+      },
+      "jsonAdditionalHeaders": {
+        "key": "jsonAdditionalHeaders",
+        "value": {
+          "jsonValue": "null"
+        }
+      },
+      "requestBody": {
+        "key": "requestBody",
+        "value": {
+          "stringValue": ""
+        }
+      },
+      "followRedirects": {
+        "key": "followRedirects",
+        "value": {
+          "booleanValue": true
+        }
+      },
+      "additionalHeaders": {
+        "key": "additionalHeaders"
+      }
+    },
+    "nextTasks": [{
+      "taskId": "16"
+    }],
+    "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+    "displayName": "REST Call to fetch the API\u0027s",
+    "externalTaskType": "NORMAL_TASK",
+    "position": {
+      "x": 233,
+      "y": -422
+    }
+  }, {
+    "task": "FieldMappingTask",
+    "taskId": "16",
+    "parameters": {
+      "FieldMappingConfigTaskParameterKey": {
+        "key": "FieldMappingConfigTaskParameterKey",
+        "value": {
+          "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.FieldMappingConfig\",\n  \"mappedFields\": [{\n    \"inputField\": {\n      \"fieldType\": \"JSON_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"referenceValue\": \"$`Task_15_responseBody`$\"\n        },\n        \"transformationFunctions\": [{\n          \"functionType\": {\n            \"stringFunction\": {\n              \"functionName\": \"TO_JSON\"\n            }\n          }\n        }]\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$apis-list$\",\n      \"fieldType\": \"JSON_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }, {\n    \"inputField\": {\n      \"fieldType\": \"STRING_ARRAY\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"referenceValue\": \"$`Task_15_responseBody`$\"\n        },\n        \"transformationFunctions\": [{\n          \"functionType\": {\n            \"stringFunction\": {\n              \"functionName\": \"TO_JSON\"\n            }\n          }\n        }, {\n          \"functionType\": {\n            \"jsonFunction\": {\n              \"functionName\": \"GET_PROPERTY\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"literalValue\": {\n                \"stringValue\": \"value.name\"\n              }\n            }\n          }]\n        }, {\n          \"functionType\": {\n            \"jsonFunction\": {\n              \"functionName\": \"TO_STRING_ARRAY\"\n            }\n          }\n        }]\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$api_id-list$\",\n      \"fieldType\": \"STRING_ARRAY\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }, {\n    \"inputField\": {\n      \"fieldType\": \"JSON_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"referenceValue\": \"$`Task_15_responseBody`$\"\n        },\n        \"transformationFunctions\": [{\n          \"functionType\": {\n            \"stringFunction\": {\n              \"functionName\": \"TO_JSON\"\n            }\n          }\n        }, {\n          \"functionType\": {\n            \"jsonFunction\": {\n              \"functionName\": \"GET_PROPERTY\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"literalValue\": {\n                \"stringValue\": \"value.name\"\n              }\n            }\n          }]\n        }]\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$in_api_id$\",\n      \"fieldType\": \"STRING_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }, {\n    \"inputField\": {\n      \"fieldType\": \"INT_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"referenceValue\": \"$api_id-list$\"\n        },\n        \"transformationFunctions\": [{\n          \"functionType\": {\n            \"stringArrayFunction\": {\n              \"functionName\": \"SIZE\"\n            }\n          }\n        }]\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$numberOfapiIds$\",\n      \"fieldType\": \"INT_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }, {\n    \"inputField\": {\n      \"fieldType\": \"JSON_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"referenceValue\": \"$`Task_15_responseBody`$\"\n        },\n        \"transformationFunctions\": [{\n          \"functionType\": {\n            \"stringFunction\": {\n              \"functionName\": \"TO_JSON\"\n            }\n          }\n        }, {\n          \"functionType\": {\n            \"jsonFunction\": {\n              \"functionName\": \"GET_PROPERTY\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"literalValue\": {\n                \"stringValue\": \"value.properties.description\"\n              }\n            }\n          }]\n        }]\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$apijsondesccription$\",\n      \"fieldType\": \"JSON_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }, {\n    \"inputField\": {\n      \"fieldType\": \"JSON_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"referenceValue\": \"$`Task_15_responseBody`$\"\n        },\n        \"transformationFunctions\": [{\n          \"functionType\": {\n            \"stringFunction\": {\n              \"functionName\": \"TO_JSON\"\n            }\n          }\n        }, {\n          \"functionType\": {\n            \"jsonFunction\": {\n              \"functionName\": \"GET_PROPERTY\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"literalValue\": {\n                \"stringValue\": \"value.properties.displayName\"\n              }\n            }\n          }]\n        }, {\n          \"functionType\": {\n            \"jsonFunction\": {\n              \"functionName\": \"GET_ELEMENT\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"literalValue\": {\n                \"intValue\": \"0\"\n              }\n            }\n          }]\n        }]\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$apiDisplayName$\",\n      \"fieldType\": \"STRING_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }, {\n    \"inputField\": {\n      \"fieldType\": \"JSON_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"referenceValue\": \"$apijsondesccription$\"\n        },\n        \"transformationFunctions\": [{\n          \"functionType\": {\n            \"jsonFunction\": {\n              \"functionName\": \"GET_ELEMENT\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"literalValue\": {\n                \"intValue\": \"0\"\n              }\n            }\n          }]\n        }]\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$apiDescription$\",\n      \"fieldType\": \"STRING_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }]\n}"
+        }
+      }
+    },
+    "nextTasks": [{
+      "taskId": "19"
+    }],
+    "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+    "displayName": "Data Mapping to retrieve the API\u0027s and API-ID",
+    "externalTaskType": "NORMAL_TASK",
+    "position": {
+      "x": 231,
+      "y": -318
+    }
+  }, {
+    "task": "SubWorkflowScatterGatherTask",
+    "taskId": "17",
+    "parameters": {
+      "ignoreIndividualFailures": {
+        "key": "ignoreIndividualFailures",
+        "value": {
+          "booleanValue": false
+        }
+      },
+      "maxParallelScatters": {
+        "key": "maxParallelScatters",
+        "value": {
+          "intValue": "50"
+        }
+      },
+      "timeInMsToSchedule": {
+        "key": "timeInMsToSchedule",
+        "value": {
+          "intValue": "0"
+        }
+      },
+      "listToScatter": {
+        "key": "listToScatter",
+        "value": {
+          "stringValue": "$servicename$"
+        }
+      },
+      "subworkflowInput": {
+        "key": "subworkflowInput",
+        "value": {
+          "stringValue": "current_service_value"
+        }
+      },
+      "triggerId": {
+        "key": "triggerId",
+        "value": {
+          "stringValue": "api_trigger/onramping-data_API_4"
+        }
+      },
+      "staggeredScheduleByBatch": {
+        "key": "staggeredScheduleByBatch",
+        "value": {
+          "intValue": "0"
+        }
+      },
+      "workflowName": {
+        "key": "workflowName",
+        "value": {
+          "stringValue": "onramping-data"
+        }
+      },
+      "scatterResponseJson": {
+        "key": "scatterResponseJson",
+        "value": {
+          "stringArray": {
+            "stringValues": ["$`Task_17_scatterResponseJson`$"]
+          }
+        }
+      },
+      "executionStrategy": {
+        "key": "executionStrategy",
+        "value": {
+          "stringValue": "SYNC"
+        }
+      },
+      "disableEucPropagation": {
+        "key": "disableEucPropagation",
+        "value": {
+          "booleanValue": false
+        }
+      },
+      "requestParamsMap": {
+        "key": "requestParamsMap",
+        "value": {
+          "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.ParameterMap\",\n  \"entries\": [{\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"cached_access_token\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"cached_access_token\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_client_id\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_client_id\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_client_secret\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_client_secret\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_subscription_id\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_subscription_id\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_tenant_id\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_tenant_id\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"new_token\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"new_token\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"servicename\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"servicename\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"resourcenames\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"resourcenames\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_service_name\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_service_name\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_api_id\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_api_id\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"api_id-list\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"api_id-list\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"current_service_value\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"current_service_value\"\n      }\n    }\n  }]\n}"
+        }
+      },
+      "responseAggregatorMap": {
+        "key": "responseAggregatorMap",
+        "value": {
+          "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.ParameterMap\",\n  \"entries\": [{\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"servicename\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"servicename\"\n      }\n    }\n  }]\n}"
+        }
+      },
+      "scatterElementParam": {
+        "key": "scatterElementParam",
+        "value": {
+          "stringValue": ""
+        }
+      },
+      "inputMap": {
+        "key": "inputMap",
+        "value": {
+          "stringArray": {
+          }
+        }
+      },
+      "aggregatorMap": {
+        "key": "aggregatorMap",
+        "value": {
+          "stringArray": {
+          }
+        }
+      }
+    },
+    "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+    "displayName": "For each service",
+    "externalTaskType": "NORMAL_TASK",
+    "position": {
+      "x": -64,
+      "y": -208
+    }
+  }, {
+    "task": "GenericRestV2Task",
+    "taskId": "18",
+    "parameters": {
+      "throwError": {
+        "key": "throwError",
+        "value": {
+          "booleanValue": true
+        }
+      },
+      "responseBody": {
+        "key": "responseBody",
+        "value": {
+          "stringArray": {
+            "stringValues": ["$`Task_18_responseBody`$"]
+          }
+        }
+      },
+      "disableSSLValidation": {
+        "key": "disableSSLValidation",
+        "value": {
+          "booleanValue": false
+        }
+      },
+      "httpParams": {
+        "key": "httpParams",
+        "value": {
+          "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.ParameterMap\",\n  \"entries\": [{\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"authorization\"\n      }\n    },\n    \"value\": {\n      \"referenceKey\": \"$new_token$\"\n    }\n  }]\n}"
+        }
+      },
+      "authConfigName": {
+        "key": "authConfigName",
+        "value": {
+          "stringValue": ""
+        }
+      },
+      "responseHeader": {
+        "key": "responseHeader",
+        "value": {
+          "stringArray": {
+            "stringValues": ["$`Task_18_responseHeader`$"]
+          }
+        }
+      },
+      "userAgent": {
+        "key": "userAgent",
+        "value": {
+          "stringValue": ""
+        }
+      },
+      "httpMethod": {
+        "key": "httpMethod",
+        "value": {
+          "stringValue": "GET"
+        }
+      },
+      "responseStatus": {
+        "key": "responseStatus",
+        "value": {
+          "stringArray": {
+            "stringValues": ["$`Task_18_responseStatus`$"]
+          }
+        }
+      },
+      "timeout": {
+        "key": "timeout",
+        "value": {
+          "intValue": "0"
+        }
+      },
+      "url": {
+        "key": "url",
+        "value": {
+          "stringValue": "https://management.azure.com/subscriptions/$in_subscription_id$/resourceGroups/$resourcenames$/providers/Microsoft.ApiManagement/service/$in_service_name$/apis/$current_api_id$/operations?api-version\u003d2021-08-01"
+        }
+      },
+      "useSSL": {
+        "key": "useSSL",
+        "value": {
+          "booleanValue": false
+        }
+      },
+      "urlFetchingService": {
+        "key": "urlFetchingService",
+        "value": {
+          "stringValue": "HARPOON"
+        }
+      },
+      "urlQueryStrings": {
+        "key": "urlQueryStrings"
+      },
+      "requestorId": {
+        "key": "requestorId",
+        "value": {
+          "stringValue": ""
+        }
+      },
+      "jsonAdditionalHeaders": {
+        "key": "jsonAdditionalHeaders",
+        "value": {
+          "jsonValue": "null"
+        }
+      },
+      "requestBody": {
+        "key": "requestBody",
+        "value": {
+          "stringValue": ""
+        }
+      },
+      "followRedirects": {
+        "key": "followRedirects",
+        "value": {
+          "booleanValue": true
+        }
+      },
+      "additionalHeaders": {
+        "key": "additionalHeaders"
+      }
+    },
+    "nextTasks": [{
+      "taskId": "20"
+    }],
+    "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+    "displayName": "REST Call to fetch API Operations for the corresponding API-ID",
+    "externalTaskType": "NORMAL_TASK",
+    "position": {
+      "x": 576,
+      "y": -416
+    }
+  }, {
+    "task": "SubWorkflowScatterGatherTask",
+    "taskId": "19",
+    "parameters": {
+      "ignoreIndividualFailures": {
+        "key": "ignoreIndividualFailures",
+        "value": {
+          "booleanValue": false
+        }
+      },
+      "maxParallelScatters": {
+        "key": "maxParallelScatters",
+        "value": {
+          "intValue": "50"
+        }
+      },
+      "timeInMsToSchedule": {
+        "key": "timeInMsToSchedule",
+        "value": {
+          "intValue": "0"
+        }
+      },
+      "listToScatter": {
+        "key": "listToScatter",
+        "value": {
+          "stringValue": "$api_id-list$"
+        }
+      },
+      "subworkflowInput": {
+        "key": "subworkflowInput",
+        "value": {
+          "stringValue": "current_api_id"
+        }
+      },
+      "triggerId": {
+        "key": "triggerId",
+        "value": {
+          "stringValue": "api_trigger/onramping-data_API_5"
+        }
+      },
+      "staggeredScheduleByBatch": {
+        "key": "staggeredScheduleByBatch",
+        "value": {
+          "intValue": "0"
+        }
+      },
+      "workflowName": {
+        "key": "workflowName",
+        "value": {
+          "stringValue": "onramping-data"
+        }
+      },
+      "scatterResponseJson": {
+        "key": "scatterResponseJson",
+        "value": {
+          "stringArray": {
+            "stringValues": ["$`Task_19_scatterResponseJson`$"]
+          }
+        }
+      },
+      "executionStrategy": {
+        "key": "executionStrategy",
+        "value": {
+          "stringValue": "SYNC"
+        }
+      },
+      "disableEucPropagation": {
+        "key": "disableEucPropagation",
+        "value": {
+          "booleanValue": false
+        }
+      },
+      "requestParamsMap": {
+        "key": "requestParamsMap",
+        "value": {
+          "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.ParameterMap\",\n  \"entries\": [{\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"cached_access_token\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"cached_access_token\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_client_id\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_client_id\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_client_secret\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_client_secret\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_service_name\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_service_name\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_subscription_id\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_subscription_id\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_tenant_id\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_tenant_id\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"new_token\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"new_token\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"resourcenames\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"resourcenames\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"servicename\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"servicename\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"current_api_id\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"current_api_id\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"current_service_value\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"current_service_value\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"apiDescription\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"apiDescription\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"apiDisplayName\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"apiDisplayName\"\n      }\n    }\n  }]\n}"
+        }
+      },
+      "responseAggregatorMap": {
+        "key": "responseAggregatorMap",
+        "value": {
+          "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.ParameterMap\",\n  \"entries\": [{\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"servicename\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"servicename\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"operations-list\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"operations-list\"\n      }\n    }\n  }]\n}"
+        }
+      },
+      "scatterElementParam": {
+        "key": "scatterElementParam",
+        "value": {
+          "stringValue": ""
+        }
+      },
+      "inputMap": {
+        "key": "inputMap",
+        "value": {
+          "stringArray": {
+          }
+        }
+      },
+      "aggregatorMap": {
+        "key": "aggregatorMap",
+        "value": {
+          "stringArray": {
+          }
+        }
+      }
+    },
+    "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+    "displayName": "For Each API-ID",
+    "externalTaskType": "NORMAL_TASK",
+    "position": {
+      "x": 229,
+      "y": -210
+    }
+  }, {
+    "task": "GenericRestV2Task",
+    "taskId": "2",
+    "parameters": {
+      "throwError": {
+        "key": "throwError",
+        "value": {
+          "booleanValue": true
+        }
+      },
+      "responseBody": {
+        "key": "responseBody",
+        "value": {
+          "stringArray": {
+            "stringValues": ["$`Task_2_responseBody`$"]
+          }
+        }
+      },
+      "disableSSLValidation": {
+        "key": "disableSSLValidation",
+        "value": {
+          "booleanValue": false
+        }
+      },
+      "httpParams": {
+        "key": "httpParams",
+        "value": {
+          "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.ParameterMap\",\n  \"entries\": [{\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"content-type\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"application/x-www-form-urlencoded\"\n      }\n    }\n  }]\n}"
+        }
+      },
+      "authConfigName": {
+        "key": "authConfigName",
+        "value": {
+          "stringValue": ""
+        }
+      },
+      "responseHeader": {
+        "key": "responseHeader",
+        "value": {
+          "stringArray": {
+            "stringValues": ["$`Task_2_responseHeader`$"]
+          }
+        }
+      },
+      "userAgent": {
+        "key": "userAgent",
+        "value": {
+          "stringValue": ""
+        }
+      },
+      "httpMethod": {
+        "key": "httpMethod",
+        "value": {
+          "stringValue": "POST"
+        }
+      },
+      "responseStatus": {
+        "key": "responseStatus",
+        "value": {
+          "stringArray": {
+            "stringValues": ["$`Task_2_responseStatus`$"]
+          }
+        }
+      },
+      "timeout": {
+        "key": "timeout",
+        "value": {
+          "intValue": "0"
+        }
+      },
+      "url": {
+        "key": "url",
+        "value": {
+          "stringValue": "https://login.microsoftonline.com/$in_tenant_id$/oauth2/v2.0/token"
+        }
+      },
+      "useSSL": {
+        "key": "useSSL",
+        "value": {
+          "booleanValue": false
+        }
+      },
+      "urlFetchingService": {
+        "key": "urlFetchingService",
+        "value": {
+          "stringValue": "HARPOON"
+        }
+      },
+      "urlQueryStrings": {
+        "key": "urlQueryStrings"
+      },
+      "requestorId": {
+        "key": "requestorId",
+        "value": {
+          "stringValue": ""
+        }
+      },
+      "jsonAdditionalHeaders": {
+        "key": "jsonAdditionalHeaders",
+        "value": {
+          "jsonValue": "null"
+        }
+      },
+      "requestBody": {
+        "key": "requestBody",
+        "value": {
+          "stringValue": "grant_type\u003dclient_credentials\u0026scope\u003dhttps://management.azure.com/.default\u0026client_id\u003d$in_client_id$\u0026client_secret\u003d$in_client_secret$"
+        }
+      },
+      "followRedirects": {
+        "key": "followRedirects",
+        "value": {
+          "booleanValue": true
+        }
+      },
+      "additionalHeaders": {
+        "key": "additionalHeaders"
+      }
+    },
+    "nextTasks": [{
+      "taskId": "5",
+      "condition": "$`Task_2_responseStatus`$ !\u003d \"200 OK\""
+    }, {
+      "taskId": "4",
+      "condition": "$`Task_2_responseStatus`$ \u003d \"200 OK\""
+    }],
+    "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+    "displayName": "Refresh Access Token from Azure AD",
+    "externalTaskType": "NORMAL_TASK",
+    "position": {
+      "x": -1111,
+      "y": -253
+    }
+  }, {
+    "task": "FieldMappingTask",
+    "taskId": "20",
+    "parameters": {
+      "FieldMappingConfigTaskParameterKey": {
+        "key": "FieldMappingConfigTaskParameterKey",
+        "value": {
+          "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.FieldMappingConfig\",\n  \"mappedFields\": [{\n    \"inputField\": {\n      \"fieldType\": \"JSON_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"referenceValue\": \"$`Task_18_responseBody`$\"\n        },\n        \"transformationFunctions\": [{\n          \"functionType\": {\n            \"stringFunction\": {\n              \"functionName\": \"TO_JSON\"\n            }\n          }\n        }]\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$operations-list$\",\n      \"fieldType\": \"JSON_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }]\n}"
+        }
+      }
+    },
+    "nextTasks": [{
+      "taskId": "23"
+    }],
+    "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+    "displayName": "Data Mapping to retrieve API Operations",
+    "externalTaskType": "NORMAL_TASK",
+    "position": {
+      "x": 578,
+      "y": -311
+    }
+  }, {
+    "task": "GenericRestV2Task",
+    "taskId": "21",
+    "parameters": {
+      "throwError": {
+        "key": "throwError",
+        "value": {
+          "booleanValue": true
+        }
+      },
+      "responseBody": {
+        "key": "responseBody",
+        "value": {
+          "stringArray": {
+            "stringValues": ["$`Task_21_responseBody`$"]
+          }
+        }
+      },
+      "disableSSLValidation": {
+        "key": "disableSSLValidation",
+        "value": {
+          "booleanValue": false
+        }
+      },
+      "httpParams": {
+        "key": "httpParams",
+        "value": {
+          "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.ParameterMap\",\n  \"entries\": [{\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"authorization\"\n      }\n    },\n    \"value\": {\n      \"referenceKey\": \"$new_token$\"\n    }\n  }]\n}"
+        }
+      },
+      "authConfigName": {
+        "key": "authConfigName",
+        "value": {
+          "stringValue": ""
+        }
+      },
+      "responseHeader": {
+        "key": "responseHeader",
+        "value": {
+          "stringArray": {
+            "stringValues": ["$`Task_21_responseHeader`$"]
+          }
+        }
+      },
+      "userAgent": {
+        "key": "userAgent",
+        "value": {
+          "stringValue": ""
+        }
+      },
+      "httpMethod": {
+        "key": "httpMethod",
+        "value": {
+          "stringValue": "GET"
+        }
+      },
+      "responseStatus": {
+        "key": "responseStatus",
+        "value": {
+          "stringArray": {
+            "stringValues": ["$`Task_21_responseStatus`$"]
+          }
+        }
+      },
+      "timeout": {
+        "key": "timeout",
+        "value": {
+          "intValue": "0"
+        }
+      },
+      "url": {
+        "key": "url",
+        "value": {
+          "stringValue": "https://management.azure.com/subscriptions/$in_subscription_id$/resourceGroups/$resourcenames$/providers/Microsoft.ApiManagement/service/$current_service_value$/apis/$current_api_id$?api-version\u003d2021-08-01"
+        }
+      },
+      "useSSL": {
+        "key": "useSSL",
+        "value": {
+          "booleanValue": false
+        }
+      },
+      "urlFetchingService": {
+        "key": "urlFetchingService",
+        "value": {
+          "stringValue": "HARPOON"
+        }
+      },
+      "urlQueryStrings": {
+        "key": "urlQueryStrings"
+      },
+      "requestorId": {
+        "key": "requestorId",
+        "value": {
+          "stringValue": ""
+        }
+      },
+      "jsonAdditionalHeaders": {
+        "key": "jsonAdditionalHeaders",
+        "value": {
+          "jsonValue": "null"
+        }
+      },
+      "requestBody": {
+        "key": "requestBody",
+        "value": {
+          "stringValue": ""
+        }
+      },
+      "followRedirects": {
+        "key": "followRedirects",
+        "value": {
+          "booleanValue": true
+        }
+      },
+      "additionalHeaders": {
+        "key": "additionalHeaders"
+      }
+    },
+    "nextTasks": [{
+      "taskId": "22"
+    }],
+    "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+    "displayName": "REST Call to fetch all the revisions of corresponding API-ID",
+    "externalTaskType": "NORMAL_TASK",
+    "position": {
+      "x": 892,
+      "y": -415
+    }
+  }, {
+    "task": "FieldMappingTask",
+    "taskId": "22",
+    "parameters": {
+      "FieldMappingConfigTaskParameterKey": {
+        "key": "FieldMappingConfigTaskParameterKey",
+        "value": {
+          "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.FieldMappingConfig\",\n  \"mappedFields\": [{\n    \"inputField\": {\n      \"fieldType\": \"JSON_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"referenceValue\": \"$`Task_21_responseBody`$\"\n        },\n        \"transformationFunctions\": [{\n          \"functionType\": {\n            \"stringFunction\": {\n              \"functionName\": \"TO_JSON\"\n            }\n          }\n        }]\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$revisions_list$\",\n      \"fieldType\": \"JSON_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }, {\n    \"inputField\": {\n      \"fieldType\": \"JSON_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"referenceValue\": \"$revisions_list$\"\n        },\n        \"transformationFunctions\": [{\n          \"functionType\": {\n            \"jsonFunction\": {\n              \"functionName\": \"GET_PROPERTY\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"literalValue\": {\n                \"stringValue\": \"properties.apiRevision\"\n              }\n            }\n          }]\n        }]\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$versionnumber$\",\n      \"fieldType\": \"STRING_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }]\n}"
+        }
+      }
+    },
+    "nextTasks": [{
+      "taskId": "26"
+    }],
+    "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+    "displayName": "Data Mapping to retrieve Revisions list",
+    "externalTaskType": "NORMAL_TASK",
+    "position": {
+      "x": 905,
+      "y": -307
+    }
+  }, {
+    "task": "SubWorkflowExecutorV2Task",
+    "taskId": "23",
+    "parameters": {
+      "disableEUCPropagation": {
+        "key": "disableEUCPropagation",
+        "value": {
+          "booleanValue": false
+        }
+      },
+      "executionIds": {
+        "key": "executionIds",
+        "value": {
+          "stringArray": {
+            "stringValues": ["$`Task_23_executionIds`$"]
+          }
+        }
+      },
+      "timeInMsToSchedule": {
+        "key": "timeInMsToSchedule",
+        "value": {
+          "intValue": "0"
+        }
+      },
+      "triggerId": {
+        "key": "triggerId",
+        "value": {
+          "stringValue": "api_trigger/onramping-data_API_6"
+        }
+      },
+      "executionStrategy": {
+        "key": "executionStrategy",
+        "value": {
+          "stringValue": "SYNC"
+        }
+      },
+      "requestParamsMap": {
+        "key": "requestParamsMap",
+        "value": {
+          "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.ParameterMap\",\n  \"entries\": [{\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"cached_access_token\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"cached_access_token\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"current_api_id\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"current_api_id\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_client_id\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_client_id\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_client_secret\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_client_secret\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_service_name\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_service_name\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_subscription_id\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_subscription_id\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_tenant_id\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_tenant_id\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"new_token\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"new_token\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"resourcenames\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"resourcenames\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"servicename\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"servicename\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"apiDescription\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"apiDescription\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"apiDisplayName\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"apiDisplayName\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"current_service_value\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"current_service_value\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"versionsDocumentation\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"versionsDocumentation\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"operations-list\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"operations-list\"\n      }\n    }\n  }]\n}"
+        }
+      },
+      "workflowName": {
+        "key": "workflowName",
+        "value": {
+          "stringValue": "onramping-data"
+        }
+      },
+      "inputMap": {
+        "key": "inputMap",
+        "value": {
+          "stringArray": {
+          }
+        }
+      },
+      "overrideParamsMap": {
+        "key": "overrideParamsMap",
+        "value": {
+          "stringArray": {
+          }
+        }
+      },
+      "responseParamsMap": {
+        "key": "responseParamsMap",
+        "value": {
+          "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.ParameterMap\",\n  \"entries\": [{\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"servicename\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"servicename\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"revisions_list\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"revisions_list\"\n      }\n    }\n  }]\n}"
+        }
+      }
+    },
+    "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+    "displayName": "Call to fetch the revisions for the corresponding API-ID",
+    "externalTaskType": "NORMAL_TASK",
+    "position": {
+      "x": 576,
+      "y": -208
+    }
+  }, {
+    "task": "GenericRestV2Task",
+    "taskId": "24",
+    "parameters": {
+      "throwError": {
+        "key": "throwError",
+        "value": {
+          "booleanValue": true
+        }
+      },
+      "responseBody": {
+        "key": "responseBody",
+        "value": {
+          "stringArray": {
+            "stringValues": ["$`Task_24_responseBody`$"]
+          }
+        }
+      },
+      "disableSSLValidation": {
+        "key": "disableSSLValidation",
+        "value": {
+          "booleanValue": false
+        }
+      },
+      "httpParams": {
+        "key": "httpParams",
+        "value": {
+          "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.ParameterMap\",\n  \"entries\": [{\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"authorization\"\n      }\n    },\n    \"value\": {\n      \"referenceKey\": \"$new_token$\"\n    }\n  }]\n}"
+        }
+      },
+      "authConfigName": {
+        "key": "authConfigName",
+        "value": {
+          "stringValue": ""
+        }
+      },
+      "responseHeader": {
+        "key": "responseHeader",
+        "value": {
+          "stringArray": {
+            "stringValues": ["$`Task_24_responseHeader`$"]
+          }
+        }
+      },
+      "userAgent": {
+        "key": "userAgent",
+        "value": {
+          "stringValue": ""
+        }
+      },
+      "httpMethod": {
+        "key": "httpMethod",
+        "value": {
+          "stringValue": "GET"
+        }
+      },
+      "responseStatus": {
+        "key": "responseStatus",
+        "value": {
+          "stringArray": {
+            "stringValues": ["$`Task_24_responseStatus`$"]
+          }
+        }
+      },
+      "timeout": {
+        "key": "timeout",
+        "value": {
+          "intValue": "0"
+        }
+      },
+      "url": {
+        "key": "url",
+        "value": {
+          "stringValue": "https://management.azure.com/subscriptions/$in_subscription_id$/resourceGroups/$resourcenames$/providers/Microsoft.ApiManagement/service/$in_service_name$/apis/$current_api_id$?export\u003dtrue\u0026format\u003dopenapi+json\u0026api-version\u003d2021-08-01"
+        }
+      },
+      "useSSL": {
+        "key": "useSSL",
+        "value": {
+          "booleanValue": false
+        }
+      },
+      "urlFetchingService": {
+        "key": "urlFetchingService",
+        "value": {
+          "stringValue": "HARPOON"
+        }
+      },
+      "urlQueryStrings": {
+        "key": "urlQueryStrings"
+      },
+      "requestorId": {
+        "key": "requestorId",
+        "value": {
+          "stringValue": ""
+        }
+      },
+      "jsonAdditionalHeaders": {
+        "key": "jsonAdditionalHeaders",
+        "value": {
+          "jsonValue": "null"
+        }
+      },
+      "requestBody": {
+        "key": "requestBody",
+        "value": {
+          "stringValue": ""
+        }
+      },
+      "followRedirects": {
+        "key": "followRedirects",
+        "value": {
+          "booleanValue": true
+        }
+      },
+      "additionalHeaders": {
+        "key": "additionalHeaders"
+      }
+    },
+    "nextTasks": [{
+      "taskId": "40"
+    }],
+    "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+    "displayName": "REST Call to fetch the OpenAI Specs",
+    "externalTaskType": "NORMAL_TASK",
+    "position": {
+      "x": 1194,
+      "y": -415
+    }
+  }, {
+    "task": "SubWorkflowExecutorV2Task",
+    "taskId": "26",
+    "parameters": {
+      "disableEUCPropagation": {
+        "key": "disableEUCPropagation",
+        "value": {
+          "booleanValue": false
+        }
+      },
+      "executionIds": {
+        "key": "executionIds",
+        "value": {
+          "stringArray": {
+            "stringValues": ["$`Task_26_executionIds`$"]
+          }
+        }
+      },
+      "timeInMsToSchedule": {
+        "key": "timeInMsToSchedule",
+        "value": {
+          "intValue": "0"
+        }
+      },
+      "triggerId": {
+        "key": "triggerId",
+        "value": {
+          "stringValue": "api_trigger/onramping-data_API_7"
+        }
+      },
+      "executionStrategy": {
+        "key": "executionStrategy",
+        "value": {
+          "stringValue": "SYNC"
+        }
+      },
+      "requestParamsMap": {
+        "key": "requestParamsMap",
+        "value": {
+          "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.ParameterMap\",\n  \"entries\": [{\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_client_id\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_client_id\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_client_secret\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_client_secret\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_subscription_id\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_subscription_id\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_tenant_id\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_tenant_id\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"new_token\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"new_token\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"cached_access_token\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"cached_access_token\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"current_api_id\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"current_api_id\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"resourcenames\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"resourcenames\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"servicename\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"servicename\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"openaispecs-list\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"openaispecs-list\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_service_name\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_service_name\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"apiDescription\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"apiDescription\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"apiDisplayName\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"apiDisplayName\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"versionnumber\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"versionnumber\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"current_service_value\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"current_service_value\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"operations-list\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"operations-list\"\n      }\n    }\n  }]\n}"
+        }
+      },
+      "workflowName": {
+        "key": "workflowName",
+        "value": {
+          "stringValue": "onramping-data"
+        }
+      },
+      "inputMap": {
+        "key": "inputMap",
+        "value": {
+          "stringArray": {
+          }
+        }
+      },
+      "overrideParamsMap": {
+        "key": "overrideParamsMap",
+        "value": {
+          "stringArray": {
+          }
+        }
+      },
+      "responseParamsMap": {
+        "key": "responseParamsMap",
+        "value": {
+          "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.ParameterMap\",\n  \"entries\": [{\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"servicename\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"servicename\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"revisions_list\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"revisions_list\"\n      }\n    }\n  }]\n}"
+        }
+      }
+    },
+    "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+    "displayName": "Call to fetch the Open AI Specs of corresponding API",
+    "externalTaskType": "NORMAL_TASK",
+    "position": {
+      "x": 904,
+      "y": -209
+    }
+  }, {
+    "task": "SubWorkflowExecutorV2Task",
+    "taskId": "29",
+    "parameters": {
+      "disableEUCPropagation": {
+        "key": "disableEUCPropagation",
+        "value": {
+          "booleanValue": false
+        }
+      },
+      "executionIds": {
+        "key": "executionIds",
+        "value": {
+          "stringArray": {
+            "stringValues": ["$`Task_29_executionIds`$"]
+          }
+        }
+      },
+      "timeInMsToSchedule": {
+        "key": "timeInMsToSchedule",
+        "value": {
+          "intValue": "0"
+        }
+      },
+      "triggerId": {
+        "key": "triggerId",
+        "value": {
+          "stringValue": "api_trigger/onramping-data_API_9"
+        }
+      },
+      "executionStrategy": {
+        "key": "executionStrategy",
+        "value": {
+          "stringValue": "SYNC"
+        }
+      },
+      "requestParamsMap": {
+        "key": "requestParamsMap",
+        "value": {
+          "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.ParameterMap\",\n  \"entries\": [{\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_client_id\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_client_id\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_client_secret\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_client_secret\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_subscription_id\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_subscription_id\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_tenant_id\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_tenant_id\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"new_token\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"new_token\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"cached_access_token\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"cached_access_token\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"current_api_id\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"current_api_id\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"resourcenames\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"resourcenames\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"servicename\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"servicename\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_service_name\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_service_name\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"api-policies-list\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"api-policies-list\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"apiDescription\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"apiDescription\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"apiDisplayName\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"apiDisplayName\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"versionnumber\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"versionnumber\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"current_service_value\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"current_service_value\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"operations-list\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"operations-list\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"finalBase64Content\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"finalBase64Content\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"specJson\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"specJson\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"speccJsonstring\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"speccJsonstring\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"deployments-list\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"deployments-list\"\n      }\n    }\n  }]\n}"
+        }
+      },
+      "workflowName": {
+        "key": "workflowName",
+        "value": {
+          "stringValue": "onramping-data"
+        }
+      },
+      "inputMap": {
+        "key": "inputMap",
+        "value": {
+          "stringArray": {
+          }
+        }
+      },
+      "overrideParamsMap": {
+        "key": "overrideParamsMap",
+        "value": {
+          "stringArray": {
+          }
+        }
+      },
+      "responseParamsMap": {
+        "key": "responseParamsMap",
+        "value": {
+          "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.ParameterMap\",\n  \"entries\": [{\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"servicename\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"servicename\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"api-operations-list\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"api-operations-list\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"deployments-list\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"deployments-list\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"deploymenturl\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"deploymenturl\"\n      }\n    }\n  }]\n}"
+        }
+      }
+    },
+    "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+    "displayName": "Call to fetch the Deployments",
+    "externalTaskType": "NORMAL_TASK",
+    "position": {
+      "x": 1194,
+      "y": 30
+    }
+  }, {
+    "task": "GenericRestV2Task",
+    "taskId": "30",
+    "parameters": {
+      "throwError": {
+        "key": "throwError",
+        "value": {
+          "booleanValue": true
+        }
+      },
+      "responseBody": {
+        "key": "responseBody",
+        "value": {
+          "stringArray": {
+            "stringValues": ["$`Task_30_responseBody`$"]
+          }
+        }
+      },
+      "disableSSLValidation": {
+        "key": "disableSSLValidation",
+        "value": {
+          "booleanValue": false
+        }
+      },
+      "httpParams": {
+        "key": "httpParams",
+        "value": {
+          "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.ParameterMap\",\n  \"entries\": [{\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"authorization\"\n      }\n    },\n    \"value\": {\n      \"referenceKey\": \"$new_token$\"\n    }\n  }]\n}"
+        }
+      },
+      "authConfigName": {
+        "key": "authConfigName",
+        "value": {
+          "stringValue": ""
+        }
+      },
+      "responseHeader": {
+        "key": "responseHeader",
+        "value": {
+          "stringArray": {
+            "stringValues": ["$`Task_30_responseHeader`$"]
+          }
+        }
+      },
+      "userAgent": {
+        "key": "userAgent",
+        "value": {
+          "stringValue": ""
+        }
+      },
+      "httpMethod": {
+        "key": "httpMethod",
+        "value": {
+          "stringValue": "GET"
+        }
+      },
+      "responseStatus": {
+        "key": "responseStatus",
+        "value": {
+          "stringArray": {
+            "stringValues": ["$`Task_30_responseStatus`$"]
+          }
+        }
+      },
+      "timeout": {
+        "key": "timeout",
+        "value": {
+          "intValue": "0"
+        }
+      },
+      "url": {
+        "key": "url",
+        "value": {
+          "stringValue": "https://management.azure.com/subscriptions/$in_subscription_id$/resourceGroups/$resourcenames$/providers/Microsoft.ApiManagement/service/$in_service_name$?api-version\u003d2022-08-01"
+        }
+      },
+      "useSSL": {
+        "key": "useSSL",
+        "value": {
+          "booleanValue": false
+        }
+      },
+      "urlFetchingService": {
+        "key": "urlFetchingService",
+        "value": {
+          "stringValue": "HARPOON"
+        }
+      },
+      "urlQueryStrings": {
+        "key": "urlQueryStrings"
+      },
+      "requestorId": {
+        "key": "requestorId",
+        "value": {
+          "stringValue": ""
+        }
+      },
+      "jsonAdditionalHeaders": {
+        "key": "jsonAdditionalHeaders",
+        "value": {
+          "jsonValue": "null"
+        }
+      },
+      "requestBody": {
+        "key": "requestBody",
+        "value": {
+          "stringValue": ""
+        }
+      },
+      "followRedirects": {
+        "key": "followRedirects",
+        "value": {
+          "booleanValue": true
+        }
+      },
+      "additionalHeaders": {
+        "key": "additionalHeaders"
+      }
+    },
+    "nextTasks": [{
+      "taskId": "31"
+    }],
+    "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+    "displayName": "REST Call to fetch the deployments",
+    "externalTaskType": "NORMAL_TASK",
+    "position": {
+      "x": 1537,
+      "y": -425
+    }
+  }, {
+    "task": "FieldMappingTask",
+    "taskId": "31",
+    "parameters": {
+      "FieldMappingConfigTaskParameterKey": {
+        "key": "FieldMappingConfigTaskParameterKey",
+        "value": {
+          "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.FieldMappingConfig\",\n  \"mappedFields\": [{\n    \"inputField\": {\n      \"fieldType\": \"JSON_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"referenceValue\": \"$`Task_30_responseBody`$\"\n        },\n        \"transformationFunctions\": [{\n          \"functionType\": {\n            \"stringFunction\": {\n              \"functionName\": \"TO_JSON\"\n            }\n          }\n        }]\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$deployments-list$\",\n      \"fieldType\": \"JSON_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }, {\n    \"inputField\": {\n      \"fieldType\": \"JSON_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"referenceValue\": \"$`Task_30_responseBody`$\"\n        },\n        \"transformationFunctions\": [{\n          \"functionType\": {\n            \"stringFunction\": {\n              \"functionName\": \"TO_JSON\"\n            }\n          }\n        }, {\n          \"functionType\": {\n            \"jsonFunction\": {\n              \"functionName\": \"GET_PROPERTY\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"literalValue\": {\n                \"stringValue\": \"properties.gatewayUrl\"\n              }\n            }\n          }]\n        }]\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$deploymenturl$\",\n      \"fieldType\": \"STRING_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }, {\n    \"inputField\": {\n      \"fieldType\": \"JSON_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"referenceValue\": \"$`Task_30_responseBody`$\"\n        },\n        \"transformationFunctions\": [{\n          \"functionType\": {\n            \"stringFunction\": {\n              \"functionName\": \"TO_JSON\"\n            }\n          }\n        }, {\n          \"functionType\": {\n            \"jsonFunction\": {\n              \"functionName\": \"GET_PROPERTY\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"literalValue\": {\n                \"stringValue\": \"properties.publisherEmail\"\n              }\n            }\n          }]\n        }]\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$publisherEmail$\",\n      \"fieldType\": \"STRING_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }, {\n    \"inputField\": {\n      \"fieldType\": \"JSON_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"referenceValue\": \"$`Task_30_responseBody`$\"\n        },\n        \"transformationFunctions\": [{\n          \"functionType\": {\n            \"stringFunction\": {\n              \"functionName\": \"TO_JSON\"\n            }\n          }\n        }, {\n          \"functionType\": {\n            \"jsonFunction\": {\n              \"functionName\": \"GET_PROPERTY\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"literalValue\": {\n                \"stringValue\": \"properties.publisherName\"\n              }\n            }\n          }]\n        }]\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$publisherName$\",\n      \"fieldType\": \"STRING_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }, {\n    \"inputField\": {\n      \"fieldType\": \"JSON_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"referenceValue\": \"$`Task_30_responseBody`$\"\n        },\n        \"transformationFunctions\": [{\n          \"functionType\": {\n            \"stringFunction\": {\n              \"functionName\": \"TO_JSON\"\n            }\n          }\n        }, {\n          \"functionType\": {\n            \"jsonFunction\": {\n              \"functionName\": \"GET_PROPERTY\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"literalValue\": {\n                \"stringValue\": \"sku.name\"\n              }\n            }\n          }]\n        }]\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$deloymentenvironment$\",\n      \"fieldType\": \"STRING_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }, {\n    \"inputField\": {\n      \"fieldType\": \"JSON_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"referenceValue\": \"$`Task_30_responseBody`$\"\n        },\n        \"transformationFunctions\": [{\n          \"functionType\": {\n            \"stringFunction\": {\n              \"functionName\": \"TO_JSON\"\n            }\n          }\n        }, {\n          \"functionType\": {\n            \"jsonFunction\": {\n              \"functionName\": \"GET_PROPERTY\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"literalValue\": {\n                \"stringValue\": \"systemData.createdAt\"\n              }\n            }\n          }]\n        }]\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$deploymentcreatedAt$\",\n      \"fieldType\": \"STRING_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }, {\n    \"inputField\": {\n      \"fieldType\": \"JSON_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"referenceValue\": \"$`Task_30_responseBody`$\"\n        },\n        \"transformationFunctions\": [{\n          \"functionType\": {\n            \"stringFunction\": {\n              \"functionName\": \"TO_JSON\"\n            }\n          }\n        }, {\n          \"functionType\": {\n            \"jsonFunction\": {\n              \"functionName\": \"GET_PROPERTY\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"literalValue\": {\n                \"stringValue\": \"systemData.lastModifiedAt\"\n              }\n            }\n          }]\n        }]\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$deploymentlastUpdatedTime$\",\n      \"fieldType\": \"STRING_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }]\n}"
+        }
+      }
+    },
+    "nextTasks": [{
+      "taskId": "34"
+    }],
+    "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+    "displayName": "Data Mapping to retrieve the Deployments list",
+    "externalTaskType": "NORMAL_TASK",
+    "position": {
+      "x": 1536,
+      "y": -316
+    }
+  }, {
+    "task": "SubWorkflowExecutorV2Task",
+    "taskId": "34",
+    "parameters": {
+      "disableEUCPropagation": {
+        "key": "disableEUCPropagation",
+        "value": {
+          "booleanValue": false
+        }
+      },
+      "executionIds": {
+        "key": "executionIds",
+        "value": {
+          "stringArray": {
+            "stringValues": ["$`Task_34_executionIds`$"]
+          }
+        }
+      },
+      "timeInMsToSchedule": {
+        "key": "timeInMsToSchedule",
+        "value": {
+          "intValue": "0"
+        }
+      },
+      "triggerId": {
+        "key": "triggerId",
+        "value": {
+          "stringValue": "api_trigger/onramping-data_API_10"
+        }
+      },
+      "executionStrategy": {
+        "key": "executionStrategy",
+        "value": {
+          "stringValue": "SYNC"
+        }
+      },
+      "requestParamsMap": {
+        "key": "requestParamsMap",
+        "value": {
+          "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.ParameterMap\",\n  \"entries\": [{\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"current_api_id\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"current_api_id\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"respomsebodyforsenfing\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"respomsebodyforsenfing\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"apiDescription\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"apiDescription\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"apiDisplayName\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"apiDisplayName\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"deploymenturl\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"deploymenturl\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"versionnumber\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"versionnumber\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"current_service_value\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"current_service_value\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"publisherName\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"publisherName\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"publisherEmail\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"publisherEmail\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"deloymentenvironment\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"deloymentenvironment\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"deploymentcreatedAt\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"deploymentcreatedAt\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"deploymentlastUpdatedTime\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"deploymentlastUpdatedTime\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"operations-list\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"operations-list\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"finalBase64Content\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"finalBase64Content\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"specJson\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"specJson\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"speccJsonstring\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"speccJsonstring\"\n      }\n    }\n  }]\n}"
+        }
+      },
+      "workflowName": {
+        "key": "workflowName",
+        "value": {
+          "stringValue": "onramping-data"
+        }
+      },
+      "inputMap": {
+        "key": "inputMap",
+        "value": {
+          "stringArray": {
+          }
+        }
+      },
+      "overrideParamsMap": {
+        "key": "overrideParamsMap",
+        "value": {
+          "stringArray": {
+          }
+        }
+      },
+      "responseParamsMap": {
+        "key": "responseParamsMap",
+        "value": {
+          "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.ParameterMap\",\n  \"entries\": [{\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"current_api_id\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"current_api_id\"\n      }\n    }\n  }]\n}"
+        }
+      }
+    },
+    "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+    "displayName": "Initiate the call to ingest the data into the hub",
+    "externalTaskType": "NORMAL_TASK",
+    "position": {
+      "x": 1537,
+      "y": -228
+    }
+  }, {
+    "task": "FieldMappingTask",
+    "taskId": "36",
+    "parameters": {
+      "FieldMappingConfigTaskParameterKey": {
+        "key": "FieldMappingConfigTaskParameterKey",
+        "value": {
+          "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.FieldMappingConfig\",\n  \"mappedFields\": [{\n    \"inputField\": {\n      \"fieldType\": \"JSON_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"referenceValue\": \"$`Task_37_responseBody`$\"\n        },\n        \"transformationFunctions\": [{\n          \"functionType\": {\n            \"stringFunction\": {\n              \"functionName\": \"TO_JSON\"\n            }\n          }\n        }]\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$respomsebodyforsenfing$\",\n      \"fieldType\": \"JSON_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }]\n}"
+        }
+      }
+    },
+    "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+    "displayName": "Data Mapping to view the response of Collect API ",
+    "externalTaskType": "NORMAL_TASK",
+    "position": {
+      "x": 1846,
+      "y": -314
+    }
+  }, {
+    "task": "GenericRestV2Task",
+    "taskId": "37",
+    "parameters": {
+      "throwError": {
+        "key": "throwError",
+        "value": {
+          "booleanValue": true
+        }
+      },
+      "responseBody": {
+        "key": "responseBody",
+        "value": {
+          "stringArray": {
+            "stringValues": ["$`Task_37_responseBody`$"]
+          }
+        }
+      },
+      "disableSSLValidation": {
+        "key": "disableSSLValidation",
+        "value": {
+          "booleanValue": false
+        }
+      },
+      "httpParams": {
+        "key": "httpParams",
+        "value": {
+        }
+      },
+      "authConfigName": {
+        "key": "authConfigName",
+        "value": {
+          "stringValue": "fetch_acess_token"
+        }
+      },
+      "authConfig": {
+        "key": "authConfig",
+        "value": {
+          "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.authconfig.AuthConfigTaskParam\"\n}"
+        }
+      },
+      "responseHeader": {
+        "key": "responseHeader",
+        "value": {
+          "stringArray": {
+            "stringValues": ["$`Task_37_responseHeader`$"]
+          }
+        }
+      },
+      "userAgent": {
+        "key": "userAgent",
+        "value": {
+          "stringValue": ""
+        }
+      },
+      "httpMethod": {
+        "key": "httpMethod",
+        "value": {
+          "stringValue": "POST"
+        }
+      },
+      "responseStatus": {
+        "key": "responseStatus",
+        "value": {
+          "stringArray": {
+            "stringValues": ["$`Task_37_responseStatus`$"]
+          }
+        }
+      },
+      "timeout": {
+        "key": "timeout",
+        "value": {
+          "intValue": "0"
+        }
+      },
+      "url": {
+        "key": "url",
+        "value": {
+          "stringValue": "https://staging-apihub.sandbox.googleapis.com/v1/projects/ah-uapim-prov26/locations/us-west1:collectApiData"
+        }
+      },
+      "useSSL": {
+        "key": "useSSL",
+        "value": {
+          "booleanValue": false
+        }
+      },
+      "urlFetchingService": {
+        "key": "urlFetchingService",
+        "value": {
+          "stringValue": "HARPOON"
+        }
+      },
+      "urlQueryStrings": {
+        "key": "urlQueryStrings"
+      },
+      "requestorId": {
+        "key": "requestorId",
+        "value": {
+          "stringValue": ""
+        }
+      },
+      "jsonAdditionalHeaders": {
+        "key": "jsonAdditionalHeaders",
+        "value": {
+          "jsonValue": "null"
+        }
+      },
+      "requestBody": {
+        "key": "requestBody",
+        "value": {
+          "stringValue": "{\n  \"location\": \"projects/ah-uapim-prov26/locations/us-west1\",\n  \"collection_type\": \"COLLECTION_TYPE_UPSERT\",\n  \"plugin_instance\": \"projects/ah-uapim-prov26/locations/us-west1/plugins/system-apigee-x-and-hybrid/instances/62d09af8-2870-4c69-8be7-170a602c3218\",\n  \"action_id\": \"sync-metadata\",\n  \"api_data\": {\n    \"api_metadata_list\": {\n      \"api_metadata\": [\n        {\n          \"api\": {\n            \"display_name\": \"$current_api_id$\",\n            \"description\": \"$apiDescription$\",\n            \"owner\": {\n              \"displayName\": \"$publisherName$\",\n              \"email\": \"$publisherEmail$\"\n            }\n          },\n          \"original_id\": \"$current_api_id$\",\n          \"versions\": [\n            {\n              \"version\": {\n                \"display_name\": \"$versionnumber$\"\n              },\n              \"original_id\": \"manual-test-api-123-v1\",\n              \"specs\": [\n                {\n                  \"spec\": {\n                    \"display_name\": \"$current_api_id$\",\n                    \"spec_type\": {\n                      \"enum_values\": {\n                        \"values\": [\n                          {\n                            \"id\": \"openapi\"\n                          }\n                        ]\n                      }\n                    },\n                    \"contents\": {\n                      \"contents\": \"$finalBase64Content$\",\n                      \"mime_type\": \"application/json\"\n                    }\n                  },\n                  \"original_id\": \"manual-test-spec-456\",\n                  \"original_create_time\": \"2025-01-01T00:00:00Z\",\n                  \"original_update_time\": \"2025-01-01T00:00:00Z\"\n                }\n              ],\n              \"deployments\": [\n                {\n                  \"deployment\": {\n                    \"display_name\": \"$current_api_id$\",\n                    \"source_project\": \"$current_service_value$\",\n                    \"source_environment\": \"$deloymentenvironment$\",\n                    \"resource_uri\": \"organizations/test-org/environments/test-env/apis/$current_api_id$\",\n                    \"deployment_type\": {\n                      \"enum_values\": {\n                        \"values\": [\n                          {\n                            \"id\": \"apigee\"\n                          }\n                        ]\n                      }\n                    },\n                    \"endpoints\": [\n                      \"$deploymenturl$\"\n                    ]\n                  },\n                  \"original_id\": \"manual-test-deployment-789\",\n                  \"original_create_time\": \"2025-01-01T00:00:00Z\",\n                  \"original_update_time\": \"2025-01-01T00:00:00Z\"\n                }\n              ],\n              \"original_create_time\": \"2025-01-01T00:00:00Z\",\n              \"original_update_time\": \"2025-01-01T00:00:00Z\"\n            }\n          ],\n          \"original_create_time\": \"$deploymentcreatedAt$\",\n          \"original_update_time\": \"$deploymentlastUpdatedTime$\"\n        }\n      ]\n    }\n  }\n}"
+        }
+      },
+      "followRedirects": {
+        "key": "followRedirects",
+        "value": {
+          "booleanValue": true
+        }
+      },
+      "additionalHeaders": {
+        "key": "additionalHeaders"
+      }
+    },
+    "nextTasks": [{
+      "taskId": "36"
+    }],
+    "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+    "displayName": "REST Call to initiate the ingestion into hub",
+    "externalTaskType": "NORMAL_TASK",
+    "position": {
+      "x": 1840,
+      "y": -425
+    }
+  }, {
+    "task": "JavaScriptTask",
+    "taskId": "38",
+    "parameters": {
+      "javaScriptEngine": {
+        "key": "javaScriptEngine",
+        "value": {
+          "stringValue": "V8"
+        }
+      },
+      "script": {
+        "key": "script",
+        "value": {
+          "stringValue": "/**\n * Main entry point for the Google Cloud Application Integration JavaScript Task.\n * This function MUST be named executeScript and be at the top level.\n * @param {IntegrationEvent} event - The event object provided by the platform, used for logging and parameter handling.\n */\nfunction executeScript(event) {\n\n  /**\n   * Parses the input, which can be a JSON string or a pre-parsed object.\n   * This is a helper function.\n   * @param {string | object} input - The input data.\n   * @returns {object} The parsed JavaScript object.\n   * @throws {Error} If the input is invalid or cannot be parsed.\n   */\n  function parseInput(input) {\n    try {\n      if (typeof input \u003d\u003d\u003d \u0027string\u0027) {\n        return JSON.parse(input);\n      } else if (typeof input \u003d\u003d\u003d \u0027object\u0027 \u0026\u0026 input !\u003d\u003d null) {\n        return input;\n      } else {\n        throw new Error(\"Invalid input: Must be a JSON object or string\");\n      }\n    } catch (error) {\n      // Re-throw the error to be caught by the main try/catch block\n      throw new Error(`Failed to parse JSON: ${error.message}`);\n    }\n  }\n\n  /**\n   * Transforms a specific API Management export format into an OpenAPI 3.0.4 specification.\n   * This is the core logic helper function.\n   * @param {object} input - The parsed API data object.\n   * @returns {object} The OpenAPI specification object.\n   */\n  function transformToOpenAPI(input) {\n    const output \u003d {\n      openapi: \"3.0.4\",\n      info: {\n        title: input.name || \"API\",\n        description: input.description || \"\",\n        termsOfService: input.termsOfServiceUrl || undefined,\n        contact: input.contact ? { email: input.contact.email || undefined, name: input.contact.name || undefined, url: input.contact.url || undefined } : undefined,\n        license: input.license ? { name: input.license.name || \"Apache 2.0\", url: input.license.url || undefined } : undefined,\n        version: input.apiRevision || \"1.0.0\",\n      },\n      servers: input.serviceUrl ? [{ url: input.serviceUrl }] : [],\n      tags: (input.tagDescriptions \u0026\u0026 Array.isArray(input.tagDescriptions)) ? input.tagDescriptions.map(tag \u003d\u003e ({ name: tag.name, description: tag.description || \"\", externalDocs: tag.externalDocsUrl ? { description: tag.externalDocsDescription || `Find out more about ${tag.name}`, url: tag.externalDocsUrl } : undefined })) : [],\n      paths: {},\n      components: {\n        schemas: {},\n        securitySchemes: (input.authenticationSettings \u0026\u0026 input.authenticationSettings.subscriptionKeyRequired) ? { api_key: { type: \"apiKey\", name: (input.subscriptionKeyParameterNames \u0026\u0026 input.subscriptionKeyParameterNames.header) || \"Ocp-Apim-Subscription-Key\", in: \"header\" } } : {}\n      }\n    };\n\n    if (input.schemas \u0026\u0026 input.schemas.value \u0026\u0026 input.schemas.value[0] \u0026\u0026 input.schemas.value[0].document \u0026\u0026 input.schemas.value[0].document.components \u0026\u0026 input.schemas.value[0].document.components.schemas) {\n      const schemas \u003d input.schemas.value[0].document.components.schemas;\n      Object.entries(schemas).forEach(([name, schema]) \u003d\u003e { if (!schema[\u0027x-apim-inline\u0027]) { output.components.schemas[name] \u003d schema; } });\n    }\n\n    if (input.operations \u0026\u0026 input.operations.value) {\n      input.operations.value.forEach(op \u003d\u003e {\n        const path \u003d op.urlTemplate;\n        const method \u003d op.method.toLowerCase();\n        if (!output.paths[path]) { output.paths[path] \u003d {}; }\n\n        const operation \u003d {\n          tags: (op.tags \u0026\u0026 Array.isArray(op.tags)) ? op.tags.map(t \u003d\u003e t.name) : [],\n          summary: op.name || \"\",\n          description: op.description || \"\",\n          operationId: op.id.split(\u0027/\u0027).pop(),\n          parameters: [],\n          responses: {}\n        };\n\n        if (op.templateParameters \u0026\u0026 op.templateParameters.length) { operation.parameters.push(...op.templateParameters.map(param \u003d\u003e ({ name: param.name, in: \"path\", description: param.description || \"\", required: param.required !\u003d\u003d false, schema: { type: param.type, format: param.format || undefined, enum: (param.values \u0026\u0026 param.values.length) ? param.values : undefined } }))); }\n        if (op.request \u0026\u0026 op.request.queryParameters \u0026\u0026 op.request.queryParameters.length) { operation.parameters.push(...op.request.queryParameters.map(param \u003d\u003e ({ name: param.name, in: \"query\", description: param.description || \"\", required: param.required || false, schema: { type: param.type, format: param.format || undefined, default: param.defaultValue || undefined, enum: (param.values \u0026\u0026 param.values.length) ? param.values : undefined, items: param.type \u003d\u003d\u003d \u0027array\u0027 ? { type: \u0027string\u0027 } : undefined } }))); }\n        if (op.request \u0026\u0026 op.request.headers \u0026\u0026 op.request.headers.length) { operation.parameters.push(...op.request.headers.map(header \u003d\u003e ({ name: header.name, in: \"header\", description: header.description || \"\", required: header.required || false, schema: { type: header.type, format: header.format || undefined } }))); }\n        \n        if (op.request \u0026\u0026 op.request.representations \u0026\u0026 op.request.representations.length) {\n          operation.requestBody \u003d {\n            description: op.request.description || \"\",\n            content: {},\n            required: op.request.representations.some(rep \u003d\u003e rep.formParameters \u0026\u0026 rep.formParameters.some(p \u003d\u003e p.required))\n          };\n          op.request.representations.forEach(rep \u003d\u003e {\n            let schema;\n            const schemaSource \u003d input.schemas \u0026\u0026 input.schemas.value \u0026\u0026 input.schemas.value[0] \u0026\u0026 input.schemas.value[0].document \u0026\u0026 input.schemas.value[0].document.components \u0026\u0026 input.schemas.value[0].document.components.schemas;\n            if (rep.contentType \u003d\u003d\u003d \"application/octet-stream\") { schema \u003d { type: \"string\", format: \"binary\" }; }\n            else if (rep.typeName \u0026\u0026 output.components.schemas[rep.typeName]) { schema \u003d { $ref: `#/components/schemas/${rep.typeName}` }; }\n            else if (rep.schemaId \u0026\u0026 schemaSource \u0026\u0026 schemaSource[rep.schemaId]) { schema \u003d schemaSource[rep.schemaId]; }\n            else if (rep.formParameters \u0026\u0026 rep.formParameters.length) {\n              const requiredParams \u003d rep.formParameters.filter(p \u003d\u003e p.required).map(p \u003d\u003e p.name);\n              schema \u003d {\n                type: \"object\",\n                properties: rep.formParameters.reduce((props, param) \u003d\u003e {\n                  // --- FIX APPLIED HERE ---\n                  // 1. Create the base schema for the parameter.\n                  const paramSchema \u003d {\n                    type: param.type,\n                    format: param.format,\n                    description: param.description,\n                    enum: (param.values \u0026\u0026 param.values.length) ? param.values : undefined\n                  };\n\n                  // 2. If the type is \u0027array\u0027, add the required \u0027items\u0027 field.\n                  if (param.type \u003d\u003d\u003d \u0027array\u0027) {\n                    paramSchema.items \u003d { type: \u0027string\u0027 }; // Assuming form arrays contain strings\n                  }\n\n                  // 3. Assign the now-valid schema to the property.\n                  props[param.name] \u003d paramSchema;\n                  return props;\n                }, {})\n              };\n              if (requiredParams.length \u003e 0) { schema.required \u003d requiredParams; }\n            } else { schema \u003d { type: \"object\" }; }\n            operation.requestBody.content[rep.contentType] \u003d { schema };\n          });\n        }\n        \n        if (op.responses \u0026\u0026 op.responses.length) {\n          op.responses.forEach(resp \u003d\u003e {\n            const response \u003d { description: resp.description || \"No description\" };\n            const schemaSource \u003d input.schemas \u0026\u0026 input.schemas.value \u0026\u0026 input.schemas.value[0] \u0026\u0026 input.schemas.value[0].document \u0026\u0026 input.schemas.value[0].document.components \u0026\u0026 input.schemas.value[0].document.components.schemas;\n            if (resp.representations \u0026\u0026 resp.representations.length) {\n              response.content \u003d {};\n              resp.representations.forEach(rep \u003d\u003e {\n                let schema;\n                if (rep.typeName \u0026\u0026 output.components.schemas[rep.typeName]) { schema \u003d { $ref: `#/components/schemas/${rep.typeName}` }; }\n                else if (rep.schemaId \u0026\u0026 schemaSource \u0026\u0026 schemaSource[rep.schemaId]) { schema \u003d schemaSource[rep.schemaId]; }\n                else { schema \u003d { type: rep.type || \"object\" }; }\n                response.content[rep.contentType] \u003d { schema };\n              });\n            }\n            if (resp.headers \u0026\u0026 resp.headers.length) {\n              response.headers \u003d {};\n              resp.headers.forEach(header \u003d\u003e { response.headers[header.name] \u003d { description: header.description || \"\", schema: { type: header.type, format: header.format || undefined } }; });\n            }\n            operation.responses[resp.statusCode || \"default\"] \u003d response;\n          });\n        }\n        output.paths[path][method] \u003d operation;\n      });\n    }\n\n    // Clean up empty objects for a tidier output\n    if (output.info.contact) { Object.keys(output.info.contact).forEach(key \u003d\u003e { if (output.info.contact[key] \u003d\u003d\u003d undefined) delete output.info.contact[key]; }); if (Object.keys(output.info.contact).length \u003d\u003d\u003d 0) delete output.info.contact; }\n    if (!output.info.termsOfService) delete output.info.termsOfService;\n    if (output.info.license \u0026\u0026 !output.info.license.url) delete output.info.license.url;\n    if (Object.keys(output.components.securitySchemes).length \u003d\u003d\u003d 0) delete output.components.securitySchemes;\n    if (Object.keys(output.components.schemas).length \u003d\u003d\u003d 0) delete output.components.schemas;\n    \n    return output;\n  }\n  \n  // --- Main execution logic ---\n  try {\n    event.log(\"STEP 1: Starting the transformation script.\", \"INFO\");\n\n    const inputData \u003d event.getParameter(\"openaispecs-list\");\n    event.log(\"STEP 2: Attempted to get input parameter \u0027openaispecs-list\u0027.\", \"INFO\");\n\n    if (!inputData) {\n        throw new Error(\"Input parameter \u0027openaispecs-list\u0027 was not found or is empty. Check variable name and task mappings.\");\n    }\n    event.log(\"STEP 3: Input parameter was found and is not empty.\", \"INFO\");\n\n    const parsedInput \u003d parseInput(inputData);\n    event.log(\"STEP 4: Successfully parsed the input string into a JSON object.\", \"INFO\");\n\n    const specJson \u003d transformToOpenAPI(parsedInput);\n    event.log(\"STEP 5: Successfully transformed the JSON object into a valid OpenAPI Spec object.\", \"INFO\");\n\n    event.setParameter(\"specJson\", specJson);\n    event.log(\"STEP 6: Script completed successfully. \u0027specJson\u0027 parameter has been set.\", \"INFO\");\n\n  } catch (error) {\n    event.log(`EXECUTION FAILED: The script stopped because of an error. REASON: ${error.message}`, \"ERROR\");\n    // This line ensures the task is officially marked as FAILED in the execution logs.\n    throw error;\n  }\n}"
+        }
+      }
+    },
+    "nextTasks": [{
+      "taskId": "39"
+    }],
+    "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+    "displayName": "JavaScript code to transform to Open API Structure",
+    "externalTaskType": "NORMAL_TASK",
+    "position": {
+      "x": 1192,
+      "y": -203
+    }
+  }, {
+    "task": "FieldMappingTask",
+    "taskId": "39",
+    "parameters": {
+      "FieldMappingConfigTaskParameterKey": {
+        "key": "FieldMappingConfigTaskParameterKey",
+        "value": {
+          "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.FieldMappingConfig\",\n  \"mappedFields\": [{\n    \"inputField\": {\n      \"fieldType\": \"STRING_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"referenceValue\": \"$specJson$\"\n        },\n        \"transformationFunctions\": [{\n          \"functionType\": {\n            \"jsonFunction\": {\n              \"functionName\": \"TO_STRING\"\n            }\n          }\n        }, {\n          \"functionType\": {\n            \"stringFunction\": {\n              \"functionName\": \"TO_BASE_64\"\n            }\n          }\n        }]\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$finalBase64Content$\",\n      \"fieldType\": \"STRING_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }, {\n    \"inputField\": {\n      \"fieldType\": \"STRING_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"referenceValue\": \"$specJson$\"\n        },\n        \"transformationFunctions\": [{\n          \"functionType\": {\n            \"jsonFunction\": {\n              \"functionName\": \"TO_STRING\"\n            }\n          }\n        }]\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$speccJsonstring$\",\n      \"fieldType\": \"STRING_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }]\n}"
+        }
+      }
+    },
+    "nextTasks": [{
+      "taskId": "29"
+    }],
+    "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+    "displayName": "Data Mapping to fetch the encoded string",
+    "externalTaskType": "NORMAL_TASK",
+    "position": {
+      "x": 1191,
+      "y": -84
+    }
+  }, {
+    "task": "FieldMappingTask",
+    "taskId": "4",
+    "parameters": {
+      "FieldMappingConfigTaskParameterKey": {
+        "key": "FieldMappingConfigTaskParameterKey",
+        "value": {
+          "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.FieldMappingConfig\",\n  \"mappedFields\": [{\n    \"inputField\": {\n      \"fieldType\": \"JSON_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"referenceValue\": \"$`Task_2_responseBody`$\"\n        },\n        \"transformationFunctions\": [{\n          \"functionType\": {\n            \"stringFunction\": {\n              \"functionName\": \"TO_JSON\"\n            }\n          }\n        }, {\n          \"functionType\": {\n            \"jsonFunction\": {\n              \"functionName\": \"GET_PROPERTY\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"literalValue\": {\n                \"stringValue\": \"access_token\"\n              }\n            }\n          }]\n        }]\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$out_bearer_token$\",\n      \"fieldType\": \"STRING_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }, {\n    \"inputField\": {\n      \"fieldType\": \"JSON_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"referenceValue\": \"$`Task_2_responseBody`$\"\n        },\n        \"transformationFunctions\": [{\n          \"functionType\": {\n            \"stringFunction\": {\n              \"functionName\": \"TO_JSON\"\n            }\n          }\n        }, {\n          \"functionType\": {\n            \"jsonFunction\": {\n              \"functionName\": \"GET_PROPERTY\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"literalValue\": {\n                \"stringValue\": \"access_token\"\n              }\n            }\n          }]\n        }]\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$cached_access_token$\",\n      \"fieldType\": \"STRING_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }, {\n    \"inputField\": {\n      \"fieldType\": \"INT_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"baseFunction\": {\n            \"functionType\": {\n              \"baseFunction\": {\n                \"functionName\": \"NOW_IN_MILLIS\"\n              }\n            }\n          }\n        },\n        \"transformationFunctions\": [{\n          \"functionType\": {\n            \"intFunction\": {\n              \"functionName\": \"ADD\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"referenceValue\": \"$`Task_2_responseBody`$\"\n            },\n            \"transformationFunctions\": [{\n              \"functionType\": {\n                \"stringFunction\": {\n                  \"functionName\": \"TO_JSON\"\n                }\n              }\n            }, {\n              \"functionType\": {\n                \"jsonFunction\": {\n                  \"functionName\": \"GET_PROPERTY\"\n                }\n              },\n              \"parameters\": [{\n                \"initialValue\": {\n                  \"literalValue\": {\n                    \"stringValue\": \"expires_in\"\n                  }\n                }\n              }]\n            }, {\n              \"functionType\": {\n                \"jsonFunction\": {\n                  \"functionName\": \"TO_INT\"\n                }\n              }\n            }, {\n              \"functionType\": {\n                \"intFunction\": {\n                  \"functionName\": \"MULTIPLY\"\n                }\n              },\n              \"parameters\": [{\n                \"initialValue\": {\n                  \"literalValue\": {\n                    \"intValue\": \"1000\"\n                  }\n                }\n              }]\n            }]\n          }]\n        }, {\n          \"functionType\": {\n            \"intFunction\": {\n              \"functionName\": \"SUBTRACT\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"literalValue\": {\n                \"intValue\": \"60000\"\n              }\n            }\n          }]\n        }]\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$cached_token_expiry_timestamp_ms$\",\n      \"fieldType\": \"INT_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }, {\n    \"inputField\": {\n      \"fieldType\": \"STRING_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"literalValue\": {\n            \"stringValue\": \"Bearer \"\n          }\n        },\n        \"transformationFunctions\": [{\n          \"functionType\": {\n            \"stringFunction\": {\n              \"functionName\": \"CONCAT\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"referenceValue\": \"$out_bearer_token$\"\n            }\n          }]\n        }]\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$new_token$\",\n      \"fieldType\": \"STRING_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }]\n}"
+        }
+      }
+    },
+    "nextTasks": [{
+      "taskId": "7"
+    }],
+    "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+    "displayName": "Store the Acess token",
+    "externalTaskType": "NORMAL_TASK",
+    "position": {
+      "x": -1290,
+      "y": -153
+    }
+  }, {
+    "task": "FieldMappingTask",
+    "taskId": "40",
+    "parameters": {
+      "FieldMappingConfigTaskParameterKey": {
+        "key": "FieldMappingConfigTaskParameterKey",
+        "value": {
+          "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.FieldMappingConfig\",\n  \"mappedFields\": [{\n    \"inputField\": {\n      \"fieldType\": \"JSON_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"referenceValue\": \"$`Task_24_responseBody`$\"\n        },\n        \"transformationFunctions\": [{\n          \"functionType\": {\n            \"stringFunction\": {\n              \"functionName\": \"TO_JSON\"\n            }\n          }\n        }]\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$openaispecs-list$\",\n      \"fieldType\": \"JSON_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }]\n}"
+        }
+      }
+    },
+    "nextTasks": [{
+      "taskId": "38"
+    }],
+    "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+    "displayName": "Data Mapping to fetch the OpenAI Specs",
+    "externalTaskType": "NORMAL_TASK",
+    "position": {
+      "x": 1193,
+      "y": -308
+    }
+  }, {
+    "task": "EmailTask",
+    "taskId": "5",
+    "parameters": {
+      "Cc": {
+        "key": "Cc",
+        "value": {
+          "stringArray": {
+          }
+        }
+      },
+      "TextBody": {
+        "key": "TextBody",
+        "value": {
+          "stringValue": "$`Task_2_responseBody`$"
+        }
+      },
+      "Bcc": {
+        "key": "Bcc",
+        "value": {
+          "stringArray": {
+          }
+        }
+      },
+      "AttachmentPath": {
+        "key": "AttachmentPath",
+        "value": {
+          "stringArray": {
+          }
+        }
+      },
+      "ThrowNoRequiredInputException": {
+        "key": "ThrowNoRequiredInputException",
+        "value": {
+          "booleanValue": true
+        }
+      },
+      "To": {
+        "key": "To",
+        "value": {
+          "stringArray": {
+            "stringValues": ["receipient@gmail.com"]
+          }
+        }
+      },
+      "Subject": {
+        "key": "Subject",
+        "value": {
+          "stringValue": "Failure of the fetching of details"
+        }
+      },
+      "BodyFormat": {
+        "key": "BodyFormat",
+        "value": {
+          "stringValue": "text"
+        }
+      },
+      "EmailConfigInput": {
+        "key": "EmailConfigInput",
+        "value": {
+          "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.EmailConfig\"\n}"
+        }
+      }
+    },
+    "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+    "displayName": "Email about the failure to fetch access token",
+    "externalTaskType": "NORMAL_TASK",
+    "position": {
+      "x": -982,
+      "y": -156
+    }
+  }, {
+    "task": "GenericRestV2Task",
+    "taskId": "6",
+    "parameters": {
+      "throwError": {
+        "key": "throwError",
+        "value": {
+          "booleanValue": true
+        }
+      },
+      "responseBody": {
+        "key": "responseBody",
+        "value": {
+          "stringArray": {
+            "stringValues": ["$`Task_6_responseBody`$"]
+          }
+        }
+      },
+      "disableSSLValidation": {
+        "key": "disableSSLValidation",
+        "value": {
+          "booleanValue": false
+        }
+      },
+      "httpParams": {
+        "key": "httpParams",
+        "value": {
+          "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.ParameterMap\",\n  \"entries\": [{\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"authorization\"\n      }\n    },\n    \"value\": {\n      \"referenceKey\": \"$new_token$\"\n    }\n  }]\n}"
+        }
+      },
+      "authConfigName": {
+        "key": "authConfigName",
+        "value": {
+          "stringValue": ""
+        }
+      },
+      "responseHeader": {
+        "key": "responseHeader",
+        "value": {
+          "stringArray": {
+            "stringValues": ["$`Task_6_responseHeader`$"]
+          }
+        }
+      },
+      "userAgent": {
+        "key": "userAgent",
+        "value": {
+          "stringValue": ""
+        }
+      },
+      "httpMethod": {
+        "key": "httpMethod",
+        "value": {
+          "stringValue": "GET"
+        }
+      },
+      "responseStatus": {
+        "key": "responseStatus",
+        "value": {
+          "stringArray": {
+            "stringValues": ["$`Task_6_responseStatus`$"]
+          }
+        }
+      },
+      "timeout": {
+        "key": "timeout",
+        "value": {
+          "intValue": "0"
+        }
+      },
+      "url": {
+        "key": "url",
+        "value": {
+          "stringValue": "https://management.azure.com/subscriptions/$in_subscription_id$/providers/Microsoft.ApiManagement/service?api-version\u003d2021-08-01"
+        }
+      },
+      "useSSL": {
+        "key": "useSSL",
+        "value": {
+          "booleanValue": false
+        }
+      },
+      "urlFetchingService": {
+        "key": "urlFetchingService",
+        "value": {
+          "stringValue": "HARPOON"
+        }
+      },
+      "urlQueryStrings": {
+        "key": "urlQueryStrings"
+      },
+      "requestorId": {
+        "key": "requestorId",
+        "value": {
+          "stringValue": ""
+        }
+      },
+      "jsonAdditionalHeaders": {
+        "key": "jsonAdditionalHeaders",
+        "value": {
+          "jsonValue": "null"
+        }
+      },
+      "requestBody": {
+        "key": "requestBody",
+        "value": {
+          "stringValue": ""
+        }
+      },
+      "followRedirects": {
+        "key": "followRedirects",
+        "value": {
+          "booleanValue": true
+        }
+      },
+      "additionalHeaders": {
+        "key": "additionalHeaders"
+      }
+    },
+    "nextTasks": [{
+      "taskId": "8"
+    }],
+    "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+    "displayName": "REST Call to fetch APIM Instances",
+    "externalTaskType": "NORMAL_TASK",
+    "position": {
+      "x": -373,
+      "y": -401
+    }
+  }, {
+    "task": "SubWorkflowExecutorV2Task",
+    "taskId": "7",
+    "parameters": {
+      "disableEUCPropagation": {
+        "key": "disableEUCPropagation",
+        "value": {
+          "booleanValue": false
+        }
+      },
+      "executionIds": {
+        "key": "executionIds",
+        "value": {
+          "stringArray": {
+            "stringValues": ["$`Task_7_executionIds`$"]
+          }
+        }
+      },
+      "timeInMsToSchedule": {
+        "key": "timeInMsToSchedule",
+        "value": {
+          "intValue": "0"
+        }
+      },
+      "triggerId": {
+        "key": "triggerId",
+        "value": {
+          "stringValue": "api_trigger/onramping-data_API_2"
+        }
+      },
+      "executionStrategy": {
+        "key": "executionStrategy",
+        "value": {
+          "stringValue": "SYNC"
+        }
+      },
+      "requestParamsMap": {
+        "key": "requestParamsMap",
+        "value": {
+          "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.ParameterMap\",\n  \"entries\": [{\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_client_id\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_client_id\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_client_secret\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_client_secret\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_subscription_id\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_subscription_id\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_tenant_id\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"in_tenant_id\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"new_token\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"new_token\"\n      }\n    }\n  }]\n}"
+        }
+      },
+      "workflowName": {
+        "key": "workflowName",
+        "value": {
+          "stringValue": "onramping-data"
+        }
+      },
+      "inputMap": {
+        "key": "inputMap",
+        "value": {
+          "stringArray": {
+          }
+        }
+      },
+      "overrideParamsMap": {
+        "key": "overrideParamsMap",
+        "value": {
+          "stringArray": {
+          }
+        }
+      },
+      "responseParamsMap": {
+        "key": "responseParamsMap",
+        "value": {
+          "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.ParameterMap\",\n  \"entries\": [{\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"cached_token_expiry_timestamp_ms\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"cached_token_expiry_timestamp_ms\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"new_token\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"new_token\"\n      }\n    }\n  }, {\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"out_bearer_token\"\n      }\n    },\n    \"value\": {\n      \"literalValue\": {\n        \"stringValue\": \"out_bearer_token\"\n      }\n    }\n  }]\n}"
+        }
+      }
+    },
+    "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+    "displayName": "Start by calling Fetch APIM instances.",
+    "externalTaskType": "NORMAL_TASK",
+    "position": {
+      "x": -1289,
+      "y": -36
+    }
+  }, {
+    "task": "FieldMappingTask",
+    "taskId": "8",
+    "parameters": {
+      "FieldMappingConfigTaskParameterKey": {
+        "key": "FieldMappingConfigTaskParameterKey",
+        "value": {
+          "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.FieldMappingConfig\",\n  \"mappedFields\": [{\n    \"inputField\": {\n      \"fieldType\": \"JSON_VALUE\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"referenceValue\": \"$`Task_6_responseBody`$\"\n        },\n        \"transformationFunctions\": [{\n          \"functionType\": {\n            \"stringFunction\": {\n              \"functionName\": \"TO_JSON\"\n            }\n          }\n        }]\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$current_apims$\",\n      \"fieldType\": \"JSON_VALUE\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }, {\n    \"inputField\": {\n      \"fieldType\": \"STRING_ARRAY\",\n      \"transformExpression\": {\n        \"initialValue\": {\n          \"referenceValue\": \"$current_apims$\"\n        },\n        \"transformationFunctions\": [{\n          \"functionType\": {\n            \"jsonFunction\": {\n              \"functionName\": \"GET_PROPERTY\"\n            }\n          },\n          \"parameters\": [{\n            \"initialValue\": {\n              \"literalValue\": {\n                \"stringValue\": \"value\"\n              }\n            }\n          }]\n        }, {\n          \"functionType\": {\n            \"jsonFunction\": {\n              \"functionName\": \"TO_STRING_ARRAY\"\n            }\n          }\n        }]\n      }\n    },\n    \"outputField\": {\n      \"referenceKey\": \"$apims-list$\",\n      \"fieldType\": \"STRING_ARRAY\",\n      \"cardinality\": \"OPTIONAL\"\n    }\n  }]\n}"
+        }
+      }
+    },
+    "nextTasks": [{
+      "taskId": "14"
+    }],
+    "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+    "displayName": "Data Mapping to retreive APIMS list",
+    "externalTaskType": "NORMAL_TASK",
+    "position": {
+      "x": -370,
+      "y": -314
+    }
+  }, {
+    "task": "GenericRestV2Task",
+    "taskId": "9",
+    "parameters": {
+      "throwError": {
+        "key": "throwError",
+        "value": {
+          "booleanValue": true
+        }
+      },
+      "responseBody": {
+        "key": "responseBody",
+        "value": {
+          "stringArray": {
+            "stringValues": ["$`Task_9_responseBody`$"]
+          }
+        }
+      },
+      "disableSSLValidation": {
+        "key": "disableSSLValidation",
+        "value": {
+          "booleanValue": false
+        }
+      },
+      "httpParams": {
+        "key": "httpParams",
+        "value": {
+          "jsonValue": "{\n  \"@type\": \"type.googleapis.com/enterprise.crm.eventbus.proto.ParameterMap\",\n  \"entries\": [{\n    \"key\": {\n      \"literalValue\": {\n        \"stringValue\": \"authorization\"\n      }\n    },\n    \"value\": {\n      \"referenceKey\": \"$new_token$\"\n    }\n  }]\n}"
+        }
+      },
+      "authConfigName": {
+        "key": "authConfigName",
+        "value": {
+          "stringValue": ""
+        }
+      },
+      "responseHeader": {
+        "key": "responseHeader",
+        "value": {
+          "stringArray": {
+            "stringValues": ["$`Task_9_responseHeader`$"]
+          }
+        }
+      },
+      "userAgent": {
+        "key": "userAgent",
+        "value": {
+          "stringValue": ""
+        }
+      },
+      "httpMethod": {
+        "key": "httpMethod",
+        "value": {
+          "stringValue": "GET"
+        }
+      },
+      "responseStatus": {
+        "key": "responseStatus",
+        "value": {
+          "stringArray": {
+            "stringValues": ["$`Task_9_responseStatus`$"]
+          }
+        }
+      },
+      "timeout": {
+        "key": "timeout",
+        "value": {
+          "intValue": "0"
+        }
+      },
+      "url": {
+        "key": "url",
+        "value": {
+          "stringValue": "https://management.azure.com/subscriptions/$in_subscription_id$/providers/Microsoft.ApiManagement/service?api-version\u003d2021-08-01"
+        }
+      },
+      "useSSL": {
+        "key": "useSSL",
+        "value": {
+          "booleanValue": false
+        }
+      },
+      "urlFetchingService": {
+        "key": "urlFetchingService",
+        "value": {
+          "stringValue": "HARPOON"
+        }
+      },
+      "urlQueryStrings": {
+        "key": "urlQueryStrings"
+      },
+      "requestorId": {
+        "key": "requestorId",
+        "value": {
+          "stringValue": ""
+        }
+      },
+      "jsonAdditionalHeaders": {
+        "key": "jsonAdditionalHeaders",
+        "value": {
+          "jsonValue": "null"
+        }
+      },
+      "requestBody": {
+        "key": "requestBody",
+        "value": {
+          "stringValue": ""
+        }
+      },
+      "followRedirects": {
+        "key": "followRedirects",
+        "value": {
+          "booleanValue": true
+        }
+      },
+      "additionalHeaders": {
+        "key": "additionalHeaders"
+      }
+    },
+    "nextTasks": [{
+      "taskId": "10"
+    }],
+    "taskExecutionStrategy": "WHEN_ALL_SUCCEED",
+    "displayName": "REST Call to fetch the resource and service names",
+    "externalTaskType": "NORMAL_TASK",
+    "position": {
+      "x": -64,
+      "y": -400
+    }
+  }],
+  "integrationParameters": [{
+    "key": "`ExecutionMode`",
+    "dataType": "STRING_VALUE",
+    "defaultValue": {
+      "stringValue": ""
+    },
+    "displayName": "`ExecutionMode`",
+    "isTransient": true
+  }, {
+    "key": "`ErrorInfo`",
+    "dataType": "JSON_VALUE",
+    "defaultValue": {
+      "jsonValue": "{\n  \"message\": \"\",\n  \"code\": 0.0\n}"
+    },
+    "displayName": "`ErrorInfo`",
+    "isTransient": true,
+    "jsonSchema": "{\n  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\n  \"type\": \"object\",\n  \"properties\": {\n    \"code\": {\n      \"type\": \"number\"\n    },\n    \"message\": {\n      \"type\": \"string\"\n    }\n  }\n}"
+  }, {
+    "key": "`ExecutionId`",
+    "dataType": "STRING_VALUE",
+    "defaultValue": {
+      "stringValue": ""
+    },
+    "displayName": "`ExecutionId`",
+    "isTransient": true
+  }, {
+    "key": "`IntegrationName`",
+    "dataType": "STRING_VALUE",
+    "defaultValue": {
+      "stringValue": ""
+    },
+    "displayName": "`IntegrationName`",
+    "isTransient": true
+  }, {
+    "key": "`Region`",
+    "dataType": "STRING_VALUE",
+    "defaultValue": {
+      "stringValue": ""
+    },
+    "displayName": "`Region`",
+    "isTransient": true
+  }, {
+    "key": "`ProjectId`",
+    "dataType": "STRING_VALUE",
+    "defaultValue": {
+      "stringValue": ""
+    },
+    "displayName": "`ProjectId`",
+    "isTransient": true
+  }, {
+    "key": "in_client_id",
+    "dataType": "STRING_VALUE",
+    "defaultValue": {
+      "stringValue": "$YOUR_CLIENT_ID$"
+    },
+    "displayName": "in_client_id",
+    "inputOutputType": "IN",
+    "description": "Provided via HTTP request for token request body"
+  }, {
+    "key": "in_client_secret",
+    "dataType": "STRING_VALUE",
+    "defaultValue": {
+      "stringValue": "$YOUR_CLIENT_SECRET$"
+    },
+    "displayName": "in_client_secret",
+    "inputOutputType": "IN"
+  }, {
+    "key": "in_subscription_id",
+    "dataType": "STRING_VALUE",
+    "defaultValue": {
+      "stringValue": "$YOUR_SUBSCRIPTION_ID$"
+    },
+    "displayName": "in_subscription_id",
+    "inputOutputType": "IN"
+  }, {
+    "key": "in_tenant_id",
+    "dataType": "STRING_VALUE",
+    "defaultValue": {
+      "stringValue": "$YOUR_TENANT_ID$"
+    },
+    "displayName": "in_tenant_id",
+    "inputOutputType": "IN",
+    "description": "Azure AD Tenant ID"
+  }, {
+    "key": "out_bearer_token",
+    "dataType": "STRING_VALUE",
+    "displayName": "out_bearer_token",
+    "inputOutputType": "IN_OUT",
+    "description": "Output Bearer token for API calls"
+  }, {
+    "key": "token_validate",
+    "dataType": "BOOLEAN_VALUE",
+    "displayName": "token_validate"
+  }, {
+    "key": "cached_token_expiry_timestamp_ms",
+    "dataType": "INT_VALUE",
+    "defaultValue": {
+      "intValue": "0"
+    },
+    "displayName": "cached_token_expiry_timestamp_ms",
+    "inputOutputType": "OUT"
+  }, {
+    "key": "cached_access_token",
+    "dataType": "STRING_VALUE",
+    "displayName": "cached_access_token",
+    "inputOutputType": "IN"
+  }, {
+    "key": "`Task_2_responseHeader`",
+    "dataType": "STRING_VALUE",
+    "displayName": "`Task_2_responseHeader`",
+    "isTransient": true,
+    "producer": "1_2"
+  }, {
+    "key": "`Task_2_responseBody`",
+    "dataType": "STRING_VALUE",
+    "displayName": "`Task_2_responseBody`",
+    "isTransient": true,
+    "producer": "1_2"
+  }, {
+    "key": "`Task_2_responseStatus`",
+    "dataType": "STRING_VALUE",
+    "displayName": "`Task_2_responseStatus`",
+    "isTransient": true,
+    "producer": "1_2"
+  }, {
+    "key": "new_token",
+    "dataType": "STRING_VALUE",
+    "displayName": "new_token",
+    "inputOutputType": "IN_OUT"
+  }, {
+    "key": "`Task_6_responseHeader`",
+    "dataType": "STRING_VALUE",
+    "displayName": "`Task_6_responseHeader`",
+    "isTransient": true,
+    "producer": "1_6"
+  }, {
+    "key": "`Task_6_responseBody`",
+    "dataType": "STRING_VALUE",
+    "displayName": "`Task_6_responseBody`",
+    "isTransient": true,
+    "producer": "1_6"
+  }, {
+    "key": "`Task_6_responseStatus`",
+    "dataType": "STRING_VALUE",
+    "displayName": "`Task_6_responseStatus`",
+    "isTransient": true,
+    "producer": "1_6"
+  }, {
+    "key": "`Task_7_executionIds`",
+    "dataType": "STRING_ARRAY",
+    "displayName": "`Task_7_executionIds`",
+    "isTransient": true,
+    "producer": "1_7"
+  }, {
+    "key": "apims-list",
+    "dataType": "STRING_ARRAY",
+    "displayName": "apims-list",
+    "inputOutputType": "IN_OUT"
+  }, {
+    "key": "current_apims",
+    "dataType": "JSON_VALUE",
+    "displayName": "current_apims",
+    "inputOutputType": "IN_OUT"
+  }, {
+    "key": "`Task_9_responseHeader`",
+    "dataType": "STRING_VALUE",
+    "displayName": "`Task_9_responseHeader`",
+    "isTransient": true,
+    "producer": "1_9"
+  }, {
+    "key": "`Task_9_responseBody`",
+    "dataType": "STRING_VALUE",
+    "displayName": "`Task_9_responseBody`",
+    "isTransient": true,
+    "producer": "1_9"
+  }, {
+    "key": "`Task_9_responseStatus`",
+    "dataType": "STRING_VALUE",
+    "displayName": "`Task_9_responseStatus`",
+    "isTransient": true,
+    "producer": "1_9"
+  }, {
+    "key": "servicename",
+    "dataType": "STRING_ARRAY",
+    "displayName": "servicename",
+    "inputOutputType": "IN_OUT"
+  }, {
+    "key": "`Task_13_executionIds`",
+    "dataType": "STRING_ARRAY",
+    "displayName": "`Task_13_executionIds`",
+    "isTransient": true,
+    "producer": "1_13"
+  }, {
+    "key": "RESOURCENAME-TEMP",
+    "dataType": "STRING_VALUE",
+    "displayName": "RESOURCENAME-TEMP"
+  }, {
+    "key": "resourcenames",
+    "dataType": "STRING_VALUE",
+    "displayName": "resourcenames",
+    "inputOutputType": "IN_OUT"
+  }, {
+    "key": "`Task_14_scatterResponseJson`",
+    "dataType": "JSON_VALUE",
+    "displayName": "`Task_14_scatterResponseJson`",
+    "isTransient": true,
+    "producer": "1_14"
+  }, {
+    "key": "current_apim_value",
+    "dataType": "STRING_ARRAY",
+    "displayName": "current_apim_value",
+    "inputOutputType": "IN_OUT"
+  }, {
+    "key": "`Task_15_responseHeader`",
+    "dataType": "STRING_VALUE",
+    "displayName": "`Task_15_responseHeader`",
+    "isTransient": true,
+    "producer": "1_15"
+  }, {
+    "key": "`Task_15_responseBody`",
+    "dataType": "STRING_VALUE",
+    "displayName": "`Task_15_responseBody`",
+    "isTransient": true,
+    "producer": "1_15"
+  }, {
+    "key": "`Task_15_responseStatus`",
+    "dataType": "STRING_VALUE",
+    "displayName": "`Task_15_responseStatus`",
+    "isTransient": true,
+    "producer": "1_15"
+  }, {
+    "key": "apis-list",
+    "dataType": "JSON_VALUE",
+    "displayName": "apis-list",
+    "inputOutputType": "IN_OUT"
+  }, {
+    "key": "in_api_id",
+    "dataType": "STRING_VALUE",
+    "displayName": "in_api_id",
+    "inputOutputType": "IN_OUT"
+  }, {
+    "key": "apis-array-list",
+    "dataType": "STRING_ARRAY",
+    "displayName": "apis-array-list",
+    "inputOutputType": "IN_OUT"
+  }, {
+    "key": "`Task_17_scatterResponseJson`",
+    "dataType": "JSON_VALUE",
+    "displayName": "`Task_17_scatterResponseJson`",
+    "isTransient": true,
+    "producer": "1_17"
+  }, {
+    "key": "current_service_value",
+    "dataType": "STRING_VALUE",
+    "displayName": "current_service_value",
+    "inputOutputType": "IN_OUT"
+  }, {
+    "key": "in_service_name",
+    "dataType": "STRING_VALUE",
+    "displayName": "in_service_name",
+    "inputOutputType": "IN_OUT"
+  }, {
+    "key": "SERVICE-TEMP",
+    "dataType": "STRING_VALUE",
+    "displayName": "SERVICE-TEMP"
+  }, {
+    "key": "SERVICELENGTH",
+    "dataType": "INT_VALUE",
+    "displayName": "SERVICELENGTH"
+  }, {
+    "key": "api_id-list",
+    "dataType": "STRING_ARRAY",
+    "displayName": "api_id-list",
+    "inputOutputType": "IN_OUT"
+  }, {
+    "key": "`Task_18_responseHeader`",
+    "dataType": "STRING_VALUE",
+    "displayName": "`Task_18_responseHeader`",
+    "isTransient": true,
+    "producer": "1_18"
+  }, {
+    "key": "`Task_18_responseBody`",
+    "dataType": "STRING_VALUE",
+    "displayName": "`Task_18_responseBody`",
+    "isTransient": true,
+    "producer": "1_18"
+  }, {
+    "key": "`Task_18_responseStatus`",
+    "dataType": "STRING_VALUE",
+    "displayName": "`Task_18_responseStatus`",
+    "isTransient": true,
+    "producer": "1_18"
+  }, {
+    "key": "`Task_19_scatterResponseJson`",
+    "dataType": "JSON_VALUE",
+    "displayName": "`Task_19_scatterResponseJson`",
+    "isTransient": true,
+    "producer": "1_19"
+  }, {
+    "key": "current_api_id",
+    "dataType": "STRING_VALUE",
+    "displayName": "current_api_id",
+    "inputOutputType": "IN_OUT"
+  }, {
+    "key": "api-operations-list",
+    "dataType": "STRING_ARRAY",
+    "displayName": "api-operations-list",
+    "inputOutputType": "IN_OUT"
+  }, {
+    "key": "operations-list",
+    "dataType": "JSON_VALUE",
+    "displayName": "operations-list",
+    "inputOutputType": "IN_OUT"
+  }, {
+    "key": "numberOfapiIds",
+    "dataType": "INT_VALUE",
+    "displayName": "numberOfapiIds",
+    "inputOutputType": "OUT"
+  }, {
+    "key": "`Task_21_responseHeader`",
+    "dataType": "STRING_VALUE",
+    "displayName": "`Task_21_responseHeader`",
+    "isTransient": true,
+    "producer": "1_21"
+  }, {
+    "key": "`Task_21_responseBody`",
+    "dataType": "STRING_VALUE",
+    "displayName": "`Task_21_responseBody`",
+    "isTransient": true,
+    "producer": "1_21"
+  }, {
+    "key": "`Task_21_responseStatus`",
+    "dataType": "STRING_VALUE",
+    "displayName": "`Task_21_responseStatus`",
+    "isTransient": true,
+    "producer": "1_21"
+  }, {
+    "key": "`Task_23_executionIds`",
+    "dataType": "STRING_ARRAY",
+    "displayName": "`Task_23_executionIds`",
+    "isTransient": true,
+    "producer": "1_23"
+  }, {
+    "key": "revisions_list",
+    "dataType": "JSON_VALUE",
+    "displayName": "revisions_list",
+    "inputOutputType": "IN_OUT"
+  }, {
+    "key": "`Task_24_responseHeader`",
+    "dataType": "STRING_VALUE",
+    "displayName": "`Task_24_responseHeader`",
+    "isTransient": true,
+    "producer": "1_24"
+  }, {
+    "key": "`Task_24_responseBody`",
+    "dataType": "STRING_VALUE",
+    "displayName": "`Task_24_responseBody`",
+    "isTransient": true,
+    "producer": "1_24"
+  }, {
+    "key": "`Task_24_responseStatus`",
+    "dataType": "STRING_VALUE",
+    "displayName": "`Task_24_responseStatus`",
+    "isTransient": true,
+    "producer": "1_24"
+  }, {
+    "key": "openaispecs-list",
+    "dataType": "JSON_VALUE",
+    "displayName": "openaispecs-list",
+    "inputOutputType": "IN_OUT"
+  }, {
+    "key": "`Task_26_executionIds`",
+    "dataType": "STRING_ARRAY",
+    "displayName": "`Task_26_executionIds`",
+    "isTransient": true,
+    "producer": "1_26"
+  }, {
+    "key": "api-policies-list",
+    "dataType": "JSON_VALUE",
+    "displayName": "api-policies-list",
+    "inputOutputType": "IN_OUT"
+  }, {
+    "key": "`Task_29_executionIds`",
+    "dataType": "STRING_ARRAY",
+    "displayName": "`Task_29_executionIds`",
+    "isTransient": true,
+    "producer": "1_29"
+  }, {
+    "key": "isRevision",
+    "dataType": "BOOLEAN_VALUE",
+    "displayName": "isRevision"
+  }, {
+    "key": "`Task_30_responseHeader`",
+    "dataType": "STRING_VALUE",
+    "displayName": "`Task_30_responseHeader`",
+    "isTransient": true,
+    "producer": "1_30"
+  }, {
+    "key": "`Task_30_responseBody`",
+    "dataType": "STRING_VALUE",
+    "displayName": "`Task_30_responseBody`",
+    "isTransient": true,
+    "producer": "1_30"
+  }, {
+    "key": "`Task_30_responseStatus`",
+    "dataType": "STRING_VALUE",
+    "displayName": "`Task_30_responseStatus`",
+    "isTransient": true,
+    "producer": "1_30"
+  }, {
+    "key": "deployments-list",
+    "dataType": "JSON_VALUE",
+    "displayName": "deployments-list",
+    "inputOutputType": "IN_OUT"
+  }, {
+    "key": "deploymenturl",
+    "dataType": "STRING_VALUE",
+    "displayName": "deploymenturl",
+    "inputOutputType": "IN_OUT"
+  }, {
+    "key": "`Task_34_executionIds`",
+    "dataType": "STRING_ARRAY",
+    "displayName": "`Task_34_executionIds`",
+    "isTransient": true,
+    "producer": "1_34"
+  }, {
+    "key": "respomsebodyforsenfing",
+    "dataType": "JSON_VALUE",
+    "displayName": "respomsebodyforsenfing",
+    "inputOutputType": "IN_OUT"
+  }, {
+    "key": "apiDescription",
+    "dataType": "STRING_VALUE",
+    "displayName": "apiDescription",
+    "inputOutputType": "IN_OUT"
+  }, {
+    "key": "apiDisplayName",
+    "dataType": "STRING_VALUE",
+    "displayName": "apiDisplayName",
+    "inputOutputType": "IN_OUT"
+  }, {
+    "key": "`Task_37_responseHeader`",
+    "dataType": "STRING_VALUE",
+    "displayName": "`Task_37_responseHeader`",
+    "isTransient": true,
+    "producer": "1_37"
+  }, {
+    "key": "`Task_37_responseBody`",
+    "dataType": "STRING_VALUE",
+    "displayName": "`Task_37_responseBody`",
+    "isTransient": true,
+    "producer": "1_37"
+  }, {
+    "key": "`Task_37_responseStatus`",
+    "dataType": "STRING_VALUE",
+    "displayName": "`Task_37_responseStatus`",
+    "isTransient": true,
+    "producer": "1_37"
+  }, {
+    "key": "apijsondesccription",
+    "dataType": "JSON_VALUE",
+    "displayName": "apijsondesccription",
+    "inputOutputType": "IN_OUT"
+  }, {
+    "key": "versionnumber",
+    "dataType": "STRING_VALUE",
+    "displayName": "versionnumber",
+    "inputOutputType": "IN_OUT"
+  }, {
+    "key": "publisherEmail",
+    "dataType": "STRING_VALUE",
+    "displayName": "publisherEmail",
+    "inputOutputType": "IN_OUT"
+  }, {
+    "key": "publisherName",
+    "dataType": "STRING_VALUE",
+    "displayName": "publisherName",
+    "inputOutputType": "IN_OUT"
+  }, {
+    "key": "deloymentenvironment",
+    "dataType": "STRING_VALUE",
+    "displayName": "deloymentenvironment",
+    "inputOutputType": "IN_OUT"
+  }, {
+    "key": "deploymentcreatedAt",
+    "dataType": "STRING_VALUE",
+    "displayName": "deploymentcreatedAt",
+    "inputOutputType": "IN_OUT"
+  }, {
+    "key": "deploymentlastUpdatedTime",
+    "dataType": "STRING_VALUE",
+    "displayName": "deploymentlastUpdatedTime",
+    "inputOutputType": "IN_OUT"
+  }, {
+    "key": "specJson",
+    "dataType": "JSON_VALUE",
+    "displayName": "specJson",
+    "inputOutputType": "IN_OUT"
+  }, {
+    "key": "finalBase64Content",
+    "dataType": "STRING_VALUE",
+    "displayName": "finalBase64Content",
+    "inputOutputType": "IN_OUT"
+  }, {
+    "key": "speccJsonstring",
+    "dataType": "STRING_VALUE",
+    "displayName": "speccJsonstring",
+    "inputOutputType": "IN_OUT"
+  }],
+  "databasePersistencePolicy": "DATABASE_PERSISTENCE_ASYNC"
+}
