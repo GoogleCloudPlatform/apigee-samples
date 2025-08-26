@@ -1,7 +1,7 @@
 {
     "operationConfigs": [
       {
-        "apiSource": "adk-retail-v1",
+        "apiSource": "cymbal-customers-v1",
         "operations": [
           {
             "resource": "/",
