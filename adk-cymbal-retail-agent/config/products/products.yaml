@@ -1,0 +1,238 @@
+# Copyright 2025 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+openapi: 3.0.0
+info:
+  title: Member Account Management API
+  description: >-
+    This API manages product inventory, allowing for creation, retrieval, and 
+    update of product inventory records.
+    The API allows products to be created, updated and retieved.
+  version: 1.0.0
+  contact:
+    name: Cymbal Retail
+    url: https://cymbal-retail.com
+  termsOfService: https://cymbal-retail/terms/
+servers:
+  - url: https://APIGEE_HOST/v1/samples/adk-cymbal-retail
+security:
+  - ApiKeyAuth: []
+paths:
+  /products:
+    get:
+      summary: Get a list of all products
+      operationId: getAllProducts
+      tags:
+        - products
+      responses:
+        '200':
+          description: A list of products
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /products/{productId}:
+    get:
+      summary: Get product details by ID
+      operationId: getProductById
+      tags:
+        - products
+      parameters:
+        - name: productId
+          in: path
+          description: Unique identifier for the product
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Product details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '404':
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /products/{productId}/stock:
+    get:
+      summary: Check stock level for a product
+      operationId: getProductStock
+      tags:
+        - stock
+      parameters:
+        - name: productId
+          in: path
+          description: Unique identifier for the product
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Product stock information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductStock'
+        '404':
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      summary: Update the stock level of a product
+      operationId: updateProductStock
+      tags:
+        - stock
+      parameters:
+        - name: productId
+          in: path
+          description: Unique identifier for the product
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: The new stock quantity
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateStock'
+      responses:
+        '200':
+          description: Stock updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductStock'
+        '400':
+          description: Invalid input (e.g., negative stock)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    Product:
+      type: object
+      required:
+        - productId
+        - name
+        - price
+        - description
+      properties:
+        productId:
+          type: string
+          description: The unique identifier for the product.
+          example: "sku-12345"
+        name:
+          type: string
+          description: The name of the product.
+          example: "Leather Wallet"
+        description:
+          type: string
+          description: A brief description of the product.
+          example: "A high-quality leather wallet with multiple card slots."
+        price:
+          type: number
+          format: float
+          description: The price of the product.
+          example: 49.99
+        category:
+          type: string
+          description: The product's category.
+          example: "accessories"
+        imageUrl:
+          type: string
+          description: A URL for the product's image.
+          example: "https://images.cymbalretail.com/wallets/sku-12345.jpg"
+    ProductStock:
+      type: object
+      required:
+        - productId
+        - quantity
+      properties:
+        productId:
+          type: string
+          description: The unique identifier for the product.
+          example: "sku-12345"
+        quantity:
+          type: integer
+          description: The current stock quantity.
+          example: 15
+    UpdateStock:
+      type: object
+      required:
+        - quantity
+      properties:
+        quantity:
+          type: integer
+          description: The new stock quantity.
+          example: 20
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+          description: The error code.
+          example: 404
+        message:
+          type: string
+          description: A detailed error message.
+          example: "Product not found with the given ID."
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      description: API key to authorize requests.
+      name: apikey
+      in: query
