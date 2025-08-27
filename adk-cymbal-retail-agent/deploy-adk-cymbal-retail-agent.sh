@@ -48,6 +48,20 @@ if [ -z "$TOKEN" ]; then
   TOKEN=$(gcloud auth print-access-token)
 fi
 
+add_api_to_hub(){
+  local api=$1
+  local id="1_0_0"
+  echo "Registering the $api API"
+  apigeecli apihub apis create --id "${api}_api" \
+  -f "tmp/${api}/${api}-api.json" \
+  -r "$APIGEE_APIHUB_REGION" -o "$APIGEE_APIHUB_PROJECT_ID" -t "$TOKEN"
+
+  apigeecli apihub apis versions create --api-id "${api}_api" --id $id \
+  -f "tmp/${api}/${api}-api-ver.json"  -r "$APIGEE_APIHUB_REGION" -o "$APIGEE_APIHUB_PROJECT_ID" -t "$TOKEN"
+
+  apigeecli apihub apis versions specs create --api-id "${api}_api" -i $id --version $id \
+  -d openapi.yaml -f "tmp/${api}/${api}.yaml"  -r "$APIGEE_APIHUB_REGION" -o "$APIGEE_APIHUB_PROJECT_ID" -t "$TOKEN"
+}
 
 PRE_PROP="project_id=$VERTEXAI_PROJECT_ID
 model_id=$MODEL_ID
@@ -55,9 +69,21 @@ region=$VERTEXAI_REGION"
 
 echo "$PRE_PROP" > ./proxies/cymbal-customers-v1/apiproxy/resources/properties/vertex_config.properties
 
+gcloud services enable aiplatform.googleapis.com --project "$PROJECT_ID"
+
 echo "Installing apigeecli"
 curl -s https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.sh | bash
 export PATH=$PATH:$HOME/.apigeecli/bin
+
+echo "Registering APIs in Apigee API hub"
+cp -rf config tmp/
+sed -i "s/APIGEE_HOST/$APIGEE_HOST/g" tmp/*/*.yaml
+sed -i "s/APIGEE_APIHUB_PROJECT_ID/$APIGEE_APIHUB_PROJECT_ID/g" tmp/*/*.json
+sed -i "s/APIGEE_APIHUB_REGION/$APIGEE_APIHUB_REGION/g" tmp/*/*.json
+
+add_api_to_hub "customers"
+
+rm -rf tmp
 
 echo "Deploying the Proxy"
 apigeecli apis create bundle -n cymbal-customers-v1 \
@@ -91,6 +117,8 @@ echo "Secret $SECRET_ID created successfully"
 export APIKEY
 export PROXY_URL="$APIGEE_HOST/v1/samples/adk-cymbal-retail"
 
+npm test
+
 echo " "
 echo "All the Apigee artifacts are successfully deployed!"
 echo " "
@@ -107,6 +135,7 @@ echo "curl --location \"https://$APIGEE_HOST/v1/samples/adk-cymbal-retail/custom
 echo " "
 echo "Export these variables"
 echo "export APIKEY=$APIKEY"
+echo "export PROXY_URL=$PROXY_URL"
 echo " "
 echo "Your PROJECT_ID is: $PROJECT_ID"
 echo "Your APIGEE_HOST is: $APIGEE_HOST"

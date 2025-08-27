@@ -1,5 +1,5 @@
 {
-    "displayName": "Returns API",
+    "displayName": "Cymbal Returns API",
     "description": "This API manages returns. It provides endpoints for creating a return request, retrieving details of a specific return, and processing a refund or credit.",
     "documentation": {
             "externalUri": "https://developer.cymbal-retail.com/docs/reference/apis/returns"

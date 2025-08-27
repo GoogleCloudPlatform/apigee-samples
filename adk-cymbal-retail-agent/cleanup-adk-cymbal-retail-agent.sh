@@ -40,6 +40,13 @@ delete_api() {
 
 }
 
+delete_api_from_hub() {
+  local api=$1
+  apigeecli apihub apis delete --id "${api}_api" \
+  --force true \
+  -r "$APIGEE_APIHUB_REGION" -o "$APIGEE_APIHUB_PROJECT_ID" -t "$TOKEN"
+}
+
 TOKEN=$(gcloud auth print-access-token)
 
 echo "Installing apigeecli"
@@ -57,6 +64,8 @@ echo "Deleting API Products"
 apigeecli products delete --name cymbal-retail-product --org "$PROJECT_ID" --token "$TOKEN"
 
 delete_api "cymbal-customers-v1"
+
+delete_api_from_hub customers
 
 echo "Deleting the Secret"
 SECRET_ID="cymbal-retail-apikey"

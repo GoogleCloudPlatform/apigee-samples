@@ -1,5 +1,5 @@
 {
-    "displayName": "Customer Profile API",
+    "displayName": "Cymbal Customer Profile API",
     "description": " This API manages customer profiles, allowing for creation, retrieval, and updates of individual customer records. The API allows customer profiles to be created, retieved and updated.",
     "documentation": {
             "externalUri": "https://developer.cymbal-retail.com/docs/reference/apis/customers"

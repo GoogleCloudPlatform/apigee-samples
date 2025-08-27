@@ -1,5 +1,5 @@
 {
-    "displayName": "Orders API",
+    "displayName": "Cymbal Orders API",
     "description": "This API manages orders, allowing for creation, retrieval, and update of orders.",
     "documentation": {
             "externalUri": "https://developer.cymbal-retail.com/docs/reference/apis/rewards"

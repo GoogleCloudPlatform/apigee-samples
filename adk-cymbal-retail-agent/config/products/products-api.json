@@ -1,5 +1,5 @@
 {
-    "displayName": "Products API",
+    "displayName": "Cymbal Products API",
     "description": "This API manages product inventory, allowing for creation, retrieval, and update of product inventory records. The API allows products to be created, updated and retieved.",
     "documentation": {
             "externalUri": "https://developer.cymbal-retail.com/docs/reference/apis/products"
