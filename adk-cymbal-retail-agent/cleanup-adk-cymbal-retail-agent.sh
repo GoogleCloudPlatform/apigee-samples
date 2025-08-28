@@ -64,8 +64,10 @@ echo "Deleting API Products"
 apigeecli products delete --name cymbal-retail-product --org "$PROJECT_ID" --token "$TOKEN"
 
 delete_api "cymbal-customers-v1"
+delete_api "cymbal-orders-v1"
 
 delete_api_from_hub customers
+delete_api_from_hub orders
 
 echo "Deleting the Secret"
 SECRET_ID="cymbal-retail-apikey"

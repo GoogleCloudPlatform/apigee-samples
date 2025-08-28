@@ -10,6 +10,17 @@
             ]
           }
         ]
+      },
+      {
+        "apiSource": "cymbal-orders-v1",
+        "operations": [
+          {
+            "resource": "/",
+            "methods": [
+              "GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS"
+            ]
+          }
+        ]
       }
     ],
     "operationConfigType": "proxy"

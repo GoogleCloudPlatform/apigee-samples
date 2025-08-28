@@ -30,41 +30,41 @@
     <Response/>
   </PostFlow>
   <Flows>
-    <Flow name="listCustomers">
-      <Description>Returns a list of customers.</Description>
+    <Flow name="listOrders">
+      <Description>Returns a list of orders.</Description>
       <Request>
         <Step>
-          <Name>AM-ListCustomers</Name>
+          <Name>AM-ListOrders</Name>
         </Step>
       </Request>
       <Response/>
       <Condition>(proxy.pathsuffix MatchesPath "/") and (request.verb = "GET")</Condition>
     </Flow>
-    <Flow name="createCustomer">
-      <Description>Creates a new customer.</Description>
+    <Flow name="createOrder">
+      <Description>Creates a new order.</Description>
       <Request>
         <Step>
-          <Name>AM-CreateCustomer</Name>
+          <Name>AM-CreateOrder</Name>
         </Step>
       </Request>
       <Response/>
       <Condition>(proxy.pathsuffix MatchesPath "/") and (request.verb = "POST")</Condition>
     </Flow>
-    <Flow name="getCustomer">
-      <Description>Retrieves a specific customer by ID.</Description>
+    <Flow name="getOrder">
+      <Description>Retrieves a specific order by ID.</Description>
       <Request>
         <Step>
           <Name>EV-FetchID</Name>
         </Step>
         <Step>
-          <Name>AM-GetCustomerById</Name>
+          <Name>AM-GetOrderById</Name>
         </Step>
       </Request>
       <Response/>
       <Condition>(proxy.pathsuffix MatchesPath "/{id}") and (request.verb = "GET")</Condition>
     </Flow>
-    <Flow name="updateCustomer">
-      <Description>Updates a specific customer by ID.</Description>
+    <Flow name="updateOrder">
+      <Description>Updates a specific order by ID.</Description>
       <Request>
         <Step>
           <Name>EV-FetchID</Name>
@@ -79,7 +79,7 @@
     </Flow>
   </Flows>
   <HTTPProxyConnection>
-    <BasePath>/v1/samples/adk-cymbal-retail/customers/</BasePath>
+    <BasePath>/v1/samples/adk-cymbal-retail/orders/</BasePath>
     <Properties/>
   </HTTPProxyConnection>
   <RouteRule name="noRoute">
