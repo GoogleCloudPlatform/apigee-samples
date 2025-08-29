@@ -12,10 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-Feature:
-  As a developer
-  I want to experiment with Orders API
-  So that I can understand how it can be used
+Feature: Orders API
 
 Scenario: Using an invalid API Key
   Given I set x-apikey header to foobar
