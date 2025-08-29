@@ -15,7 +15,7 @@
   <DisplayName>EV-FetchID</DisplayName>
   <Properties/>
   <URIPath>
-    <Pattern ignoreCase="false">/{customerId}</Pattern>
+    <Pattern ignoreCase="false">/{returnId}</Pattern>
   </URIPath>
   <Source clearPayload="false">request</Source>
 </ExtractVariables>

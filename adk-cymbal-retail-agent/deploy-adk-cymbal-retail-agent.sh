@@ -69,6 +69,7 @@ region=$VERTEXAI_REGION"
 
 echo "$PRE_PROP" > ./proxies/cymbal-customers-v1/apiproxy/resources/properties/vertex_config.properties
 echo "$PRE_PROP" > ./proxies/cymbal-orders-v1/apiproxy/resources/properties/vertex_config.properties
+echo "$PRE_PROP" > ./proxies/cymbal-returns-v1/apiproxy/resources/properties/vertex_config.properties
 
 gcloud services enable aiplatform.googleapis.com --project "$PROJECT_ID"
 
@@ -84,6 +85,7 @@ sed -i "s/APIGEE_APIHUB_REGION/$APIGEE_APIHUB_REGION/g" tmp/*/*.json
 
 add_api_to_hub "customers"
 add_api_to_hub "orders"
+add_api_to_hub "returns"
 
 rm -rf tmp
 
@@ -96,6 +98,12 @@ apigeecli apis create bundle -n cymbal-customers-v1 \
 
 apigeecli apis create bundle -n cymbal-orders-v1 \
   -f proxies/cymbal-orders-v1/apiproxy -e "$APIGEE_ENV" \
+  --token "$TOKEN" -o "$PROJECT_ID" \
+  -s "${SERVICE_ACCOUNT_NAME}@${PROJECT_ID}.iam.gserviceaccount.com" \
+  --ovr --wait
+
+apigeecli apis create bundle -n cymbal-returns-v1 \
+  -f proxies/cymbal-returns-v1/apiproxy -e "$APIGEE_ENV" \
   --token "$TOKEN" -o "$PROJECT_ID" \
   -s "${SERVICE_ACCOUNT_NAME}@${PROJECT_ID}.iam.gserviceaccount.com" \
   --ovr --wait
@@ -144,6 +152,12 @@ echo " "
 echo "Orders: "
 echo " "
 echo "curl --location \"https://$APIGEE_HOST/v1/samples/adk-cymbal-retail/orders\" \
+--header \"Content-Type: application/json\" \
+--header \"x-apikey: $APIKEY\""
+echo " "
+echo "Returns: "
+echo " "
+echo "curl --location \"https://$APIGEE_HOST/v1/samples/adk-cymbal-retail/returns\" \
 --header \"Content-Type: application/json\" \
 --header \"x-apikey: $APIKEY\""
 echo " "

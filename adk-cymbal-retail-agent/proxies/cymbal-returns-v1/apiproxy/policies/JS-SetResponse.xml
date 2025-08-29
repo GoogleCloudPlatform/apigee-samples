@@ -11,11 +11,13 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<ExtractVariables continueOnError="false" enabled="true" name="EV-FetchID">
-  <DisplayName>EV-FetchID</DisplayName>
+<Javascript continueOnError="false" enabled="true" timeLimit="200" name="JS-SetResponse">
+  <DisplayName>JS-SetResponse</DisplayName>
   <Properties/>
-  <URIPath>
-    <Pattern ignoreCase="false">/{customerId}</Pattern>
-  </URIPath>
-  <Source clearPayload="false">request</Source>
-</ExtractVariables>
+  <Source>
+    var responseObj = JSON.parse(context.getVariable("response.content"));
+    context.setVariable("response.content", responseObj.candidates[0].content.parts[0].text);
+    context.setVariable("response.status.code", context.getVariable("statusCode"));
+    context.setVariable("response.reason.phrase", context.getVariable("reasonPhrase"));
+  </Source>
+</Javascript>

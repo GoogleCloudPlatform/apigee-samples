@@ -11,11 +11,16 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<ExtractVariables continueOnError="false" enabled="true" name="EV-FetchID">
-  <DisplayName>EV-FetchID</DisplayName>
+<AssignMessage continueOnError="false" enabled="true" name="AM-SetTarget">
+  <DisplayName>AM-SetTarget</DisplayName>
   <Properties/>
-  <URIPath>
-    <Pattern ignoreCase="false">/{customerId}</Pattern>
-  </URIPath>
-  <Source clearPayload="false">request</Source>
-</ExtractVariables>
+  <AssignVariable>
+    <Name>target.copy.queryparams</Name>
+    <Value>false</Value>
+  </AssignVariable>
+  <AssignVariable>
+    <Name>target.copy.pathsuffix</Name>
+    <Value>false</Value>
+  </AssignVariable>
+  <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+</AssignMessage>

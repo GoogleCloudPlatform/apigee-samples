@@ -11,11 +11,14 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<ExtractVariables continueOnError="false" enabled="true" name="EV-FetchID">
-  <DisplayName>EV-FetchID</DisplayName>
-  <Properties/>
-  <URIPath>
-    <Pattern ignoreCase="false">/{customerId}</Pattern>
-  </URIPath>
-  <Source clearPayload="false">request</Source>
-</ExtractVariables>
+<CORS continueOnError="false" enabled="true" name="CORS">
+  <DisplayName>CORS</DisplayName>
+  <AllowOrigins>{request.header.origin}</AllowOrigins>
+  <AllowMethods>GET, PUT, POST, DELETE</AllowMethods>
+  <AllowHeaders>origin, x-requested-with, accept, content-type, x-apikey</AllowHeaders>
+  <ExposeHeaders>*</ExposeHeaders>
+  <MaxAge>3628800</MaxAge>
+  <AllowCredentials>false</AllowCredentials>
+  <GeneratePreflightResponse>true</GeneratePreflightResponse>
+  <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+</CORS>

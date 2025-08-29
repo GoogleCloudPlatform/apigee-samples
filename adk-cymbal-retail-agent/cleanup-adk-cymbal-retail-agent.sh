@@ -65,9 +65,11 @@ apigeecli products delete --name cymbal-retail-product --org "$PROJECT_ID" --tok
 
 delete_api "cymbal-customers-v1"
 delete_api "cymbal-orders-v1"
+delete_api "cymbal-returns-v1"
 
 delete_api_from_hub customers
 delete_api_from_hub orders
+delete_api_from_hub returns
 
 echo "Deleting the Secret"
 SECRET_ID="cymbal-retail-apikey"

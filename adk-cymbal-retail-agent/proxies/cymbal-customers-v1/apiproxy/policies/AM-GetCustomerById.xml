@@ -30,7 +30,7 @@
         {
             "parts": [
                 {
-                    "text": "Generate a meaningful customer and set the id field as {id}"
+                    "text": "Generate a meaningful customer and set the id field as {customerId}"
                 }
             ],
             "role": "user"

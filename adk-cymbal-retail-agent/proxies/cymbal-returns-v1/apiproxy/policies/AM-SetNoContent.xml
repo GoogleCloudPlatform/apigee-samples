@@ -11,11 +11,12 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<ExtractVariables continueOnError="false" enabled="true" name="EV-FetchID">
-  <DisplayName>EV-FetchID</DisplayName>
+<AssignMessage continueOnError="false" enabled="true" name="AM-SetNoContent">
+  <DisplayName>AM-SetNoContent</DisplayName>
   <Properties/>
-  <URIPath>
-    <Pattern ignoreCase="false">/{customerId}</Pattern>
-  </URIPath>
-  <Source clearPayload="false">request</Source>
-</ExtractVariables>
+  <Set>
+    <StatusCode>204</StatusCode>
+    <ReasonPhrase>No Content</ReasonPhrase>
+  </Set>
+  <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+</AssignMessage>

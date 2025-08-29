@@ -11,11 +11,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<ExtractVariables continueOnError="false" enabled="true" name="EV-FetchID">
-  <DisplayName>EV-FetchID</DisplayName>
-  <Properties/>
-  <URIPath>
-    <Pattern ignoreCase="false">/{customerId}</Pattern>
-  </URIPath>
-  <Source clearPayload="false">request</Source>
-</ExtractVariables>
+<APIProxy revision="1" name="cymbal-returns-v1">
+  <DisplayName/>
+  <Description>This API manages returns for Cymbal Retail.</Description>
+</APIProxy>
