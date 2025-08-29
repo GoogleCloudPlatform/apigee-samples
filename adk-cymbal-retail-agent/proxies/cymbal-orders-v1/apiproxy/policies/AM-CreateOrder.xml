@@ -30,7 +30,7 @@
         {
             "parts": [
                 {
-                    "text": "Generate a meaningful order and set the id field as a random number, set the \"createdAt\" field to be the current time."
+                    "text": "{escapeJSON(request.content)}. Generate a meaningful order and set the id field as a random number, set the \"createdAt\" field to be the current time."
                 }
             ],
             "role": "user"

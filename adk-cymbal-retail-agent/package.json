@@ -2,10 +2,11 @@
     "name": "adk-cymbal-retail-agent",
     "version": "1.0.0",
     "scripts": {
-      "test": "npx cucumber-js test/"
+        "test": "npx cucumber-js --format cucumber-console-formatter test/"
     },
     "dependencies": {
-      "@cucumber/cucumber": "latest",
-      "apickli": "latest"
+        "@cucumber/cucumber": "latest",
+        "apickli": "latest",
+        "cucumber-console-formatter": "^1.0.0"
     }
 }

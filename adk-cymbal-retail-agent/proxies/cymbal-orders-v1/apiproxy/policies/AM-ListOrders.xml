@@ -29,7 +29,7 @@
       {
          "parts":[
             {
-               "text":"Generate a list of 5 to 10 meaningful orders and set random numbers to the \"id\" fields for each order."
+               "text":"Generate a list of 5 to 10 meaningful orders and set random numbers to the \"id\" fields for each order. Use the same \"customerId\" for each order"
             }
          ],
          "role":"user"
