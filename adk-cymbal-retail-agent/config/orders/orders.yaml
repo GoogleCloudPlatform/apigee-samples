@@ -312,5 +312,5 @@ components:
     ApiKeyAuth:
       type: apiKey
       description: API key to authorize requests.
-      name: apikey
-      in: query
+      name: x-apikey
+      in: header
