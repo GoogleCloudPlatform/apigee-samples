@@ -41,7 +41,13 @@
           curl -L https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.sh | sh - &&
           \
           echo "✅ Adding apigeecli to ~/.bashrc \$PATH ..." &&
-          echo "export PATH=\"\$HOME/.apigeecli/bin:\$PATH\"" >> ~/.bashrc
+          echo "export PATH=\"\$HOME/.apigeecli/bin:\$PATH\"" >> ~/.bashrc &&
+          \
+          echo "✅ Installing integrationcli tool ..." &&
+          curl -L https://raw.githubusercontent.com/GoogleCloudPlatform/application-integration-management-toolkit/main/downloadLatest.sh | sh - &&
+          \
+          echo "✅ Adding integrationcli to ~/.bashrc \$PATH ..." &&
+          echo "export PATH=\"\$HOME/.integrationcli/bin:\$PATH\"" >> ~/.bashrc
           '';
       };
     };
