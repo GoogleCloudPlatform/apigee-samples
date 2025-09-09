@@ -15,6 +15,19 @@
 
 This GitHub repository contains a hands-on workshop that shows how to build an intelligent AI-powered customer service agent using Apigee, the Model Context Protocol (MCP), and the Agent Development Kit (ADK). By following a narrative about Cymbal Retail, a fictional company with siloed data, you'll learn how to transform APIs into "tools" for an AI agent, connect systems using Application Integration, and secure and manage all AI traffic with an Apigee API gateway. The workshop provides a complete, practical guide to building and operationalizing a Gemini-powered agent system in a Google Cloud environment.
 
+## Open Workspace 
+Click on the button below to open this workshop in Firebase Studio. All the necessary tools, and libraries, and dependencies will be installed as part of the workspace setup.
+<div align="left" >
+<a href="https://studio.firebase.google.com/new?template=https%3A%2F%2Fgithub.com%2FGoogleCloudPlatform%2Fapigee-samples%2Ftree%2Fagentic-workshop">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://cdn.firebasestudio.dev/btn/open_dark_32.svg">
+    <source media="(prefers-color-scheme: light)" srcset="https://cdn.firebasestudio.dev/btn/open_light_32.svg">
+    <img height="32" alt="Open in Firebase Studio" src="https://cdn.firebasestudio.dev/btn/open_blue_32.svg">
+  </picture>
+</a>
+</div>
+
+
 ## <a name="docs"></a>Apigee documentation
 
 The Apigee docs are located [here](https://cloud.google.com/apigee/docs).
