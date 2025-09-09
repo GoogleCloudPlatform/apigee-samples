@@ -29,6 +29,7 @@
           \
           echo "✅ Activating Python virtual env ..." &&
           source .venv/bin/activate &&
+          echo "source $(pwd)/.venv/bin/activate" >> ~/.bashrc &&
           \
           echo "✅ Installing Python requirements ..." &&
           pip install -r requirements.txt &&
