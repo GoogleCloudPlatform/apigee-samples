@@ -22,6 +22,8 @@
     workspace = {
       onCreate = {
         install =''
+          rm -rf .git
+
           echo "✅ Creating Python virtual env ..." &&
           python -m venv .venv &&
           \
