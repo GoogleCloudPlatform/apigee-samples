@@ -29,5 +29,6 @@
     cp -rf ${./requirements.txt} "$out/requirements.txt"
 
     chmod -R +w "$out"
+    rm -rf "$out/.git"
   '';
 }
