@@ -23,11 +23,15 @@
     mkdir -p "$out/.idx/"
     cp -rf ${./.idx}/* "$out/.idx"
 
+    mkdir -p "$out/.vscode/"
+    cp -rf ${./.vscode}/* "$out/.vscode"
+
     mkdir -p "$out/adk-cymbal-retail-agent/"
     cp -rf ${./adk-cymbal-retail-agent}/* "$out/adk-cymbal-retail-agent"
     
     cp -rf ${./requirements.txt} "$out/requirements.txt"
 
     chmod -R +w "$out"
+    rm -rf "$out/.git"
   '';
 }

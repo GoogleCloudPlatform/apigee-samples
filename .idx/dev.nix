@@ -16,32 +16,38 @@
     pkgs.python311Packages.pip
     pkgs.curl
   ];
-  env = {};
+  env = {
+    PATH = [
+      "/home/user/.apigee-go-gen/bin"
+      "/home/user/.apigeecli/bin"
+      "/home/user/.integrationcli/bin"
+    ];
+  };
   idx = {
     extensions = [ "ms-python.python"  "ms-python.debugpy"];
     workspace = {
       onCreate = {
         install =''
-          echo "✅ Creating Python virtual env ..." &&
-          python -m venv .venv &&
-          \
-          echo "✅ Activating Python virtual env ..." &&
-          source .venv/bin/activate &&
-          \
-          echo "✅ Installing Python requirements ..." &&
-          pip install -r requirements.txt &&
-          \
-          echo "✅ Installing apigee-go-gen tool ..." &&
-          curl -s https://apigee.github.io/apigee-go-gen/install | sh -s latest ~/.apigee-go-gen/bin &&
-          \
-          echo "✅ Adding apigee-go-gen to ~/.bashrc \$PATH ..." &&
-          echo "export PATH=\"\$HOME/.apigee-go-gen/bin:\$PATH\"" >> ~/.bashrc &&
-          \
-          echo "✅ Installing apigeecli tool ..." &&
-          curl -L https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.sh | sh - &&
-          \
-          echo "✅ Adding apigeecli to ~/.bashrc \$PATH ..." &&
-          echo "export PATH=\"\$HOME/.apigeecli/bin:\$PATH\"" >> ~/.bashrc
+          rm -rf .git
+
+          echo "✅ Creating Python virtual env ..."
+          python -m venv .venv
+
+          echo "✅ Activating Python virtual env ..."
+          source .venv/bin/activate
+          echo "source $(pwd)/.venv/bin/activate" >> ~/.bashrc
+
+          echo "✅ Installing Python requirements ..."
+          pip install -r requirements.txt
+
+          echo "✅ Installing apigee-go-gen tool ..."
+          curl -s https://apigee.github.io/apigee-go-gen/install | sh -s latest ~/.apigee-go-gen/bin
+
+          echo "✅ Installing apigeecli tool ..."
+          curl -L https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.sh | sh -
+
+          echo "✅ Installing integrationcli tool ..."
+          curl -L https://raw.githubusercontent.com/GoogleCloudPlatform/application-integration-management-toolkit/main/downloadLatest.sh | sh -
           '';
       };
     };
