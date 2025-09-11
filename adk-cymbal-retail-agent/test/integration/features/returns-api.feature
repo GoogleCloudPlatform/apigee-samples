@@ -16,20 +16,20 @@ Feature: Returns API
 
 Scenario: Using an invalid API Key
   Given I set x-apikey header to foobar
-  When I GET /returns
+  When I GET /v1/samples/adk-cymbal-retail/returns
   Then response code should be 401
   And response body should be valid json
 
 Scenario: Retieve a specfic return record
   Given I set x-apikey header to `apikey`
-  When I GET /returns/123
+  When I GET /v1/samples/adk-cymbal-retail/returns/123
   Then response code should be 200
   And response body should be valid json
   And response body should contain returnId
 
 Scenario: Retieve a list of returns
   Given I set x-apikey header to `apikey`
-  When I GET /returns
+  When I GET /v1/samples/adk-cymbal-retail/returns
   Then response code should be 200
   And response body should be valid json
   And response body should contain returnId
@@ -38,7 +38,7 @@ Scenario: Create a new return
   Given I set x-apikey header to `apikey`
   And I store the raw value {"returnId":"RMA789012","orderId":"ORD123456","returnStatus":"requested","items":["SKU987","SKU654"],"reason":"Item not as described","requestedAt":"2023-10-26T10:00:00Z","notes":"The color was completely different from the website image."} as myPayload in scenario scope
   And I set body to `myPayload`
-  When I POST to /returns
+  When I POST to /v1/samples/adk-cymbal-retail/returns
   Then response code should be 201
   And response body should be valid json
   And response body should contain returnId

@@ -1,0 +1,396 @@
+#  Copyright 2025 Google LLC
+#
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#
+#       http:#www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+
+#{{ $mcp := oas3_to_mcp $.Values.spec_file }}
+APIProxy:
+  .name: mcp-{{ slug_make ($.Values.spec.info.title) }}
+  DisplayName: {{ $.Values.spec.info.title }}
+  Description: |-
+    {{ $.Values.spec.info.description | nindent 4 }}
+Policies:
+  - AssignMessage:
+      .continueOnError: false
+      .enabled: true
+      .name: AM-InitializeRes
+      DisplayName: AM-InitializeRes
+      Set:
+        StatusCode: 200
+        Payload:
+          .contentType: application/json
+          -Data: |-
+            {
+              "jsonrpc": "2.0",
+              "id": {mcp.id},
+              "result": {
+                "protocolVersion": "2025-06-18",
+                "capabilities": {
+                  "prompts": {
+                    "listChanged": false
+                  },
+                  "resources": {
+                    "subscribe": false,
+                    "listChanged": false
+                  },
+                  "tools": {
+                    "listChanged": true
+                  }
+                },
+                "serverInfo": {
+                  "name": "mcp-{{ slug_make ($.Values.spec.info.title) }}",
+                  "title": "Apigee generated MCP API Proxy.",
+                  "version": "{{ dig "info" "version" "1.0.0" $.Values.spec }}"
+                },
+                "instructions": ""
+              }
+            }
+      IgnoreUnresolvedVariables: true
+      AssignTo:
+        .createNew: false
+        .transport: http
+        .type: response
+  - AssignMessage:
+      .continueOnError: false
+      .enabled: true
+      .name: AM-InitializedRes
+      DisplayName: AM-InitializedRes
+      Set:
+        StatusCode: 202
+      IgnoreUnresolvedVariables: true
+      AssignTo:
+        .createNew: false
+        .transport: http
+        .type: request
+  - AssignMessage:
+      .continueOnError: false
+      .enabled: true
+      .name: AM-PingRes
+      DisplayName: AM-PingRes
+      Set:
+        StatusCode: 200
+        Payload:
+          .contentType: application/json
+          -Data: |-
+            {
+              "jsonrpc": "2.0",
+              "id": {mcp.id},
+              "result": {}
+            }
+      IgnoreUnresolvedVariables: true
+      AssignTo:
+        .createNew: false
+        .transport: http
+        .type: response
+  - AssignMessage:
+      .continueOnError: false
+      .enabled: true
+      .name: AM-PromptsListRes
+      DisplayName: AM-PromptsListRes
+      Set:
+        StatusCode: 200
+        Payload:
+          .contentType: application/json
+          -Data: |-
+            {
+              "jsonrpc": "2.0",
+              "id": {mcp.id},
+              "result": {
+                "prompts": []
+              }
+            }
+      IgnoreUnresolvedVariables: true
+      AssignTo:
+        .createNew: false
+        .transport: http
+        .type: response
+  - AssignMessage:
+      .continueOnError: false
+      .enabled: true
+      .name: AM-ResourcesListRes
+      DisplayName: AM-ResourcesListRes
+      Set:
+        StatusCode: 200
+        Payload:
+          .contentType: application/json
+          -Data: |-
+            {
+              "jsonrpc": "2.0",
+              "id": {mcp.id},
+              "result": {
+                "resources": []
+              }
+            }
+      IgnoreUnresolvedVariables: true
+      AssignTo:
+        .createNew: false
+        .transport: http
+        .type: response
+  - AssignMessage:
+      .continueOnError: false
+      .enabled: true
+      .name: AM-ResourcesTemplatesListRes
+      DisplayName: AM-ResourcesTemplatesListRes
+      Set:
+        StatusCode: 200
+        Payload:
+          .contentType: application/json
+          -Data: |-
+            {
+              "jsonrpc": "2.0",
+              "id": {mcp.id},
+              "result": {
+                "resourceTemplates": []
+              }
+            }
+      IgnoreUnresolvedVariables: true
+      AssignTo:
+        .createNew: false
+        .transport: http
+        .type: response
+  - AssignMessage:
+      .continueOnError: false
+      .enabled: true
+      .name: AM-ToolsListRes
+      DisplayName: AM-ToolsListRes
+      Set:
+        StatusCode: 200
+        Payload:
+          .contentType: application/json
+          -Data: |-
+            {
+              "jsonrpc": "2.0",
+              "id": {mcp.id},
+              "result": {
+                "tools": 
+                 {{ $mcp.tools_list | toPrettyJson | nindent 18 }}
+                
+              }
+            }
+      IgnoreUnresolvedVariables: true
+      AssignTo:
+        .createNew: false
+        .transport: http
+        .type: response
+  - Javascript:
+      .continueOnError: false
+      .enabled: true
+      .timeLimit: 200
+      .name: JS-ProcessReq
+      DisplayName: JS-ProcessReq
+      Properties: {}
+      IncludeURL:  jsc://mcp.cjs
+      ResourceURL: jsc://process-req.cjs
+  - AssignMessage:
+      .continueOnError: false
+      .enabled: true
+      .name: AM-SetGenericError
+      DisplayName: AM-SetGenericError
+      Properties: { }
+      Set:
+        Payload:
+          .contentType: application/json
+          -Data: |-
+              {
+                "jsonrpc": "2.0",
+                "id": {mcp.id},
+                "error": {
+                  "code": {error.status.code},
+                  "message": "{escapeJSON(error.message)}"
+                }
+              }
+        StatusCode: "{error.status.code}"
+        ReasonPhrase: "{error.reason.phrase}"
+  - AssignMessage:
+      .continueOnError: false
+      .enabled: true
+      .name: AM-SetCustomError
+      DisplayName: AM-SetCustomError
+      Set:
+        Payload:
+          .contentType: application/json
+          -Data: "{error_body}"
+        StatusCode: "{error_status}"
+  - Javascript:
+      .continueOnError: false
+      .enabled: true
+      .timeLimit: 200
+      .name: JS-SetTarget
+      DisplayName: JS-SetTarget
+      IncludeURL:  jsc://mcp.cjs
+      ResourceURL: jsc://setup-tool-target.cjs
+  - Javascript:
+      .continueOnError: false
+      .enabled: true
+      .timeLimit: 200
+      .name: JS-ProcessToolRes
+      DisplayName: JS-ProcessToolRes
+      IncludeURL: jsc://mcp.cjs
+      ResourceURL: jsc://process-tool-res.cjs
+
+ProxyEndpoints:
+  - ProxyEndpoint:
+      .name: default
+      -Data:
+        - DefaultFaultRule:
+            .name: default-fault
+            Step:
+              Name: AM-SetGenericError
+        - FaultRules:
+            -Data:
+              - FaultRule:
+                  .name: custom-error
+                  Step:
+                    Name: AM-SetCustomError
+                  Condition: error_body != null
+        - PreFlow:
+            .name: PreFlow
+            Request:
+              Step:
+                Name: JS-ProcessReq
+                Condition: request.header.Content-Type = "application/json" and request.verb = "POST"
+            Response: { }
+        - PostFlow:
+            .name: PostFlow
+            Request: { }
+            Response: { }
+        - Flows:
+            - Flow:
+                .name: initialize
+                Description: { }
+                Request: { }
+                Response:
+                  Step:
+                    Name: AM-InitializeRes
+                Condition: mcp.method = "initialize"
+            - Flow:
+                .name: initialized
+                Description: { }
+                Request: { }
+                Response:
+                  Step:
+                    Name: AM-InitializedRes
+                Condition: mcp.method = "notifications/initialized"
+            - Flow:
+                .name: resources/templates/list
+                Description: { }
+                Request: { }
+                Response:
+                  Step:
+                    Name: AM-ResourcesTemplatesListRes
+                Condition: mcp.method = "resources/templates/list"
+            - Flow:
+                .name: resources/list
+                Description: { }
+                Request: { }
+                Response:
+                  Step:
+                    Name: AM-ResourcesListRes
+                Condition: mcp.method = "resources/list"
+            - Flow:
+                .name: prompts/list
+                Description: { }
+                Request: { }
+                Response:
+                  Step:
+                    Name: AM-PromptsListRes
+                Condition: mcp.method = "prompts/list"
+            - Flow:
+                .name: tools/list
+                Description: { }
+                Request: { }
+                Response:
+                  Step:
+                    Name: AM-ToolsListRes
+                Condition: mcp.method = "tools/list"
+            - Flow:
+                .name: ping
+                Description: { }
+                Request: { }
+                Response:
+                  Step:
+                    Name: AM-PingRes
+                Condition: mcp.method = "ping"
+            #{{- range $operationId, $_ := $mcp.tools_targets }}
+            - Flow:
+                .name: tool-{{ $operationId }}
+                Condition: (mcp.method = "tools/call") and (mcp.params.name = "{{ $operationId }}")
+            #{{- end }}
+        - HTTPProxyConnection:
+            BasePath: /mcp{{ include "get_basepath" (index $.Values.spec.servers 0 "url") }}
+        - RouteRule:
+            .name: tool-call
+            TargetEndpoint: tool-call
+            Condition: mcp.method = "tools/call"
+        - RouteRule:
+            .name: no-op
+TargetEndpoints:
+  - TargetEndpoint:
+      .name: tool-call
+      DefaultFaultRule:
+        .name: default-fault
+        Step:
+          Name: AM-SetGenericError
+      FaultRules:
+        -Data:
+          - FaultRule:
+              .name: custom-error
+              Step:
+                Name: AM-SetCustomError
+              Condition: error_body != null
+      PreFlow:
+        .name:
+        Response:
+          - Step:
+              Name: JS-ProcessToolRes
+        Request:
+          - Step:
+              Name: JS-SetTarget
+      Flows: { }
+      PostFlow:
+        .name:
+      HTTPTargetConnection:
+        #{{- $scheme := include "get_scheme" (index $.Values.spec.servers 0 "url") }}
+        #{{- if eq $scheme "https" }}
+        SSLInfo:
+          Enabled: true
+          Enforce: true
+          IgnoreValidationErrors: true
+        #{{- end }}
+        URL: https://foo.bar
+        Properties:
+          Property:
+            .name: success.codes
+            -Data: 1xx,2xx,3xx,4xx,5xx
+Resources:
+  #{{ os_copyfile "./process-req.cjs" "./resources/process-req.cjs" }}
+  - Resource:
+      Type: jsc
+      Path: ./process-req.cjs
+  #{{ os_copyfile "./setup-tool-target.cjs" "./resources/setup-tool-target.cjs" }}
+  - Resource:
+      Type: jsc
+      Path: ./setup-tool-target.cjs
+  #{{ os_copyfile "./process-tool-res.cjs" "./resources/process-tool-res.cjs" }}
+  - Resource:
+      Type: jsc
+      Path: ./process-tool-res.cjs
+  #{{ os_copyfile "./mcp.cjs" "./resources/mcp.cjs" }}
+  - Resource:
+      Type: jsc
+      Path: ./mcp.cjs
+  #{{ include "create_mcp_properties_file" (dict "file" "mcp-tools.properties" "mcp" $mcp "oas" $.Values.spec) }}
+  - Resource:
+      Type: properties
+      Path: ./mcp-tools.properties
+
+

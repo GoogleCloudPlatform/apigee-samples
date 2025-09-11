@@ -20,10 +20,10 @@ const { Before: before } = require("@cucumber/cucumber");
 var {setDefaultTimeout} = require('@cucumber/cucumber');
 setDefaultTimeout(10 * 1000);
 
-if (!process.env.PROXY_URL || !process.env.APIKEY) {
+if (!process.env.APIGEE_HOST || !process.env.APIKEY) {
   
   console.log();
-  console.log('Environment variables PROXY_URL and APIKEY must be set before the tests can be run.');
+  console.log('Environment variables APIGEE_HOST and APIKEY must be set before the tests can be run.');
   console.log();
   console.log('Please set the Environment variables and try running the command again.');
   console.log();
@@ -34,7 +34,7 @@ if (!process.env.PROXY_URL || !process.env.APIKEY) {
   before(function () {
     this.apickli = new apickli.Apickli(
       "https",
-      process.env.PROXY_URL
+      process.env.APIGEE_HOST
     );
 
     this.apickli.setGlobalVariable("apikey", process.env.APIKEY);

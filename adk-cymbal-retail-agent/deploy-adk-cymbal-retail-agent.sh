@@ -77,6 +77,10 @@ echo "Installing apigeecli"
 curl -s https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.sh | bash
 export PATH=$PATH:$HOME/.apigeecli/bin
 
+echo "✅ Installing apigee-go-gen tool ..."
+curl -s https://apigee.github.io/apigee-go-gen/install | sh -s v1.1.0-beta.1 ~/.apigee-go-gen/bin
+export PATH=$PATH:$HOME/.apigee-go-gen/bin
+
 echo "Registering APIs in Apigee API hub"
 cp -rf config tmp/
 sed -i "s/APIGEE_HOST/$APIGEE_HOST/g" tmp/*/*.yaml
@@ -86,6 +90,12 @@ sed -i "s/APIGEE_APIHUB_REGION/$APIGEE_APIHUB_REGION/g" tmp/*/*.json
 add_api_to_hub "customers"
 add_api_to_hub "orders"
 add_api_to_hub "returns"
+
+apigee-go-gen render apiproxy \
+  --template ./config/templates/mcp/apiproxy.yaml \
+  --set-oas spec=./tmp/customers/customers.yaml \
+  --include ./config/templates/mcp/*.tmpl \
+  --output ./proxies/mcp-cymbal-customers-v1
 
 rm -rf tmp
 
@@ -107,6 +117,13 @@ apigeecli apis create bundle -n cymbal-returns-v1 \
   --token "$TOKEN" -o "$PROJECT_ID" \
   -s "${SERVICE_ACCOUNT_NAME}@${PROJECT_ID}.iam.gserviceaccount.com" \
   --ovr --wait
+
+apigeecli apis create bundle -n mcp-cymbal-customers-v1 \
+  -f proxies/mcp-cymbal-customers-v1/apiproxy -e "$APIGEE_ENV" \
+  --token "$TOKEN" -o "$PROJECT_ID" \
+  --ovr --wait
+
+rm -rf proxies/mcp-cymbal-customers-v1
 
 echo "Creating API Products"
 apigeecli products create --name "cymbal-retail-product" --display-name "cymbal-retail-product" \
@@ -164,6 +181,7 @@ echo " "
 echo "Export these variables"
 echo "export APIKEY=$APIKEY"
 echo "export PROXY_URL=$PROXY_URL"
+echo "export APIGEE_HOST=$APIGEE_HOST"
 echo " "
 echo "Your PROJECT_ID is: $PROJECT_ID"
 echo "Your APIGEE_HOST is: $APIGEE_HOST"

@@ -1,0 +1,59 @@
+
+{{/*
+ Copyright 2025 Google LLC
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http:#www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+*/}}
+
+{{- define "get_basepath" -}}
+  {{- $url := url_parse . -}}
+  {{- $url.Path | default "/" -}}
+{{- end -}}
+
+{{- define "get_scheme" -}}
+  {{- $url := url_parse . -}}
+  {{- $url.Scheme -}}
+{{- end -}}
+
+{{- define "get_target_url" -}}
+  {{- $servers := . -}}
+  {{- index $servers 0 | dig "url" "https://mocktarget.apigee.net" -}}
+{{- end -}}
+
+{{- define "get_mcp_tools_properties" -}}
+  {{- $mcp := .mcp -}}
+  {{- $targetUrl := .targetUrl -}}
+  {{- range $operationId, $toolTarget := $mcp.tools_targets }}
+
+    {{- "" -}}{{ "\n"}}# MCP Tool "{{ $operationId }}"
+    {{- "" -}}{{ "\n"}}{{ $operationId }}.target_url={{ $targetUrl }}
+    {{- "" -}}{{ "\n"}}{{ $operationId }}.target_path_suffix={{ $toolTarget.pathSuffix }}
+    {{- "" -}}{{ "\n"}}{{ $operationId }}.target_verb={{ $toolTarget.verb }}
+    {{- "" -}}{{ "\n"}}{{ $operationId }}.target_content_type={{ $toolTarget.contentType }}
+    {{- "" -}}{{ "\n"}}
+  {{- end -}}
+{{- end -}}
+
+
+{{- define "create_mcp_properties_file" -}}
+  {{- $fileName := .file -}}
+  {{- $mcp := .mcp -}}
+  {{- $oas := .oas -}}
+  {{- $targetUrl := include "get_target_url" $oas.servers }}
+  {{- $text := include "get_mcp_tools_properties" (dict "mcp" $mcp "targetUrl" $targetUrl) -}}
+  {{ os_writefile $fileName $text }}
+  {{- $fileName -}}
+{{- end -}}
+
+
+{{- define "blank" -}}{{- end -}}

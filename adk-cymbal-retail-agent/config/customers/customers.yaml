@@ -24,11 +24,11 @@ info:
     url: https://cymbal-retail.com
   termsOfService: https://cymbal-retail/terms/
 servers:
-  - url: https://APIGEE_HOST/v1/samples/adk-cymbal-retail
+  - url: https://APIGEE_HOST/v1/samples/adk-cymbal-retail/customers
 security:
   - ApiKeyAuth: []
 paths:
-  /customers:
+  /:
     get:
       summary: Get a list of all customers
       operationId: getAllCustomers
@@ -81,7 +81,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-  /customers/{customerId}:
+  /{customerId}:
     get:
       summary: Get a customer by ID
       operationId: getCustomerById
