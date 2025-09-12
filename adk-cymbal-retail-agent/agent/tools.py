@@ -25,8 +25,10 @@ load_dotenv()
 
 PROJECT_ID=os.getenv("GOOGLE_CLOUD_PROJECT")
 LOCATION=os.getenv("GOOGLE_CLOUD_LOCATION")
+MCP_TOOLSET_URL=os.getenv("APIGEE_HOSTNAME")
 API_HUB_LOCATION=f"projects/{PROJECT_ID}/locations/{LOCATION}/apis"
 SECRET=f"projects/{PROJECT_ID}/secrets/cymbal-retail-apikey/versions/latest"
+
 
 # # Get the credentials for the Cymbal Auto APIs
 secret_manager_client = SecretManagerClient()
@@ -62,7 +64,7 @@ returns = APIHubToolset(
 
 membership = MCPToolset(
     connection_params=StreamableHTTPConnectionParams(
-        url="https://34.54.87.114.nip.io/mcp/v1/samples/adk-cymbal-retail"
+        url=MCP_TOOLSET_URL
     ),
     errlog=None,
     auth_scheme=auth_scheme,
