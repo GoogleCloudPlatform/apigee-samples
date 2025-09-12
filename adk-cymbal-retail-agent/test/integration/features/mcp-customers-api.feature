@@ -15,27 +15,64 @@
 Feature: MCP Customers API
 
 Scenario: initialize
-  Given I store the raw value {"jsonrpc": "2.0","id": 987654321,"method": "initialize","params": {"protocolVersion": "2025-06-18","capabilities": {"tools": {},"resources": {},"prompts": {}},"clientInfo": {"name": "test-client","version": "1.0.0"}}} as myPayload in scenario scope
+  Given I store the raw value {"method":"initialize","params":{"protocolVersion":"2025-06-18","capabilities":{},"clientInfo":{"name":"mcp","version":"0.1.0"}},"jsonrpc":"2.0","id":0} as myPayload in scenario scope
   And I set body to `myPayload`
   And I set headers to
       | name          | value            |
       | content-type  | application/json |
       | User-Agent    | apickli          |
+      | x-apikey      | `apikey`         |
+
   When I POST to /mcp/v1/samples/adk-cymbal-retail/customers
   Then response code should be 200
   And response body should be valid json
-  And response body should contain 987654321
-  And response body should contain serverInfo
+  And response body should contain mcp-customer-profile-api
+  And response body should contain jsonrpc
 
 Scenario: tools/list
-  Given I store the raw value {"jsonrpc":"2.0","id":987654321,"method":"tools/list","params":{"cursor":"optional-cursor-value"}} as myPayload in scenario scope
+  Given I store the raw value {"method":"tools/list","jsonrpc":"2.0","id":1} as myPayload in scenario scope
   And I set body to `myPayload`
   And I set headers to
       | name          | value            |
       | content-type  | application/json |
       | User-Agent    | apickli          |
+      | x-apikey      | `apikey`         |
+
   When I POST to /mcp/v1/samples/adk-cymbal-retail/customers
   Then response code should be 200
-  And response body should contain 987654321
+  And response body should be valid json
+  And response body should contain 1
   And response body should contain jsonrpc
   And response body should contain getAllCustomers
+
+  Scenario: tools/call
+  Given I store the raw value {"method":"tools/call","params":{"name":"getCustomerById","arguments":{"path_params":{"customerId":12345}}},"jsonrpc":"2.0","id":1} as myPayload in scenario scope
+  And I set body to `myPayload`
+  And I set headers to
+      | name          | value            |
+      | content-type  | application/json |
+      | User-Agent    | apickli          |
+      | x-apikey      | `apikey`         |
+
+  When I POST to /mcp/v1/samples/adk-cymbal-retail/customers
+  Then response code should be 200
+  And response body should be valid json
+  And response body should contain 1
+  And response body should contain jsonrpc
+  And response body should contain email
+  And response body should contain createdAt
+
+  Scenario: notifications/initialized
+  Given I store the raw value {"method":"notifications/initialized","jsonrpc":"2.0"} as myPayload in scenario scope
+  And I set body to `myPayload`
+  And I set headers to
+      | name          | value            |
+      | content-type  | application/json |
+      | User-Agent    | apickli          |
+      | x-apikey      | `apikey`         |
+      
+  When I POST to /mcp/v1/samples/adk-cymbal-retail/customers
+  Then response code should be 202
+  And response body should be valid json
+  And response body should contain notifications/initialized
+  And response body should contain jsonrpc
