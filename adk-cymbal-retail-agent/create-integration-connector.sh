@@ -60,7 +60,7 @@ sed -i "s/OAUTH_CLIENT_ID/$OAUTH_CLIENT_ID/g" connectors/bq-products-tmp.json
 sed -i "s/PROJECT_ID/$PROJECT_ID/g" connectors/bq-products-tmp.json
 
 echo "Creating BigQuery Connector"
-integrationcli connectors create -n bq-products -f connectors/bq-products-tmp.json -p "$PROJECT_ID" -r "$REGION" -t "$TOKEN" -g --wait
+integrationcli connectors create -n bq-products -f connectors/bq-products-tmp.json -p "$PROJECT_ID" -r "$VERTEXAI_REGION" -t "$TOKEN" -g --wait
 
 rm connectors/bq-products-tmp.json
 echo "BigQuery Connector created successfully"
