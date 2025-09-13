@@ -36,14 +36,15 @@ LOCATION=os.getenv("GOOGLE_CLOUD_LOCATION")
 MCP_TOOLSET_URL=os.getenv("APIGEE_HOSTNAME")
 API_HUB_LOCATION=f"projects/{PROJECT_ID}/locations/{LOCATION}/apis"
 SECRET=f"projects/{PROJECT_ID}/secrets/cymbal-retail-apikey/versions/latest"
+APP_SECRET=f"projects/{PROJECT_ID}/secrets/cymbal-retail-agent-client-secret/versions/latest"
 OAUTH_CLIENT_ID=os.getenv("OAUTH_CLIENT_ID")
-OAUTH_CLIENT_SECRET=os.getenv("OAUTH_CLIENT_SECRET")
 AGENT_REDIRECT_URI=os.getenv("AGENT_REDIRECT_URI")
 
 
 # # Get the credentials for the Cymbal Auto APIs
 secret_manager_client = SecretManagerClient()
-apikey_credential_str = secret_manager_client.get_secret(SECRET)    
+apikey_credential_str = secret_manager_client.get_secret(SECRET)
+app_credential_str = secret_manager_client.get_secret(APP_SECRET) 
 auth_scheme, auth_credential = token_to_scheme_credential("apikey", "header", "x-apikey", apikey_credential_str)
 
 oauth2_scheme = OAuth2(
@@ -62,7 +63,7 @@ oauth_credential = AuthCredential(
   auth_type=AuthCredentialTypes.OAUTH2,
   oauth2=OAuth2Auth(
       client_id=OAUTH_CLIENT_ID, 
-      client_secret=OAUTH_CLIENT_SECRET,
+      client_secret=app_credential_str,
       redirect_uri=AGENT_REDIRECT_URI
   )
 )

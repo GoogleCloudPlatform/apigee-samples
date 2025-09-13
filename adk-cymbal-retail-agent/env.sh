@@ -15,6 +15,8 @@
 # limitations under the License.
 
 export PROJECT_ID="PROJECT_ID_TO_SET"
+PROJECT_NUMBER="$(gcloud projects describe $PROJECT_ID --format="value(projectNumber)")"
+export PROJECT_NUMBER
 export APIGEE_ENV="APIGEE_ENV_TO_SET"
 export APIGEE_HOST="APIGEE_HOST_TO_SET"
 export SERVICE_ACCOUNT_NAME="llm-cymbal-retail-agent"
@@ -25,3 +27,7 @@ export APIGEE_APIHUB_REGION="APIGEE_APIHUB_REGION_TO_SET"
 export VERTEXAI_REGION="VERTEXAI_REGION_TO_SET"
 export VERTEXAI_PROJECT_ID="VERTEXAI_PROJECT_ID_TO_SET"
 export MODEL_ID="gemini-2.5-flash"
+
+export OAUTH_CLIENT_ID="OAUTH_CLIENT_ID_TO_SET"
+export OAUTH_CLIENT_SECRET="OAUTH_CLIENT_SECRET_TO_SET"
+export AGENT_REDIRECT_URI=http://localhost:8000/dev-ui/

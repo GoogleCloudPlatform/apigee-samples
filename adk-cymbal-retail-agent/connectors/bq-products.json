@@ -1,0 +1,54 @@
+{
+	"connectorDetails": {
+		"name": "bigquery",
+		"provider": "gcp",
+		"version": 1
+	},
+	"configVariables": [
+		{
+			"key": "project_id",
+			"stringValue": "PROJECT_ID"
+		},
+		{
+			"key": "dataset_id",
+			"stringValue": "products_sample_data"
+		},
+		{
+			"key": "support_native_data_type",
+			"boolValue": false
+		},
+		{
+			"key": "proxy_enabled",
+			"boolValue": false
+		}
+	],
+	"authConfig": {
+		"authType": "OAUTH2_AUTH_CODE_FLOW",
+		"oauth2AuthCodeFlow": {
+			"clientId": "OAUTH_CLIENT_ID",
+			"clientSecret": {
+				"secretVersion": "projects/PROJECT_ID/secrets/cymbal-retail-agent-client-secret/versions/1"
+			},
+			"scopes": [
+				"https://www.googleapis.com/auth/cloud-platform"
+			]
+		},
+		"authKey": "oauth"
+	},
+	"nodeConfig": {
+		"minNodeCount": 2,
+		"maxNodeCount": 5
+	},
+	"logConfig": {
+		"enabled": true,
+		"level": "ERROR"
+	},
+	"sslConfig": {
+		"privateServerCertificate": {},
+		"clientCertificate": {},
+		"clientPrivateKey": {},
+		"clientPrivateKeyPass": {}
+	},
+	"authOverrideEnabled": true
+}
+
