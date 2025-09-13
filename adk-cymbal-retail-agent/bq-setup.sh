@@ -52,10 +52,10 @@ curl -L https://raw.githubusercontent.com/GoogleCloudPlatform/application-integr
 export PATH=$PATH:$HOME/.integrationcli/bin
 
 # echo "Assigning BQ roles to service account"
-# add_role_to_serviceaccount "roles/bigquery.readSessionUser"
-# add_role_to_serviceaccount "roles/bigquery.jobUser"
-# add_role_to_serviceaccount "roles/bigquery.dataEditor"
-# add_role_to_serviceaccount "roles/datacatalog.categoryAdmin"
+add_role_to_serviceaccount "roles/bigquery.readSessionUser"
+add_role_to_serviceaccount "roles/bigquery.jobUser"
+add_role_to_serviceaccount "roles/bigquery.dataEditor"
+add_role_to_serviceaccount "roles/datacatalog.categoryAdmin"
 
 echo "Creating BQ Taxonomy"
 TAXONOMY_ID=$(curl --location "https://datacatalog.googleapis.com/v1/projects/$PROJECT_ID/locations/$VERTEXAI_REGION/taxonomies" \
