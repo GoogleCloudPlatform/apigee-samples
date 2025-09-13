@@ -64,3 +64,6 @@ integrationcli connectors create -n bq-products -f connectors/bq-products-tmp.js
 
 rm connectors/bq-products-tmp.json
 echo "BigQuery Connector created successfully"
+
+echo "Publishing Integration"
+integrationcli integrations apply -f integration/. -p "$PROJECT_ID" -r "$VERTEXAI_REGION" -t "$TOKEN" -g --skip-connectors --wait
