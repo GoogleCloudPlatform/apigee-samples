@@ -12,9 +12,4 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-# # If using Gemini via Vertex AI on Google CLoud
-GOOGLE_GENAI_USE_VERTEXAI="TRUE"
-GOOGLE_CLOUD_PROJECT=<YOUR_PROJECT_ID>
-GOOGLE_CLOUD_LOCATION=<YOUR_PROJECT_LOCATION>
-APIGEE_HOSTNAME=<YOUR_APIGE_HOSTNAME>
+from . import agent

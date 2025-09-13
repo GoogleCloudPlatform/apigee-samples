@@ -1,0 +1,29 @@
+[
+  {
+    "name": "id",
+    "type": "STRING"
+  },
+  {
+    "name": "name",
+    "type": "STRING"
+  },
+  {
+    "name": "description",
+    "type": "STRING"
+  },
+  {
+    "name": "purchase_cost",
+    "type": "FLOAT",
+    "policyTags": {
+      "names": ["POLICYTAG_ID"]
+    }
+  },
+  {
+    "name": "selling_cost",
+    "type": "FLOAT"
+  },
+  {
+    "name": "quantity",
+    "type": "INTEGER"
+  }
+]
