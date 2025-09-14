@@ -1,0 +1,154 @@
+openapi: 3.0.0
+info:
+  title: Products API
+  version: 1.0.0
+  description: API for managing product inventory. This API allows for the creation, retrieval, update, and deletion of product records.
+servers:
+  - url: https://api.example.com/products/v1
+    description: Production server for the Products API.
+paths:
+  /products:
+    get:
+      summary: Get all products
+      operationId: getAllProducts
+      responses:
+        '200':
+          description: A list of products successfully retrieved.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+    post:
+      summary: Add a new product
+      operationId: addProduct
+      requestBody:
+        required: true
+        description: Product data to be added.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductInput'
+      responses:
+        '201':
+          description: Product successfully created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '400':
+          description: Invalid input provided for product creation.
+  /products/{productId}:
+    get:
+      summary: Get a product by ID
+      operationId: getProductById
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          description: Unique identifier of the product to retrieve.
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Product details successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '404':
+          description: Product not found with the given ID.
+    put:
+      summary: Update an existing product
+      operationId: updateProduct
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          description: Unique identifier of the product to update.
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        description: Updated product data.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductInput'
+      responses:
+        '200':
+          description: Product successfully updated.
+        '400':
+          description: Invalid input provided for product update.
+        '404':
+          description: Product not found with the given ID.
+    delete:
+      summary: Delete a product
+      operationId: deleteProduct
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          description: Unique identifier of the product to delete.
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Product successfully deleted. No content.
+        '404':
+          description: Product not found with the given ID.
+components:
+  schemas:
+    Product:
+      type: object
+      required:
+        - id
+        - name
+        - price
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique product identifier.
+        name:
+          type: string
+          description: Name of the product.
+        description:
+          type: string
+          nullable: true
+          description: Detailed description of the product.
+        price:
+          type: number
+          format: float
+          description: Price of the product.
+        stock:
+          type: integer
+          format: int32
+          description: Current stock quantity.
+          default: 0
+    ProductInput:
+      type: object
+      required:
+        - name
+        - price
+      properties:
+        name:
+          type: string
+          description: Name of the product.
+        description:
+          type: string
+          nullable: true
+          description: Detailed description of the product.
+        price:
+          type: number
+          format: float
+          description: Price of the product.
+        stock:
+          type: integer
+          format: int32
+          description: Initial stock quantity.
+          default: 0
