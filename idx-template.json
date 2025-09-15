@@ -1,9 +1,0 @@
-{
-  "name": "Apigee Agentic Workshop",
-  "description": "Create powerful AI Agents using Apigee, App Integration, and the Google Agent Development Kit (ADK)",
-  "categories": [
-    "Apigee"
-  ],
-  "icon": "https://icon.icepanel.io/GCP/svg/Apigee-API-Platform.svg",
-  "website": "https://cloud.google.com/apigee"
-}
