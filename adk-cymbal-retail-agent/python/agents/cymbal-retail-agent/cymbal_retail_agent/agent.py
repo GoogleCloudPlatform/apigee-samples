@@ -13,7 +13,7 @@
 # limitations under the License.
 
 from google.adk.agents import Agent
-from .tools import customerprofile, orders, returns, membership, products
+from .tools import customer_profile, orders, returns, membership, products
 
 import warnings
 # Ignore all warnings
@@ -34,7 +34,7 @@ customer_profile_agent = Agent(
     instruction="""
 You are a specialized agent for retrieving customer profile information. Your sole responsibility is to get all available details about a specific customer, such as their name, contact information, and account status. You will receive a request from the root agent and should respond by providing the requested information to the user.
 """,
-    tools=[customerprofile]
+    tools=[customer_profile]
 )
 logging.info("Customer Profile Agent initialized.")
 
