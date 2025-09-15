@@ -12,6 +12,7 @@ google-adk>=1.5.0,<2.0.0
 google-cloud-aiplatform[adk,agent-engines]>=1.100.0,<2.0.0
 python-dotenv>=1.1.1,<2.0.0
 google-cloud-secret-manager>=2.24.0,<3.0.0
+poetry>=2.2.0,<3.0.0
 EOF
 )
 
