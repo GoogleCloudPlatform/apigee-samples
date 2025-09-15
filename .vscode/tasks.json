@@ -1,0 +1,38 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "env-setup",
+      "type": "shell",
+      "command": "./env-setup.sh",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": true,
+        "clear": false
+      },
+      "runOptions": {
+        "runOn": "folderOpen",
+        "instanceLimit": 1
+      }
+    },
+    {
+      "label": "open-terminal",
+      "command": "${command:workbench.action.terminal.new}",
+      "runOptions": {
+        "runOn": "folderOpen"
+      },
+      "dependsOn": [ "env-setup" ],
+      "presentation": {
+        "echo": false,
+        "focus": false,
+        "panel": "dedicated",
+        "reveal": "silent",
+        "close": true
+      }
+    }
+
+  ]
+}
