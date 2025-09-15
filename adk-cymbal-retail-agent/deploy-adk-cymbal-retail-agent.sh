@@ -44,9 +44,46 @@ if [ -z "$VERTEXAI_PROJECT_ID" ]; then
   exit
 fi
 
+if [ -z "$MODEL_ARMOR_REGION" ]; then
+  echo "No MODEL_ARMOR_REGION variable set"
+  exit
+fi
+
+if [ -z "$MODEL_ARMOR_TEMPLATE_ID" ]; then
+  echo "No MODEL_ARMOR_TEMPLATE_ID variable set"
+  exit
+fi
+
 if [ -z "$TOKEN" ]; then
   TOKEN=$(gcloud auth print-access-token)
 fi
+
+add_role_to_serviceaccount(){
+  local role=$1
+  gcloud projects add-iam-policy-binding "${PROJECT_ID}" \
+    --member="serviceAccount:${SERVICE_ACCOUNT_NAME}@${PROJECT_ID}.iam.gserviceaccount.com" \
+    --role="${role}"
+}
+
+import_and_deploy_sharedflow() {
+  local sharedflow_name=$1
+  echo "Deploying Shared Flow: $sharedflow_name"
+  apigeecli sharedflows create bundle -n "$sharedflow_name" \
+  -f sharedflowbundles/"$sharedflow_name"/sharedflowbundle \
+  -e "$APIGEE_ENV" --token "$TOKEN" -o "$PROJECT_ID" \
+  -s "${SERVICE_ACCOUNT_NAME}"@"${PROJECT_ID}".iam.gserviceaccount.com \
+  --ovr --wait
+}
+
+import_and_deploy_proxy() {
+  local proxy=$1
+  echo "Deploying Proxy: $proxy"
+  apigeecli apis create bundle -n "$proxy" \
+  -f "proxies/${proxy}/apiproxy" \
+  -e "$APIGEE_ENV" --token "$TOKEN" -o "$PROJECT_ID" \
+  -s "${SERVICE_ACCOUNT_NAME}"@"${PROJECT_ID}".iam.gserviceaccount.com \
+  --ovr --wait
+}
 
 add_api_to_hub(){
   local api=$1
@@ -99,29 +136,75 @@ apigee-go-gen render apiproxy \
 
 rm -rf tmp
 
+add_role_to_serviceaccount "roles/logging.logWriter"
+add_role_to_serviceaccount "roles/aiplatform.user"
+add_role_to_serviceaccount "roles/modelarmor.admin"
+add_role_to_serviceaccount "roles/iam.serviceAccountUser"
+add_role_to_serviceaccount "roles/dlp.reader"
+add_role_to_serviceaccount "roles/dlp.user"
+
+gcloud services enable logging.googleapis.com aiplatform.googleapis.com modelarmor.googleapis.com --project "$PROJECT_ID"
+
+gcloud config set api_endpoint_overrides/modelarmor "https://modelarmor.$MODEL_ARMOR_REGION.rep.googleapis.com/"
+
+gcloud model-armor templates create "$MODEL_ARMOR_TEMPLATE_ID" -q --location "$MODEL_ARMOR_REGION" --project="$PROJECT_ID" \
+  --rai-settings-filters='[{ "filterType": "HATE_SPEECH", "confidenceLevel": "MEDIUM_AND_ABOVE" },{ "filterType": "HARASSMENT", "confidenceLevel": "MEDIUM_AND_ABOVE" },{ "filterType": "SEXUALLY_EXPLICIT", "confidenceLevel": "MEDIUM_AND_ABOVE" }]' \
+  --basic-config-filter-enforcement=enabled \
+  --pi-and-jailbreak-filter-settings-enforcement=enabled \
+  --pi-and-jailbreak-filter-settings-confidence-level=LOW_AND_ABOVE \
+  --malicious-uri-filter-settings-enforcement=enabled
+
+curl --location "https://dlp.googleapis.com/v2/projects/$PROJECT_ID/deidentifyTemplates" \
+--header "X-Goog-User-Project: $PROJECT_NUMBER" \
+--header "Content-Type: application/json" \
+--header "Authorization: Bearer $TOKEN" \
+--data "{
+   \"templateId\": \"Basic_PII\",
+   \"deidentifyTemplate\":{
+      \"name\":\"Basic_PII\",
+      \"displayName\":\"Basic_PII\",
+      \"description\": \"Basic_PII\",
+      \"deidentifyConfig\":{
+         \"infoTypeTransformations\":{
+            \"transformations\":[
+               {
+                  \"primitiveTransformation\":{
+                     \"characterMaskConfig\":{
+                        \"maskingCharacter\":\"#\"
+                     }
+                  }
+               }
+            ]
+         },
+         \"transformationErrorHandling\":{
+            \"throwError\":{}
+         }
+      }
+   }
+}" 
+
+echo "Creating Data collectors..."
+
+apigeecli datacollectors create -d "Collects PII or Jailbreak attack matches" -n dc_ma_pi_jailbreak -p INTEGER --org "$PROJECT_ID" --token "$TOKEN"
+apigeecli datacollectors create -d "Collects malicious URI matches" -n dc_ma_malicious_uri -p INTEGER --org "$PROJECT_ID" --token "$TOKEN"
+apigeecli datacollectors create -d "Collects dangerous and Responsible AI matches" -n dc_ma_rai -p INTEGER --org "$PROJECT_ID" --token "$TOKEN"
+apigeecli datacollectors create -d "Collects CSAM matches" -n dc_ma_csam -p INTEGER --org "$PROJECT_ID" --token "$TOKEN"
+apigeecli datacollectors create -d "Candidates token count" -n dc_candidates_token_count -p INTEGER --org "$PROJECT_ID" --token "$TOKEN"
+apigeecli datacollectors create -d "Prompt token count" -n dc_prompt_token_count -p INTEGER --org "$PROJECT_ID" --token "$TOKEN"
+apigeecli datacollectors create -d "Total token count" -n dc_total_token_count -p INTEGER --org "$PROJECT_ID" --token "$TOKEN"
+
+echo "Deploying the sharedflows"
+import_and_deploy_sharedflow "llm-extract-candidates-v1"
+import_and_deploy_sharedflow "llm-extract-prompts-v1"
+import_and_deploy_sharedflow "llm-logger-v1"
+
+
 echo "Deploying the proxies"
-apigeecli apis create bundle -n cymbal-customers-v1 \
-  -f proxies/cymbal-customers-v1/apiproxy -e "$APIGEE_ENV" \
-  --token "$TOKEN" -o "$PROJECT_ID" \
-  -s "${SERVICE_ACCOUNT_NAME}@${PROJECT_ID}.iam.gserviceaccount.com" \
-  --ovr --wait
-
-apigeecli apis create bundle -n cymbal-orders-v1 \
-  -f proxies/cymbal-orders-v1/apiproxy -e "$APIGEE_ENV" \
-  --token "$TOKEN" -o "$PROJECT_ID" \
-  -s "${SERVICE_ACCOUNT_NAME}@${PROJECT_ID}.iam.gserviceaccount.com" \
-  --ovr --wait
-
-apigeecli apis create bundle -n cymbal-returns-v1 \
-  -f proxies/cymbal-returns-v1/apiproxy -e "$APIGEE_ENV" \
-  --token "$TOKEN" -o "$PROJECT_ID" \
-  -s "${SERVICE_ACCOUNT_NAME}@${PROJECT_ID}.iam.gserviceaccount.com" \
-  --ovr --wait
-
-apigeecli apis create bundle -n mcp-cymbal-customers-v1 \
-  -f proxies/mcp-cymbal-customers-v1/apiproxy -e "$APIGEE_ENV" \
-  --token "$TOKEN" -o "$PROJECT_ID" \
-  --ovr --wait
+import_and_deploy_proxy "cymbal-customers-v1"
+import_and_deploy_proxy "cymbal-orders-v1"
+import_and_deploy_proxy "cymbal-returns-v1"
+import_and_deploy_proxy "cymbal-returns-v1"
+import_and_deploy_proxy "adk-retail-agent-llm-governance-v1"
 
 rm -rf proxies/mcp-cymbal-customers-v1
 
