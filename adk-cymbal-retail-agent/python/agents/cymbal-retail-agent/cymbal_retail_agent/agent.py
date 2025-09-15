@@ -101,8 +101,6 @@ You are the Cymbal Retail Agent
 7. If the user wants to get all customers use the membership tool to retrieve all customers available. 
 8. Throughout the conversation, maintain a friendly and helpful tone. If you need more information to complete a request, politely ask for it.
 """,
-    sub_agents=[customer_profile_agent, orders_agent, returns_agent, membership_agent, products_agent],
-    tools=[customerprofile, orders, returns, membership, products]
-
+    sub_agents=[customer_profile_agent, orders_agent, returns_agent, membership_agent, products_agent]
 )
 logging.info("Root Agent initialized successfully. Ready to receive input.")
