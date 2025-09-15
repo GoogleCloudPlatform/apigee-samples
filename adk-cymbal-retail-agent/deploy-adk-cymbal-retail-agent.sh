@@ -108,7 +108,7 @@ echo "$PRE_PROP" > ./proxies/cymbal-customers-v1/apiproxy/resources/properties/v
 echo "$PRE_PROP" > ./proxies/cymbal-orders-v1/apiproxy/resources/properties/vertex_config.properties
 echo "$PRE_PROP" > ./proxies/cymbal-returns-v1/apiproxy/resources/properties/vertex_config.properties
 
-gcloud services enable aiplatform.googleapis.com --project "$PROJECT_ID"
+gcloud services enable logging.googleapis.com aiplatform.googleapis.com modelarmor.googleapis.com --project "$PROJECT_ID"
 
 echo "Installing apigeecli"
 curl -s https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.sh | bash
@@ -142,8 +142,6 @@ add_role_to_serviceaccount "roles/modelarmor.admin"
 add_role_to_serviceaccount "roles/iam.serviceAccountUser"
 add_role_to_serviceaccount "roles/dlp.reader"
 add_role_to_serviceaccount "roles/dlp.user"
-
-gcloud services enable logging.googleapis.com aiplatform.googleapis.com modelarmor.googleapis.com --project "$PROJECT_ID"
 
 gcloud config set api_endpoint_overrides/modelarmor "https://modelarmor.$MODEL_ARMOR_REGION.rep.googleapis.com/"
 
