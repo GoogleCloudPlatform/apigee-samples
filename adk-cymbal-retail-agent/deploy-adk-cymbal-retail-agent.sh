@@ -108,7 +108,7 @@ echo "$PRE_PROP" > ./proxies/cymbal-customers-v1/apiproxy/resources/properties/v
 echo "$PRE_PROP" > ./proxies/cymbal-orders-v1/apiproxy/resources/properties/vertex_config.properties
 echo "$PRE_PROP" > ./proxies/cymbal-returns-v1/apiproxy/resources/properties/vertex_config.properties
 
-gcloud services enable logging.googleapis.com aiplatform.googleapis.com modelarmor.googleapis.com --project "$PROJECT_ID"
+gcloud services enable dlp.googleapis.com logging.googleapis.com aiplatform.googleapis.com modelarmor.googleapis.com --project "$PROJECT_ID"
 
 echo "Installing apigeecli"
 curl -s https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.sh | bash
