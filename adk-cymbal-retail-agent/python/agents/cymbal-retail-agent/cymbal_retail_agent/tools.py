@@ -36,7 +36,7 @@ LOCATION=os.getenv("GOOGLE_CLOUD_LOCATION")
 MCP_TOOLSET_URL=os.getenv("APIGEE_HOSTNAME")
 API_HUB_LOCATION=f"projects/{PROJECT_ID}/locations/{LOCATION}/apis"
 SECRET=f"projects/{PROJECT_ID}/secrets/cymbal-retail-apikey/versions/latest"
-APP_SECRET=f"projects/{PROJECT_ID}/secrets/cymbal-retail-agent-client-secret/versions/latest"
+APP_SECRET=f"projects/{PROJECT_ID}/secrets/cymbal-agent-client-secret/versions/latest"
 OAUTH_CLIENT_ID=os.getenv("OAUTH_CLIENT_ID")
 AGENT_REDIRECT_URI=os.getenv("AGENT_REDIRECT_URI")
 
