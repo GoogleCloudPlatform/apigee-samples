@@ -21,6 +21,9 @@ export APIGEE_ENV="APIGEE_ENV_TO_SET"
 export APIGEE_HOST="APIGEE_HOST_TO_SET"
 export SERVICE_ACCOUNT_NAME="llm-cymbal-retail-agent"
 
+export MODEL_ARMOR_REGION="us-central1"
+export MODEL_ARMOR_TEMPLATE_ID="llm-governance-template" #use existing or create new template using this id
+
 export APIGEE_APIHUB_PROJECT_ID="APIGEE_APIHUB_PROJECT_ID_TO_SET"
 export APIGEE_APIHUB_REGION="APIGEE_APIHUB_REGION_TO_SET"
 
