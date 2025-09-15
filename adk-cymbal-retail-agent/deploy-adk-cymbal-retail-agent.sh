@@ -193,6 +193,26 @@ apigeecli datacollectors create -d "Candidates token count" -n dc_candidates_tok
 apigeecli datacollectors create -d "Prompt token count" -n dc_prompt_token_count -p INTEGER --org "$PROJECT_ID" --token "$TOKEN"
 apigeecli datacollectors create -d "Total token count" -n dc_total_token_count -p INTEGER --org "$PROJECT_ID" --token "$TOKEN"
 
+echo "Creating Token Consumption Report...."
+
+curl --request POST \
+  "https://apigee.googleapis.com/v1/organizations/$PROJECT_ID/reports" \
+  --header "Authorization: Bearer $TOKEN" \
+  --header 'Accept: application/json' \
+  --header 'Content-Type: application/json' \
+  --data '{"name":"tokens-consumption-report","displayName":"Tokens Consumption Report","metrics":[{"name":"dc_prompt_token_count","function":"sum"},{"name":"dc_candidates_token_count","function":"sum"},{"name":"dc_total_token_count","function":"sum"}],"dimensions":["api_product","developer_app"],"properties":[{"value":[{}]}],"chartType":"line"}' \
+  --compressed
+
+echo "Creating Responsible AI report...."
+
+curl --request POST \
+  "https://apigee.googleapis.com/v1/organizations/$PROJECT_ID/reports" \
+  --header "Authorization: Bearer $TOKEN" \
+  --header 'Accept: application/json' \
+  --header 'Content-Type: application/json' \
+  --data '{"name":"ai-responsible-report","displayName":"Responsible AI Report","metrics":[{"name":"dc_ma_pi_jailbreak","function":"sum"},{"name":"dc_ma_malicious_uri","function":"sum"},{"name":"dc_ma_csam","function":"sum"},{"name":"dc_ma_rai","function":"sum"}],"dimensions":["api_product","developer_app"],"properties":[{"value":[{}]}],"chartType":"line"}' \
+  --compressed
+
 echo "Deploying the sharedflows"
 import_and_deploy_sharedflow "llm-extract-candidates-v1"
 import_and_deploy_sharedflow "llm-extract-prompts-v1"
