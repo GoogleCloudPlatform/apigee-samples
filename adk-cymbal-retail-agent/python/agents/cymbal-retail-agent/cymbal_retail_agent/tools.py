@@ -33,10 +33,10 @@ load_dotenv()
 
 PROJECT_ID=os.getenv("GOOGLE_CLOUD_PROJECT")
 LOCATION=os.getenv("GOOGLE_CLOUD_LOCATION")
-MCP_TOOLSET_URL=os.getenv("APIGEE_HOSTNAME")
+APIGEE_HOSTNAME=os.getenv("APIGEE_HOSTNAME")
 API_HUB_LOCATION=f"projects/{PROJECT_ID}/locations/{LOCATION}/apis"
 SECRET=f"projects/{PROJECT_ID}/secrets/cymbal-retail-apikey/versions/latest"
-APP_SECRET=f"projects/{PROJECT_ID}/secrets/cymbal-retail-agent-client-secret/versions/latest"
+APP_SECRET=f"projects/{PROJECT_ID}/secrets/cymbal-agent-client-secret/versions/latest"
 OAUTH_CLIENT_ID=os.getenv("OAUTH_CLIENT_ID")
 AGENT_REDIRECT_URI=os.getenv("AGENT_REDIRECT_URI")
 
@@ -108,7 +108,7 @@ returns = APIHubToolset(
 
 membership = MCPToolset(
     connection_params=StreamableHTTPConnectionParams(
-        url=f"https://{MCP_TOOLSET_URL}/mcp/v1/samples/adk-cymbal-retail/customers"
+        url=f"https://{APIGEE_HOSTNAME}/mcp/v1/samples/adk-cymbal-retail/customers"
     ),
     errlog=None,
     auth_scheme=auth_scheme,
