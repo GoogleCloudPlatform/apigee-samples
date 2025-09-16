@@ -29,8 +29,8 @@ if [ -z "$VERTEXAI_REGION" ]; then
   exit
 fi
 
-if [ -z "$ADMIN_USER" ]; then
-  echo "No ADMIN_USER variable set"
+if [ -z "$NON_ADMIN_USER" ]; then
+  echo "No NON_ADMIN_USER variable set"
   exit
 fi
 
@@ -109,7 +109,7 @@ curl --location "https://bigquerydatapolicy.googleapis.com/v1/projects/$PROJECT_
             {
                 \"role\": \"roles/bigquerydatapolicy.maskedReader\",
                 \"members\": [
-                    \"user:$ADMIN_USER\"
+                    \"user:$NON_ADMIN_USER\"
                 ]
             }
         ]
