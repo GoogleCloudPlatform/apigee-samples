@@ -15,7 +15,6 @@ google-cloud-secret-manager>=2.24.0,<3.0.0
 poetry>=2.2.0,<3.0.0
 EOF
 )
-
 echo "✅ Installing apigee-go-gen tool ..."
 rm -rf ~/.apigee-go-gen
 curl -s https://apigee.github.io/apigee-go-gen/install | sh -s latest ~/.apigee-go-gen/bin
@@ -28,3 +27,5 @@ curl -L https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.s
 echo "✅ Installing integrationcli tool ..."
 rm -rf ~/.integrationcli
 curl -L https://raw.githubusercontent.com/GoogleCloudPlatform/application-integration-management-toolkit/main/downloadLatest.sh | sh -
+
+
