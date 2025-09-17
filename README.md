@@ -1,13 +1,13 @@
 # Apigee Agentic Workshop
 
-- [Apigee Samples](#apigee-samples)
-    - [Intro](#intro)
-    - [Ask questions on the Community Forum](#ask-questions-on-the-community-forum)
-    - [Apigee documentation](#apigee-documentation)
-    - [Contributing](#contributing)
-    - [License](#license)
-    - [Not Google Product Clause](#not-google-product-clause)
-    - [Support](#support)
+- [Apigee Agentic Workshop](#apigee-agentic-workshop)
+  - [Intro](#intro)
+  - [Open Workspace](#open-workspace)
+  - [Apigee documentation](#apigee-documentation)
+  - [Contributing](#contributing)
+  - [License](#license)
+  - [Not Google Product Clause](#not-google-product-clause)
+  - [Support](#support)
 
 ---
 
@@ -18,7 +18,7 @@ This GitHub repository contains a hands-on workshop that shows how to build an i
 ## Open Workspace 
 
 
-[![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.svg)](https://shell.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https%3A%2F%2Fgithub.com%2FGoogleCloudPlatform%2Fapigee-samples.git&cloudshell_git_branch=agentic-workshop&cloudshell_workspace=.&show=ide)
+[![Open in Cloud Shell](https://gstatic.com/cloudssh/images/open-btn.svg)](https://shell.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https%3A%2F%2Fgithub.com%2FGoogleCloudPlatform%2Fapigee-samples.git&cloudshell_git_branch=agentic-workshop-scratch&cloudshell_workspace=.&show=ide)
 
 ## <a name="docs"></a>Apigee documentation
 
