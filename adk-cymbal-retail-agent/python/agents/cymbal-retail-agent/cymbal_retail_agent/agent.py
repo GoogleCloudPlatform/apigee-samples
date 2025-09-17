@@ -13,7 +13,7 @@
 # limitations under the License.
 
 from google.adk.agents import Agent
-from .tools import customer_profile, orders, returns, membership, products
+from .tools import customer_profile
 
 import warnings
 # Ignore all warnings
@@ -38,49 +38,17 @@ You are a specialized agent for retrieving customer profile information. Your so
 )
 logging.info("Customer Profile Agent initialized.")
 
-orders_agent = Agent(
-    model='gemini-2.5-flash',
-    name='ordersagent',
-    description="Agent to retrieve a customer's order history and status.",
-    instruction="""
-You are a specialized agent for managing customer orders. Your sole responsibility is to look up and report on a customer's order history, track an existing order, or get shipping information. You will receive a request from the root agent. You should not process any other type of request.
-""",
-    tools=[orders]
-)
-logging.info("Orders Agent initialized.")
+# orders_agent = Agent()
+# logging.info("Orders Agent initialized.")
 
-returns_agent = Agent(
-    model='gemini-2.5-flash',
-    name='returnsagent',
-    description="Agent to handle customer returns and refunds.",
-    instruction="""
-You are a specialized agent for handling customer returns and refunds. Your sole responsibility is to use the provided tools to process a return request, check the status of a refund, or provide return instructions. You will receive a request from the root agent. You should not process any other type of request.
-""",
-    tools=[returns]
-)
-logging.info("Returns Agent initialized.")
+# returns_agent = Agent()
+# logging.info("Returns Agent initialized.")
 
-membership_agent = Agent(
-    model='gemini-2.5-flash',
-    name='membershipagent',
-    description="Agent to manage and retrieve customer membership information.",
-    instruction="""
-You are a specialized agent for managing customer memberships. Your sole responsibility is to use the provided tools to assist with membership inquiries, such as checking membership status, changing plans, or processing membership cancellation requests. You will receive a request from the root agent. You should not process any other type of request.
-""",
-    tools=[membership]
-)
-logging.info("Membership Agent initialized.")
+# membership_agent = Agent()
+# logging.info("Membership Agent initialized.")
 
-products_agent = Agent(
-    model='gemini-2.5-flash',
-    name='productsagent',
-    description="Agent to manage and retrieve product information.",
-    instruction="""
-You are a specialized agent for managing relevant information about products. Your sole responsibility is to use the provided tools to assist with product inquiries. You will receive a request from the root agent. You should not process any other type of request.
-""",
-    tools=[products]
-)
-logging.info("Membership Agent initialized.")
+# products_agent = Agent()
+# logging.info("Membership Agent initialized.")
 
 # Define the root agent and pass the sub-agents as its tools
 root_agent = Agent(
@@ -101,6 +69,6 @@ You are the Cymbal Retail Agent
 7. If the user wants to get all customers use the membership tool to retrieve all customers available. 
 8. Throughout the conversation, maintain a friendly and helpful tone. If you need more information to complete a request, politely ask for it.
 """,
-    sub_agents=[customer_profile_agent, orders_agent, returns_agent, membership_agent, products_agent]
+    sub_agents=[customer_profile_agent]
 )
 logging.info("Root Agent initialized successfully. Ready to receive input.")
