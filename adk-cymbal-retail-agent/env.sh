@@ -36,3 +36,5 @@ export OAUTH_CLIENT_SECRET="OAUTH_CLIENT_SECRET_TO_SET"
 export AGENT_REDIRECT_URI=http://localhost:8000/dev-ui/
 
 export NON_ADMIN_USER="NON_ADMIN_USER_TO_SET"
+
+gcloud config set project $PROJECT_ID
