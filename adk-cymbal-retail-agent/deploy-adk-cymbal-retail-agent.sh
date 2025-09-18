@@ -16,42 +16,52 @@
 
 if [ -z "$PROJECT_ID" ]; then
   echo "No PROJECT_ID variable set"
-  exit
+  exit 1
 fi
 
 if [ -z "$APIGEE_ENV" ]; then
   echo "No APIGEE_ENV variable set"
-  exit
+  exit 1
 fi
 
 if [ -z "$APIGEE_HOST" ]; then
   echo "No APIGEE_HOST variable set"
-  exit
+  exit 1
 fi
 
 if [ -z "$SERVICE_ACCOUNT_NAME" ]; then
   echo "No SERVICE_ACCOUNT_NAME variable set"
-  exit
+  exit 1
+fi
+
+if [ -z "$APIGEE_APIHUB_PROJECT_ID" ]; then
+  echo "No APIGEE_APIHUB_PROJECT_ID variable set"
+  exit 1
+fi
+
+if [ -z "$APIGEE_APIHUB_REGION" ]; then
+  echo "No APIGEE_APIHUB_REGION variable set"
+  exit 1
 fi
 
 if [ -z "$VERTEXAI_REGION" ]; then
   echo "No VERTEXAI_REGION variable set"
-  exit
+  exit 1
 fi
 
 if [ -z "$VERTEXAI_PROJECT_ID" ]; then
   echo "No VERTEXAI_PROJECT_ID variable set"
-  exit
+  exit 1
 fi
 
 if [ -z "$MODEL_ARMOR_REGION" ]; then
   echo "No MODEL_ARMOR_REGION variable set"
-  exit
+  exit 1
 fi
 
 if [ -z "$MODEL_ARMOR_TEMPLATE_ID" ]; then
   echo "No MODEL_ARMOR_TEMPLATE_ID variable set"
-  exit
+  exit 1
 fi
 
 if [ -z "$TOKEN" ]; then
@@ -117,6 +127,9 @@ export PATH=$PATH:$HOME/.apigeecli/bin
 echo "✅ Installing apigee-go-gen tool ..."
 curl -s https://apigee.github.io/apigee-go-gen/install | sh -s v1.1.0-beta.1 ~/.apigee-go-gen/bin
 export PATH=$PATH:$HOME/.apigee-go-gen/bin
+
+echo "Installing dependencies..."
+npm install
 
 echo "Registering APIs in Apigee API hub"
 cp -rf config tmp/
