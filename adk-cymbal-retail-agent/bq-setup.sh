@@ -38,6 +38,12 @@ if [ -z "$TOKEN" ]; then
   TOKEN=$(gcloud auth print-access-token)
 fi
 
+# Determine sed in-place arguments for portability (macOS vs Linux)
+sedi_args=("-i")
+if [[ "$(uname)" == "Darwin" ]]; then
+  sedi_args=("-i" "") # For macOS, sed -i requires an extension argument. "" means no backup.
+fi
+
 add_role_to_serviceaccount(){
   local role=$1
   gcloud projects add-iam-policy-binding "${PROJECT_ID}" \
@@ -46,10 +52,6 @@ add_role_to_serviceaccount(){
 }
 
 gcloud services enable bigquery.googleapis.com datacatalog.googleapis.com --project "$PROJECT_ID"
-
-echo "✅ Installing integrationcli"
-curl -L https://raw.githubusercontent.com/GoogleCloudPlatform/application-integration-management-toolkit/main/downloadLatest.sh | sh -
-export PATH=$PATH:$HOME/.integrationcli/bin
 
 # echo "Assigning BQ roles to service account"
 add_role_to_serviceaccount "roles/bigquery.readSessionUser"
@@ -117,7 +119,7 @@ curl --location "https://bigquerydatapolicy.googleapis.com/v1/projects/$PROJECT_
 }"
 
 cp ./config/products/schema.json ./config/products/schema-temp.json
-sed -i "s/$POLICYTAG_ID/POLICYTAG_ID/g" ./config/products/schema-temp.json
+sed "${sedi_args[@]}" "s|POLICYTAG_ID|${POLICYTAG_ID}|g" ./config/products/schema-temp.json
 
 echo "Creating the products_sample_data dataset"
 bq --location="$VERTEXAI_REGION" mk \
