@@ -16,22 +16,22 @@
 
 if [ -z "$PROJECT_ID" ]; then
   echo "No PROJECT_ID variable set"
-  exit
+  exit 1
 fi
 
 if [ -z "$SERVICE_ACCOUNT_NAME" ]; then
   echo "No SERVICE_ACCOUNT_NAME variable set"
-  exit
+  exit 1
 fi
 
 if [ -z "$VERTEXAI_REGION" ]; then
   echo "No VERTEXAI_REGION variable set"
-  exit
+  exit 1
 fi
 
 if [ -z "$NON_ADMIN_USER" ]; then
   echo "No NON_ADMIN_USER variable set"
-  exit
+  exit 1
 fi
 
 if [ -z "$TOKEN" ]; then
