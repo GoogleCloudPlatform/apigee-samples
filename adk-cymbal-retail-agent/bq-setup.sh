@@ -45,7 +45,7 @@ add_role_to_serviceaccount(){
     --role="${role}"
 }
 
-gcloud services enable bigquery.googleapis.com --project "$PROJECT_ID"
+gcloud services enable bigquery.googleapis.com datacatalog.googleapis.com --project "$PROJECT_ID"
 
 echo "✅ Installing integrationcli"
 curl -L https://raw.githubusercontent.com/GoogleCloudPlatform/application-integration-management-toolkit/main/downloadLatest.sh | sh -
