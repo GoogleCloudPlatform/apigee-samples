@@ -155,6 +155,7 @@ add_role_to_serviceaccount "roles/modelarmor.admin"
 add_role_to_serviceaccount "roles/iam.serviceAccountUser"
 add_role_to_serviceaccount "roles/dlp.reader"
 add_role_to_serviceaccount "roles/dlp.user"
+add_role_to_serviceaccount "roles/apigee.analyticsEditor"
 
 gcloud config set api_endpoint_overrides/modelarmor "https://modelarmor.$MODEL_ARMOR_REGION.rep.googleapis.com/"
 
@@ -234,7 +235,7 @@ echo "Deploying the proxies"
 import_and_deploy_proxy "cymbal-customers-v1"
 import_and_deploy_proxy "cymbal-orders-v1"
 import_and_deploy_proxy "cymbal-returns-v1"
-import_and_deploy_proxy "cymbal-returns-v1"
+import_and_deploy_proxy "mcp-cymbal-customers-v1"
 import_and_deploy_proxy "adk-retail-agent-llm-governance-v1"
 
 rm -rf proxies/mcp-cymbal-customers-v1
