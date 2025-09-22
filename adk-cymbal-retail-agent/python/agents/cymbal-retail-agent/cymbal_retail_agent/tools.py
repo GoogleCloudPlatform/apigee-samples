@@ -39,7 +39,7 @@ SECRET=f"projects/{PROJECT_ID}/secrets/cymbal-retail-apikey/versions/latest"
 APP_SECRET=f"projects/{PROJECT_ID}/secrets/cymbal-agent-client-secret/versions/latest"
 OAUTH_CLIENT_ID=os.getenv("OAUTH_CLIENT_ID")
 AGENT_REDIRECT_URI=os.getenv("AGENT_REDIRECT_URI")
-
+ 
 
 # # Get the credentials for the Cymbal Auto APIs
 secret_manager_client = SecretManagerClient()
@@ -67,18 +67,6 @@ oauth_credential = AuthCredential(
       redirect_uri=AGENT_REDIRECT_URI
   )
 )
-
-TOOL_INSTR="""
-        **Tool Definition: BigQuery Connector via Application Integration**
-
-        This tool interacts with BigQuery dataset using an Application Integration Connector.
-        It supports GET and LIST operations as defined for each entity.
-
-        **Incident Getting:**
-
-        If the user asks to get product details:
-        Fetch all the products
-"""
 
 # Customer Profile API
 customer_profile = APIHubToolset(
@@ -122,7 +110,7 @@ products = ApplicationIntegrationToolset(
     connection="bq-products",
     entity_operations= {"products": ["GET","LIST"]},
     tool_name_prefix="tool-bq-products",
-    tool_instructions=TOOL_INSTR,
+    tool_instructions="If the user asks to get product details: Fetch all the products",
     auth_scheme=oauth2_scheme,
     auth_credential=oauth_credential
 )
