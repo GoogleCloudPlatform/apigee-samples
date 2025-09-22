@@ -80,7 +80,7 @@ You are a specialized agent for managing relevant information about products. Yo
 """,
     tools=[products]
 )
-logging.info("Membership Agent initialized.")
+logging.info("Products Agent initialized.")
 
 # Define the root agent and pass the sub-agents as its tools
 root_agent = Agent(
