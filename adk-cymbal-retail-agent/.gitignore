@@ -3,3 +3,6 @@ poetry.lock
 venv
 bin
 __pycache__
+.gitignore
+client.json
+oauth_client_env.sh
