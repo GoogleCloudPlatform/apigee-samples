@@ -78,6 +78,9 @@ TAXONOMY_ID=$(curl --location "https://datacatalog.googleapis.com/v1/projects/$P
   \"description\": \"product sensitivity\"
 }" | jq ."name" -r)
 
+echo "TAXONOMY_ID: $TAXONOMY_ID"
+sleep 10
+
 echo "Creating BQ Policy Tag"
 POLICYTAG_ID=$(curl --location "https://datacatalog.googleapis.com/v1/$TAXONOMY_ID/policyTags" \
 --header "Content-Type: application/json" \
@@ -88,6 +91,9 @@ POLICYTAG_ID=$(curl --location "https://datacatalog.googleapis.com/v1/$TAXONOMY_
   \"description\": \"high sensitivity\"
 }" | jq ."name" -r)
 
+echo "POLICYTAG_ID: $POLICYTAG_ID"
+sleep 10
+
 echo "Create Data policies to enable the policy tag"
 curl --location "https://bigquerydatapolicy.googleapis.com/v1/projects/$PROJECT_ID/locations/$VERTEXAI_REGION/dataPolicies" \
 --header "Content-Type: application/json" \
@@ -97,6 +103,8 @@ curl --location "https://bigquerydatapolicy.googleapis.com/v1/projects/$PROJECT_
     \"dataPolicyId\": \"high_sensitivity_policy\",
     \"policyTag\": \"$POLICYTAG_ID\"
 }"
+
+sleep 5
 
 echo "Create Data policies to mask the column records"
 curl --location "https://bigquerydatapolicy.googleapis.com/v1/projects/$PROJECT_ID/locations/$VERTEXAI_REGION/dataPolicies" \
@@ -110,6 +118,8 @@ curl --location "https://bigquerydatapolicy.googleapis.com/v1/projects/$PROJECT_
         \"predefinedExpression\": \"ALWAYS_NULL\"
     }
 }"
+
+sleep 5
 
 curl --location "https://bigquerydatapolicy.googleapis.com/v1/projects/$PROJECT_ID/locations/$VERTEXAI_REGION/dataPolicies/nullify:setIamPolicy" \
 --header "Content-Type: application/json" \
@@ -126,6 +136,8 @@ curl --location "https://bigquerydatapolicy.googleapis.com/v1/projects/$PROJECT_
         ]
     }
 }"
+
+sleep 5
 
 cp ./config/products/schema.json ./config/products/schema-temp.json
 sed "${sedi_args[@]}" "s|POLICYTAG_ID|${POLICYTAG_ID}|g" ./config/products/schema-temp.json
