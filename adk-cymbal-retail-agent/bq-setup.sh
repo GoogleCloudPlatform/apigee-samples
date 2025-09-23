@@ -58,6 +58,7 @@ echo "Started bq-setup.sh"
 echo "======================"
 
 gcloud services enable bigquery.googleapis.com datacatalog.googleapis.com --project "$PROJECT_ID"
+sleep 30
 
 echo "Creating Service Account and assigning permissions"
 gcloud iam service-accounts create "$SERVICE_ACCOUNT_NAME" --project "$PROJECT_ID"
