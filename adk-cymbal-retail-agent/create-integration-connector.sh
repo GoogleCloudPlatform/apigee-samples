@@ -14,27 +14,33 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+set -e
+
 if [ -z "$PROJECT_ID" ]; then
   echo "No PROJECT_ID variable set"
-  exit
+  exit 1
 fi
 
 if [ -z "$VERTEXAI_REGION" ]; then
   echo "No VERTEXAI_REGION variable set"
-  exit
+  exit 1
 fi
 
 if [ -z "$OAUTH_CLIENT_ID" ]; then
   echo "No OAUTH_CLIENT_ID variable set"
-  exit
+  exit 1
 fi
 
 if [ -z "$OAUTH_CLIENT_SECRET" ]; then
   echo "No OAUTH_CLIENT_SECRET variable set"
-  exit
+  exit 1
 fi
 
 TOKEN=$(gcloud auth print-access-token)
+
+echo "================================================="
+echo "Started create-integration-connector.sh"
+echo "================================================="
 
 echo "Assigning roles to Default compute service account"
 gcloud projects add-iam-policy-binding "$PROJECT_ID" \
@@ -67,3 +73,7 @@ echo "BigQuery Connector created successfully"
 
 echo "Publishing Integration"
 integrationcli integrations apply -f integration/. -p "$PROJECT_ID" -r "$VERTEXAI_REGION" -t "$TOKEN" -g --skip-connectors --wait
+
+echo "================================================="
+echo "Finished create-integration-connector.sh"
+echo "================================================="

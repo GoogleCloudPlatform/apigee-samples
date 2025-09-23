@@ -13,15 +13,16 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+set -e
 
 if [ -z "$PROJECT_ID" ]; then
   echo "No PROJECT_ID variable set"
-  exit
+  exit 1
 fi
 
 if [ -z "$VERTEXAI_REGION" ]; then
   echo "No VERTEXAI_REGION variable set"
-  exit
+  exit 1
 fi
 
 TOKEN=$(gcloud auth print-access-token)
