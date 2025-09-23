@@ -14,6 +14,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+set -e
+
 if [ -z "$PROJECT_ID" ]; then
   echo "No PROJECT_ID variable set"
   exit 1
@@ -51,9 +53,16 @@ add_role_to_serviceaccount(){
     --role="${role}"
 }
 
+echo "======================"
+echo "Started bq-setup.sh"
+echo "======================"
+
 gcloud services enable bigquery.googleapis.com datacatalog.googleapis.com --project "$PROJECT_ID"
 
-# echo "Assigning BQ roles to service account"
+echo "Creating Service Account and assigning permissions"
+gcloud iam service-accounts create "$SERVICE_ACCOUNT_NAME" --project "$PROJECT_ID"
+
+echo "Assigning BQ roles to service account"
 add_role_to_serviceaccount "roles/bigquery.readSessionUser"
 add_role_to_serviceaccount "roles/bigquery.jobUser"
 add_role_to_serviceaccount "roles/bigquery.dataEditor"
@@ -142,3 +151,7 @@ bq --location="$VERTEXAI_REGION"  --project_id "$PROJECT_ID" load \
 "./config/products/product-items.json"
 
 rm ./config/products/schema-temp.json
+
+echo "======================"
+echo "Finished bq-setup.sh"
+echo "======================"

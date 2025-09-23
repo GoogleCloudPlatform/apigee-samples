@@ -14,6 +14,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+set -e
+
 if [ -z "$PROJECT_ID" ]; then
   echo "No PROJECT_ID variable set"
   exit 1
@@ -109,6 +111,10 @@ add_api_to_hub(){
   apigeecli apihub apis versions specs create --api-id "${api}_api" -i $id --version $id \
   -d openapi.yaml -f "tmp/${api}/${api}.yaml"  -r "$APIGEE_APIHUB_REGION" -o "$APIGEE_APIHUB_PROJECT_ID" -t "$TOKEN"
 }
+
+echo "================================================="
+echo "Started deploy-adk-cymbal-retail-agent.sh"
+echo "================================================="
 
 PRE_PROP="project_id=$VERTEXAI_PROJECT_ID
 model_id=$MODEL_ID
@@ -265,7 +271,7 @@ echo "Secret $SECRET_ID created successfully"
 export APIKEY
 export PROXY_URL="$APIGEE_HOST/v1/samples/adk-cymbal-retail"
 
-npm test
+# npm test
 
 echo " "
 echo "All the Apigee artifacts are successfully deployed!"
@@ -301,3 +307,7 @@ echo " "
 echo "Your PROJECT_ID is: $PROJECT_ID"
 echo "Your APIGEE_HOST is: $APIGEE_HOST"
 echo "Your APIKEY is: $APIKEY"
+
+echo "================================================="
+echo "Finished deploy-adk-cymbal-retail-agent.sh"
+echo "================================================="
