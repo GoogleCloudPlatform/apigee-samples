@@ -70,28 +70,33 @@ add_role_to_serviceaccount "roles/bigquery.dataEditor"
 add_role_to_serviceaccount "roles/datacatalog.categoryAdmin"
 
 echo "Creating BQ Taxonomy"
-TAXONOMY_ID=$(curl --location "https://datacatalog.googleapis.com/v1/projects/$PROJECT_ID/locations/$VERTEXAI_REGION/taxonomies" \
+TAXONOMY_RESPONSE=$(curl --location "https://datacatalog.googleapis.com/v1/projects/$PROJECT_ID/locations/$VERTEXAI_REGION/taxonomies" \
 --header "Content-Type: application/json" \
 --header "Authorization: Bearer $TOKEN" \
 --data "{
   \"name\": \"product_sensitivity\",
   \"displayName\": \"product_sensitivity\",
   \"description\": \"product sensitivity\"
-}" | jq ."name" -r)
+}" )
 
-echo "TAXONOMY_ID: $TAXONOMY_ID"
+echo "response_body: ${TAXONOMY_RESPONSE}"
+
+TAXONOMY_ID=$(echo "$TAXONOMY_RESPONSE" | jq -r .name)
 sleep 10
 
 echo "Creating BQ Policy Tag"
-POLICYTAG_ID=$(curl --location "https://datacatalog.googleapis.com/v1/$TAXONOMY_ID/policyTags" \
+POLICYTAG_RESPONSE=$(curl --location "https://datacatalog.googleapis.com/v1/$TAXONOMY_ID/policyTags" \
 --header "Content-Type: application/json" \
 --header "Authorization: Bearer $TOKEN" \
 --data "{
   \"name\": \"HIGH\",
   \"displayName\": \"HIGH\",
   \"description\": \"high sensitivity\"
-}" | jq ."name" -r)
+}" )
 
+echo "response_body: ${POLICYTAG_RESPONSE}"
+
+POLICYTAG_ID=$(echo "${POLICYTAG_RESPONSE}" | jq ."name" -r)
 echo "POLICYTAG_ID: $POLICYTAG_ID"
 sleep 10
 
