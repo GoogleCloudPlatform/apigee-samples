@@ -21,7 +21,7 @@ export PROJECT_NUMBER
 export APIGEE_ENV="eval"
 export SERVICE_ACCOUNT_NAME="llm-cymbal-retail-agent"
 
-export MODEL_ARMOR_REGION="us-central1"
+export MODEL_ARMOR_REGION="${GCP_PROJECT_REGION}"
 export MODEL_ARMOR_TEMPLATE_ID="llm-governance-template" #use existing or create new template using this id
 
 export APIGEE_APIHUB_PROJECT_ID="${PROJECT_ID}"

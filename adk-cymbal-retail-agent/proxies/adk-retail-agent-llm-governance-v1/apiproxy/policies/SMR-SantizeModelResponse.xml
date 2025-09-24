@@ -15,7 +15,7 @@
   <IgnoreUnresolvedVariables>false</IgnoreUnresolvedVariables>
   <DisplayName>SMR-SantizeModelResponse</DisplayName>
   <ModelArmor>
-    <TemplateName>projects/{organization.name}/locations/us-central1/templates/llm-governance-template</TemplateName>
+    <TemplateName>projects/{organization.name}/locations/{system.region.name}/templates/llm-governance-template</TemplateName>
   </ModelArmor>
   <UserPromptSource>{jsonPath('$.contents[-1].parts[-1].text',request.content,true)}</UserPromptSource>
   <LLMResponseSource>{jsonPath('$.candidates[-1].content.parts[-1].text',response.content,true)}</LLMResponseSource>
