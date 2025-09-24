@@ -68,6 +68,7 @@ _sleep 30
 
 echo "Creating Service Account and assigning permissions"
 gcloud iam service-accounts create "$SERVICE_ACCOUNT_NAME" --project "$PROJECT_ID"
+_sleep 10
 
 echo "Assigning BQ roles to service account"
 add_role_to_serviceaccount "roles/bigquery.readSessionUser"
