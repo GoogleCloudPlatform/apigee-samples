@@ -45,7 +45,7 @@ chmod +x /usr/local/bin/cosign
 
 gcloud config set project $PROJECT_ID
 
-gcloud services enable dlp.googleapis.com logging.googleapis.com aiplatform.googleapis.com modelarmor.googleapis.com secretmanager.googleapis.com bigquery.googleapis.com datacatalog.googleapis.com --project "$PROJECT_ID"
+gcloud services enable artifactregistry.googleapis.com run.googleapis.com dlp.googleapis.com logging.googleapis.com aiplatform.googleapis.com modelarmor.googleapis.com secretmanager.googleapis.com bigquery.googleapis.com datacatalog.googleapis.com --project "$PROJECT_ID"
 sleep 15
 
 ./bq-setup.sh #Configure the BQ dataset, data policies and assign the user to data policy
