@@ -43,6 +43,8 @@ wget "https://github.com/sigstore/cosign/releases/download/v2.4.1/cosign-linux-a
 mv cosign-linux-amd64 /usr/local/bin/cosign
 chmod +x /usr/local/bin/cosign
 
+gcloud components update -q
+
 gcloud config set project $PROJECT_ID
 
 gcloud services enable dlp.googleapis.com logging.googleapis.com aiplatform.googleapis.com modelarmor.googleapis.com secretmanager.googleapis.com bigquery.googleapis.com datacatalog.googleapis.com --project "$PROJECT_ID"
