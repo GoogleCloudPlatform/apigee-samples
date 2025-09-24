@@ -15,7 +15,7 @@
   <IgnoreUnresolvedVariables>false</IgnoreUnresolvedVariables>
   <DisplayName>SUP-Sanitize-User-Prompt</DisplayName>
   <ModelArmor>
-    <TemplateName>projects/{organization.name}/locations/us-central1/templates/llm-governance-template</TemplateName>
+    <TemplateName>projects/{organization.name}/locations/{system.region.name}/templates/llm-governance-template</TemplateName>
   </ModelArmor>
   <UserPromptSource>{prompt_contents_0}</UserPromptSource>
 </SanitizeUserPrompt>
