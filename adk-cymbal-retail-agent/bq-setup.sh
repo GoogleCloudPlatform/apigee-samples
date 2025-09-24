@@ -53,12 +53,18 @@ add_role_to_serviceaccount(){
     --role="${role}"
 }
 
+_sleep() {
+  echo "$(date +"%Y-%m-%d %H:%M:%S") Sleeping for $1 seconds ..."
+  sleep "$1"
+  echo "$(date +"%Y-%m-%d %H:%M:%S") Sleep done ..."
+}
+
 echo "======================"
 echo "Started bq-setup.sh"
 echo "======================"
 
 gcloud services enable bigquery.googleapis.com datacatalog.googleapis.com --project "$PROJECT_ID"
-sleep 30
+_sleep 30
 
 echo "Creating Service Account and assigning permissions"
 gcloud iam service-accounts create "$SERVICE_ACCOUNT_NAME" --project "$PROJECT_ID"
@@ -82,7 +88,7 @@ TAXONOMY_RESPONSE=$(curl --location "https://datacatalog.googleapis.com/v1/proje
 echo "response_body: ${TAXONOMY_RESPONSE}"
 
 TAXONOMY_ID=$(echo "$TAXONOMY_RESPONSE" | jq -r .name)
-sleep 10
+_sleep 10
 
 echo "Creating BQ Policy Tag"
 POLICYTAG_RESPONSE=$(curl --location "https://datacatalog.googleapis.com/v1/$TAXONOMY_ID/policyTags" \
@@ -98,7 +104,7 @@ echo "response_body: ${POLICYTAG_RESPONSE}"
 
 POLICYTAG_ID=$(echo "${POLICYTAG_RESPONSE}" | jq ."name" -r)
 echo "POLICYTAG_ID: $POLICYTAG_ID"
-sleep 10
+_sleep 10
 
 echo "Create Data policies to enable the policy tag"
 curl --location "https://bigquerydatapolicy.googleapis.com/v1/projects/$PROJECT_ID/locations/$VERTEXAI_REGION/dataPolicies" \
@@ -110,7 +116,7 @@ curl --location "https://bigquerydatapolicy.googleapis.com/v1/projects/$PROJECT_
     \"policyTag\": \"$POLICYTAG_ID\"
 }"
 
-sleep 5
+_sleep 5
 
 echo "Create Data policies to mask the column records"
 curl --location "https://bigquerydatapolicy.googleapis.com/v1/projects/$PROJECT_ID/locations/$VERTEXAI_REGION/dataPolicies" \
@@ -125,7 +131,7 @@ curl --location "https://bigquerydatapolicy.googleapis.com/v1/projects/$PROJECT_
     }
 }"
 
-sleep 5
+_sleep 5
 
 curl --location "https://bigquerydatapolicy.googleapis.com/v1/projects/$PROJECT_ID/locations/$VERTEXAI_REGION/dataPolicies/nullify:setIamPolicy" \
 --header "Content-Type: application/json" \
@@ -143,7 +149,7 @@ curl --location "https://bigquerydatapolicy.googleapis.com/v1/projects/$PROJECT_
     }
 }"
 
-sleep 5
+_sleep 5
 
 cp ./config/products/schema.json ./config/products/schema-temp.json
 sed "${sedi_args[@]}" "s|POLICYTAG_ID|${POLICYTAG_ID}|g" ./config/products/schema-temp.json
