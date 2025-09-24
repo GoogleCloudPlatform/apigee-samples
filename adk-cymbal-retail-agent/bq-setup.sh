@@ -76,7 +76,7 @@ TAXONOMY_RESPONSE=$(curl --location "https://datacatalog.googleapis.com/v1/proje
 --data "{
   \"name\": \"${PROJECT_ID}_product_sensitivity\",
   \"displayName\": \"${PROJECT_ID}_product_sensitivity\",
-  \"description\": \"${$PROJECT_ID} product sensitivity\"
+  \"description\": \"${PROJECT_ID} product sensitivity\"
 }" )
 
 echo "response_body: ${TAXONOMY_RESPONSE}"
