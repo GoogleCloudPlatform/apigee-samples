@@ -31,10 +31,10 @@ if [ -z "$VERTEXAI_REGION" ]; then
   exit 1
 fi
 
-if [ -z "$NON_ADMIN_USER" ]; then
-  echo "No NON_ADMIN_USER variable set"
-  exit 1
-fi
+# if [ -z "$NON_ADMIN_USER" ]; then
+#   echo "No NON_ADMIN_USER variable set"
+#   exit 1
+# fi
 
 if [ -z "$TOKEN" ]; then
   TOKEN=$(gcloud auth print-access-token)
@@ -76,84 +76,84 @@ add_role_to_serviceaccount "roles/bigquery.jobUser"
 add_role_to_serviceaccount "roles/bigquery.dataEditor"
 add_role_to_serviceaccount "roles/datacatalog.categoryAdmin"
 
-echo "Creating BQ Taxonomy"
-TAXONOMY_RESPONSE=$(curl --location "https://datacatalog.googleapis.com/v1/projects/$PROJECT_ID/locations/$VERTEXAI_REGION/taxonomies" \
---header "Content-Type: application/json" \
---header "Authorization: Bearer $TOKEN" \
---data "{
-  \"name\": \"${PROJECT_ID}_product_sensitivity\",
-  \"displayName\": \"${PROJECT_ID}_product_sensitivity\",
-  \"description\": \"${PROJECT_ID} product sensitivity\"
-}" )
+# echo "Creating BQ Taxonomy"
+# TAXONOMY_RESPONSE=$(curl --location "https://datacatalog.googleapis.com/v1/projects/$PROJECT_ID/locations/$VERTEXAI_REGION/taxonomies" \
+# --header "Content-Type: application/json" \
+# --header "Authorization: Bearer $TOKEN" \
+# --data "{
+#   \"name\": \"${PROJECT_ID}_product_sensitivity\",
+#   \"displayName\": \"${PROJECT_ID}_product_sensitivity\",
+#   \"description\": \"${PROJECT_ID} product sensitivity\"
+# }" )
 
-echo "response_body: ${TAXONOMY_RESPONSE}"
+# echo "response_body: ${TAXONOMY_RESPONSE}"
 
-TAXONOMY_ID=$(echo "$TAXONOMY_RESPONSE" | jq -r .name)
-_sleep 10
+# TAXONOMY_ID=$(echo "$TAXONOMY_RESPONSE" | jq -r .name)
+# _sleep 10
 
-echo "Creating BQ Policy Tag"
-POLICYTAG_RESPONSE=$(curl --location "https://datacatalog.googleapis.com/v1/$TAXONOMY_ID/policyTags" \
---header "Content-Type: application/json" \
---header "Authorization: Bearer $TOKEN" \
---data "{
-  \"name\": \"HIGH\",
-  \"displayName\": \"HIGH\",
-  \"description\": \"high sensitivity\"
-}" )
+# echo "Creating BQ Policy Tag"
+# POLICYTAG_RESPONSE=$(curl --location "https://datacatalog.googleapis.com/v1/$TAXONOMY_ID/policyTags" \
+# --header "Content-Type: application/json" \
+# --header "Authorization: Bearer $TOKEN" \
+# --data "{
+#   \"name\": \"HIGH\",
+#   \"displayName\": \"HIGH\",
+#   \"description\": \"high sensitivity\"
+# }" )
 
-echo "response_body: ${POLICYTAG_RESPONSE}"
+# echo "response_body: ${POLICYTAG_RESPONSE}"
 
-POLICYTAG_ID=$(echo "${POLICYTAG_RESPONSE}" | jq ."name" -r)
-echo "POLICYTAG_ID: $POLICYTAG_ID"
-_sleep 10
+# POLICYTAG_ID=$(echo "${POLICYTAG_RESPONSE}" | jq ."name" -r)
+# echo "POLICYTAG_ID: $POLICYTAG_ID"
+# _sleep 10
 
-echo "Create Data policies to enable the policy tag"
-curl --location "https://bigquerydatapolicy.googleapis.com/v1/projects/$PROJECT_ID/locations/$VERTEXAI_REGION/dataPolicies" \
---header "Content-Type: application/json" \
---header "Authorization: Bearer $TOKEN" \
---data "{
-    \"dataPolicyType\": \"COLUMN_LEVEL_SECURITY_POLICY\",
-    \"dataPolicyId\": \"high_sensitivity_policy\",
-    \"policyTag\": \"$POLICYTAG_ID\"
-}"
+# echo "Create Data policies to enable the policy tag"
+# curl --location "https://bigquerydatapolicy.googleapis.com/v1/projects/$PROJECT_ID/locations/$VERTEXAI_REGION/dataPolicies" \
+# --header "Content-Type: application/json" \
+# --header "Authorization: Bearer $TOKEN" \
+# --data "{
+#     \"dataPolicyType\": \"COLUMN_LEVEL_SECURITY_POLICY\",
+#     \"dataPolicyId\": \"high_sensitivity_policy\",
+#     \"policyTag\": \"$POLICYTAG_ID\"
+# }"
 
-_sleep 5
+# _sleep 5
 
-echo "Create Data policies to mask the column records"
-curl --location "https://bigquerydatapolicy.googleapis.com/v1/projects/$PROJECT_ID/locations/$VERTEXAI_REGION/dataPolicies" \
---header "Content-Type: application/json" \
---header "Authorization: Bearer $TOKEN" \
---data "{
-    \"dataPolicyType\": \"DATA_MASKING_POLICY\",
-    \"dataPolicyId\": \"nullify\",
-    \"policyTag\": \"$POLICYTAG_ID\",
-    \"dataMaskingPolicy\": {
-        \"predefinedExpression\": \"ALWAYS_NULL\"
-    }
-}"
+# echo "Create Data policies to mask the column records"
+# curl --location "https://bigquerydatapolicy.googleapis.com/v1/projects/$PROJECT_ID/locations/$VERTEXAI_REGION/dataPolicies" \
+# --header "Content-Type: application/json" \
+# --header "Authorization: Bearer $TOKEN" \
+# --data "{
+#     \"dataPolicyType\": \"DATA_MASKING_POLICY\",
+#     \"dataPolicyId\": \"nullify\",
+#     \"policyTag\": \"$POLICYTAG_ID\",
+#     \"dataMaskingPolicy\": {
+#         \"predefinedExpression\": \"ALWAYS_NULL\"
+#     }
+# }"
 
-_sleep 5
+# _sleep 5
 
-curl --location "https://bigquerydatapolicy.googleapis.com/v1/projects/$PROJECT_ID/locations/$VERTEXAI_REGION/dataPolicies/nullify:setIamPolicy" \
---header "Content-Type: application/json" \
---header "Authorization: Bearer $TOKEN" \
---data "{
-    \"policy\": {
-        \"bindings\": [
-            {
-                \"role\": \"roles/bigquerydatapolicy.maskedReader\",
-                \"members\": [
-                    \"user:$NON_ADMIN_USER\"
-                ]
-            }
-        ]
-    }
-}"
+# curl --location "https://bigquerydatapolicy.googleapis.com/v1/projects/$PROJECT_ID/locations/$VERTEXAI_REGION/dataPolicies/nullify:setIamPolicy" \
+# --header "Content-Type: application/json" \
+# --header "Authorization: Bearer $TOKEN" \
+# --data "{
+#     \"policy\": {
+#         \"bindings\": [
+#             {
+#                 \"role\": \"roles/bigquerydatapolicy.maskedReader\",
+#                 \"members\": [
+#                     \"user:$NON_ADMIN_USER\"
+#                 ]
+#             }
+#         ]
+#     }
+# }"
 
-_sleep 5
+# _sleep 5
 
 cp ./config/products/schema.json ./config/products/schema-temp.json
-sed "${sedi_args[@]}" "s|POLICYTAG_ID|${POLICYTAG_ID}|g" ./config/products/schema-temp.json
+# sed "${sedi_args[@]}" "s|POLICYTAG_ID|${POLICYTAG_ID}|g" ./config/products/schema-temp.json
 
 echo "Creating the products_sample_data dataset"
 bq --location="$VERTEXAI_REGION" mk \

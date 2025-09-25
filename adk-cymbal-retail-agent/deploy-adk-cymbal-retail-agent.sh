@@ -117,7 +117,7 @@ echo "Started deploy-adk-cymbal-retail-agent.sh"
 echo "================================================="
 
 PRE_PROP="project_id=$VERTEXAI_PROJECT_ID
-model_id=$MODEL_ID
+model_id=$MODEL_NAME
 region=$VERTEXAI_REGION"
 
 echo "$PRE_PROP" > ./proxies/cymbal-customers-v1/apiproxy/resources/properties/vertex_config.properties

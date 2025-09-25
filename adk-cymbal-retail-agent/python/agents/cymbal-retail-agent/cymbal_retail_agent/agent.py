@@ -13,9 +13,12 @@
 # limitations under the License.
 
 from google.adk.agents import Agent
+from dotenv import load_dotenv
+import os
+import warnings
+
 from .tools import customer_profile, orders, returns, membership, products
 
-import warnings
 # Ignore all warnings
 warnings.filterwarnings("ignore")
 
@@ -25,10 +28,13 @@ logging.basicConfig(level=logging.ERROR)
 print("Starting agent initialization...")
 print("Libraries imported.")
 
+load_dotenv()
+
+MODEL_NAME=os.getenv("MODEL_NAME")
 
 # Define the sub-agents for each tool with their instructions
 customer_profile_agent = Agent(
-    model='gemini-2.5-flash',
+    model=MODEL_NAME,
     name='customerprofileagent',
     description="Agent to retrieve a customer's comprehensive profile.",
     instruction="""
@@ -39,7 +45,7 @@ You are a specialized agent for retrieving customer profile information. Your so
 logging.info("Customer Profile Agent initialized.")
 
 orders_agent = Agent(
-    model='gemini-2.5-flash',
+    model=MODEL_NAME,
     name='ordersagent',
     description="Agent to retrieve a customer's order history and status.",
     instruction="""
@@ -50,7 +56,7 @@ You are a specialized agent for managing customer orders. Your sole responsibili
 logging.info("Orders Agent initialized.")
 
 returns_agent = Agent(
-    model='gemini-2.5-flash',
+    model=MODEL_NAME,
     name='returnsagent',
     description="Agent to handle customer returns and refunds.",
     instruction="""
@@ -61,7 +67,7 @@ You are a specialized agent for handling customer returns and refunds. Your sole
 logging.info("Returns Agent initialized.")
 
 membership_agent = Agent(
-    model='gemini-2.5-flash',
+    model=MODEL_NAME,
     name='membershipagent',
     description="Agent to manage and retrieve customer membership information.",
     instruction="""
@@ -72,7 +78,7 @@ You are a specialized agent for managing customer memberships. Your sole respons
 logging.info("Membership Agent initialized.")
 
 products_agent = Agent(
-    model='gemini-2.5-flash',
+    model=MODEL_NAME,
     name='productsagent',
     description="Agent to manage and retrieve product information.",
     instruction="""
@@ -84,7 +90,7 @@ logging.info("Products Agent initialized.")
 
 # Define the root agent and pass the sub-agents as its tools
 root_agent = Agent(
-    model='gemini-2.5-flash',
+    model=MODEL_NAME,
     name='customerserviceagent',
     description="Agent to retrieve customer order, customer profile, products information and process returns. This agent can delegate tasks to specialized sub-agents.",
     global_instruction="""You are a helpful virtual assistant for a retail company named Cymbal Retail. Always respond politely.""",

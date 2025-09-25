@@ -13,10 +13,7 @@
   },
   {
     "name": "purchase_cost",
-    "type": "FLOAT",
-    "policyTags": {
-      "names": ["POLICYTAG_ID"]
-    }
+    "type": "FLOAT"
   },
   {
     "name": "selling_cost",

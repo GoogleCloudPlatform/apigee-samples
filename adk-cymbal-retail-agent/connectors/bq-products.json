@@ -22,19 +22,7 @@
 			"boolValue": false
 		}
 	],
-	"authConfig": {
-		"authType": "OAUTH2_AUTH_CODE_FLOW",
-		"oauth2AuthCodeFlow": {
-			"clientId": "OAUTH_CLIENT_ID",
-			"clientSecret": {
-				"secretVersion": "projects/PROJECT_ID/secrets/cymbal-retail-agent-client-secret/versions/1"
-			},
-			"scopes": [
-				"https://www.googleapis.com/auth/cloud-platform"
-			]
-		},
-		"authKey": "oauth"
-	},
+	"authConfig": {},
 	"nodeConfig": {
 		"minNodeCount": 2,
 		"maxNodeCount": 5

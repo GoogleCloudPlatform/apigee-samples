@@ -13,11 +13,12 @@
 # limitations under the License.
 
 from google.adk.agents import Agent
+from dotenv import load_dotenv
 from .tools import customer_profile, orders, returns, membership, products
 from google.adk.models.lite_llm import LiteLlm
 from google.adk.tools.apihub_tool.clients.secret_client import SecretManagerClient
-
 import warnings,os
+
 # Ignore all warnings
 warnings.filterwarnings("ignore")
 
@@ -38,7 +39,7 @@ apikey_credential_str = secret_manager_client.get_secret(SECRET)
 
 # Define the sub-agents for each tool with their instructions
 customer_profile_agent = Agent(
-    # model="gemini-2.5-flash",
+    # model=MODEL_NAME,
     model=LiteLlm(
         model=MODEL_NAME,
         api_base=f"https://{APIGEE_HOSTNAME}{APIGEE_LLM}",
@@ -55,7 +56,7 @@ You are a specialized agent for retrieving customer profile information. Your so
 logging.info("Customer Profile Agent initialized.")
 
 orders_agent = Agent(
-    # model="gemini-2.5-flash",
+    # model=MODEL_NAME,
     model=LiteLlm(
         model=MODEL_NAME,
         api_base=f"https://{APIGEE_HOSTNAME}{APIGEE_LLM}",
@@ -72,7 +73,7 @@ You are a specialized agent for managing customer orders. Your sole responsibili
 logging.info("Orders Agent initialized.")
 
 returns_agent = Agent(
-    # model="gemini-2.5-flash",
+    # model=MODEL_NAME,
     model=LiteLlm(
         model=MODEL_NAME,
         api_base=f"https://{APIGEE_HOSTNAME}{APIGEE_LLM}",
@@ -89,7 +90,7 @@ You are a specialized agent for handling customer returns and refunds. Your sole
 logging.info("Returns Agent initialized.")
 
 membership_agent = Agent(
-    # model="gemini-2.5-flash",
+    # model=MODEL_NAME,
     model=LiteLlm(
         model=MODEL_NAME,
         api_base=f"https://{APIGEE_HOSTNAME}{APIGEE_LLM}",
@@ -106,7 +107,7 @@ You are a specialized agent for managing customer memberships. Your sole respons
 logging.info("Membership Agent initialized.")
 
 products_agent = Agent(
-    # model="gemini-2.5-flash",
+    # model=MODEL_NAME,
     model=LiteLlm(
         model=MODEL_NAME,
         api_base=f"https://{APIGEE_HOSTNAME}{APIGEE_LLM}",
@@ -124,7 +125,7 @@ logging.info("Membership Agent initialized.")
 
 # Define the root agent and pass the sub-agents as its tools
 root_agent = Agent(
-    # model="gemini-2.5-flash",
+    # model=MODEL_NAME,
     model=LiteLlm(
         model=MODEL_NAME,
         api_base=f"https://{APIGEE_HOSTNAME}{APIGEE_LLM}",
