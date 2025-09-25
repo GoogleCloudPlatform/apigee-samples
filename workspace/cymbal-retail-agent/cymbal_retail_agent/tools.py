@@ -21,13 +21,6 @@ from google.adk.tools.application_integration_tool.application_integration_tools
 from google.adk.tools.mcp_tool.mcp_toolset import StreamableHTTPConnectionParams
 from google.adk.tools.apihub_tool.clients.secret_client import SecretManagerClient
 from google.adk.tools.openapi_tool.auth.auth_helpers import token_to_scheme_credential
-from google.adk.tools.openapi_tool.auth.auth_helpers import dict_to_auth_scheme
-from google.adk.auth import AuthCredential
-from google.adk.auth import AuthCredentialTypes
-from google.adk.auth import OAuth2Auth
-from fastapi.openapi.models import OAuth2
-from fastapi.openapi.models import OAuthFlowAuthorizationCode
-from fastapi.openapi.models import OAuthFlows
 
 load_dotenv()
 
@@ -36,14 +29,10 @@ LOCATION=os.getenv("GOOGLE_CLOUD_LOCATION")
 APIGEE_HOSTNAME=os.getenv("APIGEE_HOSTNAME")
 API_HUB_LOCATION=f"projects/{PROJECT_ID}/locations/{LOCATION}/apis"
 SECRET=f"projects/{PROJECT_ID}/secrets/cymbal-retail-apikey/versions/latest"
-APP_SECRET=f"projects/{PROJECT_ID}/secrets/cymbal-agent-client-secret/versions/latest"
-OAUTH_CLIENT_ID=os.getenv("OAUTH_CLIENT_ID")
-AGENT_REDIRECT_URI=os.getenv("AGENT_REDIRECT_URI")
 
 # # Get the credentials for the Cymbal Auto APIs
 secret_manager_client = SecretManagerClient()
 apikey_credential_str = secret_manager_client.get_secret(SECRET)
-app_credential_str = secret_manager_client.get_secret(APP_SECRET) 
 auth_scheme, auth_credential = token_to_scheme_credential("apikey", "header", "x-apikey", apikey_credential_str)
 
 # Customer Profile API

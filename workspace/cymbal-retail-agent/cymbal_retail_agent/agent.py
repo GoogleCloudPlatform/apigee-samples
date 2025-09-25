@@ -13,6 +13,8 @@
 # limitations under the License.
 
 from google.adk.agents import Agent
+from dotenv import load_dotenv
+import os
 from .tools import customer_profile
 
 import warnings
@@ -25,10 +27,13 @@ logging.basicConfig(level=logging.ERROR)
 print("Starting agent initialization...")
 print("Libraries imported.")
 
+load_dotenv()
+
+MODEL_NAME=os.getenv("MODEL_NAME")
 
 # Define the sub-agents for each tool with their instructions
 customer_profile_agent = Agent(
-    model='gemini-2.5-flash',
+    model=MODEL_NAME,
     name='customerprofileagent',
     description="Agent to retrieve a customer's comprehensive profile.",
     instruction="""
@@ -52,7 +57,7 @@ logging.info("Customer Profile Agent initialized.")
 
 # Define the root agent and pass the sub-agents as its tools
 root_agent = Agent(
-    model='gemini-2.5-flash',
+    model=MODEL_NAME,
     name='customerserviceagent',
     description="Agent to retrieve customer order, customer profile, products information and process returns. This agent can delegate tasks to specialized sub-agents.",
     global_instruction="""You are a helpful virtual assistant for a retail company named Cymbal Retail. Always respond politely.""",
