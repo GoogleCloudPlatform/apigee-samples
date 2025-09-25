@@ -7,7 +7,7 @@
 	"configVariables": [
 		{
 			"key": "project_id",
-			"stringValue": "PROJECT_ID"
+			"stringValue": "$PROJECT_ID$"
 		},
 		{
 			"key": "dataset_id",
@@ -37,6 +37,6 @@
 		"clientPrivateKey": {},
 		"clientPrivateKeyPass": {}
 	},
-	"authOverrideEnabled": true
+	"authOverrideEnabled": false
 }
 

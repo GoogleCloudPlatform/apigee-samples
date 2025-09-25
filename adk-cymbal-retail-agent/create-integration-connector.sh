@@ -63,16 +63,16 @@ export PATH=$PATH:$HOME/.integrationcli/bin
 
 cp connectors/bq-products.json connectors/bq-products-tmp.json
 #sed -i "s/OAUTH_CLIENT_ID/$OAUTH_CLIENT_ID/g" connectors/bq-products-tmp.json
-sed -i "s/PROJECT_ID/$PROJECT_ID/g" connectors/bq-products-tmp.json
+#sed -i "s/PROJECT_ID/$PROJECT_ID/g" connectors/bq-products-tmp.json
 
-echo "Creating BigQuery Connector"
-integrationcli connectors create -n bq-products -f connectors/bq-products-tmp.json -p "$PROJECT_ID" -r "$VERTEXAI_REGION" -t "$TOKEN" -g --wait
+#echo "Creating BigQuery Connector"
+#integrationcli connectors create -n bq-products -f connectors/bq-products-tmp.json -p "$PROJECT_ID" -r "$VERTEXAI_REGION" -t "$TOKEN" -g --wait
 
-rm connectors/bq-products-tmp.json
-echo "BigQuery Connector created successfully"
+#rm connectors/bq-products-tmp.json
+#echo "BigQuery Connector created successfully"
 
 echo "Publishing Integration"
-integrationcli integrations apply -f integration/. -p "$PROJECT_ID" -r "$VERTEXAI_REGION" -t "$TOKEN" --skip-connectors -g --wait
+integrationcli integrations apply -f integration/. -p "$PROJECT_ID" -r "$VERTEXAI_REGION" -t "$TOKEN" -g --wait
 
 echo "================================================="
 echo "Finished create-integration-connector.sh"
