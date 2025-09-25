@@ -71,7 +71,7 @@ export PATH=$PATH:$HOME/.integrationcli/bin
 # rm connectors/bq-products-tmp.json
 # echo "BigQuery Connector created successfully"
 
-sed -i "s/PROJECT_ID/$PROJECT_ID/g" connectors/bq-products.json
+sed -i "s/PROJECT_ID/$PROJECT_ID/g" integration/connectors/bq-products.json
 echo "Publishing Integration"
 integrationcli integrations apply -f integration/. -p "$PROJECT_ID" -r "$VERTEXAI_REGION" -t "$TOKEN" -g --wait
 
