@@ -162,6 +162,7 @@ add_role_to_serviceaccount "roles/iam.serviceAccountUser"
 add_role_to_serviceaccount "roles/dlp.reader"
 add_role_to_serviceaccount "roles/dlp.user"
 add_role_to_serviceaccount "roles/apigee.analyticsEditor"
+add_role_to_serviceaccount "roles/integrations.integrationEditor"
 
 gcloud config set api_endpoint_overrides/modelarmor "https://modelarmor.$MODEL_ARMOR_REGION.rep.googleapis.com/"
 
