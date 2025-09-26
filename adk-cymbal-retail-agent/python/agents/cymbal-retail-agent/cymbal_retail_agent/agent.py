@@ -17,7 +17,7 @@ from dotenv import load_dotenv
 import os
 import warnings
 
-from .tools import customer_profile, orders, returns, membership, products
+from .tools import orders, returns, membership, products
 
 # Ignore all warnings
 warnings.filterwarnings("ignore")
@@ -31,18 +31,6 @@ print("Libraries imported.")
 load_dotenv()
 
 MODEL_NAME=os.getenv("MODEL_NAME")
-
-# Define the sub-agents for each tool with their instructions
-customer_profile_agent = Agent(
-    model=MODEL_NAME,
-    name='customerprofileagent',
-    description="Agent to retrieve a customer's comprehensive profile.",
-    instruction="""
-You are a specialized agent for retrieving customer profile information. Your sole responsibility is to get all available details about a specific customer, such as their name, contact information, and account status. You will receive a request from the root agent and should respond by providing the requested information to the user.
-""",
-    tools=[customer_profile]
-)
-logging.info("Customer Profile Agent initialized.")
 
 orders_agent = Agent(
     model=MODEL_NAME,
@@ -107,6 +95,6 @@ You are the Cymbal Retail Agent
 7. If the user wants to get all customers use the membership tool to retrieve all customers available. 
 8. Throughout the conversation, maintain a friendly and helpful tone. If you need more information to complete a request, politely ask for it.
 """,
-    sub_agents=[customer_profile_agent, orders_agent, returns_agent, membership_agent, products_agent]
+    sub_agents=[orders_agent, returns_agent, membership_agent, products_agent]
 )
 logging.info("Root Agent initialized successfully. Ready to receive input.")

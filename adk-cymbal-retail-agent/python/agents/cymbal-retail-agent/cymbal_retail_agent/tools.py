@@ -68,14 +68,6 @@ auth_scheme, auth_credential = token_to_scheme_credential("apikey", "header", "x
 #   )
 # )
 
-# Customer Profile API
-customer_profile = APIHubToolset(
-    name="cymbal-customer-profile-api",
-    description="Retrieve comprehensive profile for customer API",
-    apihub_resource_name=f"{API_HUB_LOCATION}/customers_api",
-    auth_scheme=auth_scheme,
-    auth_credential=auth_credential
-)
 # Orders API
 orders = APIHubToolset(
     name="cymbal-orders-status-api",

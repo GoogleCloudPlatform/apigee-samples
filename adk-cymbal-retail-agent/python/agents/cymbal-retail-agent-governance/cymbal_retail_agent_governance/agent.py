@@ -14,7 +14,7 @@
 
 from google.adk.agents import Agent
 from dotenv import load_dotenv
-from .tools import customer_profile, orders, returns, membership, products
+from .tools import orders, returns, membership, products
 from google.adk.models.lite_llm import LiteLlm
 from google.adk.tools.apihub_tool.clients.secret_client import SecretManagerClient
 import warnings,os
@@ -38,23 +38,6 @@ secret_manager_client = SecretManagerClient()
 apikey_credential_str = secret_manager_client.get_secret(SECRET)
 
 # Define the sub-agents for each tool with their instructions
-customer_profile_agent = Agent(
-    # model=MODEL_NAME,
-    model=LiteLlm(
-        model=MODEL_NAME,
-        api_base=f"https://{APIGEE_HOSTNAME}{APIGEE_LLM}",
-        # Pass authentication headers if needed
-        extra_headers={"x-apikey": apikey_credential_str}
-    ),
-    name='customerprofileagent',
-    description="Agent to retrieve a customer's comprehensive profile.",
-    instruction="""
-You are a specialized agent for retrieving customer profile information. Your sole responsibility is to get all available details about a specific customer, such as their name, contact information, and account status. You will receive a request from the root agent and should respond by providing the requested information to the user.
-""",
-    tools=[customer_profile]
-)
-logging.info("Customer Profile Agent initialized.")
-
 orders_agent = Agent(
     # model=MODEL_NAME,
     model=LiteLlm(
@@ -148,6 +131,6 @@ You are the Cymbal Retail Agent
 7. If the user wants to get all customers use the membership tool to retrieve all customers available. 
 8. Throughout the conversation, maintain a friendly and helpful tone. If you need more information to complete a request, politely ask for it.
 """,
-    sub_agents=[customer_profile_agent, orders_agent, returns_agent, membership_agent, products_agent]
+    sub_agents=[orders_agent, returns_agent, membership_agent, products_agent]
 )
 logging.info("Root Agent initialized successfully. Ready to receive input.")

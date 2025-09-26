@@ -35,17 +35,14 @@ secret_manager_client = SecretManagerClient()
 apikey_credential_str = secret_manager_client.get_secret(SECRET)
 auth_scheme, auth_credential = token_to_scheme_credential("apikey", "header", "x-apikey", apikey_credential_str)
 
-# Customer Profile API
-customer_profile = APIHubToolset(
-    name="cymbal-customer-profile-api",
-    description="Retrieve comprehensive profile for customer API",
+# Orders API
+orders = APIHubToolset(
+    name="cymbal-orders-status-api",
+    description="Retrieve customer orders API",
     apihub_resource_name=f"{API_HUB_LOCATION}/replace_me_with_id",
     auth_scheme=auth_scheme,
     auth_credential=auth_credential
 )
-
-# Orders API
-# orders = APIHubToolset()
 
 # Return and Refund API
 # returns = APIHubToolset()

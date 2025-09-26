@@ -15,7 +15,7 @@
 from google.adk.agents import Agent
 from dotenv import load_dotenv
 import os
-from .tools import customer_profile
+from .tools import orders
 
 import warnings
 # Ignore all warnings
@@ -32,19 +32,16 @@ load_dotenv()
 MODEL_NAME=os.getenv("MODEL_NAME")
 
 # Define the sub-agents for each tool with their instructions
-customer_profile_agent = Agent(
+orders_agent = Agent(
     model=MODEL_NAME,
-    name='customerprofileagent',
-    description="Agent to retrieve a customer's comprehensive profile.",
+    name='ordersagent',
+    description="Agent to retrieve a customer's order history and status.",
     instruction="""
-You are a specialized agent for retrieving customer profile information. Your sole responsibility is to get all available details about a specific customer, such as their name, contact information, and account status. You will receive a request from the root agent and should respond by providing the requested information to the user.
+You are a specialized agent for managing customer orders. Your sole responsibility is to look up and report on a customer's order history, track an existing order, or get shipping information. You will receive a request from the root agent. You should not process any other type of request.
 """,
-    tools=[customer_profile]
+    tools=[orders]
 )
-logging.info("Customer Profile Agent initialized.")
-
-# orders_agent = Agent()
-# logging.info("Orders Agent initialized.")
+logging.info("Orders Agent initialized.")
 
 # returns_agent = Agent()
 # logging.info("Returns Agent initialized.")
@@ -74,6 +71,6 @@ You are the Cymbal Retail Agent
 7. If the user wants to get all customers use the membership tool to retrieve all customers available. 
 8. Throughout the conversation, maintain a friendly and helpful tone. If you need more information to complete a request, politely ask for it.
 """,
-    sub_agents=[customer_profile_agent]
+    sub_agents=[orders_agent]
 )
 logging.info("Root Agent initialized successfully. Ready to receive input.")
