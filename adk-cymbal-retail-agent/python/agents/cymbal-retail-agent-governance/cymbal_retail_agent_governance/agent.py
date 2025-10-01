@@ -14,7 +14,7 @@
 
 from google.adk.agents import Agent
 from dotenv import load_dotenv
-from .tools import orders, returns, membership, products
+from .tools import orders, returns, customers, products
 from google.adk.models.lite_llm import LiteLlm
 from google.adk.tools.apihub_tool.clients.secret_client import SecretManagerClient
 import warnings,os
@@ -72,7 +72,7 @@ You are a specialized agent for handling customer returns and refunds. Your sole
 )
 logging.info("Returns Agent initialized.")
 
-membership_agent = Agent(
+customers_agent = Agent(
     # model=MODEL_NAME,
     model=LiteLlm(
         model=MODEL_NAME,
@@ -80,14 +80,14 @@ membership_agent = Agent(
         # Pass authentication headers if needed
         extra_headers={"x-apikey": apikey_credential_str}
     ),
-    name='membershipagent',
-    description="Agent to manage and retrieve customer membership information.",
+    name='customersagent',
+    description="Agent to manage and retrieve customer information.",
     instruction="""
-You are a specialized agent for managing customer memberships. Your sole responsibility is to use the provided tools to assist with membership inquiries, such as checking membership status, changing plans, or processing membership cancellation requests. You will receive a request from the root agent. You should not process any other type of request.
+You are a specialized agent for managing customer information. Your sole responsibility is to use the provided tools to assist with managing customer profiles. You will receive a request from the root agent. You should not process any other type of request.
 """,
-    tools=[membership]
+    tools=[customers]
 )
-logging.info("Membership Agent initialized.")
+logging.info("customers Agent initialized.")
 
 products_agent = Agent(
     # model=MODEL_NAME,
@@ -104,7 +104,7 @@ You are a specialized agent for managing relevant information about products. Yo
 """,
     tools=[products]
 )
-logging.info("Membership Agent initialized.")
+logging.info("customers Agent initialized.")
 
 # Define the root agent and pass the sub-agents as its tools
 root_agent = Agent(
@@ -116,7 +116,7 @@ root_agent = Agent(
         extra_headers={"x-apikey": apikey_credential_str}
     ),
     name='customerserviceagent',
-    description="Agent to retrieve customer order, customer profile, products information and process returns. This agent can delegate tasks to specialized sub-agents.",
+    description="Agent to retrieve customers orders, customers profiles, products information and process returns. This agent can delegate tasks to specialized sub-agents.",
     global_instruction="""You are a helpful virtual assistant for a retail company named Cymbal Retail. Always respond politely.""",
     instruction="""
 **Your Primary Goal:**
@@ -128,9 +128,9 @@ You are the Cymbal Retail Agent
 4. For questions about a customer's profile or general customer information, ask for their email address. Use the customer profile tool to retrieve and provide the requested details.
 5. When the user asks about a return or refund, ask for the specific order ID so you can check the status using the returns tool.
 6. If the user wants to list all products, use the products tool to check the information requested about products and inform them.
-7. If the user wants to get all customers use the membership tool to retrieve all customers available. 
+7. If the user wants to get all customers use the customers tool to retrieve all customers information. 
 8. Throughout the conversation, maintain a friendly and helpful tone. If you need more information to complete a request, politely ask for it.
 """,
-    sub_agents=[orders_agent, returns_agent, membership_agent, products_agent]
+    sub_agents=[orders_agent, returns_agent, customers_agent, products_agent]
 )
 logging.info("Root Agent initialized successfully. Ready to receive input.")

@@ -41,7 +41,7 @@ SECRET=f"projects/{PROJECT_ID}/secrets/cymbal-retail-apikey/versions/latest"
 # AGENT_REDIRECT_URI=os.getenv("AGENT_REDIRECT_URI")
  
 
-# # Get the credentials for the Cymbal Auto APIs
+# # Get the credentials for the Cymbal Retail APIs
 secret_manager_client = SecretManagerClient()
 apikey_credential_str = secret_manager_client.get_secret(SECRET)
 # app_credential_str = secret_manager_client.get_secret(APP_SECRET) 
@@ -86,7 +86,7 @@ returns = APIHubToolset(
     auth_credential=auth_credential
 )
 
-membership = MCPToolset(
+customers = MCPToolset(
     connection_params=StreamableHTTPConnectionParams(
         url=f"https://{APIGEE_HOSTNAME}/mcp/v1/samples/adk-cymbal-retail/customers"
     ),
@@ -106,6 +106,3 @@ products = ApplicationIntegrationToolset(
     # auth_scheme=oauth2_scheme,
     # auth_credential=oauth_credential
 )
-
-
-
