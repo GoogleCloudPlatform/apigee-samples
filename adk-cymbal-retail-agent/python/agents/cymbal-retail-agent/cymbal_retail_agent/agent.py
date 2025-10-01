@@ -17,7 +17,7 @@ from dotenv import load_dotenv
 import os
 import warnings
 
-from .tools import orders, returns, membership, products
+from .tools import orders, returns, customers, products
 
 # Ignore all warnings
 warnings.filterwarnings("ignore")
@@ -54,16 +54,16 @@ You are a specialized agent for handling customer returns and refunds. Your sole
 )
 logging.info("Returns Agent initialized.")
 
-membership_agent = Agent(
+customers_agent = Agent(
     model=MODEL_NAME,
-    name='membershipagent',
-    description="Agent to manage and retrieve customer membership information.",
+    name='customersagent',
+    description="Agent to manage and retrieve customer information.",
     instruction="""
-You are a specialized agent for managing customer memberships. Your sole responsibility is to use the provided tools to assist with membership inquiries, such as checking membership status, changing plans, or processing membership cancellation requests. You will receive a request from the root agent. You should not process any other type of request.
+You are a specialized agent for managing customer profile information. Your sole responsibility is to use the provided tools to assist with customer profile inquiries. You will receive a request from the root agent. You should not process any other type of request.
 """,
-    tools=[membership]
+    tools=[customers]
 )
-logging.info("Membership Agent initialized.")
+logging.info("Customers Agent initialized.")
 
 products_agent = Agent(
     model=MODEL_NAME,
@@ -92,9 +92,9 @@ You are the Cymbal Retail Agent
 4. For questions about a customer's profile or general customer information, ask for their email address. Use the customer profile tool to retrieve and provide the requested details.
 5. When the user asks about a return or refund, ask for the specific order ID so you can check the status using the returns tool.
 6. If the user wants to list all products, use the products tool to check the information requested about products and inform them.
-7. If the user wants to get all customers use the membership tool to retrieve all customers available. 
+7. If the user wants to get all customers use the customers tool to retrieve all customers information. 
 8. Throughout the conversation, maintain a friendly and helpful tone. If you need more information to complete a request, politely ask for it.
 """,
-    sub_agents=[orders_agent, returns_agent, membership_agent, products_agent]
+    sub_agents=[orders_agent, returns_agent, customers_agent, products_agent]
 )
 logging.info("Root Agent initialized successfully. Ready to receive input.")
