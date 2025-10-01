@@ -30,7 +30,7 @@ APIGEE_HOSTNAME=os.getenv("APIGEE_HOSTNAME")
 API_HUB_LOCATION=f"projects/{PROJECT_ID}/locations/{LOCATION}/apis"
 SECRET=f"projects/{PROJECT_ID}/secrets/cymbal-retail-apikey/versions/latest"
 
-# # Get the credentials for the Cymbal Auto APIs
+# # Get the credentials for the Cymbal Retail APIs
 secret_manager_client = SecretManagerClient()
 apikey_credential_str = secret_manager_client.get_secret(SECRET)
 auth_scheme, auth_credential = token_to_scheme_credential("apikey", "header", "x-apikey", apikey_credential_str)
@@ -47,8 +47,8 @@ orders = APIHubToolset(
 # Return and Refund API
 # returns = APIHubToolset()
 
-# Membership
-# membership = MCPToolset()
+# Customers
+# customers = MCPToolset()
 
 # Products  (Integration Connector ToolSet)
 # products = ApplicationIntegrationToolset()

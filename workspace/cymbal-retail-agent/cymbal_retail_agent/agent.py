@@ -46,11 +46,11 @@ logging.info("Orders Agent initialized.")
 # returns_agent = Agent()
 # logging.info("Returns Agent initialized.")
 
-# membership_agent = Agent()
-# logging.info("Membership Agent initialized.")
+# customers_agent = Agent()
+# logging.info("Customers Agent initialized.")
 
 # products_agent = Agent()
-# logging.info("Membership Agent initialized.")
+# logging.info("Products Agent initialized.")
 
 # Define the root agent and pass the sub-agents as its tools
 root_agent = Agent(
@@ -68,7 +68,7 @@ You are the Cymbal Retail Agent
 4. For questions about a customer's profile or general customer information, ask for their email address. Use the customer profile tool to retrieve and provide the requested details.
 5. When the user asks about a return or refund, ask for the specific order ID so you can check the status using the returns tool.
 6. If the user wants to list all products, use the products tool to check the information requested about products and inform them.
-7. If the user wants to get all customers use the membership tool to retrieve all customers available. 
+7. If the user wants to get all customers use the customers tool to retrieve all customers information. 
 8. Throughout the conversation, maintain a friendly and helpful tone. If you need more information to complete a request, politely ask for it.
 """,
     sub_agents=[orders_agent]
