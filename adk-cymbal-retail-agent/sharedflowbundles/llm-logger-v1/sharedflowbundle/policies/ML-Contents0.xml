@@ -15,6 +15,6 @@
   <DisplayName>ML-Contents0</DisplayName>
   <CloudLogging>
     <LogName>projects/{organization.name}/logs/apigee-llm</LogName>
-    <Message contentType="application/json">{"proxyName":"{apiproxy.name}","llmLogType":"{log_type}","segment":"0","messageid":"{messageid}","content":"{log_content}"}</Message>
+    <Message contentType="application/json">{"proxyName":"{apiproxy.name}","llmLogType":"{log_type}","segment":"0","messageid":"{messageid}","content":"{contents_0}"}</Message>
   </CloudLogging>
 </MessageLogging>
