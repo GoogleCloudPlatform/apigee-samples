@@ -13,7 +13,7 @@
 -->
 <SharedFlow name="default">
   <Step>
-    <Condition>log_content != null and log_content != ""</Condition>
+    <Condition>contents_0 != null and contents_0 != ""</Condition>
     <Name>ML-Contents0</Name>
   </Step>
   <Step>
