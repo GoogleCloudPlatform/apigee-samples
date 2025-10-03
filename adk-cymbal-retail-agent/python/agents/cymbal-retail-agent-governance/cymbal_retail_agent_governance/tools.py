@@ -69,19 +69,21 @@ auth_scheme, auth_credential = token_to_scheme_credential("apikey", "header", "x
 # )
 
 # Orders API
+orders_api_id="orders_api"
 orders = APIHubToolset(
     name="cymbal-orders-status-api",
     description="Retrieve customer orders API",
-    apihub_resource_name=f"{API_HUB_LOCATION}/orders_api",
+    apihub_resource_name=f"{API_HUB_LOCATION}/{orders_api_id}",
     auth_scheme=auth_scheme,
     auth_credential=auth_credential
 )
 
 # Return and Refund API
+returns_api_id="returns_api"
 returns = APIHubToolset(
     name="cymbal-returns-api",
     description="Handle customer returns API",
-    apihub_resource_name=f"{API_HUB_LOCATION}/returns_api",
+    apihub_resource_name=f"{API_HUB_LOCATION}/{returns_api_id}",
     auth_scheme=auth_scheme,
     auth_credential=auth_credential
 )
