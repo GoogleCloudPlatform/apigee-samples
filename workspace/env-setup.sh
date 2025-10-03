@@ -29,6 +29,6 @@ rm -rf ~/.integrationcli
 curl -L https://raw.githubusercontent.com/GoogleCloudPlatform/application-integration-management-toolkit/main/downloadLatest.sh | sh -
 
 echo "✅ Installing dependencies..."
-pushd "workspace/cymbal-retail-agent"
+pushd "cymbal-retail-agent"
 poetry install
 popd
