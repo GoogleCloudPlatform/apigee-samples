@@ -111,6 +111,7 @@ delete_api "adk-retail-agent-llm-governance-v1"
 delete_sharedflow "llm-extract-candidates-v1"
 delete_sharedflow "llm-extract-prompts-v1"
 delete_sharedflow "llm-logger-v1"
+delete_sharedflow "cloud-logger-v1"
 
 delete_api_from_hub "accounts"
 delete_api_from_hub "communications"

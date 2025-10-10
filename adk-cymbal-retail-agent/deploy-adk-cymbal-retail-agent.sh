@@ -286,6 +286,7 @@ echo "Deploying the sharedflows"
 import_and_deploy_sharedflow "llm-extract-candidates-v1"
 import_and_deploy_sharedflow "llm-extract-prompts-v1"
 import_and_deploy_sharedflow "llm-logger-v1"
+import_and_deploy_sharedflow "cloud-logger-v1"
 
 
 echo "Deploying the proxies"
@@ -318,6 +319,14 @@ echo "Creating a Secret that will be used by ADK"
 gcloud secrets create "$SECRET_ID" --replication-policy="automatic" --project "$PROJECT_ID"
 echo -n "$APIKEY" | gcloud secrets versions add "$SECRET_ID" --project "$PROJECT_ID" --data-file=- 
 echo "Secret $SECRET_ID created successfully"
+
+echo "Crating Flow-Hook for cloud-logger-v1 sharedflow ..."
+apigeecli flowhooks attach \
+ --name "PostProxyFlowHook" \
+ --sharedflow "cloud-logger-v1" \
+ --env "$APIGEE_ENV" \
+ --org "$PROJECT_ID" \
+ --token "$TOKEN"
 
 export APIKEY
 export PROXY_URL="$APIGEE_HOST/v1/samples/adk-cymbal-retail"
