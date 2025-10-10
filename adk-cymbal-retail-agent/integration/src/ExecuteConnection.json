@@ -399,7 +399,7 @@
 	],
 	"databasePersistencePolicy": "DATABASE_PERSISTENCE_POLICY_UNSPECIFIED",
 	"cloudLoggingDetails": {
-		"cloudLoggingSeverity": "CLOUD_LOGGING_SEVERITY_UNSPECIFIED",
-		"enableCloudLogging": false
+		"cloudLoggingSeverity": "INFO",
+		"enableCloudLogging": true
 	}
 }
