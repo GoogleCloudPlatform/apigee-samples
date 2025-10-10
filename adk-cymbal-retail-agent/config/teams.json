@@ -1,0 +1,22 @@
+[
+    {
+        "id": "market-data",
+        "displayName": "market-data"
+    },
+    {
+        "id": "logistics",
+        "displayName": "logistics"
+    },
+    {
+        "id": "open-banking",
+        "displayName": "open-banking"
+    },
+    {
+        "id": "shared-services",
+        "displayName": "shared-services"
+    },
+    {
+        "id": "retail-api",
+        "displayName": "retail-api"
+    }
+]

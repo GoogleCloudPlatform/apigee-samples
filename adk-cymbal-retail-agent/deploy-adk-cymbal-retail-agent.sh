@@ -97,7 +97,7 @@ import_and_deploy_proxy() {
   --ovr --wait
 }
 
-add_api_to_hub(){
+add_rest_api_to_hub(){
   local api=$1
   local id="1_0_0"
   echo "Registering the $api API"
@@ -110,6 +110,36 @@ add_api_to_hub(){
 
   apigeecli apihub apis versions specs create --api-id "${api}_api" -i $id --version $id \
   -d openapi.yaml -f "tmp/${api}/${api}.yaml"  -r "$APIGEE_APIHUB_REGION" -o "$APIGEE_APIHUB_PROJECT_ID" -t "$TOKEN"
+}
+
+add_soap_api_to_hub(){
+  local api=$1
+  local id="1_0_0"
+  echo "Registering the $api API"
+  apigeecli apihub apis create --id "${api}_api" \
+  -f "tmp/${api}/${api}-api.json" \
+  -r "$APIGEE_APIHUB_REGION" -o "$APIGEE_APIHUB_PROJECT_ID" -t "$TOKEN"
+
+  apigeecli apihub apis versions create --api-id "${api}_api" --id $id \
+  -f "tmp/${api}/${api}-api-ver.json"  -r "$APIGEE_APIHUB_REGION" -o "$APIGEE_APIHUB_PROJECT_ID" -t "$TOKEN"
+
+  apigeecli apihub apis versions specs create --api-id "${api}_api" -i $id --version $id \
+  -d ${api}.wsdl -f "tmp/${api}/${api}.wsdl"  -r "$APIGEE_APIHUB_REGION" -o "$APIGEE_APIHUB_PROJECT_ID" -t "$TOKEN"
+}
+
+add_grpc_api_to_hub(){
+  local api=$1
+  local id="1_0_0"
+  echo "Registering the $api API"
+  apigeecli apihub apis create --id "${api}_api" \
+  -f "tmp/${api}/${api}-api.json" \
+  -r "$APIGEE_APIHUB_REGION" -o "$APIGEE_APIHUB_PROJECT_ID" -t "$TOKEN"
+
+  apigeecli apihub apis versions create --api-id "${api}_api" --id $id \
+  -f "tmp/${api}/${api}-api-ver.json"  -r "$APIGEE_APIHUB_REGION" -o "$APIGEE_APIHUB_PROJECT_ID" -t "$TOKEN"
+
+  apigeecli apihub apis versions specs create --api-id "${api}_api" -i $id --version $id \
+  -d ${api}.proto -f "tmp/${api}/${api}.proto"  -r "$APIGEE_APIHUB_REGION" -o "$APIGEE_APIHUB_PROJECT_ID" -t "$TOKEN"
 }
 
 echo "================================================="
@@ -143,9 +173,19 @@ sed -i "s/APIGEE_HOST/$APIGEE_HOST/g" tmp/*/*.yaml
 sed -i "s/APIGEE_APIHUB_PROJECT_ID/$APIGEE_APIHUB_PROJECT_ID/g" tmp/*/*.json
 sed -i "s/APIGEE_APIHUB_REGION/$APIGEE_APIHUB_REGION/g" tmp/*/*.json
 
-add_api_to_hub "customers"
-add_api_to_hub "orders"
-add_api_to_hub "returns"
+apigeecli apihub attributes update -r "$APIGEE_APIHUB_REGION" -o "$APIGEE_APIHUB_PROJECT_ID" -t "$TOKEN" --allowed-values  "config/business-units.json" --data-type "ENUM" -i "system-business-unit" -s "API" -m "allowed_values" -d "Business Unit"
+apigeecli apihub attributes update -r "$APIGEE_APIHUB_REGION" -o "$APIGEE_APIHUB_PROJECT_ID" -t "$TOKEN" --allowed-values  "config/teams.json" --data-type "ENUM" -i "system-team" -s "API" -m "allowed_values" -d "Team"
+
+add_rest_api_to_hub "customers"
+add_rest_api_to_hub "orders"
+add_rest_api_to_hub "returns"
+add_rest_api_to_hub "accounts"
+add_rest_api_to_hub "communications"
+add_rest_api_to_hub "employees"
+add_rest_api_to_hub "products"
+add_rest_api_to_hub "stocks"
+add_soap_api_to_hub "payments"
+add_grpc_api_to_hub "shipments"
 
 apigee-go-gen render apiproxy \
   --template ./config/templates/mcp/apiproxy.yaml \

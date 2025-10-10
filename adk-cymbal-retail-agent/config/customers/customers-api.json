@@ -26,9 +26,9 @@
             "enumValues": {
                     "values": [
                             {
-                                    "id": "example-team",
-                                    "displayName": "Example Team Name",
-                                    "description": "Example team name"
+                                    "id": "retail-api",
+                                    "displayName": "Cymbal Retail API",
+                                    "description": "Cymbal Retail API"
                             }
                     ]
             }
@@ -38,9 +38,9 @@
             "enumValues": {
                     "values": [
                             {
-                                    "id": "example-business-unit",
-                                    "displayName": "Example Business Unit Name",
-                                    "description": "Example Business Unit Name"
+                                    "id": "retail",
+                                    "displayName": "Retail",
+                                    "description": "Cymbal Retail"
                             }
                     ]
             }

@@ -1,12 +1,12 @@
 {
-    "displayName": "Cymbal Orders API",
-    "description": "This API manages orders, allowing for creation, retrieval, and update of orders.",
+    "displayName": "Cymbal Employees API",
+    "description": " A secure API for managing employee records within an organization's HR system.",
     "documentation": {
-            "externalUri": "https://developer.cymbal-retail.com/docs/reference/apis/rewards"
+            "externalUri": "https://developer.cymbal-shared.com/docs/reference/apis/customers"
     },
     "owner": {
-            "displayName": "Cymbal Retail API Team",
-            "email": "api-dev@cymbal-retail.com"
+            "displayName": "Cymbal Shared Services API Team",
+            "email": "api-dev@cymbal-shared.com"
     },
     "targetUser": {
             "attribute": "projects/APIGEE_APIHUB_PROJECT_ID/locations/APIGEE_APIHUB_REGION/attributes/system-target-user",
@@ -26,9 +26,9 @@
             "enumValues": {
                     "values": [
                             {
-                                    "id": "retail-api",
-                                    "displayName": "Cymbal Retail API",
-                                    "description": "Cymbal Retail API"
+                                    "id": "shared-services",
+                                    "displayName": "Cymbal Shared Services API",
+                                    "description": "Cymbal Shared Services API team"
                             }
                     ]
             }
@@ -38,9 +38,9 @@
             "enumValues": {
                     "values": [
                             {
-                                    "id": "retail",
-                                    "displayName": "Cymbal Retail",
-                                    "description": "Cymbal Retail"
+                                    "id": "shared-services",
+                                    "displayName": "Cymbal Shared Services",
+                                    "description": "Cymbal Shared Services"
                             }
                     ]
             }
@@ -50,9 +50,9 @@
             "enumValues": {
                     "values": [
                             {
-                                    "id": "level-2",
-                                    "displayName": "Level 2",
-                                    "description": "Level 2"
+                                    "id": "level-1",
+                                    "displayName": "Level 1",
+                                    "description": "Level 1"
                             }
                     ]
             }

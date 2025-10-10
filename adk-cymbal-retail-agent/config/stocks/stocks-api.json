@@ -1,22 +1,28 @@
 {
-    "displayName": "Cymbal Orders API",
-    "description": "This API manages orders, allowing for creation, retrieval, and update of orders.",
+    "displayName": "Cymbal Stocks API",
+    "description": "A market data API that provides real-time and historical information about stocks.",
     "documentation": {
-            "externalUri": "https://developer.cymbal-retail.com/docs/reference/apis/rewards"
+            "externalUri": "https://developer.cymbal-finance.com/docs/reference/apis/stocks"
     },
     "owner": {
-            "displayName": "Cymbal Retail API Team",
-            "email": "api-dev@cymbal-retail.com"
+            "displayName": "Cymbal Finance API Team",
+            "email": "api-dev@cymbal-finance.com"
     },
     "targetUser": {
             "attribute": "projects/APIGEE_APIHUB_PROJECT_ID/locations/APIGEE_APIHUB_REGION/attributes/system-target-user",
             "enumValues": {
                     "values": [
                             {
-                                    "id": "internal",
-                                    "displayName": "Internal",
-                                    "description": "Internal target user",
+                                    "id": "public",
+                                    "displayName": "Public",
+                                    "description": "Public target user",
                                     "immutable": true
+                            },
+                            				{
+					"id": "partner",
+					"displayName": "Partner",
+					"description": "Partner target user",
+					"immutable": true
                             }
                     ]
             }
@@ -26,9 +32,9 @@
             "enumValues": {
                     "values": [
                             {
-                                    "id": "retail-api",
-                                    "displayName": "Cymbal Retail API",
-                                    "description": "Cymbal Retail API"
+                                    "id": "market-data",
+                                    "displayName": "Market Data",
+                                    "description": "Responsible for sourcing, managing, and distributing the financial market data."
                             }
                     ]
             }
@@ -38,9 +44,9 @@
             "enumValues": {
                     "values": [
                             {
-                                    "id": "retail",
-                                    "displayName": "Cymbal Retail",
-                                    "description": "Cymbal Retail"
+                                    "id": "finance",
+                                    "displayName": "Cymbal Finance",
+                                    "description": "Ensure financial health, provide accurate reporting, and support strategic decision-making."
                             }
                     ]
             }
@@ -50,9 +56,9 @@
             "enumValues": {
                     "values": [
                             {
-                                    "id": "level-2",
-                                    "displayName": "Level 2",
-                                    "description": "Level 2"
+                                    "id": "level-3",
+                                    "displayName": "Level 3",
+                                    "description": "Level 3"
                             }
                     ]
             }

@@ -1,0 +1,205 @@
+# Copyright 2025 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+openapi: 3.0.0
+info:
+  title: Stocks API
+  description: A simple API for retrieving stock market quotes and historical data.
+  version: 1.0.0
+  contact:
+    email: api-support@exampledata.com
+
+servers:
+  - url: https://api.exampledata.com/v1
+    description: Production Server
+  - url: https://sandbox-api.exampledata.com/v1
+    description: Sandbox for Testing
+
+# Defines security scheme, in this case an API Key in the header
+security:
+  - ApiKeyAuth: []
+
+# Paths define the API's endpoints
+paths:
+  /stocks/{symbol}/quote:
+    get:
+      tags:
+        - Stocks
+      summary: Get latest quote for a stock symbol
+      description: Retrieves the latest price, daily change, and volume for a given stock ticker symbol.
+      parameters:
+        - $ref: '#/components/parameters/SymbolParameter'
+      responses:
+        '200':
+          description: A successful response with the latest quote.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Quote'
+        '404':
+          description: Symbol not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /stocks/{symbol}/history:
+    get:
+      tags:
+        - Stocks
+      summary: Get historical time-series data for a symbol
+      description: Retrieves historical open, high, low, close, and volume data for a given symbol over a specified date range.
+      parameters:
+        - $ref: '#/components/parameters/SymbolParameter'
+        - name: from
+          in: query
+          description: The start date for historical data (YYYY-MM-DD).
+          required: true
+          schema:
+            type: string
+            format: date
+        - name: to
+          in: query
+          description: The end date for historical data (YYYY-MM-DD).
+          required: true
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: A successful response with a list of historical data points.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/HistoricalDataPoint'
+        '404':
+          description: Symbol not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /search:
+    get:
+      tags:
+        - Search
+      summary: Search for a stock symbol
+      description: Search for company names or ticker symbols.
+      parameters:
+        - name: query
+          in: query
+          description: The search keyword (e.g., "Apple").
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A list of matching symbols.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SearchResult'
+
+# Reusable components to keep the spec clean
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-KEY
+
+  parameters:
+    SymbolParameter:
+      name: symbol
+      in: path
+      description: The stock ticker symbol (e.g., AAPL).
+      required: true
+      schema:
+        type: string
+
+  schemas:
+    Quote:
+      type: object
+      properties:
+        symbol:
+          type: string
+          example: "AAPL"
+        companyName:
+          type: string
+          example: "Apple Inc."
+        price:
+          type: number
+          format: double
+          example: 145.12
+        change:
+          type: number
+          format: double
+          example: 1.50
+        changePercent:
+          type: number
+          format: double
+          example: 0.0103
+        volume:
+          type: integer
+          format: int64
+          example: 95000000
+        timestamp:
+          type: string
+          format: date-time
+
+    HistoricalDataPoint:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+        open:
+          type: number
+          format: double
+        high:
+          type: number
+          format: double
+        low:
+          type: number
+          format: double
+        close:
+          type: number
+          format: double
+        volume:
+          type: integer
+          format: int64
+
+    SearchResult:
+      type: object
+      properties:
+        symbol:
+          type: string
+          example: "AAPL"
+        companyName:
+          type: string
+          example: "Apple Inc."
+        exchange:
+          type: string
+          example: "NASDAQ"
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+        message:
+          type: string

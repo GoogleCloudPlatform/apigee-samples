@@ -1,8 +1,8 @@
 {
-    "displayName": "Cymbal Orders API",
-    "description": "This API manages orders, allowing for creation, retrieval, and update of orders.",
+    "displayName": "Cymbal Shipments API",
+    "description": " This API manages shipments, allowing for creation, retrieval, and updates of individual shipments records. The API allows shipments to be created, retieved and updated.",
     "documentation": {
-            "externalUri": "https://developer.cymbal-retail.com/docs/reference/apis/rewards"
+            "externalUri": "https://developer.cymbal-retail.com/docs/reference/apis/shipments"
     },
     "owner": {
             "displayName": "Cymbal Retail API Team",
@@ -26,9 +26,9 @@
             "enumValues": {
                     "values": [
                             {
-                                    "id": "retail-api",
-                                    "displayName": "Cymbal Retail API",
-                                    "description": "Cymbal Retail API"
+                                    "id": "logistics",
+                                    "displayName": "Cymbal Retail Logistics",
+                                    "description": "Cymbal Retail Logistics"
                             }
                     ]
             }
@@ -50,9 +50,9 @@
             "enumValues": {
                     "values": [
                             {
-                                    "id": "level-2",
-                                    "displayName": "Level 2",
-                                    "description": "Level 2"
+                                    "id": "level-1",
+                                    "displayName": "Level 1",
+                                    "description": "Level 1"
                             }
                     ]
             }
@@ -62,9 +62,9 @@
             "enumValues": {
                     "values": [
                             {
-                                    "id": "rest",
-                                    "displayName": "REST",
-                                    "description": "REST",
+                                    "id": "grpc",
+                                    "displayName": "gRPC",
+                                    "description": "gRPC",
                                     "immutable": true
                             }
                     ]

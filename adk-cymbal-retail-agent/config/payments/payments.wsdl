@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/"
+             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+             xmlns:tns="http://example.com/payment/service/v2"
+             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+             name="ComprehensivePaymentService"
+             targetNamespace="http://example.com/payment/service/v2">
+
+    <types>
+        <xsd:schema targetNamespace="http://example.com/payment/service/v2">
+            
+            <xsd:complexType name="CardDetails">
+                <xsd:sequence>
+                    <xsd:element name="cardNumber" type="xsd:string"/>
+                    <xsd:element name="expiryMonth" type="xsd:int"/>
+                    <xsd:element name="expiryYear" type="xsd:int"/>
+                    <xsd:element name="cvv" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:element name="AuthorizePaymentRequest">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="amount" type="xsd:decimal"/>
+                        <xsd:element name="currency" type="xsd:string"/>
+                        <xsd:element name="cardDetails" type="tns:CardDetails"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="AuthorizePaymentResponse">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="transactionId" type="xsd:string"/>
+                        <xsd:element name="status" type="xsd:string"/> </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+
+            <xsd:element name="CapturePaymentRequest">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="transactionId" type="xsd:string"/>
+                        <xsd:element name="captureAmount" type="xsd:decimal"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="CapturePaymentResponse">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="transactionId" type="xsd:string"/>
+                        <xsd:element name="status" type="xsd:string"/> </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+
+            <xsd:element name="RefundPaymentRequest">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="transactionId" type="xsd:string"/>
+                        <xsd:element name="refundAmount" type="xsd:decimal"/>
+                        <xsd:element name="reason" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="RefundPaymentResponse">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="refundTransactionId" type="xsd:string"/>
+                        <xsd:element name="status" type="xsd:string"/> </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+
+            <xsd:element name="GetPaymentStatusRequest">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="transactionId" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="GetPaymentStatusResponse">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="transactionId" type="xsd:string"/>
+                        <xsd:element name="status" type="xsd:string"/>
+                        <xsd:element name="lastUpdated" type="xsd:dateTime"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+
+            <xsd:element name="PaymentFault">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="faultCode" type="xsd:string"/>
+                        <xsd:element name="faultString" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:schema>
+    </types>
+
+    <message name="AuthorizeRequest"><part name="parameters" element="tns:AuthorizePaymentRequest"/></message>
+    <message name="AuthorizeResponse"><part name="parameters" element="tns:AuthorizePaymentResponse"/></message>
+    <message name="CaptureRequest"><part name="parameters" element="tns:CapturePaymentRequest"/></message>
+    <message name="CaptureResponse"><part name="parameters" element="tns:CapturePaymentResponse"/></message>
+    <message name="RefundRequest"><part name="parameters" element="tns:RefundPaymentRequest"/></message>
+    <message name="RefundResponse"><part name="parameters" element="tns:RefundPaymentResponse"/></message>
+    <message name="GetStatusRequest"><part name="parameters" element="tns:GetPaymentStatusRequest"/></message>
+    <message name="GetStatusResponse"><part name="parameters" element="tns:GetPaymentStatusResponse"/></message>
+    <message name="PaymentFaultMessage"><part name="fault" element="tns:PaymentFault"/></message>
+
+    <portType name="PaymentPortType">
+        <operation name="authorizePayment">
+            <input message="tns:AuthorizeRequest"/>
+            <output message="tns:AuthorizeResponse"/>
+            <fault name="PaymentFault" message="tns:PaymentFaultMessage"/>
+        </operation>
+        <operation name="capturePayment">
+            <input message="tns:CaptureRequest"/>
+            <output message="tns:CaptureResponse"/>
+            <fault name="PaymentFault" message="tns:PaymentFaultMessage"/>
+        </operation>
+        <operation name="refundPayment">
+            <input message="tns:RefundRequest"/>
+            <output message="tns:RefundResponse"/>
+            <fault name="PaymentFault" message="tns:PaymentFaultMessage"/>
+        </operation>
+        <operation name="getPaymentStatus">
+            <input message="tns:GetStatusRequest"/>
+            <output message="tns:GetStatusResponse"/>
+            <fault name="PaymentFault" message="tns:PaymentFaultMessage"/>
+        </operation>
+    </portType>
+
+    <binding name="PaymentSoapBinding" type="tns:PaymentPortType">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="authorizePayment">
+            <soap:operation soapAction="http://example.com/payment/service/v2/authorizePayment"/>
+            <input><soap:body use="literal"/></input>
+            <output><soap:body use="literal"/></output>
+            <fault name="PaymentFault"><soap:fault name="PaymentFault" use="literal"/></fault>
+        </operation>
+        <operation name="capturePayment">
+            <soap:operation soapAction="http://example.com/payment/service/v2/capturePayment"/>
+            <input><soap:body use="literal"/></input>
+            <output><soap:body use="literal"/></output>
+            <fault name="PaymentFault"><soap:fault name="PaymentFault" use="literal"/></fault>
+        </operation>
+        <operation name="refundPayment">
+            <soap:operation soapAction="http://example.com/payment/service/v2/refundPayment"/>
+            <input><soap:body use="literal"/></input>
+            <output><soap:body use="literal"/></output>
+            <fault name="PaymentFault"><soap:fault name="PaymentFault" use="literal"/></fault>
+        </operation>
+        <operation name="getPaymentStatus">
+            <soap:operation soapAction="http://example.com/payment/service/v2/getPaymentStatus"/>
+            <input><soap:body use="literal"/></input>
+            <output><soap:body use="literal"/></output>
+            <fault name="PaymentFault"><soap:fault name="PaymentFault" use="literal"/></fault>
+        </operation>
+    </binding>
+
+    <service name="ComprehensivePaymentService">
+        <port name="PaymentPort" binding="tns:PaymentSoapBinding">
+            <soap:address location="https://api.example.com/payments/v2"/>
+        </port>
+    </service>
+
+</definitions>
