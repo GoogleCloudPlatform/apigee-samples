@@ -112,16 +112,18 @@ delete_sharedflow "llm-extract-candidates-v1"
 delete_sharedflow "llm-extract-prompts-v1"
 delete_sharedflow "llm-logger-v1"
 
-delete_api_from_hub "customers"
-delete_api_from_hub "orders"
-delete_api_from_hub "returns"
 delete_api_from_hub "accounts"
 delete_api_from_hub "communications"
+delete_api_from_hub "customers"
+delete_api_from_hub "customers-mcp"
 delete_api_from_hub "employees"
-delete_api_from_hub "products"
-delete_api_from_hub "stocks"
+delete_api_from_hub "orders"
 delete_api_from_hub "payments"
+delete_api_from_hub "products"
+delete_api_from_hub "returns"
 delete_api_from_hub "shipments"
+delete_api_from_hub "stocks"
+
 
 echo "Deleting Token Consumption Report"
 

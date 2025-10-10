@@ -80,6 +80,15 @@ add_grpc_api_to_hub(){
   -d ${api}.proto -f "tmp/${api}/${api}.proto"  -r "$APIGEE_APIHUB_REGION" -o "$APIGEE_APIHUB_PROJECT_ID" -t "$TOKEN"
 }
 
+add_mcp_api_to_hub(){
+  local api=$1
+  local id="1_0_0"
+  echo "Registering the $api API"
+  apigeecli apihub apis create --id "${api}_api" \
+  -f "tmp/${api}/${api}-api.json" \
+  -r "$APIGEE_APIHUB_REGION" -o "$APIGEE_APIHUB_PROJECT_ID" -t "$TOKEN"
+}
+
 echo "Registering APIs in Apigee API hub"
 cp -rf config tmp/
 sed -i "s/APIGEE_HOST/$APIGEE_HOST/g" tmp/*/*.yaml
@@ -89,15 +98,16 @@ sed -i "s/APIGEE_APIHUB_REGION/$APIGEE_APIHUB_REGION/g" tmp/*/*.json
 apigeecli apihub attributes update -r "$APIGEE_APIHUB_REGION" -o "$APIGEE_APIHUB_PROJECT_ID" -t "$TOKEN" --allowed-values  "config/business-units.json" --data-type "ENUM" -i "system-business-unit" -s "API" -m "allowed_values" -d "Business Unit"
 apigeecli apihub attributes update -r "$APIGEE_APIHUB_REGION" -o "$APIGEE_APIHUB_PROJECT_ID" -t "$TOKEN" --allowed-values  "config/teams.json" --data-type "ENUM" -i "system-team" -s "API" -m "allowed_values" -d "Team"
 
-add_rest_api_to_hub "customers"
-add_rest_api_to_hub "orders"
-add_rest_api_to_hub "returns"
+add_grpc_api_to_hub "shipments"
+add_mcp_api_to_hub "customers-mcp"
+add_soap_api_to_hub "payments"
 add_rest_api_to_hub "accounts"
 add_rest_api_to_hub "communications"
+add_rest_api_to_hub "customers"
 add_rest_api_to_hub "employees"
+add_rest_api_to_hub "orders"
 add_rest_api_to_hub "products"
+add_rest_api_to_hub "returns"
 add_rest_api_to_hub "stocks"
-add_soap_api_to_hub "payments"
-add_grpc_api_to_hub "shipments"
 
 rm -rf tmp

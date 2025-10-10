@@ -1,0 +1,63 @@
+{
+	"displayName": "Cymbal Customers MCP API",
+	"targetUser": {
+		"attribute": "projects/apigee-x-non-prod-01/locations/us-central1/attributes/system-target-user",
+		"enumValues": {
+			"values": [
+				{
+					"id": "internal",
+					"displayName": "Internal",
+					"description": "Internal target user",
+					"immutable": true
+				}
+			]
+		}
+	},
+	"team": {
+		"attribute": "projects/apigee-x-non-prod-01/locations/us-central1/attributes/system-team",
+		"enumValues": {
+			"values": [
+				{
+					"id": "retail-api",
+					"displayName": "retail-api"
+				}
+			]
+		}
+	},
+	"businessUnit": {
+		"attribute": "projects/apigee-x-non-prod-01/locations/us-central1/attributes/system-business-unit",
+		"enumValues": {
+			"values": [
+				{
+					"id": "retail",
+					"displayName": "retail"
+				}
+			]
+		}
+	},
+	"maturityLevel": {
+		"attribute": "projects/apigee-x-non-prod-01/locations/us-central1/attributes/system-maturity-level",
+		"enumValues": {
+			"values": [
+				{
+					"id": "level-1",
+					"displayName": "Level 1",
+					"description": "Level 1"
+				}
+			]
+		}
+	},
+	"apiStyle": {
+		"attribute": "projects/apigee-x-non-prod-01/locations/us-central1/attributes/system-api-style",
+		"enumValues": {
+			"values": [
+				{
+					"id": "mcp-api",
+					"displayName": "MCP",
+					"description": "MCP",
+					"immutable": true
+				}
+			]
+		}
+	}
+}
