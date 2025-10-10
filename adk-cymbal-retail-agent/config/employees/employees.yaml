@@ -1,0 +1,224 @@
+# Copyright 2025 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+openapi: 3.0.0
+info:
+  title: Employees API
+  description: A secure API for managing employee records within an organization's HR system.
+  version: 1.0.0
+  contact:
+    email: api-support@example-hris.com
+
+servers:
+  - url: https://api.example-hris.com/v1
+    description: Production Server
+
+# Paths define the API's endpoints
+paths:
+  /employees:
+    get:
+      tags:
+        - Employees
+      summary: List all employees
+      description: Retrieves a paginated list of all employees in the system.
+      security:
+        - OAuth2Security: [employees.read]
+      parameters:
+        - name: limit
+          in: query
+          description: The number of employees to return.
+          schema:
+            type: integer
+            default: 25
+        - name: offset
+          in: query
+          description: The number of records to skip for pagination.
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: A list of employees.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Employee'
+        '401':
+          description: Unauthorized.
+        '403':
+          description: Forbidden - Insufficient scope.
+
+    post:
+      tags:
+        - Employees
+      summary: Create a new employee
+      description: Adds a new employee record to the system.
+      security:
+        - OAuth2Security: [employees.write]
+      requestBody:
+        description: The new employee's data.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewEmployee'
+      responses:
+        '201':
+          description: Employee created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Employee'
+        '400':
+          description: Bad request, such as a missing required field.
+          
+  /employees/{employeeId}:
+    get:
+      tags:
+        - Employees
+      summary: Get employee by ID
+      description: Retrieves the full record for a single employee by their unique ID.
+      security:
+        - OAuth2Security: [employees.read]
+      parameters:
+        - $ref: '#/components/parameters/EmployeeIdParameter'
+      responses:
+        '200':
+          description: Successful retrieval of employee data.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Employee'
+        '404':
+          description: Employee not found.
+
+    patch:
+      tags:
+        - Employees
+      summary: Update an employee
+      description: Partially updates an existing employee's record. Only the fields provided in the request body will be updated.
+      security:
+        - OAuth2Security: [employees.write]
+      parameters:
+        - $ref: '#/components/parameters/EmployeeIdParameter'
+      requestBody:
+        description: The fields to update for the employee.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewEmployee'
+      responses:
+        '200':
+          description: Employee updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Employee'
+        '404':
+          description: Employee not found.
+
+    delete:
+      tags:
+        - Employees
+      summary: Delete an employee
+      description: Deletes an employee's record from the system. This action is irreversible.
+      security:
+        - OAuth2Security: [employees.write]
+      parameters:
+        - $ref: '#/components/parameters/EmployeeIdParameter'
+      responses:
+        '204':
+          description: Employee deleted successfully.
+        '404':
+          description: Employee not found.
+
+# Reusable components to keep the spec clean
+components:
+  securitySchemes:
+    OAuth2Security:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://auth.example-hris.com/oauth2/token
+          scopes:
+            employees.read: Read access to employee data.
+            employees.write: Write access to employee data.
+
+  parameters:
+    EmployeeIdParameter:
+      name: employeeId
+      in: path
+      description: The unique identifier for the employee.
+      required: true
+      schema:
+        type: string
+        format: uuid
+
+  schemas:
+    NewEmployee:
+      type: object
+      required:
+        - firstName
+        - lastName
+        - email
+        - position
+        - department
+      properties:
+        firstName:
+          type: string
+          example: "Jane"
+        lastName:
+          type: string
+          example: "Doe"
+        email:
+          type: string
+          format: email
+          example: "jane.doe@example.com"
+        phone:
+          type: string
+          example: "555-123-4567"
+        position:
+          type: string
+          example: "Software Engineer"
+        department:
+          type: string
+          example: "Technology"
+        startDate:
+          type: string
+          format: date
+          example: "2023-01-15"
+
+    Employee:
+      allOf:
+        - $ref: '#/components/schemas/NewEmployee'
+        - type: object
+          properties:
+            employeeId:
+              type: string
+              format: uuid
+              description: The unique identifier for the employee.
+            createdAt:
+              type: string
+              format: date-time
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          example: "not_found"
+        message:
+          type: string
+          example: "The requested resource was not found."

@@ -1,0 +1,18 @@
+[
+    {
+        "id": "retail",
+        "displayName": "retail"
+    },
+    {
+        "id": "shared-services",
+        "displayName": "shared-services"
+    },
+    {
+        "id": "banking",
+        "displayName": "banking"
+    },
+    {
+        "id": "finance",
+        "displayName": "finance"
+    }
+]

@@ -1,0 +1,192 @@
+# Copyright 2025 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+openapi: 3.0.0
+info:
+  title: Communications API
+  description: A unified API for sending SMS and email messages.
+  version: 1.0.0
+  contact:
+    email: api-support@examplecomms.com
+
+servers:
+  - url: https://api.examplecomms.com/v1
+    description: Production Server
+
+security:
+  - ApiKeyAuth: []
+
+# Paths define the API's endpoints
+paths:
+  /sms/send:
+    post:
+      tags:
+        - SMS
+      summary: Send an SMS message
+      description: Sends a text message to a single recipient.
+      requestBody:
+        description: SMS request object
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SmsRequest'
+      responses:
+        '202':
+          description: Message accepted for delivery. The response includes a message ID to track status.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageStatus'
+        '400':
+          description: Bad request, such as an invalid phone number.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /email/send:
+    post:
+      tags:
+        - Email
+      summary: Send an email
+      description: Sends an email to one or more recipients. Supports both plain text and HTML content.
+      requestBody:
+        description: Email request object
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmailRequest'
+      responses:
+        '202':
+          description: Email accepted for delivery.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageStatus'
+        '400':
+          description: Bad request, such as a malformed email address.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /messages/{messageId}/status:
+    get:
+      tags:
+        - Messages
+      summary: Get message status
+      description: Retrieves the current delivery status of a message using its unique ID.
+      parameters:
+        - name: messageId
+          in: path
+          description: The unique identifier for the message.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful retrieval of message status.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageStatus'
+        '404':
+          description: Message not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+# Reusable components to keep the spec clean
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-KEY
+
+  schemas:
+    SmsRequest:
+      type: object
+      required:
+        - to
+        - from
+        - body
+      properties:
+        to:
+          type: string
+          description: The recipient's phone number in E.164 format.
+          example: "+15551234567"
+        from:
+          type: string
+          description: The sender's phone number (must be a provisioned number).
+          example: "+15557654321"
+        body:
+          type: string
+          description: The content of the text message.
+          example: "Hello! Your order has shipped."
+
+    EmailRequest:
+      type: object
+      required:
+        - to
+        - from
+        - subject
+        - body_text
+      properties:
+        to:
+          type: array
+          items:
+            type: string
+            format: email
+          example: ["recipient1@example.com"]
+        from:
+          type: string
+          format: email
+          example: "sender@example.com"
+        subject:
+          type: string
+          example: "Your Order Confirmation"
+        body_text:
+          type: string
+          description: The plain text content of the email.
+        body_html:
+          type: string
+          description: The HTML content of the email.
+
+    MessageStatus:
+      type: object
+      properties:
+        messageId:
+          type: string
+          description: The unique identifier for the message.
+        status:
+          type: string
+          enum: [queued, sent, delivered, failed, undelivered]
+          description: The current status of the message.
+        createdAt:
+          type: string
+          format: date-time
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          example: "invalid_parameter"
+        message:
+        
+          type: string
+          example: "The 'to' phone number is not valid."

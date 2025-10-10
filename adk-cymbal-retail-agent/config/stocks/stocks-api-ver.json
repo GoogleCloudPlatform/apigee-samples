@@ -1,0 +1,18 @@
+{
+        "displayName": "1.0.0",
+        "documentation": {
+                "externalUri": "https://developer.cymbal-finance.com/docs/reference/apis/stocks"
+        },
+        "lifecycle": {
+                "attribute": "projects/APIGEE_APIHUB_PROJECT_ID/locations/APIGEE_APIHUB_REGION/attributes/system-lifecycle",
+                "enumValues": {
+                        "values": [
+                                {
+                                        "id": "prod",
+                                        "displayName": "Production",
+                                        "description": "Production"
+                                }
+                        ]
+                }
+        }
+}

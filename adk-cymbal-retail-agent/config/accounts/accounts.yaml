@@ -1,0 +1,195 @@
+# Copyright 2025 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+openapi: 3.0.0
+info:
+  title: Accounts API
+  description: An API for accessing consented bank account information and transaction history, following Open Banking principles.
+  version: 1.0.0
+  contact:
+    email: api-support@examplebank.com
+
+servers:
+  - url: https://api.examplebank.com/v1
+    description: Production Server
+
+# Security is defined using OAuth 2.0, standard for Open Banking
+security:
+  - OAuth2Security: [accounts.read]
+
+# Paths define the API's endpoints
+paths:
+  /accounts:
+    get:
+      tags:
+        - Accounts
+      summary: List all available accounts
+      description: Retrieves a list of all bank accounts that the user has granted access to.
+      responses:
+        '200':
+          description: A successful response with a list of accounts.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Account'
+        '401':
+          description: Unauthorized - The access token is missing or invalid.
+        '403':
+          description: Forbidden - The user does not have permission to access these accounts.
+
+  /accounts/{accountId}:
+    get:
+      tags:
+        - Accounts
+      summary: Get details for a specific account
+      description: Fetches the full details for a single bank account specified by its ID.
+      parameters:
+        - name: accountId
+          in: path
+          description: The unique identifier for the account.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful retrieval of account details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountDetails'
+        '404':
+          description: Account not found.
+
+  /accounts/{accountId}/transactions:
+    get:
+      tags:
+        - Transactions
+      summary: List transactions for an account
+      description: Retrieves a paginated list of transactions for a specified account.
+      parameters:
+        - name: accountId
+          in: path
+          description: The unique identifier for the account.
+          required: true
+          schema:
+            type: string
+        - name: limit
+          in: query
+          description: The maximum number of transactions to return.
+          schema:
+            type: integer
+            default: 50
+        - name: offset
+          in: query
+          description: The number of transactions to skip for pagination.
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: A successful response with a list of transactions.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Transaction'
+        '404':
+          description: Account not found.
+
+# Reusable components to keep the spec clean
+components:
+  securitySchemes:
+    OAuth2Security:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://auth.examplebank.com/oauth2/authorize
+          tokenUrl: https://auth.examplebank.com/oauth2/token
+          scopes:
+            accounts.read: Read access to account information and transactions.
+            
+  schemas:
+    Account:
+      type: object
+      properties:
+        accountId:
+          type: string
+          description: Unique identifier for the account.
+        accountType:
+          type: string
+          enum: [checking, savings, credit_card]
+        accountNumberMask:
+          type: string
+          description: The last four digits of the account number.
+          example: "xxxx-xxxx-xxxx-1234"
+        currency:
+          type: string
+          description: The three-letter ISO currency code.
+          example: "USD"
+        balance:
+          type: number
+          format: double
+          description: The current balance of the account.
+
+    AccountDetails:
+      allOf:
+        - $ref: '#/components/schemas/Account'
+        - type: object
+          properties:
+            ownerName:
+              type: string
+              description: The name of the account holder.
+            iban:
+              type: string
+              description: International Bank Account Number.
+            swiftBic:
+              type: string
+              description: Bank Identifier Code.
+
+    Transaction:
+      type: object
+      properties:
+        transactionId:
+          type: string
+          description: Unique identifier for the transaction.
+        description:
+          type: string
+          description: The transaction description or merchant name.
+          example: "Coffee Shop Purchase"
+        amount:
+          type: number
+          format: double
+          description: The transaction amount. Negative for debits, positive for credits.
+        currency:
+          type: string
+          example: "USD"
+        transactionDate:
+          type: string
+          format: date-time
+          description: The date and time the transaction occurred.
+        status:
+          type: string
+          enum: [posted, pending]
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 404
+        message:
+          type: string
+          example: "Resource not found."

@@ -1,0 +1,124 @@
+syntax = "proto3";
+
+package shipments.v1;
+
+option go_package = "exampleshipments.com/api/shipments/v1;shipmentsv1";
+
+// The main service for handling all shipping-related operations.
+service ShippingService {
+  // Fetches a list of available shipping rates for a given shipment details.
+  rpc GetRates(GetRatesRequest) returns (GetRatesResponse);
+
+  // Creates a shipment and purchases a shipping label using a specific rate ID.
+  rpc CreateShipment(CreateShipmentRequest) returns (Shipment);
+
+  // Retrieves real-time tracking information for a package.
+  rpc TrackShipment(TrackShipmentRequest) returns (Tracker);
+
+  // Cancels a previously created shipment and voids the label.
+  rpc CancelShipment(CancelShipmentRequest) returns (Shipment);
+}
+
+// ============== Message Definitions ==============
+
+// Represents a physical address.
+message Address {
+  string name = 1;
+  string street1 = 2;
+  string city = 3;
+  string state = 4;
+  string zip = 5;
+  string country = 6; // ISO 3166-1 alpha-2 country code
+}
+
+// Represents the physical dimensions and weight of a package.
+message Parcel {
+  float length = 1;
+  float width = 2;
+  float height = 3;
+  DistanceUnit distance_unit = 4;
+  float weight = 5;
+  MassUnit mass_unit = 6;
+}
+
+// Represents a shipping rate from a carrier.
+message Rate {
+  string rate_id = 1;      // Unique ID for this rate.
+  string carrier = 2;      // e.g., "USPS"
+  string service = 3;      // e.g., "Priority Mail"
+  float amount = 4;
+  string currency = 5;     // ISO 4217 currency code
+  int32 estimated_days = 6;
+}
+
+// Represents a purchased shipment, including the label and tracking info.
+message Shipment {
+  string shipment_id = 1;       // Unique ID for the shipment.
+  ShipmentStatus status = 2;
+  string tracking_number = 3;
+  string label_url = 4;         // URL to download the shipping label.
+  Rate rate = 5;
+}
+
+// Represents the tracking status and history of a package.
+message Tracker {
+  string tracking_number = 1;
+  string status = 2;
+  string carrier = 3;
+  repeated TrackingEvent tracking_history = 4;
+}
+
+// A single event in the tracking history of a package.
+message TrackingEvent {
+  string status = 1;
+  string location = 2;
+  string timestamp = 3; // ISO 8601 timestamp
+}
+
+// ============== Request/Response Definitions ==============
+
+message GetRatesRequest {
+  Address from_address = 1;
+  Address to_address = 2;
+  Parcel parcel = 3;
+}
+
+message GetRatesResponse {
+  repeated Rate rates = 1;
+}
+
+message CreateShipmentRequest {
+  string rate_id = 1;
+}
+
+message TrackShipmentRequest {
+  string tracking_number = 1;
+}
+
+message CancelShipmentRequest {
+  string shipment_id = 1;
+}
+
+// ============== Enumerations ==============
+
+enum DistanceUnit {
+  DISTANCE_UNIT_UNSPECIFIED = 0;
+  IN = 1;
+  CM = 2;
+}
+
+enum MassUnit {
+  MASS_UNIT_UNSPECIFIED = 0;
+  LB = 1;
+  OZ = 2;
+  KG = 3;
+  G = 4;
+}
+
+enum ShipmentStatus {
+  SHIPMENT_STATUS_UNSPECIFIED = 0;
+  CREATED = 1;
+  CANCELLED = 2;
+  IN_TRANSIT = 3;
+  DELIVERED = 4;
+}
