@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+ Copyright 2025 Google LLC
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+      http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<MessageLogging continueOnError="false" enabled="true" name="ML-CloudLogging">
+  <DisplayName>ML-CloudLogging</DisplayName>
+  <CloudLogging>
+    <LogName>projects/{organization.name}/logs/api-gateway-logs</LogName>
+    <Message contentType="application/json">{
+            "timestamp": "{system.timestamp}",
+            "api_proxy": "{apiproxy.name}",
+            "org_name": "{organization.name}",
+            "env_name": "{environment.name}",
+            "request_id": "{messageid}",
+            "client_ip": "{client.ip}",
+            "verb": "{request.verb}",
+            "request_path": "{proxy.basepath}{proxy.pathsuffix}",
+            "status_code": "{response.status.code}",
+            "user_agent": "{request.header.User-Agent}",
+            "error_flow": "{flow.error.state}"
+        }</Message>
+  </CloudLogging>
+</MessageLogging>
