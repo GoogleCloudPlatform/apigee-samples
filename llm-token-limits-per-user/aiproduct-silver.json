@@ -1,0 +1,19 @@
+{
+  "operationConfigs": [
+    {
+      "apiSource": "llm-token-limits-per-user-v1",
+      "operations": [
+        {
+          "resource": "/",
+          "methods": []
+        }
+      ],
+        "quota": {
+        "limit": "5000",
+        "interval": "5",
+        "timeUnit": "minute"
+      }
+    }
+  ],
+  "operationConfigType": "proxy"
+}
