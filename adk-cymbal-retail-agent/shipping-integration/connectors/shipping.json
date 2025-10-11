@@ -1,0 +1,47 @@
+{
+	"connectorDetails": {
+		"name": "http",
+		"provider": "default",
+		"version": 1
+	},
+	"configVariables": [
+		{
+			"key": "status_check"
+		},
+		{
+			"key": "proxy_enabled",
+			"boolValue": false
+		}
+	],
+	"authConfig": {},
+	"nodeConfig": {
+		"minNodeCount": 2,
+		"maxNodeCount": 5
+	},
+	"destinationConfigs": [
+		{
+			"key": "host_address",
+			"destinations": [
+				{
+					"host": "https://httpbin.org"
+				}
+			]
+		},
+		{
+			"key": "auth_server_address"
+		}
+	],
+	"logConfig": {
+		"enabled": true,
+		"level": "ERROR"
+	},
+	"sslConfig": {
+		"useSsl": true,
+		"type": "MTLS",
+		"privateServerCertificate": {},
+		"clientCertificate": {},
+		"clientPrivateKey": {},
+		"clientPrivateKeyPass": {},
+		"clientCertType": "PEM"
+	}
+}

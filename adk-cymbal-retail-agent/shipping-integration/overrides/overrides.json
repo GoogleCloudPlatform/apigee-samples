@@ -1,0 +1,47 @@
+{
+	"task_overrides": [
+		{
+			"task": "GenericRestV2Task",
+			"taskId": "15",
+			"parameters": {
+				"url": {
+					"key": "url",
+					"value": {
+						"stringValue": "https://mocktarget.apigee.net"
+					}
+				}
+			}
+		}
+	],
+	"connection_overrides": [
+		{
+			"taskId": "17",
+			"task": "GenericConnectorTask",
+			"parameters": {
+				"connectionName": "shipping"
+			}
+		},
+		{
+			"taskId": "19",
+			"task": "GenericConnectorTask",
+			"parameters": {
+				"connectionName": "shipping"
+			}
+		},
+		{
+			"taskId": "20",
+			"task": "GenericConnectorTask",
+			"parameters": {
+				"connectionName": "shipping"
+			}
+		}
+	],
+	"integration_overrides": {
+		"databasePersistencePolicy": "DATABASE_PERSISTENCE_ASYNC",
+		"enableVariableMasking": false,
+		"cloudLoggingDetails": {
+			"cloudLoggingSeverity": "INFO",
+			"enableCloudLogging": true
+		}
+	}
+}
