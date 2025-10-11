@@ -1,5 +1,5 @@
 {
-	"snapshotNumber": "5",
+	"snapshotNumber": "1",
 	"triggerConfigs": [
 		{
 			"label": "Shipping provider search",
@@ -13,6 +13,16 @@
 			],
 			"properties": {
 				"Trigger name": "Shipping_API_Trigger"
+			},
+			"inputVariables": {
+				"names": [
+					"shippingLabelRequest"
+				]
+			},
+			"outputVariables": {
+				"names": [
+					"shippingLabelResponse"
+				]
 			}
 		}
 	],
