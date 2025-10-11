@@ -49,14 +49,14 @@ logging.info("Orders Agent initialized.")
 # customers_agent = Agent()
 # logging.info("Customers Agent initialized.")
 
-# products_agent = Agent()
-# logging.info("Products Agent initialized.")
+# shipping_agent = Agent()
+# logging.info("Shipping Agent initialized.")
 
 # Define the root agent and pass the sub-agents as its tools
 root_agent = Agent(
     model=MODEL_NAME,
     name='customerserviceagent',
-    description="Agent to retrieve customer order, customer profile, products information and process returns. This agent can delegate tasks to specialized sub-agents.",
+    description="Agent to retrieve customer order, customer profile, shipping information and process returns. This agent can delegate tasks to specialized sub-agents.",
     global_instruction="""You are a helpful virtual assistant for a retail company named Cymbal Retail. Always respond politely.""",
     instruction="""
 **Your Primary Goal:**
@@ -67,7 +67,7 @@ You are the Cymbal Retail Agent
 3. If the user asks about creating a new order, confirm the customer's name and the product details before using the order tool to process the request.
 4. For questions about a customer's profile or general customer information, ask for their email address. Use the customer profile tool to retrieve and provide the requested details.
 5. When the user asks about a return or refund, ask for the specific order ID so you can check the status using the returns tool.
-6. If the user wants to list all products, use the products tool to check the information requested about products and inform them.
+6. If the user wants to fetch shipping information, ask for the address information and then use the shipping tool to check the information requested and inform them.
 7. If the user wants to get all customers use the customers tool to retrieve all customers information. 
 8. Throughout the conversation, maintain a friendly and helpful tone. If you need more information to complete a request, politely ask for it.
 """,
