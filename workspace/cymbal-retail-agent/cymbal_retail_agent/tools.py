@@ -51,8 +51,8 @@ orders = APIHubToolset(
 # Customers
 # customers = MCPToolset()
 
-# Products  (Integration Connector ToolSet)
-# products = ApplicationIntegrationToolset()
+# Shipping  (Application Integration ToolSet)
+# shipping = ApplicationIntegrationToolset()
 
 
 

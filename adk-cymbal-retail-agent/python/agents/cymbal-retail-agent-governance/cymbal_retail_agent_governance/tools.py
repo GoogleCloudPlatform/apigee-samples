@@ -97,14 +97,11 @@ customers = MCPToolset(
     auth_credential=auth_credential
 )
 
-# Products  ( Integration Connector ToolSet)
-products = ApplicationIntegrationToolset(
+# Shipping  (Application Integration ToolSet)
+shipping = ApplicationIntegrationToolset(
     project=PROJECT_ID,
     location=LOCATION,
-    connection="bq-products",
-    entity_operations= {"products": ["GET","LIST"]},
-    tool_name_prefix="tool-bq-products",
-    tool_instructions="If the user asks to get product details: Fetch all the products",
-    # auth_scheme=oauth2_scheme,
-    # auth_credential=oauth_credential
+    integration="shipping_workflow",
+    triggers=["api_trigger/Shipping_API_Trigger"],
+    tool_name_prefix="shipping_prefix"
 )

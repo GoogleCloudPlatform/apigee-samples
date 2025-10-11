@@ -151,6 +151,12 @@ add_mcp_api_to_hub(){
   -r "$APIGEE_APIHUB_REGION" -o "$APIGEE_APIHUB_PROJECT_ID" -t "$TOKEN"
 }
 
+_sleep() {
+  echo "$(date +"%Y-%m-%d %H:%M:%S") Sleeping for $1 seconds ..."
+  sleep "$1"
+  echo "$(date +"%Y-%m-%d %H:%M:%S") Sleep done ..."
+}
+
 echo "================================================="
 echo "Started deploy-adk-cymbal-retail-agent.sh"
 echo "================================================="
@@ -204,6 +210,10 @@ apigee-go-gen render apiproxy \
   --output ./proxies/mcp-cymbal-customers-v1
 
 rm -rf tmp
+
+echo "Creating Service Account and assigning permissions"
+gcloud iam service-accounts create "$SERVICE_ACCOUNT_NAME" --project "$PROJECT_ID"
+_sleep 10
 
 add_role_to_serviceaccount "roles/logging.logWriter"
 add_role_to_serviceaccount "roles/aiplatform.user"
