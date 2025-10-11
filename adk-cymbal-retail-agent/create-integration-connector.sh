@@ -72,7 +72,9 @@ export PATH=$PATH:$HOME/.integrationcli/bin
 #echo "BigQuery Connector created successfully"
 
 echo "Publishing Integration"
-integrationcli integrations apply -f integration/. -p "$PROJECT_ID" -r "$VERTEXAI_REGION" -t "$TOKEN" -g --wait
+# integrationcli integrations apply -f products-integration/. -p "$PROJECT_ID" -r "$VERTEXAI_REGION" -t "$TOKEN" -g --wait
+integrationcli integrations apply -f shipping-integration/. -p "$PROJECT_ID" -r "$VERTEXAI_REGION" -t "$TOKEN" -g --wait
+
 
 echo "================================================="
 echo "Finished create-integration-connector.sh"

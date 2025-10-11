@@ -48,7 +48,7 @@ gcloud config set project $PROJECT_ID
 gcloud services enable artifactregistry.googleapis.com run.googleapis.com dlp.googleapis.com logging.googleapis.com aiplatform.googleapis.com modelarmor.googleapis.com secretmanager.googleapis.com bigquery.googleapis.com datacatalog.googleapis.com --project "$PROJECT_ID"
 sleep 15
 
-./bq-setup.sh
+# ./bq-setup.sh
 # ./oauth-setup.sh
 # cat oauth_client_env.sh #to be removed
 # source ./oauth_client_env.sh
