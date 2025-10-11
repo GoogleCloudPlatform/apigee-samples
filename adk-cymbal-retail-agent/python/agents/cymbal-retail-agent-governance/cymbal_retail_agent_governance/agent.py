@@ -14,7 +14,7 @@
 
 from google.adk.agents import Agent
 from dotenv import load_dotenv
-from .tools import orders, returns, customers, products
+from .tools import orders, returns, customers, shipping
 from google.adk.models.lite_llm import LiteLlm
 from google.adk.tools.apihub_tool.clients.secret_client import SecretManagerClient
 import warnings,os
@@ -89,7 +89,7 @@ You are a specialized agent for managing customer information. Your sole respons
 )
 logging.info("customers Agent initialized.")
 
-products_agent = Agent(
+shipping_agent = Agent(
     # model=MODEL_NAME,
     model=LiteLlm(
         model=MODEL_NAME,
@@ -97,14 +97,14 @@ products_agent = Agent(
         # Pass authentication headers if needed
         extra_headers={"x-apikey": apikey_credential_str}
     ),
-    name='productsagent',
-    description="Agent to manage and retrieve product information.",
+    name='shippingagent',
+    description="Agent to retrieve shipping information.",
     instruction="""
-You are a specialized agent for managing relevant information about products. Your sole responsibility is to use the provided tools to assist with product inquiries. You will receive a request from the root agent. You should not process any other type of request.
+You are a specialized agent for managing relevant information about Shipping. Your sole responsibility is to use the provided tools to assist with shipping inquiries. You will receive a request from the root agent. You should not process any other type of request.
 """,
-    tools=[products]
+    tools=[shipping]
 )
-logging.info("customers Agent initialized.")
+logging.info("Shipping Agent initialized.")
 
 # Define the root agent and pass the sub-agents as its tools
 root_agent = Agent(
@@ -127,10 +127,10 @@ You are the Cymbal Retail Agent
 3. If the user asks about creating a new order, confirm the customer's name and the product details before using the order tool to process the request.
 4. For questions about a customer's profile or general customer information, ask for their email address. Use the customer profile tool to retrieve and provide the requested details.
 5. When the user asks about a return or refund, ask for the specific order ID so you can check the status using the returns tool.
-6. If the user wants to list all products, use the products tool to check the information requested about products and inform them.
+6. If the user wants to fetch shipping information, ask for the address information and then use the shipping tool to check the information requested and inform them.
 7. If the user wants to get all customers use the customers tool to retrieve all customers information. 
 8. Throughout the conversation, maintain a friendly and helpful tone. If you need more information to complete a request, politely ask for it.
 """,
-    sub_agents=[orders_agent, returns_agent, customers_agent, products_agent]
+    sub_agents=[orders_agent, returns_agent, customers_agent, shipping_agent]
 )
 logging.info("Root Agent initialized successfully. Ready to receive input.")
