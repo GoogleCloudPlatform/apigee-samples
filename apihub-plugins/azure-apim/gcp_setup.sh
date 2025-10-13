@@ -23,8 +23,8 @@ SERVICE_ACCOUNT_EMAIL="${SERVICE_ACCOUNT_NAME}@${PROJECT_ID}.iam.gserviceaccount
 AUTH_CONFIG_FULL_NAME="projects/${PROJECT_ID}/locations/${REGION}/authConfigs/${AUTH_CONFIG_NAME}"
 
 echo "Configuring gcloud..."
-gcloud config set project $PROJECT_ID
-gcloud config set compute/region $REGION
+gcloud config set project "$PROJECT_ID"
+gcloud config set compute/region "$REGION"
 
 echo "Enabling necessary APIs..."
 gcloud services enable \
@@ -32,18 +32,18 @@ gcloud services enable \
   integrations.googleapis.com
 
 echo "Creating Service Account $SERVICE_ACCOUNT_NAME..."
-if ! gcloud iam service-accounts describe $SERVICE_ACCOUNT_EMAIL > /dev/null 2>&1; then
-  gcloud iam service-accounts create $SERVICE_ACCOUNT_NAME \
+if ! gcloud iam service-accounts describe "$SERVICE_ACCOUNT_EMAIL" > /dev/null 2>&1; then
+  gcloud iam service-accounts create "$SERVICE_ACCOUNT_NAME" \
     --display-name="Service Account for Azure APIM Integration"
 else
   echo "Service Account $SERVICE_ACCOUNT_NAME already exists."
 fi
 
 echo "Granting roles to Service Account..."
-gcloud projects add-iam-policy-binding $PROJECT_ID \
+gcloud projects add-iam-policy-binding "$PROJECT_ID" \
   --member="serviceAccount:$SERVICE_ACCOUNT_EMAIL" \
   --role="roles/apihub.admin"
-gcloud projects add-iam-policy-binding $PROJECT_ID \
+gcloud projects add-iam-policy-binding "$PROJECT_ID" \
   --member="serviceAccount:$SERVICE_ACCOUNT_EMAIL" \
   --role="roles/integrations.integrationEditor"
 
