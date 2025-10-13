@@ -20,7 +20,7 @@ set -e
 
 ERRORS=""
 
-for file in "$PWD"/*; do
+for file in "$PWD"/* "$PWD"/apihub-plugins/*; do
   F=$(basename -- "$file")
   case $F in
   *.txt | *.md | tools) continue ;; ##: Skip files that matched.
