@@ -148,9 +148,9 @@ The [Model Context Protocol (MCP)](https://github.com/modelcontext/specification
 
 Plugins, also known as *on-ramp plugins*, enable API hub to connect and ingest API metadata from various Google Cloud services and external sources where your APIs are managed or defined. They simplify and enhance the process of bringing your API metadata directly into API hub. For more info on plugins, check out this [page](https://cloud.google.com/apigee/docs/apihub/plugins). The sample in this section demonstrates how to configure them for differnt sources.
 
-|     | Sample                   | Description                                                                                                                                                                                                                                                 | Cloud Shell Tutorial                                                                                                                                         |
-| --- | ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1   | [azure-apim](./apihub-plugins/azure-apim) | This sample provides an Application Integration template and scripts to synchronize API metadata from Azure API Management (APIM) to Apigee API hub | TBD |
+|     | Sample                   | Description                                                                                                                                                                                                                                                 | 
+| --- | ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | [azure-apim](./apihub-plugins/azure-apim) | This sample provides an Application Integration template and scripts to synchronize API metadata from Azure API Management (APIM) to Apigee API hub |
 
 ## <a name="modifying"></a>Modifying a sample proxy
 
