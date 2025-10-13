@@ -13,19 +13,41 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+set -e
 
-read -p "Enter your Google Cloud Project ID: " PROJECT_ID
-read -p "Enter the Google Cloud Region: " REGION
-read -p "Enter the Integration Name to execute: " INTEGRATION_NAME
-read -p "Enter the AZURE_CLIENT_ID: " AZURE_CLIENT_ID
-read -s -p "Enter the AZURE_CLIENT_SECRET: " AZURE_CLIENT_SECRET
-echo
-read -p "Enter the AZURE_SUBSCRIPTION_ID: " AZURE_SUBSCRIPTION_ID
-read -p "Enter the AZURE_TENANT_ID: " AZURE_TENANT_ID
+if [ -z "$PROJECT_ID" ]; then
+  echo "No PROJECT_ID variable set"
+  exit
+fi
 
-if [ -z "$PROJECT_ID" ] || [ -z "$REGION" ] || [ -z "$INTEGRATION_NAME" ] || [ -z "$AZURE_CLIENT_ID" ] || [ -z "$AZURE_CLIENT_SECRET" ] || [ -z "$AZURE_SUBSCRIPTION_ID" ] || [ -z "$AZURE_TENANT_ID" ]; then
-  echo "Error: All parameters are required."
-  exit 1
+if [ -z "$REGION" ]; then
+  echo "No REGION variable set"
+  exit
+fi
+
+if [ -z "$INTEGRATION_NAME" ]; then
+  echo "No INTEGRATION_NAME variable set"
+  exit
+fi
+
+if [ -z "$AZURE_CLIENT_ID" ]; then
+  echo "No AZURE_CLIENT_ID variable set"
+  exit
+fi
+
+if [ -z "$AZURE_CLIENT_SECRET" ]; then
+  echo "No AZURE_CLIENT_SECRET variable set"
+  exit
+fi
+
+if [ -z "$AZURE_SUBSCRIPTION_ID" ]; then
+  echo "No AZURE_SUBSCRIPTION_ID variable set"
+  exit
+fi
+
+if [ -z "$AZURE_TENANT_ID" ]; then
+  echo "No AZURE_TENANT_ID variable set"
+  exit
 fi
 
 # Get access token

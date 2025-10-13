@@ -13,20 +13,21 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+set -e
 
-read -p "Enter your Google Cloud Project ID: " PROJECT_ID
-read -p "Enter the Google Cloud Region: " REGION
-read -p "Enter a unique name for this Integration: " INTEGRATION_NAME
+if [ -z "$PROJECT_ID" ]; then
+  echo "No PROJECT_ID variable set"
+  exit
+fi
 
-echo "--- Configuration ---"
-echo "PROJECT_ID: $PROJECT_ID"
-echo "REGION: $REGION"
-echo "INTEGRATION_NAME: $INTEGRATION_NAME"
-echo "---------------------"
+if [ -z "$REGION" ]; then
+  echo "No REGION variable set"
+  exit
+fi
 
-if [ -z "$PROJECT_ID" ] || [ -z "$REGION" ] || [ -z "$INTEGRATION_NAME" ]; then
-  echo "Error: Project ID, Region, and Integration Name are required."
-  exit 1
+if [ -z "$INTEGRATION_NAME" ]; then
+  echo "No INTEGRATION_NAME variable set"
+  exit
 fi
 
 TEMPLATE_FILE="azure_ip_template.json"

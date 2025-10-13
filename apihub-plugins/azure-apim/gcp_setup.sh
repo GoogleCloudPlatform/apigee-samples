@@ -13,12 +13,28 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+set -e
 
-read -p "Enter your Google Cloud Project ID: " PROJECT_ID
-read -p "Enter the Google Cloud Region for API Hub & Integration: " REGION
+if [ -z "$PROJECT_ID" ]; then
+  echo "No PROJECT_ID variable set"
+  exit
+fi
 
-SERVICE_ACCOUNT_NAME="azure-apim-integration-sa"
-AUTH_CONFIG_NAME="apihub-admin"
+if [ -z "$REGION" ]; then
+  echo "No REGION variable set"
+  exit
+fi
+
+if [ -z "$SERVICE_ACCOUNT_NAME" ]; then
+  echo "No SERVICE_ACCOUNT_NAME variable set"
+  exit
+fi
+
+if [ -z "$AUTH_CONFIG_NAME" ]; then
+  echo "No AUTH_CONFIG_NAME variable set"
+  exit
+fi
+
 SERVICE_ACCOUNT_EMAIL="${SERVICE_ACCOUNT_NAME}@${PROJECT_ID}.iam.gserviceaccount.com"
 AUTH_CONFIG_FULL_NAME="projects/${PROJECT_ID}/locations/${REGION}/authConfigs/${AUTH_CONFIG_NAME}"
 
@@ -29,7 +45,7 @@ gcloud config set compute/region "$REGION"
 echo "Enabling necessary APIs..."
 gcloud services enable \
   apihub.googleapis.com \
-  integrations.googleapis.com
+  integrations.googleapis.com --project "$PROJECT_ID"
 
 echo "Creating Service Account $SERVICE_ACCOUNT_NAME..."
 if ! gcloud iam service-accounts describe "$SERVICE_ACCOUNT_EMAIL" > /dev/null 2>&1; then

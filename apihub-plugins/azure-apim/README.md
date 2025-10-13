@@ -29,79 +29,44 @@ Follow these steps in order to set up and deploy the integration.
 This step involves running a script to set up an Azure Active Directory application and grant it the necessary permissions to read from your APIM instance.
 
 1.  Navigate to the directory containing the scripts.
-2.  Make the script executable:
+2.  Update the env.sh file with appropriate values. Then execute the following command:
     ```bash
-    chmod +x azure_setup.sh
+    source env.sh
     ```
 3.  Run the script:
     ```bash
     ./azure_setup.sh
     ```
-4.  The script will prompt you to enter the following:
-    *   Your Azure Subscription ID.
-    *   Your Azure Tenant ID (Optional, can be inferred).
-    *   A name for the Azure AD App (e.g., `apihub-integration`).
-    *   Your Azure APIM Instance Name.
-    *   The Resource Group of your APIM instance.
-
-5.  **Important:** At the end of the script, carefully note down the outputted `AZURE_CLIENT_ID` and `AZURE_CLIENT_SECRET`. The secret will not be shown again.
+4.  **Important:** At the end of the script, carefully note down the outputted `AZURE_CLIENT_ID` and `AZURE_CLIENT_SECRET`. The secret will not be shown again. Paste those values in the env.sh file and run `source env.sh` again
 
 ### Step 2: Configure Google Cloud Resources
 
 This script configures the necessary Google Cloud resources, including a service account, IAM permissions, and creating a plugin `azure-apim-plugin` with an instance `instance` in API hub.
 
-1.  Make the script executable:
-    ```bash
-    chmod +x gcp_setup.sh
-    ```
-2.  Run the script:
-    ```bash
-    ./gcp_setup.sh
-    ```
-3.  The script will prompt you to enter:
-    *   Your Google Cloud Project ID.
-    *   The Google Cloud Region where your API Hub is provisioned (e.g., `us-central1`).
-    *   The `AZURE_CLIENT_SECRET` obtained from the `azure_setup.sh` script.
+Run the script:
+```bash
+./gcp_setup.sh
+```
 
 ### Step 3: Deploy the Application Integration
 
 This script deploys the `azure_ip_template.json` workflow to your Google Cloud project's Application Integration service.
 
-1.  Make the script executable:
-    ```bash
-    chmod +x deploy_integration.sh
-    ```
-2.  Run the script:
-    ```bash
-    ./deploy_integration.sh
-    ```
-3.  The script will prompt you for:
-    *   Your Google Cloud Project ID.
-    *   The Google Cloud Region.
-    *   A unique name for this Integration instance (e.g., `AzureAPIMSync`). Remember this name for execution.
+Run the script:
+```bash
+./deploy_integration.sh
+```
 
 ### Step 4: Execute the Integration
 
 To run the synchronization process, you will execute the deployed integration.
 
-1.  Make the script executable:
-    ```bash
-    chmod +x execute_integration.sh
-    ```
-2.  Run the script:
-    ```bash
-    ./execute_integration.sh
-    ```
-3.  You will be prompted to enter:
-    *   Your Google Cloud Project ID.
-    *   The Google Cloud Region.
-    *   The Integration Name you provided during the `deploy_integration.sh` step.
-    *   The `AZURE_CLIENT_ID` from `azure_setup.sh`.
-    *   The `AZURE_CLIENT_SECRET` from `azure_setup.sh`.
-    *   The `AZURE_SUBSCRIPTION_ID` you used in `azure_setup.sh`.
-    *   The `AZURE_TENANT_ID` from `azure_setup.sh`.
+Run the script:
+```bash
+./execute_integration.sh
+```
 
-4.  Upon successful triggering, the script will indicate that the execution has started. You can monitor the detailed logs and status within the Application Integration section of the Google Cloud Console.
+Upon successful triggering, the script will indicate that the execution has started. You can monitor the detailed logs and status within the Application Integration section of the Google Cloud Console.
 
 ## Files Included
 
