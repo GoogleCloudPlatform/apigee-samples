@@ -1,5 +1,20 @@
 #!/bin/bash
 
+# Copyright 2025 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
 read -p "Enter your Azure Subscription ID: " AZURE_SUBSCRIPTION_ID
 read -p "Enter your Azure Tenant ID (Optional - press Enter to infer): " AZURE_TENANT_ID
 read -p "Enter a name for the Azure AD App (e.g., apihub-integration): " APP_NAME
