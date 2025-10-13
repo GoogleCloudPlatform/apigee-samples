@@ -1,6 +1,6 @@
 # Azure API Management to Google Cloud API Hub Integration
 
-This sample provides an Application Integration template and scripts to synchronize API metadata from Azure API Management (APIM) to Google Cloud API Hub.
+This sample provides an Application Integration template and scripts to synchronize API metadata from Azure API Management (APIM) to Apigee API hub.
 
 ## Prerequisites
 
