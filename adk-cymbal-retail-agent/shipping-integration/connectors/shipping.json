@@ -23,7 +23,7 @@
 			"key": "host_address",
 			"destinations": [
 				{
-					"host": "https://httpbin.org"
+					"host": "https://mocktarget.apigee.net"
 				}
 			]
 		},
