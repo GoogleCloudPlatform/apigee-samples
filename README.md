@@ -11,6 +11,7 @@
     - [Prerequisites](#prerequisites)
     - [Samples](#samples-1)
   - [Apigee and Model Context Protocol (MCP)](#apigee-and-model-context-protocol-mcp)
+  - [Apigee API hub plugins](#apigee-api-hub-plugins)
   - [Modifying a sample proxy](#modifying-a-sample-proxy)
   - [Ask questions on the Community Forum](#ask-questions-on-the-community-forum)
   - [Apigee documentation](#apigee-documentation)
@@ -142,6 +143,14 @@ The [Model Context Protocol (MCP)](https://github.com/modelcontext/specification
 |     | Sample                   | Description                                                                                                                                                                                                                                                 | Open Notebook                                                                                                                                         |
 | --- | ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 1   | [apigee-mcp](apigee-mcp) | Illustrates Apigee's role in the MCP ecosystem. Features an MCP server that discovers API specs from Apigee API hub, dynamically creates tools for LLMs, and exposes them through Apigee. An example CRM agent notebook demonstrates consuming these tools. | [![notebook](https://github.com/GoogleCloudPlatform/apigee-samples/blob/main/images/icon32.png?raw=true)](./apigee-mcp/notebooks/crm-agent-mcp.ipynb) |
+
+## <a name="apigee-apihub-plugin-samples"></a>Apigee API hub plugins
+
+Plugins, also known as *on-ramp plugins*, enable API hub to connect and ingest API metadata from various Google Cloud services and external sources where your APIs are managed or defined. They simplify and enhance the process of bringing your API metadata directly into API hub. For more info on plugins, check out this [page](https://cloud.google.com/apigee/docs/apihub/plugins). The sample in this section demonstrates how to configure them for different sources.
+
+|     | Sample                   | Description                                                                                                                                                                                                                                                 | 
+| --- | ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | [azure-apim](./apihub-plugins/azure-apim) | This sample provides an Application Integration template and scripts to synchronize API metadata from Azure API Management (APIM) to Apigee API hub |
 
 ## <a name="modifying"></a>Modifying a sample proxy
 
