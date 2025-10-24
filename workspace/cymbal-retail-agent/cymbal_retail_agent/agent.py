@@ -31,9 +31,11 @@ load_dotenv()
 
 MODEL_NAME=os.getenv("MODEL_NAME")
 
+model=MODEL_NAME
+
 # Define the sub-agents for each tool with their instructions
 orders_agent = Agent(
-    model=MODEL_NAME,
+    model=model,
     name='ordersagent',
     description="Agent to retrieve a customer's order history and status.",
     instruction="""
@@ -54,7 +56,7 @@ logging.info("Orders Agent initialized.")
 
 # Define the root agent and pass the sub-agents as its tools
 root_agent = Agent(
-    model=MODEL_NAME,
+    model=model,
     name='customerserviceagent',
     description="Agent to retrieve customer order, customer profile, shipping information and process returns. This agent can delegate tasks to specialized sub-agents.",
     global_instruction="""You are a helpful virtual assistant for a retail company named Cymbal Retail. Always respond politely.""",
