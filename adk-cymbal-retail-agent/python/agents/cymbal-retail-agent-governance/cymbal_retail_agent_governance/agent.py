@@ -28,24 +28,29 @@ logging.basicConfig(level=logging.ERROR)
 print("Starting agent initialization...")
 print("Libraries imported.")
 
+load_dotenv()
+
+MODEL_NAME = os.getenv("MODEL_NAME")
+
+# model=MODEL_NAME
 PROJECT_ID=os.getenv("GOOGLE_CLOUD_PROJECT")
 APIGEE_HOSTNAME = os.getenv("APIGEE_HOSTNAME")
 APIGEE_LLM = os.getenv("APIGEE_LLM")
-MODEL_NAME = os.getenv("MODEL_NAME")
 SECRET=f"projects/{PROJECT_ID}/secrets/cymbal-retail-apikey/versions/latest"
 
 secret_manager_client = SecretManagerClient()
 apikey_credential_str = secret_manager_client.get_secret(SECRET)
 
+model=LiteLlm(
+    model=MODEL_NAME,
+    api_base=f"https://{APIGEE_HOSTNAME}{APIGEE_LLM}",
+    # Pass authentication headers if needed
+    extra_headers={"x-apikey": apikey_credential_str}
+)
+
 # Define the sub-agents for each tool with their instructions
 orders_agent = Agent(
-    # model=MODEL_NAME,
-    model=LiteLlm(
-        model=MODEL_NAME,
-        api_base=f"https://{APIGEE_HOSTNAME}{APIGEE_LLM}",
-        # Pass authentication headers if needed
-        extra_headers={"x-apikey": apikey_credential_str}
-    ),
+    model=model,
     name='ordersagent',
     description="Agent to retrieve a customer's order history and status.",
     instruction="""
@@ -56,13 +61,7 @@ You are a specialized agent for managing customer orders. Your sole responsibili
 logging.info("Orders Agent initialized.")
 
 returns_agent = Agent(
-    # model=MODEL_NAME,
-    model=LiteLlm(
-        model=MODEL_NAME,
-        api_base=f"https://{APIGEE_HOSTNAME}{APIGEE_LLM}",
-        # Pass authentication headers if needed
-        extra_headers={"x-apikey": apikey_credential_str}
-    ),
+    model=model,
     name='returnsagent',
     description="Agent to handle customer returns and refunds.",
     instruction="""
@@ -73,13 +72,7 @@ You are a specialized agent for handling customer returns and refunds. Your sole
 logging.info("Returns Agent initialized.")
 
 customers_agent = Agent(
-    # model=MODEL_NAME,
-    model=LiteLlm(
-        model=MODEL_NAME,
-        api_base=f"https://{APIGEE_HOSTNAME}{APIGEE_LLM}",
-        # Pass authentication headers if needed
-        extra_headers={"x-apikey": apikey_credential_str}
-    ),
+    model=model,
     name='customersagent',
     description="Agent to manage and retrieve customer information.",
     instruction="""
@@ -90,13 +83,7 @@ You are a specialized agent for managing customer information. Your sole respons
 logging.info("customers Agent initialized.")
 
 shipping_agent = Agent(
-    # model=MODEL_NAME,
-    model=LiteLlm(
-        model=MODEL_NAME,
-        api_base=f"https://{APIGEE_HOSTNAME}{APIGEE_LLM}",
-        # Pass authentication headers if needed
-        extra_headers={"x-apikey": apikey_credential_str}
-    ),
+    model=model,
     name='shippingagent',
     description="Agent to retrieve shipping information.",
     instruction="""
@@ -108,13 +95,7 @@ logging.info("Shipping Agent initialized.")
 
 # Define the root agent and pass the sub-agents as its tools
 root_agent = Agent(
-    # model=MODEL_NAME,
-    model=LiteLlm(
-        model=MODEL_NAME,
-        api_base=f"https://{APIGEE_HOSTNAME}{APIGEE_LLM}",
-        # Pass authentication headers if needed
-        extra_headers={"x-apikey": apikey_credential_str}
-    ),
+    model=model,
     name='customerserviceagent',
     description="Agent to retrieve customers orders, customers profiles, products information and process returns. This agent can delegate tasks to specialized sub-agents.",
     global_instruction="""You are a helpful virtual assistant for a retail company named Cymbal Retail. Always respond politely.""",
