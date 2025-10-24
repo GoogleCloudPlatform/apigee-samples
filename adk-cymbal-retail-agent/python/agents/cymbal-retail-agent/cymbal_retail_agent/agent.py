@@ -32,8 +32,10 @@ load_dotenv()
 
 MODEL_NAME=os.getenv("MODEL_NAME")
 
+model=MODEL_NAME
+
 orders_agent = Agent(
-    model=MODEL_NAME,
+    model=model,
     name='ordersagent',
     description="Agent to retrieve a customer's order history and status.",
     instruction="""
@@ -44,7 +46,7 @@ You are a specialized agent for managing customer orders. Your sole responsibili
 logging.info("Orders Agent initialized.")
 
 returns_agent = Agent(
-    model=MODEL_NAME,
+    model=model,
     name='returnsagent',
     description="Agent to handle customer returns and refunds.",
     instruction="""
@@ -55,7 +57,7 @@ You are a specialized agent for handling customer returns and refunds. Your sole
 logging.info("Returns Agent initialized.")
 
 customers_agent = Agent(
-    model=MODEL_NAME,
+    model=model,
     name='customersagent',
     description="Agent to manage and retrieve customer information.",
     instruction="""
@@ -66,7 +68,7 @@ You are a specialized agent for managing customer profile information. Your sole
 logging.info("Customers Agent initialized.")
 
 shipping_agent = Agent(
-    model=MODEL_NAME,
+    model=model,
     name='shippingagent',
     description="Agent to retrieve shipping information.",
     instruction="""
@@ -78,7 +80,7 @@ logging.info("Shipping Agent initialized.")
 
 # Define the root agent and pass the sub-agents as its tools
 root_agent = Agent(
-    model=MODEL_NAME,
+    model=model,
     name='customerserviceagent',
     description="Agent to retrieve customer order, customer profile, products information and process returns. This agent can delegate tasks to specialized sub-agents.",
     global_instruction="""You are a helpful virtual assistant for a retail company named Cymbal Retail. Always respond politely.""",
