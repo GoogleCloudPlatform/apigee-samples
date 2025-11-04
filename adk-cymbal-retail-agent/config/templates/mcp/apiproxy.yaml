@@ -13,6 +13,16 @@
 #  limitations under the License.
 
 #{{ $mcp := oas3_to_mcp $.Values.spec_file }}
+#{{ $base_path := $.Values.base_path }}
+#{{- if not $base_path }}
+#  {{ $base_path = print "/mcp" (include "get_basepath" (index $.Values.spec.servers 0 "url") | trimSuffix "/") }}
+#{{- end }}
+
+#{{- if and (not $.Values.check_app_authentication) $.Values.check_app_authorization }}
+#  # enable app authentication if authorization is enabled
+#  {{ set $.Values "check_app_authentication" true }}
+#{{- end }}
+
 APIProxy:
   .name: mcp-{{ slug_make ($.Values.spec.info.title) }}
   DisplayName: {{ $.Values.spec.info.title }}
@@ -173,7 +183,7 @@ Policies:
               "result": {
                 "tools": 
                  {{ $mcp.tools_list | toPrettyJson | nindent 18 }}
-                
+            
               }
             }
       IgnoreUnresolvedVariables: true
@@ -185,29 +195,30 @@ Policies:
       .continueOnError: false
       .enabled: true
       .timeLimit: 200
-      .name: JS-ProcessReq
-      DisplayName: JS-ProcessReq
+      .name: JS-ParseMCPReq
+      DisplayName: JS-ParseMCPReq
       Properties: {}
       IncludeURL:  jsc://mcp.cjs
-      ResourceURL: jsc://process-req.cjs
+      ResourceURL: jsc://parse-mcp.cjs
   - AssignMessage:
       .continueOnError: false
       .enabled: true
       .name: AM-SetGenericError
       DisplayName: AM-SetGenericError
       Properties: { }
+      IgnoreUnresolvedVariables: true
       Set:
         Payload:
           .contentType: application/json
           -Data: |-
-              {
-                "jsonrpc": "2.0",
-                "id": {mcp.id},
-                "error": {
-                  "code": {error.status.code},
-                  "message": "{escapeJSON(error.message)}"
-                }
+            {
+              "jsonrpc": "2.0",
+              "id": {mcp.id:1},
+              "error": {
+                "code": {error.status.code},
+                "message": "{escapeJSON(error.message)}"
               }
+            }
         StatusCode: "{error.status.code}"
         ReasonPhrase: "{error.reason.phrase}"
   - AssignMessage:
@@ -224,19 +235,173 @@ Policies:
       .continueOnError: false
       .enabled: true
       .timeLimit: 200
-      .name: JS-SetTarget
-      DisplayName: JS-SetTarget
-      IncludeURL:  jsc://mcp.cjs
-      ResourceURL: jsc://setup-tool-target.cjs
+      .name: JS-ProcessMCPReq
+      -Data:
+        - DisplayName: JS-ProcessMCPReq
+        - IncludeURL: jsc://mcp.cjs
+        - IncludeURL: jsc://mcp-tools.cjs
+        - ResourceURL: jsc://process-mcp-req.cjs
   - Javascript:
       .continueOnError: false
       .enabled: true
       .timeLimit: 200
-      .name: JS-ProcessToolRes
-      DisplayName: JS-ProcessToolRes
+      .name: JS-ProcessRestRes
+      DisplayName: JS-ProcessRestRes
       IncludeURL: jsc://mcp.cjs
-      ResourceURL: jsc://process-tool-res.cjs
-
+      ResourceURL: jsc://process-rest-res.cjs
+  - Javascript:
+      .continueOnError: false
+      .enabled: true
+      .timeLimit: 200
+      .name: JS-ValidateTools
+      -Data:
+        - DisplayName: JS-ValidateTools
+        - IncludeURL: jsc://mcp.cjs
+        - IncludeURL: jsc://mcp-tools.cjs
+        - ResourceURL: jsc://validate-tools.cjs
+  - Javascript:
+      .continueOnError: false
+      .enabled: true
+      .timeLimit: 200
+      .name: JS-FilterHeaderTools
+      -Data:
+        - DisplayName: JS-FilterHeaderTools
+        - IncludeURL: jsc://mcp.cjs
+        - ResourceURL: jsc://filter-header-tools.cjs
+  #{{- if $.Values.check_app_authorization }}
+  - Javascript:
+      .continueOnError: false
+      .enabled: true
+      .timeLimit: 200
+      .name: JS-AuthorizeMCPReq
+      -Data:
+        - DisplayName: JS-AuthorizeMCPReq
+        - IncludeURL: jsc://mcp.cjs
+        - ResourceURL: jsc://authorize-mcp-req.cjs
+  - Javascript:
+      .continueOnError: false
+      .enabled: true
+      .timeLimit: 200
+      .name: JS-FilterAuthorizedTools
+      -Data:
+        - DisplayName: JS-FilterAuthorizedTools
+        - IncludeURL: jsc://mcp.cjs
+        - ResourceURL: jsc://filter-authorized-tools.cjs
+  #{{- end }}
+  - RaiseFault:
+      .continueOnError: false
+      .enabled: true
+      .name: RF-Method404
+      DisplayName: RF-Method404
+      Properties: { }
+      FaultResponse:
+        - AssignVariable:
+            Name: error_status
+            Value: 200
+        - AssignVariable:
+            Name: error_body
+            Template: |-
+              {
+                "jsonrpc": "2.0",
+                "id": {mcp.id},
+                "error": {
+                  "code": -32601,
+                  "message": "Could not find MCP method \"{escapeJSON(mcp.method)}\""
+                }
+              }
+      IgnoreUnresolvedVariables: true
+  - AssignMessage:
+      .continueOnError: false
+      .enabled: true
+      .name: AM-SaveReq
+      DisplayName: AM-SaveReq
+      Properties: { }
+      Copy:
+        .source: request
+        Headers: { }
+        QueryParams: { }
+        FormParams: { }
+        Payload: true
+        Verb: true
+        Path: true
+      IgnoreUnresolvedVariables: true
+      AssignTo:
+        .createNew: true
+        .transport: http
+        .type: request
+        -Data: original_request
+  - CORS:
+      .continueOnError: false
+      .enabled: true
+      .name: CORS-Allow
+      DisplayName: CORS-Allow
+      AllowOrigins: '{request.header.origin:*}'
+      AllowMethods: POST,GET,HEAD
+      AllowHeaders: '*'
+      ExposeHeaders: '*'
+      MaxAge: 3628800
+      AllowCredentials: true
+      GeneratePreflightResponse: true
+      IgnoreUnresolvedVariables: true
+  #{{- if $mcp.auth_server }}
+  - RaiseFault:
+      .continueOnError: false
+      .enabled: true
+      .name: RF-Set401
+      DisplayName: RF-Set401
+      Properties: { }
+      FaultResponse:
+        - Set:
+            Headers:
+              - Header:
+                  .name: WWW-Authenticate
+                  -Data: Bearer resource_metadata="{client.scheme}://{original_request.header.host}/.well-known/oauth-protected-resource{proxy.basepath}"
+        - AssignVariable:
+            Name: error_status
+            Value: 401
+        - AssignVariable:
+            Name: error_body
+            Template: |-
+              {
+                "jsonrpc": "2.0",
+                "id": {mcp.id},
+                "error": {
+                  "code": -32001,
+                  "message": "Unauthorized"
+                }
+              }
+      IgnoreUnresolvedVariables: true
+  - AssignMessage:
+      .continueOnError: false
+      .enabled: true
+      .name: AM-SetMetadataRes
+      DisplayName: AM-SetMetadataRes
+      Properties: { }
+      Set:
+        Payload:
+          .contentType: application/json
+          -Data: |-
+            {
+              "resource": "{client.scheme}://{original_request.header.host}{{ $base_path }}",
+              "resource_name": "{{ $.Values.spec.info.title }}",
+              "authorization_servers": [ "{{ $mcp.auth_server.issuer_url }}" ],
+              {{- if eq $mcp.auth_server.type "oauth2" }}
+              "scopes_supported": {{ $mcp.auth_server.scopes | toJson }},
+              {{- end }}
+              "bearer_methods_supported": [ "header" ]
+            }
+        StatusCode: 200
+        ReasonPhrase: OK
+  #{{- end }}
+  #{{- if $.Values.check_app_authentication }}
+  - VerifyAPIKey:
+      .continueOnError: false
+      .enabled: true
+      .name: VAK-Check
+      DisplayName: VAK-Check
+      APIKey:
+        .ref: request.header.x-apikey
+  #{{- end }}
 ProxyEndpoints:
   - ProxyEndpoint:
       .name: default
@@ -255,84 +420,139 @@ ProxyEndpoints:
         - PreFlow:
             .name: PreFlow
             Request:
-              Step:
-                Name: JS-ProcessReq
-                Condition: request.header.Content-Type = "application/json" and request.verb = "POST"
-            Response: { }
+              -Data:
+                - Step:
+                    Name: AM-SaveReq
+                - Step:
+                    Name: CORS-Allow
+                #{{- if $.Values.check_app_authentication }}
+                - Step:
+                    Name: VAK-Check
+                #{{- end }}
+                - Step:
+                    Name: JS-ParseMCPReq
+                    Condition: request.verb = "POST" and request.header.Content-Type = "application/json"
+                #{{- if $.Values.check_app_authorization }}
+                - Step:
+                    Name: JS-AuthorizeMCPReq
+                    Condition: request.verb = "POST" and request.header.Content-Type = "application/json"
+                #{{- end }}
+                #{{- if $mcp.auth_server }}
+                - Step:
+                    Name: RF-Set401
+                    Condition: request.header.authorization = null || NOT (request.header.authorization =| "Bearer ")
+                #{{- end }}
         - PostFlow:
             .name: PostFlow
-            Request: { }
-            Response: { }
         - Flows:
             - Flow:
                 .name: initialize
-                Description: { }
-                Request: { }
                 Response:
                   Step:
                     Name: AM-InitializeRes
-                Condition: mcp.method = "initialize"
+                Condition: request.verb = "POST" and mcp.method = "initialize"
             - Flow:
                 .name: initialized
-                Description: { }
-                Request: { }
                 Response:
                   Step:
                     Name: AM-InitializedRes
-                Condition: mcp.method = "notifications/initialized"
+                Condition: request.verb = "POST" and mcp.method = "notifications/initialized"
             - Flow:
                 .name: resources/templates/list
-                Description: { }
-                Request: { }
                 Response:
                   Step:
                     Name: AM-ResourcesTemplatesListRes
-                Condition: mcp.method = "resources/templates/list"
+                Condition: request.verb = "POST" and mcp.method = "resources/templates/list"
             - Flow:
                 .name: resources/list
-                Description: { }
-                Request: { }
                 Response:
                   Step:
                     Name: AM-ResourcesListRes
-                Condition: mcp.method = "resources/list"
+                Condition: request.verb = "POST" and mcp.method = "resources/list"
             - Flow:
                 .name: prompts/list
-                Description: { }
-                Request: { }
                 Response:
                   Step:
                     Name: AM-PromptsListRes
-                Condition: mcp.method = "prompts/list"
+                Condition: request.verb = "POST" and mcp.method = "prompts/list"
             - Flow:
                 .name: tools/list
-                Description: { }
-                Request: { }
+                Condition: request.verb = "POST" and mcp.method = "tools/list"
                 Response:
-                  Step:
-                    Name: AM-ToolsListRes
-                Condition: mcp.method = "tools/list"
+                  -Data:
+                    - Step:
+                        Name: JS-ValidateTools
+                    - Step:
+                        Name: AM-ToolsListRes
+                    - Step:
+                        Name: JS-FilterHeaderTools
+                    #{{- if $.Values.check_app_authorization }}
+                    - Step:
+                        Name: JS-FilterAuthorizedTools
+                    #{{- end }}
             - Flow:
                 .name: ping
-                Description: { }
-                Request: { }
                 Response:
                   Step:
                     Name: AM-PingRes
-                Condition: mcp.method = "ping"
-            #{{- range $operationId, $_ := $mcp.tools_targets }}
+                Condition: request.verb = "POST" and mcp.method = "ping"
+            #            #{{- range $operationId, $_ := $mcp.tools_targets }}
+            #            - Flow:
+            #                .name: tool-{{ $operationId }}
+            #                Condition: request.verb = "POST" and (mcp.method = "tools/call") and (mcp.params.name = "{{ $operationId }}")
+            #            #{{- end }}
             - Flow:
-                .name: tool-{{ $operationId }}
-                Condition: (mcp.method = "tools/call") and (mcp.params.name = "{{ $operationId }}")
-            #{{- end }}
+                .name: tools/call
+                Condition: request.verb = "POST" and mcp.method = "tools/call"
+            - Flow:
+                .name: method-404
+                Condition: "true"
+                Request:
+                  Step:
+                    Name: RF-Method404
         - HTTPProxyConnection:
-            BasePath: /mcp{{ include "get_basepath" (index $.Values.spec.servers 0 "url") }}
+            BasePath: {{ $base_path }}
         - RouteRule:
             .name: tool-call
             TargetEndpoint: tool-call
             Condition: mcp.method = "tools/call"
         - RouteRule:
             .name: no-op
+  #{{- if $mcp.auth_server }}
+  - ProxyEndpoint:
+      .name: protected-resource-metadata
+      -Data:
+        - DefaultFaultRule:
+            .name: default-fault
+            Step:
+              Name: AM-SetGenericError
+        - FaultRules:
+            -Data:
+              - FaultRule:
+                  .name: custom-error
+                  Step:
+                    Name: AM-SetCustomError
+                  Condition: error_body != null
+        - PreFlow:
+            .name: PreFlow
+            Request:
+              -Data:
+                - Step:
+                    Name: AM-SaveReq
+                - Step:
+                    Name: CORS-Allow
+            Response:
+              Step:
+                Name: AM-SetMetadataRes
+        - PostFlow:
+            .name: PostFlow
+        - Flows: []
+        - HTTPProxyConnection:
+            BasePath: /.well-known/oauth-protected-resource{{ $base_path }}
+        - RouteRule:
+            .name: no-op
+  #{{- end }}
+
 TargetEndpoints:
   - TargetEndpoint:
       .name: tool-call
@@ -351,10 +571,10 @@ TargetEndpoints:
         .name:
         Response:
           - Step:
-              Name: JS-ProcessToolRes
+              Name: JS-ProcessRestRes
         Request:
           - Step:
-              Name: JS-SetTarget
+              Name: JS-ProcessMCPReq
       Flows: { }
       PostFlow:
         .name:
@@ -372,25 +592,41 @@ TargetEndpoints:
             .name: success.codes
             -Data: 1xx,2xx,3xx,4xx,5xx
 Resources:
-  #{{ os_copyfile "./process-req.cjs" "./resources/process-req.cjs" }}
+  #{{ os_copyfile "./parse-mcp.cjs" "./resources/jsc/parse-mcp.cjs" }}
   - Resource:
       Type: jsc
-      Path: ./process-req.cjs
-  #{{ os_copyfile "./setup-tool-target.cjs" "./resources/setup-tool-target.cjs" }}
+      Path: ./parse-mcp.cjs
+  #{{ os_copyfile "./filter-header-tools.cjs" "./resources/jsc/filter-header-tools.cjs" }}
   - Resource:
       Type: jsc
-      Path: ./setup-tool-target.cjs
-  #{{ os_copyfile "./process-tool-res.cjs" "./resources/process-tool-res.cjs" }}
+      Path: ./filter-header-tools.cjs
+  #{{- if $.Values.check_app_authorization }}
+  #{{ os_copyfile "./authorize-mcp-req.cjs" "./resources/jsc/authorize-mcp-req.cjs" }}
   - Resource:
       Type: jsc
-      Path: ./process-tool-res.cjs
-  #{{ os_copyfile "./mcp.cjs" "./resources/mcp.cjs" }}
+      Path: ./authorize-mcp-req.cjs
+  #{{ os_copyfile "./filter-authorized-tools.cjs" "./resources/jsc/filter-authorized-tools.cjs" }}
+  - Resource:
+      Type: jsc
+      Path: ./filter-authorized-tools.cjs
+  #{{- end }}
+  #{{ os_copyfile "./process-mcp-req.cjs" "./resources/jsc/process-mcp-req.cjs" }}
+  - Resource:
+      Type: jsc
+      Path: ./process-mcp-req.cjs
+  #{{ os_copyfile "./process-rest-res.cjs" "./resources/jsc/process-rest-res.cjs" }}
+  - Resource:
+      Type: jsc
+      Path: ./process-rest-res.cjs
+  #{{ os_copyfile "./mcp.cjs" "./resources/jsc/mcp.cjs" }}
   - Resource:
       Type: jsc
       Path: ./mcp.cjs
-  #{{ include "create_mcp_properties_file" (dict "file" "mcp-tools.properties" "mcp" $mcp "oas" $.Values.spec) }}
+  #{{ os_copyfile "./validate-tools.cjs" "./resources/jsc/validate-tools.cjs" }}
   - Resource:
-      Type: properties
-      Path: ./mcp-tools.properties
-
-
+      Type: jsc
+      Path: ./validate-tools.cjs
+  #{{ include "create_mcp_json_file" (dict "file" "mcp-tools.cjs" "mcp" $mcp "oas" $.Values.spec) }}
+  - Resource:
+      Type: jsc
+      Path: ./mcp-tools.cjs
