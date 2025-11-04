@@ -30,27 +30,49 @@
   {{- index $servers 0 | dig "url" "https://mocktarget.apigee.net" -}}
 {{- end -}}
 
-{{- define "get_mcp_tools_properties" -}}
+{{- define "get_mcp_tools_json" -}}
   {{- $mcp := .mcp -}}
   {{- $targetUrl := .targetUrl -}}
+  {{- $len := len $mcp.tools_targets -}}
+  {{- $count := 0 }}
+  {{- "" -}}{{ "\n"}}{{`var mcpToolsInfo = {`}}
   {{- range $operationId, $toolTarget := $mcp.tools_targets }}
-
-    {{- "" -}}{{ "\n"}}# MCP Tool "{{ $operationId }}"
-    {{- "" -}}{{ "\n"}}{{ $operationId }}.target_url={{ $targetUrl }}
-    {{- "" -}}{{ "\n"}}{{ $operationId }}.target_path_suffix={{ $toolTarget.pathSuffix }}
-    {{- "" -}}{{ "\n"}}{{ $operationId }}.target_verb={{ $toolTarget.verb }}
-    {{- "" -}}{{ "\n"}}{{ $operationId }}.target_content_type={{ $toolTarget.contentType }}
+    {{- $count = add $count 1 -}}
+    {{- "" -}}{{ "\n"}}{{`  "`}}{{ $operationId }}{{ `": {`}}
+    {{- "" -}}{{ "\n"}}{{`    "target": {`}}
+    {{- "" -}}{{ "\n"}}{{`      "url": "`}}{{ $targetUrl }}{{`",`}}
+    {{- "" -}}{{ "\n"}}{{`      "pathSuffix": "`}}{{ $toolTarget.pathSuffix }}{{`",`}}
+    {{- "" -}}{{ "\n"}}{{`      "verb": "`}}{{ $toolTarget.verb }}{{`",`}}
+    {{- "" -}}{{ "\n"}}{{`      "headers": {`}}
+    {{- "" -}}{{ "\n"}}{{`        "content-type": "`}}{{ $toolTarget.contentType }}{{`",`}}
+    {{- "" -}}{{ "\n"}}{{`        "accept": "`}}{{ $toolTarget.accept }}{{`"`}}
+    {{- "" -}}{{ "\n"}}{{ `     }`}}
+    {{- "" -}}{{ "\n"}}{{ `   },`}}
+    {{- "" -}}{{ "\n"}}{{`    "schemas": {`}}
+    {{- "" -}}{{ "\n"}}{{`      "request": `}}{{ $toolTarget.payloadSchema | toJson }}{{``}}
+    {{- "" -}}{{ "\n"}}{{`    },`}}
+    {{- "" -}}{{ "\n"}}{{`    "inputParams": {`}}
+    {{- "" -}}{{ "\n"}}{{`       "body": "`}}{{ $toolTarget.payloadParam }}{{`",`}}
+    {{- "" -}}{{ "\n"}}{{`       "path": `}}{{ $toolTarget.pathParams | toJson }}{{`,`}}
+    {{- "" -}}{{ "\n"}}{{`       "query": `}}{{ $toolTarget.queryParams | toJson }}{{`,`}}
+    {{- "" -}}{{ "\n"}}{{`       "headers": `}}{{ $toolTarget.headerParams | toJson }}
+    {{- "" -}}{{ "\n"}}{{`    }`}}
+    {{- "" -}}{{ "\n"}}{{ `  }`}}
+    {{- if lt $count $len -}}
+      {{- "" -}}{{ ","}}
+    {{- end -}}
     {{- "" -}}{{ "\n"}}
   {{- end -}}
+  {{- "" -}}{{ "\n"}}{{ `};`}}
 {{- end -}}
 
 
-{{- define "create_mcp_properties_file" -}}
+{{- define "create_mcp_json_file" -}}
   {{- $fileName := .file -}}
   {{- $mcp := .mcp -}}
   {{- $oas := .oas -}}
   {{- $targetUrl := include "get_target_url" $oas.servers }}
-  {{- $text := include "get_mcp_tools_properties" (dict "mcp" $mcp "targetUrl" $targetUrl) -}}
+  {{- $text := include "get_mcp_tools_json" (dict "mcp" $mcp "targetUrl" $targetUrl) -}}
   {{ os_writefile $fileName $text }}
   {{- $fileName -}}
 {{- end -}}
