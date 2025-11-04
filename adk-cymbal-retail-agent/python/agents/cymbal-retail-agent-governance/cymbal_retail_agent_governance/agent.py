@@ -13,14 +13,11 @@
 # limitations under the License.
 
 from google.adk.agents import Agent
-from google.adk.agents.remote_a2a_agent import AGENT_CARD_WELL_KNOWN_PATH
-from google.adk.agents.remote_a2a_agent import RemoteA2aAgent
 from dotenv import load_dotenv
 from .tools import orders, returns, customers, shipping
 from google.adk.models.lite_llm import LiteLlm
 from google.adk.tools.apihub_tool.clients.secret_client import SecretManagerClient
 import warnings,os
-import httpx
 
 # Ignore all warnings
 warnings.filterwarnings("ignore")
@@ -96,20 +93,6 @@ You are a specialized agent for managing relevant information about Shipping. Yo
 )
 logging.info("Shipping Agent initialized.")
 
-currency_agent = RemoteA2aAgent(
-    name="currency_agent",
-    description="An agent that can help with currency conversions.",
-    agent_card=(
-        f"https://{APIGEE_HOSTNAME}/currency-exchange-a2a-proxy{AGENT_CARD_WELL_KNOWN_PATH}"
-    ),
-    httpx_client=httpx.AsyncClient(
-        headers={
-            "x-api-key": apikey_credential_str
-        }
-    )
-)
-logging.info("Currency Agent initialized.")
-
 # Define the root agent and pass the sub-agents as its tools
 root_agent = Agent(
     model=model,
@@ -126,10 +109,9 @@ You are the Cymbal Retail Agent
 4. For questions about a customer's profile or general customer information, ask for their email address. Use the customer profile tool to retrieve and provide the requested details.
 5. When the user asks about a return or refund, ask for the specific order ID so you can check the status using the returns tool.
 6. If the user wants to fetch shipping information, ask for the address information and then use the shipping tool to check the information requested and inform them.
-7. If the user wants to get all customers use the customers tool to retrieve all customers information.
-8. If the user asks for the price of an order in a different currency, send the total amount to `currency_agent` to convert the amount.
-9. Throughout the conversation, maintain a friendly and helpful tone. If you need more information to complete a request, politely ask for it.
+7. If the user wants to get all customers use the customers tool to retrieve all customers information. 
+8. Throughout the conversation, maintain a friendly and helpful tone. If you need more information to complete a request, politely ask for it.
 """,
-    sub_agents=[orders_agent, returns_agent, customers_agent, shipping_agent, currency_agent]
+    sub_agents=[orders_agent, returns_agent, customers_agent, shipping_agent]
 )
 logging.info("Root Agent initialized successfully. Ready to receive input.")
