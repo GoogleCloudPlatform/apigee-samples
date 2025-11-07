@@ -32,7 +32,7 @@ adk deploy agent_engine \
 export PROJECT_NUMBER="$(gcloud projects describe $GOOGLE_CLOUD_PROJECT --format="value(projectNumber)")"
 export TOKEN="$(gcloud auth print-access-token)"
 export APP_NAME="gemini-enterprise"
-export REASONING_ENGINE_ID="8410771371277156352" #input
+export REASONING_ENGINE_ID="" #input
 export REASONING_ENGINE="projects/${PROJECT_NUMBER}/locations/${GOOGLE_CLOUD_LOCATION}/reasoningEngines/${REASONING_ENGINE_ID}"
 ```
 4. Lets create our first app in Gemini Enterprise. Run the following curl in your terminal
