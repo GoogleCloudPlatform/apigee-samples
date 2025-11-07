@@ -18,7 +18,9 @@ adk deploy agent_engine \
     --display_name=cymbal_retail_agent \
     cymbal_retail_agent
 ```
-    NOTE: This will take a few minutes
+
+**NOTE:** This will take a few minutes
+
 6. Once this is complete, you should see the Agent Engine Resource Name something like `projects/{projectId}/locations/{location}/reasoningEngines/{reasoningEngineId}`, for example `projects/78901377646/locations/us-central1/reasoningEngines/76955126691298017281`. Take a note of the Reasoning Engine ID (`76955126691298017281` in this case).
 
 ## Steps to add this Agent to Gemini Enterprise
