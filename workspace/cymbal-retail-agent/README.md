@@ -83,3 +83,4 @@ EOF
 7. Go back to the Apps page and click the `Preview` to open a pop up page
 8. In the pop up page, click `Agent` and select `Cymbal Retail Agent`
 9. Then start interacting with the agent in the preview mode.
+10. To publish this, you will need to configure "Workforce Identity" and select "Use Google Identity".
