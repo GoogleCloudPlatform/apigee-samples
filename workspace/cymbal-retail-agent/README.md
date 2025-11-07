@@ -22,6 +22,10 @@ adk deploy agent_engine \
 **NOTE:** This will take a few minutes
 
 6. Once this is complete, you should see the Agent Engine Resource Name something like `projects/{projectId}/locations/{location}/reasoningEngines/{reasoningEngineId}`, for example `projects/78901377646/locations/us-central1/reasoningEngines/76955126691298017281`. Take a note of the Reasoning Engine ID (`76955126691298017281` in this case).
+7. Copy the full Resource Name and export it as a REASONING_ENGINE variable
+```sh
+export REASONING_ENGINE="RESOURCE_NAME"
+```
 
 ## Steps to add this Agent to Gemini Enterprise
 
@@ -32,8 +36,6 @@ adk deploy agent_engine \
 export PROJECT_NUMBER="$(gcloud projects describe $GOOGLE_CLOUD_PROJECT --format="value(projectNumber)")"
 export TOKEN="$(gcloud auth print-access-token)"
 export APP_NAME="gemini-enterprise"
-export REASONING_ENGINE_ID="" #input
-export REASONING_ENGINE="projects/${PROJECT_NUMBER}/locations/${GOOGLE_CLOUD_LOCATION}/reasoningEngines/${REASONING_ENGINE_ID}"
 ```
 4. Lets create our first app in Gemini Enterprise. Run the following curl in your terminal
 ```sh
@@ -64,7 +66,7 @@ curl -X POST "https://discoveryengine.googleapis.com/v1alpha/projects/${PROJECT_
 -H "Authorization: Bearer ${TOKEN}" \
 -d @- <<EOF
     {
-        "displayName": "${APP_NAME}",
+        "displayName": "Cymbal Retail Agent",
         "description": "Agent to retrieve customer order, customer profile, shipping information and process returns. This agent can delegate tasks to specialized sub-agents.",
         "adk_agent_definition": {
             "tool_settings": {
@@ -77,4 +79,7 @@ curl -X POST "https://discoveryengine.googleapis.com/v1alpha/projects/${PROJECT_
     }
 EOF
 ```
-6. You can now login to Gemini Enterprise on GCP console, and then access the App page. You should find the new agent.
+6. You can now login to Gemini Enterprise on GCP console, and then access the `gemini-enterprise` App page. Click the "Agents" on the left menu bar to see the `Cymbal Retail Agent` in the list
+7. Go back to the Apps page and click the `Preview` to open a pop up page
+8. In the pop up page, click `Agent` and select `Cymbal Retail Agent`
+9. Then start interacting with the agent in the preview mode.
