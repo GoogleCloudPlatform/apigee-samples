@@ -22,11 +22,17 @@ cp oas.yaml oas.local.yaml
 # create apigee proxy based on spec
 apigeecli apis create openapi -n "apihub-portal-publish" -f . --oas-name "oas.local.yaml" -p "/v1/samples/apihub-portal-publish" --add-cors=true -o "$PROJECT_ID" --env "$APIGEE_ENV" --wait=true -t "$(gcloud auth print-access-token)"
 
+# Determine sed in-place arguments for portability (macOS vs Linux)
+sedi_args=("-i")
+if [[ "$(uname)" == "Darwin" ]]; then
+  sedi_args=("-i" "") # For macOS, sed -i requires an extension argument. "" means no backup.
+fi
+
 # now replace oas server with apigee
-sed -i "s,mocktarget.apigee.net,$APIGEE_HOST,g" ./oas.local.yaml
-sed -i "s,/:,/v1/samples/apihub-portal-publish:,g" ./oas.local.yaml
-sed -i "s,/ip:,/v1/samples/apihub-portal-publish/ip:,g" ./oas.local.yaml
-sed -i "s,/json:,/v1/samples/apihub-portal-publish/json:,g" ./oas.local.yaml
+sed "${sedi_args[@]}" "s,mocktarget.apigee.net,$APIGEE_HOST,g" ./oas.local.yaml
+sed "${sedi_args[@]}" "s,/:,/v1/samples/apihub-portal-publish:,g" ./oas.local.yaml
+sed "${sedi_args[@]}" "s,/ip:,/v1/samples/apihub-portal-publish/ip:,g" ./oas.local.yaml
+sed "${sedi_args[@]}" "s,/json:,/v1/samples/apihub-portal-publish/json:,g" ./oas.local.yaml
 
 # create apigee product
 apigeecli products create --name "apihub-portal-product" --display-name "Apigee API hub Apigee Product" -p "apihub-portal-publish" --envs "dev" --approval "auto" --attrs "access=public" -o "$PROJECT_ID" -t "$(gcloud auth print-access-token)"
@@ -43,17 +49,17 @@ apigeecli apidocs documentation update -i "$CATALOG_ID" -n "Apigee Sample Produc
 
 echo "💻 Registering Apigee managed API to Apigee API hub..."
 
-sed -i "s,mocktarget.apigee.net/help,$APIGEE_PORTAL_URL/docs/apihub-portal-product/1,g" ./apihub-api.local.json
-sed -i "s,mocktarget.apigee.net/help,$APIGEE_PORTAL_URL/docs/apihub-portal-product/1,g" ./apihub-api-version.local.json
-sed -i "s,mocktarget.apigee.net/help,$APIGEE_PORTAL_URL/docs/apihub-portal-product/1,g" ./apihub-api-deployment.local.json
-sed -i "s,mocktarget.apigee.net,$APIGEE_HOST/v1/samples/apihub-portal-publish,g" ./apihub-api-deployment.local.json
-sed -i "s,unmanaged,apigee,g" ./apihub-api-deployment.local.json
-sed -i "s,Unmanaged,Apigee,g" ./apihub-api-deployment.local.json
-sed -i "s,test,prod,g" ./apihub-api-deployment.local.json
-sed -i "s,Test,Production,g" ./apihub-api-deployment.local.json
-sed -i "s.-v1-deployment\".-v1-deployment\", \"projects/$PROJECT_ID/locations/$APIHUB_REGION/deployments/apigee-sample-managed-v1-deployment\".g" ./apihub-api-version.local.json
-sed -i "s,develop,prod,g" ./apihub-api-version.local.json
-sed -i "s,Develop,Production,g" ./apihub-api-version.local.json
+sed "${sedi_args[@]}" "s,mocktarget.apigee.net/help,$APIGEE_PORTAL_URL/docs/apihub-portal-product/1,g" ./apihub-api.local.json
+sed "${sedi_args[@]}" "s,mocktarget.apigee.net/help,$APIGEE_PORTAL_URL/docs/apihub-portal-product/1,g" ./apihub-api-version.local.json
+sed "${sedi_args[@]}" "s,mocktarget.apigee.net/help,$APIGEE_PORTAL_URL/docs/apihub-portal-product/1,g" ./apihub-api-deployment.local.json
+sed "${sedi_args[@]}" "s,mocktarget.apigee.net,$APIGEE_HOST/v1/samples/apihub-portal-publish,g" ./apihub-api-deployment.local.json
+sed "${sedi_args[@]}" "s,unmanaged,apigee,g" ./apihub-api-deployment.local.json
+sed "${sedi_args[@]}" "s,Unmanaged,Apigee,g" ./apihub-api-deployment.local.json
+sed "${sedi_args[@]}" "s,test,prod,g" ./apihub-api-deployment.local.json
+sed "${sedi_args[@]}" "s,Test,Production,g" ./apihub-api-deployment.local.json
+sed "${sedi_args[@]}" "s.-v1-deployment\".-v1-deployment\", \"projects/$PROJECT_ID/locations/$APIHUB_REGION/deployments/apigee-sample-managed-v1-deployment\".g" ./apihub-api-version.local.json
+sed "${sedi_args[@]}" "s,develop,prod,g" ./apihub-api-version.local.json
+sed "${sedi_args[@]}" "s,Develop,Production,g" ./apihub-api-version.local.json
 
 # create managed deployment
 curl -X POST "https://apihub.googleapis.com/v1/projects/$PROJECT_ID/locations/$APIHUB_REGION/deployments?deploymentId=apigee-sample-managed-v1-deployment" \

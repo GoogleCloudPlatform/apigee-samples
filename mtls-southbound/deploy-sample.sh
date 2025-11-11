@@ -14,6 +14,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# Determine sed in-place arguments for portability (macOS vs Linux)
+sedi_args=("-i")
+if [[ "$(uname)" == "Darwin" ]]; then
+  sedi_args=("-i" "") # For macOS, sed -i requires an extension argument. "" means no backup.
+fi
+
 echo "Installing apigeecli..."
 curl -s https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.sh | bash
 export PATH=$PATH:$HOME/.apigeecli/bin
@@ -38,7 +44,7 @@ sleep 10
 
 echo "Update VM ip address in env file..."
 VM_IP=$(gcloud compute instances describe "$VM_NAME" "--project=$PROJECT_ID" "--zone=$ZONE" --format="value(networkInterfaces[0].accessConfigs[0].natIP)")
-sed -i "/export VM_IP=/c\export VM_IP=\"$VM_IP\"" env.sh
+sed "${sedi_args[@]}" "/export VM_IP=/c\export VM_IP=\"$VM_IP\"" env.sh
 
 echo "Creating self-signed certificate and key..."
 openssl req -subj '/CN=ssl.test.local' -x509 -new -newkey rsa:4096 -keyout key.pem -out cert.pem -sha256 -days 365 -nodes -addext "keyUsage = digitalSignature,keyAgreement" -addext "extendedKeyUsage = serverAuth, clientAuth" -addext "subjectAltName = DNS:ssl.test.local, DNS:localhost, IP:127.0.0.1, IP:$VM_IP"

@@ -90,11 +90,17 @@ echo "Installing apigeecli"
 curl -s https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.sh | bash
 export PATH=$PATH:$HOME/.apigeecli/bin
 
+# Determine sed in-place arguments for portability (macOS vs Linux)
+sedi_args=("-i")
+if [[ "$(uname)" == "Darwin" ]]; then
+  sedi_args=("-i" "") # For macOS, sed -i requires an extension argument. "" means no backup.
+fi
+
 echo "Registering APIs in Apigee API hub"
 cp -rf config tmp/
-sed -i '' "s/APIGEE_HOST/$APIGEE_HOST/g" tmp/*/*.yaml
-sed -i '' "s/APIGEE_APIHUB_PROJECT_ID/$APIGEE_APIHUB_PROJECT_ID/g" tmp/*/*.json
-sed -i '' "s/APIGEE_APIHUB_REGION/$APIGEE_APIHUB_REGION/g" tmp/*/*.json
+sed "${sedi_args[@]}" "s/APIGEE_HOST/$APIGEE_HOST/g" tmp/*/*.yaml
+sed "${sedi_args[@]}" "s/APIGEE_APIHUB_PROJECT_ID/$APIGEE_APIHUB_PROJECT_ID/g" tmp/*/*.json
+sed "${sedi_args[@]}" "s/APIGEE_APIHUB_REGION/$APIGEE_APIHUB_REGION/g" tmp/*/*.json
 
 add_api_to_hub "claims"
 add_api_to_hub "members"
