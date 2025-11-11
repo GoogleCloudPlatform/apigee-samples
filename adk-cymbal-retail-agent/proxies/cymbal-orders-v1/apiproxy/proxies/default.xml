@@ -38,7 +38,7 @@
         </Step>
       </Request>
       <Response/>
-      <Condition>(proxy.pathsuffix MatchesPath "/") and (request.verb = "GET")</Condition>
+      <Condition>((request.path MatchesPath "/v1/samples/adk-cymbal-retail/orders" or request.path MatchesPath "/v1/samples/adk-cymbal-retail/orders/")) and (request.verb = "GET")</Condition>
     </Flow>
     <Flow name="createOrder">
       <Description>Creates a new order.</Description>

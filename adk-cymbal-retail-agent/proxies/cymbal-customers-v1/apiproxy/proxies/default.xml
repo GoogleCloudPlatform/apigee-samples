@@ -38,7 +38,7 @@
         </Step>
       </Request>
       <Response/>
-      <Condition>(proxy.pathsuffix MatchesPath "/") and (request.verb = "GET")</Condition>
+      <Condition>((request.path MatchesPath "/v1/samples/adk-cymbal-retail/customers" or request.path MatchesPath "/v1/samples/adk-cymbal-retail/customers/")) and (request.verb = "GET")</Condition>
     </Flow>
     <Flow name="createCustomer">
       <Description>Creates a new customer.</Description>

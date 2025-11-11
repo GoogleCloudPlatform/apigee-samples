@@ -38,7 +38,7 @@
         </Step>
       </Request>
       <Response/>
-      <Condition>(proxy.pathsuffix MatchesPath "/") and (request.verb = "GET")</Condition>
+      <Condition>((request.path MatchesPath "/v1/samples/adk-cymbal-retail/returns" or request.path MatchesPath "/v1/samples/adk-cymbal-retail/returns/")) and (request.verb = "GET")</Condition>
     </Flow>
     <Flow name="createReturn">
       <Description>Creates a new return.</Description>
