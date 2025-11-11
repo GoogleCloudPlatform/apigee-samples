@@ -80,7 +80,7 @@ curl -X POST "https://discoveryengine.googleapis.com/v1alpha/projects/${PROJECT_
 EOF
 ```
 6. You can now login to Gemini Enterprise on GCP console, and then access the `gemini-enterprise` App page. Click the "Agents" on the left menu bar to see the `Cymbal Retail Agent` in the list
-7. Go back to the Apps page and click the `Preview` to open a pop up page
+7. Go back to the Apps page and click the `Preview` to open a pop up page.
 8. In the pop up page, click `Agent` and select `Cymbal Retail Agent`
 9. Then start interacting with the agent in the preview mode.
 10. To publish this, you will need to configure "Workforce Identity" and select "Use Google Identity".
