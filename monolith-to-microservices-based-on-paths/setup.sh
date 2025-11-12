@@ -34,18 +34,21 @@ if [ -z "$LEGACY_PATH" ]; then
   exit
 fi
 
-
+# Determine sed in-place arguments for portability (macOS vs Linux)
+sedi_args=("-i")
+if [[ "$(uname)" == "Darwin" ]]; then
+  sedi_args=("-i" "") # For macOS, sed -i requires an extension argument. "" means no backup.
+fi
 
 TOKEN=$(gcloud auth print-access-token)
-
 
 echo "Installing apigeecli"
 curl -s https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.sh | bash
 export PATH=$PATH:$HOME/.apigeecli/bin
 
 echo "Updating Target URLs..."
-sed -i "s|LEGACY_PATH|${LEGACY_PATH}|g" ./apiproxy/targets/Monolith.xml
-sed -i "s|MICROSERVICE_PATH|${MICROSERVICE_PATH}|g" ./apiproxy/targets/Microservice.xml
+sed "${sedi_args[@]}" "s|LEGACY_PATH|${LEGACY_PATH}|g" ./apiproxy/targets/Monolith.xml
+sed "${sedi_args[@]}" "s|MICROSERVICE_PATH|${MICROSERVICE_PATH}|g" ./apiproxy/targets/Microservice.xml
 
 
 echo "Deploying Apigee artifacts..."

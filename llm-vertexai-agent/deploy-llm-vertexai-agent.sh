@@ -33,6 +33,12 @@ if [ -z "$TOKEN" ]; then
   TOKEN=$(gcloud auth print-access-token)
 fi
 
+# Determine sed in-place arguments for portability (macOS vs Linux)
+sedi_args=("-i")
+if [[ "$(uname)" == "Darwin" ]]; then
+  sedi_args=("-i" "") # For macOS, sed -i requires an extension argument. "" means no backup.
+fi
+
 gcloud services enable aiplatform.googleapis.com dialogflow.googleapis.com --project "$PROJECT_ID"
 
 echo "Installing apigeecli"
@@ -40,14 +46,14 @@ curl -s https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.s
 export PATH=$PATH:$HOME/.apigeecli/bin
 
 echo "Deploying the Proxy"
-sed -i "s/HOST/$APIGEE_HOST/g" apiproxy/resources/oas/spec.yaml
+sed "${sedi_args[@]}" "s/HOST/$APIGEE_HOST/g" apiproxy/resources/oas/spec.yaml
 
 apigeecli apis create bundle -n llm-vertexai-agent-v1 \
   -f apiproxy -e "$APIGEE_ENV" \
   --token "$TOKEN" -o "$PROJECT_ID" \
   --ovr --wait
 
-sed -i "s/$APIGEE_HOST/HOST/g" apiproxy/resources/oas/spec.yaml
+sed "${sedi_args[@]}" "s/$APIGEE_HOST/HOST/g" apiproxy/resources/oas/spec.yaml
 
 echo "Creating API Products"
 apigeecli products create --name "llm-vertexai-agent-product" --display-name "llm-vertexai-agent-product" \

@@ -44,6 +44,12 @@ if [ -z "$MODEL_ARMOR_TEMPLATE_ID" ]; then
   exit
 fi
 
+# Determine sed in-place arguments for portability (macOS vs Linux)
+sedi_args=("-i")
+if [[ "$(uname)" == "Darwin" ]]; then
+  sedi_args=("-i" "") # For macOS, sed -i requires an extension argument. "" means no backup.
+fi
+
 add_role_to_service_account() {
   local role=$1
   gcloud projects add-iam-policy-binding "$PROJECT_ID" \
@@ -80,9 +86,9 @@ export PATH=$PATH:$HOME/.apigeecli/bin
 
 echo "Importing KVMs to Apigee environment"
 cp config/env__envname__model-armor-config-v2__kvmfile__0.json config/env__"${APIGEE_ENV}"__model-armor-config-v2__kvmfile__0.json
-sed -i "s/PROJECT_ID/$PROJECT_ID/g" config/env__"${APIGEE_ENV}"__model-armor-config-v2__kvmfile__0.json
-sed -i "s/MODEL_ARMOR_REGION/$MODEL_ARMOR_REGION/g" config/env__"${APIGEE_ENV}"__model-armor-config-v2__kvmfile__0.json
-sed -i "s/MODEL_ARMOR_TEMPLATE_ID/$MODEL_ARMOR_TEMPLATE_ID/g" config/env__"${APIGEE_ENV}"__model-armor-config-v2__kvmfile__0.json
+sed "${sedi_args[@]}" "s/PROJECT_ID/$PROJECT_ID/g" config/env__"${APIGEE_ENV}"__model-armor-config-v2__kvmfile__0.json
+sed "${sedi_args[@]}" "s/MODEL_ARMOR_REGION/$MODEL_ARMOR_REGION/g" config/env__"${APIGEE_ENV}"__model-armor-config-v2__kvmfile__0.json
+sed "${sedi_args[@]}" "s/MODEL_ARMOR_TEMPLATE_ID/$MODEL_ARMOR_TEMPLATE_ID/g" config/env__"${APIGEE_ENV}"__model-armor-config-v2__kvmfile__0.json
 
 apigeecli kvms import -f config/env__"${APIGEE_ENV}"__model-armor-config-v2__kvmfile__0.json --org "$PROJECT_ID" --token "$TOKEN"
 
@@ -92,7 +98,7 @@ rm config/env__"${APIGEE_ENV}"__model-armor-config-v2__kvmfile__0.json
 import_and_deploy_sharedflow "ModelArmor-v2"
 
 echo "Deploying the Proxy"
-sed -i "s/HOST/$APIGEE_HOST/g" apiproxy/resources/oas/spec.yaml
+sed "${sedi_args[@]}" "s/HOST/$APIGEE_HOST/g" apiproxy/resources/oas/spec.yaml
 
 apigeecli apis create bundle -n llm-security-v2 \
   -f apiproxy -e "$APIGEE_ENV" \
@@ -100,7 +106,7 @@ apigeecli apis create bundle -n llm-security-v2 \
   -s "${SERVICE_ACCOUNT_NAME}@${PROJECT_ID}.iam.gserviceaccount.com" \
   --ovr --wait
 
-sed -i "s/$APIGEE_HOST/HOST/g" apiproxy/resources/oas/spec.yaml
+sed "${sedi_args[@]}" "s/$APIGEE_HOST/HOST/g" apiproxy/resources/oas/spec.yaml
 
 echo "Creating API Products"
 apigeecli products create --name "llm-security-product-v2" --display-name "llm-security-product-v2" \
