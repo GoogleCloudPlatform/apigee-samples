@@ -78,6 +78,7 @@ echo "$PRE_PROP" > ./apiproxy/resources/properties/vertex_config.properties
 
 echo "Creating Service Account and assigning permissions"
 gcloud iam service-accounts create "$SERVICE_ACCOUNT_NAME" --project "$PROJECT_ID"
+sleep 10
 
 add_role_to_service_account "roles/apigee.analyticsEditor"
 add_role_to_service_account "roles/logging.logWriter"
