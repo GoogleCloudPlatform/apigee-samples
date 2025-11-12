@@ -29,6 +29,12 @@ if [ -z "$APIGEE_HOST" ]; then
   exit
 fi
 
+# Determine sed in-place arguments for portability (macOS vs Linux)
+sedi_args=("-i")
+if [[ "$(uname)" == "Darwin" ]]; then
+  sedi_args=("-i" "") # For macOS, sed -i requires an extension argument. "" means no backup.
+fi
+
 echo "Passed variable tests"
 
 TOKEN=$(gcloud auth print-access-token)
@@ -47,7 +53,7 @@ echo "Creating API Product"
 apigeecli products create --name sample-drupal-developer-portal-product --display-name "sample-drupal-developer-portal-product" --opgrp ./drupal-developer-portal-product-ops.json --envs "$APIGEE_ENV" --approval auto --quota 10 --interval 1 --unit minute --org "$PROJECT" --token "$TOKEN"
 
 echo "Updating OpenAPI YAML"
-sed -i "s/\[APIGEE_HOST\]/$APIGEE_HOST/" drupal-developer-portal.yaml
+sed "${sedi_args[@]}" "s/\[APIGEE_HOST\]/$APIGEE_HOST/" drupal-developer-portal.yaml
 
 # var is expected by integration test (apickli)
 export PROXY_URL="$APIGEE_HOST/v1/samples/drupal-developer-portal"

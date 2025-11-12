@@ -42,8 +42,14 @@ fi
 echo "Replacing placeholders in $TEMPLATE_FILE..."
 cp $TEMPLATE_FILE $TEMP_OUTPUT_FILE
 
+# Determine sed in-place arguments for portability (macOS vs Linux)
+sedi_args=("-i")
+if [[ "$(uname)" == "Darwin" ]]; then
+  sedi_args=("-i" "") # For macOS, sed -i requires an extension argument. "" means no backup.
+fi
+
 # Replace placeholders. We need to escape the $ in the search pattern.
-sed -i \
+sed "${sedi_args[@]}" \
   -e "s/\\\$PROJECT_ID\\\$/${PROJECT_ID}/g" \
   -e "s/\\\$LOCATION_ID\\\$/${REGION}/g" \
   -e "s/\\\$INTEGRATION_NAME\\\$/${INTEGRATION_NAME}/g" \

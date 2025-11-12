@@ -33,6 +33,12 @@ if [ -z "$TOKEN" ]; then
   TOKEN=$(gcloud auth print-access-token)
 fi
 
+# Determine sed in-place arguments for portability (macOS vs Linux)
+sedi_args=("-i")
+if [[ "$(uname)" == "Darwin" ]]; then
+  sedi_args=("-i" "") # For macOS, sed -i requires an extension argument. "" means no backup.
+fi
+
 echo "Installing apigeecli"
 curl -s https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.sh | bash
 export PATH=$PATH:$HOME/.apigeecli/bin
@@ -48,21 +54,21 @@ INDEX_ID_NAME=semantic_cache_index_endpoint_deployment
 mkdir ./tmp
 cp -r apiproxy ./tmp/.
 
-sed -i "s/REGION/$REGION/g" ./tmp/apiproxy/targets/default.xml
+sed "${sedi_args[@]}" "s/REGION/$REGION/g" ./tmp/apiproxy/targets/default.xml
 
-sed -i "s/PROJECT_ID/$PROJECT/g" ./tmp/apiproxy/policies/SCL-Semantic-Cache-Lookup.xml
-sed -i "s/PROJECT_NUMBER/$PROJECT_NUMBER/g" ./tmp/apiproxy/policies/SCL-Semantic-Cache-Lookup.xml
-sed -i "s/REGION/$REGION/g" ./tmp/apiproxy/policies/SCL-Semantic-Cache-Lookup.xml
-sed -i "s/EMBEDDINGS_MODEL_ID/$EMBEDDINGS_MODEL_ID/g" ./tmp/apiproxy/policies/SCL-Semantic-Cache-Lookup.xml
-sed -i "s/PUBLIC_ENDPOINT_SUBDOMAIN/$PUBLIC_ENDPOINT_SUBDOMAIN/g" ./tmp/apiproxy/policies/SCL-Semantic-Cache-Lookup.xml
-sed -i "s/INDEX_ENDPOINT_ID/$INDEX_ENDPOINT_ID/g" ./tmp/apiproxy/policies/SCL-Semantic-Cache-Lookup.xml
-sed -i "s/INDEX_ID_NAME/$INDEX_ID_NAME/g" ./tmp/apiproxy/policies/SCL-Semantic-Cache-Lookup.xml
-sed -i "s/NEAREST_NEIGHBOR_DISTANCE/$NEAREST_NEIGHBOR_DISTANCE/g" ./tmp/apiproxy/policies/SCL-Semantic-Cache-Lookup.xml
+sed "${sedi_args[@]}" "s/PROJECT_ID/$PROJECT/g" ./tmp/apiproxy/policies/SCL-Semantic-Cache-Lookup.xml
+sed "${sedi_args[@]}" "s/PROJECT_NUMBER/$PROJECT_NUMBER/g" ./tmp/apiproxy/policies/SCL-Semantic-Cache-Lookup.xml
+sed "${sedi_args[@]}" "s/REGION/$REGION/g" ./tmp/apiproxy/policies/SCL-Semantic-Cache-Lookup.xml
+sed "${sedi_args[@]}" "s/EMBEDDINGS_MODEL_ID/$EMBEDDINGS_MODEL_ID/g" ./tmp/apiproxy/policies/SCL-Semantic-Cache-Lookup.xml
+sed "${sedi_args[@]}" "s/PUBLIC_ENDPOINT_SUBDOMAIN/$PUBLIC_ENDPOINT_SUBDOMAIN/g" ./tmp/apiproxy/policies/SCL-Semantic-Cache-Lookup.xml
+sed "${sedi_args[@]}" "s/INDEX_ENDPOINT_ID/$INDEX_ENDPOINT_ID/g" ./tmp/apiproxy/policies/SCL-Semantic-Cache-Lookup.xml
+sed "${sedi_args[@]}" "s/INDEX_ID_NAME/$INDEX_ID_NAME/g" ./tmp/apiproxy/policies/SCL-Semantic-Cache-Lookup.xml
+sed "${sedi_args[@]}" "s/NEAREST_NEIGHBOR_DISTANCE/$NEAREST_NEIGHBOR_DISTANCE/g" ./tmp/apiproxy/policies/SCL-Semantic-Cache-Lookup.xml
 
-sed -i "s/REGION/$REGION/g" ./tmp/apiproxy/policies/SCP-Semantic-Cache-Populate.xml
-sed -i "s/PROJECT_NUMBER/$PROJECT_NUMBER/g" ./tmp/apiproxy/policies/SCP-Semantic-Cache-Populate.xml
-sed -i "s/INDEX_ID/$INDEX_ID/g" ./tmp/apiproxy/policies/SCP-Semantic-Cache-Populate.xml
-sed -i "s/CACHE_ENTRY_TTL_SEC/$CACHE_ENTRY_TTL_SEC/g" ./tmp/apiproxy/policies/SCP-Semantic-Cache-Populate.xml
+sed "${sedi_args[@]}" "s/REGION/$REGION/g" ./tmp/apiproxy/policies/SCP-Semantic-Cache-Populate.xml
+sed "${sedi_args[@]}" "s/PROJECT_NUMBER/$PROJECT_NUMBER/g" ./tmp/apiproxy/policies/SCP-Semantic-Cache-Populate.xml
+sed "${sedi_args[@]}" "s/INDEX_ID/$INDEX_ID/g" ./tmp/apiproxy/policies/SCP-Semantic-Cache-Populate.xml
+sed "${sedi_args[@]}" "s/CACHE_ENTRY_TTL_SEC/$CACHE_ENTRY_TTL_SEC/g" ./tmp/apiproxy/policies/SCP-Semantic-Cache-Populate.xml
 
 echo "Deploying Apigee artifacts..."
 
@@ -74,9 +80,9 @@ FIND_NEIGHBORS_URL="https:\/\/$PUBLIC_ENDPOINT_SUBDOMAIN.$REGION-$PROJECT_NUMBER
 REMOVE_DATAPOINTS_URL="https:\/\/$REGION-aiplatform.googleapis.com\/v1\/projects\/$PROJECT_NUMBER\/locations\/$REGION\/indexes\/$INDEX_ID:removeDatapoints"
 SERVICE_ACCOUNT_ID="ai-client@$PROJECT.iam.gserviceaccount.com"
 
-sed -i "s/FIND_NEIGHBORS_URL/$FIND_NEIGHBORS_URL/g" ./cleanup-semantic-cache-v1/dev/overrides/overrides.json
-sed -i "s/REMOVE_DATAPOINTS_URL/$REMOVE_DATAPOINTS_URL/g" ./cleanup-semantic-cache-v1/dev/overrides/overrides.json
-sed -i "s/SERVICE_ACCOUNT_ID/$SERVICE_ACCOUNT_ID/g" ./cleanup-semantic-cache-v1/dev/authconfigs/ai-client.json
+sed "${sedi_args[@]}" "s/FIND_NEIGHBORS_URL/$FIND_NEIGHBORS_URL/g" ./cleanup-semantic-cache-v1/dev/overrides/overrides.json
+sed "${sedi_args[@]}" "s/REMOVE_DATAPOINTS_URL/$REMOVE_DATAPOINTS_URL/g" ./cleanup-semantic-cache-v1/dev/overrides/overrides.json
+sed "${sedi_args[@]}" "s/SERVICE_ACCOUNT_ID/$SERVICE_ACCOUNT_ID/g" ./cleanup-semantic-cache-v1/dev/authconfigs/ai-client.json
 
 echo "Provisioning Application Integration ..."
 curl --request POST \

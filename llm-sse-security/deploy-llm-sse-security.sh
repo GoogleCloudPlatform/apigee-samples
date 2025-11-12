@@ -44,6 +44,12 @@ if [ -z "$MODEL_ARMOR_TEMPLATE_ID" ]; then
   exit
 fi
 
+# Determine sed in-place arguments for portability (macOS vs Linux)
+sedi_args=("-i")
+if [[ "$(uname)" == "Darwin" ]]; then
+  sedi_args=("-i" "") # For macOS, sed -i requires an extension argument. "" means no backup.
+fi
+
 add_role_to_service_account() {
   local role=$1
   gcloud projects add-iam-policy-binding "$PROJECT_ID" \
@@ -70,9 +76,9 @@ export PATH=$PATH:$HOME/.apigeecli/bin
 
 echo "Importing KVMs to Apigee environment"
 cp config/env__envname__llm-sse-security-config__kvmfile__0.json config/env__"${APIGEE_ENV}"__llm-sse-security-config__kvmfile__0.json
-sed -i "s/PROJECT_ID/$PROJECT_ID/g" config/env__"${APIGEE_ENV}"__llm-sse-security-config__kvmfile__0.json
-sed -i "s/MODEL_ARMOR_REGION/$MODEL_ARMOR_REGION/g" config/env__"${APIGEE_ENV}"__llm-sse-security-config__kvmfile__0.json
-sed -i "s/MODEL_ARMOR_TEMPLATE_ID/$MODEL_ARMOR_TEMPLATE_ID/g" config/env__"${APIGEE_ENV}"__llm-sse-security-config__kvmfile__0.json
+sed "${sedi_args[@]}" "s/PROJECT_ID/$PROJECT_ID/g" config/env__"${APIGEE_ENV}"__llm-sse-security-config__kvmfile__0.json
+sed "${sedi_args[@]}" "s/MODEL_ARMOR_REGION/$MODEL_ARMOR_REGION/g" config/env__"${APIGEE_ENV}"__llm-sse-security-config__kvmfile__0.json
+sed "${sedi_args[@]}" "s/MODEL_ARMOR_TEMPLATE_ID/$MODEL_ARMOR_TEMPLATE_ID/g" config/env__"${APIGEE_ENV}"__llm-sse-security-config__kvmfile__0.json
 
 apigeecli kvms import -f config/env__"${APIGEE_ENV}"__llm-sse-security-config__kvmfile__0.json --org "$PROJECT_ID" --token "$TOKEN"
 

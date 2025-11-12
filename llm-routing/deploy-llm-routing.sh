@@ -65,6 +65,12 @@ add_role_to_service_account() {
     --role="$role"
 }
 
+# Determine sed in-place arguments for portability (macOS vs Linux)
+sedi_args=("-i")
+if [[ "$(uname)" == "Darwin" ]]; then
+  sedi_args=("-i" "") # For macOS, sed -i requires an extension argument. "" means no backup.
+fi
+
 echo "Creating Service Account and assigning permissions"
 gcloud iam service-accounts create "$SERVICE_ACCOUNT_NAME" --project "$PROJECT_ID"
 
@@ -77,10 +83,10 @@ gcloud services enable aiplatform.googleapis.com --project "$PROJECT_ID"
 
 echo "Updating KVM configurations"
 cp config/env__envname__llm-routing-v1-modelprovider-config__kvmfile__0.json config/env__"${APIGEE_ENV}"__llm-routing-v1-modelprovider-config__kvmfile__0.json
-sed -i "s/MISTRAL_TOKEN/$MISTRAL_TOKEN/g" config/env__"${APIGEE_ENV}"__llm-routing-v1-modelprovider-config__kvmfile__0.json
-sed -i "s/HUGGINGFACE_TOKEN/$HUGGINGFACE_TOKEN/g" config/env__"${APIGEE_ENV}"__llm-routing-v1-modelprovider-config__kvmfile__0.json
-sed -i "s/VERTEXAI_REGION/$VERTEXAI_REGION/g" config/env__"${APIGEE_ENV}"__llm-routing-v1-modelprovider-config__kvmfile__0.json
-sed -i "s/VERTEXAI_PROJECT_ID/$VERTEXAI_PROJECT_ID/g" config/env__"${APIGEE_ENV}"__llm-routing-v1-modelprovider-config__kvmfile__0.json
+sed "${sedi_args[@]}" "s/MISTRAL_TOKEN/$MISTRAL_TOKEN/g" config/env__"${APIGEE_ENV}"__llm-routing-v1-modelprovider-config__kvmfile__0.json
+sed "${sedi_args[@]}" "s/HUGGINGFACE_TOKEN/$HUGGINGFACE_TOKEN/g" config/env__"${APIGEE_ENV}"__llm-routing-v1-modelprovider-config__kvmfile__0.json
+sed "${sedi_args[@]}" "s/VERTEXAI_REGION/$VERTEXAI_REGION/g" config/env__"${APIGEE_ENV}"__llm-routing-v1-modelprovider-config__kvmfile__0.json
+sed "${sedi_args[@]}" "s/VERTEXAI_PROJECT_ID/$VERTEXAI_PROJECT_ID/g" config/env__"${APIGEE_ENV}"__llm-routing-v1-modelprovider-config__kvmfile__0.json
 
 
 echo "Installing apigeecli"
@@ -92,7 +98,7 @@ apigeecli kvms import -f config/env__"${APIGEE_ENV}"__llm-routing-v1-modelprovid
 rm config/env__"${APIGEE_ENV}"__llm-routing-v1-modelprovider-config__kvmfile__0.json
 
 echo "Deploying the Proxy"
-sed -i "s/HOST/$APIGEE_HOST/g" apiproxy/resources/oas/spec.yaml
+sed "${sedi_args[@]}" "s/HOST/$APIGEE_HOST/g" apiproxy/resources/oas/spec.yaml
 
 apigeecli apis create bundle -n llm-routing-v1 \
   -f apiproxy -e "$APIGEE_ENV" \
@@ -100,7 +106,7 @@ apigeecli apis create bundle -n llm-routing-v1 \
   -s "${SERVICE_ACCOUNT_NAME}@${PROJECT_ID}.iam.gserviceaccount.com" \
   --ovr --wait
 
-sed -i "s/$APIGEE_HOST/HOST/g" apiproxy/resources/oas/spec.yaml
+sed "${sedi_args[@]}" "s/$APIGEE_HOST/HOST/g" apiproxy/resources/oas/spec.yaml
 
 echo "Creating API Products"
 apigeecli products create --name "llm-routing-product" --display-name "llm-routing-product" \

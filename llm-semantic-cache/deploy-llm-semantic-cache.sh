@@ -33,6 +33,12 @@ if [ -z "$TOKEN" ]; then
   TOKEN=$(gcloud auth print-access-token)
 fi
 
+# Determine sed in-place arguments for portability (macOS vs Linux)
+sedi_args=("-i")
+if [[ "$(uname)" == "Darwin" ]]; then
+  sedi_args=("-i" "") # For macOS, sed -i requires an extension argument. "" means no backup.
+fi
+
 echo "Installing apigeecli"
 curl -s https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.sh | bash
 export PATH=$PATH:$HOME/.apigeecli/bin
@@ -76,9 +82,9 @@ FIND_NEIGHBORS_URL="https:\/\/$PUBLIC_ENDPOINT_SUBDOMAIN.$REGION-$PROJECT_NUMBER
 REMOVE_DATAPOINTS_URL="https:\/\/$REGION-aiplatform.googleapis.com\/v1\/projects\/$PROJECT_NUMBER\/locations\/$REGION\/indexes\/$INDEX_ID:removeDatapoints"
 SERVICE_ACCOUNT_ID="ai-client@$PROJECT.iam.gserviceaccount.com"
 
-sed -i "s/FIND_NEIGHBORS_URL/$FIND_NEIGHBORS_URL/g" ./cleanup-semantic-cache-v1/dev/overrides/overrides.json
-sed -i "s/REMOVE_DATAPOINTS_URL/$REMOVE_DATAPOINTS_URL/g" ./cleanup-semantic-cache-v1/dev/overrides/overrides.json
-sed -i "s/SERVICE_ACCOUNT_ID/$SERVICE_ACCOUNT_ID/g" ./cleanup-semantic-cache-v1/dev/authconfigs/ai-client.json
+sed "${sedi_args[@]}" "s/FIND_NEIGHBORS_URL/$FIND_NEIGHBORS_URL/g" ./cleanup-semantic-cache-v1/dev/overrides/overrides.json
+sed "${sedi_args[@]}" "s/REMOVE_DATAPOINTS_URL/$REMOVE_DATAPOINTS_URL/g" ./cleanup-semantic-cache-v1/dev/overrides/overrides.json
+sed "${sedi_args[@]}" "s/SERVICE_ACCOUNT_ID/$SERVICE_ACCOUNT_ID/g" ./cleanup-semantic-cache-v1/dev/authconfigs/ai-client.json
 
 echo "Provisioning Application Integration ..."
 curl --request POST \
