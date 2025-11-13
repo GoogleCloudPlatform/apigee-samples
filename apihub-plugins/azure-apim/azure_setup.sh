@@ -30,8 +30,8 @@ if [ -z "$AZURE_APP_NAME" ]; then
   exit
 fi
 
-if [ -z "$AZURE_APIM_INSTANCE_NAME" ]; then
-  echo "No AZURE_APIM_INSTANCE_NAME variable set"
+if [ -z "$AZURE_APIM_RESOURCE_NAME" ]; then
+  echo "No AZURE_APIM_RESOURCE_NAME variable set"
   exit
 fi
 
@@ -72,11 +72,11 @@ if [ -z "$AZURE_CLIENT_SECRET" ] || [ "$AZURE_CLIENT_SECRET" == "null" ]; then
   exit 1
 fi
 
-echo "Granting Reader role to the App on APIM instance $AZURE_APIM_INSTANCE_NAME..."
-APIM_RESOURCE_ID=$(az apim show --name "$AZURE_APIM_INSTANCE_NAME" --resource-group "$AZURE_RESOURCE_GROUP" --query id -o tsv)
+echo "Granting Reader role to the App on APIM instance $AZURE_APIM_RESOURCE_NAME..."
+APIM_RESOURCE_ID=$(az apim show --name "$AZURE_APIM_RESOURCE_NAME" --resource-group "$AZURE_RESOURCE_GROUP" --query id -o tsv)
 
 if [ -z "$APIM_RESOURCE_ID" ]; then
-    echo "Error: Could not find APIM instance $AZURE_APIM_INSTANCE_NAME in resource group $AZURE_RESOURCE_GROUP."
+    echo "Error: Could not find APIM instance $AZURE_APIM_RESOURCE_NAME in resource group $AZURE_RESOURCE_GROUP."
     exit 1
 fi
 

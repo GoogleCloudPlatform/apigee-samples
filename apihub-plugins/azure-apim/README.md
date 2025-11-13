@@ -7,14 +7,25 @@ This sample provides an Application Integration template and scripts to synchron
 1.  **Azure:**
     *   An Azure Subscription with an active API Management instance.
     *   Azure CLI (`az`) installed and authenticated. You can install it from [here](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli).
+    *   **Roles:** The user account or service principal used for `az login` needs sufficient permissions in Azure to:
+        *   Create and manage Azure Active Directory Applications and Service Principals (e.g., `Application Administrator` role).
+        *   Read your API Management instance.
+        *   Assign the "Reader" role on the API Management instance to the created Service Principal (e.g., `Owner` or `Contributor` on the Resource Group or Subscription).
+
 2.  **Google Cloud:**
     *   A Google Cloud Project with API Hub provisioned. See [Provision API Hub](https://cloud.google.com/apigee/docs/apihub/provision).
     *   Google Cloud SDK (`gcloud`) installed and authenticated. You can install it from [here](https://cloud.google.com/sdk/docs/install).
     *   The following Google Cloud APIs Enabled in your project:
         *   `apihub.googleapis.com` (API Hub API)
         *   `integrations.googleapis.com` (Application Integration API)
-        *   `secretmanager.googleapis.com` (Secret Manager API)
-            You can enable these using the `gcp_setup.sh` script or manually in the Cloud Console.
+        *   Alternatively, you can enable these using the `gcp_setup.sh` script or manually in the Cloud Console.
+    *   **Roles:** The user account running the `gcp_setup.sh`, `deploy_integration.sh`, and `execute_integration.sh` scripts needs the following IAM roles in the GCP project:
+        *   `API Hub Admin` (`roles/apihub.admin`)
+        *   `Application Integration Admin` (`roles/integrations.admin`)
+        *   `Service Account Admin` (`roles/iam.serviceAccountAdmin`)
+        *   `Service Usage Admin` (`roles/serviceusage.serviceUsageAdmin`)
+        *   `Project IAM Admin` (`roles/resourcemanager.projectIamAdmin`) (or at least permissions to set project IAM policies)
+        *   Alternatively, the `Owner` role (`roles/owner`) on the project includes all these permissions.
 3.  **Tools:**
     *   `jq`: A lightweight and flexible command-line JSON processor. Install it from [here](https://stedolan.github.io/jq/download/).
     *   `curl`: A command-line tool for transferring data with URLs.
