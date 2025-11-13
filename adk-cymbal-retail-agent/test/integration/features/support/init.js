@@ -38,6 +38,7 @@ if (!process.env.APIGEE_HOST || !process.env.APIKEY) {
     );
 
     this.apickli.setGlobalVariable("apikey", process.env.APIKEY);
+    this.apickli.setGlobalVariable("app-default-token", process.env.APP_DEFAULT_TOKEN);
 
   });
 }
