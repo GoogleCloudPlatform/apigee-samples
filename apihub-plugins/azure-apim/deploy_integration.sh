@@ -47,10 +47,11 @@ sed -i \
   -e "s/\\\$PROJECT_ID\\\$/${PROJECT_ID}/g" \
   -e "s/\\\$LOCATION_ID\\\$/${REGION}/g" \
   -e "s/\\\$INTEGRATION_NAME\\\$/${INTEGRATION_NAME}/g" \
+  -e "s/\\\$AUTH_CONFIG_NAME\\\$/${AUTH_CONFIG_NAME}/g" \
   $TEMP_OUTPUT_FILE
 
 echo "Checking for any remaining placeholders..."
-if grep -E "\$(PROJECT_ID|LOCATION_ID|INTEGRATION_NAME)\$" $TEMP_OUTPUT_FILE; then
+if grep -E "\$(PROJECT_ID|LOCATION_ID|INTEGRATION_NAME|AUTH_CONFIG_NAME)\$" $TEMP_OUTPUT_FILE; then
    echo "Warning: Some placeholders were NOT replaced! Check the lines above."
    exit 1
 else
