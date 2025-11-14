@@ -27,6 +27,4 @@ export HF_TOKEN="HF_TOKEN_TO_SET"
 export RELEASE=v1.0.0-rc.2 #k8s CRDs
 export STABLE_MODEL_RELEASE=v0.3.0 #model server
 
-export TOKEN=$(gcloud auth print-access-token)
-
 gcloud config set project "$PROJECT_ID"

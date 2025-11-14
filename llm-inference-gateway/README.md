@@ -24,7 +24,7 @@ The flow is as follows:
 2. Configure [external access](https://cloud.google.com/apigee/docs/api-platform/get-started/configure-routing#external-access) for API traffic to your Apigee X instance
 3. Enable Google Kubernetes Engine API, Vertex AI API in your project
 4. Will require roles to create GKE cluster, Load Balancer, PSC NEGs and create/deploy Apigee resources like proxies, environments, environment groups, etc. For more info, check out this [doc](https://docs.cloud.google.com/apigee/docs/api-platform/apigee-kubernetes/apigee-apim-operator-install#required-roles)
-5. Will need a HuggingFace Token. You can signup for an account at https://huggingface.co and create an Access Token
+5. Will need a HuggingFace Token. You can sign up for an account at https://huggingface.co and create an Access Token
 6. Make sure the following tools are available in your terminal's $PATH (Cloud Shell has these preconfigured)
     - [gcloud SDK](https://cloud.google.com/sdk/docs/install)
     - [helm](https://helm.sh/docs/intro/install/)
