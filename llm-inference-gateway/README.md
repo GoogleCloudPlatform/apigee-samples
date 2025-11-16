@@ -84,29 +84,32 @@ The flow is as follows:
     ```sh
     kubectl apply -f https://github.com/kubernetes-sigs/gateway-api-inference-extension/raw/$RELEASE/config/manifests/inferenceobjective.yaml
     ```
-10. Deploy HTTPRoute
-    ```sh
-    kubectl apply -f https://github.com/kubernetes-sigs/gateway-api-inference-extension/raw/$RELEASE/config/manifests/gateway/gke/httproute.yaml
-    ```
-11. Confirm that the HTTPRoute status conditions include `Accepted=True` and `ResolvedRefs=True`
-    ```sh
-    kubectl wait httproute/llm-route \
-    --for=jsonpath='{.status.parents[0].conditions[?(@.type=="Accepted")].status}'=True \
-    --for=jsonpath='{.status.parents[0].conditions[?(@.type=="ResolvedRefs")].status}'=True \
-    --timeout=5m
-    ```
-12. Deploy Gateway
+10. Deploy Gateway
     ```sh
     kubectl apply -f https://github.com/kubernetes-sigs/gateway-api-inference-extension/raw/$RELEASE/config/manifests/gateway/gke/gateway.yaml
     ```
-13. Confirm that the Gateway was assigned an IP address and reports a `Programmed=True` status
+11. Confirm that the Gateway was assigned an IP address and reports a `Programmed=True` status
     ```sh
     kubectl wait gateway/inference-gateway \
     --for=jsonpath='{.status.addresses[0].value}' \
     --for=condition=Programmed \
     --timeout=5m
     ```
-14. Send a Request to Model Backend to Verify Inference Gateway
+12. Deploy HTTPRoute (NOTE: This can take a few minutes)
+    ```sh
+    kubectl apply -f https://github.com/kubernetes-sigs/gateway-api-inference-extension/raw/$RELEASE/config/manifests/gateway/gke/httproute.yaml
+    ```
+13. Confirm that the HTTPRoute status conditions include `Accepted=True` and `ResolvedRefs=True`
+    ```sh
+    kubectl wait httproute/llm-route \
+    --for=jsonpath='{.status.parents[0].conditions[?(@.type=="Accepted")].status}'=True \
+    --for=jsonpath='{.status.parents[0].conditions[?(@.type=="ResolvedRefs")].status}'=True \
+    --timeout=5m
+    ```
+14. Send a Request to Model Backend to Verify Inference Gateway.
+    
+    NOTE: This may take a few minutes. So please try a few times initially
+    
     ```sh
     IP=$(kubectl get gateway/inference-gateway -o jsonpath='{.status.addresses[0].value}')
     PORT=80
