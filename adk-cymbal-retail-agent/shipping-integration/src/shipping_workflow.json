@@ -47,15 +47,15 @@
 			"displayName": "Data Prep - Shipping company",
 			"nextTasks": [
 				{
-					"taskId": "17",
-					"displayName": "Shipping Company A"
+					"taskId": "21",
+					"displayName": "Shipping Company C"
 				},
 				{
-					"taskId": "19",
+					"taskId": "22",
 					"displayName": "Shipping Company B"
 				},
 				{
-					"taskId": "20",
+					"taskId": "23",
 					"displayName": "Shipping Company C"
 				}
 			],
@@ -244,53 +244,131 @@
 			"externalTaskType": "NORMAL_TASK"
 		},
 		{
-			"task": "GenericConnectorTask",
-			"taskId": "17",
+			"task": "GenericRestV2Task",
+			"taskId": "21",
 			"parameters": {
-				"actionName": {
-					"key": "actionName",
+				"additionalHeaders": {
+					"key": "additionalHeaders",
+					"value": {}
+				},
+				"authConfigName": {
+					"key": "authConfigName",
 					"value": {
-						"stringValue": "HttpRequest"
+						"stringValue": ""
 					}
 				},
-				"authOverrideEnabled": {
-					"key": "authOverrideEnabled",
+				"disableSSLValidation": {
+					"key": "disableSSLValidation",
 					"value": {
 						"booleanValue": false
 					}
 				},
-				"connectionName": {
-					"key": "connectionName",
+				"followRedirects": {
+					"key": "followRedirects",
 					"value": {
-						"stringValue": "projects/PROJECT_ID/locations/REGION/connections/shipping"
+						"booleanValue": true
 					}
 				},
-				"connectionVersion": {
-					"key": "connectionVersion",
+				"httpMethod": {
+					"key": "httpMethod",
 					"value": {
-						"stringValue": "projects/PROJECT_ID/locations/global/providers/default/connectors/http/versions/1"
+						"stringValue": "GET"
 					}
 				},
-				"connectorInputPayload": {
-					"key": "connectorInputPayload",
+				"httpParams": {
+					"key": "httpParams",
+					"value": {}
+				},
+				"jsonAdditionalHeaders": {
+					"key": "jsonAdditionalHeaders",
 					"value": {
-						"stringValue": "$`Task_17_connectorInputPayload`$"
+						"jsonValue": "null"
 					}
 				},
-				"connectorOutputPayload": {
-					"key": "connectorOutputPayload",
+				"requestBody": {
+					"key": "requestBody",
 					"value": {
-						"stringValue": "$`Task_17_connectorOutputPayload`$"
+						"stringValue": ""
 					}
 				},
-				"operation": {
-					"key": "operation",
+				"requestorId": {
+					"key": "requestorId",
 					"value": {
-						"stringValue": "EXECUTE_ACTION"
+						"stringValue": ""
+					}
+				},
+				"responseBody": {
+					"key": "responseBody",
+					"value": {
+						"stringArray": {
+							"stringValues": [
+								"$`Task_21_responseBody`$"
+							]
+						}
+					}
+				},
+				"responseHeader": {
+					"key": "responseHeader",
+					"value": {
+						"stringArray": {
+							"stringValues": [
+								"$`Task_21_responseHeader`$"
+							]
+						}
+					}
+				},
+				"responseStatus": {
+					"key": "responseStatus",
+					"value": {
+						"stringArray": {
+							"stringValues": [
+								"$`Task_21_responseStatus`$"
+							]
+						}
+					}
+				},
+				"throwError": {
+					"key": "throwError",
+					"value": {
+						"booleanValue": true
+					}
+				},
+				"timeout": {
+					"key": "timeout",
+					"value": {
+						"intValue": "0"
+					}
+				},
+				"url": {
+					"key": "url",
+					"value": {
+						"stringValue": "https://mocktarget.apigee.net"
+					}
+				},
+				"urlFetchingService": {
+					"key": "urlFetchingService",
+					"value": {
+						"stringValue": "HARPOON"
+					}
+				},
+				"urlQueryStrings": {
+					"key": "urlQueryStrings",
+					"value": {}
+				},
+				"useSSL": {
+					"key": "useSSL",
+					"value": {
+						"booleanValue": false
+					}
+				},
+				"userAgent": {
+					"key": "userAgent",
+					"value": {
+						"stringValue": ""
 					}
 				}
 			},
-			"displayName": "Shipping Company A",
+			"displayName": "Shipping Company C",
 			"nextTasks": [
 				{
 					"taskId": "14"
@@ -300,49 +378,127 @@
 			"externalTaskType": "NORMAL_TASK"
 		},
 		{
-			"task": "GenericConnectorTask",
-			"taskId": "19",
+			"task": "GenericRestV2Task",
+			"taskId": "22",
 			"parameters": {
-				"actionName": {
-					"key": "actionName",
+				"additionalHeaders": {
+					"key": "additionalHeaders",
+					"value": {}
+				},
+				"authConfigName": {
+					"key": "authConfigName",
 					"value": {
-						"stringValue": "HttpRequest"
+						"stringValue": ""
 					}
 				},
-				"authOverrideEnabled": {
-					"key": "authOverrideEnabled",
+				"disableSSLValidation": {
+					"key": "disableSSLValidation",
 					"value": {
 						"booleanValue": false
 					}
 				},
-				"connectionName": {
-					"key": "connectionName",
+				"followRedirects": {
+					"key": "followRedirects",
 					"value": {
-						"stringValue": "projects/PROJECT_ID/locations/REGION/connections/shipping"
+						"booleanValue": true
 					}
 				},
-				"connectionVersion": {
-					"key": "connectionVersion",
+				"httpMethod": {
+					"key": "httpMethod",
 					"value": {
-						"stringValue": "projects/PROJECT_ID/locations/global/providers/default/connectors/http/versions/1"
+						"stringValue": "GET"
 					}
 				},
-				"connectorInputPayload": {
-					"key": "connectorInputPayload",
+				"httpParams": {
+					"key": "httpParams",
+					"value": {}
+				},
+				"jsonAdditionalHeaders": {
+					"key": "jsonAdditionalHeaders",
 					"value": {
-						"stringValue": "$`Task_19_connectorInputPayload`$"
+						"jsonValue": "null"
 					}
 				},
-				"connectorOutputPayload": {
-					"key": "connectorOutputPayload",
+				"requestBody": {
+					"key": "requestBody",
 					"value": {
-						"stringValue": "$`Task_19_connectorOutputPayload`$"
+						"stringValue": ""
 					}
 				},
-				"operation": {
-					"key": "operation",
+				"requestorId": {
+					"key": "requestorId",
 					"value": {
-						"stringValue": "EXECUTE_ACTION"
+						"stringValue": ""
+					}
+				},
+				"responseBody": {
+					"key": "responseBody",
+					"value": {
+						"stringArray": {
+							"stringValues": [
+								"$`Task_22_responseBody`$"
+							]
+						}
+					}
+				},
+				"responseHeader": {
+					"key": "responseHeader",
+					"value": {
+						"stringArray": {
+							"stringValues": [
+								"$`Task_22_responseHeader`$"
+							]
+						}
+					}
+				},
+				"responseStatus": {
+					"key": "responseStatus",
+					"value": {
+						"stringArray": {
+							"stringValues": [
+								"$`Task_22_responseStatus`$"
+							]
+						}
+					}
+				},
+				"throwError": {
+					"key": "throwError",
+					"value": {
+						"booleanValue": true
+					}
+				},
+				"timeout": {
+					"key": "timeout",
+					"value": {
+						"intValue": "0"
+					}
+				},
+				"url": {
+					"key": "url",
+					"value": {
+						"stringValue": "https://mocktarget.apigee.net"
+					}
+				},
+				"urlFetchingService": {
+					"key": "urlFetchingService",
+					"value": {
+						"stringValue": "HARPOON"
+					}
+				},
+				"urlQueryStrings": {
+					"key": "urlQueryStrings",
+					"value": {}
+				},
+				"useSSL": {
+					"key": "useSSL",
+					"value": {
+						"booleanValue": false
+					}
+				},
+				"userAgent": {
+					"key": "userAgent",
+					"value": {
+						"stringValue": ""
 					}
 				}
 			},
@@ -356,53 +512,131 @@
 			"externalTaskType": "NORMAL_TASK"
 		},
 		{
-			"task": "GenericConnectorTask",
-			"taskId": "20",
+			"task": "GenericRestV2Task",
+			"taskId": "23",
 			"parameters": {
-				"actionName": {
-					"key": "actionName",
+				"additionalHeaders": {
+					"key": "additionalHeaders",
+					"value": {}
+				},
+				"authConfigName": {
+					"key": "authConfigName",
 					"value": {
-						"stringValue": "HttpRequest"
+						"stringValue": ""
 					}
 				},
-				"authOverrideEnabled": {
-					"key": "authOverrideEnabled",
+				"disableSSLValidation": {
+					"key": "disableSSLValidation",
 					"value": {
 						"booleanValue": false
 					}
 				},
-				"connectionName": {
-					"key": "connectionName",
+				"followRedirects": {
+					"key": "followRedirects",
 					"value": {
-						"stringValue": "projects/PROJECT_ID/locations/REGION/connections/shipping"
+						"booleanValue": true
 					}
 				},
-				"connectionVersion": {
-					"key": "connectionVersion",
+				"httpMethod": {
+					"key": "httpMethod",
 					"value": {
-						"stringValue": "projects/PROJECT_ID/locations/global/providers/default/connectors/http/versions/1"
+						"stringValue": "GET"
 					}
 				},
-				"connectorInputPayload": {
-					"key": "connectorInputPayload",
+				"httpParams": {
+					"key": "httpParams",
+					"value": {}
+				},
+				"jsonAdditionalHeaders": {
+					"key": "jsonAdditionalHeaders",
 					"value": {
-						"stringValue": "$`Task_20_connectorInputPayload`$"
+						"jsonValue": "null"
 					}
 				},
-				"connectorOutputPayload": {
-					"key": "connectorOutputPayload",
+				"requestBody": {
+					"key": "requestBody",
 					"value": {
-						"stringValue": "$`Task_20_connectorOutputPayload`$"
+						"stringValue": ""
 					}
 				},
-				"operation": {
-					"key": "operation",
+				"requestorId": {
+					"key": "requestorId",
 					"value": {
-						"stringValue": "EXECUTE_ACTION"
+						"stringValue": ""
+					}
+				},
+				"responseBody": {
+					"key": "responseBody",
+					"value": {
+						"stringArray": {
+							"stringValues": [
+								"$`Task_23_responseBody`$"
+							]
+						}
+					}
+				},
+				"responseHeader": {
+					"key": "responseHeader",
+					"value": {
+						"stringArray": {
+							"stringValues": [
+								"$`Task_23_responseHeader`$"
+							]
+						}
+					}
+				},
+				"responseStatus": {
+					"key": "responseStatus",
+					"value": {
+						"stringArray": {
+							"stringValues": [
+								"$`Task_23_responseStatus`$"
+							]
+						}
+					}
+				},
+				"throwError": {
+					"key": "throwError",
+					"value": {
+						"booleanValue": true
+					}
+				},
+				"timeout": {
+					"key": "timeout",
+					"value": {
+						"intValue": "0"
+					}
+				},
+				"url": {
+					"key": "url",
+					"value": {
+						"stringValue": "https://mocktarget.apigee.net"
+					}
+				},
+				"urlFetchingService": {
+					"key": "urlFetchingService",
+					"value": {
+						"stringValue": "HARPOON"
+					}
+				},
+				"urlQueryStrings": {
+					"key": "urlQueryStrings",
+					"value": {}
+				},
+				"useSSL": {
+					"key": "useSSL",
+					"value": {
+						"booleanValue": false
+					}
+				},
+				"userAgent": {
+					"key": "userAgent",
+					"value": {
+						"stringValue": ""
 					}
 				}
 			},
-			"displayName": "Shipping Company C",
+			"displayName": "Shipping Company A",
 			"nextTasks": [
 				{
 					"taskId": "14"
@@ -496,52 +730,58 @@
 			"jsonSchema": "{\n  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\n  \"type\": \"object\",\n  \"properties\": {\n    \"zip\": {\n      \"type\": \"string\"\n    },\n    \"address\": {\n      \"type\": \"string\"\n    },\n    \"city\": {\n      \"type\": \"string\"\n    },\n    \"state\": {\n      \"type\": \"string\"\n    }\n  }\n}"
 		},
 		{
-			"key": "`Task_17_connectorOutputPayload`",
-			"dataType": "JSON_VALUE",
+			"key": "`Task_21_responseHeader`",
+			"dataType": "STRING_VALUE",
 			"isTransient": true,
-			"producer": "1_17",
-			"jsonSchema": "{\n  \"type\": \"array\",\n  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\n  \"items\": {\n    \"type\": \"object\",\n    \"properties\": {\n      \"ResponseBody\": {\n        \"type\": \"string\",\n        \"description\": \"HTTP response body\"\n      },\n      \"StatusCode\": {\n        \"type\": \"number\",\n        \"description\": \"Status Code received from the HTTP Server\"\n      },\n      \"HttpVersion\": {\n        \"type\": \"string\",\n        \"description\": \"Version negotiated for HTTP Request\"\n      },\n      \"ResponseHeaders\": {\n        \"type\": \"object\",\n        \"description\": \"HTTP response headers. Will consist of (key,value) and (key, list of value) pairs\"\n      }\n    },\n    \"$schema\": \"http://json-schema.org/draft-07/schema#\"\n  }\n}"
+			"producer": "1_21"
 		},
 		{
-			"key": "`Task_19_connectorOutputPayload`",
-			"dataType": "JSON_VALUE",
+			"key": "`Task_21_responseBody`",
+			"dataType": "STRING_VALUE",
 			"isTransient": true,
-			"producer": "1_19",
-			"jsonSchema": "{\n  \"type\": \"array\",\n  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\n  \"items\": {\n    \"type\": \"object\",\n    \"properties\": {\n      \"ResponseBody\": {\n        \"type\": \"string\",\n        \"description\": \"HTTP response body\"\n      },\n      \"StatusCode\": {\n        \"type\": \"number\",\n        \"description\": \"Status Code received from the HTTP Server\"\n      },\n      \"HttpVersion\": {\n        \"type\": \"string\",\n        \"description\": \"Version negotiated for HTTP Request\"\n      },\n      \"ResponseHeaders\": {\n        \"type\": \"object\",\n        \"description\": \"HTTP response headers. Will consist of (key,value) and (key, list of value) pairs\"\n      }\n    },\n    \"$schema\": \"http://json-schema.org/draft-07/schema#\"\n  }\n}"
+			"producer": "1_21"
 		},
 		{
-			"key": "`Task_20_connectorOutputPayload`",
-			"dataType": "JSON_VALUE",
+			"key": "`Task_21_responseStatus`",
+			"dataType": "STRING_VALUE",
 			"isTransient": true,
-			"producer": "1_20",
-			"jsonSchema": "{\n  \"type\": \"array\",\n  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\n  \"items\": {\n    \"type\": \"object\",\n    \"properties\": {\n      \"ResponseBody\": {\n        \"type\": \"string\",\n        \"description\": \"HTTP response body\"\n      },\n      \"StatusCode\": {\n        \"type\": \"number\",\n        \"description\": \"Status Code received from the HTTP Server\"\n      },\n      \"HttpVersion\": {\n        \"type\": \"string\",\n        \"description\": \"Version negotiated for HTTP Request\"\n      },\n      \"ResponseHeaders\": {\n        \"type\": \"object\",\n        \"description\": \"HTTP response headers. Will consist of (key,value) and (key, list of value) pairs\"\n      }\n    },\n    \"$schema\": \"http://json-schema.org/draft-07/schema#\"\n  }\n}"
+			"producer": "1_21"
 		},
 		{
-			"key": "`Task_17_connectorInputPayload`",
-			"dataType": "JSON_VALUE",
-			"defaultValue": {
-				"jsonValue": "{\n  \"Method\": \"GET\"\n}"
-			},
-			"producer": "1_17",
-			"jsonSchema": "{\n  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\n  \"type\": \"object\",\n  \"properties\": {\n    \"Url\": {\n      \"type\": [\"object\", \"null\"],\n      \"description\": \"Url object to make request to. Can contain scheme, netloc, path, params, query, fragment in json format. If netloc is provided, it will override the host provided during connection creation\"\n    },\n    \"Method\": {\n      \"type\": [\"string\", \"null\"],\n      \"description\": \"HTTP request method. Eg. GET, POST, DELETE, PUT etc.\",\n      \"default\": \"GET\"\n    },\n    \"Headers\": {\n      \"type\": [\"object\", \"null\"],\n      \"description\": \"HTTP request headers. Will consist of (key,value) and (key, list of value) pairs\"\n    },\n    \"Body\": {\n      \"type\": [\"string\", \"null\"],\n      \"description\": \"HTTP request body\"\n    },\n    \"RequestHasBytes\": {\n      \"type\": [\"boolean\", \"null\"],\n      \"description\": \"Whether to send body as bytes. Base64 encoded string needs to be provided in Body parameter\",\n      \"default\": false\n    },\n    \"ResponseHasBytes\": {\n      \"type\": [\"boolean\", \"null\"],\n      \"description\": \"Whether to receive body as bytes. Base64 encoded string will be sent in the response body\",\n      \"default\": false\n    },\n    \"HttpVersion\": {\n      \"type\": [\"string\", \"null\"],\n      \"description\": \"HTTP Version to be used while making the request. Supported values are 1.1 and 2. If Version 2 is selected, ALPN negotiation will take place and version 1.1 will be used if server does not support version 2\",\n      \"default\": \"2\"\n    },\n    \"ResponseFormat\": {\n      \"type\": [\"string\", \"null\"],\n      \"description\": \"Format to be used for the response. Allowed values are v1 and v2. Using v2 will return the flattened list\",\n      \"default\": \"v1\"\n    },\n    \"FailOnError\": {\n      \"type\": [\"boolean\", \"null\"],\n      \"description\": \"Task should fail if HTTP response status code is 4xx or 5xx\",\n      \"default\": true\n    },\n    \"Timeout\": {\n      \"type\": [\"number\", \"null\"],\n      \"description\": \"Timeout for the HTTP request in seconds. Maximum allowed value is 150 seconds.\"\n    }\n  }\n}"
+			"key": "`Task_22_responseHeader`",
+			"dataType": "STRING_VALUE",
+			"isTransient": true,
+			"producer": "1_22"
 		},
 		{
-			"key": "`Task_19_connectorInputPayload`",
-			"dataType": "JSON_VALUE",
-			"defaultValue": {
-				"jsonValue": "{\n  \"Method\": \"GET\"\n}"
-			},
-			"producer": "1_19",
-			"jsonSchema": "{\n  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\n  \"type\": \"object\",\n  \"properties\": {\n    \"Url\": {\n      \"type\": [\"object\", \"null\"],\n      \"description\": \"Url object to make request to. Can contain scheme, netloc, path, params, query, fragment in json format. If netloc is provided, it will override the host provided during connection creation\"\n    },\n    \"Method\": {\n      \"type\": [\"string\", \"null\"],\n      \"description\": \"HTTP request method. Eg. GET, POST, DELETE, PUT etc.\",\n      \"default\": \"GET\"\n    },\n    \"Headers\": {\n      \"type\": [\"object\", \"null\"],\n      \"description\": \"HTTP request headers. Will consist of (key,value) and (key, list of value) pairs\"\n    },\n    \"Body\": {\n      \"type\": [\"string\", \"null\"],\n      \"description\": \"HTTP request body\"\n    },\n    \"RequestHasBytes\": {\n      \"type\": [\"boolean\", \"null\"],\n      \"description\": \"Whether to send body as bytes. Base64 encoded string needs to be provided in Body parameter\",\n      \"default\": false\n    },\n    \"ResponseHasBytes\": {\n      \"type\": [\"boolean\", \"null\"],\n      \"description\": \"Whether to receive body as bytes. Base64 encoded string will be sent in the response body\",\n      \"default\": false\n    },\n    \"HttpVersion\": {\n      \"type\": [\"string\", \"null\"],\n      \"description\": \"HTTP Version to be used while making the request. Supported values are 1.1 and 2. If Version 2 is selected, ALPN negotiation will take place and version 1.1 will be used if server does not support version 2\",\n      \"default\": \"2\"\n    },\n    \"ResponseFormat\": {\n      \"type\": [\"string\", \"null\"],\n      \"description\": \"Format to be used for the response. Allowed values are v1 and v2. Using v2 will return the flattened list\",\n      \"default\": \"v1\"\n    },\n    \"FailOnError\": {\n      \"type\": [\"boolean\", \"null\"],\n      \"description\": \"Task should fail if HTTP response status code is 4xx or 5xx\",\n      \"default\": true\n    },\n    \"Timeout\": {\n      \"type\": [\"number\", \"null\"],\n      \"description\": \"Timeout for the HTTP request in seconds. Maximum allowed value is 150 seconds.\"\n    }\n  }\n}"
+			"key": "`Task_22_responseBody`",
+			"dataType": "STRING_VALUE",
+			"isTransient": true,
+			"producer": "1_22"
 		},
 		{
-			"key": "`Task_20_connectorInputPayload`",
-			"dataType": "JSON_VALUE",
-			"defaultValue": {
-				"jsonValue": "{\n  \"Method\": \"GET\"\n}"
-			},
-			"producer": "1_20",
-			"jsonSchema": "{\n  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\n  \"type\": \"object\",\n  \"properties\": {\n    \"Url\": {\n      \"type\": [\"object\", \"null\"],\n      \"description\": \"Url object to make request to. Can contain scheme, netloc, path, params, query, fragment in json format. If netloc is provided, it will override the host provided during connection creation\"\n    },\n    \"Method\": {\n      \"type\": [\"string\", \"null\"],\n      \"description\": \"HTTP request method. Eg. GET, POST, DELETE, PUT etc.\",\n      \"default\": \"GET\"\n    },\n    \"Headers\": {\n      \"type\": [\"object\", \"null\"],\n      \"description\": \"HTTP request headers. Will consist of (key,value) and (key, list of value) pairs\"\n    },\n    \"Body\": {\n      \"type\": [\"string\", \"null\"],\n      \"description\": \"HTTP request body\"\n    },\n    \"RequestHasBytes\": {\n      \"type\": [\"boolean\", \"null\"],\n      \"description\": \"Whether to send body as bytes. Base64 encoded string needs to be provided in Body parameter\",\n      \"default\": false\n    },\n    \"ResponseHasBytes\": {\n      \"type\": [\"boolean\", \"null\"],\n      \"description\": \"Whether to receive body as bytes. Base64 encoded string will be sent in the response body\",\n      \"default\": false\n    },\n    \"HttpVersion\": {\n      \"type\": [\"string\", \"null\"],\n      \"description\": \"HTTP Version to be used while making the request. Supported values are 1.1 and 2. If Version 2 is selected, ALPN negotiation will take place and version 1.1 will be used if server does not support version 2\",\n      \"default\": \"2\"\n    },\n    \"ResponseFormat\": {\n      \"type\": [\"string\", \"null\"],\n      \"description\": \"Format to be used for the response. Allowed values are v1 and v2. Using v2 will return the flattened list\",\n      \"default\": \"v1\"\n    },\n    \"FailOnError\": {\n      \"type\": [\"boolean\", \"null\"],\n      \"description\": \"Task should fail if HTTP response status code is 4xx or 5xx\",\n      \"default\": true\n    },\n    \"Timeout\": {\n      \"type\": [\"number\", \"null\"],\n      \"description\": \"Timeout for the HTTP request in seconds. Maximum allowed value is 150 seconds.\"\n    }\n  }\n}"
+			"key": "`Task_22_responseStatus`",
+			"dataType": "STRING_VALUE",
+			"isTransient": true,
+			"producer": "1_22"
+		},
+		{
+			"key": "`Task_23_responseHeader`",
+			"dataType": "STRING_VALUE",
+			"isTransient": true,
+			"producer": "1_23"
+		},
+		{
+			"key": "`Task_23_responseBody`",
+			"dataType": "STRING_VALUE",
+			"isTransient": true,
+			"producer": "1_23"
+		},
+		{
+			"key": "`Task_23_responseStatus`",
+			"dataType": "STRING_VALUE",
+			"isTransient": true,
+			"producer": "1_23"
 		}
 	],
 	"databasePersistencePolicy": "DATABASE_PERSISTENCE_ASYNC",
