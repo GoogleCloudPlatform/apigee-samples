@@ -18,14 +18,6 @@ var requestObj = request.content.asJSON;
 print("json: "+ JSON.stringify(requestObj))
 context.setVariable("prompt_contents_0", getLatestUserText(requestObj));
 
-
-// const userContents = requestObj.contents.filter(item => item.role === 'user');
-// const userPromptTexts = userContents.map(item => item.parts[0].text);
-// print(userPromptTexts); 
-// const lastuserPromptText = userPromptTexts[userPromptTexts.length - 1];
-// context.setVariable("prompt_contents_0", lastuserPromptText)
-
-
 function getLatestUserText(json){
   // Find all objects in the contents array where the role is "user"
   const userConversations = json.contents.filter(item => item.role === 'user');

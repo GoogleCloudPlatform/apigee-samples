@@ -51,6 +51,6 @@
     </Response>
   </PostFlow>
   <HTTPTargetConnection>
-    <URL>https://{system.region.name}-aiplatform.googleapis.com/v1/projects/{organization.name}/locations/{system.region.name}/publishers/google/models/gemini-2.5-flash</URL>
+    <URL>https://{system.region.name}-aiplatform.googleapis.com</URL>
   </HTTPTargetConnection>
 </TargetEndpoint>
