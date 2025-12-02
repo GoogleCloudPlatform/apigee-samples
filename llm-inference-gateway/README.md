@@ -24,8 +24,9 @@ The flow is as follows:
 2. Configure [external access](https://cloud.google.com/apigee/docs/api-platform/get-started/configure-routing#external-access) for API traffic to your Apigee X instance
 3. Enable Google Kubernetes Engine API, Vertex AI API in your project
 4. Will require roles to create GKE cluster, Load Balancer, PSC NEGs and create/deploy Apigee resources like proxies, environments, environment groups, etc. For more info, check out this [doc](https://docs.cloud.google.com/apigee/docs/api-platform/apigee-kubernetes/apigee-apim-operator-install#required-roles)
-5. Will need a HuggingFace Token. You can sign up for an account at https://huggingface.co and create an Access Token
-6. Make sure the following tools are available in your terminal's $PATH (Cloud Shell has these preconfigured)
+5. Make sure that you have Reserved proxy-only subnets for load balancing and Private Service Connect subnets in your VPC network. For more info about these, check this [doc](https://docs.cloud.google.com/vpc/docs/subnets#purpose)
+6. Will need a HuggingFace Token. You can sign up for an account at https://huggingface.co and create an Access Token
+7. Make sure the following tools are available in your terminal's $PATH (Cloud Shell has these preconfigured)
     - [gcloud SDK](https://cloud.google.com/sdk/docs/install)
     - [helm](https://helm.sh/docs/intro/install/)
     - [apigeecli](https://github.com/apigee/apigeecli)
@@ -125,7 +126,8 @@ The flow is as follows:
 
 ## Install the Apigee APIM Operator
 
-Follow the steps provided in this [doc](https://docs.cloud.google.com/apigee/docs/api-platform/apigee-kubernetes/apigee-apim-operator-install). Please follow the entire step end to end
+- Follow the steps provided in this [doc](https://docs.cloud.google.com/apigee/docs/api-platform/apigee-kubernetes/apigee-apim-operator-install). Please follow the entire step end to end.
+- Make sure you have the Apigee environment created as well as part of these steps.
 
 ## Create an ApigeeBackendService
 
@@ -196,8 +198,11 @@ EOF
 ```sh
 kubectl apply -f gcp-traffic-extension.yaml
 ```
-3. Verify the resources are in healthy status
-4. Send a Request to Model Backend to Verify Inference Gateway
+3. Verify the resources are in `CREATE` state
+```sh
+kubectl get ApigeeBackendService apigee-llm-inf-gw
+```
+4. Send a Request to Model Backend to Verify Inference Gateway. (NOTE: This can take a few minutes)   
 ```sh
 IP=$(kubectl get gateway/inference-gateway -o jsonpath='{.status.addresses[0].value}')
 PORT=80
