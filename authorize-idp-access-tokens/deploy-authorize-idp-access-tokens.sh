@@ -94,6 +94,12 @@ if [ -z "$TOKEN" ]; then
   TOKEN=$(gcloud auth print-access-token)
 fi
 
+# Determine sed in-place arguments for portability (macOS vs Linux)
+sedi_args=("-i")
+if [[ "$(uname)" == "Darwin" ]]; then
+  sedi_args=("-i" "") # For macOS, sed -i requires an extension argument. "" means no backup.
+fi
+
 APP_NAME=authz-idp-acccess-tokens-sample-app
 
 echo "Installing apigeecli"
@@ -107,7 +113,7 @@ echo "Deploying Apigee artifacts..."
 
 mkdir rendered
 cp -r ./sharedflowbundle ./rendered
-sed -i "s/REPLACEWITHIDPCLIENTIDCLAIM/$TOKEN_CLIENT_ID_CLAIM/g" ./rendered/sharedflowbundle/policies/VA-IdentifyClientApp.xml
+sed "${sedi_args[@]}" "s/REPLACEWITHIDPCLIENTIDCLAIM/$TOKEN_CLIENT_ID_CLAIM/g" ./rendered/sharedflowbundle/policies/VA-IdentifyClientApp.xml
 if [ -n "$PR_KEY" ]; then
   echo "Deploying public and private keys for mock oidc..."
   echo -e "jwk=$JWK\nprivate_key=$PR_KEY" >mock_configuration.properties

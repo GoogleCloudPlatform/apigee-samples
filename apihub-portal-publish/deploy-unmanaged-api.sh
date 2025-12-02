@@ -44,18 +44,24 @@ if [ -z "$APIGEE_PORTAL_URL" ]; then
   exit
 fi
 
+# Determine sed in-place arguments for portability (macOS vs Linux)
+sedi_args=("-i")
+if [[ "$(uname)" == "Darwin" ]]; then
+  sedi_args=("-i" "") # For macOS, sed -i requires an extension argument. "" means no backup.
+fi
+
 echo "💻 Registering an unmanaged API in Apigee API hub to the 'Test' environment..."
 
 # copy definitions and set env variables in local files
 cp apihub-api.json apihub-api.local.json
-sed -i "s,PROJECT_ID,$PROJECT_ID,g" ./apihub-api.local.json
-sed -i "s,REGION,$APIHUB_REGION,g" ./apihub-api.local.json
+sed "${sedi_args[@]}" "s,PROJECT_ID,$PROJECT_ID,g" ./apihub-api.local.json
+sed "${sedi_args[@]}" "s,REGION,$APIHUB_REGION,g" ./apihub-api.local.json
 cp apihub-api-version.json apihub-api-version.local.json
-sed -i "s,PROJECT_ID,$PROJECT_ID,g" ./apihub-api-version.local.json
-sed -i "s,REGION,$APIHUB_REGION,g" ./apihub-api-version.local.json
+sed "${sedi_args[@]}" "s,PROJECT_ID,$PROJECT_ID,g" ./apihub-api-version.local.json
+sed "${sedi_args[@]}" "s,REGION,$APIHUB_REGION,g" ./apihub-api-version.local.json
 cp apihub-api-deployment.json apihub-api-deployment.local.json
-sed -i "s,PROJECT_ID,$PROJECT_ID,g" ./apihub-api-deployment.local.json
-sed -i "s,REGION,$APIHUB_REGION,g" ./apihub-api-deployment.local.json
+sed "${sedi_args[@]}" "s,PROJECT_ID,$PROJECT_ID,g" ./apihub-api-deployment.local.json
+sed "${sedi_args[@]}" "s,REGION,$APIHUB_REGION,g" ./apihub-api-deployment.local.json
 
 # create deployment
 curl -X POST "https://apihub.googleapis.com/v1/projects/$PROJECT_ID/locations/$APIHUB_REGION/deployments?deploymentId=apigee-sample-unmanaged-v1-deployment" \
