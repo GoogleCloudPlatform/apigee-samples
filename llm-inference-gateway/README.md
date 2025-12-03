@@ -336,5 +336,42 @@ We will refactor the existing default proxy to introduce critical enterprise fea
 
 - **API Key Verification**: Implement a policy to validate API keys on every incoming request, moving beyond basic security.
 - **Token Limiting**: This feature will strictly limit the number of tokens based on the subscription limits and allowances configured in the relevant AI Product (API Product). Requests exceeding the specified threshold will be automatically rejected.
-- **Add more LLM serving patterns**: Other features like semantic caching, sanitizing prompts, etc can be added to the proxy as well. For more LLM serving use cases, refer to this [repo](https://github.com/GoogleCloudPlatform/apigee-samples?tab=readme-ov-file#samples-for-llm-serving-with-apigee).
+- **Add more LLM serving patterns**: Other features like semantic caching, sanitizing prompts, LLM logging, etc can be added to the proxy as well. For more LLM serving use cases, refer to this [repo](https://github.com/GoogleCloudPlatform/apigee-samples?tab=readme-ov-file#samples-for-llm-serving-with-apigee).
 
+To deploy the proxy, execute the following script
+```sh
+source env.sh
+deploy-apigee-llm.sh
+```
+
+Once the script is run successfully, run the curl command to test the functionality
+
+```sh
+IP=$(kubectl get gateway/inference-gateway -o jsonpath='{.status.addresses[0].value}')
+PORT=80
+
+curl -i ${IP}:${PORT}/v1/chat/completions -H 'Content-Type: application/json' -H "x-api-key: $APIKEY" -d '{
+    "messages": [
+        {
+            "role": "user",
+            "content": "What is the capital of France?"
+        }
+    ],
+    "model": "Qwen/Qwen2.5-1.5B-Instruct",
+    "max_tokens": 10,
+    "stream": false
+}'
+```
+
+Make mulitple calls and you will notice that an error will occur once it hits the token limit. For example
+
+```json
+{
+    "fault": {
+        "faultstring": "Rate limit quota violation. Quota limit  exceeded.",
+        "detail": {
+            "errorcode": "policies.ratelimit.QuotaViolation"
+        }
+    }
+}
+```
