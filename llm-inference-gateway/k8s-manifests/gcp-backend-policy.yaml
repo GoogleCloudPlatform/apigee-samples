@@ -1,0 +1,13 @@
+apiVersion: networking.gke.io/v1
+kind: GCPBackendPolicy
+metadata:
+  name: inferencepool-backend-policy
+spec:
+  targetRef:
+    group: "inference.networking.k8s.io"
+    kind: InferencePool
+    name: vllm-qwen2.5-1.5b-instruct
+  default:
+    timeoutSec: 300
+    logging:
+      enabled: true

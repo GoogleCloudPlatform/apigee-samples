@@ -16,6 +16,7 @@
 
 export PROJECT_ID="PROJECT_ID_TO_SET"
 export APIGEE_ORG=$PROJECT_ID
+export APIGEE_ENV="APIGEE_ENV_TO_SET" #apim-op-env
 export NETWORK="NETWORK_TO_SET" #default
 export SUBNET="SUBNET_TO_SET" #default
 export REGION="REGION_TO_SET" #us-central1. Make sure this region matches with your Apigee region
@@ -23,8 +24,5 @@ export APIGEE_REGION=$REGION
 export ZONE="ZONE_TO_SET" #us-central1-a
 export CLUSTER_NAME="CLUSTER_NAME_TO_SET" #infgw-cluster
 export HF_TOKEN="HF_TOKEN_TO_SET"
-
-export RELEASE=v1.0.0-rc.2 #k8s CRDs
-export STABLE_MODEL_RELEASE=v0.3.0 #model server
 
 gcloud config set project "$PROJECT_ID"

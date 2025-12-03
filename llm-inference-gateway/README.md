@@ -38,6 +38,7 @@ The flow is as follows:
 
 1. Edit the values in [env.sh](./env.sh) file and once its saved, run the following command
     ```sh
+    cd llm-inference-gateway
     source env.sh
     ```
 2. Create a new GKE cluster by running the following command
@@ -65,29 +66,29 @@ The flow is as follows:
    ```
 5. We need to install Kubernetes custom resources
    ```sh
-    kubectl apply -f https://github.com/kubernetes-sigs/gateway-api-inference-extension/raw/$RELEASE/config/crd/bases/inference.networking.x-k8s.io_inferenceobjectives.yaml
+    kubectl apply -f k8s-manifests/crd-inferenceobjectives.yaml
    ```
 6. Deploy a model server
    ```sh
-    kubectl apply -f https://github.com/kubernetes-sigs/gateway-api-inference-extension/raw/$STABLE_MODEL_RELEASE/config/manifests/vllm/cpu-deployment.yaml 
+    kubectl apply -f k8s-manifests/cpu-deployment.yaml
    ```
 7. Wait to make sure the deployment is Available
     ```sh
-    kubectl wait deployment/vllm-llama3-8b-instruct --for=condition=Available --timeout=5m
+    kubectl wait deployment/vllm-qwen2.5-1.5b-instruct --for=condition=Available --timeout=5m
     ```
 8. Deploy the InferencePool and Endpoint Picker Extension 
     ```sh
-    kubectl apply -f https://github.com/kubernetes-sigs/gateway-api-inference-extension/raw/$RELEASE/config/manifests/inferencepool-resources.yaml
-    kubectl apply -f https://github.com/kubernetes-sigs/gateway-api-inference-extension/raw/$RELEASE/config/manifests/gateway/gke/healthcheck.yaml
-    kubectl apply -f https://github.com/kubernetes-sigs/gateway-api-inference-extension/raw/$RELEASE/config/manifests/gateway/gke/gcp-backend-policy.yaml
+    kubectl apply -f k8s-manifests/inferencepool-resources.yaml
+    kubectl apply -f k8s-manifests/healthcheck.yaml
+    kubectl apply -f k8s-manifests/gcp-backend-policy.yaml
     ```
 9.  Deploy InferenceObjective
     ```sh
-    kubectl apply -f https://github.com/kubernetes-sigs/gateway-api-inference-extension/raw/$RELEASE/config/manifests/inferenceobjective.yaml
+    kubectl apply -f k8s-manifests/inferenceobjective.yaml
     ```
 10. Deploy Gateway
     ```sh
-    kubectl apply -f https://github.com/kubernetes-sigs/gateway-api-inference-extension/raw/$RELEASE/config/manifests/gateway/gke/gateway.yaml
+    kubectl apply -f k8s-manifests/inference-gateway.yaml
     ```
 11. Confirm that the Gateway was assigned an IP address and reports a `Programmed=True` status
     ```sh
@@ -98,7 +99,7 @@ The flow is as follows:
     ```
 12. Deploy HTTPRoute (NOTE: This can take a few minutes)
     ```sh
-    kubectl apply -f https://github.com/kubernetes-sigs/gateway-api-inference-extension/raw/$RELEASE/config/manifests/gateway/gke/httproute.yaml
+    kubectl apply -f k8s-manifests/httproute.yaml
     ```
 13. Confirm that the HTTPRoute status conditions include `Accepted=True` and `ResolvedRefs=True`
     ```sh
@@ -115,11 +116,16 @@ The flow is as follows:
     IP=$(kubectl get gateway/inference-gateway -o jsonpath='{.status.addresses[0].value}')
     PORT=80
 
-    curl -i ${IP}:${PORT}/v1/completions -H 'Content-Type: application/json' -d '{
+    curl -i ${IP}:${PORT}/v1/chat/completions -H 'Content-Type: application/json' -d '{
+        "messages": [
+            {
+                "role": "user",
+                "content": "What is the capital of France?"
+            }
+        ],
         "model": "Qwen/Qwen2.5-1.5B-Instruct",
-        "prompt": "What is the capital of France?",
         "max_tokens": 10,
-        "temperature": 0
+        "stream": false
     }'
     ``` 
     You should see a valid response. If you find any issues, please use the troubleshooting [guide](https://docs.cloud.google.com/apigee/docs/api-platform/apigee-kubernetes/apigee-apim-operator-troubleshoot) available in the public docs.
@@ -139,7 +145,7 @@ kind: ApigeeBackendService
 metadata:
   name: apigee-llm-inf-gw
 spec:
-  apigeeEnv: apim-op-env
+  apigeeEnv: $APIGEE_ENV
   defaultSecurityEnabled: true
   locations:
     - name: $APIGEE_REGION
@@ -150,6 +156,10 @@ EOF
 2. Apply the file
 ```sh
 kubectl apply -f apigee-backendservice.yaml
+```
+3. Verify and make sure the state is `CREATED`
+```sh
+kubectl get apigeebackendservice
 ```
 
 ## Create a GCPTrafficExtension resource
@@ -198,20 +208,28 @@ EOF
 ```sh
 kubectl apply -f gcp-traffic-extension.yaml
 ```
-3. Verify the resources are in `CREATE` state
-```sh
-kubectl get ApigeeBackendService apigee-llm-inf-gw
-```
+3. Confirm that the GCPTrafficExtension status conditions include `Accepted=True` and `ResolvedRefs=True`
+  ```sh
+  kubectl wait GCPTrafficExtension demo-apigee-extension \
+  --for=jsonpath='{.status.ancestors[0].conditions[?(@.type=="Accepted")].status}'=True \
+  --for=jsonpath='{.status.ancestors[0].conditions[?(@.type=="ResolvedRefs")].status}'=True \
+  --timeout=5m
+  ```
 4. Send a Request to Model Backend to Verify Inference Gateway. (NOTE: This can take a few minutes)   
 ```sh
 IP=$(kubectl get gateway/inference-gateway -o jsonpath='{.status.addresses[0].value}')
 PORT=80
 
-curl -i ${IP}:${PORT}/v1/completions -H 'Content-Type: application/json' -d '{
+curl -i ${IP}:${PORT}/v1/chat/completions -H 'Content-Type: application/json' -d '{
+    "messages": [
+        {
+            "role": "user",
+            "content": "What is the capital of France?"
+        }
+    ],
     "model": "Qwen/Qwen2.5-1.5B-Instruct",
-    "prompt": "What is the capital of France?",
     "max_tokens": 10,
-    "temperature": 0
+    "stream": false
 }'
 ``` 
 You should see an error. Something like
@@ -270,12 +288,16 @@ spec:
       group: apim.googleapis.com
       namespace: apim
   quota:
-    limit: 5
+    limit: 100
     interval: 1
     timeUnit: minute
   restOperations:
-    - name: "Chat Completions"
+    - name: "Completions"
       path: /v1/completions
+      methods:
+        - POST
+    - name: "Chat Completions"
+      path: /v1/chat/completions
       methods:
         - POST
 EOF
@@ -294,11 +316,16 @@ export APIKEY="APIKEY_TO_SET"
 IP=$(kubectl get gateway/inference-gateway -o jsonpath='{.status.addresses[0].value}')
 PORT=80
 
-curl -i ${IP}:${PORT}/v1/completions -H 'Content-Type: application/json' -H "x-api-key: $APIKEY" -d '{
+curl -i ${IP}:${PORT}/v1/chat/completions -H 'Content-Type: application/json' -H "x-api-key: $APIKEY" -d '{
+    "messages": [
+        {
+            "role": "user",
+            "content": "What is the capital of France?"
+        }
+    ],
     "model": "Qwen/Qwen2.5-1.5B-Instruct",
-    "prompt": "What is the capital of France?",
     "max_tokens": 10,
-    "temperature": 0
+    "stream": false
 }'
 ``` 
 You should see a valid response. If you find any issues, please use the troubleshooting [guide](https://docs.cloud.google.com/apigee/docs/api-platform/apigee-kubernetes/apigee-apim-operator-troubleshoot) available in the public docs.
