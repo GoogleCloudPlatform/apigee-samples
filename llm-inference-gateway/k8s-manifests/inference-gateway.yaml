@@ -19,6 +19,6 @@ metadata:
 spec:
  gatewayClassName: gke-l7-regional-external-managed
  listeners:
- - name: http
-   port: 80
-   protocol: HTTP
+  - name: http
+    port: 80
+    protocol: HTTP

@@ -365,7 +365,7 @@ curl -i ${IP}:${PORT}/v1/chat/completions -H 'Content-Type: application/json' -H
 }'
 ```
 
-Make mulitple calls and you will notice that an error will occur once it hits the token limit. For example
+Make multiple calls and you will notice that an error will occur once it hits the token limit. For example
 
 ```json
 {

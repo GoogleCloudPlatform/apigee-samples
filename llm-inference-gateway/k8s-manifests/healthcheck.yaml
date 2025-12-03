@@ -26,5 +26,5 @@ spec:
     config:
       type: HTTP
       httpHealthCheck:
-          requestPath: /health
-          port: 8000
+        requestPath: /health
+        port: 8000

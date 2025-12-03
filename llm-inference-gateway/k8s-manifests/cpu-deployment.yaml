@@ -32,16 +32,16 @@ spec:
           imagePullPolicy: Always
           command: ["python3", "-m", "vllm.entrypoints.openai.api_server"]
           args:
-          - "--model"
-          - "Qwen/Qwen2.5-1.5B-Instruct"
-          - "--port"
-          - "8000"
-          - "--enable-lora"
-          - "--max-loras"
-          - "4"
-          - "--lora-modules"
-          - '{"name": "food-review-0", "path": "SriSanth2345/Qwen-1.5B-Tweet-Generations", "base_model_name": "Qwen/Qwen2.5-1.5B"}'
-          - '{"name": "food-review-1", "path": "SriSanth2345/Qwen-1.5B-Tweet-Generations", "base_model_name": "Qwen/Qwen2.5-1.5B"}'
+            - "--model"
+            - "Qwen/Qwen2.5-1.5B-Instruct"
+            - "--port"
+            - "8000"
+            - "--enable-lora"
+            - "--max-loras"
+            - "4"
+            - "--lora-modules"
+            - '{"name": "food-review-0", "path": "SriSanth2345/Qwen-1.5B-Tweet-Generations", "base_model_name": "Qwen/Qwen2.5-1.5B"}'
+            - '{"name": "food-review-1", "path": "SriSanth2345/Qwen-1.5B-Tweet-Generations", "base_model_name": "Qwen/Qwen2.5-1.5B"}'
           env:
             - name: PORT
               value: "8000"
@@ -74,12 +74,12 @@ spec:
             successThreshold: 1
             timeoutSeconds: 1
           resources:
-             limits:
-               cpu: "12"
-               memory: "9000Mi"
-             requests:
-               cpu: "12"
-               memory: "9000Mi"
+            limits:
+              cpu: "12"
+              memory: "9000Mi"
+            requests:
+              cpu: "12"
+              memory: "9000Mi"
           volumeMounts:
             - mountPath: /data
               name: data
@@ -99,7 +99,7 @@ spec:
               value: "/config/configmap.yaml"
           volumeMounts: # DO NOT USE subPath, dynamic configmap updates don't work on subPaths
           - name: config-volume
-            mountPath:  /config
+            mountPath: /config
       restartPolicy: Always
       schedulerName: default-scheduler
       terminationGracePeriodSeconds: 30

@@ -43,7 +43,7 @@
   </PreFlow>
   <HTTPProxyConnection>
     <Properties/>
-    <BasePath>/apigee-llm-inf-gw</BasePath>
+    <BasePath>/v1/samples/apigee-llm-inf-gw</BasePath>
   </HTTPProxyConnection>
   <RouteRule name="default"/>
 </ProxyEndpoint>
