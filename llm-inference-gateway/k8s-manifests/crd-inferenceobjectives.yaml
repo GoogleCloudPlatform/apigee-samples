@@ -29,18 +29,18 @@ spec:
   scope: Namespaced
   versions:
     - additionalPrinterColumns:
-      - jsonPath: .spec.modelName
-        name: Model Name
-        type: string
-      - jsonPath: .spec.poolRef.name
-        name: Inference Pool
-        type: string
-      - jsonPath: .spec.priority
-        name: Priority
-        type: string
-      - jsonPath: .metadata.creationTimestamp
-        name: Age
-        type: date
+        - jsonPath: .spec.modelName
+          name: Model Name
+          type: string
+        - jsonPath: .spec.poolRef.name
+          name: Inference Pool
+          type: string
+        - jsonPath: .spec.priority
+          name: Priority
+          type: string
+        - jsonPath: .metadata.creationTimestamp
+          name: Age
+          type: date
       name: v1alpha2
       schema:
         openAPIV3Schema:
