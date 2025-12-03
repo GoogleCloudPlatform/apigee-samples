@@ -65,7 +65,7 @@ The flow is as follows:
     --release-channel="rapid" \
     --monitoring=SYSTEM,DCGM
    ```
-    **NOTE:** The cluster and the model deployed is just for the demo/sample purposes and not intended for production scale workloads. Please use best practices to deploy your models. The main intention of this sample is to showcase how Apigee can protect your AI workloads that are exposed using GKE Inference Gateways. You can make use of [Google Cluster Toolkit](https://github.com/GoogleCloudPlatform/cluster-toolkit) which makes it easy for customers to deploy AI/ML and HPC environments on Google Cloud.
+    **NOTE:** The cluster and the model deployed is just for the **demo/sample purposes** and **not intended for production scale workloads**. Please use best practices to deploy your models. The main intention of this sample is to showcase how Apigee can protect your AI workloads that are exposed using GKE Inference Gateways. You can make use of [Google Cluster Toolkit](https://github.com/GoogleCloudPlatform/cluster-toolkit) which makes it easy for customers to deploy AI/ML and HPC environments on Google Cloud.
 3. Once the cluster is up and running, lets configure kubectl command line access by running the following command:
     ```sh
     gcloud container clusters get-credentials $CLUSTER_NAME --location $ZONE --project $PROJECT_ID
