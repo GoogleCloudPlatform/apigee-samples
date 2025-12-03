@@ -34,11 +34,21 @@ The flow is as follows:
     - curl
     - jq
 
+## Setup
+
+1. Clone this repo by running the following command in your terminal
+  ```sh
+  git clone https://github.com/GoogleCloudPlatform/apigee-samples.git
+  ```
+2. Navigate to the sample directory
+  ```sh
+  cd apigee-samples/llm-inference-gateway
+  ```
+
 ## Create a GKE Gateway with the inference extension
 
 1. Edit the values in [env.sh](./env.sh) file and once its saved, run the following command
     ```sh
-    cd llm-inference-gateway
     source env.sh
     ```
 2. Create a new GKE cluster by running the following command
