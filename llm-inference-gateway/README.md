@@ -137,6 +137,8 @@ The flow is as follows:
 
 ## Create an ApigeeBackendService
 
+**NOTE:** Please proceed with the steps only if you have completed the Apigee APIM Operator installation mentioned above.
+
 1. Create the `ApigeeBackendService` resource
 ```sh
 cat <<-'EOF' | envsubst > apigee-backendservice.yaml
