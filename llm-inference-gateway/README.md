@@ -329,3 +329,12 @@ curl -i ${IP}:${PORT}/v1/chat/completions -H 'Content-Type: application/json' -H
 }'
 ``` 
 You should see a valid response. If you find any issues, please use the troubleshooting [guide](https://docs.cloud.google.com/apigee/docs/api-platform/apigee-kubernetes/apigee-apim-operator-troubleshoot) available in the public docs.
+
+## Apigee as an AI Gateway
+
+We will refactor the existing default proxy to introduce critical enterprise features for security and traffic control.
+
+- **API Key Verification**: Implement a policy to validate API keys on every incoming request, moving beyond basic security.
+- **Token Limiting**: This feature will strictly limit the number of tokens based on the subscription limits and allowances configured in the relevant AI Product (API Product). Requests exceeding the specified threshold will be automatically rejected.
+- **Add more LLM serving patterns**: Other features like semantic caching, sanitizing prompts, etc can be added to the proxy as well. For more LLM serving use cases, refer to this [repo](https://github.com/GoogleCloudPlatform/apigee-samples?tab=readme-ov-file#samples-for-llm-serving-with-apigee).
+
