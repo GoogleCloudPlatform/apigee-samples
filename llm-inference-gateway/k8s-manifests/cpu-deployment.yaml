@@ -98,8 +98,8 @@ spec:
             - name: DYNAMIC_LORA_ROLLOUT_CONFIG
               value: "/config/configmap.yaml"
           volumeMounts: # DO NOT USE subPath, dynamic configmap updates don't work on subPaths
-          - name: config-volume
-            mountPath: /config
+            - name: config-volume
+              mountPath: /config
       restartPolicy: Always
       schedulerName: default-scheduler
       terminationGracePeriodSeconds: 30

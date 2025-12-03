@@ -169,7 +169,7 @@ metadata:
   name: auth-reviewer
 rules:
   - apiGroups:
-    - authentication.k8s.io
+      - authentication.k8s.io
     resources:
       - tokenreviews
     verbs:

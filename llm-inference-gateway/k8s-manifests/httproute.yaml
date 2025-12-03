@@ -23,10 +23,10 @@ spec:
       name: inference-gateway
   rules:
     - backendRefs:
-      - group: inference.networking.k8s.io
-        kind: InferencePool
-        name: vllm-qwen2.5-1.5b-instruct
+        - group: inference.networking.k8s.io
+          kind: InferencePool
+          name: vllm-qwen2.5-1.5b-instruct
       matches:
-      - path:
-          type: PathPrefix
-          value: /
+        - path:
+            type: PathPrefix
+            value: /
