@@ -151,7 +151,7 @@ printf "\nCheck and maybe create the app...\n"
 OUTPUT=$(apigeecli apps get --name "${app_name}" --org "$PROJECT_ID" --token "$TOKEN" --disable-check 2>/dev/null)
 if [[ "$(echo "$OUTPUT" | jq -r 'type')" == "object" ]]; then
   echo "Creating Developer App"
-  apigeecli apps create --name "${app_name}" --email "${dev_email}" --prods "${product_name}" --org "$PROJECT_ID" --token "$TOKEN" --disable-check &>/dev/null
+  apigeecli apps create --name "${app_name}" --email "${dev_email}" --prods "${product_name}" --org "$PROJECT_ID" --token "$TOKEN" --disable-check
 else
   printf "The Developer App %s already exists." "$app_name"
 fi
