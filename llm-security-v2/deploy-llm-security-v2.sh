@@ -119,6 +119,7 @@ apigeecli apis create bundle -n llm-security-v2 \
 
 sed "${sedi_args[@]}" "s/$APIGEE_HOST/HOST/g" apiproxy/resources/oas/spec.yaml
 
+<<<<<<< HEAD
 product_name="llm-security-product-v2"
 dev_email="llm-security-developer-v2@acme.com"
 app_name="llm-security-app-v2"
