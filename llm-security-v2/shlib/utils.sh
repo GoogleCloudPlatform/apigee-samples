@@ -50,6 +50,7 @@ check_required_commands() {
       missing+=("$cmd")
     fi
   done
+  # shellcheck disable=SC2128
   if [[ -n "$missing" ]]; then
     printf -v joined '%s,' "${missing[@]}"
     printf "\n\nThese commands are missing; they must be available on path: %s\nExiting.\n" "${joined%,}"

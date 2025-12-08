@@ -25,15 +25,55 @@ add_roles_to_service_account() {
     "roles/modelarmor.admin"
     "roles/iam.serviceAccountUser")
 
-  # shellcheck disable=SC2076
-  ARR=($(gcloud projects get-iam-policy "${PROJECT_ID}" \
+  read -a ARR < <(gcloud projects get-iam-policy "${PROJECT_ID}" \
     --flatten="bindings[].members" \
-    --filter="bindings.members:${SA_EMAIL}" --format="value(bindings.role)" 2>/dev/null))
+    --filter="bindings.members:${SA_EMAIL}" \
+    --format="value(bindings.role)" 2>/dev/null)
 
   for role in "${REQUIRED_ROLES[@]}"; do
     printf "\nChecking for '%s' role....\n" "${role}"
 
-    if ! [[ ${ARR[*]} =~ "${role}" ]]; then
+    # factor this out to make it a separate funciton
+    if ! [[ ${ARR[*]} =~ "${role}" ]]; then # this should not be a regex match
+      printf "Adding role '%s' for SA '%s'....\n" "${role}" "${SA_EMAIL}"
+      gcloud projects add-iam-policy-binding "${PROJECT_ID}" \
+        --member="serviceAccount:${SA_EMAIL}" \
+        --role="$role" --quiet >/dev/null
+    else
+      printf "Role '%s' is already applied to the service account.\n" "${role}"
+    fi
+  done
+}
+
+is_role_present() {
+  local search_role="$1"
+  local -n role_array="$2" # -n creates a nameref to the array passed by name
+  for element in "${role_array[@]}"; do
+    if [[ "${element}" == "${search_role}" ]]; then
+      return 0
+    fi
+  done
+  return 1
+}
+
+add_roles_to_service_account() {
+  local REQUIRED_ROLES ARR role
+  REQUIRED_ROLES=(
+    "roles/apigee.analyticsEditor"
+    "roles/logging.logWriter"
+    "roles/aiplatform.user"
+    "roles/modelarmor.admin"
+    "roles/iam.serviceAccountUser"
+  )
+
+  read -a ARR < <(gcloud projects get-iam-policy "${PROJECT_ID}" \
+    --flatten="bindings[].members" \
+    --filter="bindings.members:${SA_EMAIL}" \
+    --format="value(bindings.role)" 2>/dev/null)
+
+  for role in "${REQUIRED_ROLES[@]}"; do
+    printf "\nChecking for '%s' role....\n" "${role}"
+    if ! is_role_present "${role}" "ARR"; then
       printf "Adding role '%s' for SA '%s'....\n" "${role}" "${SA_EMAIL}"
       gcloud projects add-iam-policy-binding "${PROJECT_ID}" \
         --member="serviceAccount:${SA_EMAIL}" \
@@ -91,7 +131,6 @@ if apigeecli kvms list -e "${APIGEE_ENV}" -o "$PROJECT_ID" --token "$TOKEN" | jq
 else
   echo "Importing KVMs to Apigee environment"
   cp config/env__envname__model-armor-config-v2__kvmfile__0.json config/env__"${APIGEE_ENV}"__model-armor-config-v2__kvmfile__0.json
-  # Determine sed in-place arguments for portability (macOS vs Linux)
   sedi_args=("-i")
   if [[ "$(uname)" == "Darwin" ]]; then
     sedi_args=("-i" "") # For macOS, sed -i requires an extension argument. "" means no backup.
@@ -101,7 +140,9 @@ else
   sed "${sedi_args[@]}" "s/MODEL_ARMOR_REGION/$MODEL_ARMOR_REGION/g" config/env__"${APIGEE_ENV}"__model-armor-config-v2__kvmfile__0.json
   sed "${sedi_args[@]}" "s/MODEL_ARMOR_TEMPLATE_ID/$MODEL_ARMOR_TEMPLATE_ID/g" config/env__"${APIGEE_ENV}"__model-armor-config-v2__kvmfile__0.json
 
-  apigeecli kvms import -f config/env__"${APIGEE_ENV}"__model-armor-config-v2__kvmfile__0.json --org "$PROJECT_ID" --token "$TOKEN"
+  # The following command is noisy, emits messages to stderr when the key does not exist (which is not an error condition)
+  # So we redirect stderr to /dev/null.
+  apigeecli kvms import -f config/env__"${APIGEE_ENV}"__model-armor-config-v2__kvmfile__0.json --org "$PROJECT_ID" --token "$TOKEN" 2>/dev/null
 
   rm config/env__"${APIGEE_ENV}"__model-armor-config-v2__kvmfile__0.json
 fi
@@ -119,7 +160,6 @@ apigeecli apis create bundle -n llm-security-v2 \
 
 sed "${sedi_args[@]}" "s/$APIGEE_HOST/HOST/g" apiproxy/resources/oas/spec.yaml
 
-<<<<<<< HEAD
 product_name="llm-security-product-v2"
 dev_email="llm-security-developer-v2@acme.com"
 app_name="llm-security-app-v2"
