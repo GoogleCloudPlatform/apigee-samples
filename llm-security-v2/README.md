@@ -25,6 +25,7 @@ ModelArmor. Both approaches work.
 3. Enable Vertex AI and Model Armor in your project.  To do so, you can use the
    [APIs & Services](https://console.cloud.google.com/apis/library) module in
    Cloud Console. Or, you can run the following commands:
+
    ```sh
    PROJECT_ID=<project-id>
    gcloud services enable modelarmor.googleapis.com --project="$PROJECT_ID"
@@ -37,7 +38,7 @@ ModelArmor. Both approaches work.
    commands. For specific regions that are supported, check the [data
    residency](https://docs.cloud.google.com/model-armor/data-residency) page.
 
-   ```
+   ```sh
    MODEL_ARMOR_REGION=<region>
    gcloud config set api_endpoint_overrides/modelarmor "https://modelarmor.$MODEL_ARMOR_REGION.rep.googleapis.com/"
    ```
@@ -54,7 +55,20 @@ ModelArmor. Both approaches work.
    TEMPLATE_ID=apigee-modelarmor-template
 
    gcloud model-armor templates create -q --location $MODEL_ARMOR_REGION "$TEMPLATE_ID" --project="$PROJECT_ID" \
-     --rai-settings-filters='[{ "filterType": "HATE_SPEECH", "confidenceLevel": "MEDIUM_AND_ABOVE" },{ "filterType": "HARASSMENT", "confidenceLevel": "MEDIUM_AND_ABOVE" },{ "filterType": "SEXUALLY_EXPLICIT", "confidenceLevel": "MEDIUM_AND_ABOVE" }]' \
+     --rai-settings-filters='[
+         {
+             "filterType": "HATE_SPEECH",
+             "confidenceLevel": "MEDIUM_AND_ABOVE"
+         },
+         {
+             "filterType": "HARASSMENT",
+             "confidenceLevel": "MEDIUM_AND_ABOVE"
+         },
+         {
+             "filterType": "SEXUALLY_EXPLICIT",
+             "confidenceLevel": "MEDIUM_AND_ABOVE"
+         }
+     ]' \
      --basic-config-filter-enforcement=enabled  \
      --pi-and-jailbreak-filter-settings-enforcement=enabled \
      --pi-and-jailbreak-filter-settings-confidence-level=LOW_AND_ABOVE \
@@ -67,7 +81,6 @@ ModelArmor. Both approaches work.
     - unzip
     - curl
     - jq
-
 
 ## Get started
 
@@ -103,7 +116,6 @@ works, but you can use a shell on your own machine.
 3. You can then use the example curl commands to send requests into Apigee, and
    see that model armor is protecting requests.
 
-
 ## Manual Cleanup instructions
 
 In your terminal session, make sure you source the modified `env.sh` file, and then run
@@ -113,5 +125,3 @@ the clean-up script:
 source ./env.sh
 clean-up-llm-security-v2.sh
 ```
-
-

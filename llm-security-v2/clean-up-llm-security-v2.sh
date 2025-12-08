@@ -54,15 +54,16 @@ remove_roles_from_service_account() {
     "roles/aiplatform.user"
     "roles/modelarmor.admin"
     "roles/iam.serviceAccountUser")
-  # shellcheck disable=SC2076
-  ARR=($(gcloud projects get-iam-policy "${PROJECT_ID}" \
+  # shellcheck disable=SC2034
+  read -r -a ARR < <(gcloud projects get-iam-policy "${PROJECT_ID}" \
     --flatten="bindings[].members" \
-    --filter="bindings.members:${SA_EMAIL}" --format="value(bindings.role)" 2>/dev/null))
+    --filter="bindings.members:${SA_EMAIL}" \
+    --format="value(bindings.role)" 2>/dev/null)
 
   for role in "${ASSIGNED_ROLES[@]}"; do
     printf "\nChecking for '%s' role....\n" "${role}"
 
-    if [[ ${ARR[*]} =~ "${role}" ]]; then
+    if is_role_present "${role}" "ARR"; then
       printf "Removing role '%s' for SA '%s'....\n" "${role}" "${SA_EMAIL}"
       gcloud projects remove-iam-policy-binding "$PROJECT_ID" \
         --member="serviceAccount:${SA_EMAIL}" \

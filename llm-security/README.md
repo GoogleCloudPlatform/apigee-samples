@@ -24,6 +24,7 @@ policies.  Both approaches work.
 3. Enable Vertex AI and Model Armor in your project.  To do so, you can use the
    [APIs & Services](https://console.cloud.google.com/apis/library) module in
    Cloud Console. Or, you can run the following commands:
+
    ```sh
    PROJECT_ID=<project-id>
    gcloud services enable modelarmor.googleapis.com --project="$PROJECT_ID"

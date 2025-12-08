@@ -13,7 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 check_shell_variables() {
   local MISSING_ENV_VARS
   MISSING_ENV_VARS=()
@@ -58,3 +57,13 @@ check_required_commands() {
   fi
 }
 
+is_role_present() {
+  local search_role="$1"
+  local -n role_array="$2" # -n creates a nameref to the array passed by name
+  for element in "${role_array[@]}"; do
+    if [[ "${element}" == "${search_role}" ]]; then
+      return 0
+    fi
+  done
+  return 1
+}
