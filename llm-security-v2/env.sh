@@ -17,7 +17,10 @@
 export PROJECT_ID="PROJECT_ID_TO_SET"
 export APIGEE_ENV="APIGEE_ENV_TO_SET"
 export APIGEE_HOST="APIGEE_HOST_TO_SET"
+
+# Change these as desired
 export SERVICE_ACCOUNT_NAME="llm-security-v2-svc-acct"
+export MODEL_NAME="gemini-2.5-flash"
 
 # Model Armor configuration
 export MODEL_ARMOR_REGION="MODEL_ARMOR_REGION_TO_SET"

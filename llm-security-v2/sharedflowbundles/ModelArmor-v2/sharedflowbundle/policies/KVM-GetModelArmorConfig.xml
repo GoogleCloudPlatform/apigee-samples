@@ -11,11 +11,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<KeyValueMapOperations continueOnError="false" enabled="true" name="KVM-GetModelArmorConfig" mapIdentifier="model-armor-config-v2">
-  <DisplayName>KVM-GetModelArmorConfig</DisplayName>
-  <Properties/>
-  <ExclusiveCache>false</ExclusiveCache>
+<KeyValueMapOperations continueOnError="false" enabled="true" name="KVM-GetModelArmorConfig">
   <ExpiryTimeInSecs>300</ExpiryTimeInSecs>
+  <MapName>model-armor-config-v2</MapName>
   <Get assignTo="modelArmorTemplate">
     <Key>
       <Parameter>modelArmorTemplate</Parameter>

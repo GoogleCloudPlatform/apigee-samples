@@ -14,77 +14,133 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-if [ -z "$PROJECT_ID" ]; then
-  echo "No PROJECT_ID variable set"
-  exit
-fi
+source ./shlib/utils.sh
 
-if [ -z "$APIGEE_ENV" ]; then
-  echo "No APIGEE_ENV variable set"
-  exit
-fi
+delete_deployable_asset() {
+  local asset_type asset_name collection REV ENVNAME OUTFILE NUM_DEPLOYS
+  asset_type=$1
+  asset_name=$2
+  collection="${asset_type}s"
 
-if [ -z "$SERVICE_ACCOUNT_NAME" ]; then
-  echo "No SERVICE_ACCOUNT_NAME variable set"
-  exit
-fi
+  printf "Checking %s %s\n" "$asset_type" "${asset_name}"
+  if apigeecli "$collection" get --name "$asset_name" --org "$PROJECT_ID" --token "$TOKEN" --disable-check &>/dev/null; then
+    OUTFILE=$(mktemp /tmp/apigee-samples.apigeecli.out.XXXXXX)
+    if apigeecli "$collection" listdeploy --name "$asset_name" --org "$PROJECT_ID" --token "$TOKEN" --disable-check >"$OUTFILE" 2>&1; then
+      NUM_DEPLOYS=$(jq -r '.deployments | length' "$OUTFILE")
+      if [[ $NUM_DEPLOYS -ne 0 ]]; then
+        echo "Undeploying ${asset_name}"
+        for ((i = 0; i < NUM_DEPLOYS; i++)); do
+          ENVNAME=$(jq -r ".deployments[$i].environment" "$OUTFILE")
+          REV=$(jq -r ".deployments[$i].revision" "$OUTFILE")
+          apigeecli "$collection" undeploy --name "${asset_name}" --env "$ENVNAME" --rev "$REV" --org "$PROJECT_ID" --token "$TOKEN" --disable-check
+        done
+      else
+        printf "  There are no deployments of %s to remove.\n" "${asset_name}"
+      fi
+    fi
+    [[ -f "$OUTFILE" ]] && rm "$OUTFILE"
+    echo "Deleting ${asset_type} ${asset_name}"
+    apigeecli "$collection" delete --name "${asset_name}" --org "$PROJECT_ID" --token "$TOKEN" --disable-check
+  else
+    printf "  The %s %s does not exist.\n" "${asset_type}" "${asset_name}"
+  fi
+}
 
-delete_api() {
-  local api_name=$1
-  echo "Undeploying $api_name"
-  REV=$(apigeecli envs deployments get --env "$APIGEE_ENV" --org "$PROJECT_ID" --token "$TOKEN" --disable-check | jq .'deployments[]| select(.apiProxy=="'"$api_name"'").revision' -r)
-  apigeecli apis undeploy --name "$api_name" --env "$APIGEE_ENV" --rev "$REV" --org "$PROJECT_ID" --token "$TOKEN"
+remove_roles_from_service_account() {
+  local ASSIGNED_ROLES role
+  ASSIGNED_ROLES=(
+    "roles/apigee.analyticsEditor"
+    "roles/logging.logWriter"
+    "roles/aiplatform.user"
+    "roles/modelarmor.admin"
+    "roles/iam.serviceAccountUser")
+  # shellcheck disable=SC2076
+  ARR=($(gcloud projects get-iam-policy "${PROJECT_ID}" \
+    --flatten="bindings[].members" \
+    --filter="bindings.members:${SA_EMAIL}" --format="value(bindings.role)" 2>/dev/null))
 
-  echo "Deleting proxy $api_name"
-  apigeecli apis delete --name "$api_name" --org "$PROJECT_ID" --token "$TOKEN"
+  for role in "${ASSIGNED_ROLES[@]}"; do
+    printf "\nChecking for '%s' role....\n" "${role}"
+
+    if [[ ${ARR[*]} =~ "${role}" ]]; then
+      printf "Removing role '%s' for SA '%s'....\n" "${role}" "${SA_EMAIL}"
+      gcloud projects remove-iam-policy-binding "$PROJECT_ID" \
+        --member="serviceAccount:${SA_EMAIL}" \
+        --role="$role" &>/dev/null
+    fi
+  done
 
 }
 
-delete_sharedflow(){
-  local sharedflow_name=$1
-  echo "Undeploying $sharedflow_name sharedflow"
-  REV=$(apigeecli envs deployments get --env "$APIGEE_ENV" --org "$PROJECT_ID" --token "$TOKEN" --sharedflows true --disable-check | jq .'deployments[]| select(.apiProxy=="'"$sharedflow_name"'").revision' -r)
-  apigeecli sharedflows undeploy --name "$sharedflow_name" --env "$APIGEE_ENV" --rev "$REV" --org "$PROJECT_ID" --token "$TOKEN"
+# ====================================================================
 
-  echo "Deleting sharedflow $sharedflow_name sharedflow"
-  apigeecli sharedflows delete --name "$sharedflow_name" --org "$PROJECT_ID" --token "$TOKEN"
-}
+check_shell_variables PROJECT_ID \
+  APIGEE_ENV \
+  SERVICE_ACCOUNT_NAME
 
-remove_role_from_service_account() {
-  local role=$1
-  gcloud projects remove-iam-policy-binding "$PROJECT_ID" \
-    --member="serviceAccount:${SERVICE_ACCOUNT_NAME}@${PROJECT_ID}.iam.gserviceaccount.com" \
-    --role="$role"
-}
+check_required_commands gcloud jq curl
 
 TOKEN=$(gcloud auth print-access-token)
 
-echo "Installing apigeecli"
-curl -s https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.sh | bash
+if [[ ! -f $HOME/.apigeecli/bin/apigeecli ]]; then
+  echo "Installing apigeecli"
+  curl -s https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.sh | bash
+fi
 export PATH=$PATH:$HOME/.apigeecli/bin
 
-echo "Deleting Developer App"
-DEVELOPER_ID=$(apigeecli developers get --email llm-security-developer-v2@acme.com --org "$PROJECT_ID" --token "$TOKEN" --disable-check | jq .'developerId' -r)
-apigeecli apps delete --id "$DEVELOPER_ID" --name llm-security-app-v2 --org "$PROJECT_ID" --token "$TOKEN"
+product_name="llm-security-product-v2"
+dev_email="llm-security-developer-v2@acme.com"
+app_name="llm-security-app-v2"
 
-echo "Deleting Developer"
-apigeecli developers delete --email llm-security-developer-v2@acme.com --org "$PROJECT_ID" --token "$TOKEN"
+# ------------------------------------------------
+printf "\nCheck and maybe delete the app...\n"
+OUTPUT=$(apigeecli apps get --name "${app_name}" --org "$PROJECT_ID" --token "$TOKEN" --disable-check 2>/dev/null)
+if [[ "$(echo "$OUTPUT" | jq -r 'type')" == "object" ]]; then
+  printf "The Developer App %s does not exist." "$app_name"
+else
+  echo "Deleting Developer App..."
+  DEVELOPER_ID=$(apigeecli developers get --email "$dev_email" --org "$PROJECT_ID" --token "$TOKEN" --disable-check | jq .'developerId' -r)
+  apigeecli apps delete --id "$DEVELOPER_ID" --name "$app_name" --org "$PROJECT_ID" --token "$TOKEN"
+fi
 
-echo "Deleting API Products"
-apigeecli products delete --name llm-security-product-v2 --org "$PROJECT_ID" --token "$TOKEN"
+# ------------------------------------------------
+printf "\nCheck and maybe delete the developer...\n"
+if apigeecli developers get --email "${dev_email}" --org "$PROJECT_ID" --token "$TOKEN" --disable-check &>/dev/null; then
+  echo "Deleting Developer"
+  apigeecli developers delete --email "$dev_email" --org "$PROJECT_ID" --token "$TOKEN"
+else
+  printf "  The developer %s does not exist.\n" "$dev_email"
+fi
 
-echo "Deleting KVM"
-apigeecli kvms delete -n model-armor-config-v2 --env "$APIGEE_ENV" --org "$PROJECT_ID" --token "$TOKEN"
+# ------------------------------------------------
+printf "\nCheck and maybe delete the product...\n"
+if apigeecli products get --name "${product_name}" --org "$PROJECT_ID" --token "$TOKEN" --disable-check &>/dev/null; then
+  echo "Deleting API Product..."
+  apigeecli products delete --name "$product_name" --org "$PROJECT_ID" --token "$TOKEN"
+else
+  printf "  The apiproduct %s does not exist\n" "${product_name}"
+fi
 
-delete_api "llm-security-v2"
-delete_sharedflow "ModelArmor-v2"
+# ------------------------------------------------
+printf "\nCheck and maybe delete the KVM...\n"
+kvm_name="model-armor-config-v2"
+if apigeecli kvms list -e "${APIGEE_ENV}" -o "$PROJECT_ID" --token "$TOKEN" | jq -e 'any(. == "'$kvm_name'")' >/dev/null; then
+  echo "Deleting KVM"
+  apigeecli kvms delete -n $kvm_name --env "$APIGEE_ENV" --org "$PROJECT_ID" --token "$TOKEN"
+else
+  echo "The KVM $kvm_name does not exist..."
+fi
 
+delete_deployable_asset api "llm-security-v2"
+delete_deployable_asset sharedflow "ModelArmor-v2"
+
+SA_EMAIL="${SERVICE_ACCOUNT_NAME}@${PROJECT_ID}.iam.gserviceaccount.com"
 echo "Removing assigned roles from Service Account"
-remove_role_from_service_account "roles/apigee.analyticsEditor"
-remove_role_from_service_account "roles/logging.logWriter"
-remove_role_from_service_account "roles/aiplatform.user"
-remove_role_from_service_account "roles/modelarmor.admin"
-remove_role_from_service_account "roles/iam.serviceAccountUser"
+remove_roles_from_service_account
 
 echo "Deleting Service Account"
-gcloud iam service-accounts delete "${SERVICE_ACCOUNT_NAME}@${PROJECT_ID}.iam.gserviceaccount.com" --project "$PROJECT_ID" --quiet
+if gcloud iam service-accounts describe "${SA_EMAIL}" --project="$PROJECT_ID" --quiet &>/dev/null; then
+  gcloud iam service-accounts delete "${SERVICE_ACCOUNT_NAME}@${PROJECT_ID}.iam.gserviceaccount.com" --project "$PROJECT_ID" --quiet
+else
+  printf "The service account %s does not exist.\n" "$SA_EMAIL"
+fi
