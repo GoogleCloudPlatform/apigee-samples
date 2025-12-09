@@ -32,7 +32,7 @@ The flow is as follows:
     - curl
     - jq
 
-## Deploy open LLMs on GKE
+## Step 1: Deploy open LLMs on GKE
 
 The first step is to deploy popular open large language models (LLMs) on GKE for Inference by using Infrastructure as Code (IaC), with Terraform wrapped in CLI scripts, to create a standardized, secure, and scalable GKE environment designed for AI inference workloads. This [repo](https://github.com/GoogleCloudPlatform/accelerated-platforms/tree/hf-model-vllm-gpu-tutorial) has all the info to set it up.
 
@@ -46,7 +46,7 @@ Make sure you test your deployment by following the steps mentioned [here](https
 - This setup guide downloads the model from Hugging Face and stores it in a GCS bucket so the model name in the API will be `/gcs/${HF_MODEL_ID}`, for example `/gcs/google/gemma-3-1b-it`.
 - The setup has default variables for names of VPC network, subnets etc and the region where it gets deployed (for example `us-central1`). If you want to change any of those variables, update the appropriate values in the TF code. Those changes are beyond the scope of this sample. Please refer to the [repo](https://github.com/GoogleCloudPlatform/accelerated-platforms/tree/hf-model-vllm-gpu-tutorial) for more details.
 
-## Deploy GKE Inference Gateway
+## Step 2: Deploy GKE Inference Gateway
 
 In this step, we will deploy the GKE Inference Gateway. The high-level workflow for configuring GKE Inference Gateway is as follows: 
   1. Create an inference pool
@@ -150,12 +150,20 @@ curl -X POST \
 EOF_JSON
 ```
 
-## Install the Apigee APIM Operator
+## Apigee as an AI Gateway
+
+Now that we have an Inference Gateway up and running, lets protect is using Apigee as an AI gateway for security and traffic control.
+
+- **API Key Verification**: Implement a policy to validate API keys on every incoming request, moving beyond basic security.
+- **Token Limiting**: This feature will strictly limit the number of tokens based on the subscription limits and allowances configured in the relevant AI Product (API Product). Requests exceeding the specified threshold will be automatically rejected.
+- **Add more LLM serving patterns**: Other features like semantic caching, sanitizing prompts, LLM logging, etc can be added to the proxy as well. For more LLM serving use cases, refer to this [repo](https://github.com/GoogleCloudPlatform/apigee-samples?tab=readme-ov-file#samples-for-llm-serving-with-apigee).
+
+## Step 1: Install the Apigee APIM Operator
 
 - Follow the steps provided in this [doc](https://docs.cloud.google.com/apigee/docs/api-platform/apigee-kubernetes/apigee-apim-operator-install). Please follow the entire step end to end.
 - Make sure you have the Apigee environment created in the same region as the GKE cluster.
 
-## Create an ApigeeBackendService
+## Step 2: Create an ApigeeBackendService
 
 **NOTE:** Please proceed with the steps only if you have completed the Apigee APIM Operator installation mentioned above.
 
@@ -193,7 +201,7 @@ kubectl apply -f apigee-backendservice.yaml -n $ira_online_gpu_kubernetes_namesp
 kubectl get apigeebackendservice -n $ira_online_gpu_kubernetes_namespace_name
 ```
 
-## Create a GCPTrafficExtension resource
+## Step 3: Create a GCPTrafficExtension resource
 
 1. Get the Inference Gateway and ApigeeBackendService resource names by running the following command
 ```sh
@@ -297,7 +305,7 @@ You should see an error. Something like
 }
 ```
 
-## Create the Apigee API Product, Developer and Developer App
+## Step 4: Create the Apigee API Product, Developer and Developer App
 
 1. Create an API Product
 ```sh
@@ -398,13 +406,9 @@ EOF_JSON
 ```
 You should see a valid response. If you find any issues, please use the troubleshooting [guide](https://docs.cloud.google.com/apigee/docs/api-platform/apigee-kubernetes/apigee-apim-operator-troubleshoot) available in the public docs.
 
-## Apigee as an AI Gateway
+## Adding more AI gateway capabilities
 
-We will refactor the existing default proxy to introduce critical enterprise features for security and traffic control.
-
-- **API Key Verification**: Implement a policy to validate API keys on every incoming request, moving beyond basic security.
-- **Token Limiting**: This feature will strictly limit the number of tokens based on the subscription limits and allowances configured in the relevant AI Product (API Product). Requests exceeding the specified threshold will be automatically rejected.
-- **Add more LLM serving patterns**: Other features like semantic caching, sanitizing prompts, LLM logging, etc can be added to the proxy as well. For more LLM serving use cases, refer to this [repo](https://github.com/GoogleCloudPlatform/apigee-samples?tab=readme-ov-file#samples-for-llm-serving-with-apigee).
+The initial proxy deployed just includes basic security features, we can extend the capabilities by adding other policies to the same proxy. In the following steps, you will deploy another proxy that has other capabilities like Token Limiting. 
 
 To deploy the proxy:
 
