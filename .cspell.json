@@ -149,6 +149,7 @@
     "logutils",
     "logwarn",
     "markdownlint",
+    "MCP",
     "meshca",
     "meshconfig",
     "meshtelemetry",
