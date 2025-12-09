@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright 2024 Google LLC
+# Copyright 2024-2025 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,8 +17,11 @@
 export PROJECT_ID="PROJECT_ID_TO_SET"
 export APIGEE_ENV="APIGEE_ENV_TO_SET"
 export APIGEE_HOST="APIGEE_HOST_TO_SET"
-export SERVICE_ACCOUNT_NAME="llm-security-svc-acct"
 
 # Model Armor configuration
 export MODEL_ARMOR_REGION="MODEL_ARMOR_REGION_TO_SET"
-export MODEL_ARMOR_TEMPLATE_ID="MODEL_ARMOR_TEMPLATEID_TO_SET" #use existing or create new template using this id
+
+# change these values if you like
+export SERVICE_ACCOUNT_NAME="llm-security-svc-acct"
+export MODEL_ARMOR_TEMPLATE_ID="apigee-modelarmor-template"
+export MODEL_NAME="gemini-2.5-flash"

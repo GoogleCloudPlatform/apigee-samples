@@ -43,11 +43,24 @@ policies.  Both approaches work.
    gcloud config set api_endpoint_overrides/modelarmor "https://modelarmor.$MODEL_ARMOR_REGION.rep.googleapis.com/"
 
    gcloud model-armor templates create -q --location $MODEL_ARMOR_REGION "$TEMPLATE_ID" --project="$PROJECT_ID" \
-     --rai-settings-filters='[{ "filterType": "HATE_SPEECH", "confidenceLevel": "MEDIUM_AND_ABOVE" },{ "filterType": "HARASSMENT", "confidenceLevel": "MEDIUM_AND_ABOVE" },{ "filterType": "SEXUALLY_EXPLICIT", "confidenceLevel": "MEDIUM_AND_ABOVE" }]' \
      --basic-config-filter-enforcement=enabled  \
      --pi-and-jailbreak-filter-settings-enforcement=enabled \
      --pi-and-jailbreak-filter-settings-confidence-level=LOW_AND_ABOVE \
-     --malicious-uri-filter-settings-enforcement=enabled
+     --malicious-uri-filter-settings-enforcement=enabled \
+     --rai-settings-filters='[
+       {
+           "filterType": "HATE_SPEECH",
+           "confidenceLevel": "MEDIUM_AND_ABOVE"
+       },
+       {
+           "filterType": "HARASSMENT",
+           "confidenceLevel": "MEDIUM_AND_ABOVE"
+       },
+       {
+           "filterType": "SEXUALLY_EXPLICIT",
+           "confidenceLevel": "MEDIUM_AND_ABOVE"
+       }
+   ]'
    ```
 
 5. Make sure the following tools are available in your terminal's $PATH (Cloud Shell has these preconfigured)
@@ -60,3 +73,43 @@ policies.  Both approaches work.
 ## Get started
 
 Proceed to this [notebook](llm_security_v1.ipynb) and follow the steps in the Setup and Testing sections.
+
+## Manual Setup instructions
+
+If you've clicked the blue button above, you can ignore the rest of this README.
+If you choose _not_ to follow the tutorial in Cloud Shell, you can follow these
+steps on your own.  You can do this from any bash shell.  Google Cloud Shell
+works, but you can use a shell on your own machine.
+
+1. Edit `env.sh` and configure the variables listed there. These should all be self-explanatory.
+
+   Open a terminal session, and source the modified `env.sh` file
+
+   ```bash
+   source ./env.sh
+   ```
+
+2. Configure the API proxy, sharedflow, API product, developer, app, and service
+   account, into your Apigee organization. NB: This script will also optionally
+   install apigeecli if you do not have it installed.
+
+   ```bash
+   ./deploy-llm-security.sh
+   ```
+
+   When this script completes, it will print some information about the
+   credentials it has provisioned, including some sample curl commands to
+   exercise the proxies.
+
+3. You can then use the example curl commands to send requests into Apigee, and
+   see that model armor is protecting requests.
+
+## Manual Cleanup instructions
+
+In your terminal session, make sure you source the modified `env.sh` file, and then run
+the clean-up script:
+
+```bash
+source ./env.sh
+clean-up-llm-security.sh
+```

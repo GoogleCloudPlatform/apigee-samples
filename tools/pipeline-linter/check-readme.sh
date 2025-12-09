@@ -1,5 +1,5 @@
 #!/bin/sh
-# Copyright 2020 Google LLC
+# Copyright 2020,2025 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ ERRORS=""
 for file in "$PWD"/* "$PWD"/apihub-plugins/*; do
   F=$(basename -- "$file")
   case $F in
-  *.txt | *.md | tools) continue ;; ##: Skip files that matched.
+  *.txt | *.md | tools | shlib) continue ;; ##: Skip files that matched.
   *) grep "^|" README.md | grep "$F" -q || ERRORS="$ERRORS\n[ERROR] missing root README entry for $F" ;;
   esac
 done

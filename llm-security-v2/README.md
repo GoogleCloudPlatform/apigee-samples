@@ -55,6 +55,10 @@ ModelArmor. Both approaches work.
    TEMPLATE_ID=apigee-modelarmor-template
 
    gcloud model-armor templates create -q --location $MODEL_ARMOR_REGION "$TEMPLATE_ID" --project="$PROJECT_ID" \
+     --basic-config-filter-enforcement=enabled \
+     --pi-and-jailbreak-filter-settings-enforcement=enabled \
+     --pi-and-jailbreak-filter-settings-confidence-level=LOW_AND_ABOVE \
+     --malicious-uri-filter-settings-enforcement=enabled \
      --rai-settings-filters='[
          {
              "filterType": "HATE_SPEECH",
@@ -68,11 +72,7 @@ ModelArmor. Both approaches work.
              "filterType": "SEXUALLY_EXPLICIT",
              "confidenceLevel": "MEDIUM_AND_ABOVE"
          }
-     ]' \
-     --basic-config-filter-enforcement=enabled  \
-     --pi-and-jailbreak-filter-settings-enforcement=enabled \
-     --pi-and-jailbreak-filter-settings-confidence-level=LOW_AND_ABOVE \
-     --malicious-uri-filter-settings-enforcement=enabled
+     ]'
    ```
 
 6. Make sure the following tools are available in your terminal's $PATH (Cloud Shell has these preconfigured)
