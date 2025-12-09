@@ -86,7 +86,7 @@ kubectl get InferencePool -n $ira_online_gpu_kubernetes_namespace_name
 
 In this step we configure the `InferenceObjective` that lets you specify priority of requests. Follow the steps mentioned [here](https://docs.cloud.google.com/kubernetes-engine/docs/how-to/deploy-gke-inference-gateway#specify-inference-objectives). Update the `poolRef.name` with the name of your InferencePool.
 
-**NOTE**: Configure this `InferenceObjective` to the same namespace as the `vllm` worloads. Run the following command 
+**NOTE**: Configure this `InferenceObjective` to the same namespace as the `vllm` workloads. Run the following command 
 ```sh
 kubectl apply -f inference-objectives.yaml -n $ira_online_gpu_kubernetes_namespace_name
 ```
@@ -95,7 +95,7 @@ kubectl apply -f inference-objectives.yaml -n $ira_online_gpu_kubernetes_namespa
 
 The Gateway resource is the entry point for external traffic into your Kubernetes cluster. It defines the listeners that accept incoming connections. We will use `gke-l7-regional-external-managed` (Regional External Application Load Balancers) for our sample. Follow the steps mentioned [here](https://docs.cloud.google.com/kubernetes-engine/docs/how-to/deploy-gke-inference-gateway#create-gateway)
 
-**NOTE**: Configure this `Gateway` to the same namespace as the `vllm` worloads. Run the following command 
+**NOTE**: Configure this `Gateway` to the same namespace as the `vllm` workloads. Run the following command 
 ```sh
 kubectl apply -f gateway.yaml -n $ira_online_gpu_kubernetes_namespace_name
 ```
@@ -106,7 +106,7 @@ This may take a few mins to complete.
 
 The `HTTPRoute` resource defines how the GKE Gateway routes incoming HTTP requests to backend services, such as your `InferencePool`. Follow the steps mentioned [here](https://docs.cloud.google.com/kubernetes-engine/docs/how-to/deploy-gke-inference-gateway#create-httproute)
 
-**NOTE**: Configure this `HTTPRoute` to the same namespace as the `vllm` worloads. Run the following command 
+**NOTE**: Configure this `HTTPRoute` to the same namespace as the `vllm` workloads. Run the following command 
 ```sh
 kubectl apply -f httproute.yaml -n $ira_online_gpu_kubernetes_namespace_name
 ```
@@ -154,7 +154,7 @@ Congratulations!! You have successfully deployed an open source model to GKE and
 
 ## Apigee as an AI Gateway
 
-Now that we have an Inference Gateway up and running, lets protect is using Apigee as an AI gateway for security and traffic control.
+Now that we have an Inference Gateway up and running, lets protect it using Apigee as an AI gateway for security and traffic control.
 
 - **API Key Verification**: Implement a policy to validate API keys on every incoming request, moving beyond basic security.
 - **Token Limiting**: This feature will strictly limit the number of tokens based on the subscription limits and allowances configured in the relevant AI Product (API Product). Requests exceeding the specified threshold will be automatically rejected.
