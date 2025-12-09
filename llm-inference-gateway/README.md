@@ -162,8 +162,8 @@ Now that we have an Inference Gateway up and running, lets protect it using Apig
 
 ## Step 1: Install the Apigee APIM Operator
 
-- Follow the steps provided in this [doc](https://docs.cloud.google.com/apigee/docs/api-platform/apigee-kubernetes/apigee-apim-operator-install). Please follow the entire step end to end.
-- Make sure you have the Apigee environment created in the same region as the GKE cluster.
+1. Follow the steps provided in this [doc](https://docs.cloud.google.com/apigee/docs/api-platform/apigee-kubernetes/apigee-apim-operator-install). Please follow the entire step end to end.
+2. Make sure you have the Apigee environment created in the same region as the GKE cluster.
 
 ## Step 2: Create an ApigeeBackendService
 
