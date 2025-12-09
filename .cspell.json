@@ -140,6 +140,7 @@
     "kvmname",
     "kvms",
     "letsencrypt",
+    "LLM",
     "LOADBALANCER",
     "logdebug",
     "logerror",
