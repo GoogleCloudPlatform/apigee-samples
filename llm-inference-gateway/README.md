@@ -150,6 +150,8 @@ curl -X POST \
 EOF_JSON
 ```
 
+Congratulations!! You have successfully deployed an open source model to GKE and exposed it using the GKE Inference Gateway!
+
 ## Apigee as an AI Gateway
 
 Now that we have an Inference Gateway up and running, lets protect is using Apigee as an AI gateway for security and traffic control.
