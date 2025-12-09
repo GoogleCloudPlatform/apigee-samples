@@ -1,10 +1,8 @@
 # llm-inference-gateway
 
-- In this sample, we will cover how Apigee can be configured to provide authentication, authorization, and API management for your inference workloads. Apigee can integrate with [GKE Inference Gateway](https://cloud.google.com/kubernetes-engine/docs/concepts/about-gke-inference-gateway) to provide features like API security, rate limiting, quotas, analytics, and monetization.
+- In this sample, we will cover how Apigee can be configured as an AI gateway to provide authentication, authorization and other serving capabilities like Token limiting, etc for your inference workloads. Apigee can integrate with [GKE Inference Gateway](https://cloud.google.com/kubernetes-engine/docs/concepts/about-gke-inference-gateway) to provide features like API security, rate limiting, quotas, analytics, and monetization.
 - In ths sample, we will create a GKE cluster and configure a GKE Inference Gateway to optimize the serving of generative AI applications and workloads on GKE. 
-
-    **NOTE:** The cluster and the model deployed is just for the **demo/sample purposes** and **not intended for production scale workloads**. Please use best practices to deploy your models. The main intention of this sample is to showcase how Apigee can protect your AI workloads that are exposed using GKE Inference Gateways. You can make use of [Google Cluster Toolkit](https://github.com/GoogleCloudPlatform/cluster-toolkit) which makes it easy for customers to deploy AI/ML and HPC environments on Google Cloud
-
+- To create the cluster, we will be using [Google Cloud Accelerated Platforms ](https://github.com/GoogleCloudPlatform/accelerated-platforms/tree/hf-model-vllm-gpu-tutorial) repo, a collection of accelerated platform best practices, reference architectures, example use cases, reference implementations, and various other assets on Google Cloud.
 - The sample uses [Apigee Operator for Kubernetes](https://docs.cloud.google.com/apigee/docs/api-platform/apigee-kubernetes/apigee-apim-operator-overview) that allows you to perform API management tasks, such as defining API products and operations, using Kubernetes tools. 
 - We will be using `ApigeeBackendService` in this sample that uses Apigee as an extension in the [traffic extension](https://docs.cloud.google.com/kubernetes-engine/docs/how-to/configure-gke-service-extensions#configure-gcp-extensions) resource. 
 
@@ -25,7 +23,7 @@ The flow is as follows:
 3. Enable Google Kubernetes Engine API, Vertex AI API in your project
 4. Will require roles to create GKE cluster, Load Balancer, PSC NEGs and create/deploy Apigee resources like proxies, environments, environment groups, etc. For more info, check out this [doc](https://docs.cloud.google.com/apigee/docs/api-platform/apigee-kubernetes/apigee-apim-operator-install#required-roles)
 5. Make sure that you have Reserved proxy-only subnets for load balancing and Private Service Connect subnets in your VPC network. For more info about these, check this [doc](https://docs.cloud.google.com/vpc/docs/subnets#purpose)
-6. Will need a HuggingFace Token. You can sign up for an account at https://huggingface.co and create an Access Token
+6. Will need a Hugging Face Token. You can sign up for an account at https://huggingface.co and create an Access Token
 7. Make sure the following tools are available in your terminal's $PATH (Cloud Shell has these preconfigured)
     - [gcloud SDK](https://cloud.google.com/sdk/docs/install)
     - [helm](https://helm.sh/docs/intro/install/)
@@ -34,122 +32,143 @@ The flow is as follows:
     - curl
     - jq
 
-## Setup
+## Deploy open LLMs on GKE
 
-1. Clone this repo by running the following command in your terminal
-  ```sh
-  git clone https://github.com/GoogleCloudPlatform/apigee-samples.git
-  ```
-2. Navigate to the sample directory
-  ```sh
-  cd apigee-samples/llm-inference-gateway
-  ```
+The first step is to deploy popular open large language models (LLMs) on GKE for Inference by using Infrastructure as Code (IaC), with Terraform wrapped in CLI scripts, to create a standardized, secure, and scalable GKE environment designed for AI inference workloads. This [repo](https://github.com/GoogleCloudPlatform/accelerated-platforms/tree/hf-model-vllm-gpu-tutorial) has all the info to set it up.
 
-## Create a GKE Gateway with the inference extension
+Follow the steps mentioned in this [doc](https://docs.cloud.google.com/kubernetes-engine/docs/tutorials/serve-open-models-terraform) that guides you on how to deploy and serve LLMs using single-host GPU nodes on GKE with the vLLM serving framework.
 
-1. Edit the values in [env.sh](./env.sh) file and once its saved, run the following command
-    ```sh
-    source env.sh
-    ```
-2. Create a new GKE cluster by running the following command
-   ```sh
-    gcloud container clusters create ${CLUSTER_NAME} --location ${ZONE} \
-    --project=${PROJECT_ID} \
-    --network=${NETWORK} \
-    --subnetwork=${SUBNET} \
-    --gateway-api=standard \
-    --workload-pool=${PROJECT_ID}.svc.id.goog \
-    --machine-type="c2-standard-16" \
-    --disk-type="pd-standard" \
-    --num-nodes=3 \
-    --release-channel="rapid" \
-    --monitoring=SYSTEM,DCGM
-   ```
-    **NOTE:** The cluster and the model deployed is just for the **demo/sample purposes** and **not intended for production scale workloads**. Please use best practices to deploy your models. The main intention of this sample is to showcase how Apigee can protect your AI workloads that are exposed using GKE Inference Gateways. You can make use of [Google Cluster Toolkit](https://github.com/GoogleCloudPlatform/cluster-toolkit) which makes it easy for customers to deploy AI/ML and HPC environments on Google Cloud.
-3. Once the cluster is up and running, lets configure kubectl command line access by running the following command:
-    ```sh
-    gcloud container clusters get-credentials $CLUSTER_NAME --location $ZONE --project $PROJECT_ID
-    ```
-4. Create a Kubernetes secret with the HuggingFace Access Token
-   ```sh
-    kubectl create secret generic hf-token --from-literal=token=$HF_TOKEN 
-   ```
-5. We need to install Kubernetes custom resources
-   ```sh
-    kubectl apply -f k8s-manifests/crd-inferenceobjectives.yaml
-   ```
-6. Deploy a model server
-   ```sh
-    kubectl apply -f k8s-manifests/cpu-deployment.yaml
-   ```
-7. Wait to make sure the deployment is Available
-    ```sh
-    kubectl wait deployment/vllm-qwen2.5-1.5b-instruct --for=condition=Available --timeout=5m
-    ```
-8. Deploy the InferencePool and Endpoint Picker Extension 
-    ```sh
-    kubectl apply -f k8s-manifests/inferencepool-resources.yaml
-    kubectl apply -f k8s-manifests/healthcheck.yaml
-    kubectl apply -f k8s-manifests/gcp-backend-policy.yaml
-    ```
-9.  Deploy InferenceObjective
-    ```sh
-    kubectl apply -f k8s-manifests/inferenceobjective.yaml
-    ```
-10. Deploy Gateway
-    ```sh
-    kubectl apply -f k8s-manifests/inference-gateway.yaml
-    ```
-11. Confirm that the Gateway was assigned an IP address and reports a `Programmed=True` status
-    ```sh
-    kubectl wait gateway/inference-gateway \
-    --for=jsonpath='{.status.addresses[0].value}' \
-    --for=condition=Programmed \
-    --timeout=5m
-    ```
-12. Deploy HTTPRoute (NOTE: This can take a few minutes)
-    ```sh
-    kubectl apply -f k8s-manifests/httproute.yaml
-    ```
-13. Confirm that the HTTPRoute status conditions include `Accepted=True` and `ResolvedRefs=True`
-    ```sh
-    kubectl wait httproute/llm-route \
-    --for=jsonpath='{.status.parents[0].conditions[?(@.type=="Accepted")].status}'=True \
-    --for=jsonpath='{.status.parents[0].conditions[?(@.type=="ResolvedRefs")].status}'=True \
-    --timeout=5m
-    ```
-14. Send a Request to Model Backend to Verify Inference Gateway.
-    
-    NOTE: This may take a few minutes. So please try a few times initially
-    
-    ```sh
-    IP=$(kubectl get gateway/inference-gateway -o jsonpath='{.status.addresses[0].value}')
-    PORT=80
+Make sure you test your deployment by following the steps mentioned [here](https://docs.cloud.google.com/kubernetes-engine/docs/tutorials/serve-open-models-terraform#test-your-deployment).
 
-    curl -i ${IP}:${PORT}/v1/chat/completions -H 'Content-Type: application/json' -d '{
-        "messages": [
-            {
-                "role": "user",
-                "content": "What is the capital of France?"
-            }
-        ],
-        "model": "Qwen/Qwen2.5-1.5B-Instruct",
-        "max_tokens": 10,
-        "stream": false
-    }'
-    ``` 
-    You should see a valid response. If you find any issues, please use the troubleshooting [guide](https://docs.cloud.google.com/apigee/docs/api-platform/apigee-kubernetes/apigee-apim-operator-troubleshoot) available in the public docs.
+### Things to consider
+
+- You must accept the license terms for any gated models you want to use (such as Gemma or Llama) on their respective Hugging Face model page. 
+- This setup guide downloads the model from Hugging Face and stores it in a GCS bucket so the model name in the API will be `/gcs/${HF_MODEL_ID}`, for example `/gcs/google/gemma-3-1b-it`.
+- The setup has default variables for names of VPC network, subnets etc and the region where it gets deployed (for example `us-central1`). If you want to change any of those variables, update the appropriate values in the TF code. Those changes are beyond the scope of this sample. Please refer to the [repo](https://github.com/GoogleCloudPlatform/accelerated-platforms/tree/hf-model-vllm-gpu-tutorial) for more details.
+
+## Deploy GKE Inference Gateway
+
+In this step, we will deploy the GKE Inference Gateway. The high-level workflow for configuring GKE Inference Gateway is as follows: 
+  1. Create an inference pool
+  2. Specify inference objectives
+  3. Create the Gateway
+  4. Create the HTTPRoute
+
+**NOTE**: All the above should be configured on the same namespace as the `vllm` workloads. The namespace is created by the TF modules and available as a variable called `ira_online_gpu_kubernetes_namespace_name`.
+
+```sh
+echo "namespace is '$ira_online_gpu_kubernetes_namespace_name'"
+```
+
+### Create an inference pool
+
+- The InferencePool Kubernetes custom resource defines a group of Pods with a common base large language model (LLM) and compute configuration. For more info, you can find [here](https://docs.cloud.google.com/kubernetes-engine/docs/how-to/deploy-gke-inference-gateway#create-inference-pool).
+- Run the following command
+```sh
+APP=$(kubectl get pods -n $ira_online_gpu_kubernetes_namespace_name -o json | jq ."items[0].metadata.labels.app" -r)
+helm install $APP \
+  --set inferencePool.modelServers.matchLabels.app=$APP \
+  --set provider.name=gke \
+  --set inferenceExtension.monitoring.gke.enabled=true \
+  --version v1.0.1 \
+  oci://registry.k8s.io/gateway-api-inference-extension/charts/inferencepool \
+  -n $ira_online_gpu_kubernetes_namespace_name
+```
+
+This creates an InferencePool, for example, `object: vllm-l4-gemma-3-1b-it`, referencing the model endpoint services within the Pods. It also creates a deployment of the Endpoint Picker, for example, `app:vllm-l4-gemma-3-1b-it-epp`, for this created InferencePool.
+
+To get the InferencePool name, run 
+```sh
+kubectl get InferencePool -n $ira_online_gpu_kubernetes_namespace_name
+```
+
+### Specify inference objectives
+
+In this step we configure the `InferenceObjective` that lets you specify priority of requests. Follow the steps mentioned [here](https://docs.cloud.google.com/kubernetes-engine/docs/how-to/deploy-gke-inference-gateway#specify-inference-objectives). Update the `poolRef.name` with the name of your InferencePool.
+
+**NOTE**: Configure this `InferenceObjective` to the same namespace as the `vllm` worloads. Run the following command 
+```sh
+kubectl apply -f inference-objectives.yaml -n $ira_online_gpu_kubernetes_namespace_name
+```
+
+### Create the Gateway
+
+The Gateway resource is the entry point for external traffic into your Kubernetes cluster. It defines the listeners that accept incoming connections. We will use `gke-l7-regional-external-managed` (Regional External Application Load Balancers) for our sample. Follow the steps mentioned [here](https://docs.cloud.google.com/kubernetes-engine/docs/how-to/deploy-gke-inference-gateway#create-gateway)
+
+**NOTE**: Configure this `Gateway` to the same namespace as the `vllm` worloads. Run the following command 
+```sh
+kubectl apply -f gateway.yaml -n $ira_online_gpu_kubernetes_namespace_name
+```
+
+This may take a few mins to complete.
+
+### Create the HTTPRoute
+
+The `HTTPRoute` resource defines how the GKE Gateway routes incoming HTTP requests to backend services, such as your `InferencePool`. Follow the steps mentioned [here](https://docs.cloud.google.com/kubernetes-engine/docs/how-to/deploy-gke-inference-gateway#create-httproute)
+
+**NOTE**: Configure this `HTTPRoute` to the same namespace as the `vllm` worloads. Run the following command 
+```sh
+kubectl apply -f httproute.yaml -n $ira_online_gpu_kubernetes_namespace_name
+```
+
+## Send inference request
+
+After you have configured the GKE Inference Gateway, you can send inference requests to your deployed model. This lets you generate text based on your input prompt and specified parameters. Follow the steps mentioned [here](https://docs.cloud.google.com/kubernetes-engine/docs/how-to/deploy-gke-inference-gateway#send-inference-request).
+
+**NOTE**: The `model` name will have the `/gcs/` prefix, so make sure you pass that in your test call. For example
+```sh
+curl -X POST \
+  "http://$IP:$PORT/v1/completions" \
+  -H "Content-Type: application/json" \
+  -d @- <<EOF_JSON
+{
+  "model": "/gcs/$HF_MODEL_ID",
+  "prompt": "What is the capital of France?",
+  "max_tokens": 10,
+  "temperature": 0
+}
+EOF_JSON
+```
+or
+
+```sh
+curl -X POST \
+	"http://${IP}:${PORT}/v1/chat/completions" \
+	-H 'Content-Type: application/json' \
+	-d @- <<EOF_JSON
+	{
+	    "messages": [
+	        {
+	            "role": "user",
+	            "content": "What is the capital of France?"
+	        }
+	    ],
+	    "model": "/gcs/$HF_MODEL_ID",
+	    "max_tokens": 10,
+	    "stream": false
+	}
+EOF_JSON
+```
 
 ## Install the Apigee APIM Operator
 
 - Follow the steps provided in this [doc](https://docs.cloud.google.com/apigee/docs/api-platform/apigee-kubernetes/apigee-apim-operator-install). Please follow the entire step end to end.
-- Make sure you have the Apigee environment created as well as part of these steps.
+- Make sure you have the Apigee environment created in the same region as the GKE cluster.
 
 ## Create an ApigeeBackendService
 
 **NOTE:** Please proceed with the steps only if you have completed the Apigee APIM Operator installation mentioned above.
 
-1. Create the `ApigeeBackendService` resource
+1. Set the following environment variables
+```sh
+export PROJECT_ID=<GCP_Project_ID>
+export APIGEE_ENV=<Apigee_APIM_Env> #apim-enabled-dep-env
+export APIGEE_REGION=<Apigee_APIM_Env_Region> #us-central1
+export NETWORK=<GKE_Cluster_Network> #acp-dev
+export SUBNET=<GKE_Cluster_Network_Subnet> #acp-dev
+```
+2. Make sure you have a subnet dedicated to use with Private Service Connect (PSC). To create, refer to this [doc](https://docs.cloud.google.com/vpc/docs/configure-private-service-connect-producer#add-subnet-psc).
+3. Create the `ApigeeBackendService` resource
 ```sh
 cat <<-'EOF' | envsubst > apigee-backendservice.yaml
 apiVersion: apim.googleapis.com/v1
@@ -161,22 +180,27 @@ spec:
   defaultSecurityEnabled: true
   locations:
     - name: $APIGEE_REGION
-      network: projects/$APIGEE_ORG/global/networks/$NETWORK
-      subnetwork: projects/$APIGEE_ORG/regions/$APIGEE_REGION/subnetworks/$SUBNET
+      network: projects/$PROJECT_ID/global/networks/$NETWORK
+      subnetwork: projects/$PROJECT_ID/regions/$APIGEE_REGION/subnetworks/$SUBNET
 EOF
 ```
-2. Apply the file
+4. Apply the file
 ```sh
-kubectl apply -f apigee-backendservice.yaml
+kubectl apply -f apigee-backendservice.yaml -n $ira_online_gpu_kubernetes_namespace_name
 ```
-3. Verify and make sure the state is `CREATED`
+5. Verify and make sure the state is `CREATED`
 ```sh
-kubectl get apigeebackendservice
+kubectl get apigeebackendservice -n $ira_online_gpu_kubernetes_namespace_name
 ```
 
 ## Create a GCPTrafficExtension resource
 
-1. Create the `GCPTrafficExtension` resource
+1. Get the Inference Gateway and ApigeeBackendService resource names by running the following command
+```sh
+export INFERENCE_GATEWAY_NAME=$(kubectl get gateways -n $ira_online_gpu_kubernetes_namespace_name -o json | jq ."items[0].metadata.name" -r)
+export APIGEE_BACKENDSERVICE_NAME=$(kubectl get ApigeeBackendService -n $ira_online_gpu_kubernetes_namespace_name -o json | jq ."items[0].metadata.name" -r)
+```
+2. Create the `GCPTrafficExtension` resource
 ```sh
 cat <<-'EOF' | envsubst > gcp-traffic-extension.yaml
 kind: GCPTrafficExtension
@@ -187,7 +211,7 @@ spec:
   targetRefs:
   - group: "gateway.networking.k8s.io"
     kind: Gateway
-    name: inference-gateway
+    name: $INFERENCE_GATEWAY_NAME
   extensionChains:
   - name: my-chain1
     matchCondition:
@@ -196,7 +220,7 @@ spec:
     extensions:
     - name: my-apigee-extension
       metadata:
-          apigee-extension-processor : apigee-llm-inf-gw
+          apigee-extension-processor : $APIGEE_BACKENDSERVICE_NAME
           apigee-request-body: 'true'
           apigee-response-body: 'true'
       failOpen: false
@@ -213,37 +237,53 @@ spec:
       backendRef:
         group: "apim.googleapis.com"
         kind: ApigeeBackendService
-        name: apigee-llm-inf-gw
+        name: $APIGEE_BACKENDSERVICE_NAME
 EOF
 ```
-2. Apply the file
+3. Apply the file
 ```sh
-kubectl apply -f gcp-traffic-extension.yaml
+kubectl apply -f gcp-traffic-extension.yaml -n $ira_online_gpu_kubernetes_namespace_name
 ```
-3. Confirm that the GCPTrafficExtension status conditions include `Accepted=True` and `ResolvedRefs=True`
+4. Confirm that the GCPTrafficExtension status conditions include `Accepted=True` and `ResolvedRefs=True`
   ```sh
-  kubectl wait GCPTrafficExtension demo-apigee-extension \
+  kubectl wait GCPTrafficExtension demo-apigee-extension -n $ira_online_gpu_kubernetes_namespace_name \
   --for=jsonpath='{.status.ancestors[0].conditions[?(@.type=="Accepted")].status}'=True \
   --for=jsonpath='{.status.ancestors[0].conditions[?(@.type=="ResolvedRefs")].status}'=True \
   --timeout=5m
   ```
-4. Send a Request to Model Backend to Verify Inference Gateway. (NOTE: This can take a few minutes)   
+5. Send a Request to Model Backend to Verify Inference Gateway. (NOTE: This can take a few minutes)   
 ```sh
-IP=$(kubectl get gateway/inference-gateway -o jsonpath='{.status.addresses[0].value}')
-PORT=80
-
-curl -i ${IP}:${PORT}/v1/chat/completions -H 'Content-Type: application/json' -d '{
-    "messages": [
-        {
-            "role": "user",
-            "content": "What is the capital of France?"
-        }
-    ],
-    "model": "Qwen/Qwen2.5-1.5B-Instruct",
-    "max_tokens": 10,
-    "stream": false
-}'
+curl -X POST \
+  "http://$IP:$PORT/v1/completions" \
+  -H "Content-Type: application/json" \
+  -d @- <<EOF_JSON
+{
+  "model": "/gcs/$HF_MODEL_ID",
+  "prompt": "What is the capital of France?",
+  "max_tokens": 10,
+  "temperature": 0
+}
+EOF_JSON
 ``` 
+or
+```sh
+curl -X POST \
+	"http://${IP}:${PORT}/v1/chat/completions" \
+	-H 'Content-Type: application/json' \
+	-d @- <<EOF_JSON
+	{
+	    "messages": [
+	        {
+	            "role": "user",
+	            "content": "What is the capital of France?"
+	        }
+	    ],
+	    "model": "/gcs/$HF_MODEL_ID",
+	    "max_tokens": 10,
+	    "stream": false
+	}
+EOF_JSON
+```
 You should see an error. Something like
 
 ```json
@@ -266,16 +306,15 @@ apiVersion: apim.googleapis.com/v1
 kind: APIProduct
 metadata:
   name: api-inf-gw-product
-  namespace: apim
 spec:
   approvalType: auto
   description: Inference Gateway API Product
   displayName: api-inf-gw-product
   enforcementRefs:
-    - name: apigee-llm-inf-gw
+    - name: $APIGEE_BACKENDSERVICE_NAME
       kind: ApigeeBackendService
       group: apim.googleapis.com
-      namespace: default
+      namespace: $ira_online_gpu_kubernetes_namespace_name
   attributes:
     - name: access
       value: private
@@ -283,7 +322,7 @@ EOF
 ```
 2. Apply the file
 ```sh
-kubectl apply -f apigee-apiproduct.yaml
+kubectl apply -f apigee-apiproduct.yaml -n $ira_online_gpu_kubernetes_namespace_name
 ```
 3. Create an API Product Operation Set
 ```sh
@@ -292,13 +331,12 @@ apiVersion: apim.googleapis.com/v1
 kind: APIOperationSet
 metadata:
   name: item-set
-  namespace: apim
 spec:
   apiProductRefs:
     - name: api-inf-gw-product
       kind: APIProduct
       group: apim.googleapis.com
-      namespace: apim
+      namespace: $ira_online_gpu_kubernetes_namespace_name
   quota:
     limit: 100
     interval: 1
@@ -316,30 +354,48 @@ EOF
 ```
 4. Apply the file
 ```sh
-kubectl apply -f apigee-apiproduct-ops.yaml
+kubectl apply -f apigee-apiproduct-ops.yaml -n $ira_online_gpu_kubernetes_namespace_name
 ```
-5. Go to to the Apigee API management page in the Google Cloud console, create a Developer.
+5. Go to the Apigee API management page in the Google Cloud console, create a Developer.
 6. Once the developer is created, create a Developer App. Make sure to select the `api-inf-gw-product` product. Make a note of the API Key generated
 ```sh
 export APIKEY="APIKEY_TO_SET"
 ```
 7. Send a Request to Model Backend to Verify Inference Gateway
 ```sh
-IP=$(kubectl get gateway/inference-gateway -o jsonpath='{.status.addresses[0].value}')
-PORT=80
-
-curl -i ${IP}:${PORT}/v1/chat/completions -H 'Content-Type: application/json' -H "x-api-key: $APIKEY" -d '{
-    "messages": [
-        {
-            "role": "user",
-            "content": "What is the capital of France?"
-        }
-    ],
-    "model": "Qwen/Qwen2.5-1.5B-Instruct",
-    "max_tokens": 10,
-    "stream": false
-}'
+curl -X POST \
+  "http://$IP:$PORT/v1/completions" \
+  -H "x-api-key: $APIKEY" \
+  -H "Content-Type: application/json" \
+  -d @- <<EOF_JSON
+{
+  "model": "/gcs/$HF_MODEL_ID",
+  "prompt": "What is the capital of France?",
+  "max_tokens": 10,
+  "temperature": 0
+}
+EOF_JSON
 ``` 
+or
+```sh
+curl -X POST \
+	"http://${IP}:${PORT}/v1/chat/completions" \
+	-H 'Content-Type: application/json' \
+	-H "x-api-key: $APIKEY" \
+	-d @- <<EOF_JSON
+	{
+	    "messages": [
+	        {
+	            "role": "user",
+	            "content": "What is the capital of France?"
+	        }
+	    ],
+	    "model": "/gcs/$HF_MODEL_ID",
+	    "max_tokens": 10,
+	    "stream": false
+	}
+EOF_JSON
+```
 You should see a valid response. If you find any issues, please use the troubleshooting [guide](https://docs.cloud.google.com/apigee/docs/api-platform/apigee-kubernetes/apigee-apim-operator-troubleshoot) available in the public docs.
 
 ## Apigee as an AI Gateway
@@ -350,29 +406,59 @@ We will refactor the existing default proxy to introduce critical enterprise fea
 - **Token Limiting**: This feature will strictly limit the number of tokens based on the subscription limits and allowances configured in the relevant AI Product (API Product). Requests exceeding the specified threshold will be automatically rejected.
 - **Add more LLM serving patterns**: Other features like semantic caching, sanitizing prompts, LLM logging, etc can be added to the proxy as well. For more LLM serving use cases, refer to this [repo](https://github.com/GoogleCloudPlatform/apigee-samples?tab=readme-ov-file#samples-for-llm-serving-with-apigee).
 
-To deploy the proxy, execute the following script
+To deploy the proxy:
+
+1. Set the following environment variables
 ```sh
-source env.sh
-deploy-apigee-llm.sh
+export PROJECT_ID=<GCP_Project_ID>
+export APIGEE_ENV=<Apigee_APIM_Env> #apim-enabled-dep-env
+```
+2. Assuming you are still in the `accelerated-platforms` directory in your terminal. Run the following commands to clone the apigee-samples repo
+```sh
+cd ..
+git clone https://github.com/GoogleCloudPlatform/apigee-samples.git
+cd llm-inference-gateway
+```
+3. Execute the deployment script that will deploy a new Apigee proxy with additional policies with AI Gateway capabilities
+```sh
+./deploy-apigee-llm.sh
 ```
 
 Once the script is run successfully, run the curl command to test the functionality
 
 ```sh
-IP=$(kubectl get gateway/inference-gateway -o jsonpath='{.status.addresses[0].value}')
-PORT=80
-
-curl -i ${IP}:${PORT}/v1/chat/completions -H 'Content-Type: application/json' -H "x-api-key: $APIKEY" -d '{
-    "messages": [
-        {
-            "role": "user",
-            "content": "What is the capital of France?"
-        }
-    ],
-    "model": "Qwen/Qwen2.5-1.5B-Instruct",
-    "max_tokens": 10,
-    "stream": false
-}'
+curl -X POST \
+  "http://$IP:$PORT/v1/completions" \
+  -H "x-api-key: $APIKEY" \
+  -H "Content-Type: application/json" \
+  -d @- <<EOF_JSON
+{
+  "model": "/gcs/$HF_MODEL_ID",
+  "prompt": "What is the capital of France?",
+  "max_tokens": 10,
+  "temperature": 0
+}
+EOF_JSON
+```
+or
+```sh
+curl -X POST \
+	"http://${IP}:${PORT}/v1/chat/completions" \
+	-H 'Content-Type: application/json' \
+	-H "x-api-key: $APIKEY" \
+	-d @- <<EOF_JSON
+	{
+	    "messages": [
+	        {
+	            "role": "user",
+	            "content": "What is the capital of France?"
+	        }
+	    ],
+	    "model": "/gcs/$HF_MODEL_ID",
+	    "max_tokens": 10,
+	    "stream": false
+	}
+EOF_JSON
 ```
 
 Make multiple calls and you will notice that an error will occur once it hits the token limit. For example
@@ -387,3 +473,7 @@ Make multiple calls and you will notice that an error will occur once it hits th
     }
 }
 ```
+
+## Disclaimer
+
+This sample references GCP public documentation, which is subject to change (e.g., product updates, new features, or changes to the Google Cloud Accelerated Platforms repo). If you find a mismatch between the sample instructions and the underlying documentation, please open a GitHub [Issue](https://github.com/GoogleCloudPlatform/apigee-samples/issues).
