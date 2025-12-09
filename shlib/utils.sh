@@ -76,6 +76,22 @@ is_role_present() {
   return 1
 }
 
+get_sa_roles() {
+  local sa_email project collected_roles LINE
+  sa_email="$1"
+  project="$2"
+  local -n ref_array="$3"
+  collected_roles=()
+  while IFS= read -r LINE; do
+    collected_roles+=("$LINE")
+  done < <(gcloud projects get-iam-policy "${project}" \
+    --flatten="bindings[].members" \
+    --filter="bindings.members:${sa_email}" \
+    --format="value(bindings.role)" 2>/dev/null)
+
+  ref_array=("${collected_roles[@]}")
+
+}
 add_roles_to_service_account() {
   local sa_email project roles_var reqd_roles current_roles LINE role
   sa_email="$1"
@@ -84,14 +100,7 @@ add_roles_to_service_account() {
 
   declare -n reqd_roles="$roles_var"
 
-  current_roles=()
-  # shellcheck disable=SC2034
-  while IFS= read -r LINE; do
-    current_roles+=("$LINE")
-  done < <(gcloud projects get-iam-policy "${project}" \
-    --flatten="bindings[].members" \
-    --filter="bindings.members:${sa_email}" \
-    --format="value(bindings.role)" 2>/dev/null)
+  get_sa_roles "$sa_email" "$project" "current_roles"
 
   for role in "${reqd_roles[@]}"; do
     printf "\nChecking for '%s' role....\n" "${role}"
@@ -160,6 +169,7 @@ get_sedi_args() {
     echo "Error: get_sedi_args - must pass the name of the array to populate." >&2
     exit 1
   fi
+  # shellcheck disable=SC2178
   local -n ref_array="$1"
 
   local args=("-i")
@@ -168,7 +178,6 @@ get_sedi_args() {
     args=("-i" "")
   fi
 
-  # use declare -g to ensure this assignment is available outside the function.
   # shellcheck disable=SC2034
   ref_array=("${args[@]}")
 }
@@ -207,7 +216,7 @@ create_product_if_necessary() {
     echo "Creating API Product..."
     ops_file="./config/${product_name}-ops.json"
     if [[ ! -f "$ops_file" ]]; then
-      echo "cannot find product ops file %s . exiting." "$ops_file" >&2
+      printf "cannot find product ops file %s . exiting." "$ops_file" >&2
       exit 1
     fi
     apigeecli products create --name "${product_name}" --display-name "${product_name}" \
@@ -314,6 +323,7 @@ delete_kvm_if_necessary() {
 }
 
 remove_roles_from_service_account() {
+  # shellcheck disable=SC2034
   local sa_email project roles_var assnd_roles current_roles role LINE
   sa_email="$1"
   project="$2"
@@ -323,17 +333,9 @@ remove_roles_from_service_account() {
 
   printf "\nChecking roles on service account %s ...\n" "$sa_email"
   if gcloud iam service-accounts describe "${sa_email}" --project="$project" --quiet &>/dev/null; then
-    current_roles=()
-    while IFS= read -r LINE; do
-      current_roles+=("$LINE")
-    done < <(gcloud projects get-iam-policy "${project}" \
-      --flatten="bindings[].members" \
-      --filter="bindings.members:${sa_email}" \
-      --format="value(bindings.role)" 2>/dev/null)
-
+    get_sa_roles "$sa_email" "$project" "current_roles"
     for role in "${assnd_roles[@]}"; do
       printf "\nChecking for '%s' role....\n" "${role}"
-
       if is_role_present "${role}" "current_roles"; then
         printf "Removing role '%s' for SA '%s'....\n" "${role}" "${sa_email}"
         gcloud projects remove-iam-policy-binding "$project" \
