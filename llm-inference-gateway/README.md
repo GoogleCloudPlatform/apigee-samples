@@ -57,7 +57,7 @@ Make sure you test your deployment by following the steps mentioned [here](https
 
 - You must accept the license terms for any gated models you want to use (such as Gemma or Llama) on their respective Hugging Face model page. 
 - This setup guide downloads the model from Hugging Face and stores it in a GCS bucket so the model name in the API will be `/gcs/${HF_MODEL_ID}`, for example `/gcs/google/gemma-3-1b-it`.
-- The setup has default variables for names of VPC network, subnets etc and the region where it gets deployed (for example `us-central1`). If you want to change any of those variables, update the appropriate values in the TF code. Those changes are beyond the scope of this sample. Please refer to the [repo](https://github.com/GoogleCloudPlatform/accelerated-platforms/tree/hf-model-vllm-gpu-tutorial) for more details.
+- The setup uses default variables for the VPC network, subnets, and region (defaulting to `us-central1`). If you want to change any of these, update the appropriate values in the Terraform code. These changes are beyond the scope of this sample; please refer to the linked repo for details.
 
 ## Step 2: Deploy GKE Inference Gateway
 
