@@ -14,70 +14,50 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-if [ -z "$PROJECT_ID" ]; then
-  echo "No PROJECT_ID variable set"
-  exit
-fi
+scriptdir="$(cd "$(dirname "BASH_SOURCE[0]")" >/dev/null 2>&1 && pwd)"
 
-if [ -z "$APIGEE_ENV" ]; then
-  echo "No APIGEE_ENV variable set"
-  exit
-fi
+source "${scriptdir}/../shlib/utils.sh"
 
-if [ -z "$APIGEE_HOST" ]; then
-  echo "No APIGEE_HOST variable set"
-  exit
-fi
+# ====================================================================
 
-if [ -z "$TOKEN" ]; then
-  TOKEN=$(gcloud auth print-access-token)
-fi
+check_shell_variables PROJECT_ID APIGEE_ENV APIGEE_HOST
+check_required_commands gcloud jq curl
+
+[[ -z "$TOKEN" ]] && TOKEN=$(gcloud auth print-access-token)
+
+insure_apigeecli
 
 gcloud services enable aiplatform.googleapis.com dialogflow.googleapis.com --project "$PROJECT_ID"
 
-echo "Installing apigeecli"
-curl -s https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.sh | bash
-export PATH=$PATH:$HOME/.apigeecli/bin
+proxy_name="llm-function-calling-v1"
+import_and_deploy_apiproxy "$proxy_name" "$PROJECT_ID" "$APIGEE_ENV"
 
-echo "Deploying the Proxy"
+product_name="llm-function-calling-product"
+dev_moniker="llm-function-calling-developer"
+app_name="llm-function-calling-app"
+dev_email="${dev_moniker}@acme.com"
 
-apigeecli apis create bundle -n llm-function-calling-v1 \
-  -f apiproxy -e "$APIGEE_ENV" \
-  --token "$TOKEN" -o "$PROJECT_ID" \
-  --ovr --wait
+create_product_if_necessary "${product_name}" "$PROJECT_ID" "$APIGEE_ENV"
+create_developer_if_necessary "$dev_moniker" "$PROJECT_ID" "LLM Function Calling"
+create_app_if_necessary "$app_name" "$PROJECT_ID" "$product_name" "$dev_email"
 
-echo "Creating API Products"
-apigeecli products create --name "llm-function-calling-product" --display-name "llm-function-calling-product" \
-  --opgrp ./config/llm-function-calling-product.ops.json --envs "$APIGEE_ENV" \
-  --approval auto --org "$PROJECT_ID" --token "$TOKEN"
+APIKEY=$(apigeecli apps get --name "$app_name" --org "$PROJECT_ID" --token "$TOKEN" --disable-check | jq ."[0].credentials[0].consumerKey" -r)
 
-echo "Creating Developer"
-apigeecli developers create --user llm-function-calling-developer \
-  --email "llm-function-calling-developer@acme.com" --first="LLM Function Calling" \
-  --last="Sample User" --org "$PROJECT_ID" --token "$TOKEN"
-
-echo "Creating Developer App"
-apigeecli apps create --name llm-function-calling-app --email "llm-function-calling-developer@acme.com" \
-  --prods "llm-function-calling-product" --org "$PROJECT_ID" --token "$TOKEN" --disable-check
-
-APIKEY=$(apigeecli apps get --name "llm-function-calling-app" --org "$PROJECT_ID" --token "$TOKEN" --disable-check | jq ."[0].credentials[0].consumerKey" -r)
-
-export APIKEY
-export PROXY_URL="$APIGEE_HOST/v1/samples/llm-function-calling"
+PROXY_URL="$APIGEE_HOST/v1/samples/llm-function-calling"
 
 echo " "
 echo "All the Apigee artifacts are successfully deployed!"
 echo " "
 echo "Your Proxy URL is: https://$PROXY_URL"
 echo " "
-echo "Run the following commands to test the API"
+echo "Run the following command to test the API"
 echo " "
-echo "curl --location \"https://$APIGEE_HOST/v1/samples/llm-function-calling/products\" \
---header \"Content-Type: application/json\" \
---header \"x-apikey: $APIKEY\" "
+echo "curl --location \"https://\$APIGEE_HOST/v1/samples/llm-function-calling/products\" \\"
+echo "  --header \"Content-Type: application/json\" \\"
+echo "  --header \"x-apikey: \$APIKEY\""
 echo " "
-echo "Export these variables"
-echo "export APIKEY=$APIKEY"
+echo "Copy/paste this to set the APIKEY variable:"
+echo "  export APIKEY=$APIKEY"
 echo " "
 echo "You can now go back to the Colab notebook to test the sample. You will need the following variables during your test."
 echo "Your PROJECT_ID is: $PROJECT_ID"
