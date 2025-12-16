@@ -1,10 +1,23 @@
-# llm-inference-gateway
 
-- In this sample, we will cover how Apigee can be configured as an AI gateway to provide authentication, authorization and other serving capabilities like Token limiting, etc for your inference workloads. Apigee can integrate with [GKE Inference Gateway](https://cloud.google.com/kubernetes-engine/docs/concepts/about-gke-inference-gateway) to provide features like API security, rate limiting, quotas, analytics, and monetization.
-- In ths sample, we will create a GKE cluster and configure a GKE Inference Gateway to optimize the serving of generative AI applications and workloads on GKE. 
-- To create the cluster, we will be using [Google Cloud Accelerated Platforms ](https://github.com/GoogleCloudPlatform/accelerated-platforms/tree/hf-model-vllm-gpu-tutorial) repo, a collection of accelerated platform best practices, reference architectures, example use cases, reference implementations, and various other assets on Google Cloud.
-- The sample uses [Apigee Operator for Kubernetes](https://docs.cloud.google.com/apigee/docs/api-platform/apigee-kubernetes/apigee-apim-operator-overview) that allows you to perform API management tasks, such as defining API products and operations, using Kubernetes tools. 
-- We will be using `ApigeeBackendService` in this sample that uses Apigee as an extension in the [traffic extension](https://docs.cloud.google.com/kubernetes-engine/docs/how-to/configure-gke-service-extensions#configure-gcp-extensions) resource. 
+# GKE Inference Gateway + Apigee | llm-inference-gateway
+
+This sample demonstrates how to build a production-ready **AI Gateway** by combining **Google Kubernetes Engine (GKE) Inference Gateway** with **Apigee**.
+
+### Why Apigee + GKE Inference Gateway?
+Enterprises serving Large Language Models (LLMs) face two distinct sets of challenges: **Serving Efficiency** (Infrastructure) and **Model Governance** (Business). This reference architecture solves both by applying a "Layered Security" approach:
+
+* **GKE Inference Gateway (The Serving Layer):** Optimizes the "last mile" of traffic. It sits close to your models, handling **KV-Cache aware routing** (to speed up multi-turn chat), **dynamic model loading** (to run many models on fewer GPUs), and **efficient queueing** to prevent overload.
+* **Apigee (The Governance Layer):** Secures the "front door." It abstracts the complexity of the backend, handling **centralized authentication**, **consumption management (quotas)**, and **API lifecycle management** before traffic ever reaches your expensive GPU resources.
+
+### What You Will Build
+By following this guide, you will deploy a secured inference endpoint that exposes the following capabilities:
+
+1.  **Foundational Authentication:** Secure your open models (Llama, Gemma, etc.) with API Key verification, rejecting unauthorized traffic at the edge.
+2.  **Rate Limiting & Cost Control:** Enforce strict quotas (e.g., Requests per Minute) to prevent budget overrun and "noisy neighbor" issues.
+3.  **Unified Traffic Mediation:** A single API endpoint that routes traffic through a secure, optimized chain: **Apigee** → **GKE Gateway** → **Model Server**.
+4.  **Standardized Developer Experience:** Use Apigee's Developer Portal concepts to onboard consumers without giving them direct cluster access.
+
+## Architecture
 
 ![architecture](./images/arch.png)
 
