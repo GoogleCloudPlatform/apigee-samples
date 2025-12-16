@@ -17,12 +17,12 @@
   <Request clearPayload="true" variable="modelArmorRequest">
     <Set>
       <Payload contentType="application/json">
-                        {
-                            "user_prompt_data": { 
-                                "text": "{escapeJSON(promptText)}"
-                            }
-                        }
-            </Payload>
+        {
+            "user_prompt_data": {
+                "text": "{escapeJSON(promptText)}"
+            }
+        }
+      </Payload>
     </Set>
     <IgnoreUnresolvedVariables>false</IgnoreUnresolvedVariables>
   </Request>
