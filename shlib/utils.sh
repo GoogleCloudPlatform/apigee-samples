@@ -1,5 +1,5 @@
 #!/bin/bash
-# Copyright 2024-2025 Google LLC
+# Copyright © 2024-2025 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ check_shell_variables() {
 
   printf "Settings in use:\n"
   for var_name in "$@"; do
-    if [[ "$var_name" == *_APIKEY || "$var_name" == *_API_KEY || "$var_name" == *_SECRET || "$var_name" == *_CLIENT_ID ]]; then
+    if [[ "$var_name" == *_APIKEY || "$var_name" == *_API_KEY || "$var_name" == *_SECRET || "$var_name" == *_CLIENT_ID || "$var_name" == *_TOKEN ]]; then
       local value="${!var_name}"
       printf "  %s=%s\n" "$var_name" "${value:0:4}..."
     else
@@ -92,6 +92,7 @@ get_sa_roles() {
   ref_array=("${collected_roles[@]}")
 
 }
+
 add_roles_to_service_account() {
   local sa_email project roles_var reqd_roles current_roles LINE role
   sa_email="$1"
@@ -137,10 +138,16 @@ import_and_deploy_sharedflow() {
   apigeecli sharedflows create bundle -n "$sharedflow_name" \
     -f "$sf_dir" -e "$env" --token "$TOKEN" -o "$project" "${sa_args[@]}" \
     --ovr --wait
+  status=$?
+
+  if [[ $status -ne 0 ]]; then
+    echo "Failed to deploy Shared flow: status $status"
+    exit 1
+  fi
 }
 
 import_and_deploy_apiproxy() {
-  local proxy_name project env sa_email sa_args api_dir
+  local proxy_name project env sa_email sa_args api_dir status
   proxy_name=$1
   project=$2
   env=$3
@@ -161,6 +168,12 @@ import_and_deploy_apiproxy() {
   apigeecli apis create bundle -n "$proxy_name" \
     -f "$api_dir" -e "$env" --token "$TOKEN" -o "$project" "${sa_args[@]}" \
     --ovr --wait
+  status=$?
+
+  if [[ $status -ne 0 ]]; then
+    echo "Failed to deploy API proxy: status $status"
+    exit 1
+  fi
 }
 
 get_sedi_args() {
@@ -236,7 +249,7 @@ create_developer_if_necessary() {
   if apigeecli developers get --email "${dev_email}" --org "$project" --token "$TOKEN" --disable-check &>/dev/null; then
     printf "  The developer %s already exists.\n" "$dev_email"
   else
-    echo "Creating Developer %s ..." "$dev_email"
+    printf "Creating Developer %s ..." "$dev_email"
     apigeecli developers create --user "${dev_moniker}" \
       --email "$dev_email" --first="$label" \
       --last="Sample User" --org "$project" --token "$TOKEN"

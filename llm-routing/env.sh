@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright 2024 Google LLC
+# Copyright © 2024-2025 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,9 +17,14 @@
 export PROJECT_ID="PROJECT_ID_TO_SET"
 export APIGEE_ENV="APIGEE_ENV_TO_SET"
 export APIGEE_HOST="APIGEE_HOST_TO_SET"
-export SERVICE_ACCOUNT_NAME="llm-routing-svc-acct"
 
+# See the note about Vertex AI regions in the README
 export VERTEXAI_REGION="VERTEXAI_REGION_TO_SET"
 export VERTEXAI_PROJECT_ID="VERTEXAI_PROJECT_ID_TO_SET"
+
 export HUGGINGFACE_TOKEN="HUGGINGFACE_TOKEN_TO_SET"
-export MISTRAL_TOKEN="MISTRAL_TOKEN_TO_SET"
+export MISTRAL_APIKEY="MISTRAL_APIKEY_TO_SET"
+
+# modify these if you like
+export SERVICE_ACCOUNT_NAME="llm-routing-svc-acct"
+export GEMINI_MODEL_ID="gemini-2.5-flash"
