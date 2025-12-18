@@ -14,13 +14,6 @@
  * limitations under the License.
  */
 
-// module.exports = {
-//     extends: ['@commitlint/config-conventional'],
-//     rules: {
-//         'subject-case': [1, 'always', ['lower-case']]
-//     }
-// }
-
 export default {
   extends: ['@commitlint/config-conventional'],
   rules: {
