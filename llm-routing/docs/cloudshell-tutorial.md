@@ -191,13 +191,13 @@ This is an example showing how Apigee can route requests to multiple upstream sy
 the inbound request header `x-llm-provider` to choose the upstream target. But Apigee can use other data for routing
 decisions, including:
 
-- any part of the inbound request, such as headers, query params, url path segments, or payload elements.
-- an attribute on the caller's App (or credential), the API Product, or the Developer who owns the registered
+- any part of the inbound request, such as headers, query params, url path segments, or payload elements
+- an attribute on the caller's App (or credential), the API Product, or the Developer who owns the registered app
 - the time of day or day of the week
 - a dynamically determined load-factor
 - prior token usage or consumption
 - a weighted random selection for A/B testing
-- some combination of the above.
+- some combination of the above
 
 
 <walkthrough-inline-feedback></walkthrough-inline-feedback>
