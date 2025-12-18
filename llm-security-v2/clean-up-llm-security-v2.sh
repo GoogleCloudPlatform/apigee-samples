@@ -31,6 +31,7 @@ TOKEN=$(gcloud auth print-access-token)
 
 insure_apigeecli
 
+proxy_name="llm-security-v2"
 product_name="llm-security-product-v2"
 dev_moniker="llm-security-developer-v2"
 app_name="llm-security-app-v2"
@@ -41,8 +42,7 @@ delete_app_if_necessary "$app_name" "$PROJECT_ID" "$dev_email"
 delete_developer_if_necessary "$dev_email" "$PROJECT_ID"
 delete_product_if_necessary "$product_name" "$PROJECT_ID"
 delete_kvm_if_necessary "$kvm_name" "$PROJECT_ID" "$APIGEE_ENV"
-
-delete_apiproxy "llm-security-v2" "$PROJECT_ID"
+delete_apiproxy "${proxy_name}" "$PROJECT_ID"
 delete_sharedflow "ModelArmor-v2" "$PROJECT_ID"
 
 # shellcheck disable=SC2034

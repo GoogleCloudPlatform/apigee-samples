@@ -13,7 +13,6 @@
 -->
 <ExtractVariables continueOnError="false" enabled="true" name="EV-ExtractFields">
     <DisplayName>EV-ExtractFields</DisplayName>
-    <Properties/>
     <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
     <Header name="x-llm-provider">
         <Pattern ignoreCase="true">{modelProvider}</Pattern>

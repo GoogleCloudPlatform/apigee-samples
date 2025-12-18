@@ -11,24 +11,11 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<TargetEndpoint name="others">
-    <Description/>
-    <FaultRules/>
-    <PreFlow name="PreFlow">
-        <Request/>
-        <Response/>
-    </PreFlow>
-    <PostFlow name="PostFlow">
-        <Request>
-            <Step>
-                <Name>AM-SetTarget</Name>
-            </Step>
-        </Request>
-        <Response/>
-    </PostFlow>
-    <Flows/>
-    <HTTPTargetConnection>
-        <Properties/>
-        <URL>https://{target.url}</URL>
-    </HTTPTargetConnection>
-</TargetEndpoint>
+<OASValidation continueOnError="false" enabled="true" name="OAS-Verify">
+    <DisplayName>OAS-Verify</DisplayName>
+    <Source>request</Source>
+    <Options>
+        <ValidateMessageBody>true</ValidateMessageBody>
+    </Options>
+    <OASResource>oas://spec.yaml</OASResource>
+</OASValidation>
