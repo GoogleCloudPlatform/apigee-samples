@@ -51,6 +51,11 @@ add_roles_to_service_account "$SA_EMAIL" "$VERTEXAI_PROJECT_ID" "REQUIRED_ROLES"
 
 get_sedi_args sedi_args
 
+proxy_name="llm-routing-v1"
+product_name="llm-routing-product"
+dev_moniker="llm-routing-developer"
+app_name="llm-routing-app"
+dev_email="${dev_moniker}@acme.com"
 kvm_name="llm-routing-v1-modelprovider-config"
 
 if apigeecli kvms list -e "${APIGEE_ENV}" -o "$PROJECT_ID" --token "$TOKEN" | jq -e 'any(. == "'$kvm_name'")' >/dev/null; then
@@ -74,7 +79,6 @@ else
 fi
 
 echo "Deploying the Proxy"
-proxy_name="llm-routing-v1"
 sed "${sedi_args[@]}" "s/HOST/$APIGEE_HOST/g" "proxybundles/${proxy_name}/apiproxy/resources/oas/spec.yaml"
 
 if [[ "$PROJECT_ID" != "$VERTEXAI_PROJECT_ID" ]]; then
@@ -87,11 +91,6 @@ fi
 import_and_deploy_apiproxy "$proxy_name" "$PROJECT_ID" "$APIGEE_ENV" "${SA_EMAIL}"
 
 sed "${sedi_args[@]}" "s/$APIGEE_HOST/HOST/g" "proxybundles/${proxy_name}/apiproxy/resources/oas/spec.yaml"
-
-product_name="llm-routing-product"
-dev_moniker="llm-routing-developer"
-app_name="llm-routing-app"
-dev_email="${dev_moniker}@acme.com"
 
 create_product_if_necessary "${product_name}" "$PROJECT_ID" "$APIGEE_ENV"
 create_developer_if_necessary "$dev_moniker" "$PROJECT_ID" "LLM Security V2"

@@ -23,8 +23,8 @@ Mistral and HuggingFace as the LLM providers.
 Here are the steps we'll be going through:
 
 1. Ensure that Vertex AI is enabled in your Google Cloud project.
-3. Provision all the Apigee artifacts - proxy, KVM, product, developer, app, credential.
-4. Invoke the APIs.
+2. Provision all the Apigee artifacts - proxy, KVM, product, developer, app, credential.
+3. Invoke the APIs.
 
 Let's get started!
 
@@ -44,7 +44,7 @@ You may see a prompt: _You are already authenticated with gcloud ..._  Proceed a
 
 ## Set your environment
 
-Navigate to the 'llm-security-v2' directory in the Cloud shell.
+Navigate to the `llm-routing` directory in the Cloud shell.
 
 ```sh
 cd llm-routing
@@ -116,20 +116,17 @@ Export the `APIKEY` variable as mentioned in the command output
 
 You can test the sample with the following curl commands:
 
-### To Gemini
+### To use Gemini
 
-Provide your Provide and Model names in the follow variables:
-
-Run this curl command
+Run this curl command:
 
 ```sh
-GEMINI_MODEL=gemini-2.5-flash
-curl --location "https://\$APIGEE_HOST/v1/samples/llm-routing/chat/completions" \
+curl --location "https://$APIGEE_HOST/v1/samples/llm-routing/chat/completions" \
 --header "Content-Type: application/json" \
 --header "x-llm-provider: google" \
 --header "x-logpayload: false" \
 --header "x-apikey: $APIKEY" \
---data '{"model": "'${GEMINI_MODEL}'"","messages": [{"role": "user","content": [{"type": "image_url","image_url": {"url": "gs://generativeai-downloads/images/character.jpg"}},{"type": "text","text": "Describe this image in one sentence."}]}],"max_tokens": 250,"stream": false}'
+--data '{"model": "'${GEMINI_MODEL_ID}'"","messages": [{"role": "user","content": [{"type": "image_url","image_url": {"url": "gs://generativeai-downloads/images/character.jpg"}},{"type": "text","text": "Describe this image in one sentence."}]}],"stream": false}'
 ```
 
 In this request, you are passing the APIKEY created during setup to the
@@ -142,9 +139,9 @@ account you created during setup. In that sense Apigee is performing routing AND
 mediation.
 
 
-### To Mistral
+### To use Mistral
 
-Execute the following curl command
+Execute the following curl command:
 
 ```sh
 curl --location "https://$APIGEE_HOST/v1/samples/llm-routing/chat/completions" \
@@ -163,9 +160,9 @@ In this request, you are also passing an HTTP Header: `x-llm-provider:
 mistral`. Based on this header, the Apigee proxy is routing the request to the
 Mistral endpoint, using the API Key you created in the Mistral.ai portal.
 
-### To HuggingFace
+### To use HuggingFace
 
-Execute the following curl command
+Execute the following curl command:
 
 ```sh
 curl --location "https://$APIGEE_HOST/v1/samples/llm-routing/chat/completions" \

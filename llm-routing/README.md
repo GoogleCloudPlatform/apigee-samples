@@ -43,7 +43,7 @@ Mistral and HuggingFace as the LLM providers.
    [Llama-3.1-8B-Instruct](https://huggingface.co/meta-llama/Llama-3.1-8B-Instruct)
    page and accept the terms.
 
-5. Create an account [Mistral.AI](https://console.mistral.ai/), and create an API Key.
+6. Create an account [Mistral.AI](https://console.mistral.ai/), and create an API Key.
 
    > The process: Create an account. When signed in, on the left-hand-side navigation menu, slide down to
    > API Keys. Click it.  In the banner, click through to "Subscribe" to the free experimental plan. Confirm your
@@ -51,7 +51,7 @@ Mistral and HuggingFace as the LLM providers.
    > Click it.  Then click the button to Create an API Key.
 
 
-6. Make sure the following tools are available in your terminal's $PATH (Cloud Shell has these preconfigured)
+7. Make sure the following tools are available in your terminal's $PATH (Cloud Shell has these preconfigured)
     - [gcloud SDK](https://cloud.google.com/sdk/docs/install)
     - [apigeecli](https://github.com/apigee/apigeecli)
     - unzip

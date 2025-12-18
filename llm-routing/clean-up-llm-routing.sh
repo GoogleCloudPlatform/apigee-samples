@@ -53,7 +53,7 @@ ASSIGNED_ROLES=(
 )
 
 SA_EMAIL="${SERVICE_ACCOUNT_NAME}@${PROJECT_ID}.iam.gserviceaccount.com"
-remove_roles_from_service_account "$SA_EMAIL" "$PROJECT_ID" "ASSIGNED_ROLES"
+remove_roles_from_service_account "$SA_EMAIL" "$VERTEXAI_PROJECT_ID" "ASSIGNED_ROLES"
 
 delete_sa_if_necessary "$SA_EMAIL" "$PROJECT_ID"
 
