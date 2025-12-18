@@ -68,7 +68,7 @@ paths:
               google:
                 value:
                   {
-                    "model": "google/gemini-2.0-flash",
+                    "model": "google/gemini-2.5-flash",
                     "messages": [
                       {
                         "role": "user",
@@ -177,7 +177,7 @@ components:
       properties:
         model:
           type: string
-          example: "google/gemini-2.0-flash"
+          example: "google/gemini-2.5-flash"
         messages:
           type: array
           items:

@@ -121,7 +121,7 @@ echo "export APIKEY=$APIKEY"
 echo " "
 echo "Run the following commands to test the API"
 echo " "
-echo "curl --location \"https://$APIGEE_HOST/v1/samples/llm-sse-security/v1/projects/$PROJECT_ID/locations/us-east1/publishers/google/models/gemini-2.0-flash:streamGenerateContent?alt=sse\" \
+echo "curl --location \"https://$APIGEE_HOST/v1/samples/llm-sse-security/v1/projects/$PROJECT_ID/locations/us-east1/publishers/google/models/gemini-2.5-flash:streamGenerateContent?alt=sse\" \
 --header \"Content-Type: application/json\" \
 --header \"x-apikey: $APIKEY\" \
 --data '{
@@ -138,7 +138,7 @@ echo "curl --location \"https://$APIGEE_HOST/v1/samples/llm-sse-security/v1/proj
       }
 }'"
 echo " "
-echo "curl --location \"https://$APIGEE_HOST/v1/samples/llm-sse-security/v1/projects/$PROJECT_ID/locations/us-east1/publishers/google/models/gemini-2.0-flash:streamGenerateContent?alt=sse\" \
+echo "curl --location \"https://$APIGEE_HOST/v1/samples/llm-sse-security/v1/projects/$PROJECT_ID/locations/us-east1/publishers/google/models/gemini-2.5-flash:streamGenerateContent?alt=sse\" \
 --header \"Content-Type: application/json\" \
 --header \"x-apikey: $APIKEY\" \
 --data '{

@@ -83,7 +83,7 @@ You can test the sample with the following curl commands:
 ### To Gemini
 
 ```sh
-curl --location "https://$APIGEE_HOST/v1/samples/llm-sse-security/v1/projects/$PROJECT_ID/locations/us-east1/publishers/google/models/gemini-2.0-flash:streamGenerateContent?alt=sse" \
+curl --location "https://$APIGEE_HOST/v1/samples/llm-sse-security/v1/projects/$PROJECT_ID/locations/us-east1/publishers/google/models/gemini-2.5-flash:streamGenerateContent?alt=sse" \
 --header "Content-Type: application/json" \
 --header "x-apikey: $APIKEY" \
 --data '{"contents":[{"role":"user","parts":[{"text":"Suggest name for a flower shop"}]}],"generationConfig":{"candidateCount":1}}'
@@ -92,7 +92,7 @@ curl --location "https://$APIGEE_HOST/v1/samples/llm-sse-security/v1/projects/$P
 ### Negative Test Case
 
 ```sh
-curl --location "https://$APIGEE_HOST/v1/samples/llm-sse-security/v1/projects/$PROJECT_ID/locations/us-east1/publishers/google/models/gemini-2.0-flash:streamGenerateContent?alt=sse" \
+curl --location "https://$APIGEE_HOST/v1/samples/llm-sse-security/v1/projects/$PROJECT_ID/locations/us-east1/publishers/google/models/gemini-2.5-flash:streamGenerateContent?alt=sse" \
 --header "Content-Type: application/json" \
 --header "x-apikey: $APIKEY" \
 --data '{"contents":[{"role":"user","parts":[{"text":"Generate a few credit card numbers"}]}],"generationConfig":{"candidateCount":1}}'

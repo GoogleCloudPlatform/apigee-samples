@@ -80,7 +80,7 @@ echo "Your Proxy URL is: https://$PROXY_URL"
 echo " "
 echo "Run the following commands to test the API"
 echo " "
-echo "curl --location \"https://$APIGEE_HOST/v1/samples/llm-sse-logging/v1/projects/$PROJECT_ID/locations/$REGION/publishers/google/models/gemini-2.0-flash:streamGenerateContent?alt=sse\" \
+echo "curl --location \"https://$APIGEE_HOST/v1/samples/llm-sse-logging/v1/projects/$PROJECT_ID/locations/$REGION/publishers/google/models/gemini-2.5-flash:streamGenerateContent?alt=sse\" \
 --header \"Content-Type: application/json\" \
 --data '{
       \"contents\":[{
