@@ -67,7 +67,7 @@ In this step, we will deploy the GKE Inference Gateway. The high-level workflow 
   3. Create the Gateway
   4. Create the HTTPRoute
 
-**NOTE**: All the above should be configured on the same namespace as the `vllm` workloads. The namespace is created by the TF modules and available as a variable called `ira_online_gpu_kubernetes_namespace_name`.
+**NOTE**: All the above should be configured in the same namespace as the `vllm` workloads. The namespace is created by the TF modules and available as a variable called `ira_online_gpu_kubernetes_namespace_name`.
 
 ```sh
 echo "namespace is '$ira_online_gpu_kubernetes_namespace_name'"
@@ -106,7 +106,7 @@ kubectl apply -f inference-objectives.yaml -n $ira_online_gpu_kubernetes_namespa
 
 ### Create the Gateway
 
-The Gateway resource is the entry point for external traffic into your Kubernetes cluster. It defines the listeners that accept incoming connections. We will use `gke-l7-regional-external-managed` (Regional External Application Load Balancers) for our sample. Follow the steps mentioned [here](https://docs.cloud.google.com/kubernetes-engine/docs/how-to/deploy-gke-inference-gateway#create-gateway)
+The Gateway resource is the entry point for external traffic into your Kubernetes cluster. It defines the listeners that accept incoming connections. We will use `gke-l7-regional-external-managed` (Regional External Application Load Balancers) for our sample. Follow the steps mentioned [here](https://docs.cloud.google.com/kubernetes-engine/docs/how-to/deploy-gke-inference-gateway#create-gateway).
 
 **NOTE**: Configure this `Gateway` to the same namespace as the `vllm` workloads. Run the following command 
 ```sh
@@ -117,7 +117,7 @@ This may take a few mins to complete.
 
 ### Create the HTTPRoute
 
-The `HTTPRoute` resource defines how the GKE Gateway routes incoming HTTP requests to backend services, such as your `InferencePool`. Follow the steps mentioned [here](https://docs.cloud.google.com/kubernetes-engine/docs/how-to/deploy-gke-inference-gateway#create-httproute)
+The `HTTPRoute` resource defines how the GKE Gateway routes incoming HTTP requests to backend services, such as your `InferencePool`. Follow the steps mentioned [here](https://docs.cloud.google.com/kubernetes-engine/docs/how-to/deploy-gke-inference-gateway#create-httproute).
 
 **NOTE**: Configure this `HTTPRoute` to the same namespace as the `vllm` workloads. Run the following command 
 ```sh
