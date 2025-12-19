@@ -176,7 +176,7 @@ echo "  --data '{
   \"stream\": false
 }'"
 echo " "
-echo "Export these variables"
+echo "Export this variable"
 echo "  export APIKEY=$APIKEY"
 echo " "
 echo "You can now go back to the Colab notebook to test the sample. You will need the following variables during your test."
