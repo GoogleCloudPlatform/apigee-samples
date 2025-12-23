@@ -2,7 +2,7 @@
 
 This is a sample Apigee proxy to demonstrate the security capabilities of Apigee
 with [Model Armor](https://docs.cloud.google.com/model-armor/overview) to secure the user prompts. In this sample, we will use the out
-of the box ModelArmor policies
+of the box Model Armor policies
 ([SanitizeUserPrompt](https://docs.cloud.google.com/apigee/docs/api-platform/reference/policies/sanitize-user-prompt-policy)
 and
 [SanitizeModelResponse](https://docs.cloud.google.com/apigee/docs/api-platform/reference/policies/sanitize-llm-response-policy))
