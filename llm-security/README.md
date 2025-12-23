@@ -11,7 +11,10 @@ with Apigee using these callout policies.
 
 This sample differs from the related [llm-security-v2](../llm-security-v2/)
 sample, only in how the calls to Model Armor are made. This sample uses a
-ServiceCallout to connect to ModelArmor; the other sample uses the purpose-built
+ServiceCallout to connect to Model Armor; the other sample uses the purpose-built
+([SanitizeUserPrompt](https://docs.cloud.google.com/apigee/docs/api-platform/reference/policies/sanitize-user-prompt-policy)
+and
+[SanitizeModelResponse](https://docs.cloud.google.com/apigee/docs/api-platform/reference/policies/sanitize-llm-response-policy))
 policies.  Both approaches work.
 
 ## Pre-Requisites
