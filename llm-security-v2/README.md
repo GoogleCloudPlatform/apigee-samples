@@ -13,7 +13,7 @@ to inspect the prompt and response.
 This sample differs from the related [llm-security](../llm-security/) sample,
 only in how the calls to Model Armor are made. This sample uses the
 purpose-built policies; the other sample uses a ServiceCallout to connect to
-ModelArmor. Both approaches work.
+Model Armor. Both approaches work.
 
 ## Pre-Requisites
 
