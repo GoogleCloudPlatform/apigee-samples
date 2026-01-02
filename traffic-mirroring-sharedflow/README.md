@@ -24,22 +24,26 @@ This shared flow is useful for:
 
 ## How It Works
 
-The shared flow uses three policies:
+The shared flow uses two policies:
 
 1. **AM-SetTarget**: Configures the mirror destination host and URL
-2. **SC-RequestMirror**: Makes an asynchronous ServiceCallout to the mirror endpoint
-3. **AM-SetResponse**: Optionally captures the mirror response for logging/debugging
+2. **SC-RequestMirror**: Makes a ServiceCallout to the mirror endpoint
 
 All policies use `continueOnError="true"` to ensure failures in the mirror request don't impact the primary flow.
 
+**Non-Blocking Implementation:** The mirror is executed in the `PostClientFlow`, which runs *after* the client response has been sent. This ensures zero latency impact on the primary request - it's a true fire-and-forget pattern.
+
 ### Architecture
 
-``` bash
-Client Request → Apigee Proxy → Primary Backend
-                      ↓
-                 Shared Flow (Mirror)
-                      ↓
-                 Mirror Endpoint (async, non-blocking)
+```sh
+Client Request → Apigee Proxy → Primary Backend → Response to Client
+                                                          ↓
+                                                   PostClientFlow
+                                                          ↓
+                                                   Shared Flow (Mirror)
+                                                          ↓
+                                                   Mirror Endpoint
+                                                   (fire-and-forget)
 ```
 
 ## Prerequisites
@@ -132,7 +136,7 @@ Before calling the shared flow, set these variables using an AssignMessage polic
 
 ### 3. Add to Your Proxy Flow
 
-Add both policies to your proxy's preflow or a conditional flow:
+Add the configuration policy to your proxy's PreFlow (request), and the FlowCallout to the PostClientFlow (response). This ensures the mirror executes *after* the client response is sent:
 
 ```xml
 <PreFlow>
@@ -140,12 +144,19 @@ Add both policies to your proxy's preflow or a conditional flow:
     <Step>
       <Name>AM-ConfigureMirror</Name>
     </Step>
+  </Request>
+</PreFlow>
+
+<PostClientFlow>
+  <Response>
     <Step>
       <Name>FC-TrafficMirror</Name>
     </Step>
-  </Request>
-</PreFlow>
+  </Response>
+</PostClientFlow>
 ```
+
+**Key Point:** By placing the FlowCallout in `PostClientFlow`, the mirroring happens asynchronously after the client has already received their response. This guarantees zero latency impact.
 
 ### Variable Reference
 
@@ -155,29 +166,23 @@ Add both policies to your proxy's preflow or a conditional flow:
 | `request-mirror-target` | Yes      | Full base URL of the mirror endpoint          | `https://api-test.example.com` |
 | `request-mirror-uri`    | Yes      | Path to mirror (usually `{proxy.pathsuffix}`) | `/v1/users`                    |
 
-The shared flow also sets these response variables for debugging:
-
-|                              Variable | Description                                        |
-|---------------------------------------|----------------------------------------------------|
-| `request-mirror-response-status-code` | HTTP status code from mirror endpoint (via header) |
-| `request-mirror-response`             | Response body from mirror endpoint                 |
+**Note:** Since the mirror executes in `PostClientFlow` (after the client response is sent), the mirror response is not captured or returned to the client. This is intentional for the fire-and-forget pattern. For debugging, use analytics, message logging policies, or target server logs.
 
 ## Testing the Sample
 
 After deployment, test the example proxy:
 
 ```bash
-# Test with mirroring enabled
+# Test the proxy
 curl -i https://${APIGEE_HOST}/v1/samples/traffic-mirror/get
 
-# Check the mirror response headers
-curl -i https://${APIGEE_HOST}/v1/samples/traffic-mirror/get | grep request-mirror
+# The mirror request is sent to httpbin.org in the background
+# Check target server logs or Apigee analytics to verify mirror traffic
 ```
 
 You can also run the automated test suite:
 
 ```bash
-npm install
 npm run test
 ```
 
@@ -227,12 +232,11 @@ Send mirrored traffic to a different path:
 
 ## Best Practices
 
-1. **Monitor Mirror Endpoint**: Although errors don't impact the main flow, monitor the mirror endpoint for issues
+1. **Monitor Mirror Endpoint**: Although errors don't impact the main flow, monitor the mirror endpoint for issues using target server logs or analytics
 2. **Use Conditions**: Only mirror when needed to reduce unnecessary load
-3. **Set Timeouts**: The ServiceCallout has a default timeout; adjust if needed
-4. **Log Responses**: Use the response variables to log mirror endpoint behavior
-5. **Security**: Ensure mirror endpoint can handle production data securely
-6. **Performance**: Monitor the impact on request latency (should be minimal)
+3. **Set Timeouts**: The ServiceCallout has a default timeout; adjust if needed in the policy configuration
+4. **Security**: Ensure mirror endpoint can handle production data securely
+5. **Zero Latency**: Because mirroring happens in PostClientFlow, there's no performance impact on the client response
 
 ## Troubleshooting
 

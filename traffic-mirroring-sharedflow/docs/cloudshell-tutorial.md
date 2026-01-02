@@ -59,28 +59,29 @@ Now let's test the deployed proxy to see traffic mirroring in action.
 Make a request to the example proxy:
 
 ```sh
-curl https://$APIGEE_HOST/v1/samples/traffic-mirror/test
+curl https://$APIGEE_HOST/v1/samples/traffic-mirror/get
 ```
 
 Notice:
 
 * The response comes from the primary backend (httpbin.org)
-* There's a `request-mirror-response-status-code` header showing the mirror endpoint was called
-* The response is fast, even though the mirror endpoint has a 2-second delay
+* The response is fast, even though the mirror endpoint has a 2-second delay (mirror happens in background)
+* No mirror-related headers appear in the response (fire-and-forget pattern)
 
-This demonstrates that the mirror request is non-blocking and doesn't impact the primary response.
+This demonstrates that the mirror request is truly non-blocking. The mirroring happens in `PostClientFlow`, which executes *after* the client response is sent, ensuring zero latency impact.
 
 ---
 
 ## Understanding the Implementation
 
-The shared flow uses three key policies:
+The shared flow uses two key policies:
 
 1. **AM-SetTarget**: Configures the mirror destination
-2. **SC-RequestMirror**: Makes an async ServiceCallout to the mirror endpoint
-3. **AM-SetResponse**: Captures the mirror response (optional, for debugging)
+2. **SC-RequestMirror**: Makes a ServiceCallout to the mirror endpoint
 
 All policies use `continueOnError="true"` to ensure mirror failures don't affect the main request.
+
+**Non-Blocking Design**: The mirror executes in `PostClientFlow`, which runs after the client response is sent. This ensures zero latency impact - it's a true fire-and-forget pattern.
 
 ---
 
@@ -101,13 +102,7 @@ Navigate to **Develop > API Proxies** to see the `traffic-mirror-example` proxy.
 
 The sample includes automated integration tests. Let's run them:
 
-First, install dependencies:
-
-```sh
-npm install
-```
-
-Then run the tests:
+Run the integration tests:
 
 ```sh
 npm run test
@@ -116,7 +111,6 @@ npm run test
 The tests verify:
 
 * The proxy responds successfully
-* The mirror response header is present
 * The response is fast (non-blocking)
 
 ---

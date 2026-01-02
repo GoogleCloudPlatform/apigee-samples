@@ -1,5 +1,5 @@
 #!/bin/bash
-
+set -euo pipefail
 # Copyright 2024 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,7 +27,10 @@ fi
 TOKEN=$(gcloud auth print-access-token)
 
 echo "Installing apigeecli"
-curl -L https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.sh | sh -
+if ! command -v apigeecli &> /dev/null; then
+    echo "Installing apigeecli"
+    curl -L https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.sh | sh -
+fi
 export PATH=$PATH:$HOME/.apigeecli/bin
 
 echo "Undeploying and deleting Example Proxy"

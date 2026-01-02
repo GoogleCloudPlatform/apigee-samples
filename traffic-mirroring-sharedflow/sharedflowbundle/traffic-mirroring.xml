@@ -4,7 +4,6 @@
   <Description>Mirrors HTTP requests to a secondary endpoint for testing without impacting the primary response</Description>
   <Policies>
     <Policy>AM-SetTarget</Policy>
-    <Policy>AM-SetResponse</Policy>
     <Policy>SC-RequestMirror</Policy>
   </Policies>
   <SharedFlows>

@@ -7,7 +7,6 @@
       <Path>{request-mirror-uri}</Path>
     </Set>
   </Request>
-  <Response>calloutResponse</Response>
   <HTTPTargetConnection>
     <Properties/>
     <URL>http://will-be-replaced</URL>

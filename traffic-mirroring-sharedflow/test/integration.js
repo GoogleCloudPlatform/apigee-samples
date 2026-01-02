@@ -76,31 +76,21 @@ async function runTests() {
   try {
     // Test 1: Basic request should succeed
     console.log('Test 1: Making request to example proxy...');
-    const response = await makeRequest('/test');
+    const response = await makeRequest('/get');
     assert.strictEqual(response.statusCode, 200, 'Expected status 200');
     console.log('✓ Request successful');
 
-    // Test 2: Mirror response header should be present
-    console.log('\nTest 2: Checking for mirror response header...');
-    assert.ok(
-      response.headers['request-mirror-response-status-code'],
-      'Expected mirror response status code header'
-    );
-    console.log(`✓ Mirror response status code: ${response.headers['request-mirror-response-status-code']}`);
-
-    // Test 3: Response should be fast (not waiting for mirror)
-    console.log('\nTest 3: Checking response time (should not wait for mirror)...');
+    // Test 2: Response should be fast (not waiting for mirror)
+    console.log('\nTest 2: Checking response time (should not wait for mirror)...');
     const start = Date.now();
-    await makeRequest('/test');
+    await makeRequest('/get');
     const duration = Date.now() - start;
     console.log(`✓ Response time: ${duration}ms`);
     
     // The mirror endpoint has a 2 second delay, but the response should be fast
-    if (duration < 1500) {
-      console.log('✓ Response is fast (not blocking on mirror request)');
-    } else {
-      console.log('⚠ Warning: Response might be blocking on mirror request');
-    }
+    // because mirroring happens in PostClientFlow (after response is sent)
+    assert.ok(duration < 1500, `Response took ${duration}ms, which suggests it is blocking on the mirror request.`);
+    console.log('✓ Response is fast (not blocking on mirror request)');
 
     console.log('\n✅ All tests passed!');
     process.exit(0);

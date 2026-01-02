@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<AssignMessage continueOnError="false" enabled="true" name="AM-ConfigureMirror">
+<AssignMessage continueOnError="true" enabled="true" name="AM-ConfigureMirror">
     <DisplayName>AM-ConfigureMirror</DisplayName>
     <Properties/>
     <!-- Host header to send in the mirrored request -->

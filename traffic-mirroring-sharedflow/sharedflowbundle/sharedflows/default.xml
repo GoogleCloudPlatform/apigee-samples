@@ -2,14 +2,10 @@
 <SharedFlow name="default">
   <Step>
     <Name>AM-SetTarget</Name>
-    <Condition>request-mirror-host != null</Condition>
+    <Condition>(request-mirror-host != null) and (request-mirror-target != null) and (request-mirror-uri != null)</Condition>
   </Step>
   <Step>
     <Name>SC-RequestMirror</Name>
-    <Condition>request-mirror-host != null</Condition>
-  </Step>
-  <Step>
-    <Name>AM-SetResponse</Name>
-    <Condition>request-mirror-host != null</Condition>
+    <Condition>servicecallout.SC-RequestMirror.target.url != null</Condition>
   </Step>
 </SharedFlow>

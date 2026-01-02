@@ -6,9 +6,6 @@
             <Step>
                 <Name>AM-ConfigureMirror</Name>
             </Step>
-            <Step>
-                <Name>FC-TrafficMirror</Name>
-            </Step>
         </Request>
     </PreFlow>
     <Flows/>
@@ -16,6 +13,14 @@
         <Request/>
         <Response/>
     </PostFlow>
+    <PostClientFlow>
+        <Request/>
+        <Response>
+            <Step>
+                <Name>FC-TrafficMirror</Name>
+            </Step>
+        </Response>
+    </PostClientFlow>
     <HTTPProxyConnection>
         <BasePath>/v1/samples/traffic-mirror</BasePath>
         <Properties/>

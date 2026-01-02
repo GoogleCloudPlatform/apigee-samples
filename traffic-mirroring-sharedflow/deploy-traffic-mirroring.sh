@@ -1,5 +1,5 @@
 #!/bin/bash
-
+set -euo pipefail
 # Copyright 2024 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -33,7 +33,10 @@ TOKEN=$(gcloud auth print-access-token)
 SCRIPTPATH="$( cd "$(dirname "$0")" || exit >/dev/null 2>&1 ; pwd -P )"
 
 echo "Installing apigeecli"
-curl -L https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.sh | sh -
+if ! command -v apigeecli &> /dev/null; then
+    echo "Installing apigeecli"
+    curl -L https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.sh | sh -
+fi
 export PATH=$PATH:$HOME/.apigeecli/bin
 
 echo "Deploying Traffic Mirroring Shared Flow"
