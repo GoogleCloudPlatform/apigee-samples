@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<SharedFlowBundle revision="1" name="traffic-mirroring">
+  <DisplayName>Traffic Mirroring</DisplayName>
+  <Description>Mirrors HTTP requests to a secondary endpoint for testing without impacting the primary response</Description>
+  <Policies>
+    <Policy>AM-SetTarget</Policy>
+    <Policy>AM-SetResponse</Policy>
+    <Policy>SC-RequestMirror</Policy>
+  </Policies>
+  <SharedFlows>
+    <SharedFlow>default</SharedFlow>
+  </SharedFlows>
+  <subType>SharedFlow</subType>
+</SharedFlowBundle>

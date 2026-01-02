@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<SharedFlow name="default">
+  <Step>
+    <Name>AM-SetTarget</Name>
+    <Condition>request-mirror-host != null</Condition>
+  </Step>
+  <Step>
+    <Name>SC-RequestMirror</Name>
+    <Condition>request-mirror-host != null</Condition>
+  </Step>
+  <Step>
+    <Name>AM-SetResponse</Name>
+    <Condition>request-mirror-host != null</Condition>
+  </Step>
+</SharedFlow>

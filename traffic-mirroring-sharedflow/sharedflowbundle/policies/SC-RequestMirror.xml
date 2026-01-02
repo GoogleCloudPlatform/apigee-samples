@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ServiceCallout continueOnError="true" enabled="true" name="SC-RequestMirror">
+  <DisplayName>SC-RequestMirror</DisplayName>
+  <Properties/>
+  <Request clearPayload="false" variable="request">
+    <Set>
+      <Path>{request-mirror-uri}</Path>
+    </Set>
+  </Request>
+  <Response>calloutResponse</Response>
+  <HTTPTargetConnection>
+    <Properties/>
+    <URL>http://will-be-replaced</URL>
+  </HTTPTargetConnection>
+</ServiceCallout>

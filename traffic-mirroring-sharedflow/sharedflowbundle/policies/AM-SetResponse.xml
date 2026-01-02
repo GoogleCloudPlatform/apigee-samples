@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AssignMessage continueOnError="true" enabled="true" name="AM-SetResponse">
+  <DisplayName>AM-SetResponse</DisplayName>
+  <Set>
+    <Headers>
+      <Header name="request-mirror-response-status-code">{calloutResponse.status.code}</Header>
+    </Headers>
+  </Set>
+  <AssignVariable>
+    <Name>request-mirror-response</Name>
+    <Ref>calloutResponse.content</Ref>
+  </AssignVariable>
+  <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+  <AssignTo>response</AssignTo>
+</AssignMessage>

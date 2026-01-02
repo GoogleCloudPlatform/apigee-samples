@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AssignMessage continueOnError="false" enabled="true" name="AM-ConfigureMirror">
+    <DisplayName>AM-ConfigureMirror</DisplayName>
+    <Properties/>
+    <!-- Host header to send in the mirrored request -->
+    <AssignVariable>
+        <Name>request-mirror-host</Name>
+        <Value>httpbin.org</Value>
+    </AssignVariable>
+    <!-- Base URL of the mirror endpoint (replaces the placeholder in ServiceCallout) -->
+    <AssignVariable>
+        <Name>request-mirror-target</Name>
+        <Value>https://httpbin.org</Value>
+    </AssignVariable>
+    <!-- Path to mirror - /delay/2 adds 2-second delay to demonstrate async behavior -->
+    <AssignVariable>
+        <Name>request-mirror-uri</Name>
+        <Value>/delay/2</Value>
+    </AssignVariable>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+    <AssignTo createNew="false" transport="http" type="request"/>
+</AssignMessage>

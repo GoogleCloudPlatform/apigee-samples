@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ProxyEndpoint name="default">
+    <Description>Default Proxy Endpoint</Description>
+    <PreFlow name="PreFlow">
+        <Request>
+            <Step>
+                <Name>AM-ConfigureMirror</Name>
+            </Step>
+            <Step>
+                <Name>FC-TrafficMirror</Name>
+            </Step>
+        </Request>
+    </PreFlow>
+    <Flows/>
+    <PostFlow name="PostFlow">
+        <Request/>
+        <Response/>
+    </PostFlow>
+    <HTTPProxyConnection>
+        <BasePath>/v1/samples/traffic-mirror</BasePath>
+        <Properties/>
+        <VirtualHost>secure</VirtualHost>
+    </HTTPProxyConnection>
+    <RouteRule name="default">
+        <TargetEndpoint>default</TargetEndpoint>
+    </RouteRule>
+</ProxyEndpoint>
