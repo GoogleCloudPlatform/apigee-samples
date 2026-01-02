@@ -1,0 +1,14 @@
+{
+  "name": "traffic-mirroring-sharedflow",
+  "version": "1.0.0",
+  "description": "Tests for traffic mirroring shared flow sample",
+  "scripts": {
+    "test": "npm run test:integration",
+    "test:integration": "node test/integration.js"
+  },
+  "keywords": ["apigee", "mirroring", "shadow-traffic"],
+  "author": "Google Cloud",
+  "license": "Apache-2.0",
+  "dependencies": {},
+  "devDependencies": {}
+}

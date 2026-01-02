@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AssignMessage continueOnError="true" enabled="true" name="AM-SetTarget">
+  <DisplayName>AM-SetTarget</DisplayName>
+  <Properties/>
+  <AssignVariable>
+    <Name>target.header.host</Name>
+    <Ref>request-mirror-host</Ref>
+  </AssignVariable>
+  <AssignVariable>
+    <Name>servicecallout.SC-RequestMirror.target.url</Name>
+    <Ref>request-mirror-target</Ref>
+  </AssignVariable>
+  <AssignTo createNew="false" transport="http" type="request"/>
+</AssignMessage>
