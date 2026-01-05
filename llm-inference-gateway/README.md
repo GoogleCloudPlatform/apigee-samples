@@ -25,7 +25,7 @@ The flow is as follows:
   1. A client request (prompt) is received by the GKE Inference Gateway.
   2. The configured Traffic Extension intercepts the request and forwards the payload to Apigee via the designated `ApigeeBackendService`
   3. Apigee executes the configured Request Flow policies (e.g., authentication, spike arrest, threat protection).
-  4. Upon successful verification, Apigee sends the request back to the Inference Gateway which inturn sends it to the target InferencePool where the AI model processes the prompt and generates a response.
+  4. Upon successful verification, Apigee sends the request back to the Inference Gateway which in turn sends it to the target InferencePool where the AI model processes the prompt and generates a response.
   5. The response payload is then routed back to Apigee via the Traffic Extension. Apigee applies Response Flow policies (e.g., data masking, payload validation, quota enforcement).
   6. After final verification by Apigee, the response is returned to the Inference Gateway and ultimately sent back to the calling client.
 
