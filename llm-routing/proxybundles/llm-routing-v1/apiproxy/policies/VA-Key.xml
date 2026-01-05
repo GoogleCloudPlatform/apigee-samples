@@ -11,12 +11,6 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<OASValidation continueOnError="false" enabled="true" name="OAS-Verify">
-    <DisplayName>OAS-Verify</DisplayName>
-    <Properties/>
-    <Source>request</Source>
-    <Options>
-        <ValidateMessageBody>true</ValidateMessageBody>
-    </Options>
-    <OASResource>oas://spec.yaml</OASResource>
-</OASValidation>
+<VerifyAPIKey continueOnError="false" enabled="true" name="VA-Key">
+  <APIKey ref="request.header.x-apikey"/>
+</VerifyAPIKey>

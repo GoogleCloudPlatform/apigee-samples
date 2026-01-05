@@ -1,4 +1,4 @@
-# Copyright 2025 Google LLC
+# Copyright 2024 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@ externalDocs:
   description: Find out more about this sample
   url: https://github.com/GoogleCloudPlatform/apigee-samples/tree/main?tab=readme-ov-file#llm-samples
 servers:
-  - url: https://HOST/v2/samples/llm-security
+  - url: https://HOST/v1/samples/llm-security
 tags:
   - name: text-generation
     description: Text Generation
@@ -69,7 +69,7 @@ paths:
         - name: model
           in: path
           description: Model name
-          example: gemini-2.0-flash
+          example: gemini-2.5-flash
           required: true
           schema:
             type: string

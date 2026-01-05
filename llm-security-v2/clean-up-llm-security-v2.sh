@@ -14,77 +14,48 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-if [ -z "$PROJECT_ID" ]; then
-  echo "No PROJECT_ID variable set"
-  exit
-fi
+scriptdir="$(cd "$(dirname "BASH_SOURCE[0]")" >/dev/null 2>&1 && pwd)"
 
-if [ -z "$APIGEE_ENV" ]; then
-  echo "No APIGEE_ENV variable set"
-  exit
-fi
+source "${scriptdir}/../shlib/utils.sh"
 
-if [ -z "$SERVICE_ACCOUNT_NAME" ]; then
-  echo "No SERVICE_ACCOUNT_NAME variable set"
-  exit
-fi
+# ====================================================================
 
-delete_api() {
-  local api_name=$1
-  echo "Undeploying $api_name"
-  REV=$(apigeecli envs deployments get --env "$APIGEE_ENV" --org "$PROJECT_ID" --token "$TOKEN" --disable-check | jq .'deployments[]| select(.apiProxy=="'"$api_name"'").revision' -r)
-  apigeecli apis undeploy --name "$api_name" --env "$APIGEE_ENV" --rev "$REV" --org "$PROJECT_ID" --token "$TOKEN"
+check_shell_variables PROJECT_ID \
+  APIGEE_ENV \
+  SERVICE_ACCOUNT_NAME
 
-  echo "Deleting proxy $api_name"
-  apigeecli apis delete --name "$api_name" --org "$PROJECT_ID" --token "$TOKEN"
+check_required_commands gcloud jq curl
 
-}
-
-delete_sharedflow(){
-  local sharedflow_name=$1
-  echo "Undeploying $sharedflow_name sharedflow"
-  REV=$(apigeecli envs deployments get --env "$APIGEE_ENV" --org "$PROJECT_ID" --token "$TOKEN" --sharedflows true --disable-check | jq .'deployments[]| select(.apiProxy=="'"$sharedflow_name"'").revision' -r)
-  apigeecli sharedflows undeploy --name "$sharedflow_name" --env "$APIGEE_ENV" --rev "$REV" --org "$PROJECT_ID" --token "$TOKEN"
-
-  echo "Deleting sharedflow $sharedflow_name sharedflow"
-  apigeecli sharedflows delete --name "$sharedflow_name" --org "$PROJECT_ID" --token "$TOKEN"
-}
-
-remove_role_from_service_account() {
-  local role=$1
-  gcloud projects remove-iam-policy-binding "$PROJECT_ID" \
-    --member="serviceAccount:${SERVICE_ACCOUNT_NAME}@${PROJECT_ID}.iam.gserviceaccount.com" \
-    --role="$role"
-}
-
+# shellcheck disable=SC2034
 TOKEN=$(gcloud auth print-access-token)
 
-echo "Installing apigeecli"
-curl -s https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.sh | bash
-export PATH=$PATH:$HOME/.apigeecli/bin
+insure_apigeecli
 
-echo "Deleting Developer App"
-DEVELOPER_ID=$(apigeecli developers get --email llm-security-developer-v2@acme.com --org "$PROJECT_ID" --token "$TOKEN" --disable-check | jq .'developerId' -r)
-apigeecli apps delete --id "$DEVELOPER_ID" --name llm-security-app-v2 --org "$PROJECT_ID" --token "$TOKEN"
+proxy_name="llm-security-v2"
+product_name="llm-security-product-v2"
+dev_moniker="llm-security-developer-v2"
+app_name="llm-security-app-v2"
+dev_email="${dev_moniker}@acme.com"
+kvm_name="model-armor-config-v2"
 
-echo "Deleting Developer"
-apigeecli developers delete --email llm-security-developer-v2@acme.com --org "$PROJECT_ID" --token "$TOKEN"
+delete_app_if_necessary "$app_name" "$PROJECT_ID" "$dev_email"
+delete_developer_if_necessary "$dev_email" "$PROJECT_ID"
+delete_product_if_necessary "$product_name" "$PROJECT_ID"
+delete_kvm_if_necessary "$kvm_name" "$PROJECT_ID" "$APIGEE_ENV"
+delete_apiproxy "${proxy_name}" "$PROJECT_ID"
+delete_sharedflow "ModelArmor-v2" "$PROJECT_ID"
 
-echo "Deleting API Products"
-apigeecli products delete --name llm-security-product-v2 --org "$PROJECT_ID" --token "$TOKEN"
+# shellcheck disable=SC2034
+ASSIGNED_ROLES=(
+  "roles/apigee.analyticsEditor"
+  "roles/logging.logWriter"
+  "roles/aiplatform.user"
+  "roles/modelarmor.admin"
+  "roles/iam.serviceAccountUser"
+)
+SA_EMAIL="${SERVICE_ACCOUNT_NAME}@${PROJECT_ID}.iam.gserviceaccount.com"
+remove_roles_from_service_account "$SA_EMAIL" "$PROJECT_ID" "ASSIGNED_ROLES"
 
-echo "Deleting KVM"
-apigeecli kvms delete -n model-armor-config-v2 --env "$APIGEE_ENV" --org "$PROJECT_ID" --token "$TOKEN"
+delete_sa_if_necessary "$SA_EMAIL" "$PROJECT_ID"
 
-delete_api "llm-security-v2"
-delete_sharedflow "ModelArmor-v2"
-
-echo "Removing assigned roles from Service Account"
-remove_role_from_service_account "roles/apigee.analyticsEditor"
-remove_role_from_service_account "roles/logging.logWriter"
-remove_role_from_service_account "roles/aiplatform.user"
-remove_role_from_service_account "roles/modelarmor.admin"
-remove_role_from_service_account "roles/iam.serviceAccountUser"
-
-echo "Deleting Service Account"
-gcloud iam service-accounts delete "${SERVICE_ACCOUNT_NAME}@${PROJECT_ID}.iam.gserviceaccount.com" --project "$PROJECT_ID" --quiet
+printf "\nAll done. All of the Apigee assets should have been removed.\n\n"

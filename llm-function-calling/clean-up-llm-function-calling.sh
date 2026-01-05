@@ -14,41 +14,28 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-if [ -z "$PROJECT_ID" ]; then
-  echo "No PROJECT_ID variable set"
-  exit
-fi
+scriptdir="$(cd "$(dirname "BASH_SOURCE[0]")" >/dev/null 2>&1 && pwd)"
 
-if [ -z "$APIGEE_ENV" ]; then
-  echo "No APIGEE_ENV variable set"
-  exit
-fi
+source "${scriptdir}/../shlib/utils.sh"
 
-delete_api() {
-  local api_name=$1
-  echo "Undeploying $api_name"
-  REV=$(apigeecli envs deployments get --env "$APIGEE_ENV" --org "$PROJECT_ID" --token "$TOKEN" --disable-check | jq .'deployments[]| select(.apiProxy=="'"$api_name"'").revision' -r)
-  apigeecli apis undeploy --name "$api_name" --env "$APIGEE_ENV" --rev "$REV" --org "$PROJECT_ID" --token "$TOKEN"
+check_shell_variables PROJECT_ID APIGEE_ENV
 
-  echo "Deleting proxy $api_name"
-  apigeecli apis delete --name "$api_name" --org "$PROJECT_ID" --token "$TOKEN"
+check_required_commands gcloud jq curl
 
-}
-
+# shellcheck disable=SC2034
 TOKEN=$(gcloud auth print-access-token)
 
-echo "Installing apigeecli"
-curl -s https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.sh | bash
-export PATH=$PATH:$HOME/.apigeecli/bin
+insure_apigeecli
 
-echo "Deleting Developer App"
-DEVELOPER_ID=$(apigeecli developers get --email llm-function-calling-developer@acme.com --org "$PROJECT_ID" --token "$TOKEN" --disable-check | jq .'developerId' -r)
-apigeecli apps delete --id "$DEVELOPER_ID" --name llm-function-calling-app --org "$PROJECT_ID" --token "$TOKEN"
+proxy_name="llm-function-calling-v1"
+product_name="llm-function-calling-product"
+dev_moniker="llm-function-calling-developer"
+app_name="llm-function-calling-app"
+dev_email="${dev_moniker}@acme.com"
 
-echo "Deleting Developer"
-apigeecli developers delete --email llm-function-calling-developer@acme.com --org "$PROJECT_ID" --token "$TOKEN"
+delete_app_if_necessary "$app_name" "$PROJECT_ID" "$dev_email"
+delete_developer_if_necessary "$dev_email" "$PROJECT_ID"
+delete_product_if_necessary "$product_name" "$PROJECT_ID"
+delete_apiproxy "$proxy_name" "$PROJECT_ID"
 
-echo "Deleting API Products"
-apigeecli products delete --name llm-function-calling-product --org "$PROJECT_ID" --token "$TOKEN"
-
-delete_api "llm-function-calling-v1"
+printf "\nAll done. All of the Apigee assets should have been removed.\n\n"

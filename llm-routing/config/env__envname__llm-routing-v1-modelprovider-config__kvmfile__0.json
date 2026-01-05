@@ -1,7 +1,7 @@
 {
   "keyValueEntries": [
     {
-      "name": "google__token",
+      "name": "google__credential",
       "value": ""
     },
     {
@@ -9,7 +9,7 @@
       "value": "https://VERTEXAI_REGION-aiplatform.googleapis.com/v1/projects/VERTEXAI_PROJECT_ID/locations/VERTEXAI_REGION/endpoints/openapi/chat/completions"
     },
     {
-      "name": "huggingface__token",
+      "name": "huggingface__credential",
       "value": "HUGGINGFACE_TOKEN"
     },
     {
@@ -17,8 +17,8 @@
       "value": "https://router.huggingface.co/sambanova/v1/chat/completions"
     },
     {
-      "name": "mistral__token",
-      "value": "MISTRAL_TOKEN"
+      "name": "mistral__credential",
+      "value": "MISTRAL_APIKEY"
     },
     {
       "name": "mistral__targetUrl",
