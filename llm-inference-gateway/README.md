@@ -73,6 +73,8 @@ In this step, we will deploy the GKE Inference Gateway. The high-level workflow 
 echo "namespace is '$ira_online_gpu_kubernetes_namespace_name'"
 ```
 
+**NOTE**: Make sure your cluster is using a version `1.34.1-gke.3899000` or later. If not, please upgrade the version which can take a few minutes. 
+
 ### Create an inference pool
 
 - The InferencePool Kubernetes custom resource defines a group of Pods with a common base large language model (LLM) and compute configuration. For more info, you can find [here](https://docs.cloud.google.com/kubernetes-engine/docs/how-to/deploy-gke-inference-gateway#create-inference-pool).
@@ -96,6 +98,8 @@ kubectl get InferencePool -n $ira_online_gpu_kubernetes_namespace_name
 ```
 
 ### Specify inference objectives
+
+Install the CRDs as per the documentation [here](https://docs.cloud.google.com/kubernetes-engine/docs/how-to/deploy-gke-inference-gateway#prepare-environment).
 
 In this step we configure the `InferenceObjective` that lets you specify priority of requests. Follow the steps mentioned [here](https://docs.cloud.google.com/kubernetes-engine/docs/how-to/deploy-gke-inference-gateway#specify-inference-objectives). Update the `poolRef.name` with the name of your InferencePool.
 
@@ -130,19 +134,12 @@ After you have configured the GKE Inference Gateway, you can send inference requ
 
 **NOTE**: The `model` name will have the `/gcs/` prefix, so make sure you pass that in your test call. For example
 ```sh
-curl -X POST \
-  "http://$IP:$PORT/v1/completions" \
-  -H "Content-Type: application/json" \
-  -d @- <<EOF_JSON
-{
-  "model": "/gcs/$HF_MODEL_ID",
-  "prompt": "What is the capital of France?",
-  "max_tokens": 10,
-  "temperature": 0
-}
-EOF_JSON
+
+GATEWAY_NAME=$(kubectl get gateway -n $ira_online_gpu_kubernetes_namespace_name -o json | jq ."items[0].metadata.name" -r)
+IP=$(kubectl get gateway/${GATEWAY_NAME} -n $ira_online_gpu_kubernetes_namespace_name -o json | jq ."status.addresses[0].value" -r)
+PORT=80
 ```
-or
+and then run the following curl command
 
 ```sh
 curl -X POST \
@@ -277,20 +274,6 @@ kubectl apply -f gcp-traffic-extension.yaml -n $ira_online_gpu_kubernetes_namesp
 5. Send a Request to Model Backend to Verify Inference Gateway. (NOTE: This can take a few minutes)   
 ```sh
 curl -X POST \
-  "http://$IP:$PORT/v1/completions" \
-  -H "Content-Type: application/json" \
-  -d @- <<EOF_JSON
-{
-  "model": "/gcs/$HF_MODEL_ID",
-  "prompt": "What is the capital of France?",
-  "max_tokens": 10,
-  "temperature": 0
-}
-EOF_JSON
-``` 
-or
-```sh
-curl -X POST \
 	"http://${IP}:${PORT}/v1/chat/completions" \
 	-H 'Content-Type: application/json' \
 	-d @- <<EOF_JSON
@@ -387,21 +370,6 @@ export APIKEY="APIKEY_TO_SET"
 7. Send a Request to Model Backend to Verify Inference Gateway
 ```sh
 curl -X POST \
-  "http://$IP:$PORT/v1/completions" \
-  -H "x-api-key: $APIKEY" \
-  -H "Content-Type: application/json" \
-  -d @- <<EOF_JSON
-{
-  "model": "/gcs/$HF_MODEL_ID",
-  "prompt": "What is the capital of France?",
-  "max_tokens": 10,
-  "temperature": 0
-}
-EOF_JSON
-``` 
-or
-```sh
-curl -X POST \
 	"http://${IP}:${PORT}/v1/chat/completions" \
 	-H 'Content-Type: application/json' \
 	-H "x-api-key: $APIKEY" \
@@ -445,21 +413,6 @@ cd llm-inference-gateway
 
 Once the script is run successfully, run the curl command to test the functionality
 
-```sh
-curl -X POST \
-  "http://$IP:$PORT/v1/completions" \
-  -H "x-api-key: $APIKEY" \
-  -H "Content-Type: application/json" \
-  -d @- <<EOF_JSON
-{
-  "model": "/gcs/$HF_MODEL_ID",
-  "prompt": "What is the capital of France?",
-  "max_tokens": 10,
-  "temperature": 0
-}
-EOF_JSON
-```
-or
 ```sh
 curl -X POST \
 	"http://${IP}:${PORT}/v1/chat/completions" \
