@@ -391,7 +391,7 @@ You should see a valid response. If you find any issues, please use the troubles
 
 ## Adding more AI gateway capabilities
 
-The initial proxy deployed just includes basic security features, we can extend the capabilities by adding other policies to the same proxy. In the following steps, you will deploy another proxy that has other capabilities like Token Limiting. 
+The initial proxy deployed just includes basic security features, we can extend the capabilities by adding other policies to the same proxy. In the following steps, you will deploy another version of the same proxy that has other capabilities like Token Limiting. 
 
 To deploy the proxy:
 
@@ -438,7 +438,7 @@ Make multiple calls and you will notice that an error will occur once it hits th
 ```json
 {
     "fault": {
-        "faultstring": "Rate limit quota violation. Quota limit  exceeded.",
+        "faultstring": "Rate limit quota violation. Quota limit exceeded.",
         "detail": {
             "errorcode": "policies.ratelimit.QuotaViolation"
         }

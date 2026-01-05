@@ -12,6 +12,6 @@
  limitations under the License.
 -->
 <APIProxy revision="1" name="apigee-llm-inf-gw">
-  <DisplayName/>
-  <Description/>
+  <DisplayName>apigee-llm-inf-gw</DisplayName>
+  <Description>API Proxy for GKE Inference Gateway with token-based quota</Description>
 </APIProxy>
