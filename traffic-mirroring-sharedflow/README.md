@@ -168,6 +168,33 @@ Add the configuration policy to your proxy's PreFlow (request), and the FlowCall
 
 **Note:** Since the mirror executes in `PostClientFlow` (after the client response is sent), the mirror response is not captured or returned to the client. This is intentional for the fire-and-forget pattern. For debugging, use analytics, message logging policies, or target server logs.
 
+## Example Proxy
+
+The sample includes an example API proxy (`example-proxy/`) that demonstrates the traffic mirroring pattern. This proxy:
+
+- **Endpoint**: `/v1/samples/traffic-mirror`
+- **Primary Backend**: `https://httpbin.org` - returns the response to the client
+- **Mirror Endpoint**: `https://httpbin.org/delay/2` - receives mirrored traffic asynchronously
+
+The example proxy shows:
+1. How to configure mirror variables in PreFlow using `AM-ConfigureMirror`
+2. How to invoke the shared flow in PostClientFlow using `FC-TrafficMirror`
+3. Zero-latency implementation - the 2-second delay on the mirror endpoint does not impact client response time
+
+### Example Proxy Structure
+
+```
+example-proxy/
+├── apiproxy/
+│   ├── policies/
+│   │   ├── AM-ConfigureMirror.xml    # Sets mirror configuration variables
+│   │   └── FC-TrafficMirror.xml      # Calls the traffic-mirroring shared flow
+│   ├── proxies/
+│   │   └── default.xml               # Proxy endpoint with PostClientFlow
+│   └── targets/
+│       └── default.xml               # Primary backend target
+```
+
 ## Testing the Sample
 
 After deployment, test the example proxy:
