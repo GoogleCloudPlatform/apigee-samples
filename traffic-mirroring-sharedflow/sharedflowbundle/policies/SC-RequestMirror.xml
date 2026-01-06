@@ -14,7 +14,7 @@
 <ServiceCallout continueOnError="true" enabled="true" name="SC-RequestMirror">
   <DisplayName>SC-RequestMirror</DisplayName>
   <Properties/>
-  <Request clearPayload="false" variable="request">
+  <Request clearPayload="false" variable="mirrorRequest">
     <Set>
       <Path>{request-mirror-uri}</Path>
     </Set>

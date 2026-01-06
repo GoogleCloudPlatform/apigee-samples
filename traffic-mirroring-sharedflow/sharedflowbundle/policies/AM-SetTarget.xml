@@ -22,5 +22,4 @@
     <Name>servicecallout.SC-RequestMirror.target.url</Name>
     <Ref>request-mirror-target</Ref>
   </AssignVariable>
-  <AssignTo createNew="false" transport="http" type="request"/>
 </AssignMessage>
