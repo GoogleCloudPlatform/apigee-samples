@@ -34,9 +34,9 @@ The flow is as follows:
 1. [Provision Apigee X](https://cloud.google.com/apigee/docs/api-platform/get-started/provisioning-intro)
 2. Configure [external access](https://cloud.google.com/apigee/docs/api-platform/get-started/configure-routing#external-access) for API traffic to your Apigee X instance
 3. Enable Google Kubernetes Engine API, Vertex AI API in your project
-4. Will require roles to create GKE cluster, Load Balancer, PSC NEGs and create/deploy Apigee resources like proxies, environments, environment groups, etc. For more info, check out this [doc](https://docs.cloud.google.com/apigee/docs/api-platform/apigee-kubernetes/apigee-apim-operator-install#required-roles)
+4. This sample require roles to create GKE cluster, Load Balancer, PSC NEGs and create/deploy Apigee resources like proxies, environments, environment groups, etc. For more info, check out this [doc](https://docs.cloud.google.com/apigee/docs/api-platform/apigee-kubernetes/apigee-apim-operator-install#required-roles)
 5. Make sure that you have Reserved proxy-only subnets for load balancing and Private Service Connect subnets in your VPC network. For more info about these, check this [doc](https://docs.cloud.google.com/vpc/docs/subnets#purpose)
-6. Will need a Hugging Face Token. You can sign up for an account at https://huggingface.co and create an Access Token
+6. This sample will need a Hugging Face Token. You can sign up for an account at https://huggingface.co and create an Access Token
 7. Make sure the following tools are available in your terminal's $PATH (Cloud Shell has these preconfigured)
     - [gcloud SDK](https://cloud.google.com/sdk/docs/install)
     - [helm](https://helm.sh/docs/intro/install/)
@@ -67,13 +67,13 @@ In this step, we will deploy the GKE Inference Gateway. The high-level workflow 
   3. Create the Gateway
   4. Create the HTTPRoute
 
-**NOTE**: All the above should be configured in the same namespace as the `vllm` workloads. The namespace is created by the TF modules and available as a variable called `ira_online_gpu_kubernetes_namespace_name`.
+**Note**: All the above should be configured in the same namespace as the `vllm` workloads. The namespace is created by the TF modules and available as a variable called `ira_online_gpu_kubernetes_namespace_name`.
 
 ```sh
 echo "namespace is '$ira_online_gpu_kubernetes_namespace_name'"
 ```
 
-**NOTE**: Make sure your cluster is using a version `1.34.1-gke.3899000` or later. If not, please upgrade the version which can take a few minutes. 
+**Note**: Make sure your cluster is using a version `1.34.1-gke.3899000` or later. If not, please upgrade the version which can take a few minutes. 
 
 ### Create an inference pool
 
@@ -103,7 +103,7 @@ Install the CRDs as per the documentation [here](https://docs.cloud.google.com/k
 
 In this step we configure the `InferenceObjective` that lets you specify priority of requests. Follow the steps mentioned [here](https://docs.cloud.google.com/kubernetes-engine/docs/how-to/deploy-gke-inference-gateway#specify-inference-objectives). Update the `poolRef.name` with the name of your InferencePool.
 
-**NOTE**: Configure this `InferenceObjective` to the same namespace as the `vllm` workloads. Run the following command 
+**Note**: Configure this `InferenceObjective` to the same namespace as the `vllm` workloads. Run the following command 
 ```sh
 kubectl apply -f inference-objectives.yaml -n $ira_online_gpu_kubernetes_namespace_name
 ```
@@ -112,18 +112,18 @@ kubectl apply -f inference-objectives.yaml -n $ira_online_gpu_kubernetes_namespa
 
 The Gateway resource is the entry point for external traffic into your Kubernetes cluster. It defines the listeners that accept incoming connections. We will use `gke-l7-regional-external-managed` (Regional External Application Load Balancers) for our sample. Follow the steps mentioned [here](https://docs.cloud.google.com/kubernetes-engine/docs/how-to/deploy-gke-inference-gateway#create-gateway).
 
-**NOTE**: Configure this `Gateway` to the same namespace as the `vllm` workloads. Run the following command 
+**Note**: Configure this `Gateway` to the same namespace as the `vllm` workloads. Run the following command 
 ```sh
 kubectl apply -f gateway.yaml -n $ira_online_gpu_kubernetes_namespace_name
 ```
 
-This may take a few mins to complete.
+This may take a few minutes to complete.
 
 ### Create the HTTPRoute
 
 The `HTTPRoute` resource defines how the GKE Gateway routes incoming HTTP requests to backend services, such as your `InferencePool`. Follow the steps mentioned [here](https://docs.cloud.google.com/kubernetes-engine/docs/how-to/deploy-gke-inference-gateway#create-httproute).
 
-**NOTE**: Configure this `HTTPRoute` to the same namespace as the `vllm` workloads. Run the following command 
+**Note**: Configure this `HTTPRoute` to the same namespace as the `vllm` workloads. Run the following command 
 ```sh
 kubectl apply -f httproute.yaml -n $ira_online_gpu_kubernetes_namespace_name
 ```
@@ -132,7 +132,7 @@ kubectl apply -f httproute.yaml -n $ira_online_gpu_kubernetes_namespace_name
 
 After you have configured the GKE Inference Gateway, you can send inference requests to your deployed model. This lets you generate text based on your input prompt and specified parameters. Follow the steps mentioned [here](https://docs.cloud.google.com/kubernetes-engine/docs/how-to/deploy-gke-inference-gateway#send-inference-request).
 
-**NOTE**: The `model` name will have the `/gcs/` prefix, so make sure you pass that in your test call. For example
+**Note**: The `model` name will have the `/gcs/` prefix, so make sure you pass that in your test call. For example
 ```sh
 
 GATEWAY_NAME=$(kubectl get gateway -n $ira_online_gpu_kubernetes_namespace_name -o json | jq ."items[0].metadata.name" -r)
@@ -160,7 +160,7 @@ curl -X POST \
 EOF_JSON
 ```
 
-Congratulations!! You have successfully deployed an open source model to GKE and exposed it using the GKE Inference Gateway!
+Congratulations! You have successfully deployed an open source model to GKE and exposed it using the GKE Inference Gateway!
 
 ## Apigee as an AI Gateway
 
@@ -177,7 +177,7 @@ Now that we have an Inference Gateway up and running, lets protect it using Apig
 
 ## Step 2: Create an ApigeeBackendService
 
-**NOTE:** Please proceed with the steps only if you have completed the Apigee APIM Operator installation mentioned above.
+**Note:** Please proceed with the steps only if you have completed the Apigee APIM Operator installation mentioned above.
 
 1. Set the following environment variables
 ```sh
@@ -271,7 +271,7 @@ kubectl apply -f gcp-traffic-extension.yaml -n $ira_online_gpu_kubernetes_namesp
   --for=jsonpath='{.status.ancestors[0].conditions[?(@.type=="ResolvedRefs")].status}'=True \
   --timeout=5m
   ```
-5. Send a Request to Model Backend to Verify Inference Gateway. (NOTE: This can take a few minutes)   
+5. Send a Request to Model Backend to Verify Inference Gateway. (Note: This can take a few minutes)   
 ```sh
 curl -X POST \
 	"http://${IP}:${PORT}/v1/chat/completions" \
