@@ -1,0 +1,22 @@
+{
+  "operationConfigs": [
+    {
+      "apiSource": "llm-token-limits-v2",
+      "llmOperations": [
+        {
+          "resource": "/",
+          "methods": [
+            "POST"
+          ],
+          "model": "gemini-2.5-flash"
+        }
+      ],
+      "llmTokenQuota": {
+        "limit": "5000",
+        "interval": "5",
+        "timeUnit": "minute"
+      }
+    }
+  ],
+  "operationConfigType": "proxy"
+}
