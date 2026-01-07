@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+ Copyright 2026 Google LLC
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+      http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<AssignMessage continueOnError="true" enabled="true" name="AM-ConfigureMirror">
+    <DisplayName>AM-ConfigureMirror</DisplayName>
+    <Properties/>
+    <!-- Host header to send in the mirrored request -->
+    <AssignVariable>
+        <Name>request-mirror-host</Name>
+        <Value>httpbin.org</Value>
+    </AssignVariable>
+    <!-- Base URL of the mirror endpoint (replaces the placeholder in ServiceCallout) -->
+    <AssignVariable>
+        <Name>request-mirror-target</Name>
+        <Value>https://httpbin.org</Value>
+    </AssignVariable>
+    <!-- Path to mirror - /delay/2 adds 2-second delay to demonstrate async behavior -->
+    <AssignVariable>
+        <Name>request-mirror-uri</Name>
+        <Value>/delay/2</Value>
+    </AssignVariable>
+    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+</AssignMessage>
