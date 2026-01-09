@@ -1,4 +1,4 @@
-# Copyright 2023 Google LLC
+# Copyright 2026 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,3 +21,7 @@ Scenario: Successful request
   When I GET /
   Then response code should be 200
   And response body path $.status should be success
+
+Scenario: Rate limited request
+  When I send 15 requests in 1 second
+  Then at least one response code should be 429
