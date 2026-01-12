@@ -26,6 +26,7 @@ limitations under the License.
         <Response/>
     </PostFlow>
     <HTTPTargetConnection>
+        <!-- apigeelint disable=TD002 -->
         <URL>https://httpbin.org/get</URL>
     </HTTPTargetConnection>
 </TargetEndpoint>

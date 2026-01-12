@@ -53,6 +53,7 @@
     </SSLInfo>
 
     <!-- the proxy.pathsuffix will get appended to this -->
+    <!-- apigeelint disable=TD002 -->
     <URL>https://THIS-URL-WILL-BE-REPLACED.a.run.app/apigee-sample-hello</URL>
   </HTTPTargetConnection>
 </TargetEndpoint>

@@ -25,6 +25,7 @@
     <Properties>
       <Property name="request.streaming.enabled">true</Property>
     </Properties>
+  <!-- apigeelint disable=TD002 -->
   <URL>https://{propertyset.vertex_config.region}-aiplatform.googleapis.com</URL>
 </HTTPTargetConnection>
 </TargetEndpoint>

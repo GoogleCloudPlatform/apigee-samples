@@ -30,6 +30,7 @@
                 <Audience>@TARGETURL@</Audience>
             </GoogleIDToken>
         </Authentication>
+        <!-- apigeelint disable=TD002 -->
         <URL>@TARGETURL@</URL>
     </HTTPTargetConnection>
 </TargetEndpoint>

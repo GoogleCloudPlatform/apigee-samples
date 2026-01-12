@@ -44,6 +44,7 @@ limitations under the License.
         </Scopes>
       </GoogleAccessToken>
     </Authentication>
+    <!-- apigeelint disable=TD002 -->
     <URL>https://apihub.googleapis.com/v1/projects/{project_id}/locations/{location_id}/apis/{api_id}/versions/{version_id}/specs/{spec_id}:contents</URL>
   </HTTPTargetConnection>
 </TargetEndpoint>

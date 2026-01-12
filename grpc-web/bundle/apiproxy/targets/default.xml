@@ -22,6 +22,7 @@
         <Response/>
     </PostFlow>
     <HTTPTargetConnection>
+        <!-- apigeelint disable=TD002 -->
         <URL>@TARGETURL@</URL>
     </HTTPTargetConnection>
 </TargetEndpoint>

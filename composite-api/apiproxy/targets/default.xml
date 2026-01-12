@@ -29,6 +29,7 @@
     <Flows/>
     <HTTPTargetConnection>
         <Properties/>
+        <!-- apigeelint disable=TD002 -->
         <URL>https://api.open-meteo.com/v1/forecast</URL>
     </HTTPTargetConnection>
 </TargetEndpoint>

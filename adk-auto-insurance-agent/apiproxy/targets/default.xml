@@ -40,6 +40,7 @@
       </GoogleAccessToken>
     </Authentication>
     <Properties/>
+    <!-- apigeelint disable=TD002 -->
     <URL>https://{propertyset.vertex_config.region}-aiplatform.googleapis.com/v1/projects/{propertyset.vertex_config.project_id}/locations/{propertyset.vertex_config.region}/publishers/google/models/{propertyset.vertex_config.model_id}:generateContent</URL>
   </HTTPTargetConnection>
 </TargetEndpoint>

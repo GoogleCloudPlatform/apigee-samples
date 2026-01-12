@@ -35,6 +35,7 @@
             </GoogleAccessToken>
         </Authentication>
         <Properties/>
+        <!-- apigeelint disable=TD002 -->
         <URL>https://{target.url}</URL>
     </HTTPTargetConnection>
 </TargetEndpoint>

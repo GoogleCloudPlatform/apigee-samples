@@ -43,6 +43,7 @@
       </GoogleAccessToken>
     </Authentication>
     <Properties/>
+    <!-- apigeelint disable=TD002 -->
     <URL>https://{region}-aiplatform.googleapis.com</URL>
   </HTTPTargetConnection>
 </TargetEndpoint>

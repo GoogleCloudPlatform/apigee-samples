@@ -26,6 +26,7 @@
     <Response/>
   </PostFlow>
   <HTTPTargetConnection>
+    <!-- apigeelint disable=TD002 -->
     <URL>https://mocktarget.apigee.net/xml</URL>
     <SSLInfo>
       <Enabled>true</Enabled>

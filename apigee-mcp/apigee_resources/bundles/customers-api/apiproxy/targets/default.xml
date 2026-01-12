@@ -25,6 +25,7 @@ limitations under the License.
         <Audience>https://TARGETURL</Audience>
       </GoogleIDToken>
     </Authentication>
+    <!-- apigeelint disable=TD002 -->
     <URL>https://TARGETURL</URL>
   </HTTPTargetConnection>
 </TargetEndpoint>

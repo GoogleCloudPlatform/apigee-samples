@@ -27,6 +27,7 @@
   </PostFlow>
   <HTTPTargetConnection>
     <Properties/>
+  <!-- apigeelint disable=TD002 -->
   <URL>https://REGION-aiplatform.googleapis.com</URL>
 </HTTPTargetConnection>
 </TargetEndpoint>

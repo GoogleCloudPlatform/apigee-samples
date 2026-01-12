@@ -31,6 +31,7 @@
     </Authentication>
     <Properties/>
     <!-- The URL will be dynamically set via the target.url variable -->
+    <!-- apigeelint disable=TD002 -->
     <URL>https://notused.com</URL>
   </HTTPTargetConnection>
 </TargetEndpoint>

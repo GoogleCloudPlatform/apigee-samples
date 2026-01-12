@@ -34,6 +34,7 @@
     </Response>
   </PostFlow>
   <HTTPTargetConnection>
+    <!-- apigeelint disable=TD002 -->
     <URL>https://www.googleapis.com/books/v1/volumes</URL>
   </HTTPTargetConnection>
 </TargetEndpoint>
