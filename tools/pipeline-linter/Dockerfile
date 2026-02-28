@@ -22,7 +22,7 @@ RUN go install github.com/googlecodelabs/tools/claat@latest
 COPY *.sh /usr/bin/
 
 # install apgieelint
-RUN npm install --global apigeelint@2.78.0
+RUN npm install --global apigeelint@latest
 
 # Run script
 WORKDIR /home
