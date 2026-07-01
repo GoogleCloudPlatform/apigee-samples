@@ -310,7 +310,7 @@
         }
       },
       {
-        "apiSource": "mcp-cymbal-discovery-v1",
+        "apiSource": "cymbal-discovery-v1",
         "operations": [
           {
             "resource": "/**",
@@ -332,7 +332,7 @@
         }
       },
       {
-        "apiSource": "mcp-cymbal-discovery-v1",
+        "apiSource": "cymbal-discovery-v1",
         "operations": [
           {
             "resource": "/",
@@ -593,7 +593,7 @@
         }
       },
       {
-        "apiSource": "mcp-cymbal-discovery-v1",
+        "apiSource": "cymbal-discovery-v1",
         "operations": [
           {
             "operation": "tools/list"
@@ -606,7 +606,7 @@
         }
       },
       {
-        "apiSource": "mcp-cymbal-discovery-v1",
+        "apiSource": "cymbal-discovery-v1",
         "operations": [
           {
             "operation": "tools/call"
@@ -619,7 +619,7 @@
         }
       },
       {
-        "apiSource": "mcp-cymbal-discovery-v1",
+        "apiSource": "cymbal-discovery-v1",
         "operations": [
           {
             "operation": "notifications/initialized"
@@ -632,7 +632,7 @@
         }
       },
       {
-        "apiSource": "mcp-cymbal-discovery-v1",
+        "apiSource": "cymbal-discovery-v1",
         "operations": [
           {
             "operation": "initialize"
@@ -645,7 +645,7 @@
         }
       },
       {
-        "apiSource": "mcp-cymbal-discovery-v1",
+        "apiSource": "cymbal-discovery-v1",
         "operations": [
           {
             "operation": "resources/list"
@@ -658,7 +658,7 @@
         }
       },
       {
-        "apiSource": "mcp-cymbal-discovery-v1",
+        "apiSource": "cymbal-discovery-v1",
         "operations": [
           {
             "operation": "resources/read"
@@ -671,7 +671,7 @@
         }
       },
       {
-        "apiSource": "mcp-cymbal-discovery-v1",
+        "apiSource": "cymbal-discovery-v1",
         "operations": [
           {
             "operation": "prompts/list"
@@ -684,7 +684,7 @@
         }
       },
       {
-        "apiSource": "mcp-cymbal-discovery-v1",
+        "apiSource": "cymbal-discovery-v1",
         "operations": [
           {
             "operation": "prompts/get"
@@ -697,7 +697,7 @@
         }
       },
       {
-        "apiSource": "mcp-cymbal-discovery-v1",
+        "apiSource": "cymbal-discovery-v1",
         "operations": [
           {
             "operation": "ping"

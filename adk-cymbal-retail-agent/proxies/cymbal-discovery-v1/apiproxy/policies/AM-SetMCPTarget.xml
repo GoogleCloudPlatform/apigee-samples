@@ -3,7 +3,7 @@
     <DisplayName>AM-SetMCPTarget</DisplayName>
     <AssignVariable>
         <Name>target.copy.pathsuffix</Name>
-        <Value>true</Value>
+        <Value>false</Value>
     </AssignVariable>
     <AssignVariable>
         <Name>target.copy.queryparams</Name>

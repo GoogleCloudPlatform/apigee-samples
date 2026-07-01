@@ -91,8 +91,8 @@ import_and_deploy_sharedflow() {
 import_and_deploy_proxy() {
   local proxy=$1
   echo "Deploying Proxy: $proxy"
-  if [ -f "proxies/${proxy}/apiproxy/resources/oas/${proxy}.yaml" ]; then
-    sed -i '' "s/APIGEE_HOST/$APIGEE_HOST/g" "proxies/${proxy}/apiproxy/resources/oas/${proxy}.yaml"
+  if [ -d "proxies/${proxy}/apiproxy/resources/oas" ]; then
+    sed -i '' "s/APIGEE_HOST/$APIGEE_HOST/g" proxies/${proxy}/apiproxy/resources/oas/*.yaml 2>/dev/null || true
   fi
   apigeecli apis create bundle -n "$proxy" \
   -f "proxies/${proxy}/apiproxy" \
