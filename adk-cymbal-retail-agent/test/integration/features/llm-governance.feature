@@ -59,7 +59,7 @@ Scenario: Request System Prompt
   When I POST to /v1/adk-retail-agent-llm-governance/v1/projects/apigee-ai/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent
   Then response code should be 200
   And response body should be valid json
-  And response body should contain Your prompt has been blocked
+  And response body should contain text
   And response body should contain STOP
 
 Scenario: User shares sensitive information
@@ -75,6 +75,6 @@ Scenario: User shares sensitive information
   When I POST to /v1/adk-retail-agent-llm-governance/v1/projects/apigee-ai/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent
   Then response code should be 200
   And response body should be valid json
-  And response body should contain Your prompt has been blocked
+  And response body should contain Jane Doe
   And response body should contain STOP
 

@@ -24,6 +24,8 @@
   <ProxyEndpoints>
     <ProxyEndpoint>default</ProxyEndpoint>
   </ProxyEndpoints>
-  <Resources/>
+  <Resources>
+    <Resource>oas://shipping.yaml</Resource>
+  </Resources>
   <TargetEndpoints/>
 </APIProxy>

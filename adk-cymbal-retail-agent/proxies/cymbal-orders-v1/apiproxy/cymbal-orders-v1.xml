@@ -14,4 +14,7 @@
 <APIProxy revision="1" name="cymbal-orders-v1">
   <DisplayName/>
   <Description>This API manages orders for Cymbal Retail.</Description>
+  <Resources>
+    <Resource>oas://orders.yaml</Resource>
+  </Resources>
 </APIProxy>

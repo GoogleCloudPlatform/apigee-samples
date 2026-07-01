@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<AssignMessage continueOnError="false" enabled="true" name="AM-InitializedRes">
-  <DisplayName>AM-InitializedRes</DisplayName>
-  <Set>
-    <StatusCode>202</StatusCode>
-  </Set>
-  <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
-</AssignMessage>

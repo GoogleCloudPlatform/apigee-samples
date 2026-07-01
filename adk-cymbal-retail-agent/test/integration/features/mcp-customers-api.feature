@@ -26,7 +26,7 @@ Scenario: initialize
   When I POST to /mcp/v1/samples/adk-cymbal-retail/customers
   Then response code should be 200
   And response body should be valid json
-  And response body should contain mcp-generic-gateway
+  And response body should contain serverInfo
   And response body should contain jsonrpc
 
 Scenario: tools/list

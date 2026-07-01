@@ -26,7 +26,7 @@ Scenario: initialize
   When I POST to /mcp/v1/samples/adk-cymbal-retail/returns
   Then response code should be 200
   And response body should be valid json
-  And response body should contain mcp-generic-gateway
+  And response body should contain serverInfo
   And response body should contain jsonrpc
 
 Scenario: tools/list
@@ -42,14 +42,14 @@ Scenario: tools/list
   Then response code should be 200
   And response body should be valid json
   And response body should contain jsonrpc
-  And response body should contain getReturnDetails
+  And response body should contain getReturnById
   And response body should contain getAllReturns
   And response body should contain createReturnRequest
   And response body should contain updateReturnStatus
   And response body should contain processRefund
 
-Scenario: tools/call - getReturnDetails
-  Given I store the raw value {"method":"tools/call","params":{"name":"getReturnDetails","arguments":{"returnId":"ret-123"}},"jsonrpc":"2.0","id":1} as myPayload in scenario scope
+Scenario: tools/call - getReturnById
+  Given I store the raw value {"method":"tools/call","params":{"name":"getReturnById","arguments":{"returnId":"ret-123"}},"jsonrpc":"2.0","id":1} as myPayload in scenario scope
   And I set body to `myPayload`
   And I set headers to
       | name          | value            |

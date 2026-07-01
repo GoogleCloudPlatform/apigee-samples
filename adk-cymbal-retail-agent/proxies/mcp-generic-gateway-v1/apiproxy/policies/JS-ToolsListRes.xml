@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Javascript continueOnError="false" enabled="true" timeLimit="200" name="JS-ToolsListRes">
-  <DisplayName>JS-ToolsListRes</DisplayName>
-  <ResourceURL>jsc://tools-list-res.cjs</ResourceURL>
-</Javascript>

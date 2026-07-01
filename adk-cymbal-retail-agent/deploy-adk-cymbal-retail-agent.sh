@@ -91,6 +91,9 @@ import_and_deploy_sharedflow() {
 import_and_deploy_proxy() {
   local proxy=$1
   echo "Deploying Proxy: $proxy"
+  if [ -f "proxies/${proxy}/apiproxy/resources/oas/${proxy}.yaml" ]; then
+    sed -i '' "s/APIGEE_HOST/$APIGEE_HOST/g" "proxies/${proxy}/apiproxy/resources/oas/${proxy}.yaml"
+  fi
   apigeecli apis create bundle -n "$proxy" \
   -f "proxies/${proxy}/apiproxy" \
   -e "$APIGEE_ENV" --token "$TOKEN" -o "$PROJECT_ID" \
@@ -150,6 +153,12 @@ add_mcp_api_to_hub(){
   ( apigeecli apihub apis create --id "${api}_api" \
   -f "tmp/${api}/${api}-api.json" \
   -r "$APIGEE_APIHUB_REGION" -o "$APIGEE_APIHUB_PROJECT_ID" -t "$TOKEN" ) || true
+
+  ( apigeecli apihub apis versions create --api-id "${api}_api" --id $id \
+  -f "tmp/${api}/${api}-api-ver.json"  -r "$APIGEE_APIHUB_REGION" -o "$APIGEE_APIHUB_PROJECT_ID" -t "$TOKEN" ) || true
+
+  ( apigeecli apihub apis versions specs create --api-id "${api}_api" -i $id --version $id \
+  -d openapi.yaml -f "tmp/${api}/${api}.yaml"  -r "$APIGEE_APIHUB_REGION" -o "$APIGEE_APIHUB_PROJECT_ID" -t "$TOKEN" ) || true
 }
 
 _sleep() {
@@ -159,7 +168,7 @@ _sleep() {
 }
 
 echo "================================================="
-echo "Started deploy-adk-cymbal-retail-agent.sh"
+echo "Started deploy-cymbal-discovery-v1.sh"
 echo "================================================="
 
 PRE_PROP="project_id=$VERTEXAI_PROJECT_ID
@@ -190,7 +199,7 @@ apigeecli apihub attributes update -r "$APIGEE_APIHUB_REGION" -o "$APIGEE_APIHUB
 apigeecli apihub attributes update -r "$APIGEE_APIHUB_REGION" -o "$APIGEE_APIHUB_PROJECT_ID" -t "$TOKEN" --allowed-values  "config/teams.json" --data-type "ENUM" -i "system-team" -s "API" -m "allowed_values" -d "Team"
 
 add_grpc_api_to_hub "shipments"
-add_mcp_api_to_hub "mcp-generic-gateway-v1"
+add_mcp_api_to_hub "cymbal-discovery-v1"
 add_soap_api_to_hub "payments"
 add_rest_api_to_hub "accounts"
 add_rest_api_to_hub "communications"
@@ -298,7 +307,23 @@ echo "Deploying the proxies"
 import_and_deploy_proxy "cymbal-customers-v1"
 import_and_deploy_proxy "cymbal-orders-v1"
 import_and_deploy_proxy "cymbal-returns-v1"
-import_and_deploy_proxy "mcp-generic-gateway-v1"
+echo "Checking for legacy mcp-generic-gateway-v1 deployment..."
+OLD_REV=$(apigeecli envs deployments get --env "$APIGEE_ENV" --org "$PROJECT_ID" --token "$TOKEN" --disable-check | jq .'deployments[]| select(.apiProxy=="mcp-generic-gateway-v1").revision' -r 2>/dev/null)
+if [ ! -z "$OLD_REV" ] && [ "$OLD_REV" != "null" ]; then
+  echo "Undeploying legacy mcp-generic-gateway-v1 (revision $OLD_REV)..."
+  apigeecli apis undeploy --name "mcp-generic-gateway-v1" --env "$APIGEE_ENV" --rev "$OLD_REV" --org "$PROJECT_ID" --token "$TOKEN" || true
+  apigeecli apis delete --name "mcp-generic-gateway-v1" --org "$PROJECT_ID" --token "$TOKEN" || true
+fi
+
+echo "Checking for legacy mcp-cymbal-discovery-v1 deployment..."
+OLD_REV2=$(apigeecli envs deployments get --env "$APIGEE_ENV" --org "$PROJECT_ID" --token "$TOKEN" --disable-check | jq .'deployments[]| select(.apiProxy=="mcp-cymbal-discovery-v1").revision' -r 2>/dev/null)
+if [ ! -z "$OLD_REV2" ] && [ "$OLD_REV2" != "null" ]; then
+  echo "Undeploying legacy mcp-cymbal-discovery-v1 (revision $OLD_REV2)..."
+  apigeecli apis undeploy --name "mcp-cymbal-discovery-v1" --env "$APIGEE_ENV" --rev "$OLD_REV2" --org "$PROJECT_ID" --token "$TOKEN" || true
+  apigeecli apis delete --name "mcp-cymbal-discovery-v1" --org "$PROJECT_ID" --token "$TOKEN" || true
+fi
+
+import_and_deploy_proxy "cymbal-discovery-v1"
 import_and_deploy_proxy "adk-retail-agent-llm-governance-v1"
 import_and_deploy_proxy "cymbal-shipping-v1"
 
@@ -379,5 +404,5 @@ echo "Your APIGEE_HOST is: $APIGEE_HOST"
 echo "Your APIKEY is: $APIKEY"
 
 echo "================================================="
-echo "Finished deploy-adk-cymbal-retail-agent.sh"
+echo "Finished deploy-cymbal-discovery-v1.sh"
 echo "================================================="

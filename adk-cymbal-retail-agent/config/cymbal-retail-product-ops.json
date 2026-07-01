@@ -1,269 +1,714 @@
 {
-   "operationConfigs":[
+  "operationGroup": {
+    "operationConfigs": [
       {
-         "apiSource":"cymbal-customers-v1",
-         "operations":[
-            {
-               "resource":"/**",
-               "methods":[
-                  "GET",
-                  "POST",
-                  "PUT",
-                  "DELETE",
-                  "PATCH",
-                  "HEAD",
-                  "OPTIONS"
-               ]
-            }
-         ],
-         "quota":{
-            "limit":"2000",
-            "interval":"1",
-            "timeUnit":"minute"
-         }
+        "apiSource": "cymbal-customers-v1",
+        "operations": [
+          {
+            "resource": "/**",
+            "methods": [
+              "DELETE",
+              "GET",
+              "HEAD",
+              "OPTIONS",
+              "PATCH",
+              "POST",
+              "PUT"
+            ]
+          }
+        ],
+        "quota": {
+          "limit": "10000",
+          "interval": "1",
+          "timeUnit": "minute"
+        }
       },
       {
-         "apiSource":"cymbal-customers-v1",
-         "operations":[
-            {
-               "resource":"/",
-               "methods":[
-                  "GET",
-                  "POST",
-                  "PUT",
-                  "DELETE",
-                  "PATCH",
-                  "HEAD",
-                  "OPTIONS"
-               ]
-            }
-         ],
-         "quota":{
-            "limit":"2000",
-            "interval":"1",
-            "timeUnit":"minute"
-         }
+        "apiSource": "cymbal-customers-v1",
+        "operations": [
+          {
+            "resource": "/",
+            "methods": [
+              "DELETE",
+              "GET",
+              "HEAD",
+              "OPTIONS",
+              "PATCH",
+              "POST",
+              "PUT"
+            ]
+          }
+        ],
+        "quota": {
+          "limit": "10000",
+          "interval": "1",
+          "timeUnit": "minute"
+        }
       },
       {
-         "apiSource":"cymbal-orders-v1",
-         "operations":[
-            {
-               "resource":"/**",
-               "methods":[
-                  "GET",
-                  "POST",
-                  "PUT",
-                  "DELETE",
-                  "PATCH",
-                  "HEAD",
-                  "OPTIONS"
-               ]
-            }
-         ],
-         "quota":{
-            "limit":"2000",
-            "interval":"1",
-            "timeUnit":"minute"
-         }
+        "apiSource": "cymbal-orders-v1",
+        "operations": [
+          {
+            "resource": "/**",
+            "methods": [
+              "DELETE",
+              "GET",
+              "HEAD",
+              "OPTIONS",
+              "PATCH",
+              "POST",
+              "PUT"
+            ]
+          }
+        ],
+        "quota": {
+          "limit": "10000",
+          "interval": "1",
+          "timeUnit": "minute"
+        }
       },
       {
-         "apiSource":"cymbal-orders-v1",
-         "operations":[
-            {
-               "resource":"/",
-               "methods":[
-                  "GET",
-                  "POST",
-                  "PUT",
-                  "DELETE",
-                  "PATCH",
-                  "HEAD",
-                  "OPTIONS"
-               ]
-            }
-         ],
-         "quota":{
-            "limit":"2000",
-            "interval":"1",
-            "timeUnit":"minute"
-         }
+        "apiSource": "cymbal-orders-v1",
+        "operations": [
+          {
+            "resource": "/",
+            "methods": [
+              "DELETE",
+              "GET",
+              "HEAD",
+              "OPTIONS",
+              "PATCH",
+              "POST",
+              "PUT"
+            ]
+          }
+        ],
+        "quota": {
+          "limit": "10000",
+          "interval": "1",
+          "timeUnit": "minute"
+        }
       },
       {
-         "apiSource":"cymbal-returns-v1",
-         "operations":[
-            {
-               "resource":"/**",
-               "methods":[
-                  "GET",
-                  "POST",
-                  "PUT",
-                  "DELETE",
-                  "PATCH",
-                  "HEAD",
-                  "OPTIONS"
-               ]
-            }
-         ],
-         "quota":{
-            "limit":"2000",
-            "interval":"1",
-            "timeUnit":"minute"
-         }
+        "apiSource": "cymbal-returns-v1",
+        "operations": [
+          {
+            "resource": "/**",
+            "methods": [
+              "DELETE",
+              "GET",
+              "HEAD",
+              "OPTIONS",
+              "PATCH",
+              "POST",
+              "PUT"
+            ]
+          }
+        ],
+        "quota": {
+          "limit": "10000",
+          "interval": "1",
+          "timeUnit": "minute"
+        }
       },
       {
-         "apiSource":"cymbal-returns-v1",
-         "operations":[
-            {
-               "resource":"/",
-               "methods":[
-                  "GET",
-                  "POST",
-                  "PUT",
-                  "DELETE",
-                  "PATCH",
-                  "HEAD",
-                  "OPTIONS"
-               ]
-            }
-         ],
-         "quota":{
-            "limit":"2000",
-            "interval":"1",
-            "timeUnit":"minute"
-         }
+        "apiSource": "cymbal-returns-v1",
+        "operations": [
+          {
+            "resource": "/",
+            "methods": [
+              "DELETE",
+              "GET",
+              "HEAD",
+              "OPTIONS",
+              "PATCH",
+              "POST",
+              "PUT"
+            ]
+          }
+        ],
+        "quota": {
+          "limit": "10000",
+          "interval": "1",
+          "timeUnit": "minute"
+        }
       },
       {
-         "apiSource":"adk-retail-agent-llm-governance-v1",
-         "operations":[
-            {
-               "resource":"/**",
-               "methods":[
-                  "GET",
-                  "POST",
-                  "PUT",
-                  "DELETE",
-                  "PATCH",
-                  "HEAD",
-                  "OPTIONS"
-               ]
-            }
-         ],
-         "quota":{
-            "limit":"10000",
-            "interval":"1",
-            "timeUnit":"minute"
-         }
+        "apiSource": "cymbal-shipping-v1",
+        "operations": [
+          {
+            "resource": "/**",
+            "methods": [
+              "DELETE",
+              "GET",
+              "HEAD",
+              "OPTIONS",
+              "PATCH",
+              "POST",
+              "PUT"
+            ]
+          }
+        ],
+        "quota": {
+          "limit": "10000",
+          "interval": "1",
+          "timeUnit": "minute"
+        }
       },
       {
-         "apiSource":"adk-retail-agent-llm-governance-v1",
-         "operations":[
-            {
-               "resource":"/",
-               "methods":[
-                  "GET",
-                  "POST",
-                  "PUT",
-                  "DELETE",
-                  "PATCH",
-                  "HEAD",
-                  "OPTIONS"
-               ]
-            }
-         ],
-         "quota":{
-            "limit":"10000",
-            "interval":"1",
-            "timeUnit":"minute"
-         }
+        "apiSource": "cymbal-shipping-v1",
+        "operations": [
+          {
+            "resource": "/",
+            "methods": [
+              "DELETE",
+              "GET",
+              "HEAD",
+              "OPTIONS",
+              "PATCH",
+              "POST",
+              "PUT"
+            ]
+          }
+        ],
+        "quota": {
+          "limit": "10000",
+          "interval": "1",
+          "timeUnit": "minute"
+        }
       },
       {
-         "apiSource":"mcp-generic-gateway-v1",
-         "operations":[
-            {
-               "resource":"/**",
-               "methods":[
-                  "GET",
-                  "POST",
-                  "PUT",
-                  "DELETE",
-                  "PATCH",
-                  "HEAD",
-                  "OPTIONS"
-               ]
-            }
-         ],
-         "quota":{
-            "limit":"10000",
-            "interval":"1",
-            "timeUnit":"minute"
-         }
+        "apiSource": "adk-retail-agent-llm-governance-v1",
+        "operations": [
+          {
+            "resource": "/**",
+            "methods": [
+              "DELETE",
+              "GET",
+              "HEAD",
+              "OPTIONS",
+              "PATCH",
+              "POST",
+              "PUT"
+            ]
+          }
+        ],
+        "quota": {
+          "limit": "10000",
+          "interval": "1",
+          "timeUnit": "minute"
+        }
       },
       {
-         "apiSource":"mcp-generic-gateway-v1",
-         "operations":[
-            {
-               "resource":"/",
-               "methods":[
-                  "GET",
-                  "POST",
-                  "PUT",
-                  "DELETE",
-                  "PATCH",
-                  "HEAD",
-                  "OPTIONS"
-               ]
-            }
-         ],
-         "quota":{
-            "limit":"10000",
-            "interval":"1",
-            "timeUnit":"minute"
-         }
+        "apiSource": "adk-retail-agent-llm-governance-v1",
+        "operations": [
+          {
+            "resource": "/",
+            "methods": [
+              "DELETE",
+              "GET",
+              "HEAD",
+              "OPTIONS",
+              "PATCH",
+              "POST",
+              "PUT"
+            ]
+          }
+        ],
+        "quota": {
+          "limit": "10000",
+          "interval": "1",
+          "timeUnit": "minute"
+        }
       },
       {
-         "apiSource":"cymbal-shipping-v1",
-         "operations":[
-            {
-               "resource":"/**",
-               "methods":[
-                  "GET",
-                  "POST",
-                  "PUT",
-                  "DELETE",
-                  "PATCH",
-                  "HEAD",
-                  "OPTIONS"
-               ]
-            }
-         ],
-         "quota":{
-            "limit":"2000",
-            "interval":"1",
-            "timeUnit":"minute"
-         }
+        "apiSource": "cymbal-discovery-v1",
+        "operations": [
+          {
+            "resource": "/**",
+            "methods": [
+              "DELETE",
+              "GET",
+              "HEAD",
+              "OPTIONS",
+              "PATCH",
+              "POST",
+              "PUT"
+            ]
+          }
+        ],
+        "quota": {
+          "limit": "10000",
+          "interval": "1",
+          "timeUnit": "minute"
+        }
       },
       {
-         "apiSource":"cymbal-shipping-v1",
-         "operations":[
-            {
-               "resource":"/",
-               "methods":[
-                  "GET",
-                  "POST",
-                  "PUT",
-                  "DELETE",
-                  "PATCH",
-                  "HEAD",
-                  "OPTIONS"
-               ]
-            }
-         ],
-         "quota":{
-            "limit":"2000",
-            "interval":"1",
-            "timeUnit":"minute"
-         }
+        "apiSource": "cymbal-discovery-v1",
+        "operations": [
+          {
+            "resource": "/",
+            "methods": [
+              "DELETE",
+              "GET",
+              "HEAD",
+              "OPTIONS",
+              "PATCH",
+              "POST",
+              "PUT"
+            ]
+          }
+        ],
+        "quota": {
+          "limit": "10000",
+          "interval": "1",
+          "timeUnit": "minute"
+        }
+      },
+      {
+        "apiSource": "adk-cymbal-retail-agent",
+        "operations": [
+          {
+            "resource": "/**",
+            "methods": [
+              "DELETE",
+              "GET",
+              "HEAD",
+              "OPTIONS",
+              "PATCH",
+              "POST",
+              "PUT"
+            ]
+          }
+        ],
+        "quota": {
+          "limit": "10000",
+          "interval": "1",
+          "timeUnit": "minute"
+        }
+      },
+      {
+        "apiSource": "adk-cymbal-retail-agent",
+        "operations": [
+          {
+            "resource": "/",
+            "methods": [
+              "DELETE",
+              "GET",
+              "HEAD",
+              "OPTIONS",
+              "PATCH",
+              "POST",
+              "PUT"
+            ]
+          }
+        ],
+        "quota": {
+          "limit": "10000",
+          "interval": "1",
+          "timeUnit": "minute"
+        }
+      },
+      {
+        "apiSource": "mcp-cymbal-discovery-v1",
+        "operations": [
+          {
+            "resource": "/**",
+            "methods": [
+              "DELETE",
+              "GET",
+              "HEAD",
+              "OPTIONS",
+              "PATCH",
+              "POST",
+              "PUT"
+            ]
+          }
+        ],
+        "quota": {
+          "limit": "10000",
+          "interval": "1",
+          "timeUnit": "minute"
+        }
+      },
+      {
+        "apiSource": "mcp-cymbal-discovery-v1",
+        "operations": [
+          {
+            "resource": "/",
+            "methods": [
+              "DELETE",
+              "GET",
+              "HEAD",
+              "OPTIONS",
+              "PATCH",
+              "POST",
+              "PUT"
+            ]
+          }
+        ],
+        "quota": {
+          "limit": "10000",
+          "interval": "1",
+          "timeUnit": "minute"
+        }
       }
-   ],
-   "operationConfigType":"proxy"
+    ],
+    "operationConfigType": "proxy"
+  },
+  "payloadOperationGroup": {
+    "operationConfigs": [
+      {
+        "apiSource": "cymbal-discovery-v1",
+        "operations": [
+          {
+            "operation": "tools/list"
+          }
+        ],
+        "quota": {
+          "limit": "10000",
+          "interval": "1",
+          "timeUnit": "minute"
+        }
+      },
+      {
+        "apiSource": "cymbal-discovery-v1",
+        "operations": [
+          {
+            "operation": "tools/call"
+          }
+        ],
+        "quota": {
+          "limit": "10000",
+          "interval": "1",
+          "timeUnit": "minute"
+        }
+      },
+      {
+        "apiSource": "cymbal-discovery-v1",
+        "operations": [
+          {
+            "operation": "notifications/initialized"
+          }
+        ],
+        "quota": {
+          "limit": "10000",
+          "interval": "1",
+          "timeUnit": "minute"
+        }
+      },
+      {
+        "apiSource": "cymbal-discovery-v1",
+        "operations": [
+          {
+            "operation": "initialize"
+          }
+        ],
+        "quota": {
+          "limit": "10000",
+          "interval": "1",
+          "timeUnit": "minute"
+        }
+      },
+      {
+        "apiSource": "cymbal-discovery-v1",
+        "operations": [
+          {
+            "operation": "resources/list"
+          }
+        ],
+        "quota": {
+          "limit": "10000",
+          "interval": "1",
+          "timeUnit": "minute"
+        }
+      },
+      {
+        "apiSource": "cymbal-discovery-v1",
+        "operations": [
+          {
+            "operation": "resources/read"
+          }
+        ],
+        "quota": {
+          "limit": "10000",
+          "interval": "1",
+          "timeUnit": "minute"
+        }
+      },
+      {
+        "apiSource": "cymbal-discovery-v1",
+        "operations": [
+          {
+            "operation": "prompts/list"
+          }
+        ],
+        "quota": {
+          "limit": "10000",
+          "interval": "1",
+          "timeUnit": "minute"
+        }
+      },
+      {
+        "apiSource": "cymbal-discovery-v1",
+        "operations": [
+          {
+            "operation": "prompts/get"
+          }
+        ],
+        "quota": {
+          "limit": "10000",
+          "interval": "1",
+          "timeUnit": "minute"
+        }
+      },
+      {
+        "apiSource": "cymbal-discovery-v1",
+        "operations": [
+          {
+            "operation": "ping"
+          }
+        ],
+        "quota": {
+          "limit": "10000",
+          "interval": "1",
+          "timeUnit": "minute"
+        }
+      },
+      {
+        "apiSource": "adk-cymbal-retail-agent",
+        "operations": [
+          {
+            "operation": "tools/list"
+          }
+        ],
+        "quota": {
+          "limit": "10000",
+          "interval": "1",
+          "timeUnit": "minute"
+        }
+      },
+      {
+        "apiSource": "adk-cymbal-retail-agent",
+        "operations": [
+          {
+            "operation": "tools/call"
+          }
+        ],
+        "quota": {
+          "limit": "10000",
+          "interval": "1",
+          "timeUnit": "minute"
+        }
+      },
+      {
+        "apiSource": "adk-cymbal-retail-agent",
+        "operations": [
+          {
+            "operation": "notifications/initialized"
+          }
+        ],
+        "quota": {
+          "limit": "10000",
+          "interval": "1",
+          "timeUnit": "minute"
+        }
+      },
+      {
+        "apiSource": "adk-cymbal-retail-agent",
+        "operations": [
+          {
+            "operation": "initialize"
+          }
+        ],
+        "quota": {
+          "limit": "10000",
+          "interval": "1",
+          "timeUnit": "minute"
+        }
+      },
+      {
+        "apiSource": "adk-cymbal-retail-agent",
+        "operations": [
+          {
+            "operation": "resources/list"
+          }
+        ],
+        "quota": {
+          "limit": "10000",
+          "interval": "1",
+          "timeUnit": "minute"
+        }
+      },
+      {
+        "apiSource": "adk-cymbal-retail-agent",
+        "operations": [
+          {
+            "operation": "resources/read"
+          }
+        ],
+        "quota": {
+          "limit": "10000",
+          "interval": "1",
+          "timeUnit": "minute"
+        }
+      },
+      {
+        "apiSource": "adk-cymbal-retail-agent",
+        "operations": [
+          {
+            "operation": "prompts/list"
+          }
+        ],
+        "quota": {
+          "limit": "10000",
+          "interval": "1",
+          "timeUnit": "minute"
+        }
+      },
+      {
+        "apiSource": "adk-cymbal-retail-agent",
+        "operations": [
+          {
+            "operation": "prompts/get"
+          }
+        ],
+        "quota": {
+          "limit": "10000",
+          "interval": "1",
+          "timeUnit": "minute"
+        }
+      },
+      {
+        "apiSource": "adk-cymbal-retail-agent",
+        "operations": [
+          {
+            "operation": "ping"
+          }
+        ],
+        "quota": {
+          "limit": "10000",
+          "interval": "1",
+          "timeUnit": "minute"
+        }
+      },
+      {
+        "apiSource": "mcp-cymbal-discovery-v1",
+        "operations": [
+          {
+            "operation": "tools/list"
+          }
+        ],
+        "quota": {
+          "limit": "10000",
+          "interval": "1",
+          "timeUnit": "minute"
+        }
+      },
+      {
+        "apiSource": "mcp-cymbal-discovery-v1",
+        "operations": [
+          {
+            "operation": "tools/call"
+          }
+        ],
+        "quota": {
+          "limit": "10000",
+          "interval": "1",
+          "timeUnit": "minute"
+        }
+      },
+      {
+        "apiSource": "mcp-cymbal-discovery-v1",
+        "operations": [
+          {
+            "operation": "notifications/initialized"
+          }
+        ],
+        "quota": {
+          "limit": "10000",
+          "interval": "1",
+          "timeUnit": "minute"
+        }
+      },
+      {
+        "apiSource": "mcp-cymbal-discovery-v1",
+        "operations": [
+          {
+            "operation": "initialize"
+          }
+        ],
+        "quota": {
+          "limit": "10000",
+          "interval": "1",
+          "timeUnit": "minute"
+        }
+      },
+      {
+        "apiSource": "mcp-cymbal-discovery-v1",
+        "operations": [
+          {
+            "operation": "resources/list"
+          }
+        ],
+        "quota": {
+          "limit": "10000",
+          "interval": "1",
+          "timeUnit": "minute"
+        }
+      },
+      {
+        "apiSource": "mcp-cymbal-discovery-v1",
+        "operations": [
+          {
+            "operation": "resources/read"
+          }
+        ],
+        "quota": {
+          "limit": "10000",
+          "interval": "1",
+          "timeUnit": "minute"
+        }
+      },
+      {
+        "apiSource": "mcp-cymbal-discovery-v1",
+        "operations": [
+          {
+            "operation": "prompts/list"
+          }
+        ],
+        "quota": {
+          "limit": "10000",
+          "interval": "1",
+          "timeUnit": "minute"
+        }
+      },
+      {
+        "apiSource": "mcp-cymbal-discovery-v1",
+        "operations": [
+          {
+            "operation": "prompts/get"
+          }
+        ],
+        "quota": {
+          "limit": "10000",
+          "interval": "1",
+          "timeUnit": "minute"
+        }
+      },
+      {
+        "apiSource": "mcp-cymbal-discovery-v1",
+        "operations": [
+          {
+            "operation": "ping"
+          }
+        ],
+        "quota": {
+          "limit": "10000",
+          "interval": "1",
+          "timeUnit": "minute"
+        }
+      }
+    ]
+  }
 }

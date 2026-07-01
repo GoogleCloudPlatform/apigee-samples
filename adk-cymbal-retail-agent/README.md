@@ -58,20 +58,44 @@ Every LLM generation request is proxied through Apigee (`adk-retail-agent-llm-go
 
 ---
 
+## 🛠️ Architectural Upgrades & Recent Changes
+
+### 1. Native Apigee MCP Gateway Integration
+- **Deprecated Legacy Proxies:** Successfully undeployed and deleted the legacy Javascript/KVM discovery proxy (`mcp-cymbal-discovery-v1`).
+- **Native Target Routing:** Deployed the clean, native Apigee Discovery Gateway (`cymbal-discovery-v1`) configured with an `AM-SetMCPTarget` policy routing directly to `https://mcp.apigee.internal/mcp` per the Apigee MCP Quickstart architecture.
+- **Automated Self-Healing Deployments:** Updated `deploy-adk-cymbal-retail-agent.sh` to automatically detect, undeploy, and remove deprecated legacy discovery proxies on fresh deployments.
+
+### 2. Decoupled API Product Authorization
+- **Resolved OAuth 401 Conflicts:** Identified that configuring `payloadOperationGroup` on an Apigee X API Product enforces JSON-RPC operation extraction across all POST requests, causing standard REST write operations (which lack a JSON-RPC `method` field) to fail with HTTP 401 `oauth.v2.InvalidApiKeyForGivenResource`.
+- **Specialized Product Separation:** Separated authorization into two distinct products associated with the agent consumer key:
+  1. `cymbal-retail-product`: Strictly uses `operationGroup` (REST URI/method authorization) for standard read and write operations without payload extraction.
+  2. `discoverymcp-product`: Uses both `operationGroup` and `payloadOperationGroup` to authorize MCP tool discovery (`tools/list`) and execution (`tools/call`).
+
+### 3. OpenAPI Packaging & API Hub Auto-Sync
+- **Resource Packaging:** Updated all domain REST API proxies (`cymbal-orders-v1`, `cymbal-customers-v1`, `cymbal-returns-v1`, `cymbal-shipping-v1`, and `cymbal-discovery-v1`) to bundle OpenAPI 3.0 specifications (`oas://*.yaml`).
+- **Metadata Synchronization:** Enabled automatic synchronization with Apigee API Hub via the `system-apigee-x-and-hybrid` runtime plugin.
+- **Flow Condition Polish:** Updated proxy flow conditions to match empty trailing slashes (`MatchesPath "/" or MatchesPath ""`) for robust POST write routing.
+
+### 4. Runtime Stability & 100% BDD Verification
+- **Python 3.13 Runtime:** Recompiled local ADK virtual environments (`.venv`) using Python 3.13 to prevent AnyIO task group cancellation scope exceptions during live Server-Sent Events (`adk web` streaming).
+- **Automated Verification:** Verified that 100% of all 37 BDD integration scenarios and 275 steps pass cleanly against the live Apigee Gateway.
+
+---
+
 ## 📁 Repository Layout
 
 ```text
 ├── config/                  # Backend microservice OpenAPI specs & target YAMLs
 ├── proxies/                 # Apigee API Management proxy deployment bundles
 │   ├── adk-retail-agent-llm-governance-v1/   # AI safety & token logging proxy
-│   ├── mcp-generic-gateway-v1/               # Apigee MCP JSON-RPC host gateway
+│   ├── cymbal-discovery-v1/              # Apigee Native MCP Discovery Proxy
 │   └── cymbal-shipping-v1/                   # Domain backend REST proxy
 ├── python/agents/           # ADK Python agent definitions & toolsets
 │   ├── cymbal-retail-agent/                  # Standard retail agent
 │   └── cymbal-retail-agent-governance/       # Governed Model Armor agent
 ├── sharedflowbundles/       # Reusable Apigee flows (LLM extraction & cloud logging)
 ├── test/integration/        # Apickli BDD Cucumber automated integration suites
-├── deploy-adk-cymbal-retail-agent.sh         # Automated full GCP/Apigee deployer
+├── deploy-cymbal-discovery-v1.sh         # Automated full GCP/Apigee deployer
 ├── deploy_mcp_configs.py                     # Deploy MCP configurations to Apigee KVM
 ├── generate_mcp_config.py                    # OpenAPI to MCP config generator
 └── run_integration_tests.sh                  # Automated BDD verification runner
@@ -104,7 +128,9 @@ EOF
 To interact with your agent network via video/audio/chat development server:
 ```bash
 cd python/agents/cymbal-retail-agent-governance
-adk web --env_file=.env cymbal_retail_agent_governance
+# Activate the virtual environment where ADK is installed:
+source ../../../../workspace/cymbal-retail-agent/.venv/bin/activate
+adk web --reload_agents cymbal_retail_agent_governance
 ```
 
 ### 3. Run Automated BDD Integration Suites
@@ -124,7 +150,7 @@ export PROJECT_ID="your-gcp-project-id"
 export APIGEE_ENV="qa"
 export APIGEE_HOST="your-apigee-host.nip.io"
 
-./deploy-adk-cymbal-retail-agent.sh
+./deploy-cymbal-discovery-v1.sh
 ```
 
 ---

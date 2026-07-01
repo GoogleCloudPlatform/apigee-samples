@@ -14,4 +14,7 @@
 <APIProxy revision="1" name="cymbal-returns-v1">
   <DisplayName/>
   <Description>This API manages returns for Cymbal Retail.</Description>
+  <Resources>
+    <Resource>oas://returns.yaml</Resource>
+  </Resources>
 </APIProxy>

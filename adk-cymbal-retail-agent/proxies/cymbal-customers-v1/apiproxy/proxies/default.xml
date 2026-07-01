@@ -30,7 +30,7 @@
     <Response/>
   </PostFlow>
   <Flows>
-    <Flow name="listCustomers">
+    <Flow name="getAllCustomers">
       <Description>Returns a list of customers.</Description>
       <Request>
         <Step>
@@ -48,9 +48,9 @@
         </Step>
       </Request>
       <Response/>
-      <Condition>(proxy.pathsuffix MatchesPath "/") and (request.verb = "POST")</Condition>
+      <Condition>(proxy.pathsuffix MatchesPath "/" or proxy.pathsuffix MatchesPath "") and (request.verb = "POST")</Condition>
     </Flow>
-    <Flow name="getCustomer">
+    <Flow name="getCustomerById">
       <Description>Retrieves a specific customer by ID.</Description>
       <Request>
         <Step>

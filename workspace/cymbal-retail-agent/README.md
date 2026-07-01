@@ -7,9 +7,9 @@
 ```sh
 source .env
 ```
-3. Start the local ADK Web UI server using the virtual environment
+3. Start the local ADK Web UI server using the virtual environment (with live reload enabled)
 ```sh
-.venv/bin/adk web .
+.venv/bin/adk web --reload_agents .
 ```
 4. Open your browser and navigate to `http://127.0.0.1:8000` to interact with the agent.
 

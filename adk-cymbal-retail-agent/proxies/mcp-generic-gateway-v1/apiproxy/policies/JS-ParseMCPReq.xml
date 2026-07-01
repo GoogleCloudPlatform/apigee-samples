@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Javascript continueOnError="false" enabled="true" timeLimit="200" name="JS-ParseMCPReq">
-  <DisplayName>JS-ParseMCPReq</DisplayName>
-  <IncludeURL>jsc://mcp.cjs</IncludeURL>
-  <ResourceURL>jsc://parse-mcp.cjs</ResourceURL>
-</Javascript>

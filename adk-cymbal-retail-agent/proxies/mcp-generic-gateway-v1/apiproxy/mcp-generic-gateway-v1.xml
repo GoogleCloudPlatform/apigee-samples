@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<APIProxy revision="1" name="mcp-generic-gateway-v1">
-  <DisplayName>Apigee Generic MCP Gateway</DisplayName>
-  <Description>Dynamic Model Context Protocol (MCP) translation gateway for multicloud REST APIs.</Description>
-</APIProxy>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<APIProxy revision="1" name="cymbal-discovery-v1">
+    <BasePaths>/mcp/v1/samples/adk-cymbal-retail</BasePaths>
+    <ConfigurationVersion majorVersion="4" minorVersion="0"/>
+    <CreatedAt>0</CreatedAt>
+    <Description>Native Apigee MCP Discovery Gateway</Description>
+    <DisplayName>cymbal-discovery-v1</DisplayName>
+    <Policies>
+        <Policy>VA-VerifyKey</Policy>
+        <Policy>AM-SetMCPTarget</Policy>
+    </Policies>
+    <ProxyEndpoints>
+        <ProxyEndpoint>default</ProxyEndpoint>
+    </ProxyEndpoints>
+    <Resources>
+        <Resource>oas://cymbal-discovery-v1.yaml</Resource>
+    </Resources>
+    <TargetEndpoints>
+        <TargetEndpoint>default</TargetEndpoint>
+    </TargetEndpoints>
+</APIProxy>

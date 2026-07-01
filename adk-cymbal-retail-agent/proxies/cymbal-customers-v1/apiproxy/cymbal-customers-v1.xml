@@ -14,4 +14,7 @@
 <APIProxy revision="1" name="cymbal-customers-v1">
   <DisplayName/>
   <Description>This API manages customers for Cymbal Retail.</Description>
+  <Resources>
+    <Resource>oas://customers.yaml</Resource>
+  </Resources>
 </APIProxy>

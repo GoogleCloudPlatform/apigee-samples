@@ -30,7 +30,7 @@
     <Response/>
   </PostFlow>
   <Flows>
-    <Flow name="listOrders">
+    <Flow name="getAllOrders">
       <Description>Returns a list of orders.</Description>
       <Request>
         <Step>
@@ -48,9 +48,9 @@
         </Step>
       </Request>
       <Response/>
-      <Condition>(proxy.pathsuffix MatchesPath "/") and (request.verb = "POST")</Condition>
+      <Condition>(proxy.pathsuffix MatchesPath "/" or proxy.pathsuffix MatchesPath "") and (request.verb = "POST")</Condition>
     </Flow>
-    <Flow name="getOrder">
+    <Flow name="getOrderById">
       <Description>Retrieves a specific order by ID.</Description>
       <Request>
         <Step>
