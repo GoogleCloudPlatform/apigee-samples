@@ -3,11 +3,7 @@
     <Description/>
     <FaultRules/>
     <PreFlow name="PreFlow">
-        <Request>
-            <Step>
-                <Name>AM-SetMCPTarget</Name>
-            </Step>
-        </Request>
+        <Request/>
         <Response/>
     </PreFlow>
     <PostFlow name="PostFlow">

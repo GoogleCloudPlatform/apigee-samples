@@ -6,10 +6,7 @@
     <CreatedAt>0</CreatedAt>
     <Description>Native Apigee MCP Discovery Gateway</Description>
     <DisplayName>cymbal-discovery-v1</DisplayName>
-    <Policies>
-        <Policy>VA-VerifyKey</Policy>
-        <Policy>AM-SetMCPTarget</Policy>
-    </Policies>
+    <Policies/>
     <ProxyEndpoints>
         <ProxyEndpoint>default</ProxyEndpoint>
     </ProxyEndpoints>
