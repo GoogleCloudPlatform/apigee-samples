@@ -5,9 +5,6 @@
   <PreFlow name="PreFlow">
     <Request>
       <Step>
-        <Name>VA-VerifyKey</Name>
-      </Step>
-      <Step>
         <Name>AM-SetMCPTarget</Name>
       </Step>
     </Request>

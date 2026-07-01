@@ -1,0 +1,73 @@
+{
+    "displayName": "Cymbal Native MCP Discovery Gateway API",
+    "description": "Native Apigee MCP Discovery Gateway for Cymbal Retail.",
+    "documentation": {
+            "externalUri": "https://developer.cymbal-retail.com/docs/reference/apis/discovery"
+    },
+    "owner": {
+            "displayName": "Cymbal Retail API Team",
+            "email": "api-dev@cymbal-retail.com"
+    },
+    "targetUser": {
+            "attribute": "projects/APIGEE_APIHUB_PROJECT_ID/locations/APIGEE_APIHUB_REGION/attributes/system-target-user",
+            "enumValues": {
+                    "values": [
+                            {
+                                    "id": "internal",
+                                    "displayName": "Internal",
+                                    "description": "Internal target user",
+                                    "immutable": true
+                            }
+                    ]
+            }
+    },
+    "team": {
+            "attribute": "projects/APIGEE_APIHUB_PROJECT_ID/locations/APIGEE_APIHUB_REGION/attributes/system-team",
+            "enumValues": {
+                    "values": [
+                            {
+                                    "id": "retail-api",
+                                    "displayName": "Cymbal Retail API",
+                                    "description": "Cymbal Retail API"
+                            }
+                    ]
+            }
+    },
+    "businessUnit": {
+            "attribute": "projects/APIGEE_APIHUB_PROJECT_ID/locations/APIGEE_APIHUB_REGION/attributes/system-business-unit",
+            "enumValues": {
+                    "values": [
+                            {
+                                    "id": "retail",
+                                    "displayName": "Cymbal Retail",
+                                    "description": "Cymbal Retail"
+                            }
+                    ]
+            }
+    },
+    "maturityLevel": {
+            "attribute": "projects/APIGEE_APIHUB_PROJECT_ID/locations/APIGEE_APIHUB_REGION/attributes/system-maturity-level",
+            "enumValues": {
+                    "values": [
+                            {
+                                    "id": "level-1",
+                                    "displayName": "Level 1",
+                                    "description": "Level 1"
+                                }
+                    ]
+            }
+    },
+    "apiStyle": {
+            "attribute": "projects/APIGEE_APIHUB_PROJECT_ID/locations/APIGEE_APIHUB_REGION/attributes/system-api-style",
+            "enumValues": {
+                    "values": [
+                            {
+                                    "id": "mcp-api",
+                                    "displayName": "MCP",
+                                    "description": "MCP",
+                                    "immutable": true
+                            }
+                    ]
+            }
+    }
+}

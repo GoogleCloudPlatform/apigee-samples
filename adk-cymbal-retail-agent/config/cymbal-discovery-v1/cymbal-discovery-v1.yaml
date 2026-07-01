@@ -1,0 +1,43 @@
+openapi: 3.0.0
+info:
+  title: Cymbal Native MCP Discovery Gateway API
+  description: Native Apigee MCP Discovery Gateway for Cymbal Retail.
+  version: 1.0.0
+servers:
+  - url: https://34.54.87.114.nip.io/mcp/v1/samples/adk-cymbal-retail
+paths:
+  /:
+    post:
+      summary: MCP endpoint root
+      operationId: mcpRoot
+      responses:
+        '200':
+          description: MCP response
+  /orders:
+    post:
+      summary: MCP endpoint for orders
+      operationId: mcpOrders
+      responses:
+        '200':
+          description: MCP response
+  /customers:
+    post:
+      summary: MCP endpoint for customers
+      operationId: mcpCustomers
+      responses:
+        '200':
+          description: MCP response
+  /returns:
+    post:
+      summary: MCP endpoint for returns
+      operationId: mcpReturns
+      responses:
+        '200':
+          description: MCP response
+  /shipping:
+    post:
+      summary: MCP endpoint for shipping
+      operationId: mcpShipping
+      responses:
+        '200':
+          description: MCP response
