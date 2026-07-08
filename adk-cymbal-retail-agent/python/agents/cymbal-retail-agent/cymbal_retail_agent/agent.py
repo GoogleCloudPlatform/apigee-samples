@@ -1,4 +1,4 @@
-# Copyright 2025 Google LLC
+# Copyright 2026 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -37,9 +37,12 @@ model=MODEL_NAME
 orders_agent = Agent(
     model=model,
     name='ordersagent',
-    description="Agent to retrieve a customer's order history and status.",
+    description="Agent to manage customer orders - create, update, and retrieve order information.",
     instruction="""
-You are a specialized agent for managing customer orders. Your sole responsibility is to look up and report on a customer's order history, track an existing order, or get shipping information. You will receive a request from the root agent. You should not process any other type of request.
+You are a specialized agent for managing customer orders.
+Your sole responsibilities include creating new orders, updating existing orders, and looking up existing orders. You will receive a request from the root agent.
+Gather any additional information needed and then call the appropriate tool to process the request. 
+Do not attempt to process any other type of request.
 """,
     tools=[cymbal]
 )
@@ -48,9 +51,12 @@ logging.info("Orders Agent initialized.")
 returns_agent = Agent(
     model=model,
     name='returnsagent',
-    description="Agent to handle customer returns and refunds.",
+    description="Agent to handle customer returns and refunds - create, update, and retrieve return requests, and process refunds.",
     instruction="""
-You are a specialized agent for handling customer returns and refunds. Your sole responsibility is to use the provided tools to process a return request, check the status of a refund, or provide return instructions. You will receive a request from the root agent. You should not process any other type of request.
+You are a specialized agent for handling customer returns and refunds.
+Your sole responsibilities include processing return requests, checking the status of a refund, or providing return instructions. You will receive a request from the root agent.
+Gather any additional information needed and then call the appropriate tool to process the request.
+Do not attempt to process any other type of request.
 """,
     tools=[cymbal]
 )
@@ -59,9 +65,12 @@ logging.info("Returns Agent initialized.")
 customers_agent = Agent(
     model=model,
     name='customersagent',
-    description="Agent to manage and retrieve customer information.",
+    description="Agent to manage and retrieve customer information - create, update, and retrieve customer profiles.",
     instruction="""
-You are a specialized agent for managing customer profile information. Your sole responsibility is to use the provided tools to assist with customer profile inquiries. You will receive a request from the root agent. You should not process any other type of request.
+You are a specialized agent for managing customer profile information.
+Your sole responsibilities include creating new customer profiles, updating existing customer profiles, and looking up existing customer profiles. You will receive a request from the root agent.
+Gather any additional information needed and then call the appropriate tool to process the request.
+Do not attempt to process any other type of request.
 """,
     tools=[cymbal]
 )
@@ -70,9 +79,12 @@ logging.info("Customers Agent initialized.")
 shipping_agent = Agent(
     model=model,
     name='shippingagent',
-    description="Agent to retrieve shipping information.",
+    description="Agent to create shipping labels.",
     instruction="""
-You are a specialized agent for managing customer shipping inquiries and label generation. Your sole responsibility is to use the provided tools to assist with shipping inquiries. You will receive a request from the root agent. You should not process any other type of request.
+You are a specialized agent for creating customer shipping labels.
+Your sole responsibilities include creating shipping labels. You will receive a request from the root agent.
+Gather any additional information needed and then call the appropriate tool to process the request.
+Do not attempt to process any other type of request.
 """,
     tools=[cymbal]
 )
@@ -86,16 +98,15 @@ root_agent = Agent(
     global_instruction="""You are a helpful virtual assistant for a retail company named Cymbal Retail. Always respond politely.""",
     instruction="""
 **Your Primary Goal:**
-You are the Cymbal Retail Agent 
+You are the Cymbal Retail Agent. You are thr main orchestrator for the customer service team. You will receive requests from customers and will delegate tasks to specialized sub-agents.
 
 1. Greet the user warmly and ask them how you can help.
-2. If the user's request is related to order management, prompt them for their full name and email address. Use the order tool to retrieve a list of their orders.
-3. If the user asks about creating a new order, confirm the customer's name and the product details before using the order tool to process the request.
-4. For questions about a customer's profile or general customer information, ask for their email address. Use the customer profile tool to retrieve and provide the requested details.
-5. When the user asks about a return or refund, ask for the specific order ID so you can check the status using the returns tool.
-6. If the user wants to fetch shipping information, ask for the address information and then use the shipping tool to check the information requested and provide the shipping label response.
-7. If the user wants to get all customers use the customers tool to retrieve all customers information. 
-8. Throughout the conversation, maintain a friendly and helpful tone. If you need more information to complete a request, politely ask for it.
+2. If the user asks about related to an order, delegate to the orders_agent.
+3. For questions about a customer's profile or general customer information, delegate to the customers_agent.
+4. When the user asks about a return or refund, delegate to the returns_agent.
+5. For shipping requests, delegate to the shipping_agent.
+
+Throughout the conversation, maintain a friendly and helpful tone. If you need more information to complete a request, politely ask for it.
 """,
     sub_agents=[orders_agent, returns_agent, customers_agent, shipping_agent]
 )
