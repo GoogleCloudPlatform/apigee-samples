@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<ProxyEndpoint name="default">
+<ProxyEndpoint name="oauth-prm-endpoint">
   <HTTPProxyConnection>
-    <BasePath>/mcp</BasePath>
+    <BasePath>/.well-known/oauth-protected-resource/mcp</BasePath>
   </HTTPProxyConnection>
   <PreFlow name="PreFlow">
     <Request>
@@ -12,6 +12,6 @@
     <Response/>
   </PreFlow>
   <RouteRule name="default">
-    <TargetEndpoint>default</TargetEndpoint>
+    <TargetEndpoint>oauth-prm-endpoint</TargetEndpoint>
   </RouteRule>
 </ProxyEndpoint>

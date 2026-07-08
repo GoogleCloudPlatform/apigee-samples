@@ -15,10 +15,9 @@
 from google.adk.agents import Agent
 from dotenv import load_dotenv
 import os
+from .tools import cymbal
+
 import warnings
-
-from .tools import orders, returns, customers, shipping
-
 # Ignore all warnings
 warnings.filterwarnings("ignore")
 
@@ -34,6 +33,7 @@ MODEL_NAME=os.getenv("MODEL_NAME")
 
 model=MODEL_NAME
 
+# Define the sub-agents for each tool with their instructions
 orders_agent = Agent(
     model=model,
     name='ordersagent',
@@ -41,7 +41,7 @@ orders_agent = Agent(
     instruction="""
 You are a specialized agent for managing customer orders. Your sole responsibility is to look up and report on a customer's order history, track an existing order, or get shipping information. You will receive a request from the root agent. You should not process any other type of request.
 """,
-    tools=[orders]
+    tools=[cymbal]
 )
 logging.info("Orders Agent initialized.")
 
@@ -52,7 +52,7 @@ returns_agent = Agent(
     instruction="""
 You are a specialized agent for handling customer returns and refunds. Your sole responsibility is to use the provided tools to process a return request, check the status of a refund, or provide return instructions. You will receive a request from the root agent. You should not process any other type of request.
 """,
-    tools=[returns]
+    tools=[cymbal]
 )
 logging.info("Returns Agent initialized.")
 
@@ -63,7 +63,7 @@ customers_agent = Agent(
     instruction="""
 You are a specialized agent for managing customer profile information. Your sole responsibility is to use the provided tools to assist with customer profile inquiries. You will receive a request from the root agent. You should not process any other type of request.
 """,
-    tools=[customers]
+    tools=[cymbal]
 )
 logging.info("Customers Agent initialized.")
 
@@ -72,9 +72,9 @@ shipping_agent = Agent(
     name='shippingagent',
     description="Agent to retrieve shipping information.",
     instruction="""
-You are a specialized agent for managing relevant information about Shipping. Your sole responsibility is to use the provided tools to assist with shipping inquiries. You will receive a request from the root agent. You should not process any other type of request.
+You are a specialized agent for managing customer shipping inquiries and label generation. Your sole responsibility is to use the provided tools to assist with shipping inquiries. You will receive a request from the root agent. You should not process any other type of request.
 """,
-    tools=[shipping]
+    tools=[cymbal]
 )
 logging.info("Shipping Agent initialized.")
 

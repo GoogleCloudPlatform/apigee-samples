@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <APIProxy revision="1" name="cymbal-discovery-v1">
-    <BasePaths>/mcp</BasePaths>
-    <BasePaths>/mcp/v1/samples/adk-cymbal-retail</BasePaths>
-    <ConfigurationVersion majorVersion="4" minorVersion="0"/>
-    <CreatedAt>0</CreatedAt>
-    <Description>Native Apigee MCP Discovery Gateway</Description>
+  <BasePaths>/mcp</BasePaths>
+  <BasePaths>/.well-known/oauth-protected-resource/mcp</BasePaths>
+    <Description>Native Apigee MCP Discovery Proxy</Description>
     <DisplayName>cymbal-discovery-v1</DisplayName>
     <Policies/>
     <ProxyEndpoints>
-        <ProxyEndpoint>default</ProxyEndpoint>
+    <ProxyEndpoint>default</ProxyEndpoint>
+    <ProxyEndpoint>oauth-prm-endpoint</ProxyEndpoint>
     </ProxyEndpoints>
     <Resources>
-        <Resource>oas://cymbal-discovery-v1.yaml</Resource>
         <Resource>oas://orders.yaml</Resource>
         <Resource>oas://customers.yaml</Resource>
         <Resource>oas://returns.yaml</Resource>
@@ -19,5 +17,6 @@
     </Resources>
     <TargetEndpoints>
         <TargetEndpoint>default</TargetEndpoint>
+        <TargetEndpoint>oauth-prm-endpoint</TargetEndpoint>
     </TargetEndpoints>
 </APIProxy>

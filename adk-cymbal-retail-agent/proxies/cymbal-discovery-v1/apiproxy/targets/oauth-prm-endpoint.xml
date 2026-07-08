@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TargetEndpoint name="oauth-prm-endpoint">
+  <HTTPTargetConnection>
+    <URL>https://apigee-ai.mcp.apigee.internal/.well-known/oauth-protected-resource/mcp</URL>
+  </HTTPTargetConnection>
+</TargetEndpoint>

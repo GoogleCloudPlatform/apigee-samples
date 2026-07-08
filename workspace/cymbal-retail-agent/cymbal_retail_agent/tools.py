@@ -33,11 +33,20 @@ auth_scheme, auth_credential = token_to_scheme_credential("apikey", "header", "x
 
 mcp_protocol = "http" if "localhost" in APIGEE_HOSTNAME or "127.0.0.1" in APIGEE_HOSTNAME else "https"
 
+cymbal = MCPToolset(
+    connection_params=StreamableHTTPConnectionParams(
+        url=f"{mcp_protocol}://{APIGEE_HOSTNAME}/mcp"
+    ),
+    errlog=None,
+    auth_scheme=auth_scheme,
+    auth_credential=auth_credential
+)
+
+
 # Orders API
 orders = MCPToolset(
     connection_params=StreamableHTTPConnectionParams(
         url=f"{mcp_protocol}://{APIGEE_HOSTNAME}/mcp/v1/samples/adk-cymbal-retail/orders",
-        headers={"x-apikey": apikey_credential_str}
     ),
     errlog=None,
     auth_scheme=auth_scheme,
@@ -48,7 +57,6 @@ orders = MCPToolset(
 returns = MCPToolset(
     connection_params=StreamableHTTPConnectionParams(
         url=f"{mcp_protocol}://{APIGEE_HOSTNAME}/mcp/v1/samples/adk-cymbal-retail/returns",
-        headers={"x-apikey": apikey_credential_str}
     ),
     errlog=None,
     auth_scheme=auth_scheme,
@@ -59,7 +67,6 @@ returns = MCPToolset(
 customers = MCPToolset(
     connection_params=StreamableHTTPConnectionParams(
         url=f"{mcp_protocol}://{APIGEE_HOSTNAME}/mcp/v1/samples/adk-cymbal-retail/customers",
-        headers={"x-apikey": apikey_credential_str}
     ),
     errlog=None,
     auth_scheme=auth_scheme,
@@ -70,7 +77,6 @@ customers = MCPToolset(
 shipping = MCPToolset(
     connection_params=StreamableHTTPConnectionParams(
         url=f"{mcp_protocol}://{APIGEE_HOSTNAME}/mcp/v1/samples/adk-cymbal-retail/shipping",
-        headers={"x-apikey": apikey_credential_str}
     ),
     errlog=None,
     auth_scheme=auth_scheme,

@@ -22,21 +22,31 @@ from google.adk.tools.openapi_tool.auth.auth_helpers import token_to_scheme_cred
 
 load_dotenv()
 
-PROJECT_ID = os.getenv("GOOGLE_CLOUD_PROJECT")
-APIGEE_HOSTNAME = os.getenv("APIGEE_HOSTNAME")
-SECRET = f"projects/{PROJECT_ID}/secrets/cymbal-retail-apikey/versions/latest"
+PROJECT_ID=os.getenv("GOOGLE_CLOUD_PROJECT")
+APIGEE_HOSTNAME=os.getenv("APIGEE_HOSTNAME")
+SECRET=f"projects/{PROJECT_ID}/secrets/cymbal-retail-apikey/versions/latest"
 
-# Get the credentials for the Cymbal Retail APIs
+# # Get the credentials for the Cymbal Retail APIs
 secret_manager_client = SecretManagerClient()
 apikey_credential_str = secret_manager_client.get_secret(SECRET)
 auth_scheme, auth_credential = token_to_scheme_credential("apikey", "header", "x-apikey", apikey_credential_str)
 
 mcp_protocol = "http" if "localhost" in APIGEE_HOSTNAME or "127.0.0.1" in APIGEE_HOSTNAME else "https"
 
+cymbal = MCPToolset(
+    connection_params=StreamableHTTPConnectionParams(
+        url=f"{mcp_protocol}://{APIGEE_HOSTNAME}/mcp"
+    ),
+    errlog=None,
+    auth_scheme=auth_scheme,
+    auth_credential=auth_credential
+)
+
+
 # Orders API
 orders = MCPToolset(
     connection_params=StreamableHTTPConnectionParams(
-        url=f"{mcp_protocol}://{APIGEE_HOSTNAME}/mcp/v1/samples/adk-cymbal-retail/orders"
+        url=f"{mcp_protocol}://{APIGEE_HOSTNAME}/mcp/v1/samples/adk-cymbal-retail/orders",
     ),
     errlog=None,
     auth_scheme=auth_scheme,
@@ -46,7 +56,7 @@ orders = MCPToolset(
 # Return and Refund API
 returns = MCPToolset(
     connection_params=StreamableHTTPConnectionParams(
-        url=f"{mcp_protocol}://{APIGEE_HOSTNAME}/mcp/v1/samples/adk-cymbal-retail/returns"
+        url=f"{mcp_protocol}://{APIGEE_HOSTNAME}/mcp/v1/samples/adk-cymbal-retail/returns",
     ),
     errlog=None,
     auth_scheme=auth_scheme,
@@ -56,7 +66,7 @@ returns = MCPToolset(
 # Customers API
 customers = MCPToolset(
     connection_params=StreamableHTTPConnectionParams(
-        url=f"{mcp_protocol}://{APIGEE_HOSTNAME}/mcp/v1/samples/adk-cymbal-retail/customers"
+        url=f"{mcp_protocol}://{APIGEE_HOSTNAME}/mcp/v1/samples/adk-cymbal-retail/customers",
     ),
     errlog=None,
     auth_scheme=auth_scheme,
@@ -66,7 +76,7 @@ customers = MCPToolset(
 # Shipping API
 shipping = MCPToolset(
     connection_params=StreamableHTTPConnectionParams(
-        url=f"{mcp_protocol}://{APIGEE_HOSTNAME}/mcp/v1/samples/adk-cymbal-retail/shipping"
+        url=f"{mcp_protocol}://{APIGEE_HOSTNAME}/mcp/v1/samples/adk-cymbal-retail/shipping",
     ),
     errlog=None,
     auth_scheme=auth_scheme,

@@ -15,7 +15,7 @@
 from google.adk.agents import Agent
 from dotenv import load_dotenv
 import os
-from .tools import orders, customers, shipping, returns
+from .tools import cymbal
 
 import warnings
 # Ignore all warnings
@@ -41,7 +41,7 @@ orders_agent = Agent(
     instruction="""
 You are a specialized agent for managing customer orders. Your sole responsibility is to look up and report on a customer's order history, track an existing order, or get shipping information. You will receive a request from the root agent. You should not process any other type of request.
 """,
-    tools=[orders]
+    tools=[cymbal]
 )
 logging.info("Orders Agent initialized.")
 
@@ -52,7 +52,7 @@ returns_agent = Agent(
     instruction="""
 You are a specialized agent for handling customer returns and refunds. Your sole responsibility is to use the provided tools to process a return request, check the status of a refund, or provide return instructions. You will receive a request from the root agent. You should not process any other type of request.
 """,
-    tools=[returns]
+    tools=[cymbal]
 )
 logging.info("Returns Agent initialized.")
 
@@ -63,7 +63,7 @@ customers_agent = Agent(
     instruction="""
 You are a specialized agent for managing customer profile information. Your sole responsibility is to use the provided tools to assist with customer profile inquiries. You will receive a request from the root agent. You should not process any other type of request.
 """,
-    tools=[customers]
+    tools=[cymbal]
 )
 logging.info("Customers Agent initialized.")
 
@@ -74,7 +74,7 @@ shipping_agent = Agent(
     instruction="""
 You are a specialized agent for managing customer shipping inquiries and label generation. Your sole responsibility is to use the provided tools to assist with shipping inquiries. You will receive a request from the root agent. You should not process any other type of request.
 """,
-    tools=[shipping]
+    tools=[cymbal]
 )
 logging.info("Shipping Agent initialized.")
 
