@@ -155,6 +155,7 @@ Plugins, also known as *on-ramp plugins*, enable API hub to connect and ingest A
 |     | Sample                   | Description                                                                                                                                                                                                                                                 | 
 | --- | ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 1   | [azure-apim](./apihub-plugins/azure-apim) | This sample provides an Application Integration template and scripts to synchronize API metadata from Azure API Management (APIM) to Apigee API hub |
+| 2   | [azure-apim-onramp-realtime](./apihub-plugins/azure-apim-onramp-realtime) | This sample provides an event-driven Azure Function that pushes Azure API Management (APIM) API create/update/delete events to Apigee API hub in near real time, using keyless Workload Identity Federation |
 
 ## <a name="modifying"></a>Modifying a sample proxy
 
