@@ -105,7 +105,6 @@ apigeecli apihub attributes update -r "$APIGEE_APIHUB_REGION" -o "$APIGEE_APIHUB
 apigeecli apihub attributes update -r "$APIGEE_APIHUB_REGION" -o "$APIGEE_APIHUB_PROJECT_ID" -t "$TOKEN" --allowed-values  "config/teams.json" --data-type "ENUM" -i "system-team" -s "API" -m "allowed_values" -d "Team"
 
 add_grpc_api_to_hub "shipments"
-add_mcp_api_to_hub "cymbal-discovery-v1"
 add_soap_api_to_hub "payments"
 add_rest_api_to_hub "accounts"
 add_rest_api_to_hub "communications"

@@ -53,6 +53,5 @@ delete_api_from_hub "products"
 delete_api_from_hub "stocks"
 delete_api_from_hub "payments"
 delete_api_from_hub "shipments"
-delete_api_from_hub "cymbal-discovery-v1"
 
 rm -rf tmp

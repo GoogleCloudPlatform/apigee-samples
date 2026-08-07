@@ -110,7 +110,6 @@ delete_api "cymbal-returns-v2"
 delete_api "cymbal-shipping-v2"
 delete_api "adk-retail-agent-llm-governance-v1"
 delete_api "oauth-server"
-delete_api "cymbal-discovery-v1"
 
 echo "Undeploying GEAP Agent from Agent Runtime"
 source ../workspace/cymbal-retail-agent/.venv/bin/activate

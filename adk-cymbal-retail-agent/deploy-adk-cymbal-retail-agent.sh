@@ -343,7 +343,6 @@ import_and_deploy_proxy "cymbal-returns-v2"
 import_and_deploy_proxy "cymbal-shipping-v2"
 import_and_deploy_proxy "oauth-server"
 import_and_deploy_proxy "adk-retail-agent-llm-governance-v1"
-import_and_deploy_proxy "cymbal-discovery-v1"
 
 echo "Creating or Updating API Products"
 apigeecli products update --name "cymbal-retail-product" --display-name "cymbal-retail-product" \
