@@ -17,7 +17,7 @@ info:
   description: API to calculate rates and create shipping labels for Cymbal Retail.
   version: 1.0.0
 servers:
-  - url: https://APIGEE_HOST/v1/samples/adk-cymbal-retail/shipping
+  - url: https://APIGEE_HOST/v2/samples/adk-cymbal-retail/shipping
 paths:
   /:
     post:

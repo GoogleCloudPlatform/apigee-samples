@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <TargetEndpoint name="default">
   <HTTPTargetConnection>
-    <URL>https://apigee-ai.mcp.apigee.internal/mcp</URL>
+    <URL>https://mcp.apigee.internal/mcp</URL>
   </HTTPTargetConnection>
 </TargetEndpoint>

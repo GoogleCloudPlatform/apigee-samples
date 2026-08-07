@@ -38,7 +38,7 @@
         </Step>
       </Request>
       <Response/>
-      <Condition>((request.path MatchesPath "/v2/samples/adk-cymbal-retail/returns" or request.path MatchesPath "/v2/samples/adk-cymbal-retail/returns/")) and (request.verb = "GET")</Condition>
+      <Condition>(proxy.pathsuffix MatchesPath "/" or proxy.pathsuffix MatchesPath "") and (request.verb = "GET")</Condition>
     </Flow>
     <Flow name="createReturn">
       <Description>Creates a new return.</Description>
@@ -77,9 +77,22 @@
       </Response>
       <Condition>(proxy.pathsuffix MatchesPath "/{id}") and (request.verb = "PUT")</Condition>
     </Flow>
+    <Flow name="processRefund">
+      <Description>Processes a refund for a return.</Description>
+      <Request>
+        <Step>
+          <Name>EV-FetchID</Name>
+        </Step>
+        <Step>
+          <Name>AM-ProcessRefund</Name>
+        </Step>
+      </Request>
+      <Response/>
+      <Condition>(proxy.pathsuffix MatchesPath "/{id}/process-refund") and (request.verb = "POST")</Condition>
+    </Flow>
   </Flows>
   <HTTPProxyConnection>
-    <BasePath>/v2/samples/adk-cymbal-retail/returns/</BasePath>
+    <BasePath>/v2/samples/adk-cymbal-retail/returns</BasePath>
     <Properties/>
   </HTTPProxyConnection>
   <RouteRule name="noRoute">

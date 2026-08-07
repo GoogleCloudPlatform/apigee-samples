@@ -39,31 +39,5 @@ export APIGEE_APIHUB_REGION="${GCP_PROJECT_REGION}"
 
 export VERTEXAI_REGION="${GCP_PROJECT_REGION}"
 export VERTEXAI_PROJECT_ID="${PROJECT_ID}"
-export MODEL_NAME="gemini-2.5-flash"
 
-# Auto-discover APIGEE_HOST if not already set
-if [ -z "$APIGEE_HOST" ]; then
-  echo "APIGEE_HOST not set. Attempting auto-discovery..."
-  TOKEN=$(gcloud auth application-default print-access-token 2>/dev/null || gcloud auth print-access-token 2>/dev/null)
-  if [ -n "$TOKEN" ]; then
-    HOST_DISCOVERED=$(apigeecli envgroups list -o "$PROJECT_ID" -t "$TOKEN" 2>/dev/null | jq -r '.[0].hostnames[0]' 2>/dev/null || true)
-    if [ -n "$HOST_DISCOVERED" ] && [ "$HOST_DISCOVERED" != "null" ]; then
-      export APIGEE_HOST="$HOST_DISCOVERED"
-      echo "Discovered APIGEE_HOST: $APIGEE_HOST"
-    fi
-  fi
-fi
-
-if [ -z "$APIGEE_HOST" ]; then
-  echo "Error: APIGEE_HOST is not set and could not be auto-discovered."
-  echo "Please export APIGEE_HOST=<your-apigee-hostname> (e.g. api-my-org.apiservices.dev or 34.xx.xx.xx.nip.io)"
-  exit 1
-fi
-
-gcloud config set project "$PROJECT_ID"
-
-echo "Enabling required Google Cloud services..."
-gcloud services enable artifactregistry.googleapis.com run.googleapis.com dlp.googleapis.com logging.googleapis.com aiplatform.googleapis.com modelarmor.googleapis.com secretmanager.googleapis.com bigquery.googleapis.com datacatalog.googleapis.com --project "$PROJECT_ID"
-sleep 15
-
-./deploy-adk-cymbal-retail-agent.sh
+./cleanup-adk-cymbal-retail-agent.sh

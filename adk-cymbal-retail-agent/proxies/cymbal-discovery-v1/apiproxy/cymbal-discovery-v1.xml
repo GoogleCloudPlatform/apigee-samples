@@ -10,8 +10,8 @@
     <ProxyEndpoint>oauth-prm-endpoint</ProxyEndpoint>
     </ProxyEndpoints>
     <Resources>
-        <Resource>oas://orders.yaml</Resource>
         <Resource>oas://customers.yaml</Resource>
+        <Resource>oas://orders.yaml</Resource>
         <Resource>oas://returns.yaml</Resource>
         <Resource>oas://shipping.yaml</Resource>
     </Resources>

@@ -100,7 +100,9 @@ echo "Deleting Developer"
 apigeecli developers delete --email cymbal-retail-developer@acme.com --org "$PROJECT_ID" --token "$TOKEN"
 
 echo "Deleting API Products"
-apigeecli products delete --name cymbal-retail-product --org "$PROJECT_ID" --token "$TOKEN"
+apigeecli products delete --name cymbal-retail-product --org "$PROJECT_ID" --token "$TOKEN" || true
+apigeecli products delete --name discoverymcp-product --org "$PROJECT_ID" --token "$TOKEN" || true
+apigeecli products delete --name cymbal-retail-product-test --org "$PROJECT_ID" --token "$TOKEN" || true
 
 delete_api "cymbal-customers-v2"
 delete_api "cymbal-orders-v2"
@@ -108,6 +110,7 @@ delete_api "cymbal-returns-v2"
 delete_api "cymbal-shipping-v2"
 delete_api "adk-retail-agent-llm-governance-v1"
 delete_api "oauth-server"
+delete_api "cymbal-discovery-v1"
 
 echo "Undeploying GEAP Agent from Agent Runtime"
 source ../workspace/cymbal-retail-agent/.venv/bin/activate
@@ -115,6 +118,9 @@ python3 python/agents/cymbal-retail-agent-geap/deployment/undeploy.py \
   --project "$PROJECT_ID" \
   --location "${MODEL_ARMOR_REGION:-us-central1}"
 deactivate
+
+echo "Detaching PostProxyFlowHook"
+apigeecli flowhooks detach --name "PostProxyFlowHook" --env "$APIGEE_ENV" --org "$PROJECT_ID" --token "$TOKEN" || true
 
 delete_sharedflow "llm-extract-candidates-v1"
 delete_sharedflow "llm-extract-prompts-v1"
@@ -187,3 +193,5 @@ remove_role_from_service_account "roles/iam.serviceAccountUser"
 remove_role_from_service_account "roles/dlp.reader"
 remove_role_from_service_account "roles/dlp.user"
 remove_role_from_service_account "roles/apigee.analyticsEditor"
+remove_role_from_service_account "roles/secretmanager.secretAccessor"
+remove_role_from_service_account "roles/apigee.apiReaderV2"

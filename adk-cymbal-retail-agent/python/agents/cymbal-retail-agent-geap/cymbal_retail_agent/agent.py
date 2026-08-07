@@ -29,7 +29,7 @@ print("Starting agent initialization...")
 
 load_dotenv()
 
-MODEL_NAME=os.getenv("MODEL_NAME")
+MODEL_NAME=os.getenv("MODEL_NAME", "gemini-2.5-flash")
 
 model=MODEL_NAME
 

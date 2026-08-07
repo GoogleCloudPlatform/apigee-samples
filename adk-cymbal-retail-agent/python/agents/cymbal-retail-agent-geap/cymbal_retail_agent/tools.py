@@ -18,20 +18,22 @@ from google.adk.integrations.agent_registry.agent_registry import AgentRegistry
 from .auth_config import auth_scheme, auth_credential
 
 PROJECT_ID=os.getenv("GOOGLE_CLOUD_PROJECT")
-LOCATION=os.getenv("AGENT_REGISTRY_LOCATION")
+LOCATION=os.getenv("AGENT_REGISTRY_LOCATION", "us-central1")
 
 registry = AgentRegistry(project_id=PROJECT_ID, location=LOCATION)
 
 servers_list = []
 try:
     # Search Agent Registry for the Apigee MCP Server by name
-    mcp_servers_data = registry.list_mcp_servers(filter_str="displayName:cymbal-mcp")
+    mcp_servers_data = registry.list_mcp_servers(filter_str="displayName:cymbal-discovery-v1")
     servers_list = mcp_servers_data.get("mcpServers", [])
 except Exception as e:
     import logging
     logging.error("Failed to list MCP servers from registry: %s", e)
 
 if servers_list:
+    # Sort by updateTime descending to ensure we use the newest instance
+    servers_list.sort(key=lambda x: x.get("updateTime", ""), reverse=True)
     server_name = servers_list[0]["name"]
     cymbal_mcp = registry.get_mcp_toolset(
         server_name,

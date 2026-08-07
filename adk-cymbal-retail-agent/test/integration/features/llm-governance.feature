@@ -24,7 +24,7 @@ Scenario: Hello
       | x-apikey            | `apikey`         |   
       | authorization       | Bearer `app-default-token`   |   
 
-  When I POST to /v1/adk-retail-agent-llm-governance/v1/projects/apigee-ai/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent
+  When I POST to /v1/adk-retail-agent-llm-governance/v1/projects/PROJECT_ID/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent
   Then response code should be 200
   And response body should be valid json
   And response body should contain responseId
@@ -40,7 +40,7 @@ Scenario: List Customers
       | x-apikey            | `apikey`         |   
       | authorization       | Bearer `app-default-token`   |   
 
-  When I POST to /v1/adk-retail-agent-llm-governance/v1/projects/apigee-ai/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent
+  When I POST to /v1/adk-retail-agent-llm-governance/v1/projects/PROJECT_ID/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent
   Then response code should be 200
   And response body should be valid json
   And response body should contain responseId
@@ -56,7 +56,7 @@ Scenario: Request System Prompt
       | x-apikey            | `apikey`         |   
       | authorization       | Bearer `app-default-token`   |   
 
-  When I POST to /v1/adk-retail-agent-llm-governance/v1/projects/apigee-ai/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent
+  When I POST to /v1/adk-retail-agent-llm-governance/v1/projects/PROJECT_ID/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent
   Then response code should be 200
   And response body should be valid json
   And response body should contain text
@@ -72,7 +72,7 @@ Scenario: User shares sensitive information
       | x-apikey            | `apikey`         |   
       | authorization       | Bearer `app-default-token`   |   
 
-  When I POST to /v1/adk-retail-agent-llm-governance/v1/projects/apigee-ai/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent
+  When I POST to /v1/adk-retail-agent-llm-governance/v1/projects/PROJECT_ID/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent
   Then response code should be 200
   And response body should be valid json
   And response body should contain Jane Doe

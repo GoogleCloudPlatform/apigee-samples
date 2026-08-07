@@ -10,7 +10,7 @@ from dotenv import load_dotenv
 def load_parent_env():
     current = Path(__file__).resolve().parent
     # Add agents directory to sys.path so we can import as a package
-    sys.path.append(str(current.parent))
+    sys.path.insert(0, str(current.parent))
     for parent in [current, *current.parents]:
         env_path = parent / ".env"
         if env_path.exists():
@@ -27,7 +27,7 @@ from vertexai.preview.reasoning_engines.templates.adk import AdkApp
 
 # Dynamic import of the root_agent from the local directory
 try:
-    from cymbal_retail_agent_geap.agent import root_agent
+    from cymbal_retail_agent.agent import root_agent
 except ImportError:
     from agent import root_agent
 
@@ -156,7 +156,7 @@ def deploy(args):
     agent_dir = Path(__file__).resolve().parent
     
     # Change working directory to the parent folder of the agent so that the
-    # packaging system packages "coffee_agent_prod" as a relative top-level directory.
+    # packaging system packages "cymbal_retail_agent" as a relative top-level directory.
     # This prevents absolute paths from being preserved in the uploaded tar archive.
     os.chdir(str(agent_dir.parent))
 
@@ -164,7 +164,7 @@ def deploy(args):
         "display_name": args.display_name,
         "description": args.description,
         "staging_bucket": staging_bucket,
-        "extra_packages": ["coffee_agent_prod"],
+        "extra_packages": ["cymbal_retail_agent"],
         "requirements": [
             "google-cloud-aiplatform[reasoningengine]",
             "cloudpickle",

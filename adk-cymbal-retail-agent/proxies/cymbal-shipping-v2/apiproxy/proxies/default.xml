@@ -42,7 +42,7 @@
     </Flow>
   </Flows>
   <HTTPProxyConnection>
-    <BasePath>/v2/samples/adk-cymbal-retail/shipping/</BasePath>
+    <BasePath>/v2/samples/adk-cymbal-retail/shipping</BasePath>
     <Properties/>
   </HTTPProxyConnection>
   <RouteRule name="noRoute"/>

@@ -22,7 +22,7 @@ import logging
 logging.basicConfig(level=logging.ERROR)
 
 from google.adk.agents import Agent
-from .tools import cymbal_mcp
+from .tools import orders
 
 print("Libraries imported.")
 print("Starting agent initialization...")

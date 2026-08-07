@@ -24,7 +24,7 @@ setDefaultTimeout(25 * 1000);
 
 function fetchOAuthToken(host, clientId, clientSecret, scope) {
   return new Promise((resolve, reject) => {
-    const authPath = `/authorize?client_id=${clientId}&response_type=code&scope=${scope}`;
+    const authPath = `/authorize?client_id=${clientId}&response_type=code&scope=${scope}&redirect_uri=http://localhost`;
     https.get({
       hostname: host,
       path: authPath,
@@ -62,7 +62,8 @@ function exchangeCodeForToken(host, clientId, clientSecret, code, resolve, rejec
     grant_type: 'authorization_code',
     code: code,
     client_id: clientId,
-    client_secret: clientSecret
+    client_secret: clientSecret,
+    redirect_uri: 'http://localhost'
   });
   
   const req = https.request({

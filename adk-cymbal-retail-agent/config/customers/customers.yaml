@@ -24,7 +24,7 @@ info:
     url: https://cymbal-retail.com
   termsOfService: https://cymbal-retail/terms/
 servers:
-  - url: https://APIGEE_HOST/v1/samples/adk-cymbal-retail/customers
+  - url: https://APIGEE_HOST/v2/samples/adk-cymbal-retail/customers
 security:
   - ApiKeyAuth: []
 paths:

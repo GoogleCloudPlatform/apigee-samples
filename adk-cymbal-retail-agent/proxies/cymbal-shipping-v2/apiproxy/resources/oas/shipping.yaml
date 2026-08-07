@@ -71,6 +71,7 @@ paths:
                             type: string
                           ETA:
                             type: string
+components:
   securitySchemes:
     OidcAuth:
       type: openIdConnect

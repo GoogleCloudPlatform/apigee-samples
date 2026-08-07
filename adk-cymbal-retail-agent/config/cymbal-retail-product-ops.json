@@ -44,6 +44,142 @@
           "interval": "1",
           "timeUnit": "minute"
         }
+      },
+      {
+        "apiSource": "cymbal-customers-v2",
+        "operations": [
+          {
+            "resource": "/",
+            "methods": [
+              "DELETE",
+              "GET",
+              "HEAD",
+              "OPTIONS",
+              "PATCH",
+              "POST",
+              "PUT"
+            ]
+          }
+        ]
+      },
+      {
+        "apiSource": "cymbal-customers-v2",
+        "operations": [
+          {
+            "resource": "/**",
+            "methods": [
+              "DELETE",
+              "GET",
+              "HEAD",
+              "OPTIONS",
+              "PATCH",
+              "POST",
+              "PUT"
+            ]
+          }
+        ]
+      },
+      {
+        "apiSource": "cymbal-orders-v2",
+        "operations": [
+          {
+            "resource": "/",
+            "methods": [
+              "DELETE",
+              "GET",
+              "HEAD",
+              "OPTIONS",
+              "PATCH",
+              "POST",
+              "PUT"
+            ]
+          }
+        ]
+      },
+      {
+        "apiSource": "cymbal-orders-v2",
+        "operations": [
+          {
+            "resource": "/**",
+            "methods": [
+              "DELETE",
+              "GET",
+              "HEAD",
+              "OPTIONS",
+              "PATCH",
+              "POST",
+              "PUT"
+            ]
+          }
+        ]
+      },
+      {
+        "apiSource": "cymbal-returns-v2",
+        "operations": [
+          {
+            "resource": "/",
+            "methods": [
+              "DELETE",
+              "GET",
+              "HEAD",
+              "OPTIONS",
+              "PATCH",
+              "POST",
+              "PUT"
+            ]
+          }
+        ]
+      },
+      {
+        "apiSource": "cymbal-returns-v2",
+        "operations": [
+          {
+            "resource": "/**",
+            "methods": [
+              "DELETE",
+              "GET",
+              "HEAD",
+              "OPTIONS",
+              "PATCH",
+              "POST",
+              "PUT"
+            ]
+          }
+        ]
+      },
+      {
+        "apiSource": "cymbal-shipping-v2",
+        "operations": [
+          {
+            "resource": "/",
+            "methods": [
+              "DELETE",
+              "GET",
+              "HEAD",
+              "OPTIONS",
+              "PATCH",
+              "POST",
+              "PUT"
+            ]
+          }
+        ]
+      },
+      {
+        "apiSource": "cymbal-shipping-v2",
+        "operations": [
+          {
+            "resource": "/**",
+            "methods": [
+              "DELETE",
+              "GET",
+              "HEAD",
+              "OPTIONS",
+              "PATCH",
+              "POST",
+              "PUT"
+            ]
+          }
+        ]
       }
     ],
     "operationConfigType": "proxy"

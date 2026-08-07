@@ -20,3 +20,4 @@
 **/__pycache__/**
 *.pyc
 **/.adk/**
+workspace/cymbal-retail-agent/uv.lock

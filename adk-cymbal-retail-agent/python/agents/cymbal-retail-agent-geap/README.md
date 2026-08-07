@@ -19,7 +19,7 @@ Ensure your local `.env` file is populated with your Google Cloud and Apigee con
 ```ini
 GOOGLE_CLOUD_PROJECT="apigee-ai"
 GOOGLE_CLOUD_LOCATION="us-central1"
-APIGEE_HOSTNAME="34.54.87.114.nip.io"
+APIGEE_HOSTNAME="YOUR_APIGEE_HOSTNAME"
 GOOGLE_GENAI_USE_VERTEXAI="TRUE"
 GOOGLE_CLOUD_STORAGE_BUCKET="apigee-ai_cymbal_retail_agent"
 MODEL_NAME="gemini-2.5-flash"

@@ -19,9 +19,9 @@
       <Step>
         <Name>CORS</Name>
       </Step>
-      <!-- <Step>
+      <Step>
         <Name>OA-VerifyAccessToken</Name>
-      </Step> -->
+      </Step>
     </Request>
     <Response/>
   </PreFlow>
@@ -38,7 +38,7 @@
         </Step>
       </Request>
       <Response/>
-      <Condition>((request.path MatchesPath "/v2/samples/adk-cymbal-retail/orders" or request.path MatchesPath "/v2/samples/adk-cymbal-retail/orders/")) and (request.verb = "GET")</Condition>
+      <Condition>(proxy.pathsuffix MatchesPath "/" or proxy.pathsuffix MatchesPath "") and (request.verb = "GET")</Condition>
     </Flow>
     <Flow name="createOrder">
       <Description>Creates a new order.</Description>
@@ -79,7 +79,7 @@
     </Flow>
   </Flows>
   <HTTPProxyConnection>
-    <BasePath>/v2/samples/adk-cymbal-retail/orders/</BasePath>
+    <BasePath>/v2/samples/adk-cymbal-retail/orders</BasePath>
     <Properties/>
   </HTTPProxyConnection>
   <RouteRule name="noRoute">

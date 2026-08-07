@@ -5,7 +5,7 @@ echo "================================================================="
 echo "   CYMBAL RETAIL: AUTOMATED GATEWAY & GOVERNANCE TEST SUITE      "
 echo "================================================================="
 
-export APIGEE_HOST="${APIGEE_HOST:-34.54.87.114.nip.io}"
+export APIGEE_HOST="${APIGEE_HOST:-APIGEE_HOST_TO_SET}"
 export APIKEY="${APIKEY:-PXifa5UsWH2WhPSJfZGabR7mVndqlWMtANUYjtAWYALC7Tbb}"
 export APISECRET="${APISECRET:-oHHeazVDRvTK6aHFMop8cTWgx0MzWFvR}"
 

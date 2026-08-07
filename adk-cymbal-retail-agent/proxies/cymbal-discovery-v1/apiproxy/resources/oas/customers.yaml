@@ -1,16 +1,4 @@
 # Copyright 2026 Google LLC
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
 openapi: 3.0.0
 info:
   title: Customer Profile API
@@ -22,11 +10,11 @@ info:
   contact:
     name: Cymbal Retail
     url: https://cymbal-retail.com
-  termsOfService: https://cymbal-retail/terms/
 servers:
-  - url: https://34.54.87.114.nip.io
+  - url: https://APIGEE_HOST
 security:
-  - ApiKeyAuth: []
+  - OidcAuth:
+      - manager
 paths:
   /v2/samples/adk-cymbal-retail/customers:
     get:
@@ -93,11 +81,10 @@ paths:
           description: ID of the customer to retrieve.
           required: true
           schema:
-            type: integer
-            format: int64
+            type: string
       responses:
         '200':
-          description: A single customer profile.
+          description: Customer profile found.
           content:
             application/json:
               schema:
@@ -125,15 +112,14 @@ paths:
           description: ID of the customer to update.
           required: true
           schema:
-            type: integer
-            format: int64
+            type: string
       requestBody:
-        description: Customer profile details to update.
+        description: Updated customer profile.
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/NewCustomerProfile'
+              $ref: '#/components/schemas/CustomerProfile'
       responses:
         '200':
           description: Customer profile updated successfully.
@@ -164,83 +150,56 @@ components:
   schemas:
     CustomerProfile:
       type: object
-      required:
-        - id
-        - firstName
-        - lastName
-        - email
       properties:
-        id:
-          type: integer
-          format: int64
-          description: The unique identifier for the customer.
-          example: 12345
-        firstName:
+        customerId:
           type: string
-          description: The customer's first name.
-          example: Jane
-        lastName:
+          description: Unique identifier for the customer.
+        name:
           type: string
-          description: The customer's last name.
-          example: Doe
+          description: Full name of the customer.
         email:
           type: string
           format: email
-          description: The customer's email address.
-          example: jane.doe@example.com
-        phone:
+          description: Email address of the customer.
+        phoneNumber:
           type: string
-          description: The customer's phone number.
-          example: "+1-555-555-5555"
-        createdAt:
+          description: Contact phone number of the customer.
+        address:
           type: string
-          format: date-time
-          description: The timestamp when the profile was created.
-          example: "2023-01-01T10:00:00Z"
-        updatedAt:
+          description: Primary address of the customer.
+        creationDate:
           type: string
           format: date-time
-          description: The timestamp when the profile was last updated.
-          example: "2023-08-25T14:30:00Z"
+          description: Date and time when the customer profile was created.
+        lastUpdatedDate:
+          type: string
+          format: date-time
+          description: Date and time when the customer profile was last updated.
     NewCustomerProfile:
       type: object
       required:
-        - firstName
-        - lastName
+        - name
         - email
       properties:
-        firstName:
+        name:
           type: string
-          description: The customer's first name.
-          example: John
-        lastName:
-          type: string
-          description: The customer's last name.
-          example: Smith
+          description: Full name of the customer.
         email:
           type: string
           format: email
-          description: The customer's email address.
-          example: john.smith@example.com
-        phone:
+          description: Email address of the customer.
+        phoneNumber:
           type: string
-          description: The customer's phone number.
-          example: "+1-555-555-5555"
+          description: Contact phone number of the customer.
+        address:
+          type: string
+          description: Primary address of the customer.
     Error:
       type: object
       properties:
         code:
           type: integer
-          format: int32
-          description: The error code.
-          example: 404
+          description: Error code.
         message:
           type: string
-          description: A detailed error message.
-          example: "Customer not found with the given ID."
-  securitySchemes:
-    ApiKeyAuth:
-      type: apiKey
-      description: API key to authorize requests.
-      name: x-apikey
-      in: header
+          description: Error message.

@@ -20,9 +20,9 @@ LOCATION=os.getenv("GOOGLE_CLOUD_LOCATION")
 API_HUB_LOCATION=f"projects/{PROJECT_ID}/locations/{LOCATION}/apis"
 
 # REST based Orders API tool
-orders_api_id="cymbal-orders-api"
+orders_api_id="orders_api"
 orders = APIHubToolset(
-    name="cymbal-orders-api",
+    name="orders_api",
     description="Retrieve customer orders API",
     apihub_resource_name=f"{API_HUB_LOCATION}/{orders_api_id}"
 )

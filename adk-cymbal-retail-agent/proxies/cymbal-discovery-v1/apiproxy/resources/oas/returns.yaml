@@ -1,16 +1,4 @@
 # Copyright 2026 Google LLC
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
 openapi: 3.0.0
 info:
   title: Returns API
@@ -22,11 +10,11 @@ info:
   contact:
     name: Cymbal Retail
     url: https://cymbal-retail.com
-  termsOfService: https://cymbal-retail/terms/
 servers:
-  - url: https://34.54.87.114.nip.io
+  - url: https://APIGEE_HOST
 security:
-  - ApiKeyAuth: []
+  - OidcAuth:
+      - manager
 paths:
   /v2/samples/adk-cymbal-retail/returns:
     get:
@@ -69,7 +57,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ReturnRequest'
         '400':
-          description: Invalid input or order not found.
+          description: Invalid input.
           content:
             application/json:
               schema:
@@ -83,20 +71,20 @@ paths:
 
   /v2/samples/adk-cymbal-retail/returns/{returnId}:
     get:
-      summary: Get details of a specific return request
+      summary: Get a return request by ID
       operationId: getReturnById
       tags:
         - returns
       parameters:
         - name: returnId
           in: path
-          description: The ID of the return request.
+          description: ID of the return request to retrieve.
           required: true
           schema:
             type: string
       responses:
         '200':
-          description: Details of the return request.
+          description: Return request found.
           content:
             application/json:
               schema:
@@ -114,33 +102,33 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
     put:
-      summary: Update the status of a return request
+      summary: Update an existing return request
       operationId: updateReturnStatus
       tags:
         - returns
       parameters:
         - name: returnId
           in: path
-          description: The ID of the return request.
+          description: ID of the return request to update.
           required: true
           schema:
             type: string
       requestBody:
-        description: New status for the return request.
+        description: Updated return request details.
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateReturnStatus'
+              $ref: '#/components/schemas/ReturnRequest'
       responses:
         '200':
-          description: Return status updated successfully.
+          description: Return request updated successfully.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ReturnRequest'
         '400':
-          description: Invalid status update.
+          description: Invalid input.
           content:
             application/json:
               schema:
@@ -157,36 +145,36 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-                
+
   /v2/samples/adk-cymbal-retail/returns/{returnId}/process-refund:
     post:
-      summary: Process a refund or issue a store credit
+      summary: Process refund for a return
       operationId: processRefund
       tags:
-        - refunds
+        - returns
       parameters:
         - name: returnId
           in: path
-          description: The ID of the return request.
+          description: ID of the return to process refund for.
           required: true
           schema:
             type: string
       requestBody:
-        description: The refund type and amount to be processed.
+        description: Refund amount and details.
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RefundProcessing'
+              $ref: '#/components/schemas/ProcessRefundRequest'
       responses:
         '200':
-          description: Refund or credit processed successfully.
+          description: Refund processed successfully.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RefundConfirmation'
+                $ref: '#/components/schemas/ProcessRefundResponse'
         '400':
-          description: Invalid request or return not in a refundable state.
+          description: Invalid input.
           content:
             application/json:
               schema:
@@ -208,174 +196,101 @@ components:
   schemas:
     ReturnRequest:
       type: object
-      required:
-        - returnId
-        - orderId
-        - returnStatus
-        - items
-        - reason
-        - requestedAt
       properties:
         returnId:
           type: string
-          description: The unique identifier for the return request.
-          example: "ret-7890"
+          description: Unique identifier for the return request.
         orderId:
           type: string
-          description: The ID of the original order.
-          example: "ord-12345"
-        returnStatus:
+          description: ID of the order associated with the return.
+        customerId:
           type: string
-          description: The current status of the return.
-          enum:
-            - requested
-            - received
-            - inspected
-            - completed
-            - rejected
-          example: "requested"
+          description: ID of the customer making the return.
+        returnDate:
+          type: string
+          format: date-time
+          description: Date and time when the return request was created.
+        status:
+          type: string
+          description: Current status of the return request.
         items:
           type: array
-          description: The list of items being returned.
           items:
             $ref: '#/components/schemas/ReturnItem'
-        reason:
-          type: string
-          description: The reason for the return.
-          example: "Incorrect size"
-        notes:
-          type: string
-          description: Any additional notes from the customer.
-          example: "The shirt was too small."
-        requestedAt:
-          type: string
-          format: date-time
-          description: The timestamp when the return was requested.
-          example: "2023-09-01T10:00:00Z"
-        processedAt:
-          type: string
-          format: date-time
-          description: The timestamp when the return was completed.
-          example: "2023-09-05T15:30:00Z"
+        refundAmount:
+          type: number
+          format: float
+          description: Total amount to be refunded.
     NewReturnRequest:
       type: object
       required:
         - orderId
-        - items
-        - reason
       properties:
         orderId:
           type: string
-          description: The ID of the original order.
-          example: "ord-12345"
-        items:
-          type: array
-          description: The list of items being returned.
-          items:
-            $ref: '#/components/schemas/ReturnItem'
+          description: ID of the order associated with the return.
         reason:
           type: string
-          description: The reason for the return.
-          example: "Incorrect size"
-        notes:
-          type: string
-          description: Any additional notes from the customer.
-          example: "The shirt was too small."
+          description: Reason for returning the items.
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/NewReturnItem'
     ReturnItem:
       type: object
-      required:
-        - productId
-        - quantity
       properties:
-        productId:
+        itemId:
           type: string
-          description: The ID of the product being returned.
-          example: "sku-shirt-red-M"
+          description: Unique identifier for the item.
         quantity:
           type: integer
-          description: The quantity of the product being returned.
-          example: 1
-    UpdateReturnStatus:
+          description: Quantity of the item being returned.
+        reason:
+          type: string
+          description: Reason for returning the item.
+    NewReturnItem:
       type: object
       required:
-        - status
+        - itemId
+        - quantity
       properties:
+        itemId:
+          type: string
+          description: Unique identifier for the item.
+        quantity:
+          type: integer
+          description: Quantity of the item being returned.
+        reason:
+          type: string
+          description: Reason for returning the item.
+    ProcessRefundRequest:
+      type: object
+      required:
+        - amount
+      properties:
+        amount:
+          type: number
+          format: float
+          description: Refund amount.
+    ProcessRefundResponse:
+      type: object
+      properties:
+        refundId:
+          type: string
+          description: Unique identifier for the processed refund.
         status:
           type: string
-          description: The new status for the return request.
-          enum:
-            - received
-            - inspected
-            - rejected
-            - completed
-          example: "received"
-    RefundProcessing:
-      type: object
-      required:
-        - type
-        - amount
-      properties:
-        type:
-          type: string
-          description: The type of refund to issue.
-          enum:
-            - refund
-            - credit
-          example: "refund"
+          description: Status of the refund.
         amount:
           type: number
           format: float
-          description: The amount to be refunded or credited.
-          example: 25.50
-    RefundConfirmation:
-      type: object
-      required:
-        - returnId
-        - type
-        - amount
-        - confirmationId
-        - processedAt
-      properties:
-        returnId:
-          type: string
-          description: The ID of the return request.
-          example: "ret-7890"
-        type:
-          type: string
-          description: The type of refund that was processed.
-          enum:
-            - refund
-            - credit
-          example: "refund"
-        amount:
-          type: number
-          format: float
-          description: The amount that was refunded or credited.
-          example: 25.50
-        confirmationId:
-          type: string
-          description: The unique ID of the refund transaction.
-          example: "ref-987654"
-        processedAt:
-          type: string
-          format: date-time
-          description: The timestamp when the refund was processed.
-          example: "2023-09-05T15:35:00Z"
+          description: Refunded amount.
     Error:
       type: object
       properties:
         code:
           type: integer
-          format: int32
-          description: The error code.
-          example: 404
+          description: Error code.
         message:
           type: string
-          description: A detailed error message.
-          example: "Return request not found with the given ID."
-  securitySchemes:
-    ApiKeyAuth:
-      type: apiKey
-      description: API key to authorize requests.
-      name: x-apikey
-      in: header
+          description: Error message.

@@ -78,8 +78,36 @@ add_role_to_serviceaccount(){
     --role="${role}"
 }
 
+is_proxy_deployed() {
+  local proxy=$1
+  local output
+  if ! output=$(apigeecli apis listdeploy -n "$proxy" -o "$PROJECT_ID" -t "$TOKEN" 2>/dev/null); then
+    return 1
+  fi
+  if echo "$output" | jq -e ".deployments[] | select(.environment==\"$APIGEE_ENV\")" >/dev/null 2>&1; then
+    return 0
+  fi
+  return 1
+}
+
+is_sharedflow_deployed() {
+  local sf=$1
+  local output
+  if ! output=$(apigeecli sharedflows listdeploy -n "$sf" -o "$PROJECT_ID" -t "$TOKEN" 2>/dev/null); then
+    return 1
+  fi
+  if echo "$output" | jq -e ".deployments[] | select(.environment==\"$APIGEE_ENV\")" >/dev/null 2>&1; then
+    return 0
+  fi
+  return 1
+}
+
 import_and_deploy_sharedflow() {
   local sharedflow_name=$1
+  if is_sharedflow_deployed "$sharedflow_name"; then
+    echo "Shared Flow $sharedflow_name is already deployed to $APIGEE_ENV. Skipping."
+    return 0
+  fi
   echo "Deploying Shared Flow: $sharedflow_name"
   apigeecli sharedflows create bundle -n "$sharedflow_name" \
   -f sharedflowbundles/"$sharedflow_name"/sharedflowbundle \
@@ -90,18 +118,33 @@ import_and_deploy_sharedflow() {
 
 import_and_deploy_proxy() {
   local proxy=$1
-  echo "Deploying Proxy: $proxy"
-  if [ -d "proxies/${proxy}/apiproxy/policies" ]; then
-    sed -i '' "s/APIGEE_HOST/$APIGEE_HOST/g" proxies/${proxy}/apiproxy/policies/*.xml 2>/dev/null || true
+  if is_proxy_deployed "$proxy"; then
+    echo "Proxy $proxy is already deployed to $APIGEE_ENV. Skipping."
+    return 0
   fi
-  if [ -d "proxies/${proxy}/apiproxy/resources/oas" ]; then
-    sed -i '' "s/APIGEE_HOST/$APIGEE_HOST/g" proxies/${proxy}/apiproxy/resources/oas/*.yaml 2>/dev/null || true
+  echo "Deploying Proxy: $proxy"
+  rm -rf "tmp/${proxy}"
+  mkdir -p "tmp/${proxy}"
+  cp -rf "proxies/${proxy}/apiproxy" "tmp/${proxy}/"
+  if [ -d "tmp/${proxy}/apiproxy/policies" ]; then
+    sed -i "s/APIGEE_HOST/$APIGEE_HOST/g" tmp/${proxy}/apiproxy/policies/*.xml 2>/dev/null || true
+  fi
+  if [ -d "tmp/${proxy}/apiproxy/resources/oas" ]; then
+    sed -i "s/APIGEE_HOST/$APIGEE_HOST/g" tmp/${proxy}/apiproxy/resources/oas/*.yaml 2>/dev/null || true
+  fi
+  if [ -d "tmp/${proxy}/apiproxy/resources/properties" ]; then
+    echo "$PRE_PROP" > "tmp/${proxy}/apiproxy/resources/properties/vertex_config.properties" 2>/dev/null || true
+  fi
+  if [ -d "tmp/${proxy}/apiproxy/targets" ]; then
+    sed -i "s/apigee-ai.mcp.apigee.internal/mcp.apigee.internal/g" tmp/${proxy}/apiproxy/targets/*.xml 2>/dev/null || true
+    sed -i "s/APIGEE_HOST/$APIGEE_HOST/g" tmp/${proxy}/apiproxy/targets/*.xml 2>/dev/null || true
   fi
   apigeecli apis create bundle -n "$proxy" \
-  -f "proxies/${proxy}/apiproxy" \
+  -f "tmp/${proxy}/apiproxy" \
   -e "$APIGEE_ENV" --token "$TOKEN" -o "$PROJECT_ID" \
   -s "${SERVICE_ACCOUNT_NAME}"@"${PROJECT_ID}".iam.gserviceaccount.com \
   --ovr --wait
+  rm -rf "tmp/${proxy}"
 }
 
 add_rest_api_to_hub(){
@@ -163,9 +206,6 @@ PRE_PROP="project_id=$VERTEXAI_PROJECT_ID
 model_id=$MODEL_NAME
 region=$VERTEXAI_REGION"
 
-echo "$PRE_PROP" > ./proxies/cymbal-customers-v2/apiproxy/resources/properties/vertex_config.properties
-echo "$PRE_PROP" > ./proxies/cymbal-orders-v2/apiproxy/resources/properties/vertex_config.properties
-echo "$PRE_PROP" > ./proxies/cymbal-returns-v2/apiproxy/resources/properties/vertex_config.properties
 
 gcloud services enable dlp.googleapis.com logging.googleapis.com aiplatform.googleapis.com modelarmor.googleapis.com dialogflow.googleapis.com discoveryengine.googleapis.com --project "$PROJECT_ID"
 
@@ -176,11 +216,19 @@ export PATH=$PATH:$HOME/.apigeecli/bin
 echo "Installing dependencies..."
 #npm install
 
+echo "Attaching runtime project to API Hub..."
+apigeecli apihub project-attachments create \
+  -o "$APIGEE_APIHUB_PROJECT_ID" \
+  -r "$APIGEE_APIHUB_REGION" \
+  -i "$PROJECT_ID" \
+  -p "projects/$PROJECT_ID" \
+  -t "$TOKEN" || true
+
 echo "Registering APIs in Apigee API hub"
 cp -rf config tmp/
-sed -i '' "s/APIGEE_HOST/$APIGEE_HOST/g" tmp/*/*.yaml
-sed -i '' "s/APIGEE_APIHUB_PROJECT_ID/$APIGEE_APIHUB_PROJECT_ID/g" tmp/*/*.json
-sed -i '' "s/APIGEE_APIHUB_REGION/$APIGEE_APIHUB_REGION/g" tmp/*/*.json
+sed -i "s/APIGEE_HOST/$APIGEE_HOST/g" tmp/*/*.yaml
+sed -i "s/APIGEE_APIHUB_PROJECT_ID/$APIGEE_APIHUB_PROJECT_ID/g" tmp/*/*.json
+sed -i "s/APIGEE_APIHUB_REGION/$APIGEE_APIHUB_REGION/g" tmp/*/*.json
 
 apigeecli apihub attributes update -r "$APIGEE_APIHUB_REGION" -o "$APIGEE_APIHUB_PROJECT_ID" -t "$TOKEN" --allowed-values  "config/business-units.json" --data-type "ENUM" -i "system-business-unit" -s "API" -m "allowed_values" -d "Business Unit"
 apigeecli apihub attributes update -r "$APIGEE_APIHUB_REGION" -o "$APIGEE_APIHUB_PROJECT_ID" -t "$TOKEN" --allowed-values  "config/teams.json" --data-type "ENUM" -i "system-team" -s "API" -m "allowed_values" -d "Team"
@@ -295,6 +343,7 @@ import_and_deploy_proxy "cymbal-returns-v2"
 import_and_deploy_proxy "cymbal-shipping-v2"
 import_and_deploy_proxy "oauth-server"
 import_and_deploy_proxy "adk-retail-agent-llm-governance-v1"
+import_and_deploy_proxy "cymbal-discovery-v1"
 
 echo "Creating or Updating API Products"
 apigeecli products update --name "cymbal-retail-product" --display-name "cymbal-retail-product" \
@@ -341,6 +390,8 @@ export PROXY_URL="$APIGEE_HOST/v2/samples/adk-cymbal-retail"
 
 # Deploy Agent to Agent Runtime
 echo "🚀 Deploying GEAP Agent to Agent Runtime..."
+export GOOGLE_CLOUD_PROJECT="$PROJECT_ID"
+export GOOGLE_CLOUD_LOCATION="$VERTEXAI_REGION"
 source ../workspace/cymbal-retail-agent/.venv/bin/activate
 python3 python/agents/cymbal-retail-agent-geap/deployment/deploy.py \
   --project "$PROJECT_ID" \
