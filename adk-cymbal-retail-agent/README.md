@@ -30,12 +30,12 @@ graph TD
         Supervisor -->|A2A: transfer_to_agent| Shipping[🚚 Shipping Sub-Agent]
     end
     
-    Orders -->|MCP JSON-RPC 2.0| MCPGate[🌐 Apigee MCP Target Gateway<br>/mcp/v1/samples/adk-cymbal-retail/*]
+    Orders -->|MCP JSON-RPC 2.0| MCPGate[🌐 Apigee MCP Target Gateway<br>/mcp/v2/samples/adk-cymbal-retail/*]
     Returns -->|MCP JSON-RPC 2.0| MCPGate
     Customers -->|MCP JSON-RPC 2.0| MCPGate
     Shipping -->|MCP JSON-RPC 2.0| MCPGate
     
-    MCPGate -->|API Key Auth & REST Mapping| Services[(📦 Internal Cymbal Microservices)]
+    MCPGate -->|OAuth 2.0 Auth & REST Mapping| Services[(📦 Internal Cymbal Microservices)]
 ```
 
 ---
@@ -48,7 +48,7 @@ Instead of forcing a single LLM prompt to navigate complex enterprise APIs, the 
 * **Specialized Sub-Agents:** `ordersagent`, `returnsagent`, `customersagent`, and `shippingagent` operate with isolated system instructions and restricted tool permissions.
 
 ### 2. Unified MCP Tool Architecture
-All backend microservices are exposed via Apigee as standardized **Model Context Protocol (MCP)** servers (`MCPToolset`). Agents negotiate tool lists and tool calls purely using JSON-RPC 2.0 over HTTP, eliminating the need for hardcoded credentials, complex auth flows, or dynamic OpenAPI parsers inside client agent code.
+All backend microservices are resolved via Apigee as a standardized **Model Context Protocol (MCP)** server layout. Agents negotiate tool lists and tool calls using JSON-RPC 2.0 over HTTP, secured using dynamic OAuth 2.0 Bearer access tokens generated at runtime.
 
 ### 3. Apigee Enterprise AI Governance
 Every LLM generation request is proxied through Apigee (`adk-retail-agent-llm-governance-v1`), enforcing:
@@ -60,21 +60,13 @@ Every LLM generation request is proxied through Apigee (`adk-retail-agent-llm-go
 
 ## 🛠️ Architectural Upgrades & Recent Changes
 
-### 1. Native Apigee MCP Gateway Integration
-- **Deprecated Legacy Proxies:** Successfully undeployed and deleted the legacy Javascript/KVM discovery proxy (`mcp-cymbal-discovery-v1`).
-- **Native Target Routing:** Deployed the clean, native Apigee Discovery Gateway (`cymbal-discovery-v1`) configured with an `AM-SetMCPTarget` policy routing directly to `https://mcp.apigee.internal/mcp` per the Apigee MCP Quickstart architecture.
-- **Automated Self-Healing Deployments:** Updated `deploy-adk-cymbal-retail-agent.sh` to automatically detect, undeploy, and remove deprecated legacy discovery proxies on fresh deployments.
+### 1. OAuth 2.0 Access Token Protection
+- **OAuth 2.0 Token Verification:** Upgraded all domain REST API proxies (`cymbal-customers-v2`, `cymbal-returns-v2`, and `cymbal-shipping-v2`) from API Key validation (`VA-VerifyKey`) to OAuth 2.0 Access Token verification (`OA-VerifyAccessToken`), enforcing standard scopes like `customer` and `manager`.
+- **Mock Identity Provider (`oauth-server`):** Deployed a dedicated mock OIDC provider proxy to support programmatic authorization code flow and access token issuance for tests and agents.
 
-### 2. Decoupled API Product Authorization
-- **Resolved OAuth 401 Conflicts:** Identified that configuring `payloadOperationGroup` on an Apigee X API Product enforces JSON-RPC operation extraction across all POST requests, causing standard REST write operations (which lack a JSON-RPC `method` field) to fail with HTTP 401 `oauth.v2.InvalidApiKeyForGivenResource`.
-- **Specialized Product Separation:** Separated authorization into two distinct products associated with the agent consumer key:
-  1. `cymbal-retail-product`: Strictly uses `operationGroup` (REST URI/method authorization) for standard read and write operations without payload extraction.
-  2. `discoverymcp-product`: Uses both `operationGroup` and `payloadOperationGroup` to authorize MCP tool discovery (`tools/list`) and execution (`tools/call`).
-
-### 3. OpenAPI Packaging & API Hub Auto-Sync
-- **Resource Packaging:** Updated all domain REST API proxies (`cymbal-orders-v1`, `cymbal-customers-v1`, `cymbal-returns-v1`, `cymbal-shipping-v1`, and `cymbal-discovery-v1`) to bundle OpenAPI 3.0 specifications (`oas://*.yaml`).
-- **Metadata Synchronization:** Enabled automatic synchronization with Apigee API Hub via the `system-apigee-x-and-hybrid` runtime plugin.
-- **Flow Condition Polish:** Updated proxy flow conditions to match empty trailing slashes (`MatchesPath "/" or MatchesPath ""`) for robust POST write routing.
+### 2. Streamlined Gateway & Configuration Cleanups
+- **Removed Legacy Config Mappings:** Completely cleaned up and deleted the legacy python KVM deployer (`deploy_mcp_configs.py`) and the corresponding Apigee KVM store (`MCP-Configs`), migrating all backend routing configurations directly to the native gateway.
+- **Indentation & Formatting Polish:** Standardized all deployment attributes, teams metadata, and API product JSON structures (`cymbal-retail-product-ops.json`) with clean, consistent 2-space indentation formatting.
 
 ### 4. Runtime Stability & 100% BDD Verification
 - **Python 3.13 Runtime:** Recompiled local ADK virtual environments (`.venv`) using Python 3.13 to prevent AnyIO task group cancellation scope exceptions during live Server-Sent Events (`adk web` streaming).
@@ -88,16 +80,18 @@ Every LLM generation request is proxied through Apigee (`adk-retail-agent-llm-go
 ├── config/                  # Backend microservice OpenAPI specs & target YAMLs
 ├── proxies/                 # Apigee API Management proxy deployment bundles
 │   ├── adk-retail-agent-llm-governance-v1/   # AI safety & token logging proxy
-│   ├── cymbal-discovery-v1/              # Apigee Native MCP Discovery Proxy
-│   └── cymbal-shipping-v1/                   # Domain backend REST proxy
+│   ├── cymbal-customers-v2/                  # Domain backend REST proxy (Customers)
+│   ├── cymbal-orders-v2/                     # Domain backend REST proxy (Orders)
+│   ├── cymbal-returns-v2/                    # Domain backend REST proxy (Returns)
+│   ├── cymbal-shipping-v2/                   # Domain backend REST proxy (Shipping)
+│   └── oauth-server/                         # Mock OAuth 2.0 Authorization Server
 ├── python/agents/           # ADK Python agent definitions & toolsets
 │   ├── cymbal-retail-agent/                  # Standard retail agent
-│   └── cymbal-retail-agent-governance/       # Governed Model Armor agent
+│   ├── cymbal-retail-agent-apigeellm/        # Governed Model Armor agent
+│   └── cymbal-retail-agent-geap/             # GEAP Agent Runtime deployment agent
 ├── sharedflowbundles/       # Reusable Apigee flows (LLM extraction & cloud logging)
 ├── test/integration/        # Apickli BDD Cucumber automated integration suites
-├── deploy-cymbal-discovery-v1.sh         # Automated full GCP/Apigee deployer
-├── deploy_mcp_configs.py                     # Deploy MCP configurations to Apigee KVM
-├── generate_mcp_config.py                    # OpenAPI to MCP config generator
+├── deploy-adk-cymbal-retail-agent.sh     # Automated full GCP/Apigee deployer
 └── run_integration_tests.sh                  # Automated BDD verification runner
 ```
 
@@ -113,7 +107,7 @@ Every LLM generation request is proxied through Apigee (`adk-retail-agent-llm-go
 ### 1. Environment Configuration
 Ensure your local agent environment file is configured with your active Google Cloud and Apigee hostname settings:
 ```bash
-cd python/agents/cymbal-retail-agent-governance
+cd python/agents/cymbal-retail-agent-apigeellm
 cat <<EOF > .env
 GOOGLE_CLOUD_PROJECT="your-gcp-project-id"
 GOOGLE_CLOUD_LOCATION="us-central1"
@@ -127,10 +121,10 @@ EOF
 ### 2. Run Local ADK Web UI
 To interact with your agent network via video/audio/chat development server:
 ```bash
-cd python/agents/cymbal-retail-agent-governance
+cd python/agents/cymbal-retail-agent-apigeellm
 # Activate the virtual environment where ADK is installed:
 source ../../../../workspace/cymbal-retail-agent/.venv/bin/activate
-adk web --reload_agents cymbal_retail_agent_governance
+adk web --reload_agents cymbal_retail_agent_apigeellm
 ```
 
 ### 3. Run Automated BDD Integration Suites
@@ -150,7 +144,7 @@ export PROJECT_ID="your-gcp-project-id"
 export APIGEE_ENV="qa"
 export APIGEE_HOST="your-apigee-host.nip.io"
 
-./deploy-cymbal-discovery-v1.sh
+./deploy-adk-cymbal-retail-agent.sh
 ```
 
 ---

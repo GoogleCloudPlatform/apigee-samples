@@ -1,17 +1,12 @@
 # Cymbal Retail Agent
 
-An autonomous retail customer service agent built with Google's **Agent Development Kit (ADK)** and powered by **Vertex AI Gemini**. This agent coordinates specialized domain sub-agents (`ordersagent`, `customersagent`, `returnsagent`, and `shippingagent`) to handle customer inquiries via standardized **Model Context Protocol (MCP)** toolsets routed through Apigee API Management.
+An autonomous retail customer service agent built with Google's **Agent Development Kit (ADK)** and powered by **Gemini Enterprise Agent Platform**. This agent coordinates specialized domain sub-agents (`ordersagent`, `customersagent`, `returnsagent`, and `shippingagent`) to handle customer inquiries via a standardized **Model Context Protocol (MCP)** toolset routed through Apigee. 
 
 ---
 
 ## 🏛️ Architecture & Tool Integration
 
-The agent connects to backend domain services via the native Apigee MCP Gateway (`cymbal-discovery-v1`). All tools are defined as `MCPToolset` instances that communicate using JSON-RPC 2.0 over HTTP/HTTPS:
-
-- **Orders Toolset:** `mcp/v1/samples/adk-cymbal-retail/orders`
-- **Customers Toolset:** `mcp/v1/samples/adk-cymbal-retail/customers`
-- **Returns Toolset:** `mcp/v1/samples/adk-cymbal-retail/returns`
-- **Shipping Toolset:** `mcp/v1/samples/adk-cymbal-retail/shipping`
+The agent connects to backend domain services via the native Apigee MCP Gateway (`cymbal-discovery-v1`). All tools are defined via an `MCPToolset` instance that communicate using JSON-RPC 2.0 over HTTP/HTTPS.
 
 ---
 
@@ -43,10 +38,3 @@ source .env
 uv run adk web --reload_agents . --port 8000
 ```
 Open your web browser and navigate to **http://127.0.0.1:8000**.
-
----
-
-## 🛡️ Recent Architectural Upgrades
-- **Native MCP Gateway Routing:** Transferred tool execution from legacy proxy bundles to the native Apigee MCP Gateway (`https://mcp.apigee.internal/mcp`).
-- **Decoupled API Product Authorization:** Associated agent credentials with both `cymbal-retail-product` (for standard REST write operations) and `discoverymcp-product` (for JSON-RPC payload operations) to prevent OAuth 401 conflict errors.
-- **Python 3.13 Runtime Stability:** Resolved AnyIO task group cancellation scope exceptions during streaming tool execution.

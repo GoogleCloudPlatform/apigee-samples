@@ -1,3 +1,0 @@
-{
-    "service_account": "llm-cymbal-retail-agent@${GOOGLE_CLOUD_PROJECT}.iam.gserviceaccount.com"
-}

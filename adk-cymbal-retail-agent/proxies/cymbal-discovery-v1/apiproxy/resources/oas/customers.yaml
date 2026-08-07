@@ -1,4 +1,4 @@
-# Copyright 2025 Google LLC
+# Copyright 2026 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ info:
     This API manages customer profiles and contains operations to retrieve all customer 
     profiles, get a specific customer's profile by ID, create a new 
     customer profile, and update an existing customer profile.
-  version: 1.0.0
+  version: 2.0.0
   contact:
     name: Cymbal Retail
     url: https://cymbal-retail.com
@@ -28,7 +28,7 @@ servers:
 security:
   - ApiKeyAuth: []
 paths:
-  /v1/samples/adk-cymbal-retail/customers:
+  /v2/samples/adk-cymbal-retail/customers:
     get:
       summary: Get a list of all customers
       operationId: getAllCustomers
@@ -81,7 +81,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-  /v1/samples/adk-cymbal-retail/customers/{customerId}:
+  /v2/samples/adk-cymbal-retail/customers/{customerId}:
     get:
       summary: Get a customer by ID
       operationId: getCustomerById

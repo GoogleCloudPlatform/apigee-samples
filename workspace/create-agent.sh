@@ -4,7 +4,7 @@ set -e
 
 export PROJECT_ID=""
 export REGION=""
-export REASONING_ENGINE_ID="" # You can retrieve this by navigating to your deployed Agent via Agent Engine -> select Agent -> review "Query URL" (it is the value post /reasoningEngines/, example: https://us-central1-aiplatform.googleapis.com/v1/projects/dynolab-153020/locations/us-central1/reasoningEngines/4906346338578333696:query)
+export REASONING_ENGINE_ID="" # You can retrieve this by navigating to your deployed Agent via Agent Runtime -> select Agent -> review "Query URL" (it is the value post /reasoningEngines/, example: https://us-central1-aiplatform.googleapis.com/v1/projects/dynolab-153020/locations/us-central1/reasoningEngines/4906346338578333696:query)
 export AS_APP="" # Agentspace Application ID, can be retrieved in the GCP UI by navigating to Agentspace -> Apps -> ID (shown in the App landing zone)
 
 if [ -z "$PROJECT_ID" ]; then

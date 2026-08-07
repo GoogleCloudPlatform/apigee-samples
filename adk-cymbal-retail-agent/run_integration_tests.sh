@@ -7,6 +7,7 @@ echo "================================================================="
 
 export APIGEE_HOST="${APIGEE_HOST:-34.54.87.114.nip.io}"
 export APIKEY="${APIKEY:-PXifa5UsWH2WhPSJfZGabR7mVndqlWMtANUYjtAWYALC7Tbb}"
+export APISECRET="${APISECRET:-oHHeazVDRvTK6aHFMop8cTWgx0MzWFvR}"
 
 echo "🔒 Testing against Apigee Gateway Host: https://${APIGEE_HOST}"
 echo "🔑 Using Enterprise Consumer API Key: ${APIKEY:0:5}....${APIKEY: -5}"

@@ -3,7 +3,7 @@ name = "cymbal-retail-agent"
 version = "0.2.0"
 description = "Cymbal Retail Agent"
 authors = [
-    {name = "Sai Saran Vaidyanathan",email = "ssvaidyanathan@google.com"}
+    {name = "Apigee CE Team",email = "cloud-gtm-apigee-ce-northam@google.com"}
 ]
 license = {text = "Apache License 2.0"}
 readme = "README.md"

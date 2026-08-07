@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cymbal Retail | Agent Identity 3LO Client</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Vanilla CSS styles -->
+    <link rel="stylesheet" href="/static/styles.css">
+    <!-- Marked.js Markdown Parser -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Left Sidebar -->
+        <div class="sidebar">
+            <div class="brand">
+                <div class="brand-logo">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                </div>
+                <div class="brand-name">
+                    <h1>Cymbal Retail</h1>
+                    <span>Agent Runtime Client</span>
+                </div>
+            </div>
+
+            <div class="session-card">
+                <h3>Active Session</h3>
+                <div class="session-id-wrapper">
+                    <span id="session-id-display">No active session</span>
+                    <button id="copy-session-btn" title="Copy Session ID" disabled>
+                        <i class="fa-regular fa-copy"></i>
+                    </button>
+                </div>
+                <div style="margin-top: 0.75rem;">
+                    <label
+                        style="font-size: 0.75rem; color: var(--text-secondary); text-transform: uppercase; display: block; margin-bottom: 0.25rem;">User
+                        Email / ID</label>
+                    <input type="email" id="user-id-input" value="customer@cymbal-retail.com"
+                        style="width: 100%; background: rgba(0, 0, 0, 0.2); border: 1px solid var(--border-glass); color: var(--text-primary); padding: 0.5rem 0.75rem; border-radius: 8px; font-size: 0.85rem;">
+                </div>
+                <button id="new-session-btn" class="btn btn-primary" style="margin-top: 0.5rem;">
+                    <i class="fa-solid fa-plus"></i> New Chat Session
+                </button>
+            </div>
+            
+            <div class="chips-card">
+                <h3>Suggested Prompts</h3>
+                <div class="chips-container">
+                    <button class="chip" onclick="usePrompt('What can you do?')">
+                        <i class="fa-regular fa-circle-question" style="color: var(--text-secondary);"></i> What can you do?
+                    </button>
+                    <button class="chip" onclick="usePrompt('Check shipping rate for 123 Tech Ave')">
+                        <i class="fa-solid fa-location-dot" style="color: var(--text-secondary);"></i> Check shipping
+                    </button>
+                    <button class="chip" onclick="usePrompt('List all my orders')">
+                        <i class="fa-solid fa-receipt" style="color: var(--accent-retail);"></i> List orders
+                    </button>
+                    <button class="chip" onclick="usePrompt('Get details for order 123')">
+                        <i class="fa-solid fa-circle-info" style="color: var(--accent-retail);"></i> Check order details
+                    </button>
+                    <button class="chip" onclick="usePrompt('Get my customer profile information')">
+                        <i class="fa-solid fa-users" style="color: var(--text-secondary);"></i> Check customer profile
+                    </button>
+                    <button class="chip" onclick="usePrompt('Create a return request for order ORD123')">
+                        <i class="fa-solid fa-rotate-left" style="color: var(--text-secondary);"></i> Process return
+                    </button>
+                </div>
+            </div>
+
+            <div class="tools-card">
+                <h3><i class="fa-solid fa-terminal" style="font-size: 0.8rem; margin-right: 0.25rem;"></i> Tool Requests</h3>
+                <div id="tools-log" class="tools-log-container">
+                    <!-- Tool execution entries will be appended here dynamically -->
+                </div>
+            </div>
+
+            <div class="footer-credit"
+                style="display: flex; align-items: center; justify-content: center; gap: 0.35rem; flex-wrap: wrap; font-size: 0.7rem; margin-top: auto; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">
+                <span>Powered by</span>
+                <div
+                    style="display: flex; align-items: center; gap: 0.25rem; color: #bfdbfe; font-weight: 500; text-transform: none; letter-spacing: 0; vertical-align: middle;">
+                    <img src="/static/gemini_2026-192px.svg" alt="Gemini"
+                        style="width: 14px; height: 14px; object-fit: contain;" /> Gemini Enterprise Agent Platform
+                </div>
+                <span>&</span>
+                <div
+                    style="display: flex; align-items: center; gap: 0.25rem; color: #bfdbfe; font-weight: 500; text-transform: none; letter-spacing: 0; vertical-align: middle;">
+                    <img src="/static/Apigee-24-color.svg" alt="Apigee" style="width: 14px; height: 14px; object-fit: contain;" />
+                    Apigee
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Chat Interface -->
+        <div class="chat-area">
+            <div class="chat-header">
+                <div class="agent-status">
+                    <div class="status-indicator online"></div>
+                    <div class="agent-info">
+                        <h2>cymbal-retail-agent</h2>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button id="clear-chat-btn" class="btn-icon" title="Clear Screen">
+                        <i class="fa-regular fa-trash-can"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div id="chat-history" class="chat-history">
+                <!-- Welcome Message -->
+                <div class="message bot welcome-msg">
+                    <div class="avatar">
+                        <i class="fa-solid fa-robot"></i>
+                    </div>
+                    <div class="message-content">
+                        <p>Welcome to Cymbal Retail virtual assistant! Click the <strong>New Chat Session</strong>
+                            button on the left sidebar to get started and test the Keycloak 3-legged OAuth flow.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Input Bar -->
+            <div class="chat-input-wrapper">
+                <form id="chat-form" class="chat-form">
+                    <input type="text" id="chat-input" placeholder="Type a message to test tool authorization..."
+                        autocomplete="off" disabled>
+                    <button type="submit" id="send-btn" class="btn-send" disabled>
+                        <i class="fa-solid fa-paper-plane"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Controller Script -->
+    <script src="/static/script.js"></script>
+</body>
+
+</html>

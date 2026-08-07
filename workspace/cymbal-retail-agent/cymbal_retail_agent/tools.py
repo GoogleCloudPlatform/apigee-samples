@@ -1,4 +1,4 @@
-# Copyright 2025 Google LLC
+# Copyright 2026 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,72 +13,18 @@
 # limitations under the License.
 
 import os
-from dotenv import load_dotenv
-
-from google.adk.tools.mcp_tool.mcp_toolset import MCPToolset
-from google.adk.tools.mcp_tool.mcp_toolset import StreamableHTTPConnectionParams
-from google.adk.tools.apihub_tool.clients.secret_client import SecretManagerClient
-from google.adk.tools.openapi_tool.auth.auth_helpers import token_to_scheme_credential
-
-load_dotenv()
+from google.adk.tools.apihub_tool.apihub_toolset import APIHubToolset
 
 PROJECT_ID=os.getenv("GOOGLE_CLOUD_PROJECT")
-APIGEE_HOSTNAME=os.getenv("APIGEE_HOSTNAME")
-SECRET=f"projects/{PROJECT_ID}/secrets/cymbal-retail-apikey/versions/latest"
+LOCATION=os.getenv("GOOGLE_CLOUD_LOCATION")
+API_HUB_LOCATION=f"projects/{PROJECT_ID}/locations/{LOCATION}/apis"
 
-# # Get the credentials for the Cymbal Retail APIs
-secret_manager_client = SecretManagerClient()
-apikey_credential_str = secret_manager_client.get_secret(SECRET)
-auth_scheme, auth_credential = token_to_scheme_credential("apikey", "header", "x-apikey", apikey_credential_str)
-
-mcp_protocol = "http" if "localhost" in APIGEE_HOSTNAME or "127.0.0.1" in APIGEE_HOSTNAME else "https"
-
-cymbal = MCPToolset(
-    connection_params=StreamableHTTPConnectionParams(
-        url=f"{mcp_protocol}://{APIGEE_HOSTNAME}/mcp"
-    ),
-    errlog=None,
-    auth_scheme=auth_scheme,
-    auth_credential=auth_credential
+# REST based Orders API tool
+orders_api_id="cymbal-orders-api"
+orders = APIHubToolset(
+    name="cymbal-orders-api",
+    description="Retrieve customer orders API",
+    apihub_resource_name=f"{API_HUB_LOCATION}/{orders_api_id}"
 )
 
-
-# Orders API
-orders = MCPToolset(
-    connection_params=StreamableHTTPConnectionParams(
-        url=f"{mcp_protocol}://{APIGEE_HOSTNAME}/mcp/v1/samples/adk-cymbal-retail/orders",
-    ),
-    errlog=None,
-    auth_scheme=auth_scheme,
-    auth_credential=auth_credential
-)
-
-# Return and Refund API
-returns = MCPToolset(
-    connection_params=StreamableHTTPConnectionParams(
-        url=f"{mcp_protocol}://{APIGEE_HOSTNAME}/mcp/v1/samples/adk-cymbal-retail/returns",
-    ),
-    errlog=None,
-    auth_scheme=auth_scheme,
-    auth_credential=auth_credential
-)
-
-# Customers API
-customers = MCPToolset(
-    connection_params=StreamableHTTPConnectionParams(
-        url=f"{mcp_protocol}://{APIGEE_HOSTNAME}/mcp/v1/samples/adk-cymbal-retail/customers",
-    ),
-    errlog=None,
-    auth_scheme=auth_scheme,
-    auth_credential=auth_credential
-)
-
-# Shipping API
-shipping = MCPToolset(
-    connection_params=StreamableHTTPConnectionParams(
-        url=f"{mcp_protocol}://{APIGEE_HOSTNAME}/mcp/v1/samples/adk-cymbal-retail/shipping",
-    ),
-    errlog=None,
-    auth_scheme=auth_scheme,
-    auth_credential=auth_credential
-)
+# Cymbal MCP tools to be added here

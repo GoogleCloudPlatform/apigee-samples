@@ -1,4 +1,4 @@
-# Copyright 2025 Google LLC
+# Copyright 2026 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,30 +14,30 @@
 
 Feature: Customers API
 
-Scenario: Using an invalid API Key
-  Given I set x-apikey header to foobar
-  When I GET /v1/samples/adk-cymbal-retail/customers
+Scenario: Using an invalid Access Token
+  Given I set Authorization header to Bearer foobar
+  When I GET /v2/samples/adk-cymbal-retail/customers
   Then response code should be 401
   And response body should be valid json
 
 Scenario: Retieve a specfic customer record
-  Given I set x-apikey header to `apikey`
-  When I GET /v1/samples/adk-cymbal-retail/customers/123
+  Given I set Authorization header to Bearer manager_token
+  When I GET /v2/samples/adk-cymbal-retail/customers/123
   Then response code should be 200
   And response body should be valid json
   And response body should contain firstName
 
 Scenario: Retieve a list of customers
-  Given I set x-apikey header to `apikey`
-  When I GET /v1/samples/adk-cymbal-retail/customers
+  Given I set Authorization header to Bearer manager_token
+  When I GET /v2/samples/adk-cymbal-retail/customers
   Then response code should be 200
   And response body should be valid json
   And response body should contain firstName
 
 Scenario: Create a new customer
-  Given I set x-apikey header to `apikey`
+  Given I set Authorization header to Bearer manager_token
   And I store the raw value {"firstName": "John","lastName": "Doe","email": "john.doe@example.com","phoneNumber": "555-123-4567","address": "123 Highland Dr","city": "Some Creek","state": "GA","zip": "30303"} as myPayload in scenario scope
   And I set body to `myPayload`
-  When I POST to /v1/samples/adk-cymbal-retail/customers
+  When I POST to /v2/samples/adk-cymbal-retail/customers
   Then response code should be 201
   And response body should be valid json

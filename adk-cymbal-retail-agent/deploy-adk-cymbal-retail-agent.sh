@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright 2025 Google LLC
+# Copyright 2026 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -91,6 +91,9 @@ import_and_deploy_sharedflow() {
 import_and_deploy_proxy() {
   local proxy=$1
   echo "Deploying Proxy: $proxy"
+  if [ -d "proxies/${proxy}/apiproxy/policies" ]; then
+    sed -i '' "s/APIGEE_HOST/$APIGEE_HOST/g" proxies/${proxy}/apiproxy/policies/*.xml 2>/dev/null || true
+  fi
   if [ -d "proxies/${proxy}/apiproxy/resources/oas" ]; then
     sed -i '' "s/APIGEE_HOST/$APIGEE_HOST/g" proxies/${proxy}/apiproxy/resources/oas/*.yaml 2>/dev/null || true
   fi
@@ -146,21 +149,6 @@ add_grpc_api_to_hub(){
   -d ${api}.proto -f "tmp/${api}/${api}.proto"  -r "$APIGEE_APIHUB_REGION" -o "$APIGEE_APIHUB_PROJECT_ID" -t "$TOKEN" ) || true
 }
 
-add_mcp_api_to_hub(){
-  local api=$1
-  local id="1_0_0"
-  echo "Registering the $api API"
-  ( apigeecli apihub apis create --id "${api}_api" \
-  -f "tmp/${api}/${api}-api.json" \
-  -r "$APIGEE_APIHUB_REGION" -o "$APIGEE_APIHUB_PROJECT_ID" -t "$TOKEN" ) || true
-
-  ( apigeecli apihub apis versions create --api-id "${api}_api" --id $id \
-  -f "tmp/${api}/${api}-api-ver.json"  -r "$APIGEE_APIHUB_REGION" -o "$APIGEE_APIHUB_PROJECT_ID" -t "$TOKEN" ) || true
-
-  ( apigeecli apihub apis versions specs create --api-id "${api}_api" -i $id --version $id \
-  -d openapi.yaml -f "tmp/${api}/${api}.yaml"  -r "$APIGEE_APIHUB_REGION" -o "$APIGEE_APIHUB_PROJECT_ID" -t "$TOKEN" ) || true
-}
-
 _sleep() {
   echo "$(date +"%Y-%m-%d %H:%M:%S") Sleeping for $1 seconds ..."
   sleep "$1"
@@ -168,23 +156,22 @@ _sleep() {
 }
 
 echo "================================================="
-echo "Started deploy-cymbal-discovery-v1.sh"
+echo "Started deploy-adk-cymbal-retail-agent.sh"
 echo "================================================="
 
 PRE_PROP="project_id=$VERTEXAI_PROJECT_ID
 model_id=$MODEL_NAME
 region=$VERTEXAI_REGION"
 
-echo "$PRE_PROP" > ./proxies/cymbal-customers-v1/apiproxy/resources/properties/vertex_config.properties
-echo "$PRE_PROP" > ./proxies/cymbal-orders-v1/apiproxy/resources/properties/vertex_config.properties
-echo "$PRE_PROP" > ./proxies/cymbal-returns-v1/apiproxy/resources/properties/vertex_config.properties
+echo "$PRE_PROP" > ./proxies/cymbal-customers-v2/apiproxy/resources/properties/vertex_config.properties
+echo "$PRE_PROP" > ./proxies/cymbal-orders-v2/apiproxy/resources/properties/vertex_config.properties
+echo "$PRE_PROP" > ./proxies/cymbal-returns-v2/apiproxy/resources/properties/vertex_config.properties
 
 gcloud services enable dlp.googleapis.com logging.googleapis.com aiplatform.googleapis.com modelarmor.googleapis.com dialogflow.googleapis.com discoveryengine.googleapis.com --project "$PROJECT_ID"
 
 echo "Installing apigeecli"
 curl -s https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.sh | bash
 export PATH=$PATH:$HOME/.apigeecli/bin
-
 
 echo "Installing dependencies..."
 #npm install
@@ -199,7 +186,6 @@ apigeecli apihub attributes update -r "$APIGEE_APIHUB_REGION" -o "$APIGEE_APIHUB
 apigeecli apihub attributes update -r "$APIGEE_APIHUB_REGION" -o "$APIGEE_APIHUB_PROJECT_ID" -t "$TOKEN" --allowed-values  "config/teams.json" --data-type "ENUM" -i "system-team" -s "API" -m "allowed_values" -d "Team"
 
 add_grpc_api_to_hub "shipments"
-add_mcp_api_to_hub "cymbal-discovery-v1"
 add_soap_api_to_hub "payments"
 add_rest_api_to_hub "accounts"
 add_rest_api_to_hub "communications"
@@ -302,41 +288,21 @@ import_and_deploy_sharedflow "llm-extract-prompts-v1"
 import_and_deploy_sharedflow "llm-logger-v1"
 import_and_deploy_sharedflow "cloud-logger-v1"
 
-
 echo "Deploying the proxies"
-import_and_deploy_proxy "cymbal-customers-v1"
-import_and_deploy_proxy "cymbal-orders-v1"
-import_and_deploy_proxy "cymbal-returns-v1"
-echo "Checking for legacy mcp-generic-gateway-v1 deployment..."
-OLD_REV=$(apigeecli envs deployments get --env "$APIGEE_ENV" --org "$PROJECT_ID" --token "$TOKEN" --disable-check | jq .'deployments[]| select(.apiProxy=="mcp-generic-gateway-v1").revision' -r 2>/dev/null)
-if [ ! -z "$OLD_REV" ] && [ "$OLD_REV" != "null" ]; then
-  echo "Undeploying legacy mcp-generic-gateway-v1 (revision $OLD_REV)..."
-  apigeecli apis undeploy --name "mcp-generic-gateway-v1" --env "$APIGEE_ENV" --rev "$OLD_REV" --org "$PROJECT_ID" --token "$TOKEN" || true
-  apigeecli apis delete --name "mcp-generic-gateway-v1" --org "$PROJECT_ID" --token "$TOKEN" || true
-fi
-
-echo "Checking for legacy mcp-cymbal-discovery-v1 deployment..."
-OLD_REV2=$(apigeecli envs deployments get --env "$APIGEE_ENV" --org "$PROJECT_ID" --token "$TOKEN" --disable-check | jq .'deployments[]| select(.apiProxy=="mcp-cymbal-discovery-v1").revision' -r 2>/dev/null)
-if [ ! -z "$OLD_REV2" ] && [ "$OLD_REV2" != "null" ]; then
-  echo "Undeploying legacy mcp-cymbal-discovery-v1 (revision $OLD_REV2)..."
-  apigeecli apis undeploy --name "mcp-cymbal-discovery-v1" --env "$APIGEE_ENV" --rev "$OLD_REV2" --org "$PROJECT_ID" --token "$TOKEN" || true
-  apigeecli apis delete --name "mcp-cymbal-discovery-v1" --org "$PROJECT_ID" --token "$TOKEN" || true
-fi
-
-import_and_deploy_proxy "cymbal-discovery-v1"
+import_and_deploy_proxy "cymbal-customers-v2"
+import_and_deploy_proxy "cymbal-orders-v2"
+import_and_deploy_proxy "cymbal-returns-v2"
+import_and_deploy_proxy "cymbal-shipping-v2"
+import_and_deploy_proxy "oauth-server"
 import_and_deploy_proxy "adk-retail-agent-llm-governance-v1"
-import_and_deploy_proxy "cymbal-shipping-v1"
-
-echo "Deploying MCP Tool Configurations to Key-Value Map"
-source ../workspace/cymbal-retail-agent/.venv/bin/activate && python3 deploy_mcp_configs.py
 
 echo "Creating or Updating API Products"
 apigeecli products update --name "cymbal-retail-product" --display-name "cymbal-retail-product" \
   --opgrp ./config/cymbal-retail-product-ops.json --envs "$APIGEE_ENV" \
-  --approval auto --org "$PROJECT_ID" --token "$TOKEN" || \
+  --approval auto --scopes "customer" --org "$PROJECT_ID" --token "$TOKEN" || \
 apigeecli products create --name "cymbal-retail-product" --display-name "cymbal-retail-product" \
   --opgrp ./config/cymbal-retail-product-ops.json --envs "$APIGEE_ENV" \
-  --approval auto --org "$PROJECT_ID" --token "$TOKEN"
+  --approval auto --scopes "customer" --org "$PROJECT_ID" --token "$TOKEN"
 
 echo "Creating Developer"
 apigeecli developers create --user cymbal-retail-developer \
@@ -347,15 +313,22 @@ echo "Creating Developer App"
 apigeecli apps create --name cymbal-retail-app --email "cymbal-retail-developer@acme.com" \
   --prods "cymbal-retail-product" --org "$PROJECT_ID" --token "$TOKEN" --disable-check || true
 
-APIKEY=$(apigeecli apps get --name "cymbal-retail-app" --org "$PROJECT_ID" --token "$TOKEN" --disable-check | jq ."[0].credentials[0].consumerKey" -r)
+CLIENT_ID=$(apigeecli apps get --name "cymbal-retail-app" --org "$PROJECT_ID" --token "$TOKEN" --disable-check | jq ."[0].credentials[0].consumerKey" -r)
+CLIENT_SECRET=$(apigeecli apps get --name "cymbal-retail-app" --org "$PROJECT_ID" --token "$TOKEN" --disable-check | jq ."[0].credentials[0].consumerSecret" -r)
 
-SECRET_ID="cymbal-retail-apikey"
-echo "Creating a Secret that will be used by ADK"
-gcloud secrets create "$SECRET_ID" --replication-policy="automatic" --project "$PROJECT_ID" || true
-echo -n "$APIKEY" | gcloud secrets versions add "$SECRET_ID" --project "$PROJECT_ID" --data-file=- || true
-echo "Secret $SECRET_ID created successfully"
+echo "Creating secrets that will be used by ADK"
 
-echo "Crating Flow-Hook for cloud-logger-v1 sharedflow ..."
+CLIENT_ID_SECRET_ID="cymbal-retail-client-id"
+gcloud secrets create "$CLIENT_ID_SECRET_ID" --replication-policy="automatic" --project "$PROJECT_ID" || true
+echo -n "$CLIENT_ID" | gcloud secrets versions add "$CLIENT_ID_SECRET_ID" --project "$PROJECT_ID" --data-file=- || true
+echo "Secret $CLIENT_ID_SECRET_ID created successfully"
+
+CLIENT_SECRET_SECRET_ID="cymbal-retail-client-secret"
+gcloud secrets create "$CLIENT_SECRET_SECRET_ID" --replication-policy="automatic" --project "$PROJECT_ID" || true
+echo -n "$CLIENT_SECRET" | gcloud secrets versions add "$CLIENT_SECRET_SECRET_ID" --project "$PROJECT_ID" --data-file=- || true
+echo "Secret $CLIENT_SECRET_SECRET_ID created successfully"
+
+echo "Creating Flow-Hook for cloud-logger-v1 sharedflow ..."
 apigeecli flowhooks attach \
  --name "PostProxyFlowHook" \
  --sharedflow "cloud-logger-v1" \
@@ -363,8 +336,20 @@ apigeecli flowhooks attach \
  --org "$PROJECT_ID" \
  --token "$TOKEN" || true
 
-export APIKEY
-export PROXY_URL="$APIGEE_HOST/v1/samples/adk-cymbal-retail"
+export CLIENT_ID
+export PROXY_URL="$APIGEE_HOST/v2/samples/adk-cymbal-retail"
+
+# Deploy Agent to Agent Runtime
+echo "🚀 Deploying GEAP Agent to Agent Runtime..."
+source ../workspace/cymbal-retail-agent/.venv/bin/activate
+python3 python/agents/cymbal-retail-agent-geap/deployment/deploy.py \
+  --project "$PROJECT_ID" \
+  --location "$VERTEXAI_REGION" \
+  --bucket "${PROJECT_ID}_cymbal_retail_agent" \
+  --client-id "$CLIENT_ID" \
+  --client-secret "$CLIENT_SECRET" \
+  --apigee-hostname "$APIGEE_HOST"
+deactivate
 
 # npm test
 
@@ -372,37 +357,46 @@ echo " "
 echo "All the Apigee artifacts are successfully deployed!"
 echo " "
 echo "Your Proxy URL is: https://$PROXY_URL"
-echo "Your API Key is: $APIKEY"
+echo "Your Client ID is: $CLIENT_ID"
+echo "Your Client Secret is: $CLIENT_SECRET"
 echo " "
-echo "Run the following commands to test the API"
+echo "Run the following commands to test the API using OAuth:"
 echo " "
-echo "Customers: "
+echo "# 1. Fetch authorization code"
+echo "CODE=\$(curl -s \"https://$APIGEE_HOST/authorize?client_id=$CLIENT_ID&response_type=code&scope=manager\" | jq -r .code)"
 echo " "
-echo "curl --location \"https://$APIGEE_HOST/v1/samples/adk-cymbal-retail/customers\" \
---header \"Content-Type: application/json\" \
---header \"x-apikey: $APIKEY\""
+echo "# 2. Exchange code for access token"
+echo "ACCESS_TOKEN=\$(curl -s -X POST \"https://$APIGEE_HOST/token\" \\"
+echo "  -H \"Content-Type: application/x-www-form-urlencoded\" \\"
+echo "  -d \"grant_type=authorization_code\" \\"
+echo "  -d \"code=\$CODE\" \\"
+echo "  -d \"client_id=$CLIENT_ID\" \\"
+echo "  -d \"client_secret=$CLIENT_SECRET\" | jq -r .access_token)"
 echo " "
-echo "Orders: "
+echo "# 3. Call REST endpoints using the Bearer Token:"
 echo " "
-echo "curl --location \"https://$APIGEE_HOST/v1/samples/adk-cymbal-retail/orders\" \
---header \"Content-Type: application/json\" \
---header \"x-apikey: $APIKEY\""
+echo "Customers API:"
+echo "curl --location \"https://$APIGEE_HOST/v2/samples/adk-cymbal-retail/customers\" \\"
+echo "  --header \"Authorization: Bearer \$ACCESS_TOKEN\""
 echo " "
-echo "Returns: "
+echo "Orders API:"
+echo "curl --location \"https://$APIGEE_HOST/v2/samples/adk-cymbal-retail/orders\" \\"
+echo "  --header \"Authorization: Bearer \$ACCESS_TOKEN\""
 echo " "
-echo "curl --location \"https://$APIGEE_HOST/v1/samples/adk-cymbal-retail/returns\" \
---header \"Content-Type: application/json\" \
---header \"x-apikey: $APIKEY\""
+echo "Returns API:"
+echo "curl --location \"https://$APIGEE_HOST/v2/samples/adk-cymbal-retail/returns\" \\"
+echo "  --header \"Authorization: Bearer \$ACCESS_TOKEN\""
 echo " "
-echo "Export these variables"
-echo "export APIKEY=$APIKEY"
-echo "export PROXY_URL=$PROXY_URL"
+echo "Export these variables for local agent configuration:"
+echo "export CLIENT_ID=$CLIENT_ID"
+echo "export CLIENT_SECRET=$CLIENT_SECRET"
 echo "export APIGEE_HOST=$APIGEE_HOST"
 echo " "
 echo "Your PROJECT_ID is: $PROJECT_ID"
 echo "Your APIGEE_HOST is: $APIGEE_HOST"
-echo "Your APIKEY is: $APIKEY"
+echo "Your CLIENT_ID is: $CLIENT_ID"
+echo "Your CLIENT_SECRET is: $CLIENT_SECRET"
 
 echo "================================================="
-echo "Finished deploy-cymbal-discovery-v1.sh"
+echo "Finished deploy-adk-cymbal-retail-agent.sh"
 echo "================================================="

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright 2025 Google LLC
+# Copyright 2026 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -102,15 +102,19 @@ apigeecli developers delete --email cymbal-retail-developer@acme.com --org "$PRO
 echo "Deleting API Products"
 apigeecli products delete --name cymbal-retail-product --org "$PROJECT_ID" --token "$TOKEN"
 
-delete_api "cymbal-customers-v1"
-delete_api "cymbal-orders-v1"
-delete_api "cymbal-returns-v1"
-delete_api "cymbal-discovery-v1"
+delete_api "cymbal-customers-v2"
+delete_api "cymbal-orders-v2"
+delete_api "cymbal-returns-v2"
+delete_api "cymbal-shipping-v2"
 delete_api "adk-retail-agent-llm-governance-v1"
-delete_api "cymbal-shipping-v1"
+delete_api "oauth-server"
 
-echo "Deleting KVM Store"
-apigeecli kvms delete --name "MCP-Configs" --env "$APIGEE_ENV" --org "$PROJECT_ID" --token "$TOKEN"
+echo "Undeploying GEAP Agent from Agent Runtime"
+source ../workspace/cymbal-retail-agent/.venv/bin/activate
+python3 python/agents/cymbal-retail-agent-geap/deployment/undeploy.py \
+  --project "$PROJECT_ID" \
+  --location "${MODEL_ARMOR_REGION:-us-central1}"
+deactivate
 
 delete_sharedflow "llm-extract-candidates-v1"
 delete_sharedflow "llm-extract-prompts-v1"
@@ -120,7 +124,6 @@ delete_sharedflow "cloud-logger-v1"
 delete_api_from_hub "accounts"
 delete_api_from_hub "communications"
 delete_api_from_hub "customers"
-delete_api_from_hub "cymbal-discovery-v1"
 delete_api_from_hub "employees"
 delete_api_from_hub "orders"
 delete_api_from_hub "payments"
@@ -129,7 +132,6 @@ delete_api_from_hub "returns"
 delete_api_from_hub "shipments"
 delete_api_from_hub "stocks"
 delete_api_from_hub "shipping"
-
 
 echo "Deleting Token Consumption Report"
 
@@ -171,9 +173,11 @@ echo "Deleting Model Armor template"
 gcloud config set api_endpoint_overrides/modelarmor "https://modelarmor.$MODEL_ARMOR_REGION.rep.googleapis.com/"
 gcloud model-armor templates delete "$MODEL_ARMOR_TEMPLATE_ID" -q --location "$MODEL_ARMOR_REGION" --project="$PROJECT_ID"
 
-echo "Deleting the Secret"
-SECRET_ID="cymbal-retail-apikey"
-gcloud secrets delete "$SECRET_ID" --project "$PROJECT_ID" --quiet
+echo "Deleting the secrets"
+SECRET_ID_1="cymbal-retail-client-id"
+gcloud secrets delete "$SECRET_ID_1" --project "$PROJECT_ID" --quiet
+SECRET_ID_2="cymbal-retail-client-secret"
+gcloud secrets delete "$SECRET_ID_2" --project "$PROJECT_ID" --quiet
 
 echo "Removing assigned roles from Service Account"
 remove_role_from_service_account "roles/logging.logWriter"

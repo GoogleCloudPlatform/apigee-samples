@@ -12,20 +12,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from google.adk.agents import Agent
-from dotenv import load_dotenv
 import os
-from .tools import cymbal
+from dotenv import load_dotenv
 
 import warnings
-# Ignore all warnings
 warnings.filterwarnings("ignore")
 
 import logging
 logging.basicConfig(level=logging.ERROR)
 
-print("Starting agent initialization...")
+from google.adk.agents import Agent
+from .tools import cymbal_mcp
+
 print("Libraries imported.")
+print("Starting agent initialization...")
 
 load_dotenv()
 
@@ -44,51 +44,18 @@ Your sole responsibilities include creating new orders, updating existing orders
 Gather any additional information needed and then call the appropriate tool to process the request. 
 Do not attempt to process any other type of request.
 """,
-    tools=[cymbal]
+    tools=[orders]
 )
 logging.info("Orders Agent initialized.")
 
-returns_agent = Agent(
-    model=model,
-    name='returnsagent',
-    description="Agent to handle customer returns and refunds - create, update, and retrieve return requests, and process refunds.",
-    instruction="""
-You are a specialized agent for handling customer returns and refunds.
-Your sole responsibilities include processing return requests, checking the status of a refund, or providing return instructions. You will receive a request from the root agent.
-Gather any additional information needed and then call the appropriate tool to process the request.
-Do not attempt to process any other type of request.
-""",
-    tools=[cymbal]
-)
-logging.info("Returns Agent initialized.")
+# returns_agent = Agent()
+# logging.info("Returns Agent initialized.")
 
-customers_agent = Agent(
-    model=model,
-    name='customersagent',
-    description="Agent to manage and retrieve customer information - create, update, and retrieve customer profiles.",
-    instruction="""
-You are a specialized agent for managing customer profile information.
-Your sole responsibilities include creating new customer profiles, updating existing customer profiles, and looking up existing customer profiles. You will receive a request from the root agent.
-Gather any additional information needed and then call the appropriate tool to process the request.
-Do not attempt to process any other type of request.
-""",
-    tools=[cymbal]
-)
-logging.info("Customers Agent initialized.")
+# customers_agent = Agent()
+# logging.info("Customers Agent initialized.")
 
-shipping_agent = Agent(
-    model=model,
-    name='shippingagent',
-    description="Agent to create shipping labels.",
-    instruction="""
-You are a specialized agent for creating customer shipping labels.
-Your sole responsibilities include creating shipping labels. You will receive a request from the root agent.
-Gather any additional information needed and then call the appropriate tool to process the request.
-Do not attempt to process any other type of request.
-""",
-    tools=[cymbal]
-)
-logging.info("Shipping Agent initialized.")
+# shipping_agent = Agent()
+# logging.info("Shipping Agent initialized.")
 
 # Define the root agent and pass the sub-agents as its tools
 root_agent = Agent(
@@ -108,6 +75,6 @@ You are the Cymbal Retail Agent. You are thr main orchestrator for the customer 
 
 Throughout the conversation, maintain a friendly and helpful tone. If you need more information to complete a request, politely ask for it.
 """,
-    sub_agents=[orders_agent, returns_agent, customers_agent, shipping_agent]
+    sub_agents=[orders_agent]
 )
 logging.info("Root Agent initialized successfully. Ready to receive input.")

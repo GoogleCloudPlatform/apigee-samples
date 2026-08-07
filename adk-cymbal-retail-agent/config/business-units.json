@@ -1,18 +1,18 @@
 [
     {
         "id": "retail",
-        "displayName": "retail"
+        "displayName": "Retail"
     },
     {
         "id": "shared-services",
-        "displayName": "shared-services"
+        "displayName": "Shared Services"
     },
     {
         "id": "banking",
-        "displayName": "banking"
+        "displayName": "Banking"
     },
     {
         "id": "finance",
-        "displayName": "finance"
+        "displayName": "Finance"
     }
 ]

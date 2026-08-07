@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright 2025 Google LLC
+# Copyright 2026 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -32,25 +32,9 @@ export VERTEXAI_REGION="${GCP_PROJECT_REGION}"
 export VERTEXAI_PROJECT_ID="${PROJECT_ID}"
 export MODEL_NAME="gemini-2.5-flash"
 
-# export OAUTH_CLIENT_ID="OAUTH_CLIENT_ID_TO_SET"
-# export OAUTH_CLIENT_SECRET="OAUTH_CLIENT_SECRET_TO_SET"
-# export AGENT_REDIRECT_URI=http://localhost:8000/dev-ui/
-
-# export NON_ADMIN_USER="${GCP_USER_2_ID}"
-
-# echo "Installing dependecies like unzip and cosign"
-# apt-get install -y unzip
-# wget "https://github.com/sigstore/cosign/releases/download/v2.4.1/cosign-linux-amd64"
-# mv cosign-linux-amd64 /usr/local/bin/cosign
-# chmod +x /usr/local/bin/cosign
-
 gcloud config set project $PROJECT_ID
 
 gcloud services enable artifactregistry.googleapis.com run.googleapis.com dlp.googleapis.com logging.googleapis.com aiplatform.googleapis.com modelarmor.googleapis.com secretmanager.googleapis.com bigquery.googleapis.com datacatalog.googleapis.com --project "$PROJECT_ID"
 sleep 15
 
-# ./bq-setup.sh
-# ./oauth-setup.sh
-# cat oauth_client_env.sh #to be removed
-# source ./oauth_client_env.sh
 ./deploy-adk-cymbal-retail-agent.sh

@@ -1,22 +1,22 @@
 [
     {
         "id": "market-data",
-        "displayName": "market-data"
+        "displayName": "Market Data"
     },
     {
         "id": "logistics",
-        "displayName": "logistics"
+        "displayName": "Logistics"
     },
     {
         "id": "open-banking",
-        "displayName": "open-banking"
+        "displayName": "Open Banking"
     },
     {
         "id": "shared-services",
-        "displayName": "shared-services"
+        "displayName": "Shared Services"
     },
     {
         "id": "retail-api",
-        "displayName": "retail-api"
+        "displayName": "Retail API"
     }
 ]

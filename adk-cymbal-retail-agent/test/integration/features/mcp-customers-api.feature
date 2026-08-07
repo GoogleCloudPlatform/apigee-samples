@@ -1,4 +1,4 @@
-# Copyright 2025 Google LLC
+# Copyright 2026 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,9 +21,9 @@ Scenario: initialize
       | name          | value            |
       | content-type  | application/json |
       | User-Agent    | apickli          |
-      | x-apikey      | `apikey`         |
+      | Authorization | Bearer manager_token |
 
-  When I POST to /mcp/v1/samples/adk-cymbal-retail/customers
+  When I POST to /mcp/v2/samples/adk-cymbal-retail/customers
   Then response code should be 200
   And response body should be valid json
   And response body should contain serverInfo
@@ -36,9 +36,9 @@ Scenario: tools/list
       | name          | value            |
       | content-type  | application/json |
       | User-Agent    | apickli          |
-      | x-apikey      | `apikey`         |
+      | Authorization | Bearer manager_token |
 
-  When I POST to /mcp/v1/samples/adk-cymbal-retail/customers
+  When I POST to /mcp/v2/samples/adk-cymbal-retail/customers
   Then response code should be 200
   And response body should be valid json
   And response body should contain 1
@@ -52,9 +52,9 @@ Scenario: tools/list
       | name          | value            |
       | content-type  | application/json |
       | User-Agent    | apickli          |
-      | x-apikey      | `apikey`         |
+      | Authorization | Bearer manager_token |
 
-  When I POST to /mcp/v1/samples/adk-cymbal-retail/customers
+  When I POST to /mcp/v2/samples/adk-cymbal-retail/customers
   Then response code should be 200
   And response body should be valid json
   And response body should contain 1
@@ -69,9 +69,9 @@ Scenario: tools/list
       | name          | value            |
       | content-type  | application/json |
       | User-Agent    | apickli          |
-      | x-apikey      | `apikey`         |
+      | Authorization | Bearer manager_token |
       
-  When I POST to /mcp/v1/samples/adk-cymbal-retail/customers
+  When I POST to /mcp/v2/samples/adk-cymbal-retail/customers
   Then response code should be 202
   And response body should be valid json
   And response body should contain notifications/initialized

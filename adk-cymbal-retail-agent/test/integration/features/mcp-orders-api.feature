@@ -21,9 +21,9 @@ Scenario: initialize
       | name          | value            |
       | content-type  | application/json |
       | User-Agent    | apickli          |
-      | x-apikey      | `apikey`         |
+      | Authorization | Bearer customer_token |
 
-  When I POST to /mcp/v1/samples/adk-cymbal-retail/orders
+  When I POST to /mcp/v2/samples/adk-cymbal-retail/orders
   Then response code should be 200
   And response body should be valid json
   And response body should contain serverInfo
@@ -36,9 +36,9 @@ Scenario: tools/list
       | name          | value            |
       | content-type  | application/json |
       | User-Agent    | apickli          |
-      | x-apikey      | `apikey`         |
+      | Authorization | Bearer customer_token |
 
-  When I POST to /mcp/v1/samples/adk-cymbal-retail/orders
+  When I POST to /mcp/v2/samples/adk-cymbal-retail/orders
   Then response code should be 200
   And response body should be valid json
   And response body should contain jsonrpc
@@ -54,9 +54,9 @@ Scenario: tools/call - getOrderById
       | name          | value            |
       | content-type  | application/json |
       | User-Agent    | apickli          |
-      | x-apikey      | `apikey`         |
+      | Authorization | Bearer customer_token |
 
-  When I POST to /mcp/v1/samples/adk-cymbal-retail/orders
+  When I POST to /mcp/v2/samples/adk-cymbal-retail/orders
   Then response code should be 200
   And response body should be valid json
   And response body should contain jsonrpc
@@ -71,9 +71,9 @@ Scenario: notifications/initialized
       | name          | value            |
       | content-type  | application/json |
       | User-Agent    | apickli          |
-      | x-apikey      | `apikey`         |
+      | Authorization | Bearer customer_token |
       
-  When I POST to /mcp/v1/samples/adk-cymbal-retail/orders
+  When I POST to /mcp/v2/samples/adk-cymbal-retail/orders
   Then response code should be 202
   And response body should be valid json
   And response body should contain notifications/initialized
