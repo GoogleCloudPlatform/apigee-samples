@@ -16,6 +16,14 @@
 
 set -e
 
+sed_i() {
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+    sed -i "" "$@"
+  else
+    sed -i "$@"
+  fi
+}
+
 if [ -z "$PROJECT_ID" ]; then
   echo "No PROJECT_ID variable set"
   exit 1
@@ -66,10 +74,25 @@ if [ -z "$MODEL_ARMOR_TEMPLATE_ID" ]; then
   exit 1
 fi
 
+if [ -z "$AGENT_GATEWAY_NAME" ]; then
+  echo "No AGENT_GATEWAY_NAME variable set"
+  exit 1
+fi
+
 if [ -z "$TOKEN" ]; then
   TOKEN=$(gcloud auth application-default print-access-token)
 fi
 export TOKEN
+
+DEPLOY_DISCOVERY_PROXY="${DEPLOY_DISCOVERY_PROXY:-true}"
+while [[ "$#" -gt 0 ]]; do
+  case $1 in
+    --deploy-discovery-proxy) DEPLOY_DISCOVERY_PROXY="$2"; shift 2 ;;
+    --deploy-discovery-proxy=*) DEPLOY_DISCOVERY_PROXY="${1#*=}"; shift ;;
+    *) echo "Unknown parameter: $1"; exit 1 ;;
+  esac
+done
+export DEPLOY_DISCOVERY_PROXY
 
 add_role_to_serviceaccount(){
   local role=$1
@@ -127,17 +150,17 @@ import_and_deploy_proxy() {
   mkdir -p "tmp/${proxy}"
   cp -rf "proxies/${proxy}/apiproxy" "tmp/${proxy}/"
   if [ -d "tmp/${proxy}/apiproxy/policies" ]; then
-    sed -i "s/APIGEE_HOST/$APIGEE_HOST/g" tmp/${proxy}/apiproxy/policies/*.xml 2>/dev/null || true
+    sed_i "s/APIGEE_HOST/$APIGEE_HOST/g" tmp/${proxy}/apiproxy/policies/*.xml 2>/dev/null || true
   fi
   if [ -d "tmp/${proxy}/apiproxy/resources/oas" ]; then
-    sed -i "s/APIGEE_HOST/$APIGEE_HOST/g" tmp/${proxy}/apiproxy/resources/oas/*.yaml 2>/dev/null || true
+    sed_i "s/APIGEE_HOST/$APIGEE_HOST/g" tmp/${proxy}/apiproxy/resources/oas/*.yaml 2>/dev/null || true
   fi
   if [ -d "tmp/${proxy}/apiproxy/resources/properties" ]; then
     echo "$PRE_PROP" > "tmp/${proxy}/apiproxy/resources/properties/vertex_config.properties" 2>/dev/null || true
   fi
   if [ -d "tmp/${proxy}/apiproxy/targets" ]; then
-    sed -i "s/apigee-ai.mcp.apigee.internal/mcp.apigee.internal/g" tmp/${proxy}/apiproxy/targets/*.xml 2>/dev/null || true
-    sed -i "s/APIGEE_HOST/$APIGEE_HOST/g" tmp/${proxy}/apiproxy/targets/*.xml 2>/dev/null || true
+    sed_i "s/apigee-ai.mcp.apigee.internal/mcp.apigee.internal/g" tmp/${proxy}/apiproxy/targets/*.xml 2>/dev/null || true
+    sed_i "s/APIGEE_HOST/$APIGEE_HOST/g" tmp/${proxy}/apiproxy/targets/*.xml 2>/dev/null || true
   fi
   apigeecli apis create bundle -n "$proxy" \
   -f "tmp/${proxy}/apiproxy" \
@@ -209,26 +232,22 @@ region=$VERTEXAI_REGION"
 
 gcloud services enable dlp.googleapis.com logging.googleapis.com aiplatform.googleapis.com modelarmor.googleapis.com dialogflow.googleapis.com discoveryengine.googleapis.com --project "$PROJECT_ID"
 
-echo "Installing apigeecli"
-curl -s https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.sh | bash
-export PATH=$PATH:$HOME/.apigeecli/bin
+if ! command -v apigeecli &> /dev/null; then
+  echo "Installing apigeecli"
+  curl -s https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.sh | bash
+  export PATH=$PATH:$HOME/.apigeecli/bin
+fi
 
 echo "Installing dependencies..."
 #npm install
 
-echo "Attaching runtime project to API Hub..."
-apigeecli apihub project-attachments create \
-  -o "$APIGEE_APIHUB_PROJECT_ID" \
-  -r "$APIGEE_APIHUB_REGION" \
-  -i "$PROJECT_ID" \
-  -p "projects/$PROJECT_ID" \
-  -t "$TOKEN" || true
-
 echo "Registering APIs in Apigee API hub"
-cp -rf config tmp/
-sed -i "s/APIGEE_HOST/$APIGEE_HOST/g" tmp/*/*.yaml
-sed -i "s/APIGEE_APIHUB_PROJECT_ID/$APIGEE_APIHUB_PROJECT_ID/g" tmp/*/*.json
-sed -i "s/APIGEE_APIHUB_REGION/$APIGEE_APIHUB_REGION/g" tmp/*/*.json
+rm -rf tmp
+mkdir -p tmp
+cp -rf config/* tmp/
+sed_i "s/APIGEE_HOST/$APIGEE_HOST/g" tmp/*/*.yaml
+sed_i "s/APIGEE_APIHUB_PROJECT_ID/$APIGEE_APIHUB_PROJECT_ID/g" tmp/*/*.json
+sed_i "s/APIGEE_APIHUB_REGION/$APIGEE_APIHUB_REGION/g" tmp/*/*.json
 
 apigeecli apihub attributes update -r "$APIGEE_APIHUB_REGION" -o "$APIGEE_APIHUB_PROJECT_ID" -t "$TOKEN" --allowed-values  "config/business-units.json" --data-type "ENUM" -i "system-business-unit" -s "API" -m "allowed_values" -d "Business Unit"
 apigeecli apihub attributes update -r "$APIGEE_APIHUB_REGION" -o "$APIGEE_APIHUB_PROJECT_ID" -t "$TOKEN" --allowed-values  "config/teams.json" --data-type "ENUM" -i "system-team" -s "API" -m "allowed_values" -d "Team"
@@ -247,9 +266,14 @@ add_rest_api_to_hub "shipping"
 
 rm -rf tmp
 
-echo "Creating Service Account and assigning permissions"
-gcloud iam service-accounts create "$SERVICE_ACCOUNT_NAME" --project "$PROJECT_ID" || true
-_sleep 10
+echo "Checking Service Account..."
+if ! gcloud iam service-accounts describe "${SERVICE_ACCOUNT_NAME}@${PROJECT_ID}.iam.gserviceaccount.com" --project "$PROJECT_ID" &>/dev/null; then
+  echo "Creating Service Account..."
+  gcloud iam service-accounts create "$SERVICE_ACCOUNT_NAME" --project "$PROJECT_ID"
+  _sleep 10
+else
+  echo "Service Account ${SERVICE_ACCOUNT_NAME} already exists. Skipping creation."
+fi
 
 add_role_to_serviceaccount "roles/logging.logWriter"
 add_role_to_serviceaccount "roles/aiplatform.user"
@@ -260,6 +284,19 @@ add_role_to_serviceaccount "roles/dlp.user"
 add_role_to_serviceaccount "roles/apigee.analyticsEditor"
 add_role_to_serviceaccount "roles/secretmanager.secretAccessor"
 add_role_to_serviceaccount "roles/apigee.apiReaderV2"
+
+echo "Granting Apigee Service Agent permissions on custom Service Account"
+gcloud iam service-accounts add-iam-policy-binding \
+  "${SERVICE_ACCOUNT_NAME}@${PROJECT_ID}.iam.gserviceaccount.com" \
+  --member="serviceAccount:service-${PROJECT_NUMBER}@gcp-sa-apigee.iam.gserviceaccount.com" \
+  --role="roles/iam.serviceAccountUser" \
+  --project="${PROJECT_ID}" || true
+
+gcloud iam service-accounts add-iam-policy-binding \
+  "${SERVICE_ACCOUNT_NAME}@${PROJECT_ID}.iam.gserviceaccount.com" \
+  --member="serviceAccount:service-${PROJECT_NUMBER}@gcp-sa-apigee.iam.gserviceaccount.com" \
+  --role="roles/iam.serviceAccountTokenCreator" \
+  --project="${PROJECT_ID}" || true
 
 
 gcloud config set api_endpoint_overrides/modelarmor "https://modelarmor.$MODEL_ARMOR_REGION.rep.googleapis.com/"
@@ -298,7 +335,7 @@ curl --location "https://dlp.googleapis.com/v2/projects/$PROJECT_ID/deidentifyTe
          }
       }
    }
-}" 
+}" || true 
 
 echo "Creating Data collectors..."
 
@@ -310,25 +347,35 @@ apigeecli datacollectors create -d "Candidates token count" -n dc_candidates_tok
 apigeecli datacollectors create -d "Prompt token count" -n dc_prompt_token_count -p INTEGER --org "$PROJECT_ID" --token "$TOKEN" || true
 apigeecli datacollectors create -d "Total token count" -n dc_total_token_count -p INTEGER --org "$PROJECT_ID" --token "$TOKEN" || true
 
-echo "Creating Token Consumption Report...."
-
-curl --request POST \
-  "https://apigee.googleapis.com/v1/organizations/$PROJECT_ID/reports" \
+REPORTS_JSON=$(curl -s "https://apigee.googleapis.com/v1/organizations/$PROJECT_ID/reports" \
   --header "Authorization: Bearer $TOKEN" \
-  --header 'Accept: application/json' \
-  --header 'Content-Type: application/json' \
-  --data '{"name":"tokens-consumption-report","displayName":"Tokens Consumption Report","metrics":[{"name":"dc_prompt_token_count","function":"sum"},{"name":"dc_candidates_token_count","function":"sum"},{"name":"dc_total_token_count","function":"sum"}],"dimensions":["api_product","developer_app"],"properties":[{"value":[{}]}],"chartType":"line"}' \
-  --compressed
+  --header 'Accept: application/json')
 
-echo "Creating Responsible AI report...."
+if echo "$REPORTS_JSON" | jq -e '.qualifier[]? | select(.displayName == "Tokens Consumption Report")' >/dev/null; then
+  echo "Tokens Consumption Report already exists. Skipping."
+else
+  echo "Creating Token Consumption Report...."
+  curl -s --request POST \
+    "https://apigee.googleapis.com/v1/organizations/$PROJECT_ID/reports" \
+    --header "Authorization: Bearer $TOKEN" \
+    --header 'Accept: application/json' \
+    --header 'Content-Type: application/json' \
+    --data '{"name":"tokens-consumption-report","displayName":"Tokens Consumption Report","metrics":[{"name":"dc_prompt_token_count","function":"sum"},{"name":"dc_candidates_token_count","function":"sum"},{"name":"dc_total_token_count","function":"sum"}],"dimensions":["api_product","developer_app"],"properties":[{"value":[{}]}],"chartType":"line"}' \
+    --compressed || true
+fi
 
-curl --request POST \
-  "https://apigee.googleapis.com/v1/organizations/$PROJECT_ID/reports" \
-  --header "Authorization: Bearer $TOKEN" \
-  --header 'Accept: application/json' \
-  --header 'Content-Type: application/json' \
-  --data '{"name":"ai-responsible-report","displayName":"Responsible AI Report","metrics":[{"name":"dc_ma_pi_jailbreak","function":"sum"},{"name":"dc_ma_malicious_uri","function":"sum"},{"name":"dc_ma_csam","function":"sum"},{"name":"dc_ma_rai","function":"sum"}],"dimensions":["api_product","developer_app"],"properties":[{"value":[{}]}],"chartType":"line"}' \
-  --compressed
+if echo "$REPORTS_JSON" | jq -e '.qualifier[]? | select(.displayName == "Responsible AI Report")' >/dev/null; then
+  echo "Responsible AI Report already exists. Skipping."
+else
+  echo "Creating Responsible AI report...."
+  curl -s --request POST \
+    "https://apigee.googleapis.com/v1/organizations/$PROJECT_ID/reports" \
+    --header "Authorization: Bearer $TOKEN" \
+    --header 'Accept: application/json' \
+    --header 'Content-Type: application/json' \
+    --data '{"name":"ai-responsible-report","displayName":"Responsible AI Report","metrics":[{"name":"dc_ma_pi_jailbreak","function":"sum"},{"name":"dc_ma_malicious_uri","function":"sum"},{"name":"dc_ma_csam","function":"sum"},{"name":"dc_ma_rai","function":"sum"}],"dimensions":["api_product","developer_app"],"properties":[{"value":[{}]}],"chartType":"line"}' \
+    --compressed || true
+fi
 
 echo "Deploying the sharedflows"
 import_and_deploy_sharedflow "llm-extract-candidates-v1"
@@ -343,6 +390,9 @@ import_and_deploy_proxy "cymbal-returns-v2"
 import_and_deploy_proxy "cymbal-shipping-v2"
 import_and_deploy_proxy "oauth-server"
 import_and_deploy_proxy "adk-retail-agent-llm-governance-v1"
+if [ "$DEPLOY_DISCOVERY_PROXY" = "true" ]; then
+  import_and_deploy_proxy "cymbal-discovery-v1"
+fi
 
 echo "Creating or Updating API Products"
 apigeecli products update --name "cymbal-retail-product" --display-name "cymbal-retail-product" \
@@ -359,7 +409,7 @@ apigeecli developers create --user cymbal-retail-developer \
 
 echo "Creating Developer App"
 apigeecli apps create --name cymbal-retail-app --email "cymbal-retail-developer@acme.com" \
-  --prods "cymbal-retail-product" --org "$PROJECT_ID" --token "$TOKEN" --disable-check || true
+  --prods "cymbal-retail-product" --callback "http://127.0.0.1:9000/callback,http://127.0.0.1:8000/oauth2-redirect,http://localhost:8000/oauth2-redirect,https://iamconnectorcredentials.googleapis.com/v1/projects/${PROJECT_ID}/locations/${VERTEXAI_REGION}/connectors/idp-connector/oauthcallback" --org "$PROJECT_ID" --token "$TOKEN" --disable-check || true
 
 CLIENT_ID=$(apigeecli apps get --name "cymbal-retail-app" --org "$PROJECT_ID" --token "$TOKEN" --disable-check | jq ."[0].credentials[0].consumerKey" -r)
 CLIENT_SECRET=$(apigeecli apps get --name "cymbal-retail-app" --org "$PROJECT_ID" --token "$TOKEN" --disable-check | jq ."[0].credentials[0].consumerSecret" -r)
@@ -387,19 +437,39 @@ apigeecli flowhooks attach \
 export CLIENT_ID
 export PROXY_URL="$APIGEE_HOST/v2/samples/adk-cymbal-retail"
 
+# Sync dependencies in the package source folder before deploying
+echo "Syncing agent dependencies..."
+pushd python/agents/cymbal-retail-agent-geap >/dev/null
+if command -v uv &> /dev/null; then
+  uv sync
+else
+  # Fallback to standard pip if uv is not available
+  if [ ! -d ".venv" ]; then
+    python3 -m venv .venv
+  fi
+  source .venv/bin/activate
+  pip install --upgrade pip
+  pip install -e ".[agent-identity,a2a]"
+fi
+
 # Deploy Agent to Agent Runtime
 echo "🚀 Deploying GEAP Agent to Agent Runtime..."
 export GOOGLE_CLOUD_PROJECT="$PROJECT_ID"
 export GOOGLE_CLOUD_LOCATION="$VERTEXAI_REGION"
-source ../workspace/cymbal-retail-agent/.venv/bin/activate
-python3 python/agents/cymbal-retail-agent-geap/deployment/deploy.py \
+source .venv/bin/activate
+python3 deployment/deploy.py \
   --project "$PROJECT_ID" \
   --location "$VERTEXAI_REGION" \
   --bucket "${PROJECT_ID}_cymbal_retail_agent" \
   --client-id "$CLIENT_ID" \
   --client-secret "$CLIENT_SECRET" \
-  --apigee-hostname "$APIGEE_HOST"
+  --apigee-hostname "$APIGEE_HOST" \
+  --egress-gateway "$AGENT_GATEWAY_NAME"
 deactivate
+popd >/dev/null
+
+echo "Configuring Agent Egress Policies..."
+./setup-agent-gateway-egress.sh
 
 # npm test
 
@@ -413,7 +483,7 @@ echo " "
 echo "Run the following commands to test the API using OAuth:"
 echo " "
 echo "# 1. Fetch authorization code"
-echo "CODE=\$(curl -s \"https://$APIGEE_HOST/authorize?client_id=$CLIENT_ID&response_type=code&scope=manager\" | jq -r .code)"
+echo "CODE=\$(curl -s -o /dev/null -w \"%{redirect_url}\" \"https://$APIGEE_HOST/authorize?client_id=$CLIENT_ID&response_type=code&scope=manager&redirect_uri=http://127.0.0.1:9000/callback\" | grep -oE \"code=[^&]+\" | cut -d= -f2)"
 echo " "
 echo "# 2. Exchange code for access token"
 echo "ACCESS_TOKEN=\$(curl -s -X POST \"https://$APIGEE_HOST/token\" \\"
@@ -421,6 +491,7 @@ echo "  -H \"Content-Type: application/x-www-form-urlencoded\" \\"
 echo "  -d \"grant_type=authorization_code\" \\"
 echo "  -d \"code=\$CODE\" \\"
 echo "  -d \"client_id=$CLIENT_ID\" \\"
+echo "  -d \"redirect_uri=http://127.0.0.1:9000/callback\" \\"
 echo "  -d \"client_secret=$CLIENT_SECRET\" | jq -r .access_token)"
 echo " "
 echo "# 3. Call REST endpoints using the Bearer Token:"
@@ -448,5 +519,5 @@ echo "Your CLIENT_ID is: $CLIENT_ID"
 echo "Your CLIENT_SECRET is: $CLIENT_SECRET"
 
 echo "================================================="
-echo "Finished deploy-adk-cymbal-retail-agent.sh"
+echo "✅ Finished deploy-adk-cymbal-retail-agent.sh"
 echo "================================================="

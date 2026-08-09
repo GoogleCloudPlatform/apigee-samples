@@ -40,3 +40,12 @@ if servers_list:
         auth_scheme=auth_scheme,
         auth_credential=auth_credential
     )
+else:
+    # Placeholder fallback Toolset (used during deployment import step before Agent Registry is populated)
+    cymbal_mcp = McpToolset(
+        connection_params=StreamableHTTPConnectionParams(
+            url="http://localhost:8080"
+        ),
+        auth_scheme=auth_scheme,
+        auth_credential=auth_credential
+    )

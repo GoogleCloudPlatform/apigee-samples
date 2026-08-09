@@ -41,3 +41,6 @@ export VERTEXAI_REGION="${GCP_PROJECT_REGION}"
 export VERTEXAI_PROJECT_ID="${PROJECT_ID}"
 
 ./cleanup-adk-cymbal-retail-agent.sh
+./cleanup-agent-gateway-egress.sh
+
+echo "✅ Cleanup complete!"

@@ -11,13 +11,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<OAuthV2 name="GenerateAccessToken">
-  <Operation>GenerateAccessToken</Operation>
-  <ExpiresIn>3600000</ExpiresIn>
-  <SupportedGrantTypes>
-    <GrantType>authorization_code</GrantType>
-  </SupportedGrantTypes>
-  <Scope>{request.queryparam.scope}</Scope>
-  <RFCCompliantRequestResponse>true</RFCCompliantRequestResponse>
- <GenerateResponse/>
+<OAuthV2 continueOnError="false" enabled="true" name="OA-VerifyAccessToken">
+  <DisplayName>OA-VerifyAccessToken</DisplayName>
+  <Properties/>
+  <Operation>VerifyAccessToken</Operation>
+  <AccessTokenPrefix>Bearer</AccessTokenPrefix>
 </OAuthV2>

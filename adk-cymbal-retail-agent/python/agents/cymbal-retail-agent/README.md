@@ -6,7 +6,7 @@ An autonomous retail customer service agent built with Google's **Agent Developm
 
 ## 🏛️ Architecture & Tool Integration
 
-The agent connects to backend domain services via the native Apigee MCP Gateway. All tools are defined via an `MCPToolset` instance that communicate using JSON-RPC 2.0 over HTTP/HTTPS.
+The agent connects to backend domain services via the native Apigee MCP Gateway (`cymbal-discovery-v1`). All tools are defined via an `MCPToolset` instance that communicate using JSON-RPC 2.0 over HTTP/HTTPS.
 
 ---
 

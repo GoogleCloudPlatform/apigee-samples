@@ -31,6 +31,8 @@ export VERTEXAI_REGION="VERTEXAI_REGION_TO_SET"
 export VERTEXAI_PROJECT_ID="VERTEXAI_PROJECT_ID_TO_SET"
 export MODEL_NAME="gemini-2.5-flash"
 
+export AGENT_GATEWAY_NAME="egress-gateway"
+
 export APP_DEFAULT_TOKEN=$(gcloud auth application-default print-access-token)
 
 gcloud config set project $PROJECT_ID

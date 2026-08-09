@@ -11,13 +11,19 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<OAuthV2 name="GenerateAccessToken">
-  <Operation>GenerateAccessToken</Operation>
-  <ExpiresIn>3600000</ExpiresIn>
-  <SupportedGrantTypes>
-    <GrantType>authorization_code</GrantType>
-  </SupportedGrantTypes>
-  <Scope>{request.queryparam.scope}</Scope>
-  <RFCCompliantRequestResponse>true</RFCCompliantRequestResponse>
- <GenerateResponse/>
-</OAuthV2>
+<ProxyEndpoint name="oauth-prm-endpoint">
+  <HTTPProxyConnection>
+    <BasePath>/.well-known/oauth-protected-resource/mcp</BasePath>
+  </HTTPProxyConnection>
+  <PreFlow name="PreFlow">
+    <Request>
+      <Step>
+        <Name>CORS-Allow</Name>
+      </Step>
+    </Request>
+    <Response/>
+  </PreFlow>
+  <RouteRule name="default">
+    <TargetEndpoint>oauth-prm-endpoint</TargetEndpoint>
+  </RouteRule>
+</ProxyEndpoint>

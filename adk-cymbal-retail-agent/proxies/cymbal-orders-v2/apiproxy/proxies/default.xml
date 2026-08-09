@@ -19,9 +19,9 @@
       <Step>
         <Name>CORS</Name>
       </Step>
-      <Step>
+      <!-- <Step>
         <Name>OA-VerifyAccessToken</Name>
-      </Step>
+      </Step> -->
     </Request>
     <Response/>
   </PreFlow>

@@ -11,13 +11,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<OAuthV2 name="GenerateAccessToken">
-  <Operation>GenerateAccessToken</Operation>
-  <ExpiresIn>3600000</ExpiresIn>
-  <SupportedGrantTypes>
-    <GrantType>authorization_code</GrantType>
-  </SupportedGrantTypes>
-  <Scope>{request.queryparam.scope}</Scope>
-  <RFCCompliantRequestResponse>true</RFCCompliantRequestResponse>
- <GenerateResponse/>
-</OAuthV2>
+<ParsePayload async="false" continueOnError="false" enabled="true" name="PP-ParseMCPOperations">
+  <DisplayName>PP-ParseMCPOperations</DisplayName>
+  <Source>request</Source>
+  <PayloadType>JSON-RPC-2.0</PayloadType>
+  <Protocol>MCP</Protocol>
+</ParsePayload>

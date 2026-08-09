@@ -16,6 +16,15 @@
 
 set -e
 
+DEPLOY_DISCOVERY_PROXY="${DEPLOY_DISCOVERY_PROXY:-true}"
+while [[ "$#" -gt 0 ]]; do
+  case $1 in
+    --deploy-discovery-proxy) DEPLOY_DISCOVERY_PROXY="$2"; shift 2 ;;
+    --deploy-discovery-proxy=*) DEPLOY_DISCOVERY_PROXY="${1#*=}"; shift ;;
+    *) echo "Unknown parameter: $1"; exit 1 ;;
+  esac
+done
+
 if [ -z "$PROJECT_ID" ]; then
   PROJECT_ID="$(gcloud config get-value project 2>/dev/null)"
   if [ -z "$PROJECT_ID" ]; then
@@ -41,6 +50,13 @@ export VERTEXAI_REGION="${GCP_PROJECT_REGION}"
 export VERTEXAI_PROJECT_ID="${PROJECT_ID}"
 export MODEL_NAME="gemini-2.5-flash"
 
+# Install apigeecli if not already present
+if ! command -v apigeecli &> /dev/null; then
+  echo "Installing apigeecli..."
+  curl -s https://raw.githubusercontent.com/apigee/apigeecli/main/downloadLatest.sh | bash
+  export PATH=$PATH:$HOME/.apigeecli/bin
+fi
+
 # Auto-discover APIGEE_HOST if not already set
 if [ -z "$APIGEE_HOST" ]; then
   echo "APIGEE_HOST not set. Attempting auto-discovery..."
@@ -63,7 +79,18 @@ fi
 gcloud config set project "$PROJECT_ID"
 
 echo "Enabling required Google Cloud services..."
-gcloud services enable artifactregistry.googleapis.com run.googleapis.com dlp.googleapis.com logging.googleapis.com aiplatform.googleapis.com modelarmor.googleapis.com secretmanager.googleapis.com bigquery.googleapis.com datacatalog.googleapis.com --project "$PROJECT_ID"
+gcloud services enable \
+  artifactregistry.googleapis.com \
+  dlp.googleapis.com \
+  logging.googleapis.com \
+  aiplatform.googleapis.com \
+  modelarmor.googleapis.com \
+  secretmanager.googleapis.com \
+  agentregistry.googleapis.com \
+  agentidentitycredentials.googleapis.com \
+  iamconnectors.googleapis.com \
+  iamconnectorcredentials.googleapis.com \
+  --project "$PROJECT_ID"
 sleep 15
 
-./deploy-adk-cymbal-retail-agent.sh
+./deploy-adk-cymbal-retail-agent.sh --deploy-discovery-proxy "$DEPLOY_DISCOVERY_PROXY"

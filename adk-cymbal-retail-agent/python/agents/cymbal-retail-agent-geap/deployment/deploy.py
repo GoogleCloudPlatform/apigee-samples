@@ -19,17 +19,43 @@ def load_parent_env():
 
 load_parent_env()
 
+# Parse args early to set environment variables required by agent imports
+def parse_args_and_set_env():
+    parser = argparse.ArgumentParser(add_help=False)
+    parser.add_argument("--project")
+    parser.add_argument("--location", default="us-central1")
+    args, _ = parser.parse_known_args()
+    
+    project = args.project or os.getenv("GOOGLE_CLOUD_PROJECT") or os.getenv("PROJECT_ID")
+    if project:
+        os.environ["GOOGLE_CLOUD_PROJECT"] = project
+        os.environ["PROJECT_ID"] = project
+    
+    location = args.location or os.getenv("GOOGLE_CLOUD_LOCATION") or os.getenv("VERTEXAI_REGION")
+    if location:
+        os.environ["GOOGLE_CLOUD_LOCATION"] = location
+        os.environ["VERTEXAI_REGION"] = location
+
+parse_args_and_set_env()
+
 # Now initialize Vertex AI and import ADK / agent details
 from google.cloud import aiplatform
 import vertexai
 from vertexai import types
 from vertexai.preview.reasoning_engines.templates.adk import AdkApp
 
-# Dynamic import of the root_agent from the local directory
 try:
     from cymbal_retail_agent.agent import root_agent
-except ImportError:
-    from agent import root_agent
+except ImportError as e:
+    # Only fallback if the root level import error is directly about cymbal_retail_agent.agent missing,
+    # otherwise re-raise the nested error (e.g. missing dependencies)
+    if e.name == 'cymbal_retail_agent' or e.name == 'cymbal_retail_agent.agent':
+        from agent import root_agent
+    else:
+        raise
+
+import cymbal_retail_agent
+print(f"Loaded agent module from: {cymbal_retail_agent.__file__}")
 
 import subprocess
 

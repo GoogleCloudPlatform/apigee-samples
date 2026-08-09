@@ -17,13 +17,12 @@ info:
   description: API to calculate rates and create shipping labels for Cymbal Retail.
   version: 2.0.0
 servers:
-  - url: https://APIGEE_HOST/v2/samples/adk-cymbal-retail/shipping
+  - url: https://APIGEE_HOST
 security:
   - OidcAuth:
       - customer
-      - manager
 paths:
-  /:
+  /v2/samples/adk-cymbal-retail/shipping:
     post:
       summary: Create a shipping label and get rates
       operationId: createShippingLabel
@@ -58,20 +57,6 @@ paths:
                         type: string
                       shippingLabelStatus:
                         type: string
-                      shippingProvider:
-                        type: string
-                      shippingDetails:
-                        type: object
-                        properties:
-                          type:
-                            type: string
-                          cost:
-                            type: string
-                          currency:
-                            type: string
-                          ETA:
-                            type: string
-components:
   securitySchemes:
     OidcAuth:
       type: openIdConnect
