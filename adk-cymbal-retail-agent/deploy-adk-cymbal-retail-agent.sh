@@ -409,7 +409,7 @@ apigeecli developers create --user cymbal-retail-developer \
 
 echo "Creating Developer App"
 apigeecli apps create --name cymbal-retail-app --email "cymbal-retail-developer@acme.com" \
-  --prods "cymbal-retail-product" --callback "http://127.0.0.1:9000/callback,http://127.0.0.1:8000/oauth2-redirect,http://localhost:8000/oauth2-redirect,https://iamconnectorcredentials.googleapis.com/v1/projects/${PROJECT_ID}/locations/${VERTEXAI_REGION}/connectors/idp-connector/oauthcallback" --org "$PROJECT_ID" --token "$TOKEN" --disable-check || true
+  --prods "cymbal-retail-product" --callback "http://localhost:9000/callback,http://127.0.0.1:9000/callback,http://localhost:8000/dev-ui/,http://127.0.0.1:8000/dev-ui/,https://iamconnectorcredentials.googleapis.com/v1/projects/${PROJECT_ID}/locations/${VERTEXAI_REGION}/connectors/idp-connector/oauthcallback" --org "$PROJECT_ID" --token "$TOKEN" --disable-check || true
 
 CLIENT_ID=$(apigeecli apps get --name "cymbal-retail-app" --org "$PROJECT_ID" --token "$TOKEN" --disable-check | jq ."[0].credentials[0].consumerKey" -r)
 CLIENT_SECRET=$(apigeecli apps get --name "cymbal-retail-app" --org "$PROJECT_ID" --token "$TOKEN" --disable-check | jq ."[0].credentials[0].consumerSecret" -r)

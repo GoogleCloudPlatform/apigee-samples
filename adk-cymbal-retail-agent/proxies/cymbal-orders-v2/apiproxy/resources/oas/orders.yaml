@@ -24,10 +24,10 @@ info:
   termsOfService: https://cymbal-retail/terms/
 servers:
   - url: https://APIGEE_HOST/v2/samples/adk-cymbal-retail/orders
-# security:
-#   - OidcAuth:
-#       - customer
-#       - manager  
+#security:
+#  - OidcAuth:
+#      - customer
+#      - manager  
 paths:
   /:
     get:
@@ -310,8 +310,8 @@ components:
           type: string
           description: A detailed error message.
           example: "Order not found with the given ID."
-  # securitySchemes:
-  #   OidcAuth:
-  #     type: openIdConnect
-  #     description: OpenID Connect authorization.
-  #     openIdConnectUrl: https://APIGEE_HOST/.well-known/openid-configuration
+  #securitySchemes:
+  #  OidcAuth:
+  #    type: openIdConnect
+  #    description: OpenID Connect authorization.
+  #    openIdConnectUrl: https://APIGEE_HOST/.well-known/openid-configuration
