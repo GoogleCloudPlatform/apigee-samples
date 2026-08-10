@@ -19,55 +19,14 @@ import warnings
 warnings.filterwarnings("ignore")
 
 import logging
-logging.basicConfig(level=logging.ERROR)
+LOG_LEVEL = os.getenv("LOG_LEVEL", "ERROR").upper()
+logging.basicConfig(level=getattr(logging, LOG_LEVEL, logging.ERROR))
 
 from google.adk.agents import Agent
 from .tools import cymbal_mcp
 
-from google.adk.auth import auth_preprocessor
-from google.adk.auth.auth_handler import AuthHandler
-
-original_store_auth = auth_preprocessor._store_auth_and_collect_resume_targets
-async def patched_store_auth(events, auth_fc_ids, auth_responses, state):
-    logging.error(f"[PATCH PREPROCESSOR] Initial state keys: {list(state.keys()) if hasattr(state, 'keys') else 'no keys'}")
-    logging.error(f"[PATCH PREPROCESSOR] auth_fc_ids: {auth_fc_ids}, auth_responses: {auth_responses}")
-    result = await original_store_auth(events, auth_fc_ids, auth_responses, state)
-    logging.error(f"[PATCH PREPROCESSOR] Final state keys: {list(state.keys()) if hasattr(state, 'keys') else 'no keys'}")
-    return result
-
-auth_preprocessor._store_auth_and_collect_resume_targets = patched_store_auth
-
-original_parse_and_store = AuthHandler.parse_and_store_auth_response
-async def patched_parse_and_store(self, state):
-    logging.error(f"[PATCH AUTH_HANDLER] Writing credential for key: {self.auth_config.credential_key}")
-    await original_parse_and_store(self, state)
-    credential_key = "temp:" + self.auth_config.credential_key
-    val = state.get(credential_key) if hasattr(state, "get") else state[credential_key]
-    logging.error(f"[PATCH AUTH_HANDLER] Done writing. Key: {credential_key}, Value: {val}")
-
-AuthHandler.parse_and_store_auth_response = patched_parse_and_store
-
-from google.adk.auth.credential_service.session_state_credential_service import SessionStateCredentialService
-from google.adk.auth.auth_credential import AuthCredential
-
-original_load_credential = SessionStateCredentialService.load_credential
-async def patched_load_credential(self, auth_config, callback_context):
-    cred = await original_load_credential(self, auth_config, callback_context)
-    if cred:
-        logging.error(f"[PATCH CREDENTIAL_SERVICE] Key {auth_config.credential_key} loaded. Type: {type(cred)}, Val: {cred}")
-        if isinstance(cred, str):
-            import json
-            try:
-                cred = json.loads(cred)
-                logging.error(f"[PATCH CREDENTIAL_SERVICE] Parsed JSON string to dict")
-            except Exception as e:
-                logging.error(f"[PATCH CREDENTIAL_SERVICE] Failed to parse JSON string: {e}")
-        if isinstance(cred, dict):
-            logging.error(f"[PATCH CREDENTIAL_SERVICE] Deserializing dict to AuthCredential for key {auth_config.credential_key}")
-            cred = AuthCredential.model_validate(cred)
-    return cred
-
-SessionStateCredentialService.load_credential = patched_load_credential
+from .auth_patch import restore_credentials, persist_credentials, apply_patches
+apply_patches()
 
 print("Libraries imported.")
 print("Starting agent initialization...")
@@ -136,43 +95,7 @@ Do not attempt to process any other type of request.
 )
 logging.info("Shipping Agent initialized.")
 
-async def restore_credentials(callback_context):
-    from google.adk.auth.auth_credential import AuthCredential
-    import json
-    state = callback_context.state
-    logging.error(f"[DEBUG RESTORE] Initial state keys: {list(state.to_dict().keys())}")
-    for key, value in list(state.to_dict().items()):
-        if key.startswith("persistent_auth:"):
-            temp_key = key.replace("persistent_auth:", "temp:")
-            logging.error(f"[DEBUG RESTORE] Key: {key}, Type: {type(value)}, Val: {value}")
-            if isinstance(value, str):
-                try:
-                    value = json.loads(value)
-                    logging.error(f"[DEBUG RESTORE] Parsed JSON string to dict")
-                except Exception as e:
-                    logging.error(f"[DEBUG RESTORE] Failed to parse JSON string: {e}")
-            if isinstance(value, dict):
-                logging.error(f"[DEBUG RESTORE] Deserializing dict value for {key}")
-                value = AuthCredential.model_validate(value)
-            state[temp_key] = value
-            logging.error(f"[DEBUG RESTORE] Restored key {key} to {temp_key}")
-    logging.error(f"[DEBUG RESTORE] Final state keys: {list(state.to_dict().keys())}")
 
-async def persist_credentials(callback_context):
-    from google.genai import types
-    state = callback_context.state
-    has_changes = False
-    logging.error(f"[DEBUG PERSIST] Initial state keys: {list(state.to_dict().keys())}")
-    for key, value in list(state.to_dict().items()):
-        if key.startswith("temp:adk_"):
-            persist_key = key.replace("temp:", "persistent_auth:")
-            state[persist_key] = value
-            has_changes = True
-            logging.error(f"[DEBUG PERSIST] Persisted key {key} to {persist_key}")
-    logging.error(f"[DEBUG PERSIST] Final state keys: {list(state.to_dict().keys())}")
-    if has_changes:
-        return types.Content(role="model", parts=[types.Part(text="")])
-    return None
 
 # Define the root agent and pass the sub-agents as its tools
 root_agent = Agent(

@@ -2,6 +2,7 @@
 
 let activeSessionId = null;
 let activeAuthRequest = null;
+let pollTimer = null;
 
 const chatHistory = document.getElementById('chat-history');
 const chatForm = document.getElementById('chat-form');
@@ -128,6 +129,10 @@ async function handleOauthCallbackMessage(event) {
 }
 
 async function resumeSession(callbackUrl) {
+    if (pollTimer) {
+        clearInterval(pollTimer);
+        pollTimer = null;
+    }
     if (!activeAuthRequest) return;
     const authReq = activeAuthRequest;
     activeAuthRequest = null; // Clear immediately to prevent concurrent calls
@@ -227,14 +232,16 @@ function appendAuthCard(authUri) {
     authBtn.addEventListener('click', () => {
         const popup = window.open(authUri, 'oauth-popup', 'width=500,height=650,status=yes,toolbar=no,menubar=no,location=yes');
         
+        if (pollTimer) clearInterval(pollTimer);
         // Parent-side secure backend status polling loop
-        const pollTimer = setInterval(async () => {
+        pollTimer = setInterval(async () => {
             try {
                 const response = await fetch(`/api/check_auth?session_id=${activeSessionId}`);
                 const data = await response.json();
                 
                 if (response.ok && data.completed) {
                     clearInterval(pollTimer);
+                    pollTimer = null;
                     if (popup) popup.close();
                     resumeSession(data.callback_url); // Trigger resume immediately!
                     return;
@@ -245,6 +252,7 @@ function appendAuthCard(authUri) {
             
             if (popup && popup.closed) {
                 clearInterval(pollTimer);
+                pollTimer = null;
                 return;
             }
         }, 800);
