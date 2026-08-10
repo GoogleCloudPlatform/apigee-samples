@@ -13,6 +13,6 @@
 -->
 <TargetEndpoint name="default">
   <HTTPTargetConnection>
-    <URL>https://APIGEE_HOST.mcp.apigee.internal/mcp</URL>
+    <URL>https://PROJECT_ID.mcp.apigee.internal/mcp</URL>
   </HTTPTargetConnection>
 </TargetEndpoint>

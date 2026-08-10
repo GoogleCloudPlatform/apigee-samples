@@ -1,0 +1,57 @@
+{
+  "operationGroup": {
+    "operationConfigs": [
+      {
+        "apiSource": "adk-retail-agent-llm-governance-v1",
+        "operations": [
+          {
+            "resource": "/",
+            "methods": []
+          }
+        ],
+        "quota": {
+          "limit": "10000",
+          "interval": "1",
+          "timeUnit": "minute"
+        }
+      },
+      {
+        "apiSource": "cymbal-customers-v2",
+        "operations": [
+          {
+            "resource": "/",
+            "methods": []
+          }
+        ]
+      },
+      {
+        "apiSource": "cymbal-orders-v2",
+        "operations": [
+          {
+            "resource": "/",
+            "methods": []
+          }
+        ]
+      },
+      {
+        "apiSource": "cymbal-returns-v2",
+        "operations": [
+          {
+            "resource": "/",
+            "methods": []
+          }
+        ]
+      },
+      {
+        "apiSource": "cymbal-shipping-v2",
+        "operations": [
+          {
+            "resource": "/",
+            "methods": []
+          }
+        ]
+      }
+    ],
+    "operationConfigType": "proxy"
+  }
+}

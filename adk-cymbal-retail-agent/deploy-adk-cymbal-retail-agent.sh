@@ -159,7 +159,7 @@ import_and_deploy_proxy() {
     echo "$PRE_PROP" > "tmp/${proxy}/apiproxy/resources/properties/vertex_config.properties" 2>/dev/null || true
   fi
   if [ -d "tmp/${proxy}/apiproxy/targets" ]; then
-    sed_i "s/apigee-ai.mcp.apigee.internal/mcp.apigee.internal/g" tmp/${proxy}/apiproxy/targets/*.xml 2>/dev/null || true
+    sed_i "s/PROJECT_ID.mcp.apigee.internal/$PROJECT_ID.mcp.apigee.internal/g" tmp/${proxy}/apiproxy/targets/*.xml 2>/dev/null || true
     sed_i "s/APIGEE_HOST/$APIGEE_HOST/g" tmp/${proxy}/apiproxy/targets/*.xml 2>/dev/null || true
   fi
   apigeecli apis create bundle -n "$proxy" \
@@ -213,6 +213,59 @@ add_grpc_api_to_hub(){
 
   ( apigeecli apihub apis versions specs create --api-id "${api}_api" -i $id --version $id \
   -d ${api}.proto -f "tmp/${api}/${api}.proto"  -r "$APIGEE_APIHUB_REGION" -o "$APIGEE_APIHUB_PROJECT_ID" -t "$TOKEN" ) || true
+}
+
+# Helper function to create or update an API product using curl to support payloadOperationGroup
+create_or_update_product() {
+  local name="$1"
+  local display_name="$2"
+  local env="$3"
+  local ops_file="$4"
+
+  local payload
+  payload=$(jq -n \
+    --arg name "$name" \
+    --arg displayName "$display_name" \
+    --arg env "$env" \
+    --slurpfile ops "$ops_file" \
+    '{name: $name, displayName: $displayName, approvalType: "auto", environments: [$env]} + $ops[0]')
+
+  local status_code
+  status_code=$(curl -s -o /dev/null -w "%{http_code}" \
+    -H "Authorization: Bearer $TOKEN" \
+    "https://apigee.googleapis.com/v1/organizations/$PROJECT_ID/apiproducts/$name")
+
+  local response_file
+  response_file=$(mktemp)
+  local http_code
+
+  if [ "$status_code" -eq 200 ]; then
+    echo "Product $name already exists. Updating..."
+    http_code=$(curl -s -X PUT \
+      "https://apigee.googleapis.com/v1/organizations/$PROJECT_ID/apiproducts/$name" \
+      -H "Authorization: Bearer $TOKEN" \
+      -H "Content-Type: application/json" \
+      -d "$payload" \
+      -o "$response_file" \
+      -w "%{http_code}")
+  else
+    echo "Product $name does not exist. Creating..."
+    http_code=$(curl -s -X POST \
+      "https://apigee.googleapis.com/v1/organizations/$PROJECT_ID/apiproducts" \
+      -H "Authorization: Bearer $TOKEN" \
+      -H "Content-Type: application/json" \
+      -d "$payload" \
+      -o "$response_file" \
+      -w "%{http_code}")
+  fi
+
+  if [ "$http_code" -lt 200 ] || [ "$http_code" -ge 300 ]; then
+    echo "ERROR: Failed to save product $name (HTTP $http_code)"
+    cat "$response_file"
+    rm -f "$response_file"
+    exit 1
+  fi
+  rm -f "$response_file"
 }
 
 _sleep() {
@@ -395,12 +448,9 @@ if [ "$DEPLOY_DISCOVERY_PROXY" = "true" ]; then
 fi
 
 echo "Creating or Updating API Products"
-apigeecli products update --name "cymbal-retail-product" --display-name "cymbal-retail-product" \
-  --opgrp ./config/cymbal-retail-product-ops.json --envs "$APIGEE_ENV" \
-  --approval auto --scopes "customer" --org "$PROJECT_ID" --token "$TOKEN" || \
-apigeecli products create --name "cymbal-retail-product" --display-name "cymbal-retail-product" \
-  --opgrp ./config/cymbal-retail-product-ops.json --envs "$APIGEE_ENV" \
-  --approval auto --scopes "customer" --org "$PROJECT_ID" --token "$TOKEN"
+# 2 products are required due to b/541033120
+create_or_update_product "cymbal-retail-product-rest" "Cymbal Retail Product - REST" "$APIGEE_ENV" "./config/cymbal-retail-product-rest-ops.json"
+create_or_update_product "cymbal-retail-product-mcp" "Cymbal Retail Product - MCP" "$APIGEE_ENV" "./config/cymbal-retail-product-mcp-ops.json"
 
 echo "Creating Developer"
 apigeecli developers create --user cymbal-retail-developer \
@@ -409,7 +459,7 @@ apigeecli developers create --user cymbal-retail-developer \
 
 echo "Creating Developer App"
 apigeecli apps create --name cymbal-retail-app --email "cymbal-retail-developer@acme.com" \
-  --prods "cymbal-retail-product" --callback "http://localhost:9000/callback,http://127.0.0.1:9000/callback,http://localhost:8000/dev-ui/,http://127.0.0.1:8000/dev-ui/,https://iamconnectorcredentials.googleapis.com/v1/projects/${PROJECT_ID}/locations/${VERTEXAI_REGION}/connectors/idp-connector/oauthcallback" --org "$PROJECT_ID" --token "$TOKEN" --disable-check || true
+  --prods "cymbal-retail-product-rest,cymbal-retail-product-mcp" --callback "http://localhost:9000/callback,http://127.0.0.1:9000/callback,http://localhost:8000/dev-ui/,http://127.0.0.1:8000/dev-ui/,https://iamconnectorcredentials.googleapis.com/v1/projects/${PROJECT_ID}/locations/${VERTEXAI_REGION}/connectors/idp-connector/oauthcallback" --org "$PROJECT_ID" --token "$TOKEN" --disable-check || true
 
 CLIENT_ID=$(apigeecli apps get --name "cymbal-retail-app" --org "$PROJECT_ID" --token "$TOKEN" --disable-check | jq ."[0].credentials[0].consumerKey" -r)
 CLIENT_SECRET=$(apigeecli apps get --name "cymbal-retail-app" --org "$PROJECT_ID" --token "$TOKEN" --disable-check | jq ."[0].credentials[0].consumerSecret" -r)
@@ -437,39 +487,39 @@ apigeecli flowhooks attach \
 export CLIENT_ID
 export PROXY_URL="$APIGEE_HOST/v2/samples/adk-cymbal-retail"
 
-# Sync dependencies in the package source folder before deploying
-echo "Syncing agent dependencies..."
-pushd python/agents/cymbal-retail-agent-geap >/dev/null
-if command -v uv &> /dev/null; then
-  uv sync
-else
-  # Fallback to standard pip if uv is not available
-  if [ ! -d ".venv" ]; then
-    python3 -m venv .venv
-  fi
-  source .venv/bin/activate
-  pip install --upgrade pip
-  pip install -e ".[agent-identity,a2a]"
-fi
+# # Sync dependencies in the package source folder before deploying
+# echo "Syncing agent dependencies..."
+# pushd python/agents/cymbal-retail-agent-geap >/dev/null
+# if command -v uv &> /dev/null; then
+#   uv sync
+# else
+#   # Fallback to standard pip if uv is not available
+#   if [ ! -d ".venv" ]; then
+#     python3 -m venv .venv
+#   fi
+#   source .venv/bin/activate
+#   pip install --upgrade pip
+#   pip install -e ".[agent-identity,a2a]"
+# fi
 
-# Deploy Agent to Agent Runtime
-echo "🚀 Deploying GEAP Agent to Agent Runtime..."
-export GOOGLE_CLOUD_PROJECT="$PROJECT_ID"
-export GOOGLE_CLOUD_LOCATION="$VERTEXAI_REGION"
-source .venv/bin/activate
-python3 deployment/deploy.py \
-  --project "$PROJECT_ID" \
-  --location "$VERTEXAI_REGION" \
-  --bucket "${PROJECT_ID}_cymbal_retail_agent" \
-  --client-id "$CLIENT_ID" \
-  --client-secret "$CLIENT_SECRET" \
-  --apigee-hostname "$APIGEE_HOST" \
-  --egress-gateway "$AGENT_GATEWAY_NAME"
-deactivate
-popd >/dev/null
+# # Deploy Agent to Agent Runtime
+# echo "🚀 Deploying GEAP Agent to Agent Runtime..."
+# export GOOGLE_CLOUD_PROJECT="$PROJECT_ID"
+# export GOOGLE_CLOUD_LOCATION="$VERTEXAI_REGION"
+# source .venv/bin/activate
+# python3 deployment/deploy.py \
+#   --project "$PROJECT_ID" \
+#   --location "$VERTEXAI_REGION" \
+#   --bucket "${PROJECT_ID}_cymbal_retail_agent" \
+#   --client-id "$CLIENT_ID" \
+#   --client-secret "$CLIENT_SECRET" \
+#   --apigee-hostname "$APIGEE_HOST" \
+#   --egress-gateway "$AGENT_GATEWAY_NAME"
+# deactivate
+# popd >/dev/null
 
-echo "Configuring Agent Egress Policies..."
-./setup-agent-gateway-egress.sh
+# echo "Configuring Agent Egress Policies..."
+# ./setup-agent-gateway-egress.sh
 
 # npm test
 
@@ -483,7 +533,7 @@ echo " "
 echo "Run the following commands to test the API using OAuth:"
 echo " "
 echo "# 1. Fetch authorization code"
-echo "CODE=\$(curl -s -o /dev/null -w \"%{redirect_url}\" \"https://$APIGEE_HOST/authorize?client_id=$CLIENT_ID&response_type=code&scope=manager&redirect_uri=http://127.0.0.1:9000/callback\" | grep -oE \"code=[^&]+\" | cut -d= -f2)"
+echo "CODE=\$(curl -s -o /dev/null -w \"%{redirect_url}\" \"https://$APIGEE_HOST/authorize?client_id=$CLIENT_ID&response_type=code&scope=customer&redirect_uri=http://127.0.0.1:9000/callback\" | grep -oE \"code=[^&]+\" | cut -d= -f2)"
 echo " "
 echo "# 2. Exchange code for access token"
 echo "ACCESS_TOKEN=\$(curl -s -X POST \"https://$APIGEE_HOST/token\" \\"

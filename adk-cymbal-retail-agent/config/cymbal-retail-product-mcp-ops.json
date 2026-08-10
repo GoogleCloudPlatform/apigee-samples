@@ -1,0 +1,141 @@
+{
+  "payloadOperationGroup": {
+    "operationConfigs": [
+      {
+        "apiSource": "cymbal-discovery-v1",
+        "operations": [
+          {
+            "operation": "tools/list"
+          }
+        ],
+        "quota": {}
+      },
+      {
+        "apiSource": "cymbal-discovery-v1",
+        "operations": [
+          {
+            "operation": "tools/call/getAllOrders"
+          }
+        ],
+        "quota": {}
+      },
+      {
+        "apiSource": "cymbal-discovery-v1",
+        "operations": [
+          {
+            "operation": "tools/call/createOrder"
+          }
+        ],
+        "quota": {}
+      },
+      {
+        "apiSource": "cymbal-discovery-v1",
+        "operations": [
+          {
+            "operation": "tools/call/getOrderById"
+          }
+        ],
+        "quota": {}
+      },
+      {
+        "apiSource": "cymbal-discovery-v1",
+        "operations": [
+          {
+            "operation": "tools/call/updateOrder"
+          }
+        ],
+        "quota": {}
+      },
+      {
+        "apiSource": "cymbal-discovery-v1",
+        "operations": [
+          {
+            "operation": "tools/call/getReturnById"
+          }
+        ],
+        "quota": {}
+      },
+      {
+        "apiSource": "cymbal-discovery-v1",
+        "operations": [
+          {
+            "operation": "tools/call/updateReturnStatus"
+          }
+        ],
+        "quota": {}
+      },
+      {
+        "apiSource": "cymbal-discovery-v1",
+        "operations": [
+          {
+            "operation": "tools/call/processRefund"
+          }
+        ],
+        "quota": {}
+      },
+      {
+        "apiSource": "cymbal-discovery-v1",
+        "operations": [
+          {
+            "operation": "tools/call/getAllReturns"
+          }
+        ],
+        "quota": {}
+      },
+      {
+        "apiSource": "cymbal-discovery-v1",
+        "operations": [
+          {
+            "operation": "tools/call/createReturnRequest"
+          }
+        ],
+        "quota": {}
+      },
+      {
+        "apiSource": "cymbal-discovery-v1",
+        "operations": [
+          {
+            "operation": "tools/call/createShippingLabel"
+          }
+        ],
+        "quota": {}
+      },
+      {
+        "apiSource": "cymbal-discovery-v1",
+        "operations": [
+          {
+            "operation": "tools/call/getAllCustomers"
+          }
+        ],
+        "quota": {}
+      },
+      {
+        "apiSource": "cymbal-discovery-v1",
+        "operations": [
+          {
+            "operation": "tools/call/createCustomer"
+          }
+        ],
+        "quota": {}
+      },
+      {
+        "apiSource": "cymbal-discovery-v1",
+        "operations": [
+          {
+            "operation": "tools/call/getCustomerById"
+          }
+        ],
+        "quota": {}
+      },
+      {
+        "apiSource": "cymbal-discovery-v1",
+        "operations": [
+          {
+            "operation": "tools/call/updateCustomer"
+          }
+        ],
+        "quota": {}
+      }
+    ]
+  }
+}

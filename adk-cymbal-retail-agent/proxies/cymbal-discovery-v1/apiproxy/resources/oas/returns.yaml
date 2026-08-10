@@ -306,3 +306,8 @@ components:
         message:
           type: string
           description: Error message.
+  securitySchemes:
+    OidcAuth:
+      type: openIdConnect
+      description: OpenID Connect authorization.
+      openIdConnectUrl: https://APIGEE_HOST/.well-known/openid-configuration

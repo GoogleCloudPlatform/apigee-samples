@@ -13,6 +13,6 @@
 -->
 <TargetEndpoint name="oauth-prm-endpoint">
   <HTTPTargetConnection>
-    <URL>https://APIGEE_HOST.mcp.apigee.internal/.well-known/oauth-protected-resource/mcp</URL>
+    <URL>https://PROJECT_ID.mcp.apigee.internal/.well-known/oauth-protected-resource/mcp</URL>
   </HTTPTargetConnection>
 </TargetEndpoint>

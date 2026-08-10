@@ -106,9 +106,8 @@ echo "Deleting Developer"
 apigeecli developers delete --email cymbal-retail-developer@acme.com --org "$PROJECT_ID" --token "$TOKEN" || true
 
 echo "Deleting API Products"
-apigeecli products delete --name cymbal-retail-product --org "$PROJECT_ID" --token "$TOKEN" || true
-apigeecli products delete --name discoverymcp-product --org "$PROJECT_ID" --token "$TOKEN" || true
-apigeecli products delete --name cymbal-retail-product-test --org "$PROJECT_ID" --token "$TOKEN" || true
+apigeecli products delete --name cymbal-retail-product-rest --org "$PROJECT_ID" --token "$TOKEN" || true
+apigeecli products delete --name cymbal-retail-product-mcp --org "$PROJECT_ID" --token "$TOKEN" || true
 
 delete_api "cymbal-customers-v2"
 delete_api "cymbal-orders-v2"

@@ -16,6 +16,6 @@
   <Properties/>
   <Operation>VerifyAccessToken</Operation>
   <AccessTokenPrefix>Bearer</AccessTokenPrefix>
-  <!-- This API requires tokens with "manager" scope -->
-  <Scope>manager</Scope>
+  <!-- Uncomment this to only allow tokens with "manager" scope -->
+  <!-- <Scope>manager</Scope> -->
 </OAuthV2>

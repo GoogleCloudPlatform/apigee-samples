@@ -15,7 +15,7 @@
   <Set>
     <Payload contentType="application/json">
     {
-      "issuer": "https://APIGEE_HOST/mcp",
+      "issuer": "https://APIGEE_HOST",
       "authorization_endpoint": "https://APIGEE_HOST/authorize",
       "token_endpoint": "https://APIGEE_HOST/token",
       "response_types_supported": ["code"],
