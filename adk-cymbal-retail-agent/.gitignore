@@ -1,11 +1,27 @@
-.env
-poetry.lock
-venv
-bin
-__pycache__
-.gitignore
-client.json
-oauth_client_env.sh
-.adk
-env.sh
-env1.sh
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+
+# uv lockfiles
+uv.lock
+
+# OS metadata
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Temporary directories
+tmp/
+*.log
