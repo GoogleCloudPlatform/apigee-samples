@@ -118,7 +118,7 @@ async function handleMessageSubmit(e) {
     }
 }
 
-// Intercept Keycloak Callback Message from Popup Window (Fallback)
+// Intercept OAuth Callback Message from Popup Window (Fallback)
 async function handleOauthCallbackMessage(event) {
     if (event.origin !== window.location.origin) return;
     const data = event.data;
@@ -128,6 +128,10 @@ async function handleOauthCallbackMessage(event) {
 }
 
 async function resumeSession(callbackUrl) {
+    if (!activeAuthRequest) return;
+    const authReq = activeAuthRequest;
+    activeAuthRequest = null; // Clear immediately to prevent concurrent calls
+
     appendSystemMessage("OAuth login success! Exchanging code and resuming conversation...");
     
     // Show typing indicator
@@ -141,9 +145,9 @@ async function resumeSession(callbackUrl) {
                 session_id: activeSessionId,
                 user_id: userIdInput.value.trim(),
                 auth_response_uri: callbackUrl,
-                call_id: activeAuthRequest.call_id,
-                invocation_id: activeAuthRequest.invocation_id,
-                auth_uri: activeAuthRequest.auth_uri
+                call_id: authReq.call_id,
+                invocation_id: authReq.invocation_id,
+                auth_uri: authReq.auth_uri
             })
         });
         const resData = await response.json();
@@ -162,7 +166,6 @@ async function resumeSession(callbackUrl) {
                 });
             }
             appendMessage('bot', resData.response);
-            activeAuthRequest = null; // Clear auth request
         } else {
             appendMessage('bot', `Failed to resume: ${resData.detail}`);
         }
@@ -216,13 +219,13 @@ function appendAuthCard(authUri) {
     title.innerHTML = '<i class="fa-solid fa-lock-open"></i> Authorization Required';
     
     const desc = document.createElement('p');
-    desc.textContent = "To retrieve your balance or complete this action securely, you must log in through your Keycloak identity provider.";
+    desc.textContent = "To complete this action securely, you must log in through your identity provider.";
     
     const authBtn = document.createElement('button');
     authBtn.classList.add('btn', 'btn-auth');
-    authBtn.innerHTML = '<i class="fa-solid fa-arrow-up-right-from-square"></i> Login to Keycloak';
+    authBtn.innerHTML = '<i class="fa-solid fa-arrow-up-right-from-square"></i> Login';
     authBtn.addEventListener('click', () => {
-        const popup = window.open(authUri, 'keycloak-oauth-popup', 'width=500,height=650,status=yes,toolbar=no,menubar=no,location=yes');
+        const popup = window.open(authUri, 'oauth-popup', 'width=500,height=650,status=yes,toolbar=no,menubar=no,location=yes');
         
         // Parent-side secure backend status polling loop
         const pollTimer = setInterval(async () => {

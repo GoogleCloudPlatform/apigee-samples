@@ -97,6 +97,7 @@ def extract_text_and_auth(event):
             oauth2 = exchanged.get("oauth2") or raw.get("oauth2") or {}
             auth_uri = oauth2.get("authUri")
             nonce = oauth2.get("nonce")
+            state = oauth2.get("state")
             
             auth_request = {
                 "pause": True,
@@ -104,6 +105,7 @@ def extract_text_and_auth(event):
                 "invocation_id": call_args.get("functionCallId"),
                 "auth_uri": auth_uri,
                 "nonce": nonce,
+                "state": state,
                 "auth_config": auth_config
             }
             break
@@ -266,6 +268,7 @@ async def chat(request: ChatRequest):
                 "invocation_id": auth_request["invocation_id"],
                 "auth_uri": auth_request["auth_uri"],
                 "nonce": auth_request["nonce"],
+                "state": auth_request.get("state"),
                 "auth_config": auth_request["auth_config"],
                 "user_id": request.user_id or "customer@cymbal-retail.com"
             }
@@ -279,10 +282,8 @@ async def chat(request: ChatRequest):
 
 @app.post("/api/resume")
 async def resume(request: ResumeRequest):
-    """Appends Keycloak OAuth callback credentials to session state and continues execution."""
+    """Appends OAuth callback credentials to session state and continues execution."""
     try:
-        import asyncio
-        await asyncio.sleep(2.0) # Allow FinalizeCredentials replication!
         engine_name = get_deployed_engine_name()
         
         # Load original authConfig from the in-memory consent_sessions cache
@@ -324,7 +325,7 @@ async def resume(request: ResumeRequest):
         for event in remote_app.stream_query(
             user_id=user_id,
             session_id=request.session_id,
-            message=auth_content.model_dump(mode="json")  # Pass the Content dict to resume!
+            message=auth_content.model_dump(mode="json", exclude_none=True)  # Pass the Content dict to resume!
         ):
             print(f"[DEBUG RESUME EVENT] Raw Event: {event}")
             text, auth = extract_text_and_auth(event)
@@ -339,6 +340,7 @@ async def resume(request: ResumeRequest):
                 "invocation_id": auth_request["invocation_id"],
                 "auth_uri": auth_request["auth_uri"],
                 "nonce": auth_request["nonce"],
+                "state": auth_request.get("state"),
                 "auth_config": auth_request["auth_config"]
             }
             auth_request["tool_calls"] = tool_calls
@@ -351,7 +353,7 @@ async def resume(request: ResumeRequest):
 
 @app.get("/api/check_auth")
 async def check_auth(session_id: str = Query(...)):
-    """Checks if the Keycloak validation callback has completed for the given session_id."""
+    """Checks if the validation callback has completed for the given session_id."""
     global consent_sessions
     session_data = consent_sessions.get(session_id)
     if session_data and session_data.get("completed"):
@@ -366,21 +368,13 @@ async def check_auth(session_id: str = Query(...)):
 async def get_index():
     return FileResponse(os.path.join(os.path.dirname(__file__), "static", "index.html"))
 
-# Serve the Keycloak OAuth callback landing page
 @app.get("/callback")
 async def oauth_callback(
     request: Request,
     code: Optional[str] = None,
     state: Optional[str] = None,
-    user_id_validation_state: Optional[str] = None,
-    connector_name: Optional[str] = None,
-    auth_provider_name: Optional[str] = None
 ):
-    """Keycloak OAuth callback validation page that finalizes credentials with Google Connectors API."""
-    # Google Connector/Auth provider service passes auth_provider_name as the query parameter.
-    resolved_connector_name = auth_provider_name or connector_name
-    if not resolved_connector_name:
-        raise HTTPException(status_code=400, detail="Missing connector_name or auth_provider_name parameter")
+    """OAuth callback validation page."""
     global consent_sessions
     success = False
     err_detail = ""
@@ -389,37 +383,21 @@ async def oauth_callback(
     session_id = request.cookies.get("session_id")
     session_data = consent_sessions.get(session_id) if session_id else None
     
+    if not session_data and state:
+        # Fallback: find session by state parameter
+        for s_id, s_data in consent_sessions.items():
+            if s_data.get("state") == state:
+                session_id = s_id
+                session_data = s_data
+                break
+                
     if session_data:
         session_data["callback_url"] = str(request.url)
-        consent_nonce = session_data.get("nonce")
-        
-        consent_user_id = session_data.get("user_id", "customer@cymbal-retail.com")
-        import httpx
-        payload = {
-            "userId": consent_user_id,
-            "userIdValidationState": user_id_validation_state,
-            "consentNonce": consent_nonce
-        }
-        
-        connector_path = resolved_connector_name.replace("/authProviders/", "/connectors/")
-        finalize_url = f"https://iamconnectorcredentials.googleapis.com/v1alpha/{connector_path}/credentials:finalize"
-        print(f"[DEBUG CALLBACK] Calling FinalizeCredentials on: {finalize_url}")
-        print(f"[DEBUG CALLBACK] Payload: {payload}")
-        
-        try:
-            async with httpx.AsyncClient(timeout=30.0) as http_client:
-                resp = await http_client.post(finalize_url, json=payload)
-                print(f"[DEBUG CALLBACK] FinalizeCredentials Status: {resp.status_code}, Response: {resp.text}")
-                resp.raise_for_status()
-                print("[DEBUG CALLBACK] FinalizeCredentials completed successfully!")
-                success = True
-                # Mark the session as authenticated and completed
-                session_data["completed"] = True
-        except Exception as e:
-            err_detail = e.response.text if hasattr(e, "response") else str(e)
-            print(f"[DEBUG CALLBACK] Error calling FinalizeCredentials: {err_detail}")
+        success = True
+        # Mark the session as authenticated and completed
+        session_data["completed"] = True
     else:
-        err_detail = f"No active pending session found for session_id '{session_id}'."
+        err_detail = f"No active pending session found for session_id '{session_id}' (state: '{state}')."
         print(f"[DEBUG CALLBACK] {err_detail}")
 
     html_content = f"""
@@ -436,10 +414,18 @@ async def oauth_callback(
     <body>
         <div class="card">
             <h3>{"✓ Login Successful!" if success else "✗ Verification Failed"}</h3>
-            <p>{"You can return to the chat window. This popup will close automatically." if success else f"Credentials finalization failed: {err_detail}"}</p>
+            <p>{"You can return to the chat window. This popup will close automatically." if success else f"Verification failed: {err_detail}"}</p>
         </div>
         <script>
             if ({ "true" if success else "false" }) {{
+                try {{
+                    if (window.opener) {{
+                        window.opener.postMessage({{
+                            type: "oauth_callback",
+                            url: window.location.href
+                        }}, window.location.origin);
+                    }}
+                }} catch (e) {{}}
                 setTimeout(() => {{
                     if (window.opener) {{
                         window.close();

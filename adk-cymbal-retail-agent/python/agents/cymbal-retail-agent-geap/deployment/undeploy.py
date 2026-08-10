@@ -51,9 +51,9 @@ def undeploy(args):
     else:
         print("No matching Agent Runtime instance found.")
 
-    # Clean up the IAM connector
-    print("\n🔒 Cleaning up Agent Identity IAM Connector...")
-    clean_iam_connector(project, location)
+    # # Clean up the IAM connector
+    # print("\n🔒 Cleaning up Agent Identity IAM Connector...")
+    # clean_iam_connector(project, location)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Undeploy agent from Agent Runtime")

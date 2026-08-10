@@ -24,7 +24,12 @@ ensure_service() {
   
   echo "Ensuring service '$service_id' in Agent Registry..." >&2
   if resource=$(gcloud agent-registry services describe "$service_id" --project="$PROJECT_ID" --location="$VERTEXAI_REGION" --format="value(registryResource)" 2>/dev/null); then
-    echo "Service '$service_id' already exists." >&2
+    echo "Service '$service_id' already exists. Updating its interfaces..." >&2
+    resource=$(gcloud agent-registry services update "$service_id" \
+      --project="$PROJECT_ID" \
+      --location="$VERTEXAI_REGION" \
+      --interfaces="$interfaces" \
+      --format="value(registryResource)")
   else
     echo "Creating service '$service_id'..." >&2
     resource=$(gcloud agent-registry services create "$service_id" \
@@ -41,6 +46,14 @@ ensure_service() {
 # 1. Register the service endpoints in Agent Registry
 ENDPOINT_ID=$(ensure_service "googleapis" "Google APIs" "[
   {\"url\": \"https://agentregistry.googleapis.com\", \"protocolBinding\": \"jsonrpc\"},
+  {\"url\": \"https://${VERTEXAI_REGION}-agentregistry.googleapis.com\", \"protocolBinding\": \"jsonrpc\"},
+  {\"url\": \"https://${VERTEXAI_REGION}-agentregistry.mtls.googleapis.com\", \"protocolBinding\": \"jsonrpc\"},
+  {\"url\": \"https://secretmanager.googleapis.com\", \"protocolBinding\": \"grpc\"},
+  {\"url\": \"https://secretmanager.googleapis.com:443\", \"protocolBinding\": \"grpc\"},
+  {\"url\": \"https://secretmanager.mtls.googleapis.com\", \"protocolBinding\": \"grpc\"},
+  {\"url\": \"https://secretmanager.mtls.googleapis.com:443\", \"protocolBinding\": \"grpc\"},
+  {\"url\": \"https://iamcredentials.googleapis.com\", \"protocolBinding\": \"jsonrpc\"},
+  {\"url\": \"https://oauth2.googleapis.com\", \"protocolBinding\": \"jsonrpc\"},
   {\"url\": \"https://aiplatform.mtls.googleapis.com\", \"protocolBinding\": \"grpc\"},
   {\"url\": \"https://cloudresourcemanager.mtls.googleapis.com\", \"protocolBinding\": \"jsonrpc\"},
   {\"url\": \"https://iamcredentials.mtls.googleapis.com\", \"protocolBinding\": \"jsonrpc\"},
@@ -112,10 +125,13 @@ gcloud beta iap web add-iam-policy-binding \
 #     --role=roles/iap.egressor
 # done
 
-# 4. Grant Agent Registry Viewer access at the project level
-echo "Granting Agent Registry Viewer IAM role to agent principal pool..."
 gcloud projects add-iam-policy-binding "$PROJECT_ID" \
   --member="$MEMBER" \
   --role="roles/agentregistry.viewer"
+
+echo "Granting Secret Manager Secret Accessor IAM role to agent principal pool..."
+gcloud projects add-iam-policy-binding "$PROJECT_ID" \
+  --member="$MEMBER" \
+  --role="roles/secretmanager.secretAccessor"
 
 echo "✅ Gateway egress policies configured successfully!"

@@ -292,16 +292,16 @@ def deploy(args):
     print("\n✅ Deployment successful!")
     print(f"Agent Runtime ID: {remote_agent.api_resource.name}")
 
-    # Ensure Agent Identity IAM connector is created and registered
-    print("\n🔒 Configuring Agent Identity IAM Connector...")
-    ensure_iam_connector(
-        project,
-        location,
-        remote_agent.api_resource.name,
-        client_id=args.client_id,
-        client_secret=args.client_secret,
-        apigee_hostname=args.apigee_hostname
-    )
+    # # Ensure Agent Identity IAM connector is created and registered
+    # print("\n🔒 Configuring Agent Identity IAM Connector...")
+    # ensure_iam_connector(
+    #     project,
+    #     location,
+    #     remote_agent.api_resource.name,
+    #     client_id=args.client_id,
+    #     client_secret=args.client_secret,
+    #     apigee_hostname=args.apigee_hostname
+    # )
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Deploy agent to Agent Runtime")

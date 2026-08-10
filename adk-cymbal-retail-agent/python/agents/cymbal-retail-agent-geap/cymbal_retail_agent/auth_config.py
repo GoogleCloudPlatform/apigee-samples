@@ -13,24 +13,36 @@
 # limitations under the License.
 
 import os
-from google.adk.auth import AuthCredential, AuthCredentialTypes
-from google.adk.auth.credential_manager import CredentialManager
-from google.adk.integrations.agent_identity import GcpAuthProvider, GcpAuthProviderScheme
+from fastapi.openapi.models import OAuth2, OAuthFlowAuthorizationCode, OAuthFlows
+from google.adk.auth import AuthCredential, AuthCredentialTypes, OAuth2Auth
+from google.adk.tools.apihub_tool.clients.secret_client import SecretManagerClient
 
-# Use GCP Auth Manager to obtain tokens
-CredentialManager.register_auth_provider(GcpAuthProvider())
-PROJECT_ID = os.getenv("GOOGLE_CLOUD_PROJECT")
-if not PROJECT_ID:
-    raise ValueError("GOOGLE_CLOUD_PROJECT environment variable is not set")
-LOCATION = os.getenv("GOOGLE_CLOUD_LOCATION")
-CONNECTOR_NAME = "idp-connector"
-CONTINUE_URI = os.getenv("OAUTH_CALLBACK_URL", "http://127.0.0.1:9000/callback")
+PROJECT_ID=os.getenv("GOOGLE_CLOUD_PROJECT")
+APIGEE_HOSTNAME = os.getenv("APIGEE_HOSTNAME")
+SECRET1=f"projects/{PROJECT_ID}/secrets/cymbal-retail-client-id/versions/latest"
+SECRET2=f"projects/{PROJECT_ID}/secrets/cymbal-retail-client-secret/versions/latest"
 
-# Configure the Auth provider using the Google Cloud Agent Identity connector
-auth_scheme = GcpAuthProviderScheme(
-    name=f"projects/{PROJECT_ID}/locations/{LOCATION}/connectors/{CONNECTOR_NAME}",
-    scopes=["customer"],  # This agent will request tokens with "customer" scope
-    continue_uri=CONTINUE_URI
+secret_manager_client = SecretManagerClient()
+CLIENT_ID = secret_manager_client.get_secret(SECRET1)
+CLIENT_SECRET = secret_manager_client.get_secret(SECRET2)
+
+auth_scheme = OAuth2(
+    flows=OAuthFlows(
+        authorizationCode=OAuthFlowAuthorizationCode(
+            authorizationUrl=f"https://{APIGEE_HOSTNAME}/authorize",
+            tokenUrl=f"https://{APIGEE_HOSTNAME}/token",
+            scopes={
+                "customer": "Customer scope"    # This agent will request tokens with "customer" scope
+            },
+        )
+    )
 )
 
-auth_credential = None
+auth_credential = AuthCredential(
+    auth_type=AuthCredentialTypes.OAUTH2,
+    oauth2=OAuth2Auth(
+        client_id=CLIENT_ID,
+        client_secret=CLIENT_SECRET,
+        redirect_uri="http://localhost:9000/callback"
+    ),
+)
