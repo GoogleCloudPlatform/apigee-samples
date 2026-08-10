@@ -89,10 +89,27 @@ def ensure_iam_connector(project_id, location, engine_name, client_id, client_se
     # 2. Check if connector exists
     print(f"Checking if IAM connector '{connector_name}' exists...")
     res = subprocess.run(
-        ["gcloud", "alpha", "agent-identity", "connectors", "describe", connector_name, f"--project={project_id}", f"--location={location}"],
-        capture_output=True
+        ["gcloud", "alpha", "agent-identity", "connectors", "describe", connector_name, f"--project={project_id}", f"--location={location}", "--format=json"],
+        capture_output=True, text=True
     )
-    if res.returncode != 0:
+    
+    connector_exists = False
+    
+    if res.returncode == 0:
+        connector_exists = True
+        try:
+            connector_info = json.loads(res.stdout)
+            if connector_info.get("deleted"):
+                print("Connector exists but is soft-deleted. Undeleting it...")
+                subprocess.run(
+                    ["gcloud", "alpha", "agent-identity", "connectors", "undelete", connector_name, f"--project={project_id}", f"--location={location}"],
+                    check=True
+                )
+                print("Connector undeleted successfully.")
+        except Exception as e:
+            print(f"Warning: Failed to parse connector info: {e}")
+
+    if not connector_exists:
         if not client_id or not client_secret or not apigee_hostname:
             raise ValueError("Connector does not exist. --client-id, --client-secret, and --apigee-hostname must be provided to create it.")
         
@@ -111,6 +128,21 @@ def ensure_iam_connector(project_id, location, engine_name, client_id, client_se
             "--state=enabled"
         ], check=True)
         print(f"Connector '{connector_name}' created successfully.")
+    else:
+        # Update credentials on the existing connector to avoid stale configuration
+        if client_id and client_secret and apigee_hostname:
+            print(f"Connector '{connector_name}' already exists. Updating its credentials...")
+            auth_url = f"https://{apigee_hostname}/authorize"
+            token_url = f"https://{apigee_hostname}/token"
+            subprocess.run([
+                "gcloud", "alpha", "agent-identity", "connectors", "update", connector_name,
+                f"--project={project_id}", f"--location={location}",
+                f"--three-legged-oauth-client-id={client_id}",
+                f"--three-legged-oauth-client-secret={client_secret}",
+                f"--three-legged-oauth-authorization-url={auth_url}",
+                f"--three-legged-oauth-token-url={token_url}"
+            ], check=True)
+            print(f"Connector '{connector_name}' updated successfully.")
 
     # 3. Add the IAM policy bindings
     print(f"Adding IAM policy binding for agent SPIFFE member: {member}...")
@@ -170,8 +202,10 @@ def deploy(args):
     )
 
     env_vars = {
+        "PROJECT_ID": project,
+        "AGENT_REGISTRY_LOCATION": os.getenv("AGENT_REGISTRY_LOCATION", location),
+        "OAUTH_CALLBACK_URL": os.getenv("OAUTH_CALLBACK_URL", "http://127.0.0.1:9000/callback"),
         "MODEL_NAME": os.getenv("MODEL_NAME", "gemini-2.5-flash"),
-        "AGENT_REGISTRY_LOCATION": os.getenv("AGENT_REGISTRY_LOCATION", "us-central1"),
         "VERTEX_DEPLOYED": "true",
         # Enable Agent Telemetry and Observability settings for Google Cloud Console
         "GOOGLE_CLOUD_AGENT_ENGINE_ENABLE_TELEMETRY": "true",
@@ -186,19 +220,34 @@ def deploy(args):
     # This prevents absolute paths from being preserved in the uploaded tar archive.
     os.chdir(str(agent_dir.parent))
 
+    # Load requirements directly from pyproject.toml
+    pyproject_path = Path(__file__).resolve().parent.parent / "pyproject.toml"
+    requirements = []
+    if pyproject_path.exists():
+        try:
+            import tomllib
+            with open(pyproject_path, "rb") as f:
+                data = tomllib.load(f)
+                requirements = data.get("project", {}).get("dependencies", [])
+        except Exception:
+            pass
+            
+    if not requirements:
+        requirements = [
+            "google-adk[agent-identity,a2a] == 1.36.1",
+            "google-cloud-aiplatform[adk,agent-engines] >= 1.100.0, < 2.0.0",
+            "python-dotenv >= 1.1.1, < 2.0.0",
+            "fastapi >= 0.116.0",
+            "google-cloud-secret-manager >= 2.24.0, < 3.0.0",
+            "litellm"
+        ]
+
     config = {
         "display_name": args.display_name,
         "description": args.description,
         "staging_bucket": staging_bucket,
         "extra_packages": ["cymbal_retail_agent"],
-        "requirements": [
-            "google-cloud-aiplatform[reasoningengine]",
-            "cloudpickle",
-            "pydantic",
-            "google-adk[agent-identity]>=1.32.0,<2.0.0",
-            "a2a-sdk>=0.3.4,<0.4.0",
-            "pyopenssl<26",
-        ],
+        "requirements": requirements,
         "env_vars": env_vars,
     }
 

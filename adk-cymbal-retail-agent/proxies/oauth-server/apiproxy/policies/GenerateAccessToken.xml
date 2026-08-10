@@ -17,7 +17,6 @@
   <SupportedGrantTypes>
     <GrantType>authorization_code</GrantType>
   </SupportedGrantTypes>
-  <Scope>{request.queryparam.scope}</Scope>
   <RFCCompliantRequestResponse>true</RFCCompliantRequestResponse>
- <GenerateResponse/>
+  <GenerateResponse/>
 </OAuthV2>

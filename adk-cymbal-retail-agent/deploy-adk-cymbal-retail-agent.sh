@@ -228,7 +228,7 @@ create_or_update_product() {
     --arg displayName "$display_name" \
     --arg env "$env" \
     --slurpfile ops "$ops_file" \
-    '{name: $name, displayName: $displayName, approvalType: "auto", environments: [$env]} + $ops[0]')
+    '{name: $name, displayName: $displayName, approvalType: "auto", environments: [$env], scopes: ["customer", "manager"]} + $ops[0]')
 
   local status_code
   status_code=$(curl -s -o /dev/null -w "%{http_code}" \
@@ -487,39 +487,39 @@ apigeecli flowhooks attach \
 export CLIENT_ID
 export PROXY_URL="$APIGEE_HOST/v2/samples/adk-cymbal-retail"
 
-# # Sync dependencies in the package source folder before deploying
-# echo "Syncing agent dependencies..."
-# pushd python/agents/cymbal-retail-agent-geap >/dev/null
-# if command -v uv &> /dev/null; then
-#   uv sync
-# else
-#   # Fallback to standard pip if uv is not available
-#   if [ ! -d ".venv" ]; then
-#     python3 -m venv .venv
-#   fi
-#   source .venv/bin/activate
-#   pip install --upgrade pip
-#   pip install -e ".[agent-identity,a2a]"
-# fi
+# Sync dependencies in the package source folder before deploying
+echo "Syncing agent dependencies..."
+pushd python/agents/cymbal-retail-agent-geap >/dev/null
+if command -v uv &> /dev/null; then
+  uv sync
+else
+  # Fallback to standard pip if uv is not available
+  if [ ! -d ".venv" ]; then
+    python3 -m venv .venv
+  fi
+  source .venv/bin/activate
+  pip install --upgrade pip
+  pip install -e ".[agent-identity,a2a]"
+fi
 
-# # Deploy Agent to Agent Runtime
-# echo "🚀 Deploying GEAP Agent to Agent Runtime..."
-# export GOOGLE_CLOUD_PROJECT="$PROJECT_ID"
-# export GOOGLE_CLOUD_LOCATION="$VERTEXAI_REGION"
-# source .venv/bin/activate
-# python3 deployment/deploy.py \
-#   --project "$PROJECT_ID" \
-#   --location "$VERTEXAI_REGION" \
-#   --bucket "${PROJECT_ID}_cymbal_retail_agent" \
-#   --client-id "$CLIENT_ID" \
-#   --client-secret "$CLIENT_SECRET" \
-#   --apigee-hostname "$APIGEE_HOST" \
-#   --egress-gateway "$AGENT_GATEWAY_NAME"
-# deactivate
-# popd >/dev/null
+# Deploy Agent to Agent Runtime
+echo "🚀 Deploying GEAP Agent to Agent Runtime..."
+export GOOGLE_CLOUD_PROJECT="$PROJECT_ID"
+export GOOGLE_CLOUD_LOCATION="$VERTEXAI_REGION"
+source .venv/bin/activate
+python3 deployment/deploy.py \
+  --project "$PROJECT_ID" \
+  --location "$VERTEXAI_REGION" \
+  --bucket "${PROJECT_ID}_cymbal_retail_agent" \
+  --client-id "$CLIENT_ID" \
+  --client-secret "$CLIENT_SECRET" \
+  --apigee-hostname "$APIGEE_HOST" \
+  --egress-gateway "$AGENT_GATEWAY_NAME"
+deactivate
+popd >/dev/null
 
-# echo "Configuring Agent Egress Policies..."
-# ./setup-agent-gateway-egress.sh
+echo "Configuring Agent Egress Policies..."
+./setup-agent-gateway-egress.sh
 
 # npm test
 
