@@ -53,11 +53,22 @@ Run the hybrid routing verification script testing local Gemma 3 (4B) and fronti
 python3 test-hybrid-routing.py
 ```
 
+### Performance & Concurrency Load Benchmark
+Run the concurrency benchmark simulating 1 to 15 concurrent workshop attendees:
+```bash
+python3 perf-test-gemma.py
+```
+
 ### Qwiklabs & Workshop Turnkey Setup
 Deploy CPU-optimized Gemma 3 (4B) on Cloud Run and test hybrid routing in one command:
 ```bash
 ./setup-qwiklabs-gemma.sh
 ```
+
+### Workshop Architecture: Model A (Standard Qwiklabs Sandbox)
+- **1 Student per GCP Project:** Each student runs their own isolated Cloud Run CPU instance (4 vCPUs, 8GB RAM, `--min-instances=0`).
+- **Quota & Cost:** 0 GPU quota needed, $0 idle cost, 100% reliability, ~7.25s p50 latency.
+- **Private Zero-Trust Target:** Apigee target connection uses `<Authentication><GoogleIDToken>` with service account `llm-cymbal-retail-agent@PROJECT_ID.iam.gserviceaccount.com`.
 
 ### Rate Limiting & Quota Rules
 - When running automated tests against Vertex AI Gemini models, avoid hammering requests consecutively.

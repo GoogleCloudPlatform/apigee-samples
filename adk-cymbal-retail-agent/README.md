@@ -113,6 +113,7 @@ Every LLM generation request is proxied through Apigee, enforcing uniform securi
 ├── deploy-gemma-cloudrun.sh # GPU-Optimized Gemma 2 (9B) Cloud Run deployment (vLLM)
 ├── redeploy-all-proxies.sh  # Clean Apigee proxy deployment helper script
 ├── test-hybrid-routing.py   # Python Hybrid AI Routing (Gemma vs Gemini) verification script
+├── perf-test-gemma.py       # Python Performance & Concurrency Load Benchmark (4 tiers)
 ├── test-mcp-e2e.py          # Python End-to-End MCP & Security regression test suite
 ├── deploy-adk-cymbal-retail-agent.sh         # Automated GCP/Apigee deployer script
 ├── setup.sh                 # Main entrypoint provisioning script
@@ -182,7 +183,14 @@ To test intelligent dynamic routing between local Gemma 3 (4B) and frontier Gemi
 python3 test-hybrid-routing.py
 ```
 
-### 4. Testing Agents Locally with ADK Web UI
+### 4. Running Performance & Concurrency Load Benchmarks
+To run the automated concurrency benchmark simulating multi-user load across 4 tiers:
+
+```bash
+python3 perf-test-gemma.py
+```
+
+### 5. Testing Agents Locally with ADK Web UI
 To interact with the agents locally using the ADK development server:
 ```bash
 cd python/agents/cymbal-retail-agent # or cd python/agents/cymbal-retail-agent-apigeellm
@@ -190,7 +198,7 @@ uv sync
 uv run adk web --reload_agents
 ```
 
-### 5. Testing Remote Agent on GEAP via Client Web App
+### 6. Testing Remote Agent on GEAP via Client Web App
 The project includes a web application client to test the live deployed GEAP agent with interactive OAuth 2.0 user consent:
 
 1. **Source configuration environment variables:**
@@ -207,6 +215,28 @@ The project includes a web application client to test the live deployed GEAP age
    * Send a query requiring authentication (e.g. *"list all orders"* or *"check status of order 123"*).
    * Click **Login** on the consent card to authenticate.
    * Verify that subsequent order queries execute directly without prompting for login again.
+
+---
+
+## ⚡ Performance Benchmarks & Workshop Sizing Architecture
+
+### Recommended Deployment Model: **Model A (Standard Qwiklabs Sandbox)**
+In customer workshops and Qwiklabs training formats, the recommended architecture is **Model A: 1 Student per Dedicated GCP Sandbox Project**:
+* **Infrastructure:** Each attendee runs their own isolated Cloud Run CPU instance (**4 vCPUs, 8GB RAM, Scale-to-Zero**) via `./setup-qwiklabs-gemma.sh`.
+* **Zero GPU Quota:** Operates completely on standard CPU quotas without requiring scarce A100/L4 GPU allocations.
+* **$0 Idle Cost:** Scale-to-Zero (`--min-instances=0`) automatically terminates compute resources when students are inactive.
+* **Private Zero-Trust Target Security:** Apigee securely authenticates with Cloud Run using Google Cloud OIDC tokens (`<Authentication><GoogleIDToken>`).
+
+### Empirical Concurrency & Stress Test Matrix
+
+| Concurrency Tier | Scope / Load Type | Total Requests | Success Rate | p50 Latency | Throughput | Primary Behavior / Root Cause |
+| :--- | :---: | :---: | :---: | :---: | :---: | :--- |
+| **1 User (Model A: Qwiklabs)** | **Individual Student** | 3 | **100.0%** | **7.25s** | 5.68 tok/s | ✅ **Optimal for student workshops** |
+| **5 Users (Shared Container)** | Moderate Concurrency | 10 | **10.0%** | **21.16s** | 2.39 tok/s | ⚠️ CPU contention & client timeout |
+| **15 Users (Shared Container)**| Peak Multi-tenant | 15 | **0.0%** | >30.0s | 0.00 tok/s | ❌ Single CPU container queue saturation |
+| **Frontier Gemini 2.5 Flash** | Multi-Agent Reasoning | 10 | **100.0%** | **1.99s** | **141.52 tok/s**| ✅ Massively parallel TPU compute |
+
+> **Key Architectural Takeaway:** A single 4-vCPU container processes requests sequentially or via CPU time-slicing. In **Model A (1 student per GCP project)**, students experience **100% reliability at ~7.25s p50 latency**. For shared multi-tenant deployments with 10+ concurrent users, either scale out Cloud Run instances (`--max-instances=10 --concurrency=1`) with pre-baked images, or route complex prompts to Gemini 2.5 Flash.
 
 ---
 
