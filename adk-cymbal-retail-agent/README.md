@@ -13,15 +13,17 @@ An enterprise demonstration reference project showcasing **Agent-to-Agent (A2A)*
 
 ```mermaid
 graph TD
-    User([👤 User / Client App]) -->|HTTPS POST| ApigeeGov[🛡️ Apigee LLM Governance Proxy<br>/v1/adk-retail-agent-llm-governance]
+    User([👤 User / Client App / ADK Agent]) -->|HTTPS POST| ApigeeGov[🛡️ Apigee AI Governance & Hybrid Router<br>/v1/adk-retail-agent-llm-governance]
     
-    subgraph "Apigee Enterprise AI Governance Layer"
-        ApigeeGov -->|1. Threat Scan| ModelArmor[🤖 Google Cloud Model Armor]
-        ApigeeGov -->|2. Data Masking| DLP[🔍 Cloud SDP PII Redaction]
-        ApigeeGov -->|3. Observability| Analytics[📊 Apigee Token Data Collectors]
+    subgraph "Apigee Enterprise AI Governance & Routing Layer"
+        ApigeeGov -->|1. Threat Defense| ModelArmor[🤖 Google Cloud Model Armor]
+        ApigeeGov -->|2. Data Sanitization| DLP[🔍 Cloud DLP PII Redaction]
+        ApigeeGov -->|3. Dynamic Classification| Router{Prompt Complexity Classifier}
+        ApigeeGov -->|4. Observability| Analytics[📊 Apigee Token Data Collectors]
     end
     
-    ApigeeGov -->|Sanitized Prompt| Supervisor[👔 Root Supervisor Agent<br>customerserviceagent]
+    Router -->|Simple Queries / Greetings / Mock Data| Gemma[🏠 Private Gemma 3 4B<br>Cloud Run CPU / Scale-to-Zero]
+    Router -->|Complex Reasoning & Handoffs| Supervisor[👔 Root Supervisor Agent<br>customerserviceagent (Gemini 2.5 Flash)]
     
     subgraph "Vertex AI Agent Engine (A2A Handoff Network)"
         Supervisor -->|A2A: transfer_to_agent| Orders[📦 Orders Sub-Agent]
@@ -54,14 +56,21 @@ All backend microservices are exposed via Apigee as a standardized **Model Conte
 * **Returns (5 tools):** `getAllReturns`, `getReturnById`, `createReturnRequest`, `updateReturnStatus`, `processRefund` (Requires `customer` scope).
 * **Shipping (1 tool):** `createShippingLabel` (Requires `customer` scope).
 
-### 3. Apigee Enterprise AI Governance (`/v1/adk-retail-agent-llm-governance`)
-Every LLM generation request is proxied through Apigee, enforcing:
-* **Pre-Generation Threat Filtering (Model Armor):** Intercepts Prompt Injections, Jailbreaks, Hate Speech, and Malicious URIs before reaching Gemini models.
+### 3. Dynamic Hybrid AI Routing & Private Gemma 3 (4B)
+To eliminate Vertex AI 429 quota exhaustion and reduce inference costs:
+* **Intelligent Prompt Classifier:** Evaluates prompt complexity and header directives (`x-model-tier: local` or `x-model-tier: frontier`).
+* **Private Local Routing:** Routes simple greetings, FAQs, and mock microservice calls to a self-contained **Gemma 3 (4B)** instance running on **Cloud Run (CPU with Scale-to-Zero)**.
+* **Frontier Routing:** Routes multi-agent planning and complex reasoning tasks to **Gemini 2.5 Flash**.
+* **Protocol Translation:** Bidirectionally converts between Vertex AI `generateContent` JSON and OpenAI `/v1/chat/completions` JSON schemas.
+
+### 4. Apigee Enterprise AI Governance (`/v1/adk-retail-agent-llm-governance`)
+Every LLM generation request is proxied through Apigee, enforcing uniform security across both Gemma and Gemini:
+* **Pre-Generation Threat Filtering (Model Armor):** Intercepts Prompt Injections, Jailbreaks, Hate Speech, and Malicious URIs before reaching models.
 * **On-the-Fly PII Redaction (Cloud DLP):** Executes transformation templates to mask Social Security Numbers, Credit Cards, and sensitive entries with `#`.
 * **Token Cost Attribution & RAI Analytics:** XML Data Collectors record exact prompt, candidate, and thought token counts, compiling custom enterprise visual reports directly in Apigee Analytics.
 
-### 4. OAuth 2.0 RFC-Compliant Token Protection & Scope Authorization
-* **OAuth 2.0 Token Verification (`OA-VerifyAccessToken`):** Upgraded all domain REST API proxies (`cymbal-customers-v2`, `cymbal-orders-v2`, `cymbal-returns-v2`, `cymbal-shipping-v2`, and `/mcp`) from static API keys to OAuth 2.0 Bearer access tokens enforcing fine-grained scopes (`customer`, `manager`).
+### 5. OAuth 2.0 RFC-Compliant Token Protection & Scope Authorization
+* **OAuth 2.0 Token Verification (`OA-VerifyAccessToken`):** All domain REST API proxies (`cymbal-customers-v2`, `cymbal-orders-v2`, `cymbal-returns-v2`, `cymbal-shipping-v2`, and `/mcp`) enforce OAuth 2.0 Bearer access tokens with fine-grained scopes (`customer`, `manager`).
 * **Tool Filtering via Payload Authorization:** The MCP gateway (`cymbal-discovery-v1`) validates and filters available tools based on the MCP payload operations permitted by the caller's active token.
 * **OAuth 2.0 Authorization Server (`oauth-server`):** Built-in RFC-compliant authorization server supporting Authorization Code grant flow, OpenID discovery (`/.well-known/openid-configuration`), and Protected Resource Metadata (`/.well-known/oauth-protected-resource/mcp`).
 
@@ -73,7 +82,7 @@ Every LLM generation request is proxied through Apigee, enforcing:
 ├── config/                  # Backend microservice OpenAPI specs & target YAMLs
 ├── oauth_client/            # Web chat client app for testing the remote agent on Agent Runtime
 ├── proxies/                 # Apigee API Management proxy deployment bundles
-│   ├── adk-retail-agent-llm-governance-v1/   # AI safety & token logging proxy
+│   ├── adk-retail-agent-llm-governance-v1/   # AI safety, hybrid routing & token logging proxy
 │   ├── cymbal-customers-v2/                  # Domain backend REST proxy (Customers)
 │   ├── cymbal-orders-v2/                     # Domain backend REST proxy (Orders)
 │   ├── cymbal-returns-v2/                    # Domain backend REST proxy (Returns)
@@ -92,17 +101,19 @@ Every LLM generation request is proxied through Apigee, enforcing:
 │       ├── orders-api.feature                # REST Orders endpoints & lifecycle
 │       ├── returns-api.feature               # REST Returns endpoints & process-refund
 │       ├── shipping-api.feature              # REST Shipping endpoints & label rates
-│       ├── llm-governance.feature            # AI Safety, DLP sanitization, token quotas
+│       ├── llm-governance.feature            # AI Safety, hybrid routing, DLP, token quotas
 │       ├── mcp-customers-api.feature         # MCP JSON-RPC Customers tools
 │       ├── mcp-orders-api.feature            # MCP JSON-RPC Orders tools
 │       ├── mcp-returns-api.feature           # MCP JSON-RPC Returns tools
 │       ├── mcp-shipping-api.feature          # MCP JSON-RPC Shipping tools
 │       ├── mcp-multicloud-governance.feature # MCP Discovery & Payload Auth
 │       └── oauth-server.feature              # OAuth 2.0 RFC compliance & error flows
-├── test-mcp-e2e.py          # Python End-to-End MCP & Security regression test suite
+├── setup-qwiklabs-gemma.sh  # Turnkey Qwiklabs workshop setup script (Cloud Run CPU Gemma 3 4B)
+├── deploy-gemma-cpu-cloudrun.sh # CPU-Optimized Gemma 3 (4B) Cloud Run deployment
+├── deploy-gemma-cloudrun.sh # GPU-Optimized Gemma 2 (9B) Cloud Run deployment (vLLM)
+├── redeploy-all-proxies.sh  # Clean Apigee proxy deployment helper script
 ├── test-hybrid-routing.py   # Python Hybrid AI Routing (Gemma vs Gemini) verification script
-├── deploy-gemma-cpu-cloudrun.sh # CPU-Optimized Gemma 2 (2B) Cloud Run deployment (Qwiklabs)
-├── deploy-gemma-cloudrun.sh # GPU-Optimized Gemma 2 (9B) Cloud Run deployment
+├── test-mcp-e2e.py          # Python End-to-End MCP & Security regression test suite
 ├── deploy-adk-cymbal-retail-agent.sh         # Automated GCP/Apigee deployer script
 ├── setup.sh                 # Main entrypoint provisioning script
 └── run_integration_tests.sh                  # Automated BDD verification runner
@@ -127,21 +138,26 @@ source env.sh
 
 Upon successful deployment, the script outputs the credentials and endpoints needed for testing.
 
-### 2. (Optional) Run Gemma 3 (4B) Hybrid Routing Setup (Qwiklabs / Workshops)
-To showcase dynamic local model routing for simple prompts and eliminate Vertex AI shared quota contention without needing GPU quotas in a single turnkey command:
+### 2. Turnkey Gemma 3 (4B) Workshop Setup (Qwiklabs / Workshops)
+To deploy **Gemma 3 (4B)** on Cloud Run CPU (**4 vCPUs, 8GB RAM, Scale-to-Zero**) without requiring GPU quotas, and test hybrid routing in a single turnkey command:
 
 ```bash
 ./setup-qwiklabs-gemma.sh
 ```
 
-This automates deploying **Gemma 3 (4B)** (`gemma3:4b`) on Cloud Run CPU (4 vCPUs, 8GB RAM, Scale-to-Zero) and running end-to-end hybrid verification tests.
+### 3. Clean Redeployment of Proxies
+To cleanly redeploy all 7 Apigee API proxies to the active environment:
+
+```bash
+./redeploy-all-proxies.sh
+```
 
 ---
 
 ## 🧪 Testing and Verification
 
 ### 1. Running Full BDD Integration Regression Suite
-The automated BDD suite executes **60 scenarios (399 steps)** verifying all REST proxies, Native MCP tools, AI Governance rules, and OAuth RFC compliance:
+The automated BDD suite executes **61 scenarios (406 steps)** verifying all REST proxies, Native MCP tools, AI Governance rules, Hybrid Routing, and OAuth RFC compliance:
 
 ```bash
 ./run_integration_tests.sh
@@ -160,7 +176,7 @@ python3 test-mcp-e2e.py
 * Tests security rejections for unknown tools (`401 Unauthorized`), unauthenticated executions (`401 Unauthorized`), and unsupported JSON-RPC methods (`400 Bad Request`).
 
 ### 3. Verifying Hybrid Model Routing & AI Safety
-To test intelligent dynamic routing between local Gemma and frontier Gemini 2.5 Flash with uniform Model Armor & Cloud DLP protection:
+To test intelligent dynamic routing between local Gemma 3 (4B) and frontier Gemini 2.5 Flash with uniform Model Armor & Cloud DLP protection:
 
 ```bash
 python3 test-hybrid-routing.py

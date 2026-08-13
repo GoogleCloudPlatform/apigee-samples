@@ -64,3 +64,9 @@ All tools are invoked via `POST https://{APIGEE_HOST}/mcp` with an active Bearer
 3. **OAuth 2.0 Scope Isolation**:
    - `manager` scope is strictly required for customer data access (`getAllCustomers`, `getCustomerById`, `createCustomer`).
    - `customer` scope is required for orders, returns, and shipping operations.
+4. **Dynamic Hybrid Model Routing**:
+   - Agent prompts can include `x-model-tier: local` to route routine mock tasks and simple FAQs to private **Gemma 3 (4B)** on Cloud Run.
+   - Core supervisor reasoning and complex tool handoffs route to **Gemini 2.5 Flash** (`x-model-tier: frontier`).
+5. **Bidirectional Protocol Normalization**:
+   - The AI Gateway translates Vertex AI `generateContent` schemas $\leftrightarrow$ OpenAI `/v1/chat/completions` schemas transparently so agent code remains standard.
+

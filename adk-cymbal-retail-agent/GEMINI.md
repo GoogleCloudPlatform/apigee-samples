@@ -36,7 +36,7 @@ Cymbal Retail is an enterprise reference architecture demonstrating:
 ## 🛠️ Testing & Verification Guidelines
 
 ### Automated BDD Cucumber Suite
-Run all 60 scenarios (399 steps) across 11 feature files:
+Run all 61 scenarios (406 steps) across 11 feature files:
 ```bash
 ./run_integration_tests.sh
 ```
