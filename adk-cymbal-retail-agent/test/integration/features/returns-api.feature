@@ -21,24 +21,46 @@ Scenario: Using an invalid Access Token
   And response body should be valid json
 
 Scenario: Retieve a specfic return record
-  Given I set Authorization header to Bearer customer_token
+  Given I set Authorization header to Bearer `customer_token`
   When I GET /v2/samples/adk-cymbal-retail/returns/123
   Then response code should be 200
   And response body should be valid json
   And response body should contain returnId
 
 Scenario: Retieve a list of returns
-  Given I set Authorization header to Bearer customer_token
+  Given I set Authorization header to Bearer `customer_token`
   When I GET /v2/samples/adk-cymbal-retail/returns
   Then response code should be 200
   And response body should be valid json
   And response body should contain returnId
 
 Scenario: Create a new return
-  Given I set Authorization header to Bearer customer_token
+  Given I set Authorization header to Bearer `customer_token`
   And I store the raw value {"returnId":"RMA789012","orderId":"ORD123456","returnStatus":"requested","items":["SKU987","SKU654"],"reason":"Item not as described","requestedAt":"2023-10-26T10:00:00Z","notes":"The color was completely different from the website image."} as myPayload in scenario scope
   And I set body to `myPayload`
   When I POST to /v2/samples/adk-cymbal-retail/returns
   Then response code should be 201
   And response body should be valid json
   And response body should contain returnId
+
+Scenario: Update an existing return record
+  Given I set Authorization header to Bearer `customer_token`
+  And I store the raw value {"returnStatus":"approved"} as myPayload in scenario scope
+  And I set body to `myPayload`
+  When I PUT /v2/samples/adk-cymbal-retail/returns/123
+  Then response code should be 204
+
+Scenario: Process a refund for a return
+  Given I set Authorization header to Bearer `customer_token`
+  And I store the raw value {"amount": 49.99} as myPayload in scenario scope
+  And I set body to `myPayload`
+  When I POST to /v2/samples/adk-cymbal-retail/returns/123/process-refund
+  Then response code should be 200
+  And response body should be valid json
+  And response body should contain returnId
+  And response body should contain processedAt
+
+Scenario: Unauthenticated request without Authorization header
+  When I GET /v2/samples/adk-cymbal-retail/returns
+  Then response code should be 401
+  And response body should be valid json

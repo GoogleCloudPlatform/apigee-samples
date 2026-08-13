@@ -21,7 +21,7 @@ Scenario: Using an invalid Access Token
   And response body should be valid json
 
 Scenario: Create a shipping label and get rates
-  Given I set Authorization header to Bearer customer_token
+  Given I set Authorization header to Bearer `customer_token`
   And I store the raw value {"shippingLabelRequest":{"recipientName":"Alice Smith","address":"1600 Amphitheatre Pkwy, Mountain View, CA 94043","weight":2.5}} as myPayload in scenario scope
   And I set body to `myPayload`
   When I POST to /v2/samples/adk-cymbal-retail/shipping
@@ -29,3 +29,10 @@ Scenario: Create a shipping label and get rates
   And response body should be valid json
   And response body should contain shippingLabelResponse
   And response body should contain confirmationId
+
+Scenario: Unauthenticated request without Authorization header
+  And I store the raw value {"shippingLabelRequest":{"recipientName":"Alice Smith","address":"1600 Amphitheatre Pkwy, Mountain View, CA 94043","weight":2.5}} as myPayload in scenario scope
+  And I set body to `myPayload`
+  When I POST to /v2/samples/adk-cymbal-retail/shipping
+  Then response code should be 401
+  And response body should be valid json

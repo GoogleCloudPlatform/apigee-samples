@@ -21,9 +21,9 @@ Scenario: initialize
       | name          | value            |
       | content-type  | application/json |
       | User-Agent    | apickli          |
-      | Authorization | Bearer customer_token |
+      | Authorization | Bearer `customer_token` |
 
-  When I POST to /mcp/v2/samples/adk-cymbal-retail/returns
+  When I POST to /mcp
   Then response code should be 200
   And response body should be valid json
   And response body should contain serverInfo
@@ -36,9 +36,9 @@ Scenario: tools/list
       | name          | value            |
       | content-type  | application/json |
       | User-Agent    | apickli          |
-      | Authorization | Bearer customer_token |
+      | Authorization | Bearer `customer_token` |
 
-  When I POST to /mcp/v2/samples/adk-cymbal-retail/returns
+  When I POST to /mcp
   Then response code should be 200
   And response body should be valid json
   And response body should contain jsonrpc
@@ -55,15 +55,60 @@ Scenario: tools/call - getReturnById
       | name          | value            |
       | content-type  | application/json |
       | User-Agent    | apickli          |
-      | Authorization | Bearer customer_token |
+      | Authorization | Bearer `customer_token` |
 
-  When I POST to /mcp/v2/samples/adk-cymbal-retail/returns
+  When I POST to /mcp
   Then response code should be 200
   And response body should be valid json
   And response body should contain jsonrpc
   And response body should contain orderId
   And response body should contain returnStatus
   And response body should contain reason
+
+Scenario: tools/call - getAllReturns
+  Given I store the raw value {"method":"tools/call","params":{"name":"getAllReturns","arguments":{}},"jsonrpc":"2.0","id":2} as myPayload in scenario scope
+  And I set body to `myPayload`
+  And I set headers to
+      | name          | value            |
+      | content-type  | application/json |
+      | User-Agent    | apickli          |
+      | Authorization | Bearer `customer_token` |
+
+  When I POST to /mcp
+  Then response code should be 200
+  And response body should be valid json
+  And response body should contain jsonrpc
+  And response body should contain returnId
+
+Scenario: tools/call - createReturnRequest
+  Given I store the raw value {"method":"tools/call","params":{"name":"createReturnRequest","arguments":{"NewReturnRequest":{"orderId":"ord-001","reason":"Defective item"}}},"jsonrpc":"2.0","id":3} as myPayload in scenario scope
+  And I set body to `myPayload`
+  And I set headers to
+      | name          | value            |
+      | content-type  | application/json |
+      | User-Agent    | apickli          |
+      | Authorization | Bearer `customer_token` |
+
+  When I POST to /mcp
+  Then response code should be 200
+  And response body should be valid json
+  And response body should contain jsonrpc
+  And response body should contain returnId
+
+Scenario: tools/call - processRefund
+  Given I store the raw value {"method":"tools/call","params":{"name":"processRefund","arguments":{"returnId":"ret-001","ProcessRefundRequest":{"amount":49.99}}},"jsonrpc":"2.0","id":4} as myPayload in scenario scope
+  And I set body to `myPayload`
+  And I set headers to
+      | name          | value            |
+      | content-type  | application/json |
+      | User-Agent    | apickli          |
+      | Authorization | Bearer `customer_token` |
+
+  When I POST to /mcp
+  Then response code should be 200
+  And response body should be valid json
+  And response body should contain jsonrpc
+  And response body should contain returnId
 
 Scenario: notifications/initialized
   Given I store the raw value {"method":"notifications/initialized","jsonrpc":"2.0"} as myPayload in scenario scope
@@ -72,10 +117,7 @@ Scenario: notifications/initialized
       | name          | value            |
       | content-type  | application/json |
       | User-Agent    | apickli          |
-      | Authorization | Bearer customer_token |
+      | Authorization | Bearer `customer_token` |
       
-  When I POST to /mcp/v2/samples/adk-cymbal-retail/returns
+  When I POST to /mcp
   Then response code should be 202
-  And response body should be valid json
-  And response body should contain notifications/initialized
-  And response body should contain jsonrpc

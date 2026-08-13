@@ -21,20 +21,20 @@ Feature: MCP Multicloud Governance & Payload Authorization
       | User-Agent    | apickli          |
 
   Scenario: 1. Successful Tool Discovery via KVM
-    Given I set Authorization header to Bearer customer_token
+    Given I set Authorization header to Bearer `customer_token`
     And I store the raw value {"method":"tools/list","jsonrpc":"2.0","id":1} as myPayload in scenario scope
     And I set body to `myPayload`
-    When I POST to /mcp/v2/samples/adk-cymbal-retail/orders
+    When I POST to /mcp
     Then response code should be 200
     And response body should be valid json
     And response body should contain getAllOrders
     And response body should contain createOrder
 
   Scenario: 2. Authorized Tool Execution (Positive Payload Auth via Existing Proxy)
-    Given I set Authorization header to Bearer customer_token
+    Given I set Authorization header to Bearer `customer_token`
     And I store the raw value {"method":"tools/call","params":{"name":"getAllOrders","arguments":{}},"jsonrpc":"2.0","id":2} as myPayload in scenario scope
     And I set body to `myPayload`
-    When I POST to /mcp/v2/samples/adk-cymbal-retail/orders
+    When I POST to /mcp
     Then response code should be 200
     And response body should be valid json
     And response body should contain jsonrpc
@@ -43,22 +43,22 @@ Feature: MCP Multicloud Governance & Payload Authorization
     Given I set Authorization header to Bearer foobar
     And I store the raw value {"method":"tools/call","params":{"name":"getAllOrders","arguments":{}},"jsonrpc":"2.0","id":3} as myPayload in scenario scope
     And I set body to `myPayload`
-    When I POST to /mcp/v2/samples/adk-cymbal-retail/orders
+    When I POST to /mcp
     Then response code should be 401
 
   Scenario: 4. Method Not Found Governance (Invalid JSON-RPC Method)
-    Given I set Authorization header to Bearer customer_token
+    Given I set Authorization header to Bearer `customer_token`
     And I store the raw value {"method":"tools/unsupportedMethod","params":{},"jsonrpc":"2.0","id":4} as myPayload in scenario scope
     And I set body to `myPayload`
-    When I POST to /mcp/v2/samples/adk-cymbal-retail/orders
+    When I POST to /mcp
     Then response code should be 400
     And response body should be valid json
 
   Scenario: 5. Multicloud Tool Execution (Target Proxy JSON-RPC Transformation)
-    Given I set Authorization header to Bearer customer_token
-    And I store the raw value {"method":"tools/call","params":{"name":"getOrderById","arguments":{"orderId":101}},"jsonrpc":"2.0","id":5} as myPayload in scenario scope
+    Given I set Authorization header to Bearer `customer_token`
+    And I store the raw value {"method":"tools/call","params":{"name":"getOrderById","arguments":{"orderId":"101"}},"jsonrpc":"2.0","id":5} as myPayload in scenario scope
     And I set body to `myPayload`
-    When I POST to /mcp/v2/samples/adk-cymbal-retail/orders
+    When I POST to /mcp
     Then response code should be 200
     And response body should be valid json
     And response body should contain customerId

@@ -5,9 +5,10 @@ echo "================================================================="
 echo "   CYMBAL RETAIL: AUTOMATED GATEWAY & GOVERNANCE TEST SUITE      "
 echo "================================================================="
 
-export APIGEE_HOST="${APIGEE_HOST:-APIGEE_HOST_TO_SET}"
+export APIGEE_HOST="${APIGEE_HOST:-34.54.87.114.nip.io}"
 export APIKEY="${APIKEY:-PXifa5UsWH2WhPSJfZGabR7mVndqlWMtANUYjtAWYALC7Tbb}"
-export APISECRET="${APISECRET:-oHHeazVDRvTK6aHFMop8cTWgx0MzWFvR}"
+export APISECRET="${APISECRET:-d01QHF9Ot8JPDBdm1nRdQQWtDV0AkyBCZCWAuz4MAx0Dj8Mmt3mpjAgdDGpvWGGK}"
+export PROJECT_ID="${PROJECT_ID:-apigee-ai}"
 
 echo "🔒 Testing against Apigee Gateway Host: https://${APIGEE_HOST}"
 echo "🔑 Using Enterprise Consumer API Key: ${APIKEY:0:5}....${APIKEY: -5}"

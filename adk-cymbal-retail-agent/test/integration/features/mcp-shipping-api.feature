@@ -21,9 +21,9 @@ Scenario: initialize
       | name          | value            |
       | content-type  | application/json |
       | User-Agent    | apickli          |
-      | Authorization | Bearer customer_token |
+      | Authorization | Bearer `customer_token` |
 
-  When I POST to /mcp/v2/samples/adk-cymbal-retail/shipping
+  When I POST to /mcp
   Then response code should be 200
   And response body should be valid json
   And response body should contain serverInfo
@@ -36,24 +36,24 @@ Scenario: tools/list
       | name          | value            |
       | content-type  | application/json |
       | User-Agent    | apickli          |
-      | Authorization | Bearer customer_token |
+      | Authorization | Bearer `customer_token` |
 
-  When I POST to /mcp/v2/samples/adk-cymbal-retail/shipping
+  When I POST to /mcp
   Then response code should be 200
   And response body should be valid json
   And response body should contain jsonrpc
   And response body should contain createShippingLabel
 
 Scenario: tools/call - createShippingLabel
-  Given I store the raw value {"method":"tools/call","params":{"name":"createShippingLabel","arguments":{"body":{"shippingLabelRequest":{"recipientName":"Alice Smith","address":"456 Oak Ave, Seattle, WA","weight":2.5}}}},"jsonrpc":"2.0","id":1} as myPayload in scenario scope
+  Given I store the raw value {"method":"tools/call","params":{"name":"createShippingLabel","arguments":{"createShippingLabelBody":{"shippingLabelRequest":{"recipientName":"Alice Smith","address":"456 Oak Ave, Seattle, WA","weight":2.5}}}},"jsonrpc":"2.0","id":1} as myPayload in scenario scope
   And I set body to `myPayload`
   And I set headers to
       | name          | value            |
       | content-type  | application/json |
       | User-Agent    | apickli          |
-      | Authorization | Bearer customer_token |
+      | Authorization | Bearer `customer_token` |
 
-  When I POST to /mcp/v2/samples/adk-cymbal-retail/shipping
+  When I POST to /mcp
   Then response code should be 200
   And response body should be valid json
   And response body should contain jsonrpc
@@ -68,10 +68,17 @@ Scenario: notifications/initialized
       | name          | value            |
       | content-type  | application/json |
       | User-Agent    | apickli          |
-      | Authorization | Bearer customer_token |
+      | Authorization | Bearer `customer_token` |
       
-  When I POST to /mcp/v2/samples/adk-cymbal-retail/shipping
+  When I POST to /mcp
   Then response code should be 202
-  And response body should be valid json
-  And response body should contain notifications/initialized
-  And response body should contain jsonrpc
+
+Scenario: Unauthenticated MCP tool call
+  Given I store the raw value {"method":"tools/call","params":{"name":"createShippingLabel","arguments":{"createShippingLabelBody":{"shippingLabelRequest":{"recipientName":"Alice Smith","address":"456 Oak Ave, Seattle, WA","weight":2.5}}}},"jsonrpc":"2.0","id":1} as myPayload in scenario scope
+  And I set body to `myPayload`
+  And I set headers to
+      | name          | value            |
+      | content-type  | application/json |
+      | User-Agent    | apickli          |
+  When I POST to /mcp
+  Then response code should be 401

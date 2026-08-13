@@ -21,23 +21,40 @@ Scenario: Using an invalid Access Token
   And response body should be valid json
 
 Scenario: Retieve a specfic order record
-  Given I set Authorization header to Bearer customer_token
+  Given I set Authorization header to Bearer `customer_token`
   When I GET /v2/samples/adk-cymbal-retail/orders/123
   Then response code should be 200
   And response body should be valid json
   And response body should contain shippingAddress
 
 Scenario: Retieve a list of orders
-  Given I set Authorization header to Bearer customer_token
+  Given I set Authorization header to Bearer `customer_token`
   When I GET /v2/samples/adk-cymbal-retail/orders
   Then response code should be 200
   And response body should be valid json
   And response body should contain shippingAddress
 
 Scenario: Create a new order
-  Given I set Authorization header to Bearer customer_token
+  Given I set Authorization header to Bearer `customer_token`
   And I store the raw value {"customerId": 101,"id": 87654,"items": ["Laptop", "Wireless Mouse", "Keyboard"],"shippingAddress": "123 Tech Avenue, Silicon City, CA 90210","status": "shipped","totalAmount": 1500.75} as myPayload in scenario scope
   And I set body to `myPayload`
   When I POST to /v2/samples/adk-cymbal-retail/orders
   Then response code should be 201
+  And response body should be valid json
+
+Scenario: Update an existing order
+  Given I set Authorization header to Bearer `customer_token`
+  And I store the raw value {"customerId": 101,"status": "delivered"} as myPayload in scenario scope
+  And I set body to `myPayload`
+  When I PUT /v2/samples/adk-cymbal-retail/orders/87654
+  Then response code should be 204
+
+Scenario: Delete an order record
+  Given I set Authorization header to Bearer `customer_token`
+  When I DELETE /v2/samples/adk-cymbal-retail/orders/87654
+  Then response code should be 200
+
+Scenario: Unauthenticated request without Authorization header
+  When I GET /v2/samples/adk-cymbal-retail/orders
+  Then response code should be 401
   And response body should be valid json

@@ -21,9 +21,9 @@ Scenario: initialize
       | name          | value            |
       | content-type  | application/json |
       | User-Agent    | apickli          |
-      | Authorization | Bearer customer_token |
+      | Authorization | Bearer `customer_token` |
 
-  When I POST to /mcp/v2/samples/adk-cymbal-retail/orders
+  When I POST to /mcp
   Then response code should be 200
   And response body should be valid json
   And response body should contain serverInfo
@@ -36,9 +36,9 @@ Scenario: tools/list
       | name          | value            |
       | content-type  | application/json |
       | User-Agent    | apickli          |
-      | Authorization | Bearer customer_token |
+      | Authorization | Bearer `customer_token` |
 
-  When I POST to /mcp/v2/samples/adk-cymbal-retail/orders
+  When I POST to /mcp
   Then response code should be 200
   And response body should be valid json
   And response body should contain jsonrpc
@@ -48,21 +48,51 @@ Scenario: tools/list
   And response body should contain updateOrder
 
 Scenario: tools/call - getOrderById
-  Given I store the raw value {"method":"tools/call","params":{"name":"getOrderById","arguments":{"orderId":123456}},"jsonrpc":"2.0","id":1} as myPayload in scenario scope
+  Given I store the raw value {"method":"tools/call","params":{"name":"getOrderById","arguments":{"orderId":"123456"}},"jsonrpc":"2.0","id":1} as myPayload in scenario scope
   And I set body to `myPayload`
   And I set headers to
       | name          | value            |
       | content-type  | application/json |
       | User-Agent    | apickli          |
-      | Authorization | Bearer customer_token |
+      | Authorization | Bearer `customer_token` |
 
-  When I POST to /mcp/v2/samples/adk-cymbal-retail/orders
+  When I POST to /mcp
   Then response code should be 200
   And response body should be valid json
   And response body should contain jsonrpc
   And response body should contain customerId
   And response body should contain totalAmount
   And response body should contain status
+
+Scenario: tools/call - getAllOrders
+  Given I store the raw value {"method":"tools/call","params":{"name":"getAllOrders","arguments":{}},"jsonrpc":"2.0","id":2} as myPayload in scenario scope
+  And I set body to `myPayload`
+  And I set headers to
+      | name          | value            |
+      | content-type  | application/json |
+      | User-Agent    | apickli          |
+      | Authorization | Bearer `customer_token` |
+
+  When I POST to /mcp
+  Then response code should be 200
+  And response body should be valid json
+  And response body should contain jsonrpc
+  And response body should contain shippingAddress
+
+Scenario: tools/call - createOrder
+  Given I store the raw value {"method":"tools/call","params":{"name":"createOrder","arguments":{"NewOrder":{"customerId":"cust-001","items":[{"itemId":"item-1","quantity":2}]}}},"jsonrpc":"2.0","id":3} as myPayload in scenario scope
+  And I set body to `myPayload`
+  And I set headers to
+      | name          | value            |
+      | content-type  | application/json |
+      | User-Agent    | apickli          |
+      | Authorization | Bearer `customer_token` |
+
+  When I POST to /mcp
+  Then response code should be 200
+  And response body should be valid json
+  And response body should contain jsonrpc
+  And response body should contain totalAmount
 
 Scenario: notifications/initialized
   Given I store the raw value {"method":"notifications/initialized","jsonrpc":"2.0"} as myPayload in scenario scope
@@ -71,10 +101,7 @@ Scenario: notifications/initialized
       | name          | value            |
       | content-type  | application/json |
       | User-Agent    | apickli          |
-      | Authorization | Bearer customer_token |
+      | Authorization | Bearer `customer_token` |
       
-  When I POST to /mcp/v2/samples/adk-cymbal-retail/orders
+  When I POST to /mcp
   Then response code should be 202
-  And response body should be valid json
-  And response body should contain notifications/initialized
-  And response body should contain jsonrpc

@@ -21,9 +21,9 @@ Scenario: initialize
       | name          | value            |
       | content-type  | application/json |
       | User-Agent    | apickli          |
-      | Authorization | Bearer manager_token |
+      | Authorization | Bearer `manager_token` |
 
-  When I POST to /mcp/v2/samples/adk-cymbal-retail/customers
+  When I POST to /mcp
   Then response code should be 200
   And response body should be valid json
   And response body should contain serverInfo
@@ -36,25 +36,25 @@ Scenario: tools/list
       | name          | value            |
       | content-type  | application/json |
       | User-Agent    | apickli          |
-      | Authorization | Bearer manager_token |
+      | Authorization | Bearer `manager_token` |
 
-  When I POST to /mcp/v2/samples/adk-cymbal-retail/customers
+  When I POST to /mcp
   Then response code should be 200
   And response body should be valid json
   And response body should contain 1
   And response body should contain jsonrpc
   And response body should contain getAllCustomers
 
-  Scenario: tools/call
-  Given I store the raw value {"method":"tools/call","params":{"name":"getCustomerById","arguments":{"customerId":12345}},"jsonrpc":"2.0","id":1} as myPayload in scenario scope
+Scenario: tools/call - getCustomerById
+  Given I store the raw value {"method":"tools/call","params":{"name":"getCustomerById","arguments":{"customerId":"12345"}},"jsonrpc":"2.0","id":1} as myPayload in scenario scope
   And I set body to `myPayload`
   And I set headers to
       | name          | value            |
       | content-type  | application/json |
       | User-Agent    | apickli          |
-      | Authorization | Bearer manager_token |
+      | Authorization | Bearer `manager_token` |
 
-  When I POST to /mcp/v2/samples/adk-cymbal-retail/customers
+  When I POST to /mcp
   Then response code should be 200
   And response body should be valid json
   And response body should contain 1
@@ -62,17 +62,44 @@ Scenario: tools/list
   And response body should contain email
   And response body should contain createdAt
 
-  Scenario: notifications/initialized
+Scenario: tools/call - getAllCustomers
+  Given I store the raw value {"method":"tools/call","params":{"name":"getAllCustomers","arguments":{}},"jsonrpc":"2.0","id":2} as myPayload in scenario scope
+  And I set body to `myPayload`
+  And I set headers to
+      | name          | value            |
+      | content-type  | application/json |
+      | User-Agent    | apickli          |
+      | Authorization | Bearer `manager_token` |
+
+  When I POST to /mcp
+  Then response code should be 200
+  And response body should be valid json
+  And response body should contain jsonrpc
+  And response body should contain firstName
+
+Scenario: tools/call - createCustomer
+  Given I store the raw value {"method":"tools/call","params":{"name":"createCustomer","arguments":{"NewCustomerProfile":{"name":"Test User","email":"test@example.com","phoneNumber":"555-123-4567","address":"123 Test St"}}},"jsonrpc":"2.0","id":3} as myPayload in scenario scope
+  And I set body to `myPayload`
+  And I set headers to
+      | name          | value            |
+      | content-type  | application/json |
+      | User-Agent    | apickli          |
+      | Authorization | Bearer `manager_token` |
+
+  When I POST to /mcp
+  Then response code should be 200
+  And response body should be valid json
+  And response body should contain jsonrpc
+  And response body should contain firstName
+
+Scenario: notifications/initialized
   Given I store the raw value {"method":"notifications/initialized","jsonrpc":"2.0"} as myPayload in scenario scope
   And I set body to `myPayload`
   And I set headers to
       | name          | value            |
       | content-type  | application/json |
       | User-Agent    | apickli          |
-      | Authorization | Bearer manager_token |
+      | Authorization | Bearer `manager_token` |
       
-  When I POST to /mcp/v2/samples/adk-cymbal-retail/customers
+  When I POST to /mcp
   Then response code should be 202
-  And response body should be valid json
-  And response body should contain notifications/initialized
-  And response body should contain jsonrpc
