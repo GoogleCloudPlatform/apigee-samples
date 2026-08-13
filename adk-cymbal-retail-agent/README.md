@@ -100,6 +100,9 @@ Every LLM generation request is proxied through Apigee, enforcing:
 │       ├── mcp-multicloud-governance.feature # MCP Discovery & Payload Auth
 │       └── oauth-server.feature              # OAuth 2.0 RFC compliance & error flows
 ├── test-mcp-e2e.py          # Python End-to-End MCP & Security regression test suite
+├── test-hybrid-routing.py   # Python Hybrid AI Routing (Gemma vs Gemini) verification script
+├── deploy-gemma-cpu-cloudrun.sh # CPU-Optimized Gemma 2 (2B) Cloud Run deployment (Qwiklabs)
+├── deploy-gemma-cloudrun.sh # GPU-Optimized Gemma 2 (9B) Cloud Run deployment
 ├── deploy-adk-cymbal-retail-agent.sh         # Automated GCP/Apigee deployer script
 ├── setup.sh                 # Main entrypoint provisioning script
 └── run_integration_tests.sh                  # Automated BDD verification runner
@@ -124,6 +127,15 @@ source env.sh
 
 Upon successful deployment, the script outputs the credentials and endpoints needed for testing.
 
+### 2. (Optional) Run Gemma 3 (4B) Hybrid Routing Setup (Qwiklabs / Workshops)
+To showcase dynamic local model routing for simple prompts and eliminate Vertex AI shared quota contention without needing GPU quotas in a single turnkey command:
+
+```bash
+./setup-qwiklabs-gemma.sh
+```
+
+This automates deploying **Gemma 3 (4B)** (`gemma3:4b`) on Cloud Run CPU (4 vCPUs, 8GB RAM, Scale-to-Zero) and running end-to-end hybrid verification tests.
+
 ---
 
 ## 🧪 Testing and Verification
@@ -147,7 +159,14 @@ python3 test-mcp-e2e.py
 * Tests all 14 MCP tool calls (`getAllCustomers`, `getOrderById`, `createReturnRequest`, etc.).
 * Tests security rejections for unknown tools (`401 Unauthorized`), unauthenticated executions (`401 Unauthorized`), and unsupported JSON-RPC methods (`400 Bad Request`).
 
-### 3. Testing Agents Locally with ADK Web UI
+### 3. Verifying Hybrid Model Routing & AI Safety
+To test intelligent dynamic routing between local Gemma and frontier Gemini 2.5 Flash with uniform Model Armor & Cloud DLP protection:
+
+```bash
+python3 test-hybrid-routing.py
+```
+
+### 4. Testing Agents Locally with ADK Web UI
 To interact with the agents locally using the ADK development server:
 ```bash
 cd python/agents/cymbal-retail-agent # or cd python/agents/cymbal-retail-agent-apigeellm
@@ -155,7 +174,7 @@ uv sync
 uv run adk web --reload_agents
 ```
 
-### 4. Testing Remote Agent on GEAP via Client Web App
+### 5. Testing Remote Agent on GEAP via Client Web App
 The project includes a web application client to test the live deployed GEAP agent with interactive OAuth 2.0 user consent:
 
 1. **Source configuration environment variables:**

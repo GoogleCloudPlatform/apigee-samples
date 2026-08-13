@@ -44,6 +44,9 @@
         <Name>RF-MA-Detected</Name>
         <Condition>SanitizeUserPrompt.SUP-Sanitize-User-Prompt.filterMatchState = "MATCH_FOUND"</Condition>
       </Step>
+      <Step>
+        <Name>JS-Classify-And-Route-Prompt</Name>
+      </Step>
     </Request>
     <Response>
       <Step>
@@ -80,6 +83,10 @@
   <HTTPProxyConnection>
     <BasePath>/v1/adk-retail-agent-llm-governance</BasePath>
   </HTTPProxyConnection>
+  <RouteRule name="routeToPrivateGemma">
+    <Condition>(route_to_gemma = "true") or (request.header.x-model-tier = "local") or (request.header.x-model-name Matches "*gemma*")</Condition>
+    <TargetEndpoint>gemma-private-target</TargetEndpoint>
+  </RouteRule>
   <RouteRule name="default">
     <TargetEndpoint>default</TargetEndpoint>
   </RouteRule>

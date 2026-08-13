@@ -37,14 +37,22 @@
     <Policy>AM-SetRAIValues</Policy>
     <Policy>EV-DLPResponse</Policy>
     <Policy>SC-DLPCallout</Policy>
+    <Policy>JS-Classify-And-Route-Prompt</Policy>
+    <Policy>JS-Transform-Vertex-To-OpenAI</Policy>
+    <Policy>JS-Transform-OpenAI-To-Vertex</Policy>
   </Policies>
   <ProxyEndpoints>
     <ProxyEndpoint>default</ProxyEndpoint>
   </ProxyEndpoints>
   <Resources>
     <Resource>jsc://JS-ExtractPrompt.js</Resource>
+    <Resource>jsc://JS-Classify-And-Route-Prompt.js</Resource>
+    <Resource>jsc://JS-Transform-Vertex-To-OpenAI.js</Resource>
+    <Resource>jsc://JS-Transform-OpenAI-To-Vertex.js</Resource>
+    <Resource>properties://gemma_config.properties</Resource>
   </Resources>
   <TargetEndpoints>
     <TargetEndpoint>default</TargetEndpoint>
+    <TargetEndpoint>gemma-private-target</TargetEndpoint>
   </TargetEndpoints>
 </APIProxy>
