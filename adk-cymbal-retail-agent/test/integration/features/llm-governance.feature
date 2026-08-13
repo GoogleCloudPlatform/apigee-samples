@@ -78,3 +78,20 @@ Scenario: User shares sensitive information
   And response body should contain Jane
   And response body should contain STOP
 
+Scenario: Explicit Local Model Routing via Header
+  Given I store the raw value {"contents":[{"role":"user","parts":[{"text":"Hello, how are you today?"}]}],"system_instruction":{"parts":[{"text":"You are a helpful retail assistant."}]}} as myPayload in scenario scope
+  And I set body to `myPayload`
+  And I set headers to
+      | name                | value            |
+      | content-type        | application/json |
+      | User-Agent          | apickli          |
+      | x-apikey            | `apikey`         |   
+      | authorization       | Bearer `app-default-token`   |   
+      | x-model-tier        | frontier         |
+
+  When I POST to /v1/adk-retail-agent-llm-governance/v1/projects/`PROJECT_ID`/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent
+  Then response code should be 200
+  And response body should be valid json
+  And response body should contain responseId
+
+

@@ -47,6 +47,19 @@ Run the 17-test Python verification suite covering all 14 MCP tools and negative
 python3 test-mcp-e2e.py
 ```
 
+### Hybrid Model Routing & AI Safety Suite
+Run the hybrid routing verification script testing local Gemma 3 (4B) and frontier Gemini routes:
+```bash
+python3 test-hybrid-routing.py
+```
+
+### Qwiklabs & Workshop Turnkey Setup
+Deploy CPU-optimized Gemma 3 (4B) on Cloud Run and test hybrid routing in one command:
+```bash
+./setup-qwiklabs-gemma.sh
+```
+
 ### Rate Limiting & Quota Rules
 - When running automated tests against Vertex AI Gemini models, avoid hammering requests consecutively.
 - Use the built-in token caching and exponential backoff retry handler in `test/integration/features/support/init.js` to avoid Vertex AI 429 quota exhaustion.
+- Offload high-frequency simple prompts to private Gemma 3 (`x-model-tier: local`) to preserve Vertex AI quotas.
