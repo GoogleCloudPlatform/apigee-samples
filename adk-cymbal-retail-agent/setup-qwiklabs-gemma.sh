@@ -20,7 +20,10 @@ echo "=================================================================="
 echo "    CYMBAL RETAIL: QWIKLABS GEMMA 3 (4B) WORKSHOP SETUP           "
 echo "=================================================================="
 
-# 1. Source environment variables
+# ==============================================================================
+# Step 1: Environment Discovery & Validation
+# Automatically loads env.sh if available and resolves active GCP project ID.
+# ==============================================================================
 if [ -f "env.sh" ]; then
   echo "--> Sourcing environment variables from env.sh..."
   source env.sh
@@ -34,12 +37,19 @@ fi
 
 echo "--> Target Project: $PROJECT_ID"
 
-# 2. Deploy CPU-optimized Gemma 3 (4B) on Cloud Run
+# ==============================================================================
+# Step 2: Deploy CPU-Optimized Gemma 3 (4B) to Cloud Run (Qwiklabs Sandbox Mode)
+# Runs a quantized model requiring 0 GPU quotas with scale-to-zero ($0 idle cost).
+# Automatically updates Apigee propertyset (gemma_config.properties) with endpoint.
+# ==============================================================================
 echo ""
 echo "--> Step 1/2: Deploying Gemma 3 (4B) on Cloud Run (CPU / Scale-to-Zero)..."
 ./deploy-gemma-cpu-cloudrun.sh
 
-# 3. Test and Validate Hybrid Routing & AI Governance
+# ==============================================================================
+# Step 3: Run End-to-End Hybrid Routing & AI Safety Verification
+# Tests both local Gemma route and frontier Gemini route with Model Armor & DLP.
+# ==============================================================================
 echo ""
 echo "--> Step 2/2: Validating Apigee Hybrid Model Routing & AI Safety..."
 python3 test-hybrid-routing.py

@@ -14,20 +14,31 @@
  * limitations under the License.
  */
 
+// ==============================================================================
+// Hybrid AI Gateway Dynamic Routing Classifier
+// Evaluates incoming prompts to determine whether to route to:
+//  - Private Local Gemma 3 (4B) on Cloud Run CPU (Simple queries / FAQs / Mocks)
+//  - Managed Frontier Gemini 2.5 Flash on Vertex AI (Complex multi-agent reasoning)
+// ==============================================================================
+
 var modelTierHeader = context.getVariable("request.header.x-model-tier");
 var modelNameHeader = context.getVariable("request.header.x-model-name");
 var prompt = context.getVariable("prompt_contents_0") || "";
+
+// Read configured Gemma endpoint URL from Apigee propertyset
 var gemmaUrl = context.getVariable("propertyset.gemma_config.gemma_url") || "";
-var isGemmaConfigured = gemmaUrl.length > 0 && gemmaUrl.indexOf("gemma-cpu-router-run.app") === -1 && gemmaUrl.indexOf("gemma-2-9b-private-router.run.app") === -1;
+var isGemmaConfigured = gemmaUrl.length > 0 && 
+                        gemmaUrl.indexOf("gemma-cpu-router-run.app") === -1 && 
+                        gemmaUrl.indexOf("gemma-2-9b-private-router.run.app") === -1;
 var routeToGemma = false;
 
-// 1. Explicit Header Override Check
+// 1. Explicit Header Override Check (Client-directed routing)
 if (modelTierHeader && (modelTierHeader.toLowerCase() === "local" || modelTierHeader.toLowerCase() === "gemma")) {
   routeToGemma = true;
 } else if (modelNameHeader && modelNameHeader.toLowerCase().indexOf("gemma") !== -1) {
   routeToGemma = true;
 } else if (isGemmaConfigured) {
-  // 2. Intelligent Prompt Complexity Classifier (active when Gemma endpoint is provisioned)
+  // 2. Intelligent Prompt Complexity Classifier (Active when Gemma endpoint is provisioned)
   var trimmedPrompt = prompt.trim().toLowerCase();
   var wordCount = trimmedPrompt.split(/\s+/).length;
   

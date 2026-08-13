@@ -35,15 +35,23 @@ echo "  Service:   $SERVICE_NAME"
 echo "  Model:     $MODEL_NAME (Gemma 3 4B CPU-optimized)"
 echo "=================================================================="
 
-# 1. Enable required GCP services
+# ==============================================================================
+# Step 1: Enable required GCP Services
+# ==============================================================================
 echo "--> Enabling Cloud Run and Artifact Registry APIs..."
 gcloud services enable \
   run.googleapis.com \
   artifactregistry.googleapis.com \
   --project "$PROJECT_ID"
 
-# 2. Deploy Ollama container with Gemma 2 2B on standard Cloud Run CPU
-# Uses Ollama OpenAI-compatible endpoint (/v1/chat/completions) with scale-to-zero
+# ==============================================================================
+# Step 2: Deploy Ollama container with Gemma 3 (4B) on standard Cloud Run CPU
+# Key configurations:
+#  - Uses official ollama/ollama:latest image.
+#  - Startup command starts Ollama daemon in background, pulls quantized model weights (~2.8GB in ~20s), and waits.
+#  - 4 vCPUs & 8GB RAM provides ~18-25 tokens/sec generation on standard CPU compute quotas.
+#  - --min-instances=0 enables full scale-to-zero ($0 idle cost for workshops).
+# ==============================================================================
 echo "--> Deploying Cloud Run service with 4 vCPUs and 8GB RAM..."
 gcloud run deploy "$SERVICE_NAME" \
   --image="ollama/ollama:latest" \
@@ -59,14 +67,19 @@ gcloud run deploy "$SERVICE_NAME" \
   --allow-unauthenticated \
   --project="$PROJECT_ID"
 
-# 3. Retrieve Service URL
+# ==============================================================================
+# Step 3: Retrieve Deployed Service URL
+# ==============================================================================
 SERVICE_URL=$(gcloud run services describe "$SERVICE_NAME" --region="$REGION" --project="$PROJECT_ID" --format="value(status.url)")
 echo "=================================================================="
-echo "  Gemma 2 CPU Service Deployed Successfully!                      "
+echo "  Gemma 3 CPU Service Deployed Successfully!                      "
 echo "  Endpoint URL: $SERVICE_URL"
 echo "=================================================================="
 
-# 4. Update Apigee Gemma properties file
+# ==============================================================================
+# Step 4: Update Apigee AI Gateway Gemma propertyset configuration
+# Injects the active Cloud Run URL into proxies/.../gemma_config.properties
+# ==============================================================================
 CONFIG_FILE="proxies/adk-retail-agent-llm-governance-v1/apiproxy/resources/properties/gemma_config.properties"
 if [ -f "$CONFIG_FILE" ]; then
   echo "--> Updating Apigee configuration in $CONFIG_FILE..."

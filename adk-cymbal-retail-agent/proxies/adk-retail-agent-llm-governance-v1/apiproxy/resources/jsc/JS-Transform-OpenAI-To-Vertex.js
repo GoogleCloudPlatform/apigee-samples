@@ -14,6 +14,13 @@
  * limitations under the License.
  */
 
+// ==============================================================================
+// Protocol Response Transformer: OpenAI -> Vertex AI JSON-RPC Schema
+// Normalizes responses from private Gemma (OpenAI choices[].message.content)
+// to standard Vertex AI `generateContent` response (candidates[].content.parts[].text)
+// and extracts token counts for Apigee Data Collectors & Analytics.
+// ==============================================================================
+
 var responseObj = response.content.asJSON;
 var replyText = "";
 var finishReason = "STOP";

@@ -14,10 +14,16 @@
  * limitations under the License.
  */
 
+// ==============================================================================
+// Protocol Request Transformer: Vertex AI -> OpenAI JSON-RPC Schema
+// Converts Vertex AI `generateContent` payload (contents[].parts[].text, system_instruction)
+// to OpenAI / vLLM / Ollama chat format (messages[].role, messages[].content)
+// ==============================================================================
+
 var requestObj = request.content.asJSON;
 var openAiMessages = [];
 
-// 1. Extract System Instruction if present
+// 1. Extract and map Vertex AI System Instruction to OpenAI 'system' role
 if (requestObj.system_instruction && requestObj.system_instruction.parts) {
   var sysText = requestObj.system_instruction.parts.map(function(p) { return p.text || ""; }).join("\n");
   if (sysText) {
