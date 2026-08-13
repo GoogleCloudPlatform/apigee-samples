@@ -61,7 +61,7 @@ var vertexResponse = {
     candidatesTokenCount: candidateTokens,
     totalTokenCount: totalTokens
   },
-  modelVersion: "gemma3:4b",
+  modelVersion: context.getVariable("propertyset.gemma_config.model_id") || "gemma2:2b",
   responseId: responseObj.id || "gemma-" + Date.now()
 };
 

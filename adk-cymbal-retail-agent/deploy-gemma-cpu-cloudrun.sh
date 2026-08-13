@@ -14,17 +14,27 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set -e
-
-# Load environment configuration if available
-if [ -f "env.sh" ]; then
+# Load environment configuration if valid
+PROJECT_ID_CURRENT=$(gcloud config get-value project 2>/dev/null)
+if [ -f "env.sh" ] && ! grep -q "PROJECT_ID_TO_SET" env.sh; then
   source env.sh
 fi
 
-PROJECT_ID="${PROJECT_ID:-$(gcloud config get-value project)}"
+PROJECT_ID="${PROJECT_ID:-$(gcloud config get-value project 2>/dev/null)}"
+if [ "$PROJECT_ID" == "PROJECT_ID_TO_SET" ] || [ -z "$PROJECT_ID" ]; then
+  PROJECT_ID=$(gcloud config get-value project 2>/dev/null)
+fi
+
 REGION="${VERTEXAI_REGION:-us-central1}"
+if [ "$REGION" == "VERTEXAI_REGION_TO_SET" ] || [ -z "$REGION" ]; then
+  REGION="us-central1"
+fi
+
 SERVICE_NAME="gemma-cpu-router"
 MODEL_NAME="${MODEL_NAME:-gemma3:4b}"
+if [ "$MODEL_NAME" == "gemini-2.5-flash" ]; then
+  MODEL_NAME="gemma3:4b"
+fi
 
 echo "=================================================================="
 echo "  Deploying CPU-Optimized Gemma 3 (4B) to Cloud Run (Qwiklabs)   "

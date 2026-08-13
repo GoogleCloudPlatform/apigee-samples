@@ -54,3 +54,9 @@ var openAiPayload = {
 
 request.content = JSON.stringify(openAiPayload);
 context.setVariable("request.header.Content-Type", "application/json");
+
+// Direct Apigee target connection to configured Cloud Run Gemma endpoint
+var gemmaUrl = context.getVariable("propertyset.gemma_config.gemma_url");
+if (gemmaUrl && gemmaUrl.length > 0) {
+  context.setVariable("target.url", gemmaUrl);
+}

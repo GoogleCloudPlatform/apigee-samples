@@ -35,6 +35,11 @@
     </Response>
   </PostFlow>
   <HTTPTargetConnection>
-    <URL>https://gemma-2-9b-private-router.run.app/v1/chat/completions</URL>
+    <Authentication>
+      <GoogleIDToken>
+        <Audience>https://gemma-cpu-router-xtdjbcahkq-uc.a.run.app</Audience>
+      </GoogleIDToken>
+    </Authentication>
+    <URL>https://gemma-cpu-router-xtdjbcahkq-uc.a.run.app/v1/chat/completions</URL>
   </HTTPTargetConnection>
 </TargetEndpoint>
