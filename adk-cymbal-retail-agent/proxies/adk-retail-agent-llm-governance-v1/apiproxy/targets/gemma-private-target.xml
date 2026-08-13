@@ -35,6 +35,13 @@
     </Response>
   </PostFlow>
   <HTTPTargetConnection>
+    <!-- 
+      Google Cloud OIDC ID Token Authentication:
+      Secures communication between Apigee and Cloud Run in enterprise GCP orgs where
+      Domain-Restricted Sharing blocks 'allUsers' unauthenticated access.
+      Uses the deployed proxy's service account (llm-cymbal-retail-agent@PROJECT_ID.iam.gserviceaccount.com)
+      which is granted 'roles/run.invoker' on the Cloud Run service.
+    -->
     <Authentication>
       <GoogleIDToken>
         <Audience>https://gemma-cpu-router-xtdjbcahkq-uc.a.run.app</Audience>
