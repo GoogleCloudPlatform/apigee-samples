@@ -17,6 +17,8 @@
 var modelTierHeader = context.getVariable("request.header.x-model-tier");
 var modelNameHeader = context.getVariable("request.header.x-model-name");
 var prompt = context.getVariable("prompt_contents_0") || "";
+var gemmaUrl = context.getVariable("propertyset.gemma_config.gemma_url") || "";
+var isGemmaConfigured = gemmaUrl.length > 0 && gemmaUrl.indexOf("gemma-cpu-router-run.app") === -1 && gemmaUrl.indexOf("gemma-2-9b-private-router.run.app") === -1;
 var routeToGemma = false;
 
 // 1. Explicit Header Override Check
@@ -24,8 +26,8 @@ if (modelTierHeader && (modelTierHeader.toLowerCase() === "local" || modelTierHe
   routeToGemma = true;
 } else if (modelNameHeader && modelNameHeader.toLowerCase().indexOf("gemma") !== -1) {
   routeToGemma = true;
-} else {
-  // 2. Intelligent Prompt Complexity Classifier
+} else if (isGemmaConfigured) {
+  // 2. Intelligent Prompt Complexity Classifier (active when Gemma endpoint is provisioned)
   var trimmedPrompt = prompt.trim().toLowerCase();
   var wordCount = trimmedPrompt.split(/\s+/).length;
   
@@ -50,4 +52,4 @@ if (modelTierHeader && (modelTierHeader.toLowerCase() === "local" || modelTierHe
 }
 
 context.setVariable("route_to_gemma", routeToGemma ? "true" : "false");
-print("Gemma Model Routing Decision: route_to_gemma=" + routeToGemma + " for prompt: " + prompt);
+print("Gemma Model Routing Decision: route_to_gemma=" + routeToGemma + " (isGemmaConfigured=" + isGemmaConfigured + ") for prompt: " + prompt);
