@@ -1,0 +1,183 @@
+# Copyright 2026 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+openapi: 3.0.3
+info:
+  title: Product Catalog API
+  description: A RESTful API for managing a product catalog with search, list, and CRUD operations.
+  version: 1.0.0
+servers:
+  - url: https://aigw-test-service-323709580283.europe-west1.run.app
+    description: Product Catalog Backend
+paths:
+  /products:
+    get:
+      summary: List or search products
+      description: Returns a list of products, optionally filtered by category or a search query.
+      parameters:
+        - name: category
+          in: query
+          description: Filter products by category (e.g., Electronics, Office)
+          required: false
+          schema:
+            type: string
+        - name: q
+          in: query
+          description: Search query to match against product name or description
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: A list of products
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Product"
+    post:
+      summary: Add a new product
+      description: Creates a new product and adds it to the catalog.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProductInput"
+      responses:
+        "201":
+          description: Product created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+        "400":
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /products/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: The unique ID of the product
+        schema:
+          type: string
+    get:
+      summary: Get product by ID
+      description: Returns details for a single product.
+      responses:
+        "200":
+          description: Product details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+        "404":
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      summary: Update a product
+      description: Updates the details of an existing product.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProductInput"
+      responses:
+        "200":
+          description: Product updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+        "400":
+          description: Invalid input or missing ID
+        "404":
+          description: Product not found
+    delete:
+      summary: Delete a product
+      description: Removes a product from the catalog.
+      responses:
+        "224":
+          description: Product deleted successfully
+        "404":
+          description: Product not found
+
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        id:
+          type: string
+          example: prod_1
+        name:
+          type: string
+          example: Wireless Mouse
+        description:
+          type: string
+          example: Ergonomic 2.4GHz wireless mouse
+        category:
+          type: string
+          example: Electronics
+        price:
+          type: number
+          format: float
+          example: 29.99
+        stock:
+          type: integer
+          example: 150
+      required:
+        - id
+        - name
+        - price
+
+    ProductInput:
+      type: object
+      properties:
+        name:
+          type: string
+          example: New Gaming Mouse
+        description:
+          type: string
+          example: High DPI gaming mouse with RGB
+        category:
+          type: string
+          example: Electronics
+        price:
+          type: number
+          format: float
+          example: 49.99
+        stock:
+          type: integer
+          example: 50
+      required:
+        - name
+        - price
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          example: product not found

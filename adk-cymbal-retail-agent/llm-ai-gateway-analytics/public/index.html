@@ -1,0 +1,1221 @@
+<!doctype html>
+<!--
+ Copyright 2026 Google LLC
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Gateway Analytics</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+      :root {
+        --bg-color: #f8fafc;
+        --panel-bg: #ffffff;
+        --header-bg: rgba(255, 255, 255, 0.85);
+        --modal-bg: rgba(255, 255, 255, 0.4);
+        --text-main: #334155;
+        --text-title: #0f172a;
+        --text-muted: #64748b;
+        --border-color: #e2e8f0;
+        --primary: #3b82f6;
+        --primary-hover: #2563eb;
+        --chart-border: #e2e8f0;
+        --chart-text: #64748b;
+      }
+
+      [data-theme="dark"] {
+        --bg-color: #0f172a;
+        --panel-bg: #1e293b;
+        --header-bg: rgba(30, 41, 59, 0.85);
+        --modal-bg: rgba(30, 41, 59, 0.5);
+        --text-main: #f8fafc;
+        --text-title: #ffffff;
+        --text-muted: #94a3b8;
+        --border-color: #334155;
+        --primary: #60a5fa;
+        --primary-hover: #3b82f6;
+        --chart-border: #334155;
+        --chart-text: #94a3b8;
+      }
+
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: var(--bg-color);
+        color: var(--text-main);
+        transition:
+          background-color 0.3s ease,
+          color 0.3s ease;
+      }
+
+      header {
+        background-color: var(--header-bg);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        padding: 1rem 2rem;
+        border-bottom: 1px solid var(--border-color);
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        transition:
+          background-color 0.3s ease,
+          border-color 0.3s ease;
+      }
+
+      .header-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .logo-container {
+        display: flex;
+        align-items: center;
+        gap: 0.85rem;
+      }
+
+      .logo-icon {
+        width: 36px;
+        height: 36px;
+        background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 800;
+        font-size: 1.1rem;
+        transform: scale(1);
+        transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.4);
+      }
+
+      header:hover .logo-icon {
+        transform: scale(1.1);
+      }
+
+      h1 {
+        margin: 0;
+        font-size: 1.6rem;
+        font-weight: 800;
+        background: linear-gradient(to right, var(--text-title), var(--primary));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        letter-spacing: -0.5px;
+      }
+
+      .header-controls {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+      }
+
+      .demo-toggle-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-weight: 600;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+      }
+
+      .switch {
+        position: relative;
+        display: inline-block;
+        width: 44px;
+        height: 24px;
+      }
+
+      .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: var(--border-color);
+        transition: 0.3s;
+        border-radius: 24px;
+      }
+
+      .slider:before {
+        position: absolute;
+        content: "";
+        height: 18px;
+        width: 18px;
+        left: 3px;
+        bottom: 3px;
+        background-color: white;
+        transition: 0.3s;
+        border-radius: 50%;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      }
+
+      input:checked + .slider {
+        background-color: var(--primary);
+      }
+
+      input:checked + .slider:before {
+        transform: translateX(20px);
+      }
+
+      .theme-toggle {
+        background: transparent;
+        border: 1px solid var(--border-color);
+        color: var(--text-main);
+        padding: 0.5rem;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+        height: 42px;
+        width: 42px;
+      }
+
+      .theme-toggle:hover {
+        background: var(--bg-color);
+        transform: scale(1.05);
+        border-color: var(--primary);
+        color: var(--primary);
+      }
+
+      .theme-toggle svg {
+        width: 22px;
+        height: 22px;
+        fill: currentColor;
+      }
+
+      main {
+        padding: 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .config-panel {
+        background: var(--panel-bg);
+        padding: 1.5rem;
+        border-radius: 12px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        margin-bottom: 2rem;
+        display: flex;
+        gap: 1.5rem;
+        align-items: flex-end;
+        flex-wrap: wrap;
+        border: 1px solid var(--border-color);
+        transition:
+          background-color 0.3s ease,
+          border-color 0.3s ease;
+      }
+
+      .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        flex: 1;
+        min-width: 200px;
+      }
+
+      label {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--text-muted);
+      }
+
+      input {
+        padding: 0.5rem;
+        border: 1px solid var(--border-color);
+        border-radius: 6px;
+        font-size: 1rem;
+        outline: none;
+        background-color: var(--bg-color);
+        color: var(--text-main);
+        transition:
+          border-color 0.2s ease,
+          background-color 0.3s ease,
+          color 0.3s ease;
+      }
+
+      input:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+      }
+
+      button.primary-btn {
+        background-color: var(--primary);
+        color: white;
+        border: none;
+        padding: 0.6rem 1.2rem;
+        border-radius: 6px;
+        font-size: 1rem;
+        cursor: pointer;
+        font-weight: 600;
+        transition:
+          background-color 0.2s,
+          transform 0.1s;
+        height: 42px;
+      }
+
+      button.primary-btn:hover {
+        background-color: var(--primary-hover);
+      }
+
+      button.primary-btn:active {
+        transform: scale(0.98);
+      }
+
+      .dashboard {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 1.5rem;
+      }
+
+      .card {
+        background: var(--panel-bg);
+        padding: 1.5rem;
+        border-radius: 12px;
+        box-shadow:
+          0 4px 6px -1px rgba(0, 0, 0, 0.05),
+          0 2px 4px -1px rgba(0, 0, 0, 0.03);
+        border: 1px solid var(--border-color);
+        transition:
+          background-color 0.3s ease,
+          border-color 0.3s ease;
+      }
+
+      .card h2 {
+        margin-top: 0;
+        font-size: 1.125rem;
+        margin-bottom: 1rem;
+        color: var(--text-title);
+        font-weight: 700;
+        transition: color 0.3s ease;
+      }
+
+      .chart-container {
+        position: relative;
+        height: 300px;
+        width: 100%;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 1rem;
+      }
+
+      th,
+      td {
+        text-align: left;
+        padding: 0.85rem;
+        border-bottom: 1px solid var(--border-color);
+        transition: border-color 0.3s ease;
+      }
+
+      th {
+        background-color: var(--bg-color);
+        font-weight: 600;
+        color: var(--text-muted);
+        font-size: 0.875rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        transition:
+          background-color 0.3s ease,
+          color 0.3s ease;
+      }
+
+      td {
+        font-size: 0.95rem;
+      }
+
+      .error-message {
+        color: #ef4444;
+        background-color: #fef2f2;
+        padding: 1rem;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+        display: none;
+        border: 1px solid #f87171;
+        font-weight: 500;
+      }
+
+      .loading-modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: var(--modal-bg);
+        backdrop-filter: blur(8px) saturate(140%);
+        -webkit-backdrop-filter: blur(8px) saturate(140%);
+        z-index: 9999;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .elegant-loader {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-bottom: 2rem;
+      }
+
+      .track {
+        width: 120px;
+        height: 3px;
+        background: var(--border-color);
+        border-radius: 3px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .track::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 60%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, #3b82f6, #8b5cf6, transparent);
+        animation: flow 1.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+        border-radius: 3px;
+      }
+
+      .track:nth-child(2)::after {
+        animation-delay: 0.3s;
+        background: linear-gradient(90deg, transparent, #8b5cf6, #ec4899, transparent);
+      }
+
+      .track:nth-child(3)::after {
+        animation-delay: 0.6s;
+        background: linear-gradient(90deg, transparent, #10b981, #06b6d4, transparent);
+      }
+
+      @keyframes flow {
+        0% {
+          left: -100%;
+        }
+        100% {
+          left: 200%;
+        }
+      }
+
+      .loading-text {
+        font-size: 1.1rem;
+        font-weight: 600;
+        letter-spacing: 2px;
+        color: var(--text-title);
+        text-transform: uppercase;
+        animation: soft-pulse 2s ease-in-out infinite;
+      }
+
+      @keyframes soft-pulse {
+        0%,
+        100% {
+          opacity: 0.5;
+        }
+        50% {
+          opacity: 1;
+        }
+      }
+
+      .tabs {
+        display: flex;
+        gap: 1.5rem;
+        margin-bottom: 1.5rem;
+        border-bottom: 2px solid var(--border-color);
+        transition: border-color 0.3s ease;
+      }
+
+      .tab {
+        padding: 0.5rem 0.25rem;
+        cursor: pointer;
+        border-bottom: 2px solid transparent;
+        font-weight: 600;
+        color: var(--text-muted);
+        transition: all 0.2s ease;
+        margin-bottom: -2px;
+      }
+
+      .tab:hover {
+        color: var(--text-main);
+      }
+
+      .tab.active {
+        border-bottom-color: var(--primary);
+        color: var(--primary);
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="header-content">
+        <div class="logo-container">
+          <div class="logo-icon">AI</div>
+          <h1>Gateway Analytics</h1>
+        </div>
+        <div class="header-controls">
+          <div class="demo-toggle-wrapper">
+            <span>Demo Mode</span>
+            <label class="switch">
+              <input type="checkbox" id="demoModeSwitch" />
+              <span class="slider"></span>
+            </label>
+          </div>
+          <button id="themeToggle" class="theme-toggle" aria-label="Toggle Theme">
+            <!-- Sun Icon (Light Mode) -->
+            <svg id="sunIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path
+                d="M12 2.25a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM7.5 12a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM18.894 6.166a.75.75 0 00-1.06-1.06l-1.591 1.59a.75.75 0 101.06 1.061l1.591-1.59zM21.75 12a.75.75 0 01-.75.75h-2.25a.75.75 0 010-1.5H21a.75.75 0 01.75.75zM17.834 18.894a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 10-1.061 1.06l1.59 1.591zM12 18.75a.75.75 0 01.75.75V21a.75.75 0 01-1.5 0v-1.5a.75.75 0 01.75-.75zM6.166 18.894a.75.75 0 001.06-1.06l-1.591-1.59a.75.75 0 10-1.06 1.061l1.591 1.59zM4.5 12a.75.75 0 01-.75.75H1.5a.75.75 0 010-1.5h2.25a.75.75 0 01.75.75zM6.166 5.106a.75.75 0 00-1.06 1.06l1.59 1.591a.75.75 0 101.061-1.06l-1.59-1.591z"
+              />
+            </svg>
+            <!-- Moon Icon (Dark Mode) -->
+            <svg
+              id="moonIcon"
+              style="display: none"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M9.528 1.718a.75.75 0 01.162.819A8.97 8.97 0 009 6a9 9 0 009 9 8.97 8.97 0 003.463-.69.75.75 0 01.981.98 10.503 10.503 0 01-9.694 6.46c-5.799 0-10.5-4.701-10.5-10.5 0-4.368 2.667-8.112 6.46-9.694a.75.75 0 01.818.162z"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <div class="config-panel">
+        <div class="form-group">
+          <label for="projectInput">Google Cloud Project</label>
+          <input type="text" id="projectInput" placeholder="Loading..." />
+        </div>
+        <div class="form-group">
+          <label for="userFilter">Filter by User</label>
+          <select
+            id="userFilter"
+            style="
+              padding: 0.5rem;
+              border: 1px solid var(--border-color);
+              border-radius: 6px;
+              font-size: 1rem;
+              outline: none;
+              background-color: var(--bg-color);
+              color: var(--text-main);
+              transition:
+                border-color 0.2s ease,
+                background-color 0.3s ease,
+                color 0.3s ease;
+            "
+          >
+            <option value="all">All Users</option>
+          </select>
+        </div>
+        <button id="refreshBtn" class="primary-btn">Refresh Data</button>
+      </div>
+
+      <div id="errorMsg" class="error-message"></div>
+
+      <!-- Cool Fullscreen Loading Modal -->
+      <div id="loadingModal" class="loading-modal">
+        <div class="elegant-loader">
+          <div class="track"></div>
+          <div class="track"></div>
+          <div class="track"></div>
+        </div>
+        <div class="loading-text">Processing Analytics...</div>
+      </div>
+
+      <div class="tabs">
+        <div class="tab active" data-tab="app">Apps</div>
+        <div class="tab" data-tab="model">Models</div>
+        <div class="tab" data-tab="product">Products</div>
+      </div>
+
+      <div class="dashboard" id="dashboardContent">
+        <div class="card" style="grid-column: 1 / -1">
+          <h2>Total Response Tokens Over Time</h2>
+          <div class="chart-container">
+            <canvas id="timelineChart"></canvas>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Total Messages</h2>
+          <div class="chart-container">
+            <canvas id="messagesPieChart"></canvas>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Total Tokens</h2>
+          <div class="chart-container">
+            <canvas id="tokensPieChart"></canvas>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Total Request Tokens</h2>
+          <div class="chart-container">
+            <canvas id="reqTokensPieChart"></canvas>
+          </div>
+        </div>
+
+        <div class="card" style="grid-column: 1 / -1">
+          <h2>Message Count Over Time</h2>
+          <div class="chart-container">
+            <canvas id="messagesTimelineChart"></canvas>
+          </div>
+        </div>
+
+        <div class="card" style="grid-column: 1 / -1">
+          <h2>Avg Time To First Token (ms)</h2>
+          <div class="chart-container">
+            <canvas id="ttftChart"></canvas>
+          </div>
+        </div>
+
+        <div class="card" style="grid-column: 1 / -1">
+          <h2>Summary Data</h2>
+          <div style="overflow-x: auto">
+            <table id="summaryTable">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Messages</th>
+                  <th>Prompt Tokens</th>
+                  <th>Response Tokens</th>
+                  <th>Avg TTFT (ms)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Populated via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      // State
+      let currentData = null; // now a map of email -> {app: [], model: [], product: []}
+      let currentTab = "app";
+      let charts = {};
+      let eventSource = null;
+
+      // DOM Elements
+      const projectInput = document.getElementById("projectInput");
+      const userFilter = document.getElementById("userFilter");
+      const refreshBtn = document.getElementById("refreshBtn");
+      const errorMsg = document.getElementById("errorMsg");
+      const loadingModal = document.getElementById("loadingModal");
+      const dashboardContent = document.getElementById("dashboardContent");
+      const tabs = document.querySelectorAll(".tab");
+      const demoModeSwitch = document.getElementById("demoModeSwitch");
+
+      // Theme Elements
+      const themeToggle = document.getElementById("themeToggle");
+      const sunIcon = document.getElementById("sunIcon");
+      const moonIcon = document.getElementById("moonIcon");
+
+      // Check Demo Mode
+      const urlParams = new URLSearchParams(window.location.search);
+      const isDemoMode = urlParams.get("demoMode") === "true";
+
+      // Theme Initialization
+      function applyTheme(theme) {
+        document.documentElement.setAttribute("data-theme", theme);
+        localStorage.setItem("theme", theme);
+
+        if (theme === "dark") {
+          sunIcon.style.display = "none";
+          moonIcon.style.display = "block";
+          Chart.defaults.color = "#94a3b8"; // text-muted dark
+          Chart.defaults.borderColor = "#334155"; // border-color dark
+        } else {
+          sunIcon.style.display = "block";
+          moonIcon.style.display = "none";
+          Chart.defaults.color = "#64748b"; // text-muted light
+          Chart.defaults.borderColor = "#e2e8f0"; // border-color light
+        }
+
+        // Re-render charts to apply colors if data is loaded
+        if (currentData) {
+          updateCharts(processDataForTab(currentTab));
+        }
+      }
+
+      const savedTheme =
+        localStorage.getItem("theme") ||
+        (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      applyTheme(savedTheme);
+
+      themeToggle.addEventListener("click", () => {
+        const currentTheme = document.documentElement.getAttribute("data-theme");
+        applyTheme(currentTheme === "dark" ? "light" : "dark");
+      });
+
+      // Initialize
+      async function init() {
+        const urlProject = urlParams.get("project");
+        if (isDemoMode) {
+          projectInput.value = urlProject || "demo-project-123";
+          await fetchMockData();
+        } else if (urlProject) {
+          projectInput.value = urlProject;
+          connectSSE(urlProject);
+        } else {
+          try {
+            const res = await fetch("/api/config");
+            if (res.ok) {
+              const config = await res.json();
+              if (config.googleCloudProject) {
+                projectInput.value = config.googleCloudProject;
+              }
+            } else {
+              console.error("Failed to load config");
+            }
+          } catch (e) {
+            console.error("Could not load configuration:", e);
+          }
+          if (projectInput.value) {
+            connectSSE(projectInput.value);
+          }
+        }
+      }
+
+      async function fetchMockData() {
+        errorMsg.style.display = "none";
+        loadingModal.style.display = "flex";
+        try {
+          const res = await fetch("/mock-analytics.json");
+          let rawData = await res.json();
+          if (rawData.app && Array.isArray(rawData.app)) {
+            currentData = { "demo-user@example.com": rawData };
+          } else {
+            currentData = rawData;
+          }
+          updateUserFilterOptions();
+          updateView();
+        } catch (err) {
+          showError("Failed to fetch mock data: " + err.message);
+        } finally {
+          loadingModal.style.display = "none";
+        }
+      }
+
+      function connectSSE(projectId) {
+        if (!projectId) {
+          showError("Project ID is required");
+          return;
+        }
+
+        if (eventSource) {
+          eventSource.close();
+        }
+
+        errorMsg.style.display = "none";
+        loadingModal.style.display = "flex";
+
+        const url = `/api/projects/${encodeURIComponent(projectId)}/users/analytics/stream`;
+        eventSource = new EventSource(url);
+
+        eventSource.onmessage = function (event) {
+          try {
+            const data = JSON.parse(event.data);
+            if (Object.keys(data).length > 0) {
+              currentData = data;
+              updateUserFilterOptions();
+              updateView();
+              loadingModal.style.display = "none";
+            }
+          } catch (err) {
+            console.error("Failed to parse SSE data", err);
+          }
+        };
+
+        eventSource.onerror = function (err) {
+          console.error("SSE Error:", err);
+          if (!currentData) {
+            loadingModal.style.display = "none";
+            showError("Failed to connect to analytics stream.");
+            eventSource.close();
+          }
+        };
+      }
+
+      async function triggerRefresh() {
+        if (isDemoMode) {
+          fetchMockData();
+          return;
+        }
+
+        const projectId = projectInput.value;
+        if (!projectId) {
+          showError("Project ID is required");
+          return;
+        }
+
+        if (!eventSource || !eventSource.url.includes(encodeURIComponent(projectId))) {
+          connectSSE(projectId);
+        }
+
+        try {
+          loadingModal.style.display = "flex";
+          await fetch(`/api/projects/${encodeURIComponent(projectId)}/users/analytics`);
+          // Fallback timeout in case the SSE push happens faster than the UI renders, or data didn't change
+          setTimeout(() => {
+            loadingModal.style.display = "none";
+          }, 1500);
+        } catch (e) {
+          showError("Failed to trigger refresh.");
+          loadingModal.style.display = "none";
+        }
+      }
+
+      function updateUserFilterOptions() {
+        if (!currentData) return;
+        const users = Object.keys(currentData);
+        // keep the "all" option
+        userFilter.innerHTML = '<option value="all">All Users</option>';
+        users.forEach((user) => {
+          const opt = document.createElement("option");
+          opt.value = user;
+          opt.textContent = user;
+          userFilter.appendChild(opt);
+        });
+      }
+
+      function showError(msg) {
+        errorMsg.textContent = msg;
+        errorMsg.style.display = "block";
+      }
+
+      function processDataForTab(tabName) {
+        if (!currentData) return [];
+
+        const selectedUser = userFilter.value;
+        const dimensionsMap = new Map(); // Group by name across users
+
+        const processUserTab = (userData) => {
+          if (!userData || !userData[tabName]) return;
+          const environments = userData[tabName].flatMap((envObj) => envObj.environments || []);
+          const dimensions = environments.flatMap((env) => env.dimensions || []);
+
+          dimensions.forEach((dim) => {
+            const name = dim.name || dim.individualNames?.[0] || "Unknown";
+            const metrics = dim.metrics || [];
+
+            if (!dimensionsMap.has(name)) {
+              dimensionsMap.set(name, {
+                name,
+                totalMessages: 0,
+                totalPTokens: 0,
+                totalRTokens: 0,
+                totalTTFT: 0,
+                ttftCount: 0,
+                messageValues: [], // We might just concat for simplicity and group later in chart
+                rTokenValues: [],
+                ttftValues: [],
+              });
+            }
+            const current = dimensionsMap.get(name);
+
+            metrics.forEach((m) => {
+              if (m.name.includes("message_count")) {
+                const vals = m.values || [];
+                current.messageValues.push(...vals);
+                current.totalMessages += vals.reduce((sum, v) => sum + parseInt(v.value || 0), 0);
+              } else if (m.name.includes("prompt_token_count_v2")) {
+                const vals = m.values || [];
+                current.totalPTokens += vals.reduce((sum, v) => sum + parseInt(v.value || 0), 0);
+              } else if (m.name.includes("candidates_token_count_v2")) {
+                const vals = m.values || [];
+                current.rTokenValues.push(...vals);
+                current.totalRTokens += vals.reduce((sum, v) => sum + parseInt(v.value || 0), 0);
+              } else if (m.name.includes("time_to_first_token_v2")) {
+                const vals = m.values || [];
+                current.ttftValues.push(...vals);
+                current.totalTTFT += vals.reduce((sum, v) => sum + parseFloat(v.value || 0), 0);
+                current.ttftCount += vals.length;
+              }
+            });
+          });
+        };
+
+        if (selectedUser === "all") {
+          Object.values(currentData).forEach(processUserTab);
+        } else if (currentData[selectedUser]) {
+          processUserTab(currentData[selectedUser]);
+        }
+
+        return Array.from(dimensionsMap.values()).map((item) => {
+          item.avgTTFT = item.ttftCount > 0 ? item.totalTTFT / item.ttftCount : 0;
+          return item;
+        });
+      }
+
+      function getRandomColor(index) {
+        const colors = [
+          "#3b82f6",
+          "#ef4444",
+          "#10b981",
+          "#f59e0b",
+          "#8b5cf6",
+          "#ec4899",
+          "#06b6d4",
+          "#f97316",
+          "#14b8a6",
+          "#6366f1",
+        ];
+        return colors[index % colors.length];
+      }
+
+      function updateView() {
+        if (!currentData) return;
+
+        const processed = processDataForTab(currentTab);
+
+        // Update Table
+        const tbody = document.querySelector("#summaryTable tbody");
+        tbody.innerHTML = "";
+
+        if (processed.length === 0) {
+          tbody.innerHTML =
+            '<tr><td colspan="5" style="text-align: center;">No data available</td></tr>';
+        } else {
+          processed.forEach((item) => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+                        <td><strong>${item.name}</strong></td>
+                        <td>${item.totalMessages.toLocaleString()}</td>
+                        <td>${item.totalPTokens.toLocaleString()}</td>
+                        <td>${item.totalRTokens.toLocaleString()}</td>
+                        <td>${item.avgTTFT ? item.avgTTFT.toFixed(2) : "-"}</td>
+                    `;
+            tbody.appendChild(tr);
+          });
+        }
+
+        updateCharts(processed);
+      }
+
+      function updateCharts(data) {
+        // Destroy existing charts safely
+        Object.values(charts).forEach((c) => c && c.destroy());
+        charts = {};
+
+        if (!data || data.length === 0) return;
+
+        // Prepare Pie Charts Data
+        const labels = data.map((d) => d.name);
+        const messages = data.map((d) => d.totalMessages);
+        const tokens = data.map((d) => d.totalPTokens + d.totalRTokens);
+        const reqTokens = data.map((d) => d.totalPTokens);
+        const colors = data.map((_, i) => getRandomColor(i));
+
+        const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+        const gridColor = isDark ? "#334155" : "#e2e8f0";
+
+        // Messages Pie
+        const ctxMessages = document.getElementById("messagesPieChart").getContext("2d");
+        charts.messages = new Chart(ctxMessages, {
+          type: "doughnut",
+          data: {
+            labels,
+            datasets: [
+              {
+                data: messages,
+                backgroundColor: colors,
+                borderWidth: 2,
+                borderColor: isDark ? "#1e293b" : "#ffffff",
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { position: "right" },
+            },
+          },
+        });
+
+        // Tokens Pie
+        const ctxTokens = document.getElementById("tokensPieChart").getContext("2d");
+        charts.tokens = new Chart(ctxTokens, {
+          type: "doughnut",
+          data: {
+            labels,
+            datasets: [
+              {
+                data: tokens,
+                backgroundColor: colors,
+                borderWidth: 2,
+                borderColor: isDark ? "#1e293b" : "#ffffff",
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { position: "right" },
+            },
+          },
+        });
+
+        // Request Tokens Pie
+        const ctxReqTokens = document.getElementById("reqTokensPieChart").getContext("2d");
+        charts.reqTokens = new Chart(ctxReqTokens, {
+          type: "doughnut",
+          data: {
+            labels,
+            datasets: [
+              {
+                data: reqTokens,
+                backgroundColor: colors,
+                borderWidth: 2,
+                borderColor: isDark ? "#1e293b" : "#ffffff",
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { position: "right" },
+            },
+          },
+        });
+
+        // Timeline Chart (Total Response Tokens over time)
+        const dateMap = {}; // timestamp -> { name: value }
+        data.forEach((d) => {
+          if (d.rTokenValues) {
+            d.rTokenValues.forEach((v) => {
+              if (!dateMap[v.timestamp]) dateMap[v.timestamp] = {};
+              dateMap[v.timestamp][d.name] = parseInt(v.value);
+            });
+          }
+        });
+
+        const timestamps = Object.keys(dateMap).sort((a, b) => parseInt(a) - parseInt(b));
+        const timeLabels = timestamps.map((ts) => new Date(parseInt(ts)).toLocaleDateString());
+
+        const datasets = data.map((d, i) => {
+          const dVals = timestamps.map((ts) => dateMap[ts][d.name] || 0);
+          return {
+            label: d.name,
+            data: dVals,
+            borderColor: getRandomColor(i),
+            backgroundColor: getRandomColor(i),
+            tension: 0.4,
+            borderWidth: 3,
+            pointRadius: 3,
+            fill: false,
+          };
+        });
+
+        const ctxTimeline = document.getElementById("timelineChart").getContext("2d");
+        charts.timeline = new Chart(ctxTimeline, {
+          type: "line",
+          data: {
+            labels: timeLabels,
+            datasets,
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: {
+              mode: "index",
+              intersect: false,
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                grid: { color: gridColor },
+              },
+              x: {
+                grid: { display: false },
+              },
+            },
+          },
+        });
+
+        // Timeline Chart (Messages over time)
+        const msgDateMap = {}; // timestamp -> { name: value }
+        data.forEach((d) => {
+          if (d.messageValues) {
+            d.messageValues.forEach((v) => {
+              if (!msgDateMap[v.timestamp]) msgDateMap[v.timestamp] = {};
+              msgDateMap[v.timestamp][d.name] = parseInt(v.value);
+            });
+          }
+        });
+
+        const msgTimestamps = Object.keys(msgDateMap).sort((a, b) => parseInt(a) - parseInt(b));
+        const msgTimeLabels = msgTimestamps.map((ts) =>
+          new Date(parseInt(ts)).toLocaleDateString(),
+        );
+
+        const msgDatasets = data.map((d, i) => {
+          const dVals = msgTimestamps.map((ts) => msgDateMap[ts][d.name] || 0);
+          return {
+            label: d.name,
+            data: dVals,
+            borderColor: getRandomColor(i),
+            backgroundColor: getRandomColor(i),
+            tension: 0.4,
+            borderWidth: 3,
+            pointRadius: 3,
+            fill: false,
+          };
+        });
+
+        const ctxMsgTimeline = document.getElementById("messagesTimelineChart").getContext("2d");
+        charts.msgTimeline = new Chart(ctxMsgTimeline, {
+          type: "line",
+          data: {
+            labels: msgTimeLabels,
+            datasets: msgDatasets,
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: {
+              mode: "index",
+              intersect: false,
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                grid: { color: gridColor },
+              },
+              x: {
+                grid: { display: false },
+              },
+            },
+          },
+        });
+
+        // TTFT Chart
+        const ttftDateMap = {}; // timestamp -> { name: value }
+        data.forEach((d) => {
+          if (d.ttftValues) {
+            d.ttftValues.forEach((v) => {
+              if (!ttftDateMap[v.timestamp]) ttftDateMap[v.timestamp] = {};
+              ttftDateMap[v.timestamp][d.name] = parseFloat(v.value);
+            });
+          }
+        });
+
+        const ttftTimestamps = Object.keys(ttftDateMap).sort((a, b) => parseInt(a) - parseInt(b));
+        const ttftLabels = ttftTimestamps.map((ts) => new Date(parseInt(ts)).toLocaleDateString());
+
+        const ttftDatasets = data.map((d, i) => {
+          const dVals = ttftTimestamps.map((ts) => ttftDateMap[ts][d.name] || 0);
+          return {
+            label: d.name,
+            data: dVals,
+            borderColor: getRandomColor(i),
+            backgroundColor: getRandomColor(i),
+            tension: 0.4,
+            borderWidth: 3,
+            pointRadius: 3,
+            fill: false,
+          };
+        });
+
+        const ctxTtft = document.getElementById("ttftChart").getContext("2d");
+        charts.ttft = new Chart(ctxTtft, {
+          type: "line",
+          data: {
+            labels: ttftLabels,
+            datasets: ttftDatasets,
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: {
+              mode: "index",
+              intersect: false,
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                grid: { color: gridColor },
+              },
+              x: {
+                grid: { display: false },
+              },
+            },
+          },
+        });
+      }
+
+      // Event Listeners
+      refreshBtn.addEventListener("click", triggerRefresh);
+      projectInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          triggerRefresh();
+        }
+      });
+      userFilter.addEventListener("change", updateView);
+
+      demoModeSwitch.addEventListener("change", (e) => {
+        const url = new URL(window.location.href);
+        if (e.target.checked) {
+          url.searchParams.set("demoMode", "true");
+        } else {
+          url.searchParams.delete("demoMode");
+        }
+        window.location.href = url.toString();
+      });
+
+      tabs.forEach((tab) => {
+        tab.addEventListener("click", (e) => {
+          tabs.forEach((t) => t.classList.remove("active"));
+          e.target.classList.add("active");
+          currentTab = e.target.getAttribute("data-tab");
+          updateView();
+        });
+      });
+
+      // Run
+      demoModeSwitch.checked = isDemoMode;
+      init();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,5799 @@
+{
+  "app": [
+    {
+      "environments": [
+        {
+          "dimensions": [
+            {
+              "individualNames": [
+                "GeminiApp"
+              ],
+              "metrics": [
+                {
+                  "name": "sum(message_count)",
+                  "values": [
+                    {
+                      "timestamp": 1778976000000,
+                      "value": "45"
+                    },
+                    {
+                      "timestamp": 1778889600000,
+                      "value": "16"
+                    },
+                    {
+                      "timestamp": 1778803200000,
+                      "value": "16"
+                    },
+                    {
+                      "timestamp": 1778716800000,
+                      "value": "16"
+                    },
+                    {
+                      "timestamp": 1778630400000,
+                      "value": "16"
+                    },
+                    {
+                      "timestamp": 1778544000000,
+                      "value": "16"
+                    },
+                    {
+                      "timestamp": 1778457600000,
+                      "value": "16"
+                    },
+                    {
+                      "timestamp": 1778371200000,
+                      "value": "16"
+                    },
+                    {
+                      "timestamp": 1778284800000,
+                      "value": "14"
+                    },
+                    {
+                      "timestamp": 1778198400000,
+                      "value": "42"
+                    },
+                    {
+                      "timestamp": 1778112000000,
+                      "value": "16"
+                    },
+                    {
+                      "timestamp": 1778025600000,
+                      "value": "76"
+                    },
+                    {
+                      "timestamp": 1777939200000,
+                      "value": "27"
+                    },
+                    {
+                      "timestamp": 1777852800000,
+                      "value": "104"
+                    },
+                    {
+                      "timestamp": 1777766400000,
+                      "value": "16"
+                    },
+                    {
+                      "timestamp": 1777680000000,
+                      "value": "16"
+                    },
+                    {
+                      "timestamp": 1777593600000,
+                      "value": "16"
+                    },
+                    {
+                      "timestamp": 1777507200000,
+                      "value": "16"
+                    },
+                    {
+                      "timestamp": 1777420800000,
+                      "value": "14"
+                    },
+                    {
+                      "timestamp": 1777334400000,
+                      "value": "18"
+                    },
+                    {
+                      "timestamp": 1777248000000,
+                      "value": "24"
+                    },
+                    {
+                      "timestamp": 1777161600000,
+                      "value": "16"
+                    },
+                    {
+                      "timestamp": 1777075200000,
+                      "value": "16"
+                    },
+                    {
+                      "timestamp": 1776988800000,
+                      "value": "16"
+                    },
+                    {
+                      "timestamp": 1776902400000,
+                      "value": "19"
+                    },
+                    {
+                      "timestamp": 1776816000000,
+                      "value": "27"
+                    },
+                    {
+                      "timestamp": 1776729600000,
+                      "value": "43"
+                    },
+                    {
+                      "timestamp": 1776643200000,
+                      "value": "4"
+                    },
+                    {
+                      "timestamp": 1776470400000,
+                      "value": "64"
+                    },
+                    {
+                      "timestamp": 1776384000000,
+                      "value": "7"
+                    }
+                  ]
+                },
+                {
+                  "name": "sum(dc_ai_prompt_token_count)",
+                  "values": [
+                    {
+                      "timestamp": 1778976000000,
+                      "value": "582163"
+                    },
+                    {
+                      "timestamp": 1778889600000,
+                      "value": "144"
+                    },
+                    {
+                      "timestamp": 1778803200000,
+                      "value": "144"
+                    },
+                    {
+                      "timestamp": 1778716800000,
+                      "value": "144"
+                    },
+                    {
+                      "timestamp": 1778630400000,
+                      "value": "144"
+                    },
+                    {
+                      "timestamp": 1778544000000,
+                      "value": "144"
+                    },
+                    {
+                      "timestamp": 1778457600000,
+                      "value": "144"
+                    },
+                    {
+                      "timestamp": 1778371200000,
+                      "value": "144"
+                    },
+                    {
+                      "timestamp": 1778284800000,
+                      "value": "108"
+                    },
+                    {
+                      "timestamp": 1778198400000,
+                      "value": "149642"
+                    },
+                    {
+                      "timestamp": 1778112000000,
+                      "value": "144"
+                    },
+                    {
+                      "timestamp": 1778025600000,
+                      "value": "352321"
+                    },
+                    {
+                      "timestamp": 1777939200000,
+                      "value": "61141"
+                    },
+                    {
+                      "timestamp": 1777852800000,
+                      "value": "1262236"
+                    },
+                    {
+                      "timestamp": 1777766400000,
+                      "value": "144"
+                    },
+                    {
+                      "timestamp": 1777680000000,
+                      "value": "144"
+                    },
+                    {
+                      "timestamp": 1777593600000,
+                      "value": "144"
+                    },
+                    {
+                      "timestamp": 1777507200000,
+                      "value": "144"
+                    },
+                    {
+                      "timestamp": 1777420800000,
+                      "value": "126"
+                    },
+                    {
+                      "timestamp": 1777334400000,
+                      "value": "114"
+                    },
+                    {
+                      "timestamp": 1777248000000,
+                      "value": "72"
+                    },
+                    {
+                      "timestamp": 1777161600000,
+                      "value": "48"
+                    },
+                    {
+                      "timestamp": 1777075200000,
+                      "value": "48"
+                    },
+                    {
+                      "timestamp": 1776988800000,
+                      "value": "48"
+                    },
+                    {
+                      "timestamp": 1776902400000,
+                      "value": "64"
+                    },
+                    {
+                      "timestamp": 1776816000000,
+                      "value": "58488"
+                    },
+                    {
+                      "timestamp": 1776729600000,
+                      "value": "301581"
+                    },
+                    {
+                      "timestamp": 1776643200000,
+                      "value": "8053"
+                    },
+                    {
+                      "timestamp": 1776470400000,
+                      "value": "189989"
+                    },
+                    {
+                      "timestamp": 1776384000000,
+                      "value": "21872"
+                    }
+                  ]
+                },
+                {
+                  "name": "sum(dc_ai_response_token_count)",
+                  "values": [
+                    {
+                      "timestamp": 1778976000000,
+                      "value": "16851"
+                    },
+                    {
+                      "timestamp": 1778889600000,
+                      "value": "21616"
+                    },
+                    {
+                      "timestamp": 1778803200000,
+                      "value": "20679"
+                    },
+                    {
+                      "timestamp": 1778716800000,
+                      "value": "21372"
+                    },
+                    {
+                      "timestamp": 1778630400000,
+                      "value": "22102"
+                    },
+                    {
+                      "timestamp": 1778544000000,
+                      "value": "21659"
+                    },
+                    {
+                      "timestamp": 1778457600000,
+                      "value": "21426"
+                    },
+                    {
+                      "timestamp": 1778371200000,
+                      "value": "21804"
+                    },
+                    {
+                      "timestamp": 1778284800000,
+                      "value": "15196"
+                    },
+                    {
+                      "timestamp": 1778198400000,
+                      "value": "27529"
+                    },
+                    {
+                      "timestamp": 1778112000000,
+                      "value": "20866"
+                    },
+                    {
+                      "timestamp": 1778025600000,
+                      "value": "25511"
+                    },
+                    {
+                      "timestamp": 1777939200000,
+                      "value": "11931"
+                    },
+                    {
+                      "timestamp": 1777852800000,
+                      "value": "38715"
+                    },
+                    {
+                      "timestamp": 1777766400000,
+                      "value": "22328"
+                    },
+                    {
+                      "timestamp": 1777680000000,
+                      "value": "20887"
+                    },
+                    {
+                      "timestamp": 1777593600000,
+                      "value": "22259"
+                    },
+                    {
+                      "timestamp": 1777507200000,
+                      "value": "21120"
+                    },
+                    {
+                      "timestamp": 1777420800000,
+                      "value": "18538"
+                    },
+                    {
+                      "timestamp": 1777334400000,
+                      "value": "16144"
+                    },
+                    {
+                      "timestamp": 1777248000000,
+                      "value": "7369"
+                    },
+                    {
+                      "timestamp": 1777161600000,
+                      "value": "4633"
+                    },
+                    {
+                      "timestamp": 1777075200000,
+                      "value": "4961"
+                    },
+                    {
+                      "timestamp": 1776988800000,
+                      "value": "4837"
+                    },
+                    {
+                      "timestamp": 1776902400000,
+                      "value": "6551"
+                    },
+                    {
+                      "timestamp": 1776816000000,
+                      "value": "4352"
+                    },
+                    {
+                      "timestamp": 1776729600000,
+                      "value": "2354"
+                    },
+                    {
+                      "timestamp": 1776643200000,
+                      "value": "128"
+                    },
+                    {
+                      "timestamp": 1776470400000,
+                      "value": "3404"
+                    },
+                    {
+                      "timestamp": 1776384000000,
+                      "value": "196"
+                    }
+                  ]
+                },
+                {
+                  "name": "avg(dc_ai_time_first_token)",
+                  "values": [
+                    {
+                      "timestamp": 1778976000000,
+                      "value": "6076.818181818182"
+                    },
+                    {
+                      "timestamp": 1778889600000,
+                      "value": "12264.375"
+                    },
+                    {
+                      "timestamp": 1778803200000,
+                      "value": "11294.250000000002"
+                    },
+                    {
+                      "timestamp": 1778716800000,
+                      "value": "11553.750000000002"
+                    },
+                    {
+                      "timestamp": 1778630400000,
+                      "value": "12102.875"
+                    },
+                    {
+                      "timestamp": 1778544000000,
+                      "value": "11534.750000000002"
+                    },
+                    {
+                      "timestamp": 1778457600000,
+                      "value": "11826.25"
+                    },
+                    {
+                      "timestamp": 1778371200000,
+                      "value": "11703.499999999998"
+                    },
+                    {
+                      "timestamp": 1778284800000,
+                      "value": "10916.0"
+                    },
+                    {
+                      "timestamp": 1778198400000,
+                      "value": "6560.666666666667"
+                    },
+                    {
+                      "timestamp": 1778112000000,
+                      "value": "11628.25"
+                    },
+                    {
+                      "timestamp": 1778025600000,
+                      "value": "4609.964285714286"
+                    },
+                    {
+                      "timestamp": 1777939200000,
+                      "value": "34192.18181818182"
+                    },
+                    {
+                      "timestamp": 1777852800000,
+                      "value": "9287.9"
+                    },
+                    {
+                      "timestamp": 1777766400000,
+                      "value": "11799.999999999998"
+                    },
+                    {
+                      "timestamp": 1777680000000,
+                      "value": "11775.25"
+                    },
+                    {
+                      "timestamp": 1777593600000,
+                      "value": "11997.0"
+                    },
+                    {
+                      "timestamp": 1777507200000,
+                      "value": "11951.375"
+                    },
+                    {
+                      "timestamp": 1777420800000,
+                      "value": "11513.57142857143"
+                    },
+                    {
+                      "timestamp": 1777334400000,
+                      "value": "8092.555555555556"
+                    },
+                    {
+                      "timestamp": 1777248000000,
+                      "value": "3322.0833333333335"
+                    },
+                    {
+                      "timestamp": 1777161600000,
+                      "value": "3163.5"
+                    },
+                    {
+                      "timestamp": 1777075200000,
+                      "value": "3534.0"
+                    },
+                    {
+                      "timestamp": 1776988800000,
+                      "value": "3373.625"
+                    },
+                    {
+                      "timestamp": 1776902400000,
+                      "value": "2896.0"
+                    },
+                    {
+                      "timestamp": 1776816000000,
+                      "value": "2091.7"
+                    },
+                    {
+                      "timestamp": 1776729600000,
+                      "value": "2157.3125"
+                    },
+                    {
+                      "timestamp": 1776643200000,
+                      "value": "1915.5"
+                    },
+                    {
+                      "timestamp": 1776470400000,
+                      "value": "2649.9999999999995"
+                    },
+                    {
+                      "timestamp": 1776384000000,
+                      "value": "2400.3333333333335"
+                    }
+                  ]
+                }
+              ],
+              "name": "GeminiApp"
+            },
+            {
+              "individualNames": [
+                "QwenApp"
+              ],
+              "metrics": [
+                {
+                  "name": "sum(message_count)",
+                  "values": [
+                    {
+                      "timestamp": 1778976000000,
+                      "value": "2"
+                    },
+                    {
+                      "timestamp": 1778889600000,
+                      "value": "16"
+                    },
+                    {
+                      "timestamp": 1778803200000,
+                      "value": "16"
+                    },
+                    {
+                      "timestamp": 1778716800000,
+                      "value": "16"
+                    },
+                    {
+                      "timestamp": 1778630400000,
+                      "value": "15"
+                    },
+                    {
+                      "timestamp": 1778544000000,
+                      "value": "15"
+                    },
+                    {
+                      "timestamp": 1778457600000,
+                      "value": "15"
+                    },
+                    {
+                      "timestamp": 1778371200000,
+                      "value": "15"
+                    },
+                    {
+                      "timestamp": 1778284800000,
+                      "value": "16"
+                    },
+                    {
+                      "timestamp": 1778198400000,
+                      "value": "16"
+                    },
+                    {
+                      "timestamp": 1778112000000,
+                      "value": "15"
+                    },
+                    {
+                      "timestamp": 1778025600000,
+                      "value": "16"
+                    },
+                    {
+                      "timestamp": 1777939200000,
+                      "value": "13"
+                    },
+                    {
+                      "timestamp": 1777852800000,
+                      "value": "15"
+                    },
+                    {
+                      "timestamp": 1777766400000,
+                      "value": "15"
+                    },
+                    {
+                      "timestamp": 1777680000000,
+                      "value": "14"
+                    },
+                    {
+                      "timestamp": 1777593600000,
+                      "value": "12"
+                    },
+                    {
+                      "timestamp": 1777507200000,
+                      "value": "16"
+                    },
+                    {
+                      "timestamp": 1777420800000,
+                      "value": "14"
+                    },
+                    {
+                      "timestamp": 1777334400000,
+                      "value": "20"
+                    },
+                    {
+                      "timestamp": 1777248000000,
+                      "value": "29"
+                    },
+                    {
+                      "timestamp": 1777161600000,
+                      "value": "15"
+                    },
+                    {
+                      "timestamp": 1777075200000,
+                      "value": "8"
+                    },
+                    {
+                      "timestamp": 1776988800000,
+                      "value": "8"
+                    },
+                    {
+                      "timestamp": 1776902400000,
+                      "value": "11"
+                    }
+                  ]
+                },
+                {
+                  "name": "sum(dc_ai_prompt_token_count)",
+                  "values": [
+                    {
+                      "timestamp": 1778976000000,
+                      "value": "18"
+                    },
+                    {
+                      "timestamp": 1778889600000,
+                      "value": "144"
+                    },
+                    {
+                      "timestamp": 1778803200000,
+                      "value": "144"
+                    },
+                    {
+                      "timestamp": 1778716800000,
+                      "value": "144"
+                    },
+                    {
+                      "timestamp": 1778630400000,
+                      "value": "126"
+                    },
+                    {
+                      "timestamp": 1778544000000,
+                      "value": "116"
+                    },
+                    {
+                      "timestamp": 1778457600000,
+                      "value": "126"
+                    },
+                    {
+                      "timestamp": 1778371200000,
+                      "value": "126"
+                    },
+                    {
+                      "timestamp": 1778284800000,
+                      "value": "144"
+                    },
+                    {
+                      "timestamp": 1778198400000,
+                      "value": "144"
+                    },
+                    {
+                      "timestamp": 1778112000000,
+                      "value": "126"
+                    },
+                    {
+                      "timestamp": 1778025600000,
+                      "value": "144"
+                    },
+                    {
+                      "timestamp": 1777939200000,
+                      "value": "90"
+                    },
+                    {
+                      "timestamp": 1777852800000,
+                      "value": "116"
+                    },
+                    {
+                      "timestamp": 1777766400000,
+                      "value": "126"
+                    },
+                    {
+                      "timestamp": 1777680000000,
+                      "value": "108"
+                    },
+                    {
+                      "timestamp": 1777593600000,
+                      "value": "90"
+                    },
+                    {
+                      "timestamp": 1777507200000,
+                      "value": "144"
+                    },
+                    {
+                      "timestamp": 1777420800000,
+                      "value": "126"
+                    },
+                    {
+                      "timestamp": 1777334400000,
+                      "value": "170"
+                    },
+                    {
+                      "timestamp": 1777248000000,
+                      "value": "208"
+                    },
+                    {
+                      "timestamp": 1777161600000,
+                      "value": "32"
+                    },
+                    {
+                      "timestamp": 1777075200000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1776988800000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1776902400000,
+                      "value": "0"
+                    }
+                  ]
+                },
+                {
+                  "name": "sum(dc_ai_response_token_count)",
+                  "values": [
+                    {
+                      "timestamp": 1778976000000,
+                      "value": "3553"
+                    },
+                    {
+                      "timestamp": 1778889600000,
+                      "value": "28497"
+                    },
+                    {
+                      "timestamp": 1778803200000,
+                      "value": "27034"
+                    },
+                    {
+                      "timestamp": 1778716800000,
+                      "value": "27023"
+                    },
+                    {
+                      "timestamp": 1778630400000,
+                      "value": "23623"
+                    },
+                    {
+                      "timestamp": 1778544000000,
+                      "value": "23321"
+                    },
+                    {
+                      "timestamp": 1778457600000,
+                      "value": "25706"
+                    },
+                    {
+                      "timestamp": 1778371200000,
+                      "value": "25137"
+                    },
+                    {
+                      "timestamp": 1778284800000,
+                      "value": "27909"
+                    },
+                    {
+                      "timestamp": 1778198400000,
+                      "value": "29990"
+                    },
+                    {
+                      "timestamp": 1778112000000,
+                      "value": "25476"
+                    },
+                    {
+                      "timestamp": 1778025600000,
+                      "value": "27058"
+                    },
+                    {
+                      "timestamp": 1777939200000,
+                      "value": "15943"
+                    },
+                    {
+                      "timestamp": 1777852800000,
+                      "value": "22473"
+                    },
+                    {
+                      "timestamp": 1777766400000,
+                      "value": "24073"
+                    },
+                    {
+                      "timestamp": 1777680000000,
+                      "value": "22134"
+                    },
+                    {
+                      "timestamp": 1777593600000,
+                      "value": "17285"
+                    },
+                    {
+                      "timestamp": 1777507200000,
+                      "value": "31806"
+                    },
+                    {
+                      "timestamp": 1777420800000,
+                      "value": "26987"
+                    },
+                    {
+                      "timestamp": 1777334400000,
+                      "value": "25855"
+                    },
+                    {
+                      "timestamp": 1777248000000,
+                      "value": "21863"
+                    },
+                    {
+                      "timestamp": 1777161600000,
+                      "value": "3729"
+                    },
+                    {
+                      "timestamp": 1777075200000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1776988800000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1776902400000,
+                      "value": "0"
+                    }
+                  ]
+                },
+                {
+                  "name": "avg(dc_ai_time_first_token)",
+                  "values": [
+                    {
+                      "timestamp": 1778976000000,
+                      "value": "18142.0"
+                    },
+                    {
+                      "timestamp": 1778889600000,
+                      "value": "21502.75"
+                    },
+                    {
+                      "timestamp": 1778803200000,
+                      "value": "27103.875"
+                    },
+                    {
+                      "timestamp": 1778716800000,
+                      "value": "22233.125000000004"
+                    },
+                    {
+                      "timestamp": 1778630400000,
+                      "value": "20399.571428571428"
+                    },
+                    {
+                      "timestamp": 1778544000000,
+                      "value": "19096.714285714286"
+                    },
+                    {
+                      "timestamp": 1778457600000,
+                      "value": "22946.714285714286"
+                    },
+                    {
+                      "timestamp": 1778371200000,
+                      "value": "23863.42857142857"
+                    },
+                    {
+                      "timestamp": 1778284800000,
+                      "value": "24621.875"
+                    },
+                    {
+                      "timestamp": 1778198400000,
+                      "value": "29981.625"
+                    },
+                    {
+                      "timestamp": 1778112000000,
+                      "value": "20489.14285714286"
+                    },
+                    {
+                      "timestamp": 1778025600000,
+                      "value": "21506.875"
+                    },
+                    {
+                      "timestamp": 1777939200000,
+                      "value": "17020.2"
+                    },
+                    {
+                      "timestamp": 1777852800000,
+                      "value": "38570.0"
+                    },
+                    {
+                      "timestamp": 1777766400000,
+                      "value": "19565.42857142857"
+                    },
+                    {
+                      "timestamp": 1777680000000,
+                      "value": "21718.666666666668"
+                    },
+                    {
+                      "timestamp": 1777593600000,
+                      "value": "20222.8"
+                    },
+                    {
+                      "timestamp": 1777507200000,
+                      "value": "24676.75"
+                    },
+                    {
+                      "timestamp": 1777420800000,
+                      "value": "20307.0"
+                    },
+                    {
+                      "timestamp": 1777334400000,
+                      "value": "12775.2"
+                    },
+                    {
+                      "timestamp": 1777248000000,
+                      "value": "7045.153846153847"
+                    },
+                    {
+                      "timestamp": 1777161600000,
+                      "value": "13036.5"
+                    },
+                    {
+                      "timestamp": 1777075200000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1776988800000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1776902400000,
+                      "value": "0"
+                    }
+                  ]
+                }
+              ],
+              "name": "QwenApp"
+            },
+            {
+              "individualNames": [
+                "ClaudeApp"
+              ],
+              "metrics": [
+                {
+                  "name": "sum(message_count)",
+                  "values": [
+                    {
+                      "timestamp": 1778976000000,
+                      "value": "2"
+                    },
+                    {
+                      "timestamp": 1778889600000,
+                      "value": "16"
+                    },
+                    {
+                      "timestamp": 1778803200000,
+                      "value": "16"
+                    },
+                    {
+                      "timestamp": 1778716800000,
+                      "value": "16"
+                    },
+                    {
+                      "timestamp": 1778630400000,
+                      "value": "20"
+                    },
+                    {
+                      "timestamp": 1778544000000,
+                      "value": "16"
+                    },
+                    {
+                      "timestamp": 1778457600000,
+                      "value": "16"
+                    },
+                    {
+                      "timestamp": 1778371200000,
+                      "value": "16"
+                    },
+                    {
+                      "timestamp": 1778284800000,
+                      "value": "16"
+                    },
+                    {
+                      "timestamp": 1778198400000,
+                      "value": "54"
+                    },
+                    {
+                      "timestamp": 1778112000000,
+                      "value": "16"
+                    },
+                    {
+                      "timestamp": 1778025600000,
+                      "value": "30"
+                    },
+                    {
+                      "timestamp": 1777939200000,
+                      "value": "65"
+                    },
+                    {
+                      "timestamp": 1777852800000,
+                      "value": "396"
+                    },
+                    {
+                      "timestamp": 1777766400000,
+                      "value": "16"
+                    },
+                    {
+                      "timestamp": 1777680000000,
+                      "value": "16"
+                    },
+                    {
+                      "timestamp": 1777593600000,
+                      "value": "16"
+                    },
+                    {
+                      "timestamp": 1777507200000,
+                      "value": "16"
+                    },
+                    {
+                      "timestamp": 1777420800000,
+                      "value": "14"
+                    },
+                    {
+                      "timestamp": 1777334400000,
+                      "value": "18"
+                    },
+                    {
+                      "timestamp": 1777248000000,
+                      "value": "14"
+                    },
+                    {
+                      "timestamp": 1776988800000,
+                      "value": "28"
+                    },
+                    {
+                      "timestamp": 1776816000000,
+                      "value": "144"
+                    },
+                    {
+                      "timestamp": 1776729600000,
+                      "value": "326"
+                    },
+                    {
+                      "timestamp": 1776643200000,
+                      "value": "35"
+                    },
+                    {
+                      "timestamp": 1776384000000,
+                      "value": "7"
+                    }
+                  ]
+                },
+                {
+                  "name": "sum(dc_ai_prompt_token_count)",
+                  "values": [
+                    {
+                      "timestamp": 1778976000000,
+                      "value": "13"
+                    },
+                    {
+                      "timestamp": 1778889600000,
+                      "value": "104"
+                    },
+                    {
+                      "timestamp": 1778803200000,
+                      "value": "104"
+                    },
+                    {
+                      "timestamp": 1778716800000,
+                      "value": "104"
+                    },
+                    {
+                      "timestamp": 1778630400000,
+                      "value": "307"
+                    },
+                    {
+                      "timestamp": 1778544000000,
+                      "value": "104"
+                    },
+                    {
+                      "timestamp": 1778457600000,
+                      "value": "104"
+                    },
+                    {
+                      "timestamp": 1778371200000,
+                      "value": "104"
+                    },
+                    {
+                      "timestamp": 1778284800000,
+                      "value": "104"
+                    },
+                    {
+                      "timestamp": 1778198400000,
+                      "value": "1523"
+                    },
+                    {
+                      "timestamp": 1778112000000,
+                      "value": "104"
+                    },
+                    {
+                      "timestamp": 1778025600000,
+                      "value": "1351"
+                    },
+                    {
+                      "timestamp": 1777939200000,
+                      "value": "3038"
+                    },
+                    {
+                      "timestamp": 1777852800000,
+                      "value": "18158"
+                    },
+                    {
+                      "timestamp": 1777766400000,
+                      "value": "104"
+                    },
+                    {
+                      "timestamp": 1777680000000,
+                      "value": "104"
+                    },
+                    {
+                      "timestamp": 1777593600000,
+                      "value": "104"
+                    },
+                    {
+                      "timestamp": 1777507200000,
+                      "value": "104"
+                    },
+                    {
+                      "timestamp": 1777420800000,
+                      "value": "91"
+                    },
+                    {
+                      "timestamp": 1777334400000,
+                      "value": "117"
+                    },
+                    {
+                      "timestamp": 1777248000000,
+                      "value": "91"
+                    },
+                    {
+                      "timestamp": 1776988800000,
+                      "value": "21"
+                    },
+                    {
+                      "timestamp": 1776816000000,
+                      "value": "11605"
+                    },
+                    {
+                      "timestamp": 1776729600000,
+                      "value": "2496"
+                    },
+                    {
+                      "timestamp": 1776643200000,
+                      "value": "5410"
+                    },
+                    {
+                      "timestamp": 1776384000000,
+                      "value": "6"
+                    }
+                  ]
+                },
+                {
+                  "name": "sum(dc_ai_response_token_count)",
+                  "values": [
+                    {
+                      "timestamp": 1778976000000,
+                      "value": "310"
+                    },
+                    {
+                      "timestamp": 1778889600000,
+                      "value": "2353"
+                    },
+                    {
+                      "timestamp": 1778803200000,
+                      "value": "2374"
+                    },
+                    {
+                      "timestamp": 1778716800000,
+                      "value": "2380"
+                    },
+                    {
+                      "timestamp": 1778630400000,
+                      "value": "2436"
+                    },
+                    {
+                      "timestamp": 1778544000000,
+                      "value": "2336"
+                    },
+                    {
+                      "timestamp": 1778457600000,
+                      "value": "2291"
+                    },
+                    {
+                      "timestamp": 1778371200000,
+                      "value": "2280"
+                    },
+                    {
+                      "timestamp": 1778284800000,
+                      "value": "2314"
+                    },
+                    {
+                      "timestamp": 1778198400000,
+                      "value": "50047"
+                    },
+                    {
+                      "timestamp": 1778112000000,
+                      "value": "2375"
+                    },
+                    {
+                      "timestamp": 1778025600000,
+                      "value": "3636"
+                    },
+                    {
+                      "timestamp": 1777939200000,
+                      "value": "7963"
+                    },
+                    {
+                      "timestamp": 1777852800000,
+                      "value": "299004"
+                    },
+                    {
+                      "timestamp": 1777766400000,
+                      "value": "2295"
+                    },
+                    {
+                      "timestamp": 1777680000000,
+                      "value": "2343"
+                    },
+                    {
+                      "timestamp": 1777593600000,
+                      "value": "2343"
+                    },
+                    {
+                      "timestamp": 1777507200000,
+                      "value": "2296"
+                    },
+                    {
+                      "timestamp": 1777420800000,
+                      "value": "2044"
+                    },
+                    {
+                      "timestamp": 1777334400000,
+                      "value": "2616"
+                    },
+                    {
+                      "timestamp": 1777248000000,
+                      "value": "2089"
+                    },
+                    {
+                      "timestamp": 1776988800000,
+                      "value": "1044"
+                    },
+                    {
+                      "timestamp": 1776816000000,
+                      "value": "25620"
+                    },
+                    {
+                      "timestamp": 1776729600000,
+                      "value": "72863"
+                    },
+                    {
+                      "timestamp": 1776643200000,
+                      "value": "36334"
+                    },
+                    {
+                      "timestamp": 1776384000000,
+                      "value": "661"
+                    }
+                  ]
+                },
+                {
+                  "name": "avg(dc_ai_time_first_token)",
+                  "values": [
+                    {
+                      "timestamp": 1778976000000,
+                      "value": "719.0"
+                    },
+                    {
+                      "timestamp": 1778889600000,
+                      "value": "733.625"
+                    },
+                    {
+                      "timestamp": 1778803200000,
+                      "value": "1049.125"
+                    },
+                    {
+                      "timestamp": 1778716800000,
+                      "value": "767.75"
+                    },
+                    {
+                      "timestamp": 1778630400000,
+                      "value": "1066.7"
+                    },
+                    {
+                      "timestamp": 1778544000000,
+                      "value": "846.875"
+                    },
+                    {
+                      "timestamp": 1778457600000,
+                      "value": "2052.375"
+                    },
+                    {
+                      "timestamp": 1778371200000,
+                      "value": "703.125"
+                    },
+                    {
+                      "timestamp": 1778284800000,
+                      "value": "972.0"
+                    },
+                    {
+                      "timestamp": 1778198400000,
+                      "value": "1113.0740740740744"
+                    },
+                    {
+                      "timestamp": 1778112000000,
+                      "value": "1135.8750000000002"
+                    },
+                    {
+                      "timestamp": 1778025600000,
+                      "value": "980.0666666666666"
+                    },
+                    {
+                      "timestamp": 1777939200000,
+                      "value": "1144.8125000000002"
+                    },
+                    {
+                      "timestamp": 1777852800000,
+                      "value": "1464.1025641025637"
+                    },
+                    {
+                      "timestamp": 1777766400000,
+                      "value": "901.75"
+                    },
+                    {
+                      "timestamp": 1777680000000,
+                      "value": "1023.3750000000001"
+                    },
+                    {
+                      "timestamp": 1777593600000,
+                      "value": "781.5"
+                    },
+                    {
+                      "timestamp": 1777507200000,
+                      "value": "1373.125"
+                    },
+                    {
+                      "timestamp": 1777420800000,
+                      "value": "1600.142857142857"
+                    },
+                    {
+                      "timestamp": 1777334400000,
+                      "value": "1373.111111111111"
+                    },
+                    {
+                      "timestamp": 1777248000000,
+                      "value": "1642.0"
+                    },
+                    {
+                      "timestamp": 1776988800000,
+                      "value": "1560.1428571428573"
+                    },
+                    {
+                      "timestamp": 1776816000000,
+                      "value": "1402.904761904762"
+                    },
+                    {
+                      "timestamp": 1776729600000,
+                      "value": "1813.5273972602733"
+                    },
+                    {
+                      "timestamp": 1776643200000,
+                      "value": "2279.0769230769233"
+                    },
+                    {
+                      "timestamp": 1776384000000,
+                      "value": "1205.0"
+                    }
+                  ]
+                }
+              ],
+              "name": "ClaudeApp"
+            },
+            {
+              "individualNames": [
+                "AI App"
+              ],
+              "metrics": [
+                {
+                  "name": "sum(message_count)",
+                  "values": [
+                    {
+                      "timestamp": 1776729600000,
+                      "value": "2"
+                    },
+                    {
+                      "timestamp": 1776643200000,
+                      "value": "60"
+                    },
+                    {
+                      "timestamp": 1776556800000,
+                      "value": "84"
+                    },
+                    {
+                      "timestamp": 1776470400000,
+                      "value": "35"
+                    },
+                    {
+                      "timestamp": 1776384000000,
+                      "value": "38"
+                    }
+                  ]
+                },
+                {
+                  "name": "sum(dc_ai_prompt_token_count)",
+                  "values": [
+                    {
+                      "timestamp": 1776729600000,
+                      "value": "6"
+                    },
+                    {
+                      "timestamp": 1776643200000,
+                      "value": "168"
+                    },
+                    {
+                      "timestamp": 1776556800000,
+                      "value": "90"
+                    },
+                    {
+                      "timestamp": 1776470400000,
+                      "value": "126"
+                    },
+                    {
+                      "timestamp": 1776384000000,
+                      "value": "138"
+                    }
+                  ]
+                },
+                {
+                  "name": "sum(dc_ai_response_token_count)",
+                  "values": [
+                    {
+                      "timestamp": 1776729600000,
+                      "value": "518"
+                    },
+                    {
+                      "timestamp": 1776643200000,
+                      "value": "16921"
+                    },
+                    {
+                      "timestamp": 1776556800000,
+                      "value": "8753"
+                    },
+                    {
+                      "timestamp": 1776470400000,
+                      "value": "13288"
+                    },
+                    {
+                      "timestamp": 1776384000000,
+                      "value": "14673"
+                    }
+                  ]
+                },
+                {
+                  "name": "avg(dc_ai_time_first_token)",
+                  "values": [
+                    {
+                      "timestamp": 1776729600000,
+                      "value": "695.0"
+                    },
+                    {
+                      "timestamp": 1776643200000,
+                      "value": "3215.392857142858"
+                    },
+                    {
+                      "timestamp": 1776556800000,
+                      "value": "1811.9333333333334"
+                    },
+                    {
+                      "timestamp": 1776470400000,
+                      "value": "3419.8095238095243"
+                    },
+                    {
+                      "timestamp": 1776384000000,
+                      "value": "3271.478260869565"
+                    }
+                  ]
+                }
+              ],
+              "name": "AI App"
+            }
+          ],
+          "name": "dev"
+        }
+      ]
+    }
+  ],
+  "model": [
+    {
+      "environments": [
+        {
+          "dimensions": [
+            {
+              "individualNames": [
+                "gemini-1.5-pro"
+              ],
+              "metrics": [
+                {
+                  "name": "sum(message_count)",
+                  "values": [
+                    {
+                      "timestamp": 1778976000000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1778889600000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1778803200000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1778716800000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1778630400000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1778544000000,
+                      "value": "29"
+                    },
+                    {
+                      "timestamp": 1778457600000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1778371200000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1778284800000,
+                      "value": "28"
+                    },
+                    {
+                      "timestamp": 1778198400000,
+                      "value": "2"
+                    },
+                    {
+                      "timestamp": 1778112000000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1778025600000,
+                      "value": "49"
+                    },
+                    {
+                      "timestamp": 1777939200000,
+                      "value": "21"
+                    },
+                    {
+                      "timestamp": 1777852800000,
+                      "value": "29"
+                    },
+                    {
+                      "timestamp": 1777766400000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1777680000000,
+                      "value": "48"
+                    },
+                    {
+                      "timestamp": 1777593600000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1777507200000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1777420800000,
+                      "value": "21"
+                    },
+                    {
+                      "timestamp": 1777334400000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1777248000000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1777161600000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1777075200000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1776988800000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1776902400000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1776816000000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1776729600000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1776643200000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1776556800000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1776470400000,
+                      "value": "32"
+                    },
+                    {
+                      "timestamp": 1776384000000,
+                      "value": "0"
+                    }
+                  ]
+                },
+                {
+                  "name": "sum(dc_ai_prompt_token_count)",
+                  "values": [
+                    {
+                      "timestamp": 1778976000000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1778889600000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1778803200000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1778716800000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1778630400000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1778544000000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1778457600000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1778371200000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1778284800000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1778198400000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1778112000000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1778025600000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1777939200000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1777852800000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1777766400000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1777680000000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1777593600000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1777507200000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1777420800000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1777334400000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1777248000000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1777161600000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1777075200000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1776988800000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1776902400000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1776816000000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1776729600000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1776643200000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1776556800000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1776470400000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1776384000000,
+                      "value": "0"
+                    }
+                  ]
+                },
+                {
+                  "name": "sum(dc_ai_response_token_count)",
+                  "values": [
+                    {
+                      "timestamp": 1778976000000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1778889600000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1778803200000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1778716800000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1778630400000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1778544000000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1778457600000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1778371200000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1778284800000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1778198400000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1778112000000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1778025600000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1777939200000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1777852800000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1777766400000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1777680000000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1777593600000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1777507200000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1777420800000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1777334400000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1777248000000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1777161600000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1777075200000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1776988800000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1776902400000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1776816000000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1776729600000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1776643200000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1776556800000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1776470400000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1776384000000,
+                      "value": "0"
+                    }
+                  ]
+                },
+                {
+                  "name": "avg(dc_ai_time_first_token)",
+                  "values": [
+                    {
+                      "timestamp": 1778976000000,
+                      "value": "0.00"
+                    },
+                    {
+                      "timestamp": 1778889600000,
+                      "value": "0.00"
+                    },
+                    {
+                      "timestamp": 1778803200000,
+                      "value": "0.00"
+                    },
+                    {
+                      "timestamp": 1778716800000,
+                      "value": "0.00"
+                    },
+                    {
+                      "timestamp": 1778630400000,
+                      "value": "0.00"
+                    },
+                    {
+                      "timestamp": 1778544000000,
+                      "value": "0.00"
+                    },
+                    {
+                      "timestamp": 1778457600000,
+                      "value": "0.00"
+                    },
+                    {
+                      "timestamp": 1778371200000,
+                      "value": "0.00"
+                    },
+                    {
+                      "timestamp": 1778284800000,
+                      "value": "0.00"
+                    },
+                    {
+                      "timestamp": 1778198400000,
+                      "value": "0.00"
+                    },
+                    {
+                      "timestamp": 1778112000000,
+                      "value": "0.00"
+                    },
+                    {
+                      "timestamp": 1778025600000,
+                      "value": "0.00"
+                    },
+                    {
+                      "timestamp": 1777939200000,
+                      "value": "0.00"
+                    },
+                    {
+                      "timestamp": 1777852800000,
+                      "value": "0.00"
+                    },
+                    {
+                      "timestamp": 1777766400000,
+                      "value": "0.00"
+                    },
+                    {
+                      "timestamp": 1777680000000,
+                      "value": "0.00"
+                    },
+                    {
+                      "timestamp": 1777593600000,
+                      "value": "0.00"
+                    },
+                    {
+                      "timestamp": 1777507200000,
+                      "value": "0.00"
+                    },
+                    {
+                      "timestamp": 1777420800000,
+                      "value": "0.00"
+                    },
+                    {
+                      "timestamp": 1777334400000,
+                      "value": "0.00"
+                    },
+                    {
+                      "timestamp": 1777248000000,
+                      "value": "0.00"
+                    },
+                    {
+                      "timestamp": 1777161600000,
+                      "value": "0.00"
+                    },
+                    {
+                      "timestamp": 1777075200000,
+                      "value": "0.00"
+                    },
+                    {
+                      "timestamp": 1776988800000,
+                      "value": "0.00"
+                    },
+                    {
+                      "timestamp": 1776902400000,
+                      "value": "0.00"
+                    },
+                    {
+                      "timestamp": 1776816000000,
+                      "value": "0.00"
+                    },
+                    {
+                      "timestamp": 1776729600000,
+                      "value": "0.00"
+                    },
+                    {
+                      "timestamp": 1776643200000,
+                      "value": "0.00"
+                    },
+                    {
+                      "timestamp": 1776556800000,
+                      "value": "0.00"
+                    },
+                    {
+                      "timestamp": 1776470400000,
+                      "value": "0.00"
+                    },
+                    {
+                      "timestamp": 1776384000000,
+                      "value": "0.00"
+                    }
+                  ]
+                }
+              ],
+              "name": "gemini-1.5-pro"
+            },
+            {
+              "individualNames": [
+                "gemini-1.5-flash"
+              ],
+              "metrics": [
+                {
+                  "name": "sum(message_count)",
+                  "values": [
+                    {
+                      "timestamp": 1778976000000,
+                      "value": "2977"
+                    },
+                    {
+                      "timestamp": 1777852800000,
+                      "value": "1756"
+                    },
+                    {
+                      "timestamp": 1776470400000,
+                      "value": "806"
+                    },
+                    {
+                      "timestamp": 1776384000000,
+                      "value": "32"
+                    }
+                  ]
+                },
+                {
+                  "name": "sum(dc_ai_prompt_token_count)",
+                  "values": [
+                    {
+                      "timestamp": 1778976000000,
+                      "value": "1043387"
+                    },
+                    {
+                      "timestamp": 1777852800000,
+                      "value": "926683"
+                    },
+                    {
+                      "timestamp": 1776470400000,
+                      "value": "173565"
+                    },
+                    {
+                      "timestamp": 1776384000000,
+                      "value": "17106"
+                    }
+                  ]
+                },
+                {
+                  "name": "sum(dc_ai_response_token_count)",
+                  "values": [
+                    {
+                      "timestamp": 1778976000000,
+                      "value": "24780"
+                    },
+                    {
+                      "timestamp": 1777852800000,
+                      "value": "25976"
+                    },
+                    {
+                      "timestamp": 1776470400000,
+                      "value": "1404"
+                    },
+                    {
+                      "timestamp": 1776384000000,
+                      "value": "85"
+                    }
+                  ]
+                },
+                {
+                  "name": "avg(dc_ai_time_first_token)",
+                  "values": [
+                    {
+                      "timestamp": 1778976000000,
+                      "value": "11329.25"
+                    },
+                    {
+                      "timestamp": 1777852800000,
+                      "value": "25584.29"
+                    },
+                    {
+                      "timestamp": 1776470400000,
+                      "value": "5437.55"
+                    },
+                    {
+                      "timestamp": 1776384000000,
+                      "value": "6696.95"
+                    }
+                  ]
+                }
+              ],
+              "name": "gemini-1.5-flash"
+            },
+            {
+              "individualNames": [
+                "claude-3-opus"
+              ],
+              "metrics": [
+                {
+                  "name": "sum(message_count)",
+                  "values": [
+                    {
+                      "timestamp": 1778976000000,
+                      "value": "4"
+                    },
+                    {
+                      "timestamp": 1778198400000,
+                      "value": "47"
+                    },
+                    {
+                      "timestamp": 1778025600000,
+                      "value": "5"
+                    },
+                    {
+                      "timestamp": 1777939200000,
+                      "value": "6"
+                    },
+                    {
+                      "timestamp": 1777852800000,
+                      "value": "9"
+                    },
+                    {
+                      "timestamp": 1776729600000,
+                      "value": "301"
+                    },
+                    {
+                      "timestamp": 1776643200000,
+                      "value": "4"
+                    },
+                    {
+                      "timestamp": 1776470400000,
+                      "value": "139"
+                    },
+                    {
+                      "timestamp": 1776384000000,
+                      "value": "12"
+                    }
+                  ]
+                },
+                {
+                  "name": "sum(dc_ai_prompt_token_count)",
+                  "values": [
+                    {
+                      "timestamp": 1778976000000,
+                      "value": "1725"
+                    },
+                    {
+                      "timestamp": 1778198400000,
+                      "value": "20808"
+                    },
+                    {
+                      "timestamp": 1778025600000,
+                      "value": "1454"
+                    },
+                    {
+                      "timestamp": 1777939200000,
+                      "value": "2594"
+                    },
+                    {
+                      "timestamp": 1777852800000,
+                      "value": "3870"
+                    },
+                    {
+                      "timestamp": 1776729600000,
+                      "value": "85459"
+                    },
+                    {
+                      "timestamp": 1776643200000,
+                      "value": "1700"
+                    },
+                    {
+                      "timestamp": 1776470400000,
+                      "value": "65087"
+                    },
+                    {
+                      "timestamp": 1776384000000,
+                      "value": "5404"
+                    }
+                  ]
+                },
+                {
+                  "name": "sum(dc_ai_response_token_count)",
+                  "values": [
+                    {
+                      "timestamp": 1778976000000,
+                      "value": "53"
+                    },
+                    {
+                      "timestamp": 1778198400000,
+                      "value": "604"
+                    },
+                    {
+                      "timestamp": 1778025600000,
+                      "value": "48"
+                    },
+                    {
+                      "timestamp": 1777939200000,
+                      "value": "164"
+                    },
+                    {
+                      "timestamp": 1777852800000,
+                      "value": "139"
+                    },
+                    {
+                      "timestamp": 1776729600000,
+                      "value": "1048"
+                    },
+                    {
+                      "timestamp": 1776643200000,
+                      "value": "98"
+                    },
+                    {
+                      "timestamp": 1776470400000,
+                      "value": "2204"
+                    },
+                    {
+                      "timestamp": 1776384000000,
+                      "value": "76"
+                    }
+                  ]
+                },
+                {
+                  "name": "avg(dc_ai_time_first_token)",
+                  "values": [
+                    {
+                      "timestamp": 1778976000000,
+                      "value": "1632.38"
+                    },
+                    {
+                      "timestamp": 1778198400000,
+                      "value": "4125.06"
+                    },
+                    {
+                      "timestamp": 1778025600000,
+                      "value": "1898.62"
+                    },
+                    {
+                      "timestamp": 1777939200000,
+                      "value": "2444.42"
+                    },
+                    {
+                      "timestamp": 1777852800000,
+                      "value": "3486.08"
+                    },
+                    {
+                      "timestamp": 1776729600000,
+                      "value": "4011.24"
+                    },
+                    {
+                      "timestamp": 1776643200000,
+                      "value": "3411.20"
+                    },
+                    {
+                      "timestamp": 1776470400000,
+                      "value": "4436.61"
+                    },
+                    {
+                      "timestamp": 1776384000000,
+                      "value": "2026.75"
+                    }
+                  ]
+                }
+              ],
+              "name": "claude-3-opus"
+            },
+            {
+              "individualNames": [
+                "claude-3-sonnet"
+              ],
+              "metrics": [
+                {
+                  "name": "sum(message_count)",
+                  "values": [
+                    {
+                      "timestamp": 1778976000000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1778889600000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1778803200000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1778716800000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1778630400000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1778544000000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1778457600000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1778371200000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1778284800000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1778198400000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1778112000000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1778025600000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1777939200000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1777852800000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1777766400000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1777680000000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1777593600000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1777507200000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1777420800000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1777334400000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1777248000000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1776988800000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1776816000000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1776729600000,
+                      "value": "1"
+                    }
+                  ]
+                },
+                {
+                  "name": "sum(dc_ai_prompt_token_count)",
+                  "values": [
+                    {
+                      "timestamp": 1778976000000,
+                      "value": "13"
+                    },
+                    {
+                      "timestamp": 1778889600000,
+                      "value": "107"
+                    },
+                    {
+                      "timestamp": 1778803200000,
+                      "value": "107"
+                    },
+                    {
+                      "timestamp": 1778716800000,
+                      "value": "107"
+                    },
+                    {
+                      "timestamp": 1778630400000,
+                      "value": "107"
+                    },
+                    {
+                      "timestamp": 1778544000000,
+                      "value": "107"
+                    },
+                    {
+                      "timestamp": 1778457600000,
+                      "value": "107"
+                    },
+                    {
+                      "timestamp": 1778371200000,
+                      "value": "107"
+                    },
+                    {
+                      "timestamp": 1778284800000,
+                      "value": "107"
+                    },
+                    {
+                      "timestamp": 1778198400000,
+                      "value": "107"
+                    },
+                    {
+                      "timestamp": 1778112000000,
+                      "value": "107"
+                    },
+                    {
+                      "timestamp": 1778025600000,
+                      "value": "107"
+                    },
+                    {
+                      "timestamp": 1777939200000,
+                      "value": "181"
+                    },
+                    {
+                      "timestamp": 1777852800000,
+                      "value": "107"
+                    },
+                    {
+                      "timestamp": 1777766400000,
+                      "value": "107"
+                    },
+                    {
+                      "timestamp": 1777680000000,
+                      "value": "107"
+                    },
+                    {
+                      "timestamp": 1777593600000,
+                      "value": "107"
+                    },
+                    {
+                      "timestamp": 1777507200000,
+                      "value": "107"
+                    },
+                    {
+                      "timestamp": 1777420800000,
+                      "value": "94"
+                    },
+                    {
+                      "timestamp": 1777334400000,
+                      "value": "121"
+                    },
+                    {
+                      "timestamp": 1777248000000,
+                      "value": "94"
+                    },
+                    {
+                      "timestamp": 1776988800000,
+                      "value": "21"
+                    },
+                    {
+                      "timestamp": 1776816000000,
+                      "value": "80"
+                    },
+                    {
+                      "timestamp": 1776729600000,
+                      "value": "12"
+                    }
+                  ]
+                },
+                {
+                  "name": "sum(dc_ai_response_token_count)",
+                  "values": [
+                    {
+                      "timestamp": 1778976000000,
+                      "value": "321"
+                    },
+                    {
+                      "timestamp": 1778889600000,
+                      "value": "2441"
+                    },
+                    {
+                      "timestamp": 1778803200000,
+                      "value": "2463"
+                    },
+                    {
+                      "timestamp": 1778716800000,
+                      "value": "2469"
+                    },
+                    {
+                      "timestamp": 1778630400000,
+                      "value": "2443"
+                    },
+                    {
+                      "timestamp": 1778544000000,
+                      "value": "2424"
+                    },
+                    {
+                      "timestamp": 1778457600000,
+                      "value": "2377"
+                    },
+                    {
+                      "timestamp": 1778371200000,
+                      "value": "2366"
+                    },
+                    {
+                      "timestamp": 1778284800000,
+                      "value": "2401"
+                    },
+                    {
+                      "timestamp": 1778198400000,
+                      "value": "2371"
+                    },
+                    {
+                      "timestamp": 1778112000000,
+                      "value": "2464"
+                    },
+                    {
+                      "timestamp": 1778025600000,
+                      "value": "2442"
+                    },
+                    {
+                      "timestamp": 1777939200000,
+                      "value": "3732"
+                    },
+                    {
+                      "timestamp": 1777852800000,
+                      "value": "2407"
+                    },
+                    {
+                      "timestamp": 1777766400000,
+                      "value": "2381"
+                    },
+                    {
+                      "timestamp": 1777680000000,
+                      "value": "2431"
+                    },
+                    {
+                      "timestamp": 1777593600000,
+                      "value": "2431"
+                    },
+                    {
+                      "timestamp": 1777507200000,
+                      "value": "2382"
+                    },
+                    {
+                      "timestamp": 1777420800000,
+                      "value": "2121"
+                    },
+                    {
+                      "timestamp": 1777334400000,
+                      "value": "2714"
+                    },
+                    {
+                      "timestamp": 1777248000000,
+                      "value": "2167"
+                    },
+                    {
+                      "timestamp": 1776988800000,
+                      "value": "1083"
+                    },
+                    {
+                      "timestamp": 1776816000000,
+                      "value": "21816"
+                    },
+                    {
+                      "timestamp": 1776729600000,
+                      "value": "667"
+                    }
+                  ]
+                },
+                {
+                  "name": "avg(dc_ai_time_first_token)",
+                  "values": [
+                    {
+                      "timestamp": 1778976000000,
+                      "value": "746.14"
+                    },
+                    {
+                      "timestamp": 1778889600000,
+                      "value": "761.32"
+                    },
+                    {
+                      "timestamp": 1778803200000,
+                      "value": "1088.73"
+                    },
+                    {
+                      "timestamp": 1778716800000,
+                      "value": "796.73"
+                    },
+                    {
+                      "timestamp": 1778630400000,
+                      "value": "1034.77"
+                    },
+                    {
+                      "timestamp": 1778544000000,
+                      "value": "878.85"
+                    },
+                    {
+                      "timestamp": 1778457600000,
+                      "value": "2129.86"
+                    },
+                    {
+                      "timestamp": 1778371200000,
+                      "value": "729.67"
+                    },
+                    {
+                      "timestamp": 1778284800000,
+                      "value": "1008.69"
+                    },
+                    {
+                      "timestamp": 1778198400000,
+                      "value": "916.21"
+                    },
+                    {
+                      "timestamp": 1778112000000,
+                      "value": "1178.76"
+                    },
+                    {
+                      "timestamp": 1778025600000,
+                      "value": "727.59"
+                    },
+                    {
+                      "timestamp": 1777939200000,
+                      "value": "1197.24"
+                    },
+                    {
+                      "timestamp": 1777852800000,
+                      "value": "1292.00"
+                    },
+                    {
+                      "timestamp": 1777766400000,
+                      "value": "935.79"
+                    },
+                    {
+                      "timestamp": 1777680000000,
+                      "value": "1062.01"
+                    },
+                    {
+                      "timestamp": 1777593600000,
+                      "value": "811.00"
+                    },
+                    {
+                      "timestamp": 1777507200000,
+                      "value": "1424.96"
+                    },
+                    {
+                      "timestamp": 1777420800000,
+                      "value": "1660.55"
+                    },
+                    {
+                      "timestamp": 1777334400000,
+                      "value": "1424.95"
+                    },
+                    {
+                      "timestamp": 1777248000000,
+                      "value": "1703.99"
+                    },
+                    {
+                      "timestamp": 1776988800000,
+                      "value": "1619.04"
+                    },
+                    {
+                      "timestamp": 1776816000000,
+                      "value": "1555.31"
+                    },
+                    {
+                      "timestamp": 1776729600000,
+                      "value": "1368.28"
+                    }
+                  ]
+                }
+              ],
+              "name": "claude-3-sonnet"
+            },
+            {
+              "individualNames": [
+                "text-bison@002"
+              ],
+              "metrics": [
+                {
+                  "name": "sum(message_count)",
+                  "values": [
+                    {
+                      "timestamp": 1778976000000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1778889600000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1778803200000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1778716800000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1778630400000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1778544000000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1778457600000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1778371200000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1778284800000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1778198400000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1778112000000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1778025600000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1777939200000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1777852800000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1777766400000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1777680000000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1777593600000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1777507200000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1777420800000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1777334400000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1777248000000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1776902400000,
+                      "value": "1"
+                    }
+                  ]
+                },
+                {
+                  "name": "sum(dc_ai_prompt_token_count)",
+                  "values": [
+                    {
+                      "timestamp": 1778976000000,
+                      "value": "21"
+                    },
+                    {
+                      "timestamp": 1778889600000,
+                      "value": "170"
+                    },
+                    {
+                      "timestamp": 1778803200000,
+                      "value": "170"
+                    },
+                    {
+                      "timestamp": 1778716800000,
+                      "value": "170"
+                    },
+                    {
+                      "timestamp": 1778630400000,
+                      "value": "149"
+                    },
+                    {
+                      "timestamp": 1778544000000,
+                      "value": "137"
+                    },
+                    {
+                      "timestamp": 1778457600000,
+                      "value": "149"
+                    },
+                    {
+                      "timestamp": 1778371200000,
+                      "value": "149"
+                    },
+                    {
+                      "timestamp": 1778284800000,
+                      "value": "170"
+                    },
+                    {
+                      "timestamp": 1778198400000,
+                      "value": "170"
+                    },
+                    {
+                      "timestamp": 1778112000000,
+                      "value": "149"
+                    },
+                    {
+                      "timestamp": 1778025600000,
+                      "value": "170"
+                    },
+                    {
+                      "timestamp": 1777939200000,
+                      "value": "106"
+                    },
+                    {
+                      "timestamp": 1777852800000,
+                      "value": "137"
+                    },
+                    {
+                      "timestamp": 1777766400000,
+                      "value": "149"
+                    },
+                    {
+                      "timestamp": 1777680000000,
+                      "value": "127"
+                    },
+                    {
+                      "timestamp": 1777593600000,
+                      "value": "106"
+                    },
+                    {
+                      "timestamp": 1777507200000,
+                      "value": "170"
+                    },
+                    {
+                      "timestamp": 1777420800000,
+                      "value": "149"
+                    },
+                    {
+                      "timestamp": 1777334400000,
+                      "value": "201"
+                    },
+                    {
+                      "timestamp": 1777248000000,
+                      "value": "151"
+                    },
+                    {
+                      "timestamp": 1776902400000,
+                      "value": "26"
+                    }
+                  ]
+                },
+                {
+                  "name": "sum(dc_ai_response_token_count)",
+                  "values": [
+                    {
+                      "timestamp": 1778976000000,
+                      "value": "4201"
+                    },
+                    {
+                      "timestamp": 1778889600000,
+                      "value": "33702"
+                    },
+                    {
+                      "timestamp": 1778803200000,
+                      "value": "31971"
+                    },
+                    {
+                      "timestamp": 1778716800000,
+                      "value": "31958"
+                    },
+                    {
+                      "timestamp": 1778630400000,
+                      "value": "27937"
+                    },
+                    {
+                      "timestamp": 1778544000000,
+                      "value": "27580"
+                    },
+                    {
+                      "timestamp": 1778457600000,
+                      "value": "30401"
+                    },
+                    {
+                      "timestamp": 1778371200000,
+                      "value": "29728"
+                    },
+                    {
+                      "timestamp": 1778284800000,
+                      "value": "33006"
+                    },
+                    {
+                      "timestamp": 1778198400000,
+                      "value": "35467"
+                    },
+                    {
+                      "timestamp": 1778112000000,
+                      "value": "30129"
+                    },
+                    {
+                      "timestamp": 1778025600000,
+                      "value": "32000"
+                    },
+                    {
+                      "timestamp": 1777939200000,
+                      "value": "18855"
+                    },
+                    {
+                      "timestamp": 1777852800000,
+                      "value": "26577"
+                    },
+                    {
+                      "timestamp": 1777766400000,
+                      "value": "28470"
+                    },
+                    {
+                      "timestamp": 1777680000000,
+                      "value": "26176"
+                    },
+                    {
+                      "timestamp": 1777593600000,
+                      "value": "20442"
+                    },
+                    {
+                      "timestamp": 1777507200000,
+                      "value": "37615"
+                    },
+                    {
+                      "timestamp": 1777420800000,
+                      "value": "31916"
+                    },
+                    {
+                      "timestamp": 1777334400000,
+                      "value": "30577"
+                    },
+                    {
+                      "timestamp": 1777248000000,
+                      "value": "15998"
+                    },
+                    {
+                      "timestamp": 1776902400000,
+                      "value": "2600"
+                    }
+                  ]
+                },
+                {
+                  "name": "avg(dc_ai_time_first_token)",
+                  "values": [
+                    {
+                      "timestamp": 1778976000000,
+                      "value": "21455.71"
+                    },
+                    {
+                      "timestamp": 1778889600000,
+                      "value": "25430.31"
+                    },
+                    {
+                      "timestamp": 1778803200000,
+                      "value": "32054.50"
+                    },
+                    {
+                      "timestamp": 1778716800000,
+                      "value": "26294.09"
+                    },
+                    {
+                      "timestamp": 1778630400000,
+                      "value": "24125.63"
+                    },
+                    {
+                      "timestamp": 1778544000000,
+                      "value": "22584.80"
+                    },
+                    {
+                      "timestamp": 1778457600000,
+                      "value": "27138.02"
+                    },
+                    {
+                      "timestamp": 1778371200000,
+                      "value": "28222.18"
+                    },
+                    {
+                      "timestamp": 1778284800000,
+                      "value": "29119.16"
+                    },
+                    {
+                      "timestamp": 1778198400000,
+                      "value": "35457.88"
+                    },
+                    {
+                      "timestamp": 1778112000000,
+                      "value": "24231.56"
+                    },
+                    {
+                      "timestamp": 1778025600000,
+                      "value": "25435.19"
+                    },
+                    {
+                      "timestamp": 1777939200000,
+                      "value": "20129.01"
+                    },
+                    {
+                      "timestamp": 1777852800000,
+                      "value": "45614.96"
+                    },
+                    {
+                      "timestamp": 1777766400000,
+                      "value": "23139.13"
+                    },
+                    {
+                      "timestamp": 1777680000000,
+                      "value": "25685.66"
+                    },
+                    {
+                      "timestamp": 1777593600000,
+                      "value": "23916.57"
+                    },
+                    {
+                      "timestamp": 1777507200000,
+                      "value": "29184.05"
+                    },
+                    {
+                      "timestamp": 1777420800000,
+                      "value": "24016.15"
+                    },
+                    {
+                      "timestamp": 1777334400000,
+                      "value": "15108.64"
+                    },
+                    {
+                      "timestamp": 1777248000000,
+                      "value": "6136.20"
+                    },
+                    {
+                      "timestamp": 1776902400000,
+                      "value": "2852.56"
+                    }
+                  ]
+                }
+              ],
+              "name": "text-bison@002"
+            },
+            {
+              "individualNames": [
+                "gemini-flash-latest"
+              ],
+              "metrics": [
+                {
+                  "name": "sum(message_count)",
+                  "values": [
+                    {
+                      "timestamp": 1778976000000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1778889600000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1778803200000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1778716800000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1778630400000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1778544000000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1778457600000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1778371200000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1778284800000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1778198400000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1778112000000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1778025600000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1777939200000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1777852800000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1777766400000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1777680000000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1777593600000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1777507200000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1777420800000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1777334400000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1777248000000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1777161600000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1777075200000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1776988800000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1776902400000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1776816000000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1776729600000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1776643200000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1776556800000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1776470400000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1776384000000,
+                      "value": "1"
+                    }
+                  ]
+                },
+                {
+                  "name": "sum(dc_ai_prompt_token_count)",
+                  "values": [
+                    {
+                      "timestamp": 1778976000000,
+                      "value": "20"
+                    },
+                    {
+                      "timestamp": 1778889600000,
+                      "value": "165"
+                    },
+                    {
+                      "timestamp": 1778803200000,
+                      "value": "165"
+                    },
+                    {
+                      "timestamp": 1778716800000,
+                      "value": "165"
+                    },
+                    {
+                      "timestamp": 1778630400000,
+                      "value": "165"
+                    },
+                    {
+                      "timestamp": 1778544000000,
+                      "value": "165"
+                    },
+                    {
+                      "timestamp": 1778457600000,
+                      "value": "165"
+                    },
+                    {
+                      "timestamp": 1778371200000,
+                      "value": "165"
+                    },
+                    {
+                      "timestamp": 1778284800000,
+                      "value": "124"
+                    },
+                    {
+                      "timestamp": 1778198400000,
+                      "value": "144"
+                    },
+                    {
+                      "timestamp": 1778112000000,
+                      "value": "165"
+                    },
+                    {
+                      "timestamp": 1778025600000,
+                      "value": "144"
+                    },
+                    {
+                      "timestamp": 1777939200000,
+                      "value": "82"
+                    },
+                    {
+                      "timestamp": 1777852800000,
+                      "value": "62"
+                    },
+                    {
+                      "timestamp": 1777766400000,
+                      "value": "165"
+                    },
+                    {
+                      "timestamp": 1777680000000,
+                      "value": "165"
+                    },
+                    {
+                      "timestamp": 1777593600000,
+                      "value": "165"
+                    },
+                    {
+                      "timestamp": 1777507200000,
+                      "value": "165"
+                    },
+                    {
+                      "timestamp": 1777420800000,
+                      "value": "144"
+                    },
+                    {
+                      "timestamp": 1777334400000,
+                      "value": "130"
+                    },
+                    {
+                      "timestamp": 1777248000000,
+                      "value": "82"
+                    },
+                    {
+                      "timestamp": 1777161600000,
+                      "value": "55"
+                    },
+                    {
+                      "timestamp": 1777075200000,
+                      "value": "55"
+                    },
+                    {
+                      "timestamp": 1776988800000,
+                      "value": "55"
+                    },
+                    {
+                      "timestamp": 1776902400000,
+                      "value": "48"
+                    },
+                    {
+                      "timestamp": 1776816000000,
+                      "value": "27"
+                    },
+                    {
+                      "timestamp": 1776729600000,
+                      "value": "6"
+                    },
+                    {
+                      "timestamp": 1776643200000,
+                      "value": "193"
+                    },
+                    {
+                      "timestamp": 1776556800000,
+                      "value": "96"
+                    },
+                    {
+                      "timestamp": 1776470400000,
+                      "value": "144"
+                    },
+                    {
+                      "timestamp": 1776384000000,
+                      "value": "137"
+                    }
+                  ]
+                },
+                {
+                  "name": "sum(dc_ai_response_token_count)",
+                  "values": [
+                    {
+                      "timestamp": 1778976000000,
+                      "value": "3692"
+                    },
+                    {
+                      "timestamp": 1778889600000,
+                      "value": "24839"
+                    },
+                    {
+                      "timestamp": 1778803200000,
+                      "value": "23762"
+                    },
+                    {
+                      "timestamp": 1778716800000,
+                      "value": "24558"
+                    },
+                    {
+                      "timestamp": 1778630400000,
+                      "value": "25397"
+                    },
+                    {
+                      "timestamp": 1778544000000,
+                      "value": "24888"
+                    },
+                    {
+                      "timestamp": 1778457600000,
+                      "value": "24620"
+                    },
+                    {
+                      "timestamp": 1778371200000,
+                      "value": "25055"
+                    },
+                    {
+                      "timestamp": 1778284800000,
+                      "value": "17461"
+                    },
+                    {
+                      "timestamp": 1778198400000,
+                      "value": "20916"
+                    },
+                    {
+                      "timestamp": 1778112000000,
+                      "value": "23977"
+                    },
+                    {
+                      "timestamp": 1778025600000,
+                      "value": "21812"
+                    },
+                    {
+                      "timestamp": 1777939200000,
+                      "value": "12710"
+                    },
+                    {
+                      "timestamp": 1777852800000,
+                      "value": "9412"
+                    },
+                    {
+                      "timestamp": 1777766400000,
+                      "value": "25657"
+                    },
+                    {
+                      "timestamp": 1777680000000,
+                      "value": "24001"
+                    },
+                    {
+                      "timestamp": 1777593600000,
+                      "value": "25578"
+                    },
+                    {
+                      "timestamp": 1777507200000,
+                      "value": "24269"
+                    },
+                    {
+                      "timestamp": 1777420800000,
+                      "value": "21302"
+                    },
+                    {
+                      "timestamp": 1777334400000,
+                      "value": "18551"
+                    },
+                    {
+                      "timestamp": 1777248000000,
+                      "value": "8467"
+                    },
+                    {
+                      "timestamp": 1777161600000,
+                      "value": "5323"
+                    },
+                    {
+                      "timestamp": 1777075200000,
+                      "value": "5700"
+                    },
+                    {
+                      "timestamp": 1776988800000,
+                      "value": "5558"
+                    },
+                    {
+                      "timestamp": 1776902400000,
+                      "value": "5000"
+                    },
+                    {
+                      "timestamp": 1776816000000,
+                      "value": "2796"
+                    },
+                    {
+                      "timestamp": 1776729600000,
+                      "value": "595"
+                    },
+                    {
+                      "timestamp": 1776643200000,
+                      "value": "19444"
+                    },
+                    {
+                      "timestamp": 1776556800000,
+                      "value": "9343"
+                    },
+                    {
+                      "timestamp": 1776470400000,
+                      "value": "15269"
+                    },
+                    {
+                      "timestamp": 1776384000000,
+                      "value": "14961"
+                    }
+                  ]
+                },
+                {
+                  "name": "avg(dc_ai_time_first_token)",
+                  "values": [
+                    {
+                      "timestamp": 1778976000000,
+                      "value": "14259.33"
+                    },
+                    {
+                      "timestamp": 1778889600000,
+                      "value": "14093.14"
+                    },
+                    {
+                      "timestamp": 1778803200000,
+                      "value": "12978.36"
+                    },
+                    {
+                      "timestamp": 1778716800000,
+                      "value": "13276.55"
+                    },
+                    {
+                      "timestamp": 1778630400000,
+                      "value": "13907.56"
+                    },
+                    {
+                      "timestamp": 1778544000000,
+                      "value": "13254.72"
+                    },
+                    {
+                      "timestamp": 1778457600000,
+                      "value": "13589.68"
+                    },
+                    {
+                      "timestamp": 1778371200000,
+                      "value": "13448.63"
+                    },
+                    {
+                      "timestamp": 1778284800000,
+                      "value": "12543.70"
+                    },
+                    {
+                      "timestamp": 1778198400000,
+                      "value": "13018.78"
+                    },
+                    {
+                      "timestamp": 1778112000000,
+                      "value": "13362.16"
+                    },
+                    {
+                      "timestamp": 1778025600000,
+                      "value": "13672.62"
+                    },
+                    {
+                      "timestamp": 1777939200000,
+                      "value": "13583.08"
+                    },
+                    {
+                      "timestamp": 1777852800000,
+                      "value": "13574.07"
+                    },
+                    {
+                      "timestamp": 1777766400000,
+                      "value": "13559.52"
+                    },
+                    {
+                      "timestamp": 1777680000000,
+                      "value": "13531.08"
+                    },
+                    {
+                      "timestamp": 1777593600000,
+                      "value": "13785.89"
+                    },
+                    {
+                      "timestamp": 1777507200000,
+                      "value": "13733.47"
+                    },
+                    {
+                      "timestamp": 1777420800000,
+                      "value": "13230.38"
+                    },
+                    {
+                      "timestamp": 1777334400000,
+                      "value": "9299.25"
+                    },
+                    {
+                      "timestamp": 1777248000000,
+                      "value": "3817.44"
+                    },
+                    {
+                      "timestamp": 1777161600000,
+                      "value": "3635.21"
+                    },
+                    {
+                      "timestamp": 1777075200000,
+                      "value": "4060.96"
+                    },
+                    {
+                      "timestamp": 1776988800000,
+                      "value": "3876.67"
+                    },
+                    {
+                      "timestamp": 1776902400000,
+                      "value": "3486.73"
+                    },
+                    {
+                      "timestamp": 1776816000000,
+                      "value": "2772.81"
+                    },
+                    {
+                      "timestamp": 1776729600000,
+                      "value": "798.63"
+                    },
+                    {
+                      "timestamp": 1776643200000,
+                      "value": "3694.85"
+                    },
+                    {
+                      "timestamp": 1776556800000,
+                      "value": "2094.42"
+                    },
+                    {
+                      "timestamp": 1776470400000,
+                      "value": "3929.74"
+                    },
+                    {
+                      "timestamp": 1776384000000,
+                      "value": "4162.54"
+                    }
+                  ]
+                }
+              ],
+              "name": "gemini-flash-latest"
+            },
+            {
+              "individualNames": [
+                "qwen/qwen3-next-80b-a3b-thinking-maas"
+              ],
+              "metrics": [
+                {
+                  "name": "sum(message_count)",
+                  "values": [
+                    {
+                      "timestamp": 1777248000000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1777161600000,
+                      "value": "1"
+                    }
+                  ]
+                },
+                {
+                  "name": "sum(dc_ai_prompt_token_count)",
+                  "values": [
+                    {
+                      "timestamp": 1777248000000,
+                      "value": "142"
+                    },
+                    {
+                      "timestamp": 1777161600000,
+                      "value": "57"
+                    }
+                  ]
+                },
+                {
+                  "name": "sum(dc_ai_response_token_count)",
+                  "values": [
+                    {
+                      "timestamp": 1777248000000,
+                      "value": "14853"
+                    },
+                    {
+                      "timestamp": 1777161600000,
+                      "value": "6645"
+                    }
+                  ]
+                },
+                {
+                  "name": "avg(dc_ai_time_first_token)",
+                  "values": [
+                    {
+                      "timestamp": 1777248000000,
+                      "value": "17848.79"
+                    },
+                    {
+                      "timestamp": 1777161600000,
+                      "value": "23231.87"
+                    }
+                  ]
+                }
+              ],
+              "name": "qwen/qwen3-next-80b-a3b-thinking-maas"
+            },
+            {
+              "individualNames": [
+                "gemini-3-flash-preview"
+              ],
+              "metrics": [
+                {
+                  "name": "sum(message_count)",
+                  "values": [
+                    {
+                      "timestamp": 1778976000000,
+                      "value": "44"
+                    },
+                    {
+                      "timestamp": 1778198400000,
+                      "value": "1324"
+                    },
+                    {
+                      "timestamp": 1778025600000,
+                      "value": "2072"
+                    },
+                    {
+                      "timestamp": 1777939200000,
+                      "value": "212"
+                    },
+                    {
+                      "timestamp": 1777852800000,
+                      "value": "3270"
+                    },
+                    {
+                      "timestamp": 1776816000000,
+                      "value": "577"
+                    },
+                    {
+                      "timestamp": 1776729600000,
+                      "value": "876"
+                    },
+                    {
+                      "timestamp": 1776643200000,
+                      "value": "26"
+                    },
+                    {
+                      "timestamp": 1776470400000,
+                      "value": "269"
+                    },
+                    {
+                      "timestamp": 1776384000000,
+                      "value": "45"
+                    }
+                  ]
+                },
+                {
+                  "name": "sum(dc_ai_prompt_token_count)",
+                  "values": [
+                    {
+                      "timestamp": 1778976000000,
+                      "value": "5782"
+                    },
+                    {
+                      "timestamp": 1778198400000,
+                      "value": "80936"
+                    },
+                    {
+                      "timestamp": 1778025600000,
+                      "value": "207535"
+                    },
+                    {
+                      "timestamp": 1777939200000,
+                      "value": "35154"
+                    },
+                    {
+                      "timestamp": 1777852800000,
+                      "value": "444487"
+                    },
+                    {
+                      "timestamp": 1776816000000,
+                      "value": "34536"
+                    },
+                    {
+                      "timestamp": 1776729600000,
+                      "value": "147813"
+                    },
+                    {
+                      "timestamp": 1776643200000,
+                      "value": "4153"
+                    },
+                    {
+                      "timestamp": 1776470400000,
+                      "value": "32983"
+                    },
+                    {
+                      "timestamp": 1776384000000,
+                      "value": "5468"
+                    }
+                  ]
+                },
+                {
+                  "name": "sum(dc_ai_response_token_count)",
+                  "values": [
+                    {
+                      "timestamp": 1778976000000,
+                      "value": "21"
+                    },
+                    {
+                      "timestamp": 1778198400000,
+                      "value": "5295"
+                    },
+                    {
+                      "timestamp": 1778025600000,
+                      "value": "3839"
+                    },
+                    {
+                      "timestamp": 1777939200000,
+                      "value": "455"
+                    },
+                    {
+                      "timestamp": 1777852800000,
+                      "value": "9579"
+                    },
+                    {
+                      "timestamp": 1776816000000,
+                      "value": "1133"
+                    },
+                    {
+                      "timestamp": 1776729600000,
+                      "value": "1018"
+                    },
+                    {
+                      "timestamp": 1776643200000,
+                      "value": "40"
+                    },
+                    {
+                      "timestamp": 1776470400000,
+                      "value": "773"
+                    },
+                    {
+                      "timestamp": 1776384000000,
+                      "value": "60"
+                    }
+                  ]
+                },
+                {
+                  "name": "avg(dc_ai_time_first_token)",
+                  "values": [
+                    {
+                      "timestamp": 1778976000000,
+                      "value": "1437.83"
+                    },
+                    {
+                      "timestamp": 1778198400000,
+                      "value": "2314.85"
+                    },
+                    {
+                      "timestamp": 1778025600000,
+                      "value": "1318.77"
+                    },
+                    {
+                      "timestamp": 1777939200000,
+                      "value": "38503.00"
+                    },
+                    {
+                      "timestamp": 1777852800000,
+                      "value": "2979.45"
+                    },
+                    {
+                      "timestamp": 1776816000000,
+                      "value": "1109.09"
+                    },
+                    {
+                      "timestamp": 1776729600000,
+                      "value": "1206.38"
+                    },
+                    {
+                      "timestamp": 1776643200000,
+                      "value": "1052.09"
+                    },
+                    {
+                      "timestamp": 1776470400000,
+                      "value": "1153.69"
+                    },
+                    {
+                      "timestamp": 1776384000000,
+                      "value": "1368.13"
+                    }
+                  ]
+                }
+              ],
+              "name": "gemini-3-flash-preview"
+            },
+            {
+              "individualNames": [
+                "claude-opus-4-6"
+              ],
+              "metrics": [
+                {
+                  "name": "sum(message_count)",
+                  "values": [
+                    {
+                      "timestamp": 1778630400000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1778025600000,
+                      "value": "2"
+                    },
+                    {
+                      "timestamp": 1777939200000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1777852800000,
+                      "value": "9"
+                    },
+                    {
+                      "timestamp": 1776816000000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1776729600000,
+                      "value": "12"
+                    },
+                    {
+                      "timestamp": 1776643200000,
+                      "value": "34"
+                    },
+                    {
+                      "timestamp": 1776384000000,
+                      "value": "1"
+                    }
+                  ]
+                },
+                {
+                  "name": "sum(dc_ai_prompt_token_count)",
+                  "values": [
+                    {
+                      "timestamp": 1778630400000,
+                      "value": "4"
+                    },
+                    {
+                      "timestamp": 1778025600000,
+                      "value": "1160"
+                    },
+                    {
+                      "timestamp": 1777939200000,
+                      "value": "118"
+                    },
+                    {
+                      "timestamp": 1777852800000,
+                      "value": "3532"
+                    },
+                    {
+                      "timestamp": 1776816000000,
+                      "value": "4"
+                    },
+                    {
+                      "timestamp": 1776729600000,
+                      "value": "3410"
+                    },
+                    {
+                      "timestamp": 1776643200000,
+                      "value": "7427"
+                    },
+                    {
+                      "timestamp": 1776384000000,
+                      "value": "8"
+                    }
+                  ]
+                },
+                {
+                  "name": "sum(dc_ai_response_token_count)",
+                  "values": [
+                    {
+                      "timestamp": 1778630400000,
+                      "value": "78"
+                    },
+                    {
+                      "timestamp": 1778025600000,
+                      "value": "1585"
+                    },
+                    {
+                      "timestamp": 1777939200000,
+                      "value": "2728"
+                    },
+                    {
+                      "timestamp": 1777852800000,
+                      "value": "31440"
+                    },
+                    {
+                      "timestamp": 1776816000000,
+                      "value": "104"
+                    },
+                    {
+                      "timestamp": 1776729600000,
+                      "value": "99158"
+                    },
+                    {
+                      "timestamp": 1776643200000,
+                      "value": "49886"
+                    },
+                    {
+                      "timestamp": 1776384000000,
+                      "value": "907"
+                    }
+                  ]
+                },
+                {
+                  "name": "avg(dc_ai_time_first_token)",
+                  "values": [
+                    {
+                      "timestamp": 1778630400000,
+                      "value": "2647.15"
+                    },
+                    {
+                      "timestamp": 1778025600000,
+                      "value": "2180.88"
+                    },
+                    {
+                      "timestamp": 1777939200000,
+                      "value": "2081.48"
+                    },
+                    {
+                      "timestamp": 1777852800000,
+                      "value": "2714.54"
+                    },
+                    {
+                      "timestamp": 1776816000000,
+                      "value": "1591.31"
+                    },
+                    {
+                      "timestamp": 1776729600000,
+                      "value": "2509.13"
+                    },
+                    {
+                      "timestamp": 1776643200000,
+                      "value": "3129.18"
+                    },
+                    {
+                      "timestamp": 1776384000000,
+                      "value": "1654.47"
+                    }
+                  ]
+                }
+              ],
+              "name": "claude-opus-4-6"
+            },
+            {
+              "individualNames": [
+                "google/gemini-flash-latest"
+              ],
+              "metrics": [
+                {
+                  "name": "sum(message_count)",
+                  "values": [
+                    {
+                      "timestamp": 1776556800000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1776384000000,
+                      "value": "1"
+                    }
+                  ]
+                },
+                {
+                  "name": "sum(dc_ai_prompt_token_count)",
+                  "values": [
+                    {
+                      "timestamp": 1776556800000,
+                      "value": "11"
+                    },
+                    {
+                      "timestamp": 1776384000000,
+                      "value": "34"
+                    }
+                  ]
+                },
+                {
+                  "name": "sum(dc_ai_response_token_count)",
+                  "values": [
+                    {
+                      "timestamp": 1776556800000,
+                      "value": "1181"
+                    },
+                    {
+                      "timestamp": 1776384000000,
+                      "value": "3139"
+                    }
+                  ]
+                },
+                {
+                  "name": "avg(dc_ai_time_first_token)",
+                  "values": [
+                    {
+                      "timestamp": 1776556800000,
+                      "value": "3156.66"
+                    },
+                    {
+                      "timestamp": 1776384000000,
+                      "value": "1770.16"
+                    }
+                  ]
+                }
+              ],
+              "name": "google/gemini-flash-latest"
+            },
+            {
+              "individualNames": [
+                "claude-haiku-4-5-20251001"
+              ],
+              "metrics": [
+                {
+                  "name": "sum(message_count)",
+                  "values": [
+                    {
+                      "timestamp": 1778630400000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1778198400000,
+                      "value": "4"
+                    },
+                    {
+                      "timestamp": 1778025600000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1777939200000,
+                      "value": "10"
+                    },
+                    {
+                      "timestamp": 1777852800000,
+                      "value": "94"
+                    },
+                    {
+                      "timestamp": 1776816000000,
+                      "value": "43"
+                    }
+                  ]
+                },
+                {
+                  "name": "sum(dc_ai_prompt_token_count)",
+                  "values": [
+                    {
+                      "timestamp": 1778630400000,
+                      "value": "139"
+                    },
+                    {
+                      "timestamp": 1778198400000,
+                      "value": "963"
+                    },
+                    {
+                      "timestamp": 1778025600000,
+                      "value": "279"
+                    },
+                    {
+                      "timestamp": 1777939200000,
+                      "value": "1934"
+                    },
+                    {
+                      "timestamp": 1777852800000,
+                      "value": "10649"
+                    },
+                    {
+                      "timestamp": 1776816000000,
+                      "value": "8026"
+                    }
+                  ]
+                },
+                {
+                  "name": "sum(dc_ai_response_token_count)",
+                  "values": [
+                    {
+                      "timestamp": 1778630400000,
+                      "value": "16"
+                    },
+                    {
+                      "timestamp": 1778198400000,
+                      "value": "3878"
+                    },
+                    {
+                      "timestamp": 1778025600000,
+                      "value": "88"
+                    },
+                    {
+                      "timestamp": 1777939200000,
+                      "value": "1656"
+                    },
+                    {
+                      "timestamp": 1777852800000,
+                      "value": "6071"
+                    },
+                    {
+                      "timestamp": 1776816000000,
+                      "value": "3148"
+                    }
+                  ]
+                },
+                {
+                  "name": "avg(dc_ai_time_first_token)",
+                  "values": [
+                    {
+                      "timestamp": 1778630400000,
+                      "value": "530.72"
+                    },
+                    {
+                      "timestamp": 1778198400000,
+                      "value": "333.27"
+                    },
+                    {
+                      "timestamp": 1778025600000,
+                      "value": "400.48"
+                    },
+                    {
+                      "timestamp": 1777939200000,
+                      "value": "450.83"
+                    },
+                    {
+                      "timestamp": 1777852800000,
+                      "value": "541.02"
+                    },
+                    {
+                      "timestamp": 1776816000000,
+                      "value": "647.04"
+                    }
+                  ]
+                }
+              ],
+              "name": "claude-haiku-4-5-20251001"
+            },
+            {
+              "individualNames": [
+                "claude-opus-4-7"
+              ],
+              "metrics": [
+                {
+                  "name": "sum(message_count)",
+                  "values": [
+                    {
+                      "timestamp": 1778198400000,
+                      "value": "1"
+                    },
+                    {
+                      "timestamp": 1777852800000,
+                      "value": "1"
+                    }
+                  ]
+                },
+                {
+                  "name": "sum(dc_ai_prompt_token_count)",
+                  "values": [
+                    {
+                      "timestamp": 1778198400000,
+                      "value": "66"
+                    },
+                    {
+                      "timestamp": 1777852800000,
+                      "value": "358"
+                    }
+                  ]
+                },
+                {
+                  "name": "sum(dc_ai_response_token_count)",
+                  "values": [
+                    {
+                      "timestamp": 1778198400000,
+                      "value": "79595"
+                    },
+                    {
+                      "timestamp": 1777852800000,
+                      "value": "500027"
+                    }
+                  ]
+                },
+                {
+                  "name": "avg(dc_ai_time_first_token)",
+                  "values": [
+                    {
+                      "timestamp": 1778198400000,
+                      "value": "2650.54"
+                    },
+                    {
+                      "timestamp": 1777852800000,
+                      "value": "2861.01"
+                    }
+                  ]
+                }
+              ],
+              "name": "claude-opus-4-7"
+            }
+          ],
+          "name": "dev"
+        }
+      ]
+    }
+  ],
+  "product": [
+    {
+      "environments": [
+        {
+          "dimensions": [
+            {
+              "individualNames": [
+                "AI-VertexClaude"
+              ],
+              "metrics": [
+                {
+                  "name": "sum(message_count)",
+                  "values": [
+                    {
+                      "timestamp": 1778976000000,
+                      "value": "2"
+                    },
+                    {
+                      "timestamp": 1778889600000,
+                      "value": "16"
+                    },
+                    {
+                      "timestamp": 1778803200000,
+                      "value": "16"
+                    },
+                    {
+                      "timestamp": 1778716800000,
+                      "value": "16"
+                    },
+                    {
+                      "timestamp": 1778630400000,
+                      "value": "20"
+                    },
+                    {
+                      "timestamp": 1778544000000,
+                      "value": "16"
+                    },
+                    {
+                      "timestamp": 1778457600000,
+                      "value": "16"
+                    },
+                    {
+                      "timestamp": 1778371200000,
+                      "value": "16"
+                    },
+                    {
+                      "timestamp": 1778284800000,
+                      "value": "16"
+                    },
+                    {
+                      "timestamp": 1778198400000,
+                      "value": "54"
+                    },
+                    {
+                      "timestamp": 1778112000000,
+                      "value": "16"
+                    },
+                    {
+                      "timestamp": 1778025600000,
+                      "value": "30"
+                    },
+                    {
+                      "timestamp": 1777939200000,
+                      "value": "65"
+                    },
+                    {
+                      "timestamp": 1777852800000,
+                      "value": "396"
+                    },
+                    {
+                      "timestamp": 1777766400000,
+                      "value": "16"
+                    },
+                    {
+                      "timestamp": 1777680000000,
+                      "value": "16"
+                    },
+                    {
+                      "timestamp": 1777593600000,
+                      "value": "16"
+                    },
+                    {
+                      "timestamp": 1777507200000,
+                      "value": "16"
+                    },
+                    {
+                      "timestamp": 1777420800000,
+                      "value": "14"
+                    },
+                    {
+                      "timestamp": 1777334400000,
+                      "value": "18"
+                    },
+                    {
+                      "timestamp": 1777248000000,
+                      "value": "14"
+                    },
+                    {
+                      "timestamp": 1776988800000,
+                      "value": "28"
+                    },
+                    {
+                      "timestamp": 1776816000000,
+                      "value": "144"
+                    },
+                    {
+                      "timestamp": 1776729600000,
+                      "value": "327"
+                    },
+                    {
+                      "timestamp": 1776643200000,
+                      "value": "63"
+                    },
+                    {
+                      "timestamp": 1776556800000,
+                      "value": "15"
+                    },
+                    {
+                      "timestamp": 1776470400000,
+                      "value": "21"
+                    },
+                    {
+                      "timestamp": 1776384000000,
+                      "value": "30"
+                    }
+                  ]
+                },
+                {
+                  "name": "sum(message_count)",
+                  "values": [
+                    {
+                      "timestamp": 1778976000000,
+                      "value": "89"
+                    },
+                    {
+                      "timestamp": 1778889600000,
+                      "value": "35"
+                    }
+                  ]
+                },
+                {
+                  "name": "sum(dc_ai_prompt_token_count)",
+                  "values": [
+                    {
+                      "timestamp": 1778976000000,
+                      "value": "13"
+                    },
+                    {
+                      "timestamp": 1778889600000,
+                      "value": "104"
+                    },
+                    {
+                      "timestamp": 1778803200000,
+                      "value": "104"
+                    },
+                    {
+                      "timestamp": 1778716800000,
+                      "value": "104"
+                    },
+                    {
+                      "timestamp": 1778630400000,
+                      "value": "307"
+                    },
+                    {
+                      "timestamp": 1778544000000,
+                      "value": "104"
+                    },
+                    {
+                      "timestamp": 1778457600000,
+                      "value": "104"
+                    },
+                    {
+                      "timestamp": 1778371200000,
+                      "value": "104"
+                    },
+                    {
+                      "timestamp": 1778284800000,
+                      "value": "104"
+                    },
+                    {
+                      "timestamp": 1778198400000,
+                      "value": "1523"
+                    },
+                    {
+                      "timestamp": 1778112000000,
+                      "value": "104"
+                    },
+                    {
+                      "timestamp": 1778025600000,
+                      "value": "1351"
+                    },
+                    {
+                      "timestamp": 1777939200000,
+                      "value": "3038"
+                    },
+                    {
+                      "timestamp": 1777852800000,
+                      "value": "18158"
+                    },
+                    {
+                      "timestamp": 1777766400000,
+                      "value": "104"
+                    },
+                    {
+                      "timestamp": 1777680000000,
+                      "value": "104"
+                    },
+                    {
+                      "timestamp": 1777593600000,
+                      "value": "104"
+                    },
+                    {
+                      "timestamp": 1777507200000,
+                      "value": "104"
+                    },
+                    {
+                      "timestamp": 1777420800000,
+                      "value": "91"
+                    },
+                    {
+                      "timestamp": 1777334400000,
+                      "value": "117"
+                    },
+                    {
+                      "timestamp": 1777248000000,
+                      "value": "91"
+                    },
+                    {
+                      "timestamp": 1776988800000,
+                      "value": "21"
+                    },
+                    {
+                      "timestamp": 1776816000000,
+                      "value": "11605"
+                    },
+                    {
+                      "timestamp": 1776729600000,
+                      "value": "2502"
+                    },
+                    {
+                      "timestamp": 1776643200000,
+                      "value": "5578"
+                    },
+                    {
+                      "timestamp": 1776556800000,
+                      "value": "90"
+                    },
+                    {
+                      "timestamp": 1776470400000,
+                      "value": "126"
+                    },
+                    {
+                      "timestamp": 1776384000000,
+                      "value": "144"
+                    }
+                  ]
+                },
+                {
+                  "name": "sum(dc_ai_response_token_count)",
+                  "values": [
+                    {
+                      "timestamp": 1778976000000,
+                      "value": "310"
+                    },
+                    {
+                      "timestamp": 1778889600000,
+                      "value": "2353"
+                    },
+                    {
+                      "timestamp": 1778803200000,
+                      "value": "2374"
+                    },
+                    {
+                      "timestamp": 1778716800000,
+                      "value": "2380"
+                    },
+                    {
+                      "timestamp": 1778630400000,
+                      "value": "2436"
+                    },
+                    {
+                      "timestamp": 1778544000000,
+                      "value": "2336"
+                    },
+                    {
+                      "timestamp": 1778457600000,
+                      "value": "2291"
+                    },
+                    {
+                      "timestamp": 1778371200000,
+                      "value": "2280"
+                    },
+                    {
+                      "timestamp": 1778284800000,
+                      "value": "2314"
+                    },
+                    {
+                      "timestamp": 1778198400000,
+                      "value": "50047"
+                    },
+                    {
+                      "timestamp": 1778112000000,
+                      "value": "2375"
+                    },
+                    {
+                      "timestamp": 1778025600000,
+                      "value": "3636"
+                    },
+                    {
+                      "timestamp": 1777939200000,
+                      "value": "7963"
+                    },
+                    {
+                      "timestamp": 1777852800000,
+                      "value": "299004"
+                    },
+                    {
+                      "timestamp": 1777766400000,
+                      "value": "2295"
+                    },
+                    {
+                      "timestamp": 1777680000000,
+                      "value": "2343"
+                    },
+                    {
+                      "timestamp": 1777593600000,
+                      "value": "2343"
+                    },
+                    {
+                      "timestamp": 1777507200000,
+                      "value": "2296"
+                    },
+                    {
+                      "timestamp": 1777420800000,
+                      "value": "2044"
+                    },
+                    {
+                      "timestamp": 1777334400000,
+                      "value": "2616"
+                    },
+                    {
+                      "timestamp": 1777248000000,
+                      "value": "2089"
+                    },
+                    {
+                      "timestamp": 1776988800000,
+                      "value": "1044"
+                    },
+                    {
+                      "timestamp": 1776816000000,
+                      "value": "25620"
+                    },
+                    {
+                      "timestamp": 1776729600000,
+                      "value": "73381"
+                    },
+                    {
+                      "timestamp": 1776643200000,
+                      "value": "53255"
+                    },
+                    {
+                      "timestamp": 1776556800000,
+                      "value": "8753"
+                    },
+                    {
+                      "timestamp": 1776470400000,
+                      "value": "13288"
+                    },
+                    {
+                      "timestamp": 1776384000000,
+                      "value": "15334"
+                    }
+                  ]
+                },
+                {
+                  "name": "avg(dc_ai_time_first_token)",
+                  "values": [
+                    {
+                      "timestamp": 1778976000000,
+                      "value": "719.0"
+                    },
+                    {
+                      "timestamp": 1778889600000,
+                      "value": "733.625"
+                    },
+                    {
+                      "timestamp": 1778803200000,
+                      "value": "1049.125"
+                    },
+                    {
+                      "timestamp": 1778716800000,
+                      "value": "767.75"
+                    },
+                    {
+                      "timestamp": 1778630400000,
+                      "value": "1066.7"
+                    },
+                    {
+                      "timestamp": 1778544000000,
+                      "value": "846.875"
+                    },
+                    {
+                      "timestamp": 1778457600000,
+                      "value": "2052.375"
+                    },
+                    {
+                      "timestamp": 1778371200000,
+                      "value": "703.125"
+                    },
+                    {
+                      "timestamp": 1778284800000,
+                      "value": "972.0"
+                    },
+                    {
+                      "timestamp": 1778198400000,
+                      "value": "1113.0740740740744"
+                    },
+                    {
+                      "timestamp": 1778112000000,
+                      "value": "1135.8750000000002"
+                    },
+                    {
+                      "timestamp": 1778025600000,
+                      "value": "980.0666666666666"
+                    },
+                    {
+                      "timestamp": 1777939200000,
+                      "value": "1144.8125000000002"
+                    },
+                    {
+                      "timestamp": 1777852800000,
+                      "value": "1464.1025641025637"
+                    },
+                    {
+                      "timestamp": 1777766400000,
+                      "value": "901.75"
+                    },
+                    {
+                      "timestamp": 1777680000000,
+                      "value": "1023.3750000000001"
+                    },
+                    {
+                      "timestamp": 1777593600000,
+                      "value": "781.5"
+                    },
+                    {
+                      "timestamp": 1777507200000,
+                      "value": "1373.125"
+                    },
+                    {
+                      "timestamp": 1777420800000,
+                      "value": "1600.142857142857"
+                    },
+                    {
+                      "timestamp": 1777334400000,
+                      "value": "1373.111111111111"
+                    },
+                    {
+                      "timestamp": 1777248000000,
+                      "value": "1642.0"
+                    },
+                    {
+                      "timestamp": 1776988800000,
+                      "value": "1560.1428571428573"
+                    },
+                    {
+                      "timestamp": 1776816000000,
+                      "value": "1402.904761904762"
+                    },
+                    {
+                      "timestamp": 1776729600000,
+                      "value": "1805.918367346938"
+                    },
+                    {
+                      "timestamp": 1776643200000,
+                      "value": "2918.5121951219517"
+                    },
+                    {
+                      "timestamp": 1776556800000,
+                      "value": "1811.9333333333334"
+                    },
+                    {
+                      "timestamp": 1776470400000,
+                      "value": "3419.8095238095243"
+                    },
+                    {
+                      "timestamp": 1776384000000,
+                      "value": "3106.1600000000003"
+                    }
+                  ]
+                }
+              ],
+              "name": "AI-VertexClaude"
+            },
+            {
+              "individualNames": [
+                "AI-VertexQwen"
+              ],
+              "metrics": [
+                {
+                  "name": "sum(message_count)",
+                  "values": [
+                    {
+                      "timestamp": 1778976000000,
+                      "value": "2"
+                    },
+                    {
+                      "timestamp": 1778889600000,
+                      "value": "16"
+                    },
+                    {
+                      "timestamp": 1778803200000,
+                      "value": "16"
+                    },
+                    {
+                      "timestamp": 1778716800000,
+                      "value": "16"
+                    },
+                    {
+                      "timestamp": 1778630400000,
+                      "value": "15"
+                    },
+                    {
+                      "timestamp": 1778544000000,
+                      "value": "15"
+                    },
+                    {
+                      "timestamp": 1778457600000,
+                      "value": "15"
+                    },
+                    {
+                      "timestamp": 1778371200000,
+                      "value": "15"
+                    },
+                    {
+                      "timestamp": 1778284800000,
+                      "value": "16"
+                    },
+                    {
+                      "timestamp": 1778198400000,
+                      "value": "16"
+                    },
+                    {
+                      "timestamp": 1778112000000,
+                      "value": "15"
+                    },
+                    {
+                      "timestamp": 1778025600000,
+                      "value": "16"
+                    },
+                    {
+                      "timestamp": 1777939200000,
+                      "value": "13"
+                    },
+                    {
+                      "timestamp": 1777852800000,
+                      "value": "15"
+                    },
+                    {
+                      "timestamp": 1777766400000,
+                      "value": "15"
+                    },
+                    {
+                      "timestamp": 1777680000000,
+                      "value": "14"
+                    },
+                    {
+                      "timestamp": 1777593600000,
+                      "value": "12"
+                    },
+                    {
+                      "timestamp": 1777507200000,
+                      "value": "16"
+                    },
+                    {
+                      "timestamp": 1777420800000,
+                      "value": "14"
+                    },
+                    {
+                      "timestamp": 1777334400000,
+                      "value": "20"
+                    },
+                    {
+                      "timestamp": 1777248000000,
+                      "value": "29"
+                    },
+                    {
+                      "timestamp": 1777161600000,
+                      "value": "15"
+                    },
+                    {
+                      "timestamp": 1777075200000,
+                      "value": "8"
+                    },
+                    {
+                      "timestamp": 1776988800000,
+                      "value": "8"
+                    },
+                    {
+                      "timestamp": 1776902400000,
+                      "value": "11"
+                    }
+                  ]
+                },
+                {
+                  "name": "sum(message_count)",
+                  "values": [
+                    {
+                      "timestamp": 1778976000000,
+                      "value": "89"
+                    },
+                    {
+                      "timestamp": 1778889600000,
+                      "value": "35"
+                    }
+                  ]
+                },
+                {
+                  "name": "sum(dc_ai_prompt_token_count)",
+                  "values": [
+                    {
+                      "timestamp": 1778976000000,
+                      "value": "18"
+                    },
+                    {
+                      "timestamp": 1778889600000,
+                      "value": "144"
+                    },
+                    {
+                      "timestamp": 1778803200000,
+                      "value": "144"
+                    },
+                    {
+                      "timestamp": 1778716800000,
+                      "value": "144"
+                    },
+                    {
+                      "timestamp": 1778630400000,
+                      "value": "126"
+                    },
+                    {
+                      "timestamp": 1778544000000,
+                      "value": "116"
+                    },
+                    {
+                      "timestamp": 1778457600000,
+                      "value": "126"
+                    },
+                    {
+                      "timestamp": 1778371200000,
+                      "value": "126"
+                    },
+                    {
+                      "timestamp": 1778284800000,
+                      "value": "144"
+                    },
+                    {
+                      "timestamp": 1778198400000,
+                      "value": "144"
+                    },
+                    {
+                      "timestamp": 1778112000000,
+                      "value": "126"
+                    },
+                    {
+                      "timestamp": 1778025600000,
+                      "value": "144"
+                    },
+                    {
+                      "timestamp": 1777939200000,
+                      "value": "90"
+                    },
+                    {
+                      "timestamp": 1777852800000,
+                      "value": "116"
+                    },
+                    {
+                      "timestamp": 1777766400000,
+                      "value": "126"
+                    },
+                    {
+                      "timestamp": 1777680000000,
+                      "value": "108"
+                    },
+                    {
+                      "timestamp": 1777593600000,
+                      "value": "90"
+                    },
+                    {
+                      "timestamp": 1777507200000,
+                      "value": "144"
+                    },
+                    {
+                      "timestamp": 1777420800000,
+                      "value": "126"
+                    },
+                    {
+                      "timestamp": 1777334400000,
+                      "value": "170"
+                    },
+                    {
+                      "timestamp": 1777248000000,
+                      "value": "208"
+                    },
+                    {
+                      "timestamp": 1777161600000,
+                      "value": "32"
+                    },
+                    {
+                      "timestamp": 1777075200000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1776988800000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1776902400000,
+                      "value": "0"
+                    }
+                  ]
+                },
+                {
+                  "name": "sum(dc_ai_response_token_count)",
+                  "values": [
+                    {
+                      "timestamp": 1778976000000,
+                      "value": "3553"
+                    },
+                    {
+                      "timestamp": 1778889600000,
+                      "value": "28497"
+                    },
+                    {
+                      "timestamp": 1778803200000,
+                      "value": "27034"
+                    },
+                    {
+                      "timestamp": 1778716800000,
+                      "value": "27023"
+                    },
+                    {
+                      "timestamp": 1778630400000,
+                      "value": "23623"
+                    },
+                    {
+                      "timestamp": 1778544000000,
+                      "value": "23321"
+                    },
+                    {
+                      "timestamp": 1778457600000,
+                      "value": "25706"
+                    },
+                    {
+                      "timestamp": 1778371200000,
+                      "value": "25137"
+                    },
+                    {
+                      "timestamp": 1778284800000,
+                      "value": "27909"
+                    },
+                    {
+                      "timestamp": 1778198400000,
+                      "value": "29990"
+                    },
+                    {
+                      "timestamp": 1778112000000,
+                      "value": "25476"
+                    },
+                    {
+                      "timestamp": 1778025600000,
+                      "value": "27058"
+                    },
+                    {
+                      "timestamp": 1777939200000,
+                      "value": "15943"
+                    },
+                    {
+                      "timestamp": 1777852800000,
+                      "value": "22473"
+                    },
+                    {
+                      "timestamp": 1777766400000,
+                      "value": "24073"
+                    },
+                    {
+                      "timestamp": 1777680000000,
+                      "value": "22134"
+                    },
+                    {
+                      "timestamp": 1777593600000,
+                      "value": "17285"
+                    },
+                    {
+                      "timestamp": 1777507200000,
+                      "value": "31806"
+                    },
+                    {
+                      "timestamp": 1777420800000,
+                      "value": "26987"
+                    },
+                    {
+                      "timestamp": 1777334400000,
+                      "value": "25855"
+                    },
+                    {
+                      "timestamp": 1777248000000,
+                      "value": "21863"
+                    },
+                    {
+                      "timestamp": 1777161600000,
+                      "value": "3729"
+                    },
+                    {
+                      "timestamp": 1777075200000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1776988800000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1776902400000,
+                      "value": "0"
+                    }
+                  ]
+                },
+                {
+                  "name": "avg(dc_ai_time_first_token)",
+                  "values": [
+                    {
+                      "timestamp": 1778976000000,
+                      "value": "18142.0"
+                    },
+                    {
+                      "timestamp": 1778889600000,
+                      "value": "21502.75"
+                    },
+                    {
+                      "timestamp": 1778803200000,
+                      "value": "27103.875"
+                    },
+                    {
+                      "timestamp": 1778716800000,
+                      "value": "22233.125000000004"
+                    },
+                    {
+                      "timestamp": 1778630400000,
+                      "value": "20399.571428571428"
+                    },
+                    {
+                      "timestamp": 1778544000000,
+                      "value": "19096.714285714286"
+                    },
+                    {
+                      "timestamp": 1778457600000,
+                      "value": "22946.714285714286"
+                    },
+                    {
+                      "timestamp": 1778371200000,
+                      "value": "23863.42857142857"
+                    },
+                    {
+                      "timestamp": 1778284800000,
+                      "value": "24621.875"
+                    },
+                    {
+                      "timestamp": 1778198400000,
+                      "value": "29981.625"
+                    },
+                    {
+                      "timestamp": 1778112000000,
+                      "value": "20489.14285714286"
+                    },
+                    {
+                      "timestamp": 1778025600000,
+                      "value": "21506.875"
+                    },
+                    {
+                      "timestamp": 1777939200000,
+                      "value": "17020.2"
+                    },
+                    {
+                      "timestamp": 1777852800000,
+                      "value": "38570.0"
+                    },
+                    {
+                      "timestamp": 1777766400000,
+                      "value": "19565.42857142857"
+                    },
+                    {
+                      "timestamp": 1777680000000,
+                      "value": "21718.666666666668"
+                    },
+                    {
+                      "timestamp": 1777593600000,
+                      "value": "20222.8"
+                    },
+                    {
+                      "timestamp": 1777507200000,
+                      "value": "24676.75"
+                    },
+                    {
+                      "timestamp": 1777420800000,
+                      "value": "20307.0"
+                    },
+                    {
+                      "timestamp": 1777334400000,
+                      "value": "12775.2"
+                    },
+                    {
+                      "timestamp": 1777248000000,
+                      "value": "7045.153846153847"
+                    },
+                    {
+                      "timestamp": 1777161600000,
+                      "value": "13036.5"
+                    },
+                    {
+                      "timestamp": 1777075200000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1776988800000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1776902400000,
+                      "value": "0"
+                    }
+                  ]
+                }
+              ],
+              "name": "AI-VertexQwen"
+            },
+            {
+              "individualNames": [
+                "AI-VertexGemini"
+              ],
+              "metrics": [
+                {
+                  "name": "sum(message_count)",
+                  "values": [
+                    {
+                      "timestamp": 1778976000000,
+                      "value": "45"
+                    },
+                    {
+                      "timestamp": 1778889600000,
+                      "value": "16"
+                    },
+                    {
+                      "timestamp": 1778803200000,
+                      "value": "16"
+                    },
+                    {
+                      "timestamp": 1778716800000,
+                      "value": "16"
+                    },
+                    {
+                      "timestamp": 1778630400000,
+                      "value": "16"
+                    },
+                    {
+                      "timestamp": 1778544000000,
+                      "value": "16"
+                    },
+                    {
+                      "timestamp": 1778457600000,
+                      "value": "16"
+                    },
+                    {
+                      "timestamp": 1778371200000,
+                      "value": "16"
+                    },
+                    {
+                      "timestamp": 1778284800000,
+                      "value": "14"
+                    },
+                    {
+                      "timestamp": 1778198400000,
+                      "value": "42"
+                    },
+                    {
+                      "timestamp": 1778112000000,
+                      "value": "16"
+                    },
+                    {
+                      "timestamp": 1778025600000,
+                      "value": "76"
+                    },
+                    {
+                      "timestamp": 1777939200000,
+                      "value": "27"
+                    },
+                    {
+                      "timestamp": 1777852800000,
+                      "value": "104"
+                    },
+                    {
+                      "timestamp": 1777766400000,
+                      "value": "16"
+                    },
+                    {
+                      "timestamp": 1777680000000,
+                      "value": "16"
+                    },
+                    {
+                      "timestamp": 1777593600000,
+                      "value": "16"
+                    },
+                    {
+                      "timestamp": 1777507200000,
+                      "value": "16"
+                    },
+                    {
+                      "timestamp": 1777420800000,
+                      "value": "14"
+                    },
+                    {
+                      "timestamp": 1777334400000,
+                      "value": "18"
+                    },
+                    {
+                      "timestamp": 1777248000000,
+                      "value": "24"
+                    },
+                    {
+                      "timestamp": 1777161600000,
+                      "value": "16"
+                    },
+                    {
+                      "timestamp": 1777075200000,
+                      "value": "16"
+                    },
+                    {
+                      "timestamp": 1776988800000,
+                      "value": "16"
+                    },
+                    {
+                      "timestamp": 1776902400000,
+                      "value": "19"
+                    },
+                    {
+                      "timestamp": 1776816000000,
+                      "value": "27"
+                    },
+                    {
+                      "timestamp": 1776729600000,
+                      "value": "44"
+                    },
+                    {
+                      "timestamp": 1776643200000,
+                      "value": "8"
+                    },
+                    {
+                      "timestamp": 1776556800000,
+                      "value": "69"
+                    },
+                    {
+                      "timestamp": 1776470400000,
+                      "value": "78"
+                    },
+                    {
+                      "timestamp": 1776384000000,
+                      "value": "22"
+                    }
+                  ]
+                },
+                {
+                  "name": "sum(message_count)",
+                  "values": [
+                    {
+                      "timestamp": 1778976000000,
+                      "value": "89"
+                    },
+                    {
+                      "timestamp": 1778889600000,
+                      "value": "35"
+                    }
+                  ]
+                },
+                {
+                  "name": "sum(dc_ai_prompt_token_count)",
+                  "values": [
+                    {
+                      "timestamp": 1778976000000,
+                      "value": "582163"
+                    },
+                    {
+                      "timestamp": 1778889600000,
+                      "value": "144"
+                    },
+                    {
+                      "timestamp": 1778803200000,
+                      "value": "144"
+                    },
+                    {
+                      "timestamp": 1778716800000,
+                      "value": "144"
+                    },
+                    {
+                      "timestamp": 1778630400000,
+                      "value": "144"
+                    },
+                    {
+                      "timestamp": 1778544000000,
+                      "value": "144"
+                    },
+                    {
+                      "timestamp": 1778457600000,
+                      "value": "144"
+                    },
+                    {
+                      "timestamp": 1778371200000,
+                      "value": "144"
+                    },
+                    {
+                      "timestamp": 1778284800000,
+                      "value": "108"
+                    },
+                    {
+                      "timestamp": 1778198400000,
+                      "value": "149642"
+                    },
+                    {
+                      "timestamp": 1778112000000,
+                      "value": "144"
+                    },
+                    {
+                      "timestamp": 1778025600000,
+                      "value": "352321"
+                    },
+                    {
+                      "timestamp": 1777939200000,
+                      "value": "61141"
+                    },
+                    {
+                      "timestamp": 1777852800000,
+                      "value": "1262236"
+                    },
+                    {
+                      "timestamp": 1777766400000,
+                      "value": "144"
+                    },
+                    {
+                      "timestamp": 1777680000000,
+                      "value": "144"
+                    },
+                    {
+                      "timestamp": 1777593600000,
+                      "value": "144"
+                    },
+                    {
+                      "timestamp": 1777507200000,
+                      "value": "144"
+                    },
+                    {
+                      "timestamp": 1777420800000,
+                      "value": "126"
+                    },
+                    {
+                      "timestamp": 1777334400000,
+                      "value": "114"
+                    },
+                    {
+                      "timestamp": 1777248000000,
+                      "value": "72"
+                    },
+                    {
+                      "timestamp": 1777161600000,
+                      "value": "48"
+                    },
+                    {
+                      "timestamp": 1777075200000,
+                      "value": "48"
+                    },
+                    {
+                      "timestamp": 1776988800000,
+                      "value": "48"
+                    },
+                    {
+                      "timestamp": 1776902400000,
+                      "value": "64"
+                    },
+                    {
+                      "timestamp": 1776816000000,
+                      "value": "58488"
+                    },
+                    {
+                      "timestamp": 1776729600000,
+                      "value": "301581"
+                    },
+                    {
+                      "timestamp": 1776643200000,
+                      "value": "8053"
+                    },
+                    {
+                      "timestamp": 1776556800000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1776470400000,
+                      "value": "189989"
+                    },
+                    {
+                      "timestamp": 1776384000000,
+                      "value": "21872"
+                    }
+                  ]
+                },
+                {
+                  "name": "sum(dc_ai_response_token_count)",
+                  "values": [
+                    {
+                      "timestamp": 1778976000000,
+                      "value": "16851"
+                    },
+                    {
+                      "timestamp": 1778889600000,
+                      "value": "21616"
+                    },
+                    {
+                      "timestamp": 1778803200000,
+                      "value": "20679"
+                    },
+                    {
+                      "timestamp": 1778716800000,
+                      "value": "21372"
+                    },
+                    {
+                      "timestamp": 1778630400000,
+                      "value": "22102"
+                    },
+                    {
+                      "timestamp": 1778544000000,
+                      "value": "21659"
+                    },
+                    {
+                      "timestamp": 1778457600000,
+                      "value": "21426"
+                    },
+                    {
+                      "timestamp": 1778371200000,
+                      "value": "21804"
+                    },
+                    {
+                      "timestamp": 1778284800000,
+                      "value": "15196"
+                    },
+                    {
+                      "timestamp": 1778198400000,
+                      "value": "27529"
+                    },
+                    {
+                      "timestamp": 1778112000000,
+                      "value": "20866"
+                    },
+                    {
+                      "timestamp": 1778025600000,
+                      "value": "25511"
+                    },
+                    {
+                      "timestamp": 1777939200000,
+                      "value": "11931"
+                    },
+                    {
+                      "timestamp": 1777852800000,
+                      "value": "38715"
+                    },
+                    {
+                      "timestamp": 1777766400000,
+                      "value": "22328"
+                    },
+                    {
+                      "timestamp": 1777680000000,
+                      "value": "20887"
+                    },
+                    {
+                      "timestamp": 1777593600000,
+                      "value": "22259"
+                    },
+                    {
+                      "timestamp": 1777507200000,
+                      "value": "21120"
+                    },
+                    {
+                      "timestamp": 1777420800000,
+                      "value": "18538"
+                    },
+                    {
+                      "timestamp": 1777334400000,
+                      "value": "16144"
+                    },
+                    {
+                      "timestamp": 1777248000000,
+                      "value": "7369"
+                    },
+                    {
+                      "timestamp": 1777161600000,
+                      "value": "4633"
+                    },
+                    {
+                      "timestamp": 1777075200000,
+                      "value": "4961"
+                    },
+                    {
+                      "timestamp": 1776988800000,
+                      "value": "4837"
+                    },
+                    {
+                      "timestamp": 1776902400000,
+                      "value": "6551"
+                    },
+                    {
+                      "timestamp": 1776816000000,
+                      "value": "4352"
+                    },
+                    {
+                      "timestamp": 1776729600000,
+                      "value": "2354"
+                    },
+                    {
+                      "timestamp": 1776643200000,
+                      "value": "128"
+                    },
+                    {
+                      "timestamp": 1776556800000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1776470400000,
+                      "value": "3404"
+                    },
+                    {
+                      "timestamp": 1776384000000,
+                      "value": "196"
+                    }
+                  ]
+                },
+                {
+                  "name": "avg(dc_ai_time_first_token)",
+                  "values": [
+                    {
+                      "timestamp": 1778976000000,
+                      "value": "6076.818181818182"
+                    },
+                    {
+                      "timestamp": 1778889600000,
+                      "value": "12264.375"
+                    },
+                    {
+                      "timestamp": 1778803200000,
+                      "value": "11294.250000000002"
+                    },
+                    {
+                      "timestamp": 1778716800000,
+                      "value": "11553.750000000002"
+                    },
+                    {
+                      "timestamp": 1778630400000,
+                      "value": "12102.875"
+                    },
+                    {
+                      "timestamp": 1778544000000,
+                      "value": "11534.750000000002"
+                    },
+                    {
+                      "timestamp": 1778457600000,
+                      "value": "11826.25"
+                    },
+                    {
+                      "timestamp": 1778371200000,
+                      "value": "11703.499999999998"
+                    },
+                    {
+                      "timestamp": 1778284800000,
+                      "value": "10916.0"
+                    },
+                    {
+                      "timestamp": 1778198400000,
+                      "value": "6560.666666666667"
+                    },
+                    {
+                      "timestamp": 1778112000000,
+                      "value": "11628.25"
+                    },
+                    {
+                      "timestamp": 1778025600000,
+                      "value": "4609.964285714286"
+                    },
+                    {
+                      "timestamp": 1777939200000,
+                      "value": "34192.18181818182"
+                    },
+                    {
+                      "timestamp": 1777852800000,
+                      "value": "9287.9"
+                    },
+                    {
+                      "timestamp": 1777766400000,
+                      "value": "11799.999999999998"
+                    },
+                    {
+                      "timestamp": 1777680000000,
+                      "value": "11775.25"
+                    },
+                    {
+                      "timestamp": 1777593600000,
+                      "value": "11997.0"
+                    },
+                    {
+                      "timestamp": 1777507200000,
+                      "value": "11951.375"
+                    },
+                    {
+                      "timestamp": 1777420800000,
+                      "value": "11513.57142857143"
+                    },
+                    {
+                      "timestamp": 1777334400000,
+                      "value": "8092.555555555556"
+                    },
+                    {
+                      "timestamp": 1777248000000,
+                      "value": "3322.0833333333335"
+                    },
+                    {
+                      "timestamp": 1777161600000,
+                      "value": "3163.5"
+                    },
+                    {
+                      "timestamp": 1777075200000,
+                      "value": "3534.0"
+                    },
+                    {
+                      "timestamp": 1776988800000,
+                      "value": "3373.625"
+                    },
+                    {
+                      "timestamp": 1776902400000,
+                      "value": "2896.0"
+                    },
+                    {
+                      "timestamp": 1776816000000,
+                      "value": "2091.7"
+                    },
+                    {
+                      "timestamp": 1776729600000,
+                      "value": "2157.3125"
+                    },
+                    {
+                      "timestamp": 1776643200000,
+                      "value": "1915.5"
+                    },
+                    {
+                      "timestamp": 1776556800000,
+                      "value": "0"
+                    },
+                    {
+                      "timestamp": 1776470400000,
+                      "value": "2649.9999999999995"
+                    },
+                    {
+                      "timestamp": 1776384000000,
+                      "value": "2400.3333333333335"
+                    }
+                  ]
+                }
+              ],
+              "name": "AI-VertexGemini"
+            },
+            {
+              "individualNames": [
+                "AI Product"
+              ],
+              "metrics": [
+                {
+                  "name": "sum(message_count)",
+                  "values": [
+                    {
+                      "timestamp": 1776643200000,
+                      "value": "28"
+                    }
+                  ]
+                },
+                {
+                  "name": "sum(message_count)",
+                  "values": [
+                    {
+                      "timestamp": 1778976000000,
+                      "value": "89"
+                    },
+                    {
+                      "timestamp": 1778889600000,
+                      "value": "35"
+                    }
+                  ]
+                },
+                {
+                  "name": "sum(dc_ai_prompt_token_count)",
+                  "values": [
+                    {
+                      "timestamp": 1776643200000,
+                      "value": "0"
+                    }
+                  ]
+                },
+                {
+                  "name": "sum(dc_ai_response_token_count)",
+                  "values": [
+                    {
+                      "timestamp": 1776643200000,
+                      "value": "0"
+                    }
+                  ]
+                },
+                {
+                  "name": "avg(dc_ai_time_first_token)",
+                  "values": [
+                    {
+                      "timestamp": 1776643200000,
+                      "value": "0"
+                    }
+                  ]
+                }
+              ],
+              "name": "AI Product"
+            }
+          ],
+          "name": "dev"
+        }
+      ]
+    }
+  ]
+}

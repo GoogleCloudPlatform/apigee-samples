@@ -1,0 +1,106 @@
+<!doctype html>
+<!--
+ Copyright 2026 Google LLC
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OpenAPI Specification</title>
+    <style>
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 2rem;
+        background-color: #f8f9fa;
+      }
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+        border-bottom: 2px solid #dee2e6;
+        padding-bottom: 0.5rem;
+      }
+      h1 {
+        margin: 0;
+        font-size: 1.5rem;
+      }
+      .back-link {
+        text-decoration: none;
+        color: #007bff;
+        font-weight: 500;
+      }
+      .back-link:hover {
+        text-decoration: underline;
+      }
+      pre {
+        background: #ffffff;
+        padding: 1.5rem;
+        border: 1px solid #dee2e6;
+        border-radius: 4px;
+        overflow-x: auto;
+        font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+        font-size: 0.9rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      }
+      .error {
+        color: #dc3545;
+        background: #f8d7da;
+        padding: 1rem;
+        border-radius: 4px;
+        border: 1px solid #f5c6cb;
+      }
+      .loading {
+        color: #6c757d;
+        font-style: italic;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <h1>OpenAPI Specification (YAML)</h1>
+    </div>
+    <div id="status" class="loading">Loading specification...</div>
+    <pre id="spec-container" style="display: none"></pre>
+
+    <script>
+      async function loadSpec() {
+        const status = document.getElementById("status");
+        const container = document.getElementById("spec-container");
+
+        try {
+          const response = await fetch("/openapi.yaml");
+          if (!response.ok) throw new Error(`Failed to load spec: ${response.statusText}`);
+
+          const text = await response.text();
+          container.textContent = text;
+          container.style.display = "block";
+          status.style.display = "none";
+        } catch (err) {
+          status.textContent = `Error: ${err.message}`;
+          status.className = "error";
+        }
+      }
+
+      loadSpec();
+    </script>
+  </body>
+</html>

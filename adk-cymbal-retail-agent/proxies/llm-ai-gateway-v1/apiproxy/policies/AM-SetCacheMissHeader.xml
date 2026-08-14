@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+ Copyright 2026 Google LLC
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+      http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<AssignMessage continueOnError="false" enabled="true" name="AM-SetCacheMissHeader">
+  <DisplayName>AM-SetCacheMissHeader</DisplayName>
+  <Set>
+    <Headers>
+      <Header name="X-Cache">MISS</Header>
+      <Header name="X-Debug-Prompt-Value">{request_prompt_value}</Header>
+      <Header name="X-Debug-ModelArmor-Match">{SanitizeUserPrompt.SUP-Sanitize-User-Prompt.piAndJailbreakFilterResult.matchState}</Header>
+      <Header name="X-Debug-Vertex-Payload">{vertex_payload_debug}</Header>
+      <Header name="X-Debug-Payload-Error">{x-build-payload-error}</Header>
+      <Header name="X-LLM-Model-Selected">{message.header.x-llm-model-selected}</Header>
+      <Header name="X-Debug-Extract-Token-Error">{extract_token_count_error}</Header>
+      <Header name="X-Debug-Semantic-Routing-Error">{semantic_routing_error}</Header>
+      <Header name="X-Debug-Model">{model}</Header>
+      <Header name="X-Debug-Fallback-Triggered">{fallback_triggered}</Header>
+      <Header name="X-Debug-Semantic-Match-ID">{semantic_match_id}</Header>
+      <Header name="X-Debug-Semantic-Match-Distance">{semantic_match_distance}</Header>
+    </Headers>
+  </Set>
+  <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+</AssignMessage>
