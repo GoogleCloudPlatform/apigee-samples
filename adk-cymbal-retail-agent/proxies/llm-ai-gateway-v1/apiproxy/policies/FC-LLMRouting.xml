@@ -13,5 +13,5 @@
 -->
 <FlowCallout async="false" continueOnError="false" enabled="true" name="FC-LLMRouting">
   <DisplayName>FC-LLMRouting</DisplayName>
-  <SharedFlowBundle>sf-llm-routing</SharedFlowBundle>
+  <SharedFlowBundle>llm-routing-v2</SharedFlowBundle>
 </FlowCallout>

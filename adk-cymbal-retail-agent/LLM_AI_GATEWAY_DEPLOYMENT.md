@@ -125,22 +125,24 @@ The deployment script [`deploy-llm-ai-gateway.sh`](file:///usr/local/google/home
      - `dc_response_type_v2` (`STRING`)
      - `dc_time_to_first_token_v2` (`INTEGER`)
      - `dc_total_token_count_v2` (`INTEGER`)
-3. **Shared Flows Deployment**:
+3. **KeyValueMap (`model-armor-config-v2`)**:
+   - Provisions an environment-scoped KVM `model-armor-config-v2` containing the `modelArmorTemplate` key configured via the `$MODEL_ARMOR_TEMPLATE` environment variable.
+4. **Shared Flows Deployment**:
    - `llm-modelarmor-dlp-v1`: Enforces Model Armor responsible AI governance and Sensitive Data Protection (DLP) de-identification.
    - `llm-routing-v2`: Routes requests dynamically and handles model failovers.
-4. **API Proxy Deployment (`llm-ai-gateway-v1`)**:
+5. **API Proxy Deployment (`llm-ai-gateway-v1`)**:
    - Deploys the GenAI proxy bundle with token count extraction, semantic caching, routing, and quota enforcement policies.
-5. **Developer & Developer App Configuration**:
+6. **Developer & Developer App Configuration**:
    - Provisions developer `cymbal-retail-dev@example.com` (`cymbal-retail-dev`).
-   - Provisions the API Product `llm-ai-gateway-product` with both standard proxy operations and per-model **LLM Token Quotas**:
+   - Provisions the API Product `llm-ai-gateway-product` with both proxy operations and per-model **LLM Token Quotas** on `llm-ai-gateway-v1`:
      - **gemini-2.5-pro**: `POST` operations limited to **10,000 tokens every 5 minutes**.
      - **gemini-2.5-flash**: `POST` operations limited to **100,000 tokens every 5 minutes**.
-6. **Application Provisioning (`llm-ai-gateway-app`)**:
+7. **Application Provisioning (`llm-ai-gateway-app`)**:
    - Connects the developer and API product to issue an API consumer key.
 
 ---
 
-## 2. Prerequisites
+## 3. Prerequisites
 
 Before running the deployment script, ensure you have authenticated with Google Cloud CLI and set the mandatory environment variables:
 
@@ -149,9 +151,10 @@ Before running the deployment script, ensure you have authenticated with Google 
 gcloud auth login
 gcloud auth application-default login
 
-# Export your target Google Cloud Project ID and Apigee Environment
+# Export your target Google Cloud Project ID, Apigee Environment, and Model Armor Template
 export PROJECT_ID="your-gcp-project-id"
 export APIGEE_ENV="your-apigee-environment"
+export MODEL_ARMOR_TEMPLATE="projects/your-gcp-project-id/locations/your-region/templates/your-model-armor-template"
 
 # Optional: Set a custom access token (otherwise automatically fetched)
 # export TOKEN=$(gcloud auth application-default print-access-token)
@@ -165,7 +168,7 @@ chmod +x ./deploy-llm-ai-gateway.sh
 
 ---
 
-## 3. Executing the Deployment Script
+## 4. Executing the Deployment Script
 
 Run the deployment script from the root repository directory:
 
@@ -176,6 +179,7 @@ Run the deployment script from the root repository directory:
 ### Expected Output
 - The script checks or creates the `apigee-vertex-ai-caller` service account and applies IAM policy bindings.
 - It verifies and creates all seven LLM `dc_*_v2` Data Collectors.
+- It creates or updates the `model-armor-config-v2` KVM with the `modelArmorTemplate` entry.
 - It deploys the `llm-modelarmor-dlp-v1` and `llm-routing-v2` shared flows.
 - It deploys the `llm-ai-gateway-v1` proxy.
 - It configures the API Product `llm-ai-gateway-product` via Apigee REST API v1.
@@ -183,7 +187,7 @@ Run the deployment script from the root repository directory:
 
 ---
 
-## 4. Visualizing LLM AI Gateway Analytics
+## 5. Visualizing LLM AI Gateway Analytics
 
 Once requests are flowing through your deployed LLM AI Gateway, you can inspect real-time metrics and telemetry using the local Go analytics dashboard provided in `./llm-ai-gateway-analytics`.
 
@@ -214,7 +218,7 @@ Once requests are flowing through your deployed LLM AI Gateway, you can inspect 
 
 ---
 
-## 5. Testing the Gateway
+## 6. Testing the Gateway
 
 Once your API proxy is deployed, you can test both OpenAI-compatible completions and native Vertex AI Gemini endpoints. Set the required variables first:
 

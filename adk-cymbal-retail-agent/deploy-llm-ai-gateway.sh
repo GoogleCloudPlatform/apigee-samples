@@ -39,6 +39,12 @@ if [ -z "$APIGEE_ENV" ]; then
   exit 1
 fi
 
+if [ -z "$MODEL_ARMOR_TEMPLATE" ]; then
+  echo "ERROR: Mandatory environment variable MODEL_ARMOR_TEMPLATE is not set."
+  echo "Usage: export MODEL_ARMOR_TEMPLATE=\"projects/<project-id>/locations/<region>/templates/<template-name>\""
+  exit 1
+fi
+
 # Ensure apigeecli CLI tool is installed or available in PATH
 if ! command -v apigeecli &> /dev/null; then
   echo "INFO: apigeecli not found in PATH. Checking ~/.apigeecli/bin..."
@@ -150,10 +156,28 @@ create_data_collector "dc_time_to_first_token_v2"    "INTEGER" "LLM Time to Firs
 create_data_collector "dc_total_token_count_v2"      "INTEGER" "LLM Total Token Count v2"
 
 # ==============================================================================
-# Step 3: Deploy Shared Flows and API Proxy using the Service Account
+# Step 3: Create KeyValueMap (model-armor-config-v2) for Model Armor Template
 # ==============================================================================
 echo ""
-echo "--- Step 3: Deploying Shared Flows and API Proxy ---"
+echo "--- Step 3: Creating KeyValueMap (model-armor-config-v2) ---"
+echo "Creating KVM: model-armor-config-v2 in environment $APIGEE_ENV..."
+apigeecli kvms create --name "model-armor-config-v2" \
+  --env "$APIGEE_ENV" --org "$PROJECT_ID" --token "$TOKEN" >/dev/null 2>&1 || \
+  echo "INFO: KVM model-armor-config-v2 may already exist."
+
+echo "Configuring KVM entry modelArmorTemplate..."
+apigeecli kvms entries create --map "model-armor-config-v2" \
+  --key "modelArmorTemplate" --value "$MODEL_ARMOR_TEMPLATE" \
+  --env "$APIGEE_ENV" --org "$PROJECT_ID" --token "$TOKEN" >/dev/null 2>&1 || \
+  apigeecli kvms entries update --map "model-armor-config-v2" \
+  --key "modelArmorTemplate" --value "$MODEL_ARMOR_TEMPLATE" \
+  --env "$APIGEE_ENV" --org "$PROJECT_ID" --token "$TOKEN"
+
+# ==============================================================================
+# Step 4: Deploy Shared Flows and API Proxy using the Service Account
+# ==============================================================================
+echo ""
+echo "--- Step 4: Deploying Shared Flows and API Proxy ---"
 
 deploy_shared_flow() {
   local sf_name=$1
@@ -203,10 +227,10 @@ apigeecli apis create bundle -n "$PROXY_NAME" \
   --ovr --wait
 
 # ==============================================================================
-# Step 4: Create Developer (cymbal-retail-dev@example.com)
+# Step 5: Create Developer (cymbal-retail-dev@example.com)
 # ==============================================================================
 echo ""
-echo "--- Step 4: Creating Developer ---"
+echo "--- Step 5: Creating Developer ---"
 DEV_EMAIL="cymbal-retail-dev@example.com"
 DEV_USER="cymbal-retail-dev"
 
@@ -221,15 +245,14 @@ apigeecli developers create \
   echo "INFO: Developer $DEV_EMAIL may already exist."
 
 # ==============================================================================
-# Step 5: Create API Product (llm-ai-gateway-product) with LLM Operations & Quotas
+# Step 6: Create API Product (llm-ai-gateway-product) with LLM Operations & Quotas
 # ==============================================================================
 echo ""
-echo "--- Step 5: Creating API Product (llm-ai-gateway-product) ---"
+echo "--- Step 6: Creating API Product (llm-ai-gateway-product) ---"
 PRODUCT_NAME="llm-ai-gateway-product"
 PRODUCT_DISPLAY_NAME="LLM AI Gateway Product"
 
-# Construct product JSON configuration supporting proxy and LLM operations for
-# both proxy names (llm-ai-gateway and llm-ai-gateway-v1) for broad compatibility
+# Construct product JSON configuration supporting proxy and LLM operations
 PRODUCT_PAYLOAD=$(jq -n \
   --arg name "$PRODUCT_NAME" \
   --arg displayName "$PRODUCT_DISPLAY_NAME" \
@@ -241,48 +264,30 @@ PRODUCT_PAYLOAD=$(jq -n \
     environments: [$env],
     scopes: ["customer", "manager"],
     operationGroup: {
-      operationConfigType: "llm",
+      operationConfigType: "proxy",
       operationConfigs: [
         {
-          apiSource: "llm-ai-gateway",
-          operations: [
-            {
-              resource: "/**",
-              methods: ["POST"],
-              model: "gemini-2.5-pro"
-            }
-          ],
-          quota: {
-            limit: "10000",
-            interval: "5",
-            timeUnit": "minute"
-          }
-        },
-        {
-          apiSource: "llm-ai-gateway",
-          operations: [
-            {
-              resource: "/**",
-              methods: ["POST"],
-              model: "gemini-2.5-flash"
-            }
-          ],
-          quota: {
-            limit: "100000",
-            interval: "5",
-            timeUnit: "minute"
-          }
-        },
-        {
           apiSource: "llm-ai-gateway-v1",
           operations: [
             {
+              resource: "/**"
+            }
+          ],
+          quota: {}
+        }
+      ]
+    },
+    llmOperationGroup: {
+      operationConfigs: [
+        {
+          apiSource: "llm-ai-gateway-v1",
+          llmOperations: [
+            {
               resource: "/**",
-              methods: ["POST"],
               model: "gemini-2.5-pro"
             }
           ],
-          quota: {
+          llmTokenQuota: {
             limit: "10000",
             interval: "5",
             timeUnit: "minute"
@@ -290,14 +295,13 @@ PRODUCT_PAYLOAD=$(jq -n \
         },
         {
           apiSource: "llm-ai-gateway-v1",
-          operations: [
+          llmOperations: [
             {
               resource: "/**",
-              methods: ["POST"],
               model: "gemini-2.5-flash"
             }
           ],
-          quota: {
+          llmTokenQuota: {
             limit: "100000",
             interval: "5",
             timeUnit: "minute"
@@ -307,16 +311,8 @@ PRODUCT_PAYLOAD=$(jq -n \
     },
     attributes: [
       {
-        name: "developer.llmQuota.limit",
-        value: "10000"
-      },
-      {
-        name: "developer.llmQuota.interval",
-        value: "5"
-      },
-      {
-        name: "developer.llmQuota.timeunit",
-        value: "minute"
+        name: "access",
+        value: "internal"
       }
     ]
   }')
@@ -357,10 +353,10 @@ rm -f "$RESPONSE_TMP"
 echo "INFO: API Product $PRODUCT_NAME configured successfully."
 
 # ==============================================================================
-# Step 6: Create Application (llm-ai-gateway-app) linked to Developer and Product
+# Step 7: Create Application (llm-ai-gateway-app) linked to Developer and Product
 # ==============================================================================
 echo ""
-echo "--- Step 6: Creating Application (llm-ai-gateway-app) ---"
+echo "--- Step 7: Creating Application (llm-ai-gateway-app) ---"
 APP_NAME="llm-ai-gateway-app"
 
 echo "Creating App: $APP_NAME linked to developer $DEV_EMAIL and product $PRODUCT_NAME..."

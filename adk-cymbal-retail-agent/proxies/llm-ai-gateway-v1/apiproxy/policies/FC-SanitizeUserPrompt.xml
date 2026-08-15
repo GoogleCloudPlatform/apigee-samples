@@ -16,5 +16,5 @@
   <Parameters>
     <Parameter name="type">user-prompt</Parameter>
   </Parameters>
-  <SharedFlowBundle>ModelArmor-v2</SharedFlowBundle>
+  <SharedFlowBundle>llm-modelarmor-dlp-v1</SharedFlowBundle>
 </FlowCallout>
