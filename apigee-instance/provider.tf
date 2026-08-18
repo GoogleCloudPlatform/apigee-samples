@@ -1,0 +1,4 @@
+provider "google" {
+  alias   = "vendor"
+
+}
