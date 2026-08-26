@@ -15,7 +15,11 @@
 import os
 from google.adk.tools.mcp_tool import McpToolset, StreamableHTTPConnectionParams
 from google.adk.integrations.agent_registry.agent_registry import AgentRegistry
-from .auth_config import auth_scheme, auth_credential
+from google.adk.auth.credential_manager import CredentialManager
+from google.adk.integrations.agent_identity import GcpAuthProvider
+
+# Use GCP Agent Identity Auth Provider to obtain tokens for the MCP toolset
+CredentialManager.register_auth_provider(GcpAuthProvider())
 
 PROJECT_ID = os.getenv("GOOGLE_CLOUD_PROJECT") or os.getenv("PROJECT_ID")
 LOCATION = os.getenv("AGENT_REGISTRY_LOCATION", os.getenv("GOOGLE_CLOUD_LOCATION", "us-central1"))
@@ -37,23 +41,13 @@ if servers_list:
     servers_list.sort(key=lambda x: x.get("updateTime", ""), reverse=True)
     server_name = servers_list[0]["name"]
     registry = AgentRegistry(project_id=PROJECT_ID, location=LOCATION)
-    cymbal_mcp = registry.get_mcp_toolset(
-        server_name,
-        auth_scheme=auth_scheme,
-        auth_credential=auth_credential
-    )
+    cymbal_mcp = registry.get_mcp_toolset(server_name)
     # Detach internal registry closure to enable clean cloudpickle serialization for Agent Runtime
     cymbal_mcp._header_provider = None
 else:
     # Fallback to Apigee MCP gateway directly if registry query returned no servers
     mcp_url = f"https://{APIGEE_HOSTNAME}/mcp" if APIGEE_HOSTNAME else "http://localhost:8080"
-    cymbal_mcp = McpToolset(
-        connection_params=StreamableHTTPConnectionParams(
-            url=mcp_url
-        ),
-        auth_scheme=auth_scheme,
-        auth_credential=auth_credential
-    )
+    cymbal_mcp = McpToolset(connection_params=StreamableHTTPConnectionParams(url=mcp_url))
 
 # Configure generous connection timeout and cache TTL for robust multi-turn execution
 if hasattr(cymbal_mcp, "connection_params") and cymbal_mcp.connection_params:

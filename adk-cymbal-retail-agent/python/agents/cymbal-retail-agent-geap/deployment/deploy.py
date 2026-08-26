@@ -132,7 +132,7 @@ def ensure_auth_provider(project_id, location, engine_name, client_id, client_se
         
         subprocess.run([
             "gcloud", "agent-identity", "auth-providers", "create", auth_provider_name,
-            f"--project={project_id}", f"--location={location}",
+            f"--project={project_id}", f"--location={location}", f"--description=Cymbal Auth Provider (Apigee)",
             f"--three-legged-oauth-client-id={client_id}",
             f"--three-legged-oauth-client-secret={client_secret}",
             f"--three-legged-oauth-authorization-url={auth_url}",
@@ -147,7 +147,7 @@ def ensure_auth_provider(project_id, location, engine_name, client_id, client_se
             token_url = f"https://{apigee_hostname}/token"
             subprocess.run([
                 "gcloud", "agent-identity", "auth-providers", "update", auth_provider_name,
-                f"--project={project_id}", f"--location={location}",
+                f"--project={project_id}", f"--location={location}", f"--description=Cymbal Auth Provider (Apigee)",
                 f"--three-legged-oauth-client-id={client_id}",
                 f"--three-legged-oauth-client-secret={client_secret}",
                 f"--three-legged-oauth-authorization-url={auth_url}",
@@ -319,7 +319,84 @@ def deploy(args):
         apigee_hostname=args.apigee_hostname
     )
 
-if __name__ == "__main__":
+    # Ensure Agent Registry Binding is created/updated
+    print("\n🔗 Configuring Agent Registry Binding...")
+    ensure_agent_registry_binding(
+        project,
+        location,
+        remote_agent.api_resource.name
+    )
+
+def ensure_agent_registry_binding(project_id, location, engine_name, auth_provider_name=None, continue_uri=None):
+    """Creates or updates the Agent Registry Binding between the deployed Reasoning Engine and MCP Server."""
+    engine_id = engine_name.split("/")[-1]
+    auth_provider = auth_provider_name or os.getenv("AUTH_PROVIDER_NAME", "cymbal-idp")
+    continue_uri = continue_uri or os.getenv("OAUTH_CALLBACK_URL", "http://127.0.0.1:9000/callback")
+    
+    try:
+        proj_res = subprocess.run(
+            ["gcloud", "projects", "describe", project_id, "--format=value(projectNumber)"],
+            capture_output=True, text=True, check=True
+        )
+        project_number = proj_res.stdout.strip()
+    except Exception as e:
+        print(f"Warning: Failed to get project number for binding: {e}")
+        return
+
+    source_identifier = f"urn:agent:projects-{project_number}:projects:{project_number}:locations:{location}:aiplatform:reasoningEngines:{engine_id}"
+
+    target_identifier = None
+    try:
+        mcp_res = subprocess.run(
+            ["gcloud", "agent-registry", "mcp-servers", "list", f"--project={project_id}", f"--location={location}", "--format=json"],
+            capture_output=True, text=True
+        )
+        if mcp_res.returncode == 0:
+            servers = json.loads(mcp_res.stdout)
+            for s in servers:
+                if s.get("displayName") == "cymbal-discovery-v1" or "cymbal" in s.get("displayName", ""):
+                    target_identifier = s.get("mcpServerId")
+                    break
+    except Exception as e:
+        print(f"Warning: Failed to list MCP servers: {e}")
+
+    if not target_identifier:
+        print("Warning: MCP server target identifier not found. Skipping binding creation.")
+        return
+
+    binding_name = "cymbal-discovery-binding"
+    auth_provider_path = f"projects/{project_id}/locations/{location}/authProviders/{auth_provider}"
+
+    print(f"Configuring Agent Registry Binding '{binding_name}'...")
+    describe_res = subprocess.run(
+        ["gcloud", "agent-registry", "bindings", "describe", binding_name, f"--project={project_id}", f"--location={location}"],
+        capture_output=True, text=True
+    )
+
+    if describe_res.returncode == 0:
+        print(f"Updating existing Agent Registry binding '{binding_name}'...")
+        subprocess.run([
+            "gcloud", "agent-registry", "bindings", "update", binding_name,
+            f"--project={project_id}", f"--location={location}",
+            f"--source-identifier={source_identifier}",
+            f"--target-identifier={target_identifier}",
+            f"--auth-provider-binding={auth_provider_path}",
+            "--auth-provider-binding-scopes=customer",
+            f"--auth-provider-binding-continue-uri={continue_uri}"
+        ], check=True)
+    else:
+        print(f"Creating new Agent Registry binding '{binding_name}'...")
+        subprocess.run([
+            "gcloud", "agent-registry", "bindings", "create", binding_name,
+            f"--project={project_id}", f"--location={location}",
+            f"--source-identifier={source_identifier}",
+            f"--target-identifier={target_identifier}",
+            f"--auth-provider-binding={auth_provider_path}",
+            "--auth-provider-binding-scopes=customer",
+            f"--auth-provider-binding-continue-uri={continue_uri}"
+        ], check=True)
+    print(f"✅ Agent Registry Binding '{binding_name}' configured successfully.")
+    
     parser = argparse.ArgumentParser(description="Deploy agent to Agent Runtime")
     parser.add_argument("--project", help="Google Cloud Project ID (defaults to GOOGLE_CLOUD_PROJECT env var)")
     parser.add_argument("--location", default="us-central1", help="Google Cloud Region/Location (defaults to us-central1)")

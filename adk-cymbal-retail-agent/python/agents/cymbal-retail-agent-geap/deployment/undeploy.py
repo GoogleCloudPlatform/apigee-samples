@@ -4,6 +4,24 @@ import subprocess
 import agentplatform
 from google.cloud import aiplatform
 
+def clean_binding(project_id, location):
+    binding_name = "cymbal-discovery-binding"
+    print(f"Checking if Agent Registry binding '{binding_name}' exists...")
+    res = subprocess.run(
+        ["gcloud", "agent-registry", "bindings", "describe", binding_name, f"--project={project_id}", f"--location={location}"],
+        capture_output=True
+    )
+    if res.returncode == 0:
+        print(f"Deleting Agent Registry binding '{binding_name}'...")
+        subprocess.run(
+            ["gcloud", "agent-registry", "bindings", "delete", binding_name, f"--project={project_id}", f"--location={location}", "--quiet"],
+            check=True
+        )
+        print("Agent Registry binding deleted successfully.")
+    else:
+        print("Agent Registry binding does not exist. Skipping.")
+
+
 def clean_auth_provider(project_id, location):
     auth_provider_name = os.getenv("AUTH_PROVIDER_NAME", "cymbal-idp")
     print(f"Checking if Agent Identity auth provider '{auth_provider_name}' exists...")
@@ -50,6 +68,10 @@ def undeploy(args):
             print("Deleted successfully.")
     else:
         print("No matching Agent Runtime instance found.")
+
+    # Clean up the binding
+    print("\n🔗 Cleaning up Agent Registry Binding...")
+    clean_binding(project, location)
 
     # Clean up the auth provider
     print("\n🔒 Cleaning up Agent Identity Auth Provider...")
