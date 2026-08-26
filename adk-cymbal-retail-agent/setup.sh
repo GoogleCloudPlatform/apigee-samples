@@ -17,10 +17,13 @@
 set -e
 
 DEPLOY_DISCOVERY_PROXY="${DEPLOY_DISCOVERY_PROXY:-true}"
+DEPLOY_LLM_AI_GATEWAY="${DEPLOY_LLM_AI_GATEWAY:-true}"
 while [[ "$#" -gt 0 ]]; do
   case $1 in
     --deploy-discovery-proxy) DEPLOY_DISCOVERY_PROXY="$2"; shift 2 ;;
     --deploy-discovery-proxy=*) DEPLOY_DISCOVERY_PROXY="${1#*=}"; shift ;;
+    --deploy-llm-ai-gateway) DEPLOY_LLM_AI_GATEWAY="$2"; shift 2 ;;
+    --deploy-llm-ai-gateway=*) DEPLOY_LLM_AI_GATEWAY="${1#*=}"; shift ;;
     *) echo "Unknown parameter: $1"; exit 1 ;;
   esac
 done
@@ -92,4 +95,4 @@ gcloud services enable \
   --project "$PROJECT_ID"
 sleep 15
 
-./deploy-adk-cymbal-retail-agent.sh --deploy-discovery-proxy "$DEPLOY_DISCOVERY_PROXY"
+./deploy-adk-cymbal-retail-agent.sh --deploy-discovery-proxy "$DEPLOY_DISCOVERY_PROXY" --deploy-llm-ai-gateway "$DEPLOY_LLM_AI_GATEWAY"

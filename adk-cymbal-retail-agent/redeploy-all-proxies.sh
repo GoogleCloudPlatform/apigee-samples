@@ -73,6 +73,7 @@ deploy_proxy() {
 }
 
 deploy_proxy "adk-retail-agent-llm-governance-v1"
+deploy_proxy "llm-ai-gateway-v1"
 deploy_proxy "cymbal-customers-v2"
 deploy_proxy "cymbal-orders-v2"
 deploy_proxy "cymbal-returns-v2"

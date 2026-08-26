@@ -42,5 +42,8 @@ export VERTEXAI_PROJECT_ID="${PROJECT_ID}"
 
 ./cleanup-adk-cymbal-retail-agent.sh
 ./cleanup-agent-gateway-egress.sh
+if [ -f "./cleanup-llm-ai-gateway.sh" ]; then
+  ./cleanup-llm-ai-gateway.sh || echo "INFO: LLM AI Gateway cleanup completed or not present."
+fi
 
 echo "✅ Cleanup complete!"

@@ -40,10 +40,13 @@ if [ -z "$APIGEE_ENV" ]; then
 fi
 
 if [ -z "$MODEL_ARMOR_TEMPLATE" ]; then
-  echo "ERROR: Mandatory environment variable MODEL_ARMOR_TEMPLATE is not set."
-  echo "Usage: export MODEL_ARMOR_TEMPLATE=\"projects/<project-id>/locations/<region>/templates/<template-name>\""
-  exit 1
+  MODEL_ARMOR_REGION="${MODEL_ARMOR_REGION:-${VERTEXAI_REGION:-${GCP_PROJECT_REGION:-us-central1}}}"
+  MODEL_ARMOR_TEMPLATE_ID="${MODEL_ARMOR_TEMPLATE_ID:-llm-governance-template}"
+  MODEL_ARMOR_TEMPLATE="projects/${PROJECT_ID}/locations/${MODEL_ARMOR_REGION}/templates/${MODEL_ARMOR_TEMPLATE_ID}"
+  echo "INFO: MODEL_ARMOR_TEMPLATE not explicitly set. Auto-configured as: $MODEL_ARMOR_TEMPLATE"
 fi
+
+REGION="${VERTEXAI_REGION:-${GCP_PROJECT_REGION:-us-central1}}"
 
 # Ensure apigeecli CLI tool is installed or available in PATH
 if ! command -v apigeecli &> /dev/null; then
@@ -187,11 +190,21 @@ deploy_shared_flow() {
     exit 1
   fi
   echo "Deploying Shared Flow: $sf_name to environment $APIGEE_ENV..."
+  local tmp_sf_dir
+  tmp_sf_dir=$(mktemp -d)
+  cp -r "$sf_dir" "$tmp_sf_dir/"
+  local prop_file="$tmp_sf_dir/sharedflowbundle/resources/properties/vertex_config.properties"
+  if [ -f "$prop_file" ]; then
+    sed -i "s/project=.*/project=$PROJECT_ID/g" "$prop_file"
+    sed -i "s/project_number=.*/project_number=$PROJECT_NUMBER/g" "$prop_file"
+    sed -i "s/region=.*/region=$REGION/g" "$prop_file"
+  fi
   apigeecli sharedflows create bundle -n "$sf_name" \
-    -f "$sf_dir" \
+    -f "$tmp_sf_dir/sharedflowbundle" \
     -e "$APIGEE_ENV" --token "$TOKEN" -o "$PROJECT_ID" \
     -s "$SA_EMAIL" \
     --ovr --wait
+  rm -rf "$tmp_sf_dir"
 }
 
 # Deploy the 2 shared flows:
@@ -213,11 +226,12 @@ TMP_PROXY_DIR=$(mktemp -d)
 trap 'rm -rf "$TMP_PROXY_DIR"' EXIT
 cp -r "$PROXY_SRC_DIR" "$TMP_PROXY_DIR/"
 
-# Update project ID in vertex_config.properties if present
+# Update project ID and region in vertex_config.properties if present
 PROP_FILE="$TMP_PROXY_DIR/apiproxy/resources/properties/vertex_config.properties"
 if [ -f "$PROP_FILE" ]; then
   sed -i "s/project=.*/project=$PROJECT_ID/g" "$PROP_FILE"
   sed -i "s/project_number=.*/project_number=$PROJECT_NUMBER/g" "$PROP_FILE"
+  sed -i "s/region=.*/region=$REGION/g" "$PROP_FILE"
 fi
 
 apigeecli apis create bundle -n "$PROXY_NAME" \

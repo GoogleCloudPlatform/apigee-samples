@@ -85,14 +85,18 @@ fi
 export TOKEN
 
 DEPLOY_DISCOVERY_PROXY="${DEPLOY_DISCOVERY_PROXY:-true}"
+DEPLOY_LLM_AI_GATEWAY="${DEPLOY_LLM_AI_GATEWAY:-true}"
 while [[ "$#" -gt 0 ]]; do
   case $1 in
     --deploy-discovery-proxy) DEPLOY_DISCOVERY_PROXY="$2"; shift 2 ;;
     --deploy-discovery-proxy=*) DEPLOY_DISCOVERY_PROXY="${1#*=}"; shift ;;
+    --deploy-llm-ai-gateway) DEPLOY_LLM_AI_GATEWAY="$2"; shift 2 ;;
+    --deploy-llm-ai-gateway=*) DEPLOY_LLM_AI_GATEWAY="${1#*=}"; shift ;;
     *) echo "Unknown parameter: $1"; exit 1 ;;
   esac
 done
 export DEPLOY_DISCOVERY_PROXY
+export DEPLOY_LLM_AI_GATEWAY
 
 add_role_to_serviceaccount(){
   local role=$1
@@ -445,6 +449,14 @@ import_and_deploy_proxy "oauth-server"
 import_and_deploy_proxy "adk-retail-agent-llm-governance-v1"
 if [ "$DEPLOY_DISCOVERY_PROXY" = "true" ]; then
   import_and_deploy_proxy "cymbal-discovery-v1"
+fi
+
+if [ "$DEPLOY_LLM_AI_GATEWAY" = "true" ]; then
+  echo "Deploying Apigee X LLM AI Gateway (llm-ai-gateway-v1)..."
+  export MODEL_ARMOR_TEMPLATE="projects/${PROJECT_ID}/locations/${MODEL_ARMOR_REGION}/templates/${MODEL_ARMOR_TEMPLATE_ID}"
+  if [ -f "./deploy-llm-ai-gateway.sh" ]; then
+    ./deploy-llm-ai-gateway.sh || echo "WARNING: deploy-llm-ai-gateway.sh encountered an error, continuing..."
+  fi
 fi
 
 echo "Creating or Updating API Products"
