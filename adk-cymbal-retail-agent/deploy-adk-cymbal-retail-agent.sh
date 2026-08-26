@@ -459,7 +459,7 @@ apigeecli developers create --user cymbal-retail-developer \
 
 echo "Creating Developer App"
 apigeecli apps create --name cymbal-retail-app --email "cymbal-retail-developer@acme.com" \
-  --prods "cymbal-retail-product-rest,cymbal-retail-product-mcp" --callback "http://localhost:9000/callback,http://127.0.0.1:9000/callback,http://localhost:8000/dev-ui/,http://127.0.0.1:8000/dev-ui/,https://iamconnectorcredentials.googleapis.com/v1/projects/${PROJECT_ID}/locations/${VERTEXAI_REGION}/connectors/idp-connector/oauthcallback" --org "$PROJECT_ID" --token "$TOKEN" --disable-check || true
+  --prods "cymbal-retail-product-rest,cymbal-retail-product-mcp" --callback "http://localhost:9000/callback,http://127.0.0.1:9000/callback,http://localhost:8000/dev-ui/,http://127.0.0.1:8000/dev-ui/,https://agentidentitycredentials.googleapis.com/v1/projects/${PROJECT_ID}/locations/${VERTEXAI_REGION}/authProviders/cymbal-idp/oauthcallback,https://agentidentitycredentials.googleapis.com/v1alpha/projects/${PROJECT_ID}/locations/${VERTEXAI_REGION}/authProviders/cymbal-idp/oauthcallback,https://agentidentitycredentials.googleapis.com/v1/projects/${PROJECT_NUMBER}/locations/${VERTEXAI_REGION}/authProviders/cymbal-idp/oauthcallback,https://agentidentitycredentials.googleapis.com/v1alpha/projects/${PROJECT_NUMBER}/locations/${VERTEXAI_REGION}/authProviders/cymbal-idp/oauthcallback" --org "$PROJECT_ID" --token "$TOKEN" --disable-check || true
 
 CLIENT_ID=$(apigeecli apps get --name "cymbal-retail-app" --org "$PROJECT_ID" --token "$TOKEN" --disable-check | jq ."[0].credentials[0].consumerKey" -r)
 CLIENT_SECRET=$(apigeecli apps get --name "cymbal-retail-app" --org "$PROJECT_ID" --token "$TOKEN" --disable-check | jq ."[0].credentials[0].consumerSecret" -r)
@@ -487,6 +487,9 @@ apigeecli flowhooks attach \
 export CLIENT_ID
 export PROXY_URL="$APIGEE_HOST/v2/samples/adk-cymbal-retail"
 
+echo "Configuring Agent Gateway Egress Endpoints and Rules..."
+./setup-agent-gateway-egress.sh
+
 # Sync dependencies in the package source folder before deploying
 echo "Syncing agent dependencies..."
 pushd python/agents/cymbal-retail-agent-geap >/dev/null
@@ -499,7 +502,7 @@ else
   fi
   source .venv/bin/activate
   pip install --upgrade pip
-  pip install -e ".[agent-identity,a2a]"
+  pip install -e .
 fi
 
 # Deploy Agent to Agent Runtime
@@ -517,9 +520,6 @@ python3 deployment/deploy.py \
   --egress-gateway "$AGENT_GATEWAY_NAME"
 deactivate
 popd >/dev/null
-
-echo "Configuring Agent Egress Policies..."
-./setup-agent-gateway-egress.sh
 
 # npm test
 

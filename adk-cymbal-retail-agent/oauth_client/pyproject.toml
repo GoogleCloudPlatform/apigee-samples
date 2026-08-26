@@ -1,0 +1,17 @@
+[project]
+name = "oauth-client"
+version = "0.1.0"
+description = "OAuth client web UI for Cymbal Retail Agent"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.116.0",
+    "uvicorn>=0.30.0",
+    "google-adk[agent-identity,mcp]>=2.3.0,<3.0.0",
+    "google-cloud-aiplatform[adk,agent-engines]>=1.100.0",
+    "pydantic>=2.0.0",
+    "httpx>=0.27.0",
+    "python-dotenv>=1.0.0"
+]
+
+[tool.uv]
+package = false

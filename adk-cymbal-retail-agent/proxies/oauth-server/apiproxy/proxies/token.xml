@@ -19,9 +19,6 @@
       <Step>
         <Name>CORS-Allow</Name>
       </Step>
-      <Step>
-        <Name>GenerateAccessToken</Name>
-      </Step>
     </Request>
     <Response/>
   </PreFlow>
@@ -31,13 +28,18 @@
   </PostFlow>
   <Flows>
     <Flow name="AccessToken">
-      <Condition>(proxy.pathsuffix MatchesPath "/") and (request.verb = "POST")</Condition>
+      <Condition>(proxy.pathsuffix MatchesPath "/") and (request.verb = "POST") and (request.formparam.grant_type = "authorization_code")</Condition>
       <Request>
         <Step>
-          <Name>CORS-Allow</Name>
-        </Step>
-        <Step>
           <Name>GenerateAccessToken</Name>
+        </Step>
+      </Request>
+    </Flow>
+    <Flow name="RefreshToken">
+      <Condition>(proxy.pathsuffix MatchesPath "/") and (request.verb = "POST") and (request.formparam.grant_type = "refresh_token")</Condition>
+      <Request>
+        <Step>
+          <Name>RefreshAccessToken</Name>
         </Step>
       </Request>
     </Flow>

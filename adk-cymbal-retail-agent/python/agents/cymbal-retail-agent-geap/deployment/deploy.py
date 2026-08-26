@@ -38,10 +38,22 @@ def parse_args_and_set_env():
 
 parse_args_and_set_env()
 
-# Now initialize Vertex AI and import ADK / agent details
+# Compatibility fix: allow google-auth's _MutualTlsAdapter to be safely serialized with cloudpickle
+try:
+    import google.auth.transport.requests as gar
+    if hasattr(gar, "_MutualTlsAdapter"):
+        def _mtls_setstate(self, state):
+            self._ctx_poolmanager = state.get("_ctx_poolmanager")
+            self._ctx_proxymanager = state.get("_ctx_proxymanager")
+            super(gar._MutualTlsAdapter, self).__setstate__(state)
+        gar._MutualTlsAdapter.__setstate__ = _mtls_setstate
+except Exception:
+    pass
+
+# Now initialize Agent Platform and import ADK / agent details
 from google.cloud import aiplatform
-import vertexai
-from vertexai import types
+import agentplatform
+from agentplatform import types
 from vertexai.preview.reasoning_engines.templates.adk import AdkApp
 
 try:
@@ -59,7 +71,7 @@ print(f"Loaded agent module from: {cymbal_retail_agent.__file__}")
 
 import subprocess
 
-def ensure_iam_connector(project_id, location, engine_name, client_id, client_secret, apigee_hostname):
+def ensure_auth_provider(project_id, location, engine_name, client_id, client_secret, apigee_hostname):
     # engine_name format: projects/{project_number}/locations/{location}/reasoningEngines/{engine_id}
     parts = engine_name.split('/')
     project_number = parts[1]
@@ -84,72 +96,71 @@ def ensure_iam_connector(project_id, location, engine_name, client_id, client_se
     else:
         member = f"principal://agents.global.project-{project_number}.system.id.goog/resources/aiplatform/projects/{project_number}/locations/{location}/reasoningEngines/{engine_id}"
 
-    connector_name = "idp-connector"
+    auth_provider_name = os.getenv("AUTH_PROVIDER_NAME", "cymbal-idp")
     
-    # 2. Check if connector exists
-    print(f"Checking if IAM connector '{connector_name}' exists...")
+    # 2. Check if auth provider exists
+    print(f"Checking if Agent Identity auth provider '{auth_provider_name}' exists...")
     res = subprocess.run(
-        ["gcloud", "alpha", "agent-identity", "connectors", "describe", connector_name, f"--project={project_id}", f"--location={location}", "--format=json"],
+        ["gcloud", "agent-identity", "auth-providers", "describe", auth_provider_name, f"--project={project_id}", f"--location={location}", "--format=json"],
         capture_output=True, text=True
     )
     
-    connector_exists = False
+    provider_exists = False
     
     if res.returncode == 0:
-        connector_exists = True
+        provider_exists = True
         try:
-            connector_info = json.loads(res.stdout)
-            if connector_info.get("deleted"):
-                print("Connector exists but is soft-deleted. Undeleting it...")
+            provider_info = json.loads(res.stdout)
+            if provider_info.get("deleted"):
+                print("Auth provider exists but is soft-deleted. Undeleting it...")
                 subprocess.run(
-                    ["gcloud", "alpha", "agent-identity", "connectors", "undelete", connector_name, f"--project={project_id}", f"--location={location}"],
+                    ["gcloud", "agent-identity", "auth-providers", "undelete", auth_provider_name, f"--project={project_id}", f"--location={location}"],
                     check=True
                 )
-                print("Connector undeleted successfully.")
+                print("Auth provider undeleted successfully.")
         except Exception as e:
-            print(f"Warning: Failed to parse connector info: {e}")
+            print(f"Warning: Failed to parse auth provider info: {e}")
 
-    if not connector_exists:
+    if not provider_exists:
         if not client_id or not client_secret or not apigee_hostname:
-            raise ValueError("Connector does not exist. --client-id, --client-secret, and --apigee-hostname must be provided to create it.")
+            raise ValueError("Auth provider does not exist. --client-id, --client-secret, and --apigee-hostname must be provided to create it.")
         
-        print(f"Connector '{connector_name}' does not exist. Creating it...")
-        # Create the connector
+        print(f"Auth provider '{auth_provider_name}' does not exist. Creating it...")
+        # Create the auth provider
         auth_url = f"https://{apigee_hostname}/authorize"
         token_url = f"https://{apigee_hostname}/token"
         
         subprocess.run([
-            "gcloud", "alpha", "agent-identity", "connectors", "create", connector_name,
+            "gcloud", "agent-identity", "auth-providers", "create", auth_provider_name,
             f"--project={project_id}", f"--location={location}",
             f"--three-legged-oauth-client-id={client_id}",
             f"--three-legged-oauth-client-secret={client_secret}",
             f"--three-legged-oauth-authorization-url={auth_url}",
-            f"--three-legged-oauth-token-url={token_url}",
-            "--state=enabled"
+            f"--three-legged-oauth-token-url={token_url}"
         ], check=True)
-        print(f"Connector '{connector_name}' created successfully.")
+        print(f"Auth provider '{auth_provider_name}' created successfully.")
     else:
-        # Update credentials on the existing connector to avoid stale configuration
+        # Update credentials on the existing auth provider to avoid stale configuration
         if client_id and client_secret and apigee_hostname:
-            print(f"Connector '{connector_name}' already exists. Updating its credentials...")
+            print(f"Auth provider '{auth_provider_name}' already exists. Updating its credentials...")
             auth_url = f"https://{apigee_hostname}/authorize"
             token_url = f"https://{apigee_hostname}/token"
             subprocess.run([
-                "gcloud", "alpha", "agent-identity", "connectors", "update", connector_name,
+                "gcloud", "agent-identity", "auth-providers", "update", auth_provider_name,
                 f"--project={project_id}", f"--location={location}",
                 f"--three-legged-oauth-client-id={client_id}",
                 f"--three-legged-oauth-client-secret={client_secret}",
                 f"--three-legged-oauth-authorization-url={auth_url}",
                 f"--three-legged-oauth-token-url={token_url}"
             ], check=True)
-            print(f"Connector '{connector_name}' updated successfully.")
+            print(f"Auth provider '{auth_provider_name}' updated successfully.")
 
     # 3. Add the IAM policy bindings
     print(f"Adding IAM policy binding for agent SPIFFE member: {member}...")
     subprocess.run([
-        "gcloud", "alpha", "agent-identity", "connectors", "add-iam-policy-binding", connector_name,
+        "gcloud", "agent-identity", "auth-providers", "add-iam-policy-binding", auth_provider_name,
         f"--project={project_id}", f"--location={location}",
-        "--role=roles/iamconnectors.user",
+        "--role=roles/agentidentity.user",
         f"--member={member}"
     ], check=True)
 
@@ -163,9 +174,9 @@ def ensure_iam_connector(project_id, location, engine_name, client_id, client_se
         if developer_email:
             print(f"Adding IAM policy binding for developer: user:{developer_email}...")
             subprocess.run([
-                "gcloud", "alpha", "agent-identity", "connectors", "add-iam-policy-binding", connector_name,
+                "gcloud", "agent-identity", "auth-providers", "add-iam-policy-binding", auth_provider_name,
                 f"--project={project_id}", f"--location={location}",
-                "--role=roles/iamconnectors.user",
+                "--role=roles/agentidentity.user",
                 f"--member=user:{developer_email}"
             ], check=True)
     except Exception as e:
@@ -182,9 +193,9 @@ def deploy(args):
     if not staging_bucket.startswith("gs://"):
         staging_bucket = f"gs://{staging_bucket}"
 
-    print(f"Initializing Vertex AI SDK for project={project}, location={location}...")
-    vertexai.init(project=project, location=location)
-    client = vertexai.Client(project=project, location=location)
+    print(f"Initializing Agent Platform SDK for project={project}, location={location}...")
+    agentplatform.init(project=project, location=location)
+    client = agentplatform.Client(project=project, location=location)
 
     # Check for existing reasoning engine with the same display name
     print(f"Checking for existing deployments with display_name='{args.display_name}'...")
@@ -203,10 +214,11 @@ def deploy(args):
 
     env_vars = {
         "PROJECT_ID": project,
+        "APIGEE_HOSTNAME": args.apigee_hostname or os.getenv("APIGEE_HOSTNAME", ""),
         "AGENT_REGISTRY_LOCATION": os.getenv("AGENT_REGISTRY_LOCATION", location),
+        "AUTH_PROVIDER_NAME": os.getenv("AUTH_PROVIDER_NAME", "cymbal-idp"),
         "OAUTH_CALLBACK_URL": os.getenv("OAUTH_CALLBACK_URL", "http://127.0.0.1:9000/callback"),
         "MODEL_NAME": os.getenv("MODEL_NAME", "gemini-2.5-flash"),
-        "VERTEX_DEPLOYED": "true",
         # Enable Agent Telemetry and Observability settings for Google Cloud Console
         "GOOGLE_CLOUD_AGENT_ENGINE_ENABLE_TELEMETRY": "true",
         "OTEL_SEMCONV_STABILITY_OPT_IN": "gen_ai_latest_experimental",
@@ -234,12 +246,16 @@ def deploy(args):
             
     if not requirements:
         requirements = [
-            "google-adk[agent-identity,a2a] == 1.36.1",
-            "google-cloud-aiplatform[adk,agent-engines] >= 1.100.0, < 2.0.0",
-            "python-dotenv >= 1.1.1, < 2.0.0",
-            "fastapi >= 0.116.0",
-            "google-cloud-secret-manager >= 2.24.0, < 3.0.0",
-            "litellm"
+            "google-cloud-aiplatform[reasoningengine]",
+            "cloudpickle",
+            "pydantic",
+            "google-adk[agent-identity,mcp]>=2.3.0,<3.0.0",
+            "a2a-sdk>=0.3.4,<0.4.0",
+            "pyopenssl<26",
+            "python-dotenv",
+            "fastapi",
+            "google-cloud-secret-manager",
+            "litellm",
         ]
 
     config = {
@@ -292,16 +308,16 @@ def deploy(args):
     print("\n✅ Deployment successful!")
     print(f"Agent Runtime ID: {remote_agent.api_resource.name}")
 
-    # # Ensure Agent Identity IAM connector is created and registered
-    # print("\n🔒 Configuring Agent Identity IAM Connector...")
-    # ensure_iam_connector(
-    #     project,
-    #     location,
-    #     remote_agent.api_resource.name,
-    #     client_id=args.client_id,
-    #     client_secret=args.client_secret,
-    #     apigee_hostname=args.apigee_hostname
-    # )
+    # Ensure Agent Identity Auth Provider is created and registered
+    print("\n🔒 Configuring Agent Identity Auth Provider...")
+    ensure_auth_provider(
+        project,
+        location,
+        remote_agent.api_resource.name,
+        client_id=args.client_id,
+        client_secret=args.client_secret,
+        apigee_hostname=args.apigee_hostname
+    )
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Deploy agent to Agent Runtime")

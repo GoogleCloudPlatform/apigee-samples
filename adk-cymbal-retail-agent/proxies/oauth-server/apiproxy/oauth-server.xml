@@ -20,6 +20,7 @@
   <Policies>
     <Policy>GenerateAuthCode</Policy>
     <Policy>GenerateAccessToken</Policy>
+    <Policy>RefreshAccessToken</Policy>
     <Policy>AM-SetAuthServerMetadata</Policy>
     <Policy>CORS-Allow</Policy>
   </Policies>

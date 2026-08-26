@@ -1,77 +1,142 @@
 #!/bin/bash
 set -e
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+if [ -f "$SCRIPT_DIR/env.sh" ]; then
+  source "$SCRIPT_DIR/env.sh"
+fi
+
+PROJECT_ID=${GOOGLE_CLOUD_PROJECT:-$PROJECT_ID}
+LOCATION=${VERTEXAI_REGION:-${AGENT_REGISTRY_LOCATION:-us-central1}}
+
 if [ -z "$PROJECT_ID" ]; then
-  echo "Error: PROJECT_ID is not set. Please set it in your environment."
+  echo "Error: PROJECT_ID is not set. Please set it in your environment or env.sh."
   exit 1
 fi
 
 if [ -z "$APIGEE_HOST" ]; then
-  echo "Error: APIGEE_HOST is not set. Please set it in your environment."
+  echo "Error: APIGEE_HOST is not set. Please set it in your environment or env.sh."
   exit 1
 fi
 
-if [ -z "$VERTEXAI_REGION" ]; then
-  echo "Error: VERTEXAI_REGION is not set. Please set it in your environment."
-  exit 1
-fi
+register_or_update_service() {
+  local SERVICE_NAME="$1"
+  local DISPLAY_NAME="$2"
+  local INTERFACES_JSON="$3"
 
-ensure_service() {
-  local service_id=$1
-  local display_name=$2
-  local interfaces=$3
-  local resource
-  
-  echo "Ensuring service '$service_id' in Agent Registry..." >&2
-  if resource=$(gcloud agent-registry services describe "$service_id" --project="$PROJECT_ID" --location="$VERTEXAI_REGION" --format="value(registryResource)" 2>/dev/null); then
-    echo "Service '$service_id' already exists. Updating its interfaces..." >&2
-    resource=$(gcloud agent-registry services update "$service_id" \
+  echo "Checking if '$SERVICE_NAME' service exists in Agent Registry..." >&2
+  local REGISTRY_RESOURCE=""
+  if gcloud agent-registry services describe "$SERVICE_NAME" --project="$PROJECT_ID" --location="$LOCATION" >/dev/null 2>&1; then
+    echo "Service '$SERVICE_NAME' already exists. Updating configuration..." >&2
+    REGISTRY_RESOURCE=$(gcloud agent-registry services update "$SERVICE_NAME" \
       --project="$PROJECT_ID" \
-      --location="$VERTEXAI_REGION" \
-      --interfaces="$interfaces" \
+      --location="$LOCATION" \
+      --display-name="$DISPLAY_NAME" \
+      --endpoint-spec-type=no-spec \
+      --interfaces="$INTERFACES_JSON" \
       --format="value(registryResource)")
   else
-    echo "Creating service '$service_id'..." >&2
-    resource=$(gcloud agent-registry services create "$service_id" \
+    echo "Registering '$SERVICE_NAME' in Agent Registry..." >&2
+    REGISTRY_RESOURCE=$(gcloud agent-registry services create "$SERVICE_NAME" \
       --project="$PROJECT_ID" \
-      --location="$VERTEXAI_REGION" \
-      --display-name="$display_name" \
+      --location="$LOCATION" \
+      --display-name="$DISPLAY_NAME" \
       --endpoint-spec-type=no-spec \
-      --interfaces="$interfaces" \
+      --interfaces="$INTERFACES_JSON" \
       --format="value(registryResource)")
   fi
-  basename "$resource"
+
+  if [ -z "$REGISTRY_RESOURCE" ]; then
+    REGISTRY_RESOURCE=$(gcloud agent-registry services describe "$SERVICE_NAME" \
+      --project="$PROJECT_ID" \
+      --location="$LOCATION" \
+      --format="value(registryResource)")
+  fi
+
+  basename "$REGISTRY_RESOURCE"
 }
 
-# 1. Register the service endpoints in Agent Registry
-ENDPOINT_ID=$(ensure_service "googleapis" "Google APIs" "[
-  {\"url\": \"https://agentregistry.googleapis.com\", \"protocolBinding\": \"jsonrpc\"},
-  {\"url\": \"https://${VERTEXAI_REGION}-agentregistry.googleapis.com\", \"protocolBinding\": \"jsonrpc\"},
-  {\"url\": \"https://${VERTEXAI_REGION}-agentregistry.mtls.googleapis.com\", \"protocolBinding\": \"jsonrpc\"},
-  {\"url\": \"https://secretmanager.googleapis.com\", \"protocolBinding\": \"grpc\"},
-  {\"url\": \"https://secretmanager.googleapis.com:443\", \"protocolBinding\": \"grpc\"},
-  {\"url\": \"https://secretmanager.mtls.googleapis.com\", \"protocolBinding\": \"grpc\"},
-  {\"url\": \"https://secretmanager.mtls.googleapis.com:443\", \"protocolBinding\": \"grpc\"},
-  {\"url\": \"https://iamcredentials.googleapis.com\", \"protocolBinding\": \"jsonrpc\"},
-  {\"url\": \"https://oauth2.googleapis.com\", \"protocolBinding\": \"jsonrpc\"},
-  {\"url\": \"https://aiplatform.mtls.googleapis.com\", \"protocolBinding\": \"grpc\"},
-  {\"url\": \"https://cloudresourcemanager.mtls.googleapis.com\", \"protocolBinding\": \"jsonrpc\"},
-  {\"url\": \"https://iamcredentials.mtls.googleapis.com\", \"protocolBinding\": \"jsonrpc\"},
-  {\"url\": \"https://iamconnectorcredentials.googleapis.com\", \"protocolBinding\": \"jsonrpc\"},
-  {\"url\": \"https://iamconnectorcredentials.mtls.googleapis.com\", \"protocolBinding\": \"jsonrpc\"},
-  {\"url\": \"https://telemetry.mtls.googleapis.com\", \"protocolBinding\": \"jsonrpc\"},
-  {\"url\": \"https://${VERTEXAI_REGION}-aiplatform.mtls.googleapis.com\", \"protocolBinding\": \"grpc\"},
-  {\"url\": \"https://${VERTEXAI_REGION}-aiplatform.googleapis.com\", \"protocolBinding\": \"grpc\"},
-  {\"url\": \"https://aiplatform.${VERTEXAI_REGION}.rep.googleapis.com\", \"protocolBinding\": \"grpc\"},
-  {\"url\": \"https://logging.googleapis.com\", \"protocolBinding\": \"grpc\"},
-  {\"url\": \"https://logging.mtls.googleapis.com\", \"protocolBinding\": \"grpc\"}
-]")
-echo "Google APIs Endpoint ID: $ENDPOINT_ID"
+build_interfaces_json() {
+  local PROTOCOL="$1"
+  shift
+  local URLS=("$@")
+  local JSON="["
+  local FIRST=1
+  for URL in "${URLS[@]}"; do
+    if [ $FIRST -eq 1 ]; then
+      FIRST=0
+    else
+      JSON+=", "
+    fi
+    JSON+="{\"url\": \"$URL\", \"protocolBinding\": \"$PROTOCOL\"}"
+  done
+  JSON+="]"
+  echo "$JSON"
+}
 
-APIGEE_ENDPOINT_ID=$(ensure_service "apigee-host" "Apigee Host" "[
-  {\"url\": \"https://${APIGEE_HOST}\", \"protocolBinding\": \"jsonrpc\"}
-]")
+# 1a. Base URLs for Google APIs
+GOOGLE_API_URLS=(
+  "https://agentregistry.googleapis.com"
+  "https://agentregistry.mtls.googleapis.com"
+  "https://${LOCATION}-agentregistry.googleapis.com"
+  "https://${LOCATION}-agentregistry.mtls.googleapis.com"
+  "https://agentregistry.${LOCATION}.rep.googleapis.com"
+
+  "https://aiplatform.googleapis.com"
+  "https://aiplatform.mtls.googleapis.com"
+  "https://${LOCATION}-aiplatform.googleapis.com"
+  "https://${LOCATION}-aiplatform.mtls.googleapis.com"
+  "https://aiplatform.${LOCATION}.rep.googleapis.com"
+
+  "https://generativelanguage.googleapis.com"
+  "https://generativelanguage.mtls.googleapis.com"
+
+  "https://agentidentity.googleapis.com"
+  "https://agentidentity.mtls.googleapis.com"
+  "https://agentidentitycredentials.googleapis.com"
+  "https://agentidentitycredentials.mtls.googleapis.com"
+  "https://iamconnectorcredentials.googleapis.com"
+  "https://iamconnectorcredentials.mtls.googleapis.com"
+  "https://iamcredentials.googleapis.com"
+  "https://iamcredentials.mtls.googleapis.com"
+  "https://oauth2.googleapis.com"
+  "https://accounts.google.com"
+
+  "https://telemetry.googleapis.com"
+  "https://telemetry.mtls.googleapis.com"
+  "https://logging.googleapis.com"
+  "https://logging.mtls.googleapis.com"
+  "https://monitoring.googleapis.com"
+  "https://monitoring.mtls.googleapis.com"
+  "https://cloudtrace.googleapis.com"
+  "https://cloudtrace.mtls.googleapis.com"
+
+  "https://cloudresourcemanager.googleapis.com"
+  "https://cloudresourcemanager.mtls.googleapis.com"
+  "https://storage.googleapis.com"
+  "https://storage.mtls.googleapis.com"
+  "https://secretmanager.googleapis.com"
+  "https://secretmanager.mtls.googleapis.com"
+)
+
+GOOGLE_INTERFACES=$(build_interfaces_json "jsonrpc" "${GOOGLE_API_URLS[@]}")
+
+APIGEE_HOST_URLS=("https://${APIGEE_HOST}")
+APIGEE_INTERFACES=$(build_interfaces_json "jsonrpc" "${APIGEE_HOST_URLS[@]}")
+
+ENDPOINTS=()
+
+# 1a. Configure Google APIs Endpoint
+echo "--- Configuring Google APIs Endpoint ---"
+GOOGLE_ENDPOINT_ID=$(register_or_update_service "googleapis" "Google APIs" "$GOOGLE_INTERFACES")
+echo "Google APIs Endpoint ID: $GOOGLE_ENDPOINT_ID"
+ENDPOINTS+=("$GOOGLE_ENDPOINT_ID")
+
+# 1b. Configure Apigee Host Endpoint
+echo "--- Configuring Apigee Host Endpoint (https://${APIGEE_HOST}) ---"
+APIGEE_ENDPOINT_ID=$(register_or_update_service "apigee-host" "Apigee Host" "$APIGEE_INTERFACES")
 echo "Apigee Host Endpoint ID: $APIGEE_ENDPOINT_ID"
+ENDPOINTS+=("$APIGEE_ENDPOINT_ID")
 
 # 2. Determine SPIFFE trust domain based on ancestry (org vs project level)
 echo "Determining agent principal pool identity..."
@@ -87,51 +152,42 @@ else
 fi
 echo "Principal member: $MEMBER"
 
-# 3. Add the IAM policy binding for IAP
-echo "Applying IAP egress IAM binding for Google APIs..."
-gcloud beta iap web add-iam-policy-binding \
-  --resource-type=agent-registry \
-  --endpoint="$ENDPOINT_ID" \
-  --region="$VERTEXAI_REGION" \
+# 3. Add the IAM policy binding for IAP on all registered service endpoints
+echo "Applying IAP egress IAM bindings for service endpoints..."
+for ENDPOINT_ID in "${ENDPOINTS[@]}"; do
+  echo "Applying IAP egress IAM binding for endpoint: $ENDPOINT_ID"
+  gcloud beta iap web add-iam-policy-binding \
+    --resource-type=agent-registry \
+    --endpoint="$ENDPOINT_ID" \
+    --region="$LOCATION" \
+    --project="$PROJECT_ID" \
+    --member="$MEMBER" \
+    --role=roles/iap.egressor
+done
+
+# 3b. Add the IAM policy binding for all MCP servers in the Agent Registry
+echo "Retrieving registered MCP servers..."
+MCP_SERVERS=$(gcloud agent-registry mcp-servers list \
   --project="$PROJECT_ID" \
-  --member="$MEMBER" \
-  --role=roles/iap.egressor
+  --location="$LOCATION" \
+  --format="value(name)" 2>/dev/null || true)
 
-echo "Applying IAP egress IAM binding for Apigee Host..."
-gcloud beta iap web add-iam-policy-binding \
-  --resource-type=agent-registry \
-  --endpoint="$APIGEE_ENDPOINT_ID" \
-  --region="$VERTEXAI_REGION" \
-  --project="$PROJECT_ID" \
-  --member="$MEMBER" \
-  --role=roles/iap.egressor
+for SERVER in $MCP_SERVERS; do
+  SERVER_ID=$(basename "$SERVER")
+  echo "Applying IAP egress IAM binding for MCP server: $SERVER_ID"
+  gcloud beta iap web add-iam-policy-binding \
+    --resource-type=agent-registry \
+    --mcp-server="$SERVER_ID" \
+    --region="$LOCATION" \
+    --project="$PROJECT_ID" \
+    --member="$MEMBER" \
+    --role=roles/iap.egressor
+done
 
-# # 3b. Add the IAM policy binding for all MCP servers in the Agent Registry
-# echo "Retrieving registered MCP servers..."
-# MCP_SERVERS=$(gcloud agent-registry mcp-servers list \
-#   --project="$PROJECT_ID" \
-#   --location="$VERTEXAI_REGION" \
-#   --format="value(name)" 2>/dev/null || true)
-
-# for SERVER in $MCP_SERVERS; do
-#   SERVER_ID=$(basename "$SERVER")
-#   echo "Applying IAP egress IAM binding for MCP server: $SERVER_ID"
-#   gcloud beta iap web add-iam-policy-binding \
-#     --resource-type=agent-registry \
-#     --mcp-server="$SERVER_ID" \
-#     --region="$VERTEXAI_REGION" \
-#     --project="$PROJECT_ID" \
-#     --member="$MEMBER" \
-#     --role=roles/iap.egressor
-# done
-
+# 4. Grant Agent Registry Viewer access at the project level
+echo "Granting Agent Registry Viewer IAM role to agent principal pool..."
 gcloud projects add-iam-policy-binding "$PROJECT_ID" \
   --member="$MEMBER" \
   --role="roles/agentregistry.viewer"
-
-echo "Granting Secret Manager Secret Accessor IAM role to agent principal pool..."
-gcloud projects add-iam-policy-binding "$PROJECT_ID" \
-  --member="$MEMBER" \
-  --role="roles/secretmanager.secretAccessor"
 
 echo "✅ Gateway egress policies configured successfully!"

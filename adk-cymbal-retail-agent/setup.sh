@@ -87,9 +87,8 @@ gcloud services enable \
   modelarmor.googleapis.com \
   secretmanager.googleapis.com \
   agentregistry.googleapis.com \
+  agentidentity.googleapis.com \
   agentidentitycredentials.googleapis.com \
-  iamconnectors.googleapis.com \
-  iamconnectorcredentials.googleapis.com \
   --project "$PROJECT_ID"
 sleep 15
 

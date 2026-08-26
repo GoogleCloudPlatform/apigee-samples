@@ -1,25 +1,25 @@
 import argparse
 import os
 import subprocess
-import vertexai
+import agentplatform
 from google.cloud import aiplatform
 
-def clean_iam_connector(project_id, location):
-    connector_name = "idp-connector"
-    print(f"Checking if IAM connector '{connector_name}' exists...")
+def clean_auth_provider(project_id, location):
+    auth_provider_name = os.getenv("AUTH_PROVIDER_NAME", "cymbal-idp")
+    print(f"Checking if Agent Identity auth provider '{auth_provider_name}' exists...")
     res = subprocess.run(
-        ["gcloud", "alpha", "agent-identity", "connectors", "describe", connector_name, f"--project={project_id}", f"--location={location}"],
+        ["gcloud", "agent-identity", "auth-providers", "describe", auth_provider_name, f"--project={project_id}", f"--location={location}"],
         capture_output=True
     )
     if res.returncode == 0:
-        print(f"Deleting IAM connector '{connector_name}'...")
+        print(f"Deleting Agent Identity auth provider '{auth_provider_name}'...")
         subprocess.run(
-            ["gcloud", "alpha", "agent-identity", "connectors", "delete", connector_name, f"--project={project_id}", f"--location={location}", "--quiet"],
+            ["gcloud", "agent-identity", "auth-providers", "delete", auth_provider_name, f"--project={project_id}", f"--location={location}", "--quiet"],
             check=True
         )
-        print("IAM connector deleted successfully.")
+        print("Agent Identity auth provider deleted successfully.")
     else:
-        print("IAM connector does not exist. Skipping.")
+        print("Agent Identity auth provider does not exist. Skipping.")
 
 def undeploy(args):
     project = args.project or os.getenv("GOOGLE_CLOUD_PROJECT")
@@ -28,9 +28,9 @@ def undeploy(args):
 
     location = args.location or "us-central1"
 
-    print(f"Initializing Vertex AI SDK for project={project}, location={location}...")
-    vertexai.init(project=project, location=location)
-    client = vertexai.Client(project=project, location=location)
+    print(f"Initializing Agent Platform SDK for project={project}, location={location}...")
+    agentplatform.init(project=project, location=location)
+    client = agentplatform.Client(project=project, location=location)
 
     # Check for existing reasoning engine with the same display name
     print(f"Checking for existing deployments with display_name='{args.display_name}'...")
@@ -45,15 +45,15 @@ def undeploy(args):
     if matching_agents:
         for agent in matching_agents:
             resource_name = agent.api_resource.name
-            print(f"Deleting Agent Runtime instance: {resource_name}...")
-            client.agent_engines.delete(name=resource_name)
+            print(f"Deleting Agent Runtime instance: {resource_name} (force=True)...")
+            client.agent_engines.delete(name=resource_name, force=True)
             print("Deleted successfully.")
     else:
         print("No matching Agent Runtime instance found.")
 
-    # # Clean up the IAM connector
-    # print("\n🔒 Cleaning up Agent Identity IAM Connector...")
-    # clean_iam_connector(project, location)
+    # Clean up the auth provider
+    print("\n🔒 Cleaning up Agent Identity Auth Provider...")
+    clean_auth_provider(project, location)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Undeploy agent from Agent Runtime")

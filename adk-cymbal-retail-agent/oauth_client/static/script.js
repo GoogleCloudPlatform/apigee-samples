@@ -2,6 +2,7 @@
 
 let activeSessionId = null;
 let activeAuthRequest = null;
+let activePopup = null;
 let pollTimer = null;
 
 const chatHistory = document.getElementById('chat-history');
@@ -121,7 +122,6 @@ async function handleMessageSubmit(e) {
 
 // Intercept OAuth Callback Message from Popup Window (Fallback)
 async function handleOauthCallbackMessage(event) {
-    if (event.origin !== window.location.origin) return;
     const data = event.data;
     if (data && data.type === "oauth_callback" && activeAuthRequest) {
         resumeSession(data.url);
@@ -230,7 +230,10 @@ function appendAuthCard(authUri) {
     authBtn.classList.add('btn', 'btn-auth');
     authBtn.innerHTML = '<i class="fa-solid fa-arrow-up-right-from-square"></i> Login';
     authBtn.addEventListener('click', () => {
-        const popup = window.open(authUri, 'oauth-popup', 'width=500,height=650,status=yes,toolbar=no,menubar=no,location=yes');
+        if (activePopup && !activePopup.closed) {
+            try { activePopup.close(); } catch (e) {}
+        }
+        activePopup = window.open(authUri, 'oauth-popup', 'width=500,height=650,status=yes,toolbar=no,menubar=no,location=yes');
         
         if (pollTimer) clearInterval(pollTimer);
         // Parent-side secure backend status polling loop
@@ -242,7 +245,6 @@ function appendAuthCard(authUri) {
                 if (response.ok && data.completed) {
                     clearInterval(pollTimer);
                     pollTimer = null;
-                    if (popup) popup.close();
                     resumeSession(data.callback_url); // Trigger resume immediately!
                     return;
                 }
@@ -250,7 +252,7 @@ function appendAuthCard(authUri) {
                 // Silently ignore network glitches during polling
             }
             
-            if (popup && popup.closed) {
+            if (activePopup && activePopup.closed) {
                 clearInterval(pollTimer);
                 pollTimer = null;
                 return;

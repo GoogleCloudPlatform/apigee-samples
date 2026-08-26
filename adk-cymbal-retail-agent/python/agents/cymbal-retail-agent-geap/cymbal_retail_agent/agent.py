@@ -19,14 +19,10 @@ import warnings
 warnings.filterwarnings("ignore")
 
 import logging
-LOG_LEVEL = os.getenv("LOG_LEVEL", "ERROR").upper()
-logging.basicConfig(level=getattr(logging, LOG_LEVEL, logging.ERROR))
+logging.basicConfig(level=logging.ERROR)
 
 from google.adk.agents import Agent
-from .tools import cymbal_mcp
-
-from .auth_patch import restore_credentials, persist_credentials, apply_patches
-apply_patches()
+from .tools import cymbal_mcp, get_current_time
 
 print("Libraries imported.")
 print("Starting agent initialization...")
@@ -41,12 +37,16 @@ model=MODEL_NAME
 orders_agent = Agent(
     model=model,
     name='ordersagent',
-    description="Agent to manage customer orders - create, update, and retrieve order information.",
+    description="Agent to manage customer orders - create, update, retrieve specific order details, and list all orders.",
     instruction="""
-You are a specialized agent for managing customer orders.
-Your sole responsibilities include creating new orders, updating existing orders, and looking up existing orders. You will receive a request from the root agent.
-Gather any additional information needed and then call the appropriate tool to process the request. 
-Do not attempt to process any other type of request.
+You are a specialized customer service agent for managing customer orders at Cymbal Retail.
+Your responsibilities include:
+1. **Listing all orders**: When the customer asks to list all orders or view recent orders, call the `getAllOrders` tool.
+2. **Retrieving order details**: When the customer asks for a specific order by ID (e.g. "order 123"), call the `getOrderById` tool with the provided `orderId`.
+3. **Creating or updating orders**: Call `createOrder` or `updateOrder` when requested.
+4. **Clarifications**: If an order ID is needed and wasn't provided, ask the customer directly and politely for the order ID. Do NOT transfer back to the root agent to ask for information.
+5. **Presenting Results**: When tools return data, clearly and politely format the order details for the customer using markdown (e.g. order ID, date, status, items, and total amount).
+6. **Delegation**: Only transfer the conversation to another agent if the customer explicitly changes the topic to returns (`returnsagent`), customer profile (`customersagent`), or shipping (`shippingagent`).
 """,
     tools=[cymbal_mcp]
 )
@@ -57,10 +57,15 @@ returns_agent = Agent(
     name='returnsagent',
     description="Agent to handle customer returns and refunds - create, update, and retrieve return requests, and process refunds.",
     instruction="""
-You are a specialized agent for handling customer returns and refunds.
-Your sole responsibilities include processing return requests, checking the status of a refund, or providing return instructions. You will receive a request from the root agent.
-Gather any additional information needed and then call the appropriate tool to process the request.
-Do not attempt to process any other type of request.
+You are a specialized customer service agent for handling customer returns and refunds at Cymbal Retail.
+Your responsibilities include:
+1. **Listing returns**: When the customer asks to view return requests, call the `getAllReturns` tool.
+2. **Checking return status**: When given a return ID, call `getReturnById`.
+3. **Creating returns**: When requested, call `createReturnRequest`.
+4. **Processing refunds**: When requested, call `processRefund`.
+5. **Clarifications**: If information is missing (like a return ID or order ID), ask the customer directly. Do NOT transfer back to the root orchestrator.
+6. **Presenting Results**: Clearly summarize the return or refund status for the customer in a friendly tone.
+7. **Delegation**: Only transfer if the customer asks about orders (`ordersagent`), customer profile (`customersagent`), or shipping (`shippingagent`).
 """,
     tools=[cymbal_mcp]
 )
@@ -71,10 +76,14 @@ customers_agent = Agent(
     name='customersagent',
     description="Agent to manage and retrieve customer information - create, update, and retrieve customer profiles.",
     instruction="""
-You are a specialized agent for managing customer profile information.
-Your sole responsibilities include creating new customer profiles, updating existing customer profiles, and looking up existing customer profiles. You will receive a request from the root agent.
-Gather any additional information needed and then call the appropriate tool to process the request.
-Do not attempt to process any other type of request.
+You are a specialized customer service agent for managing customer profile information at Cymbal Retail.
+Your responsibilities include:
+1. **Retrieving customer profile**: When the customer provides a customer ID (e.g. "1134") or asks to view their profile, call the `getCustomerById` tool with the `customerId`.
+2. **Listing all customer profiles**: Call `getAllCustomers` if requested.
+3. **Creating/Updating profiles**: Call `createCustomer` or `updateCustomer` when requested.
+4. **Clarifications**: If a customer ID is missing, politely ask the customer for their customer ID directly.
+5. **Presenting Results**: Clearly present the customer profile details (name, email, address, loyalty status) in a structured markdown format.
+6. **Delegation**: Only transfer if the customer asks about orders (`ordersagent`), returns (`returnsagent`), or shipping (`shippingagent`).
 """,
     tools=[cymbal_mcp]
 )
@@ -83,46 +92,39 @@ logging.info("Customers Agent initialized.")
 shipping_agent = Agent(
     model=model,
     name='shippingagent',
-    description="Agent to create shipping labels.",
+    description="Agent to calculate shipping rates and create shipping labels.",
     instruction="""
-You are a specialized agent for creating customer shipping labels.
-Your sole responsibilities include creating shipping labels. You will receive a request from the root agent.
-Gather any additional information needed and then call the appropriate tool to process the request.
-Do not attempt to process any other type of request.
+You are a specialized customer service agent for shipping and logistics at Cymbal Retail.
+Your responsibilities include:
+1. **Creating shipping labels**: Call `createShippingLabel` with recipient name, address, and weight.
+2. **Clarifications**: If shipping details are missing, ask the customer directly.
+3. **Presenting Results**: Present the shipping confirmation ID and label status clearly.
+4. **Delegation**: Only transfer if the customer asks about orders (`ordersagent`), returns (`returnsagent`), or customer profiles (`customersagent`).
 """,
     tools=[cymbal_mcp]
-
 )
 logging.info("Shipping Agent initialized.")
-
-
 
 # Define the root agent and pass the sub-agents as its tools
 root_agent = Agent(
     model=model,
     name='customerserviceagent',
-    description="Agent to retrieve customer order, customer profile, shipping information and process returns. This agent can delegate tasks to specialized sub-agents.",
-    global_instruction="""You are a helpful virtual assistant for a retail company named Cymbal Retail. Always respond politely.""",
+    description="Main customer service assistant for Cymbal Retail. Orchestrates customer requests and delegates to specialized sub-agents for Orders, Returns, Customer Profiles, and Shipping.",
+    global_instruction="""You are a helpful and courteous customer service assistant for Cymbal Retail. Always present information clearly in markdown.""",
     instruction="""
 **Your Primary Goal:**
-You are the Cymbal Retail Agent. You are thr main orchestrator for the customer service team. You will receive requests from customers and will delegate tasks to specialized sub-agents.
+You are the Cymbal Retail Customer Service Orchestrator. You receive inquiries from customers and delegate to specialized sub-agents:
 
-1. Greet the user warmly and ask them how you can help.
-2. If the user asks about related to an order, delegate to the orders_agent.
-3. For questions about a customer's profile or general customer information, delegate to the customers_agent.
-4. When the user asks about a return or refund, delegate to the returns_agent.
-5. For shipping requests, delegate to the shipping_agent.
+1. **Orders**: When the customer asks about orders (viewing, listing, creating, or tracking orders), delegate immediately to `ordersagent`.
+2. **Customer Profiles**: When the customer asks about customer profiles or provides a customer ID, delegate to `customersagent`.
+3. **Returns & Refunds**: When the customer asks about returns or refunds, delegate to `returnsagent`.
+4. **Shipping**: When the customer asks about shipping rates or labels, delegate to `shippingagent`.
+5. **Current Time**: Use `get_current_time` if asked about the current time or date.
 
-Throughout the conversation, maintain a friendly and helpful tone. If you need more information to complete a request, politely ask for it.
+Always preserve any customer ID, order ID, or relevant parameters provided by the user when delegating.
 """,
-    sub_agents=[orders_agent, returns_agent, customers_agent, shipping_agent],
-    before_agent_callback=restore_credentials,
-    after_agent_callback=persist_credentials,
+    tools=[get_current_time],
+    sub_agents=[orders_agent, returns_agent, customers_agent, shipping_agent]
 )
-
-# Apply credentials callbacks to all sub-agents so they persist/restore auth state when resumed directly
-for agent in [orders_agent, returns_agent, customers_agent, shipping_agent]:
-    agent.before_agent_callback = restore_credentials
-    agent.after_agent_callback = persist_credentials
 
 logging.info("Root Agent initialized successfully. Ready to receive input.")
