@@ -2,7 +2,7 @@
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-if [ -f "$SCRIPT_DIR/env.sh" ]; then
+if [ -z "$PROJECT_ID" ] && [ -f "$SCRIPT_DIR/env.sh" ] && ! grep -q "PROJECT_ID_TO_SET" "$SCRIPT_DIR/env.sh"; then
   source "$SCRIPT_DIR/env.sh"
 fi
 

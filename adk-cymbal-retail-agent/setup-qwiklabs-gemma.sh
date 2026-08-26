@@ -24,7 +24,7 @@ echo "=================================================================="
 # Step 1: Environment Discovery & Validation
 # Automatically loads env.sh if available and resolves active GCP project ID.
 # ==============================================================================
-if [ -f "env.sh" ]; then
+if [ -z "$PROJECT_ID" ] && [ -f "env.sh" ] && ! grep -q "PROJECT_ID_TO_SET" env.sh; then
   echo "--> Sourcing environment variables from env.sh..."
   source env.sh
 fi

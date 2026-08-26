@@ -17,7 +17,7 @@
 set -e
 
 # Load environment configuration if available
-if [ -f "env.sh" ]; then
+if [ -z "$PROJECT_ID" ] && [ -f "env.sh" ] && ! grep -q "PROJECT_ID_TO_SET" env.sh; then
   source env.sh
 fi
 

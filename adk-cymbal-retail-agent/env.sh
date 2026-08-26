@@ -14,25 +14,26 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-export PROJECT_ID="PROJECT_ID_TO_SET"
-PROJECT_NUMBER="$(gcloud projects describe $PROJECT_ID --format="value(projectNumber)")"
-export PROJECT_NUMBER
-export APIGEE_ENV="APIGEE_ENV_TO_SET"
-export APIGEE_HOST="APIGEE_HOST_TO_SET"
-export SERVICE_ACCOUNT_NAME="llm-cymbal-retail-agent"
+export PROJECT_ID="${PROJECT_ID:-PROJECT_ID_TO_SET}"
+if [ -n "$PROJECT_ID" ] && [ "$PROJECT_ID" != "PROJECT_ID_TO_SET" ]; then
+  PROJECT_NUMBER="$(gcloud projects describe "$PROJECT_ID" --format="value(projectNumber)" 2>/dev/null || true)"
+  export PROJECT_NUMBER
+  gcloud config set project "$PROJECT_ID" 2>/dev/null || true
+fi
+export APIGEE_ENV="${APIGEE_ENV:-APIGEE_ENV_TO_SET}"
+export APIGEE_HOST="${APIGEE_HOST:-APIGEE_HOST_TO_SET}"
+export SERVICE_ACCOUNT_NAME="${SERVICE_ACCOUNT_NAME:-llm-cymbal-retail-agent}"
 
-export MODEL_ARMOR_REGION="MODEL_ARMOR_REGION_TO_SET"
-export MODEL_ARMOR_TEMPLATE_ID="llm-governance-template" #use existing or create new template using this id
+export MODEL_ARMOR_REGION="${MODEL_ARMOR_REGION:-MODEL_ARMOR_REGION_TO_SET}"
+export MODEL_ARMOR_TEMPLATE_ID="${MODEL_ARMOR_TEMPLATE_ID:-llm-governance-template}" #use existing or create new template using this id
 
-export APIGEE_APIHUB_PROJECT_ID="APIGEE_APIHUB_PROJECT_ID_TO_SET"
-export APIGEE_APIHUB_REGION="APIGEE_APIHUB_REGION_TO_SET"
+export APIGEE_APIHUB_PROJECT_ID="${APIGEE_APIHUB_PROJECT_ID:-APIGEE_APIHUB_PROJECT_ID_TO_SET}"
+export APIGEE_APIHUB_REGION="${APIGEE_APIHUB_REGION:-APIGEE_APIHUB_REGION_TO_SET}"
 
-export VERTEXAI_REGION="VERTEXAI_REGION_TO_SET"
-export VERTEXAI_PROJECT_ID="VERTEXAI_PROJECT_ID_TO_SET"
-export MODEL_NAME="gemini-2.5-flash"
+export VERTEXAI_REGION="${VERTEXAI_REGION:-VERTEXAI_REGION_TO_SET}"
+export VERTEXAI_PROJECT_ID="${VERTEXAI_PROJECT_ID:-VERTEXAI_PROJECT_ID_TO_SET}"
+export MODEL_NAME="${MODEL_NAME:-gemini-2.5-flash}"
 
-export AGENT_GATEWAY_NAME="egress-gateway"
+export AGENT_GATEWAY_NAME="${AGENT_GATEWAY_NAME:-egress-gateway}"
 
-export APP_DEFAULT_TOKEN=$(gcloud auth application-default print-access-token)
-
-gcloud config set project $PROJECT_ID
+export APP_DEFAULT_TOKEN=$(gcloud auth application-default print-access-token 2>/dev/null || true)
