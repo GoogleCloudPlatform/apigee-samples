@@ -396,7 +396,8 @@ def ensure_agent_registry_binding(project_id, location, engine_name, auth_provid
             f"--auth-provider-binding-continue-uri={continue_uri}"
         ], check=True)
     print(f"✅ Agent Registry Binding '{binding_name}' configured successfully.")
-    
+
+if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Deploy agent to Agent Runtime")
     parser.add_argument("--project", help="Google Cloud Project ID (defaults to GOOGLE_CLOUD_PROJECT env var)")
     parser.add_argument("--location", default="us-central1", help="Google Cloud Region/Location (defaults to us-central1)")
