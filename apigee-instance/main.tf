@@ -258,7 +258,7 @@ resource "google_compute_target_https_proxy" "this" {
   project          = local.project_id
   name             = "apigee-${var.vendor_slug}-https-proxy"
   url_map          = google_compute_url_map.this.id
-  ssl_certificates = [google_compute_managed_ssl_certificate.this[0].id]
+  ssl_certificates = [google_compute_managed_ssl_certificate.this[count.index].id]
 }
 
 resource "google_compute_global_forwarding_rule" "this" {
@@ -269,9 +269,8 @@ resource "google_compute_global_forwarding_rule" "this" {
   load_balancing_scheme = "EXTERNAL_MANAGED"
   ip_address            = google_compute_global_address.lb_ip.address
   port_range            = "443"
-  target                = google_compute_target_https_proxy.this[0].id
+  target                = google_compute_target_https_proxy.this[count.index].id
 }
-
 ### network ###
 
 # Apigee X's runtime is fully managed by Google and does not
@@ -300,6 +299,7 @@ resource "google_compute_network" "this" {
 
 # Create the Subnetwork
 resource "google_compute_subnetwork" "this" {
+  provider      = google.vendor
   name          = "apigee-${var.vendor_slug}-sub"
   project       = local.project_id
   ip_cidr_range = "10.0.1.0/24"      
@@ -314,9 +314,9 @@ resource "google_compute_global_address" "psa_range" {
   name          = "apigee-psa-final"
   purpose       = "VPC_PEERING"
   address_type  = "INTERNAL"
-  prefix_length = 20
+  prefix_length = split("/", var.runtime_cidr)[1]
   network       = google_compute_network.this.id
-  address       = "10.46.208.0"
+  address       = split("/", var.runtime_cidr)[0]
 }
 
 resource "google_service_networking_connection" "psa" {

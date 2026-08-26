@@ -51,7 +51,6 @@ variable "apigee_hostname" {
     condition     = length(var.apigee_hostname) <= 253 && can(regex("^[a-z0-9.-]+$", var.apigee_hostname))
     error_message = "apigee_hostname must be a valid lowercase FQDN, <=253 chars."
   }
-  default = ""
 }
 
 
@@ -69,7 +68,6 @@ variable "apigee_org_admins" {
     )
     error_message = "apigee_org_admins must have 1-10 entries; each must match the email regex ^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$ (no whitespace, colons, commas, or unicode). Rejects injection patterns like 'user:foo@x.com' and 'a@x.com,b@y.com', and malformed addresses like 'foo@bar' (no TLD). Resolves lumbergh-verify CRITICAL-3 / Bob Security S-1 (OWASP A01 Broken Access Control)."
   }
-  default = [""]
 }
 
 variable "runtime_cidr" {
@@ -107,5 +105,5 @@ variable "defer_cert" {
 variable "build_id" {
   type        = string
   default     = ""
-  description = "Cloud Build BUILD_ID, passed via -var=build_id=$BUILD_ID. Used to force terraform_data.cert_active replacement on retry builds (resolves OD-012)."
+  description = "Cloud Build BUILD_ID."
 }
