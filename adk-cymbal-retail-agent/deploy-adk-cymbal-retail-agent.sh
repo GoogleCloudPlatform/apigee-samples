@@ -287,7 +287,7 @@ model_id=$MODEL_NAME
 region=$VERTEXAI_REGION"
 
 
-gcloud services enable dlp.googleapis.com logging.googleapis.com aiplatform.googleapis.com modelarmor.googleapis.com dialogflow.googleapis.com discoveryengine.googleapis.com --project "$PROJECT_ID"
+gcloud services enable dlp.googleapis.com logging.googleapis.com aiplatform.googleapis.com modelarmor.googleapis.com dialogflow.googleapis.com discoveryengine.googleapis.com agentregistry.googleapis.com agentidentity.googleapis.com agentidentitycredentials.googleapis.com iamconnectors.googleapis.com iamconnectorcredentials.googleapis.com --project "$PROJECT_ID" 2>/dev/null || true
 
 if ! command -v apigeecli &> /dev/null; then
   echo "Installing apigeecli"

@@ -92,7 +92,9 @@ gcloud services enable \
   agentregistry.googleapis.com \
   agentidentity.googleapis.com \
   agentidentitycredentials.googleapis.com \
-  --project "$PROJECT_ID"
+  iamconnectors.googleapis.com \
+  iamconnectorcredentials.googleapis.com \
+  --project "$PROJECT_ID" 2>/dev/null || true
 sleep 15
 
 ./deploy-adk-cymbal-retail-agent.sh --deploy-discovery-proxy "$DEPLOY_DISCOVERY_PROXY" --deploy-llm-ai-gateway "$DEPLOY_LLM_AI_GATEWAY"
