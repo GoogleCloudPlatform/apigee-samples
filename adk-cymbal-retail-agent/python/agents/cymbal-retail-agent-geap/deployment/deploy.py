@@ -357,14 +357,25 @@ def ensure_agent_registry_binding(project_id, location, engine_name, auth_provid
                 if s.get("displayName") == "cymbal-discovery-v1" or "cymbal" in s.get("displayName", ""):
                     target_identifier = s.get("mcpServerId")
                     break
-    except Exception as e:
-        print(f"Warning: Failed to list MCP servers: {e}")
+    if not target_identifier:
+        try:
+            ep_res = subprocess.run(
+                ["gcloud", "agent-registry", "endpoints", "list", f"--project={project_id}", f"--location={location}", "--format=json"],
+                capture_output=True, text=True
+            )
+            if ep_res.returncode == 0:
+                endpoints = json.loads(ep_res.stdout)
+                for ep in endpoints:
+                    if ep.get("displayName") == "Apigee Host" or "apigee" in ep.get("displayName", "").lower():
+                        target_identifier = ep.get("endpointId")
+                        break
+        except Exception as e:
+            print(f"Warning: Failed to list Endpoints: {e}")
 
     if not target_identifier:
-        print("Warning: MCP server target identifier not found. Skipping binding creation.")
-        return
+        target_identifier = f"urn:endpoint:projects-{project_number}:projects:{project_number}:locations:{location}:agentregistry:services:apigee-host"
 
-    binding_name = "cymbal-discovery-binding"
+    binding_name = "cymbal-auth-binding"
     auth_provider_path = f"projects/{project_id}/locations/{location}/authProviders/{auth_provider}"
 
     print(f"Configuring Agent Registry Binding '{binding_name}'...")
