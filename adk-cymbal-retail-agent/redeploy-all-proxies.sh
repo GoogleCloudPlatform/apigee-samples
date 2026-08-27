@@ -28,13 +28,23 @@ if [ -f "env.sh" ]; then
 fi
 
 # Target GCP and Apigee environment configuration
-export PROJECT_ID="${PROJECT_ID:-apigeex-talanki}"
+if [ -z "$PROJECT_ID" ] || [ "$PROJECT_ID" = "PROJECT_ID_TO_SET" ]; then
+  PROJECT_ID="$(gcloud config get-value project 2>/dev/null || true)"
+fi
+
+if [ -z "$PROJECT_ID" ]; then
+  echo "Error: PROJECT_ID is not set. Please export PROJECT_ID or configure env.sh"
+  exit 1
+fi
+
+export PROJECT_ID
 export APIGEE_ENV="${APIGEE_ENV:-test-env}"
-export APIGEE_HOST="${APIGEE_HOST:-136.68.214.207.nip.io}"
+export APIGEE_HOST="${APIGEE_HOST:-$APIGEE_HOST}"
 export SERVICE_ACCOUNT_NAME="${SERVICE_ACCOUNT_NAME:-llm-cymbal-retail-agent}"
 export VERTEXAI_PROJECT_ID="${VERTEXAI_PROJECT_ID:-$PROJECT_ID}"
 export VERTEXAI_REGION="${VERTEXAI_REGION:-us-central1}"
 export MODEL_NAME="${MODEL_NAME:-gemini-2.5-flash}"
+
 
 
 # Ensure apigeecli is on PATH and retrieve fresh auth token

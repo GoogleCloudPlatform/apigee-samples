@@ -102,15 +102,16 @@ python3 ../../../test-agent-runtime-e2e.py
 ### 1. Environment Configuration
 Populate `.env` with your Google Cloud and Apigee configuration:
 ```ini
-GOOGLE_CLOUD_PROJECT="apigeex-talanki"
+GOOGLE_CLOUD_PROJECT="YOUR_PROJECT_ID"
 GOOGLE_CLOUD_LOCATION="us-central1"
-APIGEE_HOSTNAME="136.68.214.207.nip.io"
+APIGEE_HOSTNAME="YOUR_APIGEE_HOSTNAME"
 GOOGLE_GENAI_USE_VERTEXAI="TRUE"
-GOOGLE_CLOUD_STORAGE_BUCKET="apigeex-talanki_cymbal_retail_agent"
+GOOGLE_CLOUD_STORAGE_BUCKET="YOUR_PROJECT_ID_cymbal_retail_agent"
 MODEL_NAME="gemini-2.5-flash"
-AGENT_SERVICE_ACCOUNT="llm-cymbal-retail-agent@apigeex-talanki.iam.gserviceaccount.com"
+AGENT_SERVICE_ACCOUNT="llm-cymbal-retail-agent@YOUR_PROJECT_ID.iam.gserviceaccount.com"
 APIGEE_LLM="/v1/adk-retail-agent-llm-governance"
 ```
+
 
 ### 2. Virtual Environment Synchronization
 ```bash

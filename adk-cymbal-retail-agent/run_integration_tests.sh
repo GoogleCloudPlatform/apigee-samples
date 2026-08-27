@@ -25,41 +25,54 @@ if [ -f "env.sh" ]; then
 fi
 
 export PATH=$PATH:$HOME/.apigeecli/bin
-export APIGEE_HOST="${APIGEE_HOST:-136.68.214.207.nip.io}"
-export PROJECT_ID="${PROJECT_ID:-apigeex-talanki}"
+if [ -z "$PROJECT_ID" ] || [ "$PROJECT_ID" = "PROJECT_ID_TO_SET" ]; then
+    export PROJECT_ID="$(gcloud config get-value project 2>/dev/null || echo 'PROJECT_ID_TO_SET')"
+fi
+
+if [ -z "$APP_DEFAULT_TOKEN" ]; then
+    export APP_DEFAULT_TOKEN="$(gcloud auth application-default print-access-token 2>/dev/null || true)"
+fi
+
+if [ -z "$APIGEE_HOST" ] || [ "$APIGEE_HOST" = "APIGEE_HOST_TO_SET" ]; then
+    if command -v apigeecli &>/dev/null && [ -n "$APP_DEFAULT_TOKEN" ]; then
+        DISCOVERED_HOST=$(apigeecli envgroups list -o "$PROJECT_ID" --token "$APP_DEFAULT_TOKEN" --disable-check 2>/dev/null | grep -o '"[0-9a-zA-Z.-]*\.nip\.io"' | tr -d '"' | head -n1 || true)
+        if [ -n "$DISCOVERED_HOST" ]; then
+            export APIGEE_HOST="$DISCOVERED_HOST"
+        fi
+    fi
+fi
+export APIGEE_HOST="${APIGEE_HOST:-APIGEE_HOST_TO_SET}"
 export VERTEXAI_REGION="${VERTEXAI_REGION:-us-central1}"
 export REDIRECT_URI="${REDIRECT_URI:-http://127.0.0.1:9000/callback}"
 
-if [ -z "$APP_DEFAULT_TOKEN" ]; then
-    export APP_DEFAULT_TOKEN="$(gcloud auth application-default print-access-token 2>/dev/null || echo 'mock-token')"
-fi
 
-# Fetch Cymbal Retail App credentials if not set
+# Fetch Cymbal Retail App credentials dynamically if not set
 if [ -z "$CLIENT_ID" ] || [ -z "$CLIENT_SECRET" ] || [ -z "$APIKEY" ]; then
-    if command -v apigeecli &>/dev/null; then
+    if command -v apigeecli &>/dev/null && [ -n "$APP_DEFAULT_TOKEN" ]; then
         APP_JSON=$(apigeecli apps get --name "cymbal-retail-app" --org "$PROJECT_ID" --token "$APP_DEFAULT_TOKEN" --disable-check 2>/dev/null || true)
         if [ -n "$APP_JSON" ]; then
-            CLIENT_ID=$(echo "$APP_JSON" | jq -r '.[0].credentials[0].consumerKey // empty')
-            CLIENT_SECRET=$(echo "$APP_JSON" | jq -r '.[0].credentials[0].consumerSecret // empty')
+            CLIENT_ID=$(echo "$APP_JSON" | jq -r '.[0].credentials[0].consumerKey // empty' 2>/dev/null || true)
+            CLIENT_SECRET=$(echo "$APP_JSON" | jq -r '.[0].credentials[0].consumerSecret // empty' 2>/dev/null || true)
         fi
     fi
 fi
 
-export APIKEY="${CLIENT_ID:-1d5tf54kifNMfYeGBZiJORieZcDV6HMjxn6ZPzP2Xr0xD399}"
-export APISECRET="${CLIENT_SECRET:-LS8RAJqejEigoAOQ48pIGrRngbZvotvl7RcggGItUJkdkO57R5k0TLQZ8BdH7V9v}"
-export CLIENT_ID="$APIKEY"
-export CLIENT_SECRET="$APISECRET"
+export APIKEY="${APIKEY:-$CLIENT_ID}"
+export APISECRET="${APISECRET:-$CLIENT_SECRET}"
+export CLIENT_ID="${CLIENT_ID:-$APIKEY}"
+export CLIENT_SECRET="${CLIENT_SECRET:-$APISECRET}"
 
-# Fetch LLM AI Gateway App credentials
+# Fetch LLM AI Gateway App credentials dynamically
 if [ -z "$LLM_APIKEY" ]; then
-    if command -v apigeecli &>/dev/null; then
+    if command -v apigeecli &>/dev/null && [ -n "$APP_DEFAULT_TOKEN" ]; then
         LLM_APP_JSON=$(apigeecli apps get --name "llm-ai-gateway-app" --org "$PROJECT_ID" --token "$APP_DEFAULT_TOKEN" --disable-check 2>/dev/null || true)
         if [ -n "$LLM_APP_JSON" ]; then
-            LLM_APIKEY=$(echo "$LLM_APP_JSON" | jq -r '.[0].credentials[0].consumerKey // empty')
+            LLM_APIKEY=$(echo "$LLM_APP_JSON" | jq -r '.[0].credentials[0].consumerKey // empty' 2>/dev/null || true)
         fi
     fi
 fi
 export LLM_APIKEY="${LLM_APIKEY:-$APIKEY}"
+
 
 echo "================================================================="
 echo "   CYMBAL RETAIL: UNIFIED REGRESSION & VERIFICATION SUITE       "

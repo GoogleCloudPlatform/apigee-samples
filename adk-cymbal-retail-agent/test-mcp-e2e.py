@@ -29,25 +29,35 @@ def get_env_var(name, default=None):
     return os.environ.get(name, default)
 
 def main():
-    host = get_env_var("APIGEE_HOST", "34.54.87.114.nip.io")
-    project_id = get_env_var("PROJECT_ID", "apigee-ai")
-    
-    if not host:
+    project_id = get_env_var("PROJECT_ID")
+    if not project_id or project_id == "PROJECT_ID_TO_SET":
         try:
-            token = subprocess.check_output(["gcloud", "auth", "print-access-token"]).decode().strip()
-            project = project_id or subprocess.check_output(["gcloud", "config", "get-value", "project"]).decode().strip()
-            out = json.loads(subprocess.check_output([
-                f"{os.environ.get('HOME')}/.apigeecli/bin/apigeecli", "envgroups", "list",
-                "-o", project, "-t", token
-            ]))
-            host = out[0]["hostnames"][0]
+            project_id = subprocess.check_output(["gcloud", "config", "get-value", "project"]).decode().strip()
+        except Exception:
+            project_id = "PROJECT_ID_TO_SET"
+
+    host = get_env_var("APIGEE_HOST")
+    if not host or "TO_SET" in host:
+        try:
+            token = subprocess.check_output("gcloud auth application-default print-access-token 2>/dev/null || gcloud auth print-access-token", shell=True).decode().strip()
+            apigeecli_bin = f"{os.environ.get('HOME')}/.apigeecli/bin/apigeecli"
+            if os.path.exists(apigeecli_bin):
+                out = json.loads(subprocess.check_output([
+                    apigeecli_bin, "envgroups", "list",
+                    "-o", project_id, "-t", token
+                ]))
+                if out and "environmentGroups" in out and len(out["environmentGroups"]) > 0:
+                    host = out["environmentGroups"][0]["hostnames"][0]
+                elif out and isinstance(out, list) and len(out) > 0 and "hostnames" in out[0]:
+                    host = out[0]["hostnames"][0]
         except Exception:
             pass
 
-    if not host:
+    if not host or "TO_SET" in host:
         print("Error: APIGEE_HOST environment variable is not set.")
         print("Usage: export APIGEE_HOST=<host> && python3 test-mcp-e2e.py")
         sys.exit(1)
+
 
     if not host.startswith("http"):
         base_url = f"https://{host}"

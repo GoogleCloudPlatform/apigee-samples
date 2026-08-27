@@ -147,7 +147,8 @@ if (!process.env.APIGEE_HOST || !process.env.APIKEY || !process.env.APISECRET) {
     this.apickli.setGlobalVariable("apikey", process.env.APIKEY);
     this.apickli.setGlobalVariable("llm_apikey", process.env.LLM_APIKEY || process.env.APIKEY);
     this.apickli.setGlobalVariable("app-default-token", process.env.APP_DEFAULT_TOKEN);
-    this.apickli.setGlobalVariable("PROJECT_ID", process.env.PROJECT_ID || "apigeex-talanki");
+    this.apickli.setGlobalVariable("PROJECT_ID", process.env.PROJECT_ID || process.env.GOOGLE_CLOUD_PROJECT || "PROJECT_ID_TO_SET");
+
 
     try {
       if (!cachedManagerToken || !cachedCustomerToken) {

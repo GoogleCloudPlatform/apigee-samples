@@ -27,10 +27,17 @@ import time
 def get_env(name, default=None):
     return os.environ.get(name, default)
 
+def get_default_gcp_project():
+    try:
+        return subprocess.check_output("gcloud config get-value project 2>/dev/null", shell=True).decode().strip()
+    except Exception:
+        return "PROJECT_ID_TO_SET"
+
 def main():
-    project = get_env("PROJECT_ID", "apigeex-talanki")
+    project = get_env("PROJECT_ID") or get_default_gcp_project()
     location = get_env("VERTEXAI_REGION", "us-central1")
     display_name = get_env("AGENT_DISPLAY_NAME", "cymbal-retail-agent")
+
 
     print("==================================================================")
     print("  CYMBAL RETAIL AGENT: AGENT PLATFORM & RUNTIME REGRESSION SUITE  ")
