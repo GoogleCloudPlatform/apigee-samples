@@ -95,8 +95,6 @@ GOOGLE_API_URLS=(
   "https://agentidentity.mtls.googleapis.com"
   "https://agentidentitycredentials.googleapis.com"
   "https://agentidentitycredentials.mtls.googleapis.com"
-  "https://iamconnectorcredentials.googleapis.com"
-  "https://iamconnectorcredentials.mtls.googleapis.com"
   "https://iamcredentials.googleapis.com"
   "https://iamcredentials.mtls.googleapis.com"
   "https://oauth2.googleapis.com"
