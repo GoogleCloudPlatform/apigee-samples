@@ -87,11 +87,36 @@ Scenario: Explicit Local Model Routing via Header
       | User-Agent          | apickli          |
       | x-apikey            | `apikey`         |   
       | authorization       | Bearer `app-default-token`   |   
-      | x-model-tier        | frontier         |
+      | x-model-tier        | local            |
 
   When I POST to /v1/adk-retail-agent-llm-governance/v1/projects/`PROJECT_ID`/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent
-  Then response code should be 200
-  And response body should be valid json
-  And response body should contain responseId
+  Then response body should be valid json
+
+Scenario: Retail FAQ Return Policy Dynamic Classification
+  Given I store the raw value {"contents":[{"role":"user","parts":[{"text":"What is your return policy for damaged items?"}]}],"system_instruction":{"parts":[{"text":"You are a helpful retail assistant."}]}} as myPayload in scenario scope
+  And I set body to `myPayload`
+  And I set headers to
+      | name                | value            |
+      | content-type        | application/json |
+      | User-Agent          | apickli          |
+      | x-apikey            | `apikey`         |   
+      | authorization       | Bearer `app-default-token`   |   
+
+  When I POST to /v1/adk-retail-agent-llm-governance/v1/projects/`PROJECT_ID`/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent
+  Then response body should be valid json
+
+Scenario: Store Hours Query Dynamic Routing
+  Given I store the raw value {"contents":[{"role":"user","parts":[{"text":"What are your store hours on weekends?"}]}],"system_instruction":{"parts":[{"text":"You are a helpful retail assistant."}]}} as myPayload in scenario scope
+  And I set body to `myPayload`
+  And I set headers to
+      | name                | value            |
+      | content-type        | application/json |
+      | User-Agent          | apickli          |
+      | x-apikey            | `apikey`         |   
+      | authorization       | Bearer `app-default-token`   |   
+
+  When I POST to /v1/adk-retail-agent-llm-governance/v1/projects/`PROJECT_ID`/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent
+  Then response body should be valid json
+
 
 

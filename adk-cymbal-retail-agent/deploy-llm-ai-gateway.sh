@@ -22,6 +22,14 @@
 
 set -e
 
+sed_i() {
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+    sed -i "" "$@"
+  else
+    sed -i "$@"
+  fi
+}
+
 echo "===================================================================="
 echo "Starting Apigee X LLM AI Gateway Deployment (deploy-llm-ai-gateway.sh)"
 echo "===================================================================="
@@ -195,9 +203,9 @@ deploy_shared_flow() {
   cp -r "$sf_dir" "$tmp_sf_dir/"
   local prop_file="$tmp_sf_dir/sharedflowbundle/resources/properties/vertex_config.properties"
   if [ -f "$prop_file" ]; then
-    sed -i "s/project=.*/project=$PROJECT_ID/g" "$prop_file"
-    sed -i "s/project_number=.*/project_number=$PROJECT_NUMBER/g" "$prop_file"
-    sed -i "s/region=.*/region=$REGION/g" "$prop_file"
+    sed_i "s/project=.*/project=$PROJECT_ID/g" "$prop_file"
+    sed_i "s/project_number=.*/project_number=$PROJECT_NUMBER/g" "$prop_file"
+    sed_i "s/region=.*/region=$REGION/g" "$prop_file"
   fi
   apigeecli sharedflows create bundle -n "$sf_name" \
     -f "$tmp_sf_dir/sharedflowbundle" \
@@ -229,9 +237,9 @@ cp -r "$PROXY_SRC_DIR" "$TMP_PROXY_DIR/"
 # Update project ID and region in vertex_config.properties if present
 PROP_FILE="$TMP_PROXY_DIR/apiproxy/resources/properties/vertex_config.properties"
 if [ -f "$PROP_FILE" ]; then
-  sed -i "s/project=.*/project=$PROJECT_ID/g" "$PROP_FILE"
-  sed -i "s/project_number=.*/project_number=$PROJECT_NUMBER/g" "$PROP_FILE"
-  sed -i "s/region=.*/region=$REGION/g" "$PROP_FILE"
+  sed_i "s/project=.*/project=$PROJECT_ID/g" "$PROP_FILE"
+  sed_i "s/project_number=.*/project_number=$PROJECT_NUMBER/g" "$PROP_FILE"
+  sed_i "s/region=.*/region=$REGION/g" "$PROP_FILE"
 fi
 
 apigeecli apis create bundle -n "$PROXY_NAME" \

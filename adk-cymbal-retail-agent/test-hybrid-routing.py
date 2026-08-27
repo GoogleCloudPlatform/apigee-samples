@@ -39,9 +39,18 @@ def get_env_var(name, default=""):
             pass
     return default
 
-PROJECT_ID = get_env_var("PROJECT_ID", "PROJECT_ID_TO_SET")
-APIGEE_HOST = get_env_var("APIGEE_HOST", "34.54.87.114.nip.io")
-API_KEY = get_env_var("CLIENT_ID", "PXifa5UsK0p42hZfFwYfT9J6wW6C7Tbb")
+PROJECT_ID = get_env_var("PROJECT_ID", "apigeex-talanki")
+APIGEE_HOST = get_env_var("APIGEE_HOST", "136.68.214.207.nip.io")
+API_KEY = get_env_var("CLIENT_ID") or get_env_var("APIKEY")
+
+if not API_KEY:
+    try:
+        token = subprocess.check_output("gcloud auth application-default print-access-token", shell=True).decode().strip()
+        apigeecli_bin = f"{os.environ.get('HOME')}/.apigeecli/bin/apigeecli"
+        app_json = json.loads(subprocess.check_output(f"{apigeecli_bin} apps get --name cymbal-retail-app --org {PROJECT_ID} --token {token} --disable-check", shell=True).decode())
+        API_KEY = app_json[0]["credentials"][0]["consumerKey"]
+    except Exception:
+        API_KEY = "1d5tf54kifNMfYeGBZiJORieZcDV6HMjxn6ZPzP2Xr0xD399"
 
 # Get Google Auth Token
 def get_gcp_token():
@@ -130,9 +139,24 @@ def main():
     if status == 200:
         print("   PII Sanitization: \033[92mCloud DLP Template Executed\033[0m")
 
+    # Test 5: Retail FAQ Dynamic Auto-Classification (No tier header)
+    print("\n5. Testing Retail FAQ Dynamic Auto-Classification (Return Policy FAQ)...")
+    status, res = send_governance_request("What is your return policy for damaged items?")
+    print(f"   Status Code: {status}")
+    if status == 200:
+        print("   Auto-Classifier Result: \033[92mClassified & Routed Successfully\033[0m")
+
+    # Test 6: Store Operating Hours Dynamic Auto-Classification (No tier header)
+    print("\n6. Testing Store Operating Hours Dynamic Auto-Classification...")
+    status, res = send_governance_request("What are your store hours this weekend?")
+    print(f"   Status Code: {status}")
+    if status == 200:
+        print("   Auto-Classifier Result: \033[92mClassified & Routed Successfully\033[0m")
+
     print("\n==================================================================")
     print("  Hybrid Model Routing & Safety Verification Complete!            ")
     print("==================================================================")
 
 if __name__ == "__main__":
     main()
+

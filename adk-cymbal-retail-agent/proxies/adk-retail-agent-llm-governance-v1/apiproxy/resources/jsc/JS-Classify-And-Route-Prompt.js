@@ -43,24 +43,32 @@ if (modelTierHeader && (modelTierHeader.toLowerCase() === "local" || modelTierHe
   var wordCount = trimmedPrompt.split(/\s+/).length;
   
   // Simple greetings, single-intent inquiries, or FAQ phrases routed to local Gemma
-  var simpleGreetingPatterns = [
-    /^hello[\s!.]*$/,
-    /^hi[\s!.]*$/,
-    /^hey[\s!.]*$/,
-    /^how are you[\s?!.]*$/,
-    /^what can you do[\s?!.]*$/,
-    /^help[\s!.]*$/,
-    /^good (morning|afternoon|evening)[\s!.]*$/
+  var gemmaRetailPatterns = [
+    /^hello[\s!.]*$/i,
+    /^hi[\s!.]*$/i,
+    /^hey[\s!.]*$/i,
+    /^how are you[\s?!.]*$/i,
+    /^what can you do[\s?!.]*$/i,
+    /^help[\s!.]*$/i,
+    /^good (morning|afternoon|evening)[\s!.]*$/i,
+    /store hours|operating hours|opening hours|when are you open/i,
+    /return policy|refund policy|exchange policy|how do i return/i,
+    /shipping (rates|options|policy|cost|fee|methods|time)/i,
+    /loyalty (points|rewards|program|tier)/i,
+    /store locations|store address|where are you located/i,
+    /contact customer service|support email|support phone/i,
+    /cancel order policy|cancellation policy/i
   ];
   
-  var isGreeting = simpleGreetingPatterns.some(function(pattern) {
+  var isPatternMatch = gemmaRetailPatterns.some(function(pattern) {
     return pattern.test(trimmedPrompt);
   });
   
-  if (isGreeting || (wordCount <= 3 && trimmedPrompt.indexOf("order") === -1 && trimmedPrompt.indexOf("return") === -1)) {
+  if (isPatternMatch || (wordCount <= 4 && trimmedPrompt.indexOf("transfer_to_agent") === -1 && trimmedPrompt.indexOf("createorder") === -1)) {
     routeToGemma = true;
   }
 }
 
 context.setVariable("route_to_gemma", routeToGemma ? "true" : "false");
 print("Gemma Model Routing Decision: route_to_gemma=" + routeToGemma + " (isGemmaConfigured=" + isGemmaConfigured + ") for prompt: " + prompt);
+

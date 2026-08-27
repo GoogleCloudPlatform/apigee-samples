@@ -187,7 +187,7 @@ curl --location --request DELETE "https://dlp.googleapis.com/v2/projects/$PROJEC
 --header "Authorization: Bearer $TOKEN" || true
 
 echo "Deleting Model Armor template"
-gcloud config set api_endpoint_overrides/modelarmor "https://modelarmor.$MODEL_ARMOR_REGION.rep.googleapis.com/" || true
+gcloud config set api_endpoint_overrides/modelarmor "https://modelarmor.$MODEL_ARMOR_REGION.rep.mtls.googleapis.com/" || true
 gcloud model-armor templates delete "$MODEL_ARMOR_TEMPLATE_ID" -q --location "$MODEL_ARMOR_REGION" --project="$PROJECT_ID" || true
 
 echo "Deleting the secrets"

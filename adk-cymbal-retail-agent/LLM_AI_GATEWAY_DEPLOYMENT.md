@@ -21,49 +21,69 @@ The gateway provides the following core capabilities out of the box:
 - **Model Failover**: Automatically switches to a fallback model if the primary model endpoint experiences downtime or faults.
 - **Anonymization & Pseudonymization**: Sanitizes Sensitive Data Protection (DLP) patterns in user prompts and model responses.
 
-### Architecture & Request Lifecycle Diagram
+### Policy Execution Pipeline & Flow Architecture
 
-The diagram below illustrates how the **Apigee X LLM AI Gateway** (`/llm-ai-gateway/v1`) interacts with Google Cloud services (**Vector Search & Embeddings**, **Model Armor & DLP**, and **Vertex AI Gemini Models** with automatic failover) while allowing request-level override via HTTP `x-llm-*` headers:
+The diagram below details the exact policy execution chain across `PreFlow`, `Flow: chat`, `TargetEndpoint`, and `PostFlow` in `llm-ai-gateway-v1`:
 
 ```mermaid
 flowchart TD
-    Client["Client App\n(Headers: x-llm-cache, x-llm-routing, x-llm-model, etc.)"] -->|POST /llm-ai-gateway/v1/...| Gateway["Apigee X LLM AI Gateway\n(llm-ai-gateway-v1)"]
+    ClientReq([Incoming Request: /chat/completions OR /chat]) --> PreFlow
     
-    subgraph ApigeeGateway["Apigee X LLM AI Gateway Pipeline"]
-        RateQuota["1. Token Rate Limiting &\nQuota Enforcement\n[x-llm-prompt-rate-limiting]\n[x-llm-token-quota-enforce]"]
-        SanitizePrompt["2. Prompt Sanitization &\nJailbreak Protection\n[x-llm-sanitize-user-prompt]"]
-        SemCache["3. Semantic Caching Lookup\n[x-llm-cache]"]
-        DynamicRouting["4. Dynamic Complexity Routing\n[x-llm-routing / x-llm-model]"]
-        LLMExecution["5. Primary LLM Execution\nwith Fallback Protection"]
-        SanitizeResp["6. Response Sanitization &\nAnonymization\n[x-llm-sanitize-model-response]"]
-        Telemetry["7. Observability Telemetry\n(7 Data Collectors dc_*_v2)"]
-        
-        RateQuota --> SanitizePrompt
-        SanitizePrompt --> SemCache
-        SemCache -->|Cache Hit| SanitizeResp
-        SemCache -->|Cache Miss| DynamicRouting
-        DynamicRouting --> LLMExecution
-        LLMExecution --> SanitizeResp
-        SanitizeResp --> Telemetry
+    subgraph PreFlow["1. PreFlow (Authentication & Headers)"]
+        PF1[CORS-AddCors] --> PF2[VA-VerifyAPIKey]
+        PF2 --> PF3[AM-StripAcceptEncoding]
+        PF3 --> PF4[JS-ProcessCustomLLMHeaders<br>Extract x-llm-* flags & tier]
     end
     
-    Gateway --> RateQuota
-    Telemetry --> Response["Return Sanitized Response\nto Client"]
+    PreFlow --> ChatFlow
     
-    subgraph GCPServices["Google Cloud Platform Services"]
-        ModelArmorDLP["Model Armor & DLP\n(PII Anonymization,\nJailbreak Detection)"]
-        VectorSearch["Vertex AI Vector Search &\nEmbeddings API\n(Cache & Routing Indexes)"]
-        PrimaryGemini["Primary Model\n(e.g., Gemini 2.5 Pro)"]
-        FallbackGemini["Fallback Model\n(e.g., Gemini 2.5 Flash / Gemma)"]
+    subgraph ChatFlow["2. Flow: Chat (Inspection, Safety, Cache & Quotas)"]
+        CF1[JS-ParseRequestBody] --> CF2[AM-ExtractRequestPrompt]
+        CF2 --> CF3{llm_prompt_rate_limiting != false?}
+        CF3 -->|Yes| CF4[PTL-PromptRateLimiting]
+        CF3 -->|No| CF5{llm_sanitize_user_prompt != false?}
+        CF4 --> CF5
+        CF5 -->|Yes| CF6[FC-SanitizeUserPrompt<br>Model Armor + Cloud DLP]
+        CF5 -->|No| CF7{cache_enabled != false?}
+        CF6 --> CF7
+        CF7 -->|Yes| CF8[SCL-Semantic-Cache-Lookup<br>Vector Search Index]
+        CF7 -->|No| CF9{llm_routing_enabled != false?}
+        CF8 -->|Cache Miss| CF9
+        CF9 -->|Yes| CF10[FC-LLMRouting<br>Vector Complexity / Keyword Route]
+        CF9 -->|No| CF11[JS-BuildVertexPayload]
+        CF10 --> CF11
+        CF11 --> CF12{llm_token_quota_enforce != false?}
+        CF12 -->|Yes| CF13[LTQ-TokenEnforce<br>Per-Model Token Bucket]
+        CF12 -->|No| CF14[Dispatch to TargetEndpoint]
+        CF13 --> CF14
     end
     
-    SanitizePrompt <-->|"Check & De-identify\nPrompt"| ModelArmorDLP
-    SemCache <-->|"Embed & Query\nCache Index"| VectorSearch
-    DynamicRouting <-->|"Embed & Query\nRouting Index"| VectorSearch
-    LLMExecution -->|"Primary Call"| PrimaryGemini
-    LLMExecution -.->|"Failover (if Primary fails)"| FallbackGemini
-    SanitizeResp <-->|"De-identify Response\nEmail & PII"| ModelArmorDLP
+    ChatFlow --> TargetSelection{Target Endpoint Selection}
+    
+    subgraph Targets["3. Target Endpoints & Fallback"]
+        TargetSelection -->|Default Model Route| PrimaryTarget[🎯 Primary Target<br>Vertex AI Gemini 2.5 Pro]
+        PrimaryTarget -.->|HTTP 5xx / 429 Fault| FallbackTarget[🔀 Fallback Target<br>Vertex AI Gemini 2.5 Flash]
+        TargetSelection -->|x-model-tier: local| GemmaTarget[🏠 Private Gemma Target<br>Cloud Run CPU Gemma 3 4B]
+    end
+    
+    PrimaryTarget --> PostFlow
+    FallbackTarget --> PostFlow
+    GemmaTarget --> PostFlow
+    CF8 -->|Cache Hit| PostFlow
+    
+    subgraph PostFlow["4. PostFlow (Response Sanitization, Cache Populate & Analytics)"]
+        PO1[Set Cache Hit / Miss Headers] --> PO2[JS-ParseVertexResponse]
+        PO2 --> PO3[FC-SanitizeModelResponse<br>Cloud DLP Response Redaction]
+        PO3 --> PO4[SCL-Semantic-Cache-Populate<br>Store in Vector Cache]
+        PO4 --> PO5[DC-* Extract Token Counts<br>Prompt, Candidates, Total, Latency]
+        PO5 --> PO6[FC-LLM-Logger<br>Cloud Logging & Analytics]
+    end
+    
+    PostFlow --> ClientResp([Return 200 OK to Client])
 ```
+
+---
+
 
 ### Control Headers (Processing Flags)
 Each treatment or feature can be enabled or disabled per request using HTTP headers. By default, all features are enabled (`true`). Passing any value other than `true` (e.g., `false`) disables the respective treatment:
@@ -111,7 +131,7 @@ cache_index_id=<retrieve-from-vector-search-index-id>
 
 ## 2. Automated Deployment Script (`deploy-llm-ai-gateway.sh`)
 
-The deployment script [`deploy-llm-ai-gateway.sh`](file:///usr/local/google/home/joelgauci/repo/apigee-samples/adk-cymbal-retail-agent/deploy-llm-ai-gateway.sh) automates the provisioning of the gateway on Apigee X. It orchestrates:
+The deployment script [`deploy-llm-ai-gateway.sh`](deploy-llm-ai-gateway.sh) automates the provisioning of the gateway on Apigee X. It orchestrates:
 
 1. **Service Account Provisioning (`apigee-vertex-ai-caller`)**:
    - Assigns minimal least-privilege IAM roles (`roles/run.invoker`, `roles/aiplatform.user`, `roles/dlp.user`, `roles/dlp.reader`, `roles/modelarmor.user`, `roles/modelarmor.viewer`).
@@ -243,4 +263,26 @@ curl -s -X POST "https://$APIGEE_HOSTNAME/llm-ai-gateway/v1/projects/$PROJECT_ID
   -H "Content-Type: application/json; charset=utf-8" \
   -d '{"contents": [{"role": "USER", "parts": [{"text": "What does the Orion constellation look like?"}]}]}' -vk | jq
 ```
+
+---
+
+## 7. Automated BDD Regression Testing
+
+The repository includes a dedicated Cucumber BDD regression test suite covering all LLM AI Gateway features and security behaviors in [`test/integration/features/llm-ai-gateway.feature`](test/integration/features/llm-ai-gateway.feature):
+
+* **Unauthorized Requests (401)**: Missing and invalid API key rejection via `VA-VerifyAPIKey`.
+* **OpenAI-Compatible Payload**: `POST /llm-ai-gateway/v1/chat/completions` validation.
+* **Native Chat Payload**: `POST /llm-ai-gateway/v1/chat` validation.
+* **Dynamic Hybrid Model Routing**: `x-model-tier: frontier` and `x-llm-routing: false`.
+* **Model Overrides**: `x-llm-model: gemini-2.5-pro` explicit header override.
+* **Prompt Rate Limiting & Token Quotas**: `x-llm-prompt-rate-limiting` and `x-llm-token-quota-enforce`.
+* **Responsible AI & PII Sanitization**: `x-llm-sanitize-user-prompt` and `x-llm-sanitize-model-response`.
+* **Native Vertex AI Endpoint**: `POST /llm-ai-gateway/v1/projects/{PROJECT_ID}/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent`.
+* **Invalid Route Handling (404)**: Unknown route error response.
+
+To execute the LLM AI Gateway regression tests as part of the unified test suite:
+```bash
+./run_integration_tests.sh
+```
+
 

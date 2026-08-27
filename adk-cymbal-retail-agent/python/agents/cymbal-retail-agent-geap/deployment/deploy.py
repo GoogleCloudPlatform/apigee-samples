@@ -101,7 +101,7 @@ def ensure_auth_provider(project_id, location, engine_name, client_id, client_se
     # 2. Check if auth provider exists
     print(f"Checking if Agent Identity auth provider '{auth_provider_name}' exists...")
     res = subprocess.run(
-        ["gcloud", "agent-identity", "auth-providers", "describe", auth_provider_name, f"--project={project_id}", f"--location={location}", "--format=json"],
+        ["gcloud", "beta", "agent-identity", "auth-providers", "describe", auth_provider_name, f"--project={project_id}", f"--location={location}", "--format=json"],
         capture_output=True, text=True
     )
     
@@ -114,7 +114,7 @@ def ensure_auth_provider(project_id, location, engine_name, client_id, client_se
             if provider_info.get("deleted"):
                 print("Auth provider exists but is soft-deleted. Undeleting it...")
                 subprocess.run(
-                    ["gcloud", "agent-identity", "auth-providers", "undelete", auth_provider_name, f"--project={project_id}", f"--location={location}"],
+                    ["gcloud", "beta", "agent-identity", "auth-providers", "undelete", auth_provider_name, f"--project={project_id}", f"--location={location}"],
                     check=True
                 )
                 print("Auth provider undeleted successfully.")
@@ -131,7 +131,7 @@ def ensure_auth_provider(project_id, location, engine_name, client_id, client_se
         token_url = f"https://{apigee_hostname}/token"
         
         subprocess.run([
-            "gcloud", "agent-identity", "auth-providers", "create", auth_provider_name,
+            "gcloud", "beta", "agent-identity", "auth-providers", "create", auth_provider_name,
             f"--project={project_id}", f"--location={location}", f"--description=Cymbal Auth Provider (Apigee)",
             f"--three-legged-oauth-client-id={client_id}",
             f"--three-legged-oauth-client-secret={client_secret}",
@@ -146,7 +146,7 @@ def ensure_auth_provider(project_id, location, engine_name, client_id, client_se
             auth_url = f"https://{apigee_hostname}/authorize"
             token_url = f"https://{apigee_hostname}/token"
             subprocess.run([
-                "gcloud", "agent-identity", "auth-providers", "update", auth_provider_name,
+                "gcloud", "beta", "agent-identity", "auth-providers", "update", auth_provider_name,
                 f"--project={project_id}", f"--location={location}", f"--description=Cymbal Auth Provider (Apigee)",
                 f"--three-legged-oauth-client-id={client_id}",
                 f"--three-legged-oauth-client-secret={client_secret}",
@@ -158,7 +158,7 @@ def ensure_auth_provider(project_id, location, engine_name, client_id, client_se
     # 3. Add the IAM policy bindings
     print(f"Adding IAM policy binding for agent SPIFFE member: {member}...")
     subprocess.run([
-        "gcloud", "agent-identity", "auth-providers", "add-iam-policy-binding", auth_provider_name,
+        "gcloud", "beta", "agent-identity", "auth-providers", "add-iam-policy-binding", auth_provider_name,
         f"--project={project_id}", f"--location={location}",
         "--role=roles/agentidentity.user",
         f"--member={member}"
@@ -174,7 +174,7 @@ def ensure_auth_provider(project_id, location, engine_name, client_id, client_se
         if developer_email:
             print(f"Adding IAM policy binding for developer: user:{developer_email}...")
             subprocess.run([
-                "gcloud", "agent-identity", "auth-providers", "add-iam-policy-binding", auth_provider_name,
+                "gcloud", "beta", "agent-identity", "auth-providers", "add-iam-policy-binding", auth_provider_name,
                 f"--project={project_id}", f"--location={location}",
                 "--role=roles/agentidentity.user",
                 f"--member=user:{developer_email}"
@@ -269,17 +269,35 @@ def deploy(args):
 
     # Handle Gateways
     gateway_config = {}
-    if args.egress_gateway:
-        egress_path = args.egress_gateway
-        if not egress_path.startswith("projects/"):
-            egress_path = f"projects/{project}/locations/{location}/agentGateways/{args.egress_gateway}"
-        gateway_config["agent_to_anywhere_config"] = {"agent_gateway": egress_path}
+    if args.egress_gateway and args.egress_gateway != "None":
+        egress_gw_name = args.egress_gateway.split("/")[-1]
+        gw_check = subprocess.run(
+            ["gcloud", "network-services", "agent-gateways", "describe", egress_gw_name,
+             f"--project={project}", f"--location={location}"],
+            capture_output=True, text=True
+        )
+        if gw_check.returncode == 0:
+            egress_path = args.egress_gateway
+            if not egress_path.startswith("projects/"):
+                egress_path = f"projects/{project}/locations/{location}/agentGateways/{args.egress_gateway}"
+            gateway_config["agent_to_anywhere_config"] = {"agent_gateway": egress_path}
+        else:
+            print(f"INFO: Agent Gateway '{args.egress_gateway}' not found in project. Proceeding with standard Agent Platform identity.")
 
-    if args.ingress_gateway:
-        ingress_path = args.ingress_gateway
-        if not ingress_path.startswith("projects/"):
-            ingress_path = f"projects/{project}/locations/{location}/agentGateways/{args.ingress_gateway}"
-        gateway_config["client_to_agent_config"] = {"agent_gateway": ingress_path}
+    if args.ingress_gateway and args.ingress_gateway != "None":
+        ingress_gw_name = args.ingress_gateway.split("/")[-1]
+        gw_check = subprocess.run(
+            ["gcloud", "network-services", "agent-gateways", "describe", ingress_gw_name,
+             f"--project={project}", f"--location={location}"],
+            capture_output=True, text=True
+        )
+        if gw_check.returncode == 0:
+            ingress_path = args.ingress_gateway
+            if not ingress_path.startswith("projects/"):
+                ingress_path = f"projects/{project}/locations/{location}/agentGateways/{args.ingress_gateway}"
+            gateway_config["client_to_agent_config"] = {"agent_gateway": ingress_path}
+        else:
+            print(f"INFO: Ingress Gateway '{args.ingress_gateway}' not found in project.")
 
     if gateway_config:
         config["agent_gateway_config"] = gateway_config
@@ -357,6 +375,9 @@ def ensure_agent_registry_binding(project_id, location, engine_name, auth_provid
                 if s.get("displayName") == "cymbal-discovery-v1" or "cymbal" in s.get("displayName", ""):
                     target_identifier = s.get("mcpServerId")
                     break
+    except Exception as e:
+        print(f"Warning: Failed to list MCP servers: {e}")
+
     if not target_identifier:
         try:
             ep_res = subprocess.run(

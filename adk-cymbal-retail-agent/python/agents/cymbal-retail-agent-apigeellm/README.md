@@ -12,8 +12,28 @@ Before the root agent processes user prompts or delegates to domain sub-agents, 
 - **Model Armor Threat Filtering:** Intercepts prompt injections, jailbreaks, and hate speech.
 - **Cloud DLP Redaction:** Masks sensitive PII (SSNs, credit card numbers, email addresses) on the fly.
 - **Token Analytics:** Captures prompt and candidate token counts for RAI dashboards.
+- **Dynamic Tier Routing:** Routes to local private Gemma 3 (4B) on Cloud Run when `DEFAULT_MODEL_TIER="local"` or to Gemini 2.5 Flash.
+
+```mermaid
+flowchart TD
+    ADKAgent[🤖 Local ADK Agent Instance] -->|ApigeeLlm with x-apikey & x-model-tier| ApigeeGov[🛡️ Apigee AI Governance Gateway]
+    
+    subgraph ApigeeGovernance["Apigee Enterprise AI Governance Layer"]
+        ApigeeGov --> MA[🤖 Model Armor Threat Filter]
+        MA --> DLP[🔍 Cloud DLP Real-time Redaction]
+        DLP --> Router{Model Tier Router}
+        Router -->|Tier: local| Gemma[🏠 Cloud Run CPU Gemma 3 4B]
+        Router -->|Tier: frontier| Gemini[⚡ Vertex AI Gemini 2.5 Flash]
+        Gemma --> Normalizer[Transform OpenAI to Vertex JSON]
+        Gemini --> Analytics[Token Data Collectors]
+        Normalizer --> Analytics
+    end
+    
+    Analytics --> ADKAgent
+```
 
 ---
+
 
 ## 🚀 Local Setup & Development
 

@@ -26,13 +26,13 @@ def clean_auth_provider(project_id, location):
     auth_provider_name = os.getenv("AUTH_PROVIDER_NAME", "cymbal-idp")
     print(f"Checking if Agent Identity auth provider '{auth_provider_name}' exists...")
     res = subprocess.run(
-        ["gcloud", "agent-identity", "auth-providers", "describe", auth_provider_name, f"--project={project_id}", f"--location={location}"],
+        ["gcloud", "beta", "agent-identity", "auth-providers", "describe", auth_provider_name, f"--project={project_id}", f"--location={location}"],
         capture_output=True
     )
     if res.returncode == 0:
         print(f"Deleting Agent Identity auth provider '{auth_provider_name}'...")
         subprocess.run(
-            ["gcloud", "agent-identity", "auth-providers", "delete", auth_provider_name, f"--project={project_id}", f"--location={location}", "--quiet"],
+            ["gcloud", "beta", "agent-identity", "auth-providers", "delete", auth_provider_name, f"--project={project_id}", f"--location={location}", "--quiet"],
             check=True
         )
         print("Agent Identity auth provider deleted successfully.")

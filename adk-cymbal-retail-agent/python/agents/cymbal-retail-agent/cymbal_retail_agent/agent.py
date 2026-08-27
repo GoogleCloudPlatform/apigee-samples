@@ -29,13 +29,13 @@ print("Starting agent initialization...")
 
 load_dotenv()
 
-MODEL_NAME=os.getenv("MODEL_NAME")
-
-model=MODEL_NAME
+# Multi-Tier Model Configuration
+SUPERVISOR_MODEL = os.getenv("SUPERVISOR_MODEL") or os.getenv("MODEL_NAME", "gemini-2.5-flash")
+SUBAGENT_MODEL = os.getenv("SUBAGENT_MODEL") or os.getenv("MODEL_NAME", "gemma3:4b")
 
 # Define the sub-agents for each tool with their instructions
 orders_agent = Agent(
-    model=model,
+    model=SUBAGENT_MODEL,
     name='ordersagent',
     description="Agent to manage customer orders - create, update, and retrieve order information.",
     instruction="""
@@ -49,7 +49,7 @@ Do not attempt to process any other type of request.
 logging.info("Orders Agent initialized.")
 
 returns_agent = Agent(
-    model=model,
+    model=SUBAGENT_MODEL,
     name='returnsagent',
     description="Agent to handle customer returns and refunds - create, update, and retrieve return requests, and process refunds.",
     instruction="""
@@ -63,7 +63,7 @@ Do not attempt to process any other type of request.
 logging.info("Returns Agent initialized.")
 
 customers_agent = Agent(
-    model=model,
+    model=SUBAGENT_MODEL,
     name='customersagent',
     description="Agent to manage and retrieve customer information - create, update, and retrieve customer profiles.",
     instruction="""
@@ -77,7 +77,7 @@ Do not attempt to process any other type of request.
 logging.info("Customers Agent initialized.")
 
 shipping_agent = Agent(
-    model=model,
+    model=SUBAGENT_MODEL,
     name='shippingagent',
     description="Agent to create shipping labels.",
     instruction="""
@@ -87,13 +87,12 @@ Gather any additional information needed and then call the appropriate tool to p
 Do not attempt to process any other type of request.
 """,
     tools=[cymbal_mcp]
-
 )
 logging.info("Shipping Agent initialized.")
 
 # Define the root agent and pass the sub-agents as its tools
 root_agent = Agent(
-    model=model,
+    model=SUPERVISOR_MODEL,
     name='customerserviceagent',
     description="Agent to retrieve customer order, customer profile, shipping information and process returns. This agent can delegate tasks to specialized sub-agents.",
     global_instruction="""You are a helpful virtual assistant for a retail company named Cymbal Retail. Always respond politely.""",
@@ -112,3 +111,4 @@ Throughout the conversation, maintain a friendly and helpful tone. If you need m
     sub_agents=[orders_agent, returns_agent, customers_agent, shipping_agent]
 )
 logging.info("Root Agent initialized successfully. Ready to receive input.")
+

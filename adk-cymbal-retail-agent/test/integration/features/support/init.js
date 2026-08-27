@@ -41,15 +41,17 @@ apickli.Apickli.prototype.sendRequest = function (method, resource, callback) {
 var {setDefaultTimeout} = require('@cucumber/cucumber');
 setDefaultTimeout(35 * 1000);
 
+const redirectUri = process.env.REDIRECT_URI || "http://127.0.0.1:9000/callback";
+
 function fetchOAuthToken(host, clientId, clientSecret, scope) {
   return new Promise((resolve, reject) => {
-    const authPath = `/authorize?client_id=${clientId}&response_type=code&scope=${scope}&redirect_uri=http://localhost`;
+    const authPath = `/authorize?client_id=${clientId}&response_type=code&scope=${scope}&redirect_uri=${encodeURIComponent(redirectUri)}`;
     https.get({
       hostname: host,
       path: authPath,
       rejectUnauthorized: false
     }, (res) => {
-      if (res.statusCode === 302 && res.headers.location) {
+      if ((res.statusCode === 302 || res.statusCode === 303) && res.headers.location) {
         try {
           const url = new URL(res.headers.location);
           const code = url.searchParams.get("code");
@@ -73,10 +75,10 @@ function fetchOAuthToken(host, clientId, clientSecret, scope) {
           if (code) {
             exchangeCodeForToken(host, clientId, clientSecret, code, resolve, reject);
           } else {
-            reject(new Error(`Failed to get auth code for scope ${scope}: ${data}`));
+            reject(new Error(`Failed to get auth code for scope ${scope}: HTTP ${res.statusCode} ${data}`));
           }
         } catch (e) {
-          reject(e);
+          reject(new Error(`Failed to parse auth code for scope ${scope}: HTTP ${res.statusCode} ${data}`));
         }
       });
     }).on('error', reject);
@@ -87,7 +89,9 @@ function exchangeCodeForToken(host, clientId, clientSecret, code, resolve, rejec
   const postData = querystring.stringify({
     grant_type: 'authorization_code',
     code: code,
-    redirect_uri: 'http://localhost'
+    client_id: clientId,
+    client_secret: clientSecret,
+    redirect_uri: redirectUri
   });
   
   const authHeader = "Basic " + Buffer.from(`${clientId}:${clientSecret}`).toString("base64");
@@ -128,15 +132,11 @@ let cachedManagerToken = null;
 let cachedCustomerToken = null;
 
 if (!process.env.APIGEE_HOST || !process.env.APIKEY || !process.env.APISECRET) {
-  
   console.log();
   console.log('Environment variables APIGEE_HOST, APIKEY and APISECRET must be set before the tests can be run.');
-  console.log();
   console.log('Please set the Environment variables and try running the command again.');
   console.log();
-
   process.exit(1);
-
 } else {
   before(async function () {
     this.apickli = new apickli.Apickli(
@@ -145,8 +145,9 @@ if (!process.env.APIGEE_HOST || !process.env.APIKEY || !process.env.APISECRET) {
     );
 
     this.apickli.setGlobalVariable("apikey", process.env.APIKEY);
+    this.apickli.setGlobalVariable("llm_apikey", process.env.LLM_APIKEY || process.env.APIKEY);
     this.apickli.setGlobalVariable("app-default-token", process.env.APP_DEFAULT_TOKEN);
-    this.apickli.setGlobalVariable("PROJECT_ID", process.env.PROJECT_ID || "apigee-ai");
+    this.apickli.setGlobalVariable("PROJECT_ID", process.env.PROJECT_ID || "apigeex-talanki");
 
     try {
       if (!cachedManagerToken || !cachedCustomerToken) {
@@ -157,7 +158,7 @@ if (!process.env.APIGEE_HOST || !process.env.APIKEY || !process.env.APISECRET) {
       
       this.apickli.setGlobalVariable("manager_token", cachedManagerToken);
       this.apickli.setGlobalVariable("customer_token", cachedCustomerToken);
-      await new Promise((resolve) => setTimeout(resolve, 1200));
+      await new Promise((resolve) => setTimeout(resolve, 500));
     } catch (e) {
       console.error("   🔴 Error fetching OAuth tokens:", e.message);
       console.log("   ⚠️  Falling back to APIKEY for BDD headers...");

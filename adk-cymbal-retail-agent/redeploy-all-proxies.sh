@@ -22,14 +22,20 @@
 
 set -e
 
+# Load environment configuration if valid
+if [ -f "env.sh" ]; then
+  source env.sh
+fi
+
 # Target GCP and Apigee environment configuration
-export PROJECT_ID="${PROJECT_ID:-apigee-ai}"
-export APIGEE_ENV="${APIGEE_ENV:-qa}"
-export APIGEE_HOST="${APIGEE_HOST:-34.54.87.114.nip.io}"
+export PROJECT_ID="${PROJECT_ID:-apigeex-talanki}"
+export APIGEE_ENV="${APIGEE_ENV:-test-env}"
+export APIGEE_HOST="${APIGEE_HOST:-136.68.214.207.nip.io}"
 export SERVICE_ACCOUNT_NAME="${SERVICE_ACCOUNT_NAME:-llm-cymbal-retail-agent}"
 export VERTEXAI_PROJECT_ID="${VERTEXAI_PROJECT_ID:-$PROJECT_ID}"
 export VERTEXAI_REGION="${VERTEXAI_REGION:-us-central1}"
 export MODEL_NAME="${MODEL_NAME:-gemini-2.5-flash}"
+
 
 # Ensure apigeecli is on PATH and retrieve fresh auth token
 export PATH=$PATH:$HOME/.apigeecli/bin

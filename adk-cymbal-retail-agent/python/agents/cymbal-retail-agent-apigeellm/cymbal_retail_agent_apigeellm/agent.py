@@ -31,21 +31,30 @@ print("Starting agent initialization...")
 
 load_dotenv()
 
-PROJECT_ID=os.getenv("GOOGLE_CLOUD_PROJECT")
-MODEL_NAME = os.getenv("MODEL_NAME")
+PROJECT_ID = os.getenv("GOOGLE_CLOUD_PROJECT")
+MODEL_NAME = os.getenv("MODEL_NAME", "gemma3:4b")
 APIGEE_HOSTNAME = os.getenv("APIGEE_HOSTNAME")
-APIGEE_LLM = os.getenv("APIGEE_LLM")
-SECRET=f"projects/{PROJECT_ID}/secrets/cymbal-retail-client-id/versions/latest"
+APIGEE_LLM = os.getenv("APIGEE_LLM", "/v1/adk-retail-agent-llm-governance")
+DEFAULT_MODEL_TIER = os.getenv("DEFAULT_MODEL_TIER", "local")
+SECRET = f"projects/{PROJECT_ID}/secrets/cymbal-retail-client-id/versions/latest"
 
 secret_manager_client = SecretManagerClient()
-client_id = secret_manager_client.get_secret(SECRET)
+try:
+    client_id = secret_manager_client.get_secret(SECRET)
+except Exception:
+    client_id = os.getenv("APIKEY", "")
+
+# Configure Apigee LLM client with local Gemma tier routing
+custom_headers = {"x-apikey": client_id}
+if DEFAULT_MODEL_TIER:
+    custom_headers["x-model-tier"] = DEFAULT_MODEL_TIER
 
 model = ApigeeLlm(
-  model=f"apigee/{MODEL_NAME}",
-  proxy_url=f"https://{APIGEE_HOSTNAME}{APIGEE_LLM}",
-  # Pass authentication header
-  custom_headers={"x-apikey": client_id}
+    model=f"apigee/{MODEL_NAME}",
+    proxy_url=f"https://{APIGEE_HOSTNAME}{APIGEE_LLM}",
+    custom_headers=custom_headers
 )
+
 
 # Define the sub-agents for each tool with their instructions
 orders_agent = Agent(
