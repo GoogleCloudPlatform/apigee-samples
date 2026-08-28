@@ -11,7 +11,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<SemanticCacheLookup async="false" continueOnError="false" enabled="true" name="SCL-Semantic-Cache-Lookup">
+<SemanticCacheLookup async="false" continueOnError="true" enabled="true" name="SCL-Semantic-Cache-Lookup">
   <DisplayName>SCL-Semantic-Cache-Lookup</DisplayName>
   <UserPromptSource>{request_prompt}</UserPromptSource>
   <Embeddings>

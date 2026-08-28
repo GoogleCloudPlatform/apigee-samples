@@ -11,7 +11,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<SemanticCachePopulate async="false" continueOnError="false" enabled="true" name="SCP-Semantic-Cache-Populate">
+<SemanticCachePopulate async="false" continueOnError="true" enabled="true" name="SCP-Semantic-Cache-Populate">
   <DisplayName>SCP-Semantic-Cache-Populate</DisplayName>
   <SimilaritySearch>
     <VertexAI>

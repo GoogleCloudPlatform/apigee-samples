@@ -77,15 +77,62 @@ echo "  Endpoint URL: $SERVICE_URL"
 echo "=================================================================="
 
 # 5. Grant Apigee / Agent Service Account invoker permissions
-if [ -n "$SERVICE_ACCOUNT_NAME" ]; then
-  SA_EMAIL="${SERVICE_ACCOUNT_NAME}@${PROJECT_ID}.iam.gserviceaccount.com"
-  echo "--> Granting Cloud Run Invoker role to $SA_EMAIL..."
-  gcloud run services add-iam-policy-binding "$SERVICE_NAME" \
-    --region="$REGION" \
-    --project="$PROJECT_ID" \
-    --member="serviceAccount:${SA_EMAIL}" \
-    --role="roles/run.invoker" \
-    --quiet || true
+SA_EMAIL="${SERVICE_ACCOUNT_NAME:-llm-cymbal-retail-agent}@${PROJECT_ID}.iam.gserviceaccount.com"
+echo "--> Granting Cloud Run Invoker role to $SA_EMAIL..."
+gcloud run services add-iam-policy-binding "$SERVICE_NAME" \
+  --region="$REGION" \
+  --project="$PROJECT_ID" \
+  --member="serviceAccount:${SA_EMAIL}" \
+  --role="roles/run.invoker" \
+  --quiet || true
+
+# 6. Pre-warm Gemma 2 (vLLM) on Cloud Run
+echo ""
+echo "=================================================================="
+echo "  Pre-warming Gemma 2 Model Instance                              "
+echo "=================================================================="
+ID_TOKEN=$(gcloud auth print-identity-token 2>/dev/null || true)
+AUTH_HEADER=""
+if [ -n "$ID_TOKEN" ]; then
+  AUTH_HEADER="Authorization: Bearer $ID_TOKEN"
+fi
+
+echo "--> Checking model health on ${SERVICE_URL}..."
+MAX_RETRIES=20
+RETRY_COUNT=0
+IS_READY=false
+
+while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
+  HEALTH_RESP=$(curl -s -k -H "$AUTH_HEADER" "${SERVICE_URL}/health" 2>/dev/null || true)
+  if [ "$HEALTH_RESP" == "OK" ] || [ -n "$HEALTH_RESP" ]; then
+    IS_READY=true
+    break
+  fi
+  echo "    Waiting for vLLM container to initialize ($((RETRY_COUNT * 10))s elapsed)..."
+  sleep 10
+  RETRY_COUNT=$((RETRY_COUNT + 1))
+done
+
+if [ "$IS_READY" = true ]; then
+  echo "--> Executing pre-warming test invocation..."
+  WARMUP_RESP=$(curl -s -k -X POST "${SERVICE_URL}/v1/chat/completions" \
+    -H "$AUTH_HEADER" \
+    -H "Content-Type: application/json" \
+    -d "{
+      \"model\": \"${MODEL_ID}\",
+      \"messages\": [{\"role\": \"user\", \"content\": \"Pre-warming test. Respond with OK.\"}],
+      \"max_tokens\": 10
+    }")
+  
+  CONTENT=$(echo "$WARMUP_RESP" | grep -o '"content":"[^"]*"' | head -n 1 || true)
+  if [ -n "$CONTENT" ]; then
+    echo "--> Pre-warm test successful! Received: $CONTENT"
+  else
+    echo "--> Pre-warm response: $WARMUP_RESP"
+  fi
+  echo "✅ Gemma 2 instance pre-warmed and ready for student traffic!"
+else
+  echo "⚠️ Warning: Pre-warming check timed out."
 fi
 
 echo ""
@@ -95,3 +142,4 @@ echo "curl -X POST ${SERVICE_URL}/v1/chat/completions \\"
 echo "  -H \"Authorization: Bearer \$TOKEN\" \\"
 echo "  -H \"Content-Type: application/json\" \\"
 echo "  -d '{\"model\": \"${MODEL_ID}\", \"messages\": [{\"role\": \"user\", \"content\": \"Hello Gemma!\"}]}'"
+

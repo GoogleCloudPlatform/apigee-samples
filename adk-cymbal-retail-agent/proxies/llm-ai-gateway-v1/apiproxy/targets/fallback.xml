@@ -23,12 +23,12 @@
     </Request>
     <Response>
       <Step>
-        <Name>LTQ-TokenCount</Name>
-        <Condition>llm_token_quota_enforce != "false"</Condition>
-      </Step>
-      <Step>
         <Name>JS-ExtractTokenCount</Name>
         <Condition>response.content != null</Condition>
+      </Step>
+      <Step>
+        <Name>LTQ-TokenCount</Name>
+        <Condition>(llm_token_quota_enforce != "false") and (response.status.code = 200) and (total_token_count != "0")</Condition>
       </Step>
       <Step>
         <Name>DC-CollectTokenCounts</Name>

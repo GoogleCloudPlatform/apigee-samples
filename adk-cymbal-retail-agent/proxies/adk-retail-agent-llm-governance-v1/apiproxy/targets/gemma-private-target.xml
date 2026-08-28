@@ -44,10 +44,15 @@
     -->
     <Authentication>
       <GoogleIDToken>
-        <Audience>GEMMA_AUDIENCE</Audience>
+        <Audience>https://gemma-cpu-router-78901377646.us-central1.run.app</Audience>
       </GoogleIDToken>
     </Authentication>
-    <URL>GEMMA_URL</URL>
+    <Properties>
+      <Property name="connect.timeout.millis">60000</Property>
+      <Property name="io.timeout.millis">60000</Property>
+    </Properties>
+    <URL>https://gemma-cpu-router-78901377646.us-central1.run.app/v1/chat/completions</URL>
   </HTTPTargetConnection>
 </TargetEndpoint>
+
 

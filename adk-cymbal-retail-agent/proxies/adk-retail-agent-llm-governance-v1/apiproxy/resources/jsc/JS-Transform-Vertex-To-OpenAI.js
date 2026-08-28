@@ -46,10 +46,17 @@ if (requestObj.contents && Array.isArray(requestObj.contents)) {
   });
 }
 
+var maxTokens = (requestObj.generationConfig && requestObj.generationConfig.maxOutputTokens) ? requestObj.generationConfig.maxOutputTokens : 2000;
+var configuredModel = context.getVariable("propertyset.gemma_config.model_id");
+if (!configuredModel || configuredModel.indexOf("gemma3") === -1) {
+  configuredModel = "gemma3:4b";
+}
+
 var openAiPayload = {
-  model: context.getVariable("propertyset.gemma_config.model_id") || "gemma3:4b",
+  model: configuredModel,
   messages: openAiMessages,
-  temperature: (requestObj.generationConfig && requestObj.generationConfig.temperature) ? requestObj.generationConfig.temperature : 0.7
+  temperature: (requestObj.generationConfig && requestObj.generationConfig.temperature) ? requestObj.generationConfig.temperature : 0.7,
+  max_tokens: maxTokens
 };
 
 request.content = JSON.stringify(openAiPayload);
@@ -57,6 +64,8 @@ context.setVariable("request.header.Content-Type", "application/json");
 
 // Direct Apigee target connection to configured Cloud Run Gemma endpoint
 var gemmaUrl = context.getVariable("propertyset.gemma_config.gemma_url");
-if (gemmaUrl && gemmaUrl.length > 0) {
-  context.setVariable("target.url", gemmaUrl);
+if (!gemmaUrl || gemmaUrl.indexOf("run.app") === -1) {
+  gemmaUrl = "https://gemma-cpu-router-78901377646.us-central1.run.app/v1/chat/completions";
 }
+context.setVariable("target.url", gemmaUrl);
+

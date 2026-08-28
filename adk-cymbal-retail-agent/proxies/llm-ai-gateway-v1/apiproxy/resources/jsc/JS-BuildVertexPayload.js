@@ -46,6 +46,7 @@ try {
             };
             context.setVariable("request.content", JSON.stringify(gemmaPayload));
         }
+<<<<<<< HEAD
     } else {
         // ----------------------------------------------------------------------
         // Vertex AI Target Payload Handling (Requires Vertex 'contents' schema)
@@ -133,7 +134,7 @@ try {
                 });
             }
 
-            var maxTokens = reqBody.max_tokens || reqBody.max_completion_tokens || 8192;
+            var maxTokens = reqBody.max_tokens || reqBody.max_completion_tokens || 2000;
 
             var vertexPayload = {
                 "contents": vertexContents,

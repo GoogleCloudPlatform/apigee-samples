@@ -11,7 +11,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<LLMTokenQuota continueOnError="false" enabled="true" name="LTQ-TokenCount" type="calendar">
+<LLMTokenQuota continueOnError="true" enabled="true" name="LTQ-TokenCount" type="calendar">
   <DisplayName>LTQ-TokenCount</DisplayName>
   <Allow count="1000" countRef="verifyapikey.VA-VerifyAPIKey.apiproduct.developer.llmQuota.limit"/>
   <Interval ref="verifyapikey.VA-VerifyAPIKey.apiproduct.developer.llmQuota.interval">1</Interval>
@@ -19,7 +19,7 @@
   <Distributed>true</Distributed>
   <Synchronous>true</Synchronous>
   <StartTime>2013-08-21 10:00:00</StartTime>
-  <LLMTokenUsageSource>{jsonPath('$.usageMetadata.totalTokenCount',response.content,true)}</LLMTokenUsageSource>
+  <LLMTokenUsageSource>{total_token_count}</LLMTokenUsageSource>
   <LLMModelSource>{model}</LLMModelSource>
   <CountOnly>true</CountOnly>
   <SharedName>common-counter</SharedName>
