@@ -1,0 +1,35 @@
+# Copyright 2026 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+FROM ollama/ollama:latest
+
+# Build argument to specify the model to bake in (default: gemma3:1b for high-speed CPU inference)
+ARG MODEL_NAME=gemma3:1b
+ENV MODEL_NAME=${MODEL_NAME}
+ENV OLLAMA_MODELS=/root/.ollama/models
+ENV OMP_NUM_THREADS=4
+ENV OLLAMA_NUM_PARALLEL=2
+ENV OLLAMA_FLASH_ATTENTION=1
+ENV OLLAMA_KEEP_ALIVE=-1
+ENV OLLAMA_MAX_LOADED_MODELS=1
+
+# Pre-download and bake model weights into image layer during build
+RUN ollama serve & PID=$! && \
+    sleep 3 && \
+    ollama pull ${MODEL_NAME} && \
+    kill $PID
+
+EXPOSE 11434
+
+ENTRYPOINT ["ollama", "serve"]

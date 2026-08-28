@@ -48,8 +48,8 @@ if (requestObj.contents && Array.isArray(requestObj.contents)) {
 
 var maxTokens = (requestObj.generationConfig && requestObj.generationConfig.maxOutputTokens) ? requestObj.generationConfig.maxOutputTokens : 2000;
 var configuredModel = context.getVariable("propertyset.gemma_config.model_id");
-if (!configuredModel || configuredModel.indexOf("gemma3") === -1) {
-  configuredModel = "gemma3:4b";
+if (!configuredModel || configuredModel.indexOf("gemma") === -1) {
+  configuredModel = "gemma3:1b";
 }
 
 var openAiPayload = {
