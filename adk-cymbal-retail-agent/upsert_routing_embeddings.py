@@ -26,21 +26,11 @@ import os
 # Configure logging format and level
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-def get_env_var(name, default=""):
-    val = os.getenv(name)
-    if val and val != "PROJECT_ID_TO_SET":
-        return val
-    try:
-        if name == "PROJECT_ID":
-            return subprocess.check_output("gcloud config get-value project 2>/dev/null", shell=True).decode().strip()
-    except Exception:
-        pass
-    return default
-
-INDEX_ID = os.getenv("ROUTING_INDEX_ID", "5904894211622174720")
-PROJECT_ID = get_env_var("PROJECT_ID", "PROJECT_ID_TO_SET")
-REGION = os.getenv("VERTEXAI_REGION", "us-central1")
-EMBEDDING_URL = os.getenv("EMBEDDING_URL", "")
+# Default Configurations
+INDEX_ID = "5904894211622174720"
+PROJECT_ID = "apigee-ai"
+REGION = "us-central1"
+EMBEDDING_URL = ""
 
 # Training Dataset for Semantic Model Routing:
 # - Simple & General queries are prefixed with "simple_"
