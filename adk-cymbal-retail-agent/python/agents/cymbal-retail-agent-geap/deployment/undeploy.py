@@ -5,21 +5,21 @@ import agentplatform
 from google.cloud import aiplatform
 
 def clean_binding(project_id, location):
-    binding_name = "cymbal-discovery-binding"
-    print(f"Checking if Agent Registry binding '{binding_name}' exists...")
-    res = subprocess.run(
-        ["gcloud", "agent-registry", "bindings", "describe", binding_name, f"--project={project_id}", f"--location={location}"],
-        capture_output=True
-    )
-    if res.returncode == 0:
-        print(f"Deleting Agent Registry binding '{binding_name}'...")
-        subprocess.run(
-            ["gcloud", "agent-registry", "bindings", "delete", binding_name, f"--project={project_id}", f"--location={location}", "--quiet"],
-            check=True
+    for binding_name in ["cymbal-auth-binding", "cymbal-discovery-binding"]:
+        print(f"Checking if Agent Registry binding '{binding_name}' exists...")
+        res = subprocess.run(
+            ["gcloud", "agent-registry", "bindings", "describe", binding_name, f"--project={project_id}", f"--location={location}"],
+            capture_output=True
         )
-        print("Agent Registry binding deleted successfully.")
-    else:
-        print("Agent Registry binding does not exist. Skipping.")
+        if res.returncode == 0:
+            print(f"Deleting Agent Registry binding '{binding_name}'...")
+            subprocess.run(
+                ["gcloud", "agent-registry", "bindings", "delete", binding_name, f"--project={project_id}", f"--location={location}", "--quiet"],
+                check=True
+            )
+            print(f"Agent Registry binding '{binding_name}' deleted successfully.")
+        else:
+            print(f"Agent Registry binding '{binding_name}' does not exist. Skipping.")
 
 
 def clean_auth_provider(project_id, location):

@@ -164,7 +164,7 @@ def ensure_auth_provider(project_id, location, engine_name, client_id, client_se
         f"--member={member}"
     ], check=True)
 
-    # Add the IAM policy binding for the developer's personal email
+    # Add the IAM policy binding for the developer's personal email or service account
     try:
         email_res = subprocess.run(
             ["gcloud", "config", "get-value", "account"],
@@ -172,12 +172,13 @@ def ensure_auth_provider(project_id, location, engine_name, client_id, client_se
         )
         developer_email = email_res.stdout.strip()
         if developer_email:
-            print(f"Adding IAM policy binding for developer: user:{developer_email}...")
+            member_type = "serviceAccount" if developer_email.endswith(".gserviceaccount.com") else "user"
+            print(f"Adding IAM policy binding for developer: {member_type}:{developer_email}...")
             subprocess.run([
                 "gcloud", "beta", "agent-identity", "auth-providers", "add-iam-policy-binding", auth_provider_name,
                 f"--project={project_id}", f"--location={location}",
                 "--role=roles/agentidentity.user",
-                f"--member=user:{developer_email}"
+                f"--member={member_type}:{developer_email}"
             ], check=True)
     except Exception as e:
         print(f"Warning: Failed to add developer IAM policy binding: {e}")
@@ -347,6 +348,7 @@ def deploy(args):
 
 def ensure_agent_registry_binding(project_id, location, engine_name, auth_provider_name=None, continue_uri=None):
     """Creates or updates the Agent Registry Binding between the deployed Reasoning Engine and MCP Server."""
+    import time
     engine_id = engine_name.split("/")[-1]
     auth_provider = auth_provider_name or os.getenv("AUTH_PROVIDER_NAME", "cymbal-idp")
     continue_uri = continue_uri or os.getenv("OAUTH_CALLBACK_URL", "http://127.0.0.1:9000/callback")
@@ -399,35 +401,42 @@ def ensure_agent_registry_binding(project_id, location, engine_name, auth_provid
     binding_name = "cymbal-auth-binding"
     auth_provider_path = f"projects/{project_id}/locations/{location}/authProviders/{auth_provider}"
 
-    print(f"Configuring Agent Registry Binding '{binding_name}'...")
-    describe_res = subprocess.run(
-        ["gcloud", "agent-registry", "bindings", "describe", binding_name, f"--project={project_id}", f"--location={location}"],
-        capture_output=True, text=True
-    )
+    max_retries = 18
+    retry_delay = 10
+    success = False
 
-    if describe_res.returncode == 0:
-        print(f"Updating existing Agent Registry binding '{binding_name}'...")
-        subprocess.run([
-            "gcloud", "agent-registry", "bindings", "update", binding_name,
+    for attempt in range(1, max_retries + 1):
+        print(f"Configuring Agent Registry Binding '{binding_name}' (attempt {attempt}/{max_retries})...")
+        describe_res = subprocess.run(
+            ["gcloud", "agent-registry", "bindings", "describe", binding_name, f"--project={project_id}", f"--location={location}"],
+            capture_output=True, text=True
+        )
+
+        action = "update" if describe_res.returncode == 0 else "create"
+        cmd = [
+            "gcloud", "agent-registry", "bindings", action, binding_name,
             f"--project={project_id}", f"--location={location}",
             f"--source-identifier={source_identifier}",
             f"--target-identifier={target_identifier}",
             f"--auth-provider-binding={auth_provider_path}",
             "--auth-provider-binding-scopes=customer",
             f"--auth-provider-binding-continue-uri={continue_uri}"
-        ], check=True)
-    else:
-        print(f"Creating new Agent Registry binding '{binding_name}'...")
-        subprocess.run([
-            "gcloud", "agent-registry", "bindings", "create", binding_name,
-            f"--project={project_id}", f"--location={location}",
-            f"--source-identifier={source_identifier}",
-            f"--target-identifier={target_identifier}",
-            f"--auth-provider-binding={auth_provider_path}",
-            "--auth-provider-binding-scopes=customer",
-            f"--auth-provider-binding-continue-uri={continue_uri}"
-        ], check=True)
-    print(f"✅ Agent Registry Binding '{binding_name}' configured successfully.")
+        ]
+
+        res = subprocess.run(cmd, capture_output=True, text=True)
+        if res.returncode == 0:
+            print(f"✅ Agent Registry Binding '{binding_name}' configured successfully.")
+            success = True
+            break
+
+        err_msg = res.stderr.strip()
+        print(f"Warning: Failed to configure Agent Registry binding (attempt {attempt}/{max_retries}): {err_msg}")
+        if attempt < max_retries:
+            print(f"Waiting {retry_delay}s for Reasoning Engine / resources to be indexed in Agent Registry...")
+            time.sleep(retry_delay)
+
+    if not success:
+        raise RuntimeError(f"Failed to configure Agent Registry binding '{binding_name}' after {max_retries} attempts.")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Deploy agent to Agent Runtime")
