@@ -7,7 +7,10 @@
 
 An enterprise reference architecture showcasing **Agent-to-Agent (A2A)** autonomous orchestration built with Google's **Agent Development Kit (ADK)** and deployed on **Gemini Enterprise Agent Platform (GEAP) Agent Runtime (Reasoning Engine)**, integrated with standardized **Model Context Protocol (MCP)** tool gateways, secured via **Google Cloud Agent Identity**, and fully governed by **Apigee API Management** (featuring **Google Cloud Model Armor** threat defense, **Sensitive Data Protection (DLP)** real-time PII sanitization, and **Apigee LLM AI Gateway** token rate limiting, quotas, and semantic caching).
 
+> 📘 **Looking for the student workshop tutorial & lab guide?** Check out the [Workshop Student Guide & Architecture Blueprint](file:///Users/rtalanki/apigee-samples/adk-cymbal-retail-agent/WORKSHOP_STUDENT_GUIDE.md).
+
 ---
+
 
 ## 🏛️ System Architecture
 
