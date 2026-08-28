@@ -16,30 +16,38 @@
 
 try {
     var keywordDecision = context.getVariable("keyword_routing_decision");
-    var defaultModel = context.getVariable("llm_model"); // Default model
-    var model = context.getVariable("model");
-    var fallbackModel = context.getVariable("llm_fallback_model"); // Fallback model
+    var defaultModel = context.getVariable("llm_model"); // Default model (e.g. gemini-2.5-pro)
+    var model = context.getVariable("model") || defaultModel;
+    var fallbackModel = context.getVariable("llm_fallback_model"); // Fallback model (e.g. gemini-2.5-flash)
     var matchedDatapointId = "";
     var distance = 0.0;
+    var routeToGemma = false;
 
+    // 1. Process KVM Keyword Decision ("gemma", "simple", "complex")
     if (keywordDecision) {
-        if (keywordDecision === "simple") {
+        var decisionLower = keywordDecision.toLowerCase();
+        if (decisionLower === "gemma") {
             model = fallbackModel;
+            routeToGemma = true;
+        } else if (decisionLower === "simple") {
+            model = fallbackModel;
+        } else if (decisionLower === "complex") {
+            model = defaultModel;
         }
-        matchedDatapointId = "kvm_override_" + keywordDecision;
+        matchedDatapointId = "kvm_override_" + decisionLower;
         distance = 1.0;
     } else {
+        // 2. Process Vector Search Nearest Neighbor Results
         var responseStr = context.getVariable("vectorSearchResponse.content");
         var responseObj = null;
         if (responseStr) {
             try {
                 responseObj = JSON.parse(responseStr);
             } catch(e) {
-                // Ignore parse error
+                // Fail silently if JSON parse fails
             }
         }
         
-        // Process Vector Search results
         if (responseObj && responseObj.nearestNeighbors && responseObj.nearestNeighbors.length > 0) {
             var neighbors = responseObj.nearestNeighbors[0].neighbors;
             if (neighbors && neighbors.length > 0) {
@@ -49,19 +57,32 @@ try {
                 matchedDatapointId = nearestNeighbor.datapoint.datapointId;
                 distance = nearestNeighbor.distance;
                 
-                if (matchedDatapointId.indexOf("simple") >= 0) {
+                var matchedIdLower = matchedDatapointId.toLowerCase();
+
+                // Check datapoint ID classification: "gemma_", "simple_", or "complex_"
+                if (matchedIdLower.indexOf("gemma") >= 0) {
                     model = fallbackModel;
+                    routeToGemma = true;
+                } else if (matchedIdLower.indexOf("simple") >= 0) {
+                    model = fallbackModel;
+                } else if (matchedIdLower.indexOf("complex") >= 0) {
+                    model = defaultModel;
                 }
             }
         }
         
-        // Mock / Testing Rule as fallback
+        // 3. Fallback Testing / Mock Rule from Request Prompt
         var userPrompt = context.getVariable("request_prompt") || "";
         if (model === defaultModel) {
             var lowerPrompt = userPrompt.toLowerCase();
-            if (lowerPrompt.indexOf("simple") >= 0 || 
-                lowerPrompt.indexOf("french") >= 0 || 
-                lowerPrompt.indexOf("hello") >= 0) {
+            if (lowerPrompt.indexOf("gemma") >= 0) {
+                model = fallbackModel;
+                routeToGemma = true;
+                matchedDatapointId = "mock_gemma_query_from_prompt_rules";
+                distance = 0.99;
+            } else if (lowerPrompt.indexOf("simple") >= 0 || 
+                       lowerPrompt.indexOf("french") >= 0 || 
+                       lowerPrompt.indexOf("hello") >= 0) {
                 model = fallbackModel;
                 matchedDatapointId = "mock_simple_query_from_prompt_rules";
                 distance = 0.99;
@@ -70,9 +91,12 @@ try {
     }
     
     context.setVariable("model", model);
+    context.setVariable("route_to_gemma", routeToGemma ? "true" : "false");
     context.setVariable("semantic_match_id", matchedDatapointId);
     context.setVariable("semantic_match_distance", distance.toString());
     
+    print("Semantic Router Decision: model=" + model + ", route_to_gemma=" + routeToGemma + ", match_id=" + matchedDatapointId);
+
 } catch (e) {
     context.setVariable("model", defaultModel); // Safe fallback
     context.setVariable("semantic_routing_error", e.message);

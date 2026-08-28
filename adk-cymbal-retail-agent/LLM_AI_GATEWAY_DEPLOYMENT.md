@@ -97,12 +97,57 @@ Each treatment or feature can be enabled or disabled per request using HTTP head
 | `x-llm-sanitize-model-response` | `true` | Enables model response cleaning/anonymization via DLP |
 | `x-llm-prompt-rate-limiting` | `true` | Enables token-based load spike detection and prompt rate limiting |
 
-### Model Resolution & Override Rules (`x-llm-model`)
-You can explicitly override the target LLM model by passing the `x-llm-model` HTTP header. The gateway determines the target model according to the following strict order of precedence:
-1. **HTTP Header**: Value specified in `x-llm-model`.
-2. **URI Path**: Model extracted from the request URI path.
-3. **Request Payload**: Model specified within the JSON body payload.
-4. **Default Property**: Fallback to `default_model` configured in `vertex_config.properties`.
+### Model Resolution & Priority Routing Hierarchy
+The gateway determines the target LLM model and routing tier during `JS-ParseRequestBody` execution according to the following strict order of precedence:
+
+#### 1. Gemma / Local Execution Priority Route (`route_to_gemma = true`)
+Gemma routing takes precedence over Cloud/Vertex AI models if requested explicitly:
+- **Header Tier Override**: `x-model-tier` set to `local` or `gemma`.
+- **Header Model Name**: `x-llm-model` or `x-model-name` containing `"gemma"` (case-insensitive).
+- **Body / URI Model**: Model path or JSON field containing `"gemma"`.
+
+*Result*: Sets `route_to_gemma = "true"` and assigns `model` to the requested Gemma variant (defaults to `gemma-3-4b`).
+
+#### 2. Cloud / Vertex AI Model Resolution Hierarchy (`route_to_gemma = false`)
+When Gemma is not explicitly targeted, the gateway resolves the Vertex AI target model as follows:
+1. **Consolidated HTTP Header**: Value specified in `x-llm-model` (primary header) or `x-model-name` (secondary header alias).
+2. **URI Path / Request Payload**: Model extracted from the request URI path (e.g. `/publishers/google/models/{model}`) or JSON body `model` field.
+3. **Default Property**: Fallback to `default_model` configured in `vertex_config.properties` (e.g. `gemini-2.5-pro` or `gemini-2.5-flash`).
+
+#### 3. Dynamic Semantic Routing (`FC-LLMRouting`)
+If dynamic routing is enabled (`x-llm-routing: true`) and the model has not been explicitly overridden by a header or URI, the gateway invokes the `FC-LLMRouting` Flow Callout policy. This delegates execution to the **`llm-routing-v2`** Shared Flow to classify prompt complexity and assign the optimal model tier.
+
+##### Execution Steps of `llm-routing-v2`:
+1. **Execution Condition**:
+   - Executes only when `llm_routing_enabled != "false"` and `llm_model == llm_default_model`.
+2. **Step 1: Keyword Route Pre-Check (`KVM-GetKeywordRoute`)**:
+   - Executes `JS-PrepareKVMKey` to normalize the prompt and queries an Apigee Key-Value Map (`KVM-GetKeywordRoute`).
+   - If an exact keyword match is found (e.g. mapping simple intent keywords directly to `"simple"`), vector embedding calls are bypassed to minimize latency and API cost.
+3. **Step 2: Text Embedding Generation (`SCO-GetEmbeddings`)**:
+   - If no KVM match occurred, a Service Callout (`SCO-GetEmbeddings`) sends the `request_prompt` to the Vertex AI Embeddings API (`text-embedding-005`).
+   - `JS-ExtractEmbeddingVector` parses the response and extracts the 768-dimensional dense vector representation of the prompt.
+4. **Step 3: Vector Search Nearest Neighbor Query (`SCO-VectorSearch`)**:
+   - A Service Callout (`SCO-VectorSearch`) queries the configured Vertex AI Vector Search Index Endpoint (`routing_index_endpoint_id`).
+   - Finds the nearest neighbor datapoint cluster (`simple` vs `complex` query reference embeddings) and returns the similarity distance score.
+5. **Step 4: Model Decision & Variable Assignment (`JS-DetermineModelRoute`)**:
+   - Evaluates the nearest neighbor `datapointId` prefix and sets the model tier:
+     - **`gemma_*` (Retail FAQ Intents)**: Sets `model = llm_fallback_model` and `route_to_gemma = "true"` (routes to private Gemma 3 instance).
+     - **`simple_*` (Greetings & General Tasks)**: Sets `model = llm_fallback_model` (`gemini-2.5-flash`).
+     - **`complex_*` (Complex Reasoning & Code)**: Maintains `model = default_model` (`gemini-2.5-pro`).
+   - Populates observability variables: `semantic_match_id` (datapoint ID) and `semantic_match_distance` (cosine distance score).
+
+##### Vector Search Intent Generation & Upsert Script (`upsert_routing_embeddings.py`)
+To populate or update the Vertex AI Vector Search Index with reference intent embeddings, run the automated provisioning script [`upsert_routing_embeddings.py`](upsert_routing_embeddings.py):
+
+```bash
+# Execute embedding generation and upsert to Vertex AI Vector Search
+./upsert_routing_embeddings.py --project $PROJECT_ID --region $REGION --index-id $ROUTING_INDEX_ID
+```
+
+**How Vector Search Intent Generation Works**:
+1. **Dataset Intent Categorization**: Defines structured prompt datasets categorized into `simple_*` (general tasks), `gemma_*` (retail FAQs like store hours, shipping, return policy), and `complex_*` (coding, architecture analysis).
+2. **Text Embedding Generation**: Sends each intent text prompt to Vertex AI `text-embedding-005:predict` endpoint to extract a 768-dimensional floating point feature vector.
+3. **Index Upsert**: Formats feature vectors into Vertex AI datapoint JSON payloads (`datapointId` + `featureVector`) and calls `gcloud ai indexes upsert-datapoints` to publish them to the Vector Search index.
 
 ### Mandatory Configuration: `vertex_config.properties`
 Before deploying, you **must configure** the following property values in `vertex_config.properties` within both the **`llm-routing-v2` shared flow** and the **`llm-ai-gateway-v1` API proxy** (`apiproxy/resources/properties/vertex_config.properties`):
@@ -134,8 +179,13 @@ cache_index_id=<retrieve-from-vector-search-index-id>
 The deployment script [`deploy-llm-ai-gateway.sh`](deploy-llm-ai-gateway.sh) automates the provisioning of the gateway on Apigee X. It orchestrates:
 
 1. **Service Account Provisioning (`apigee-vertex-ai-caller`)**:
-   - Assigns minimal least-privilege IAM roles (`roles/run.invoker`, `roles/aiplatform.user`, `roles/dlp.user`, `roles/dlp.reader`, `roles/modelarmor.user`, `roles/modelarmor.viewer`).
-   - Binds Google Cloud Apigee Service Agent token creation/user permissions so Apigee can impersonate this account during runtime LLM calls and deployment.
+   - Provisions the dedicated runtime Service Account (`apigee-vertex-ai-caller@${PROJECT_ID}.iam.gserviceaccount.com`).
+   - Assigns minimal least-privilege IAM roles:
+     - **`roles/run.invoker` (Cloud Run Invoker)**: **Mandatory** for `llm-ai-gateway-v1` and `llm-routing-v2` to authenticate and invoke private Gemma 3 microservices deployed on Cloud Run.
+     - **`roles/aiplatform.user` (Vertex AI User)**: Required to call Vertex AI Gemini prediction models and Vector Search embedding endpoints.
+     - **`roles/dlp.user` & `roles/dlp.reader`**: Required for Cloud DLP real-time PII de-identification.
+     - **`roles/modelarmor.user` & `roles/modelarmor.viewer`**: Required for Model Armor responsible AI template execution.
+   - Binds Google Cloud Apigee Service Agent (`service-${PROJECT_NUMBER}@gcp-sa-apigee.iam.gserviceaccount.com`) token creation and user permissions (`roles/iam.serviceAccountUser`, `roles/iam.serviceAccountTokenCreator`) so Apigee can impersonate this account at runtime.
 2. **Apigee X Data Collectors**:
    - Creates seven structured data collectors for LLM observability and reporting:
      - `dc_candidates_token_count_v2` (`INTEGER`)

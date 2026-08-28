@@ -22,7 +22,7 @@
   <SimilaritySearch>
     <VertexAI>
       <URL>https://{propertyset.vertex_config.index_endpoint_dns}.{propertyset.vertex_config.region}-{propertyset.vertex_config.project_number}.vdb.vertexai.goog/v1/projects/{propertyset.vertex_config.project_number}/locations/{propertyset.vertex_config.region}/indexEndpoints/{propertyset.vertex_config.cache_index_endpoint_id}:findNeighbors</URL>
-      <DeployedIndexID>semantic_cache_index_endpoint_deployment</DeployedIndexID>
+      <DeployedIndexID>semantic_cache_index_endpo_1787843991814</DeployedIndexID>
       <Threshold>0.80</Threshold>
     </VertexAI>
   </SimilaritySearch>

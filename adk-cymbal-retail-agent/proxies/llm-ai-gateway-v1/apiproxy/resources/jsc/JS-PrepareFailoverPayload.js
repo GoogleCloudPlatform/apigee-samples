@@ -15,8 +15,8 @@
  */
 
 // ====================================================
-// Apigee X - Failover Payload Preparation & Response Handler
-// Prepares Vertex AI payload format for ServiceCallout (SC-VertexFailover)
+// Apigee X - Failover Request Payload Preparation
+// Converts request payload to Vertex AI generateContent schema
 // ====================================================
 (function () {
     try {
@@ -24,7 +24,6 @@
         var failoverModel = context.getVariable("llm_default_fallback_model") || "gemini-2.5-flash";
         var currentModel = context.getVariable("model") || "";
 
-        // --- 1. Payload Adaptation (OpenAI messages -> Vertex AI contents) ---
         var payloadObj = null;
         try {
             payloadObj = (typeof rawPayload === "object") ? rawPayload : JSON.parse(rawPayload);
@@ -77,24 +76,12 @@
             }
         }
 
-        // Export failover_payload for ServiceCallout policy (SC-VertexFailover)
         context.setVariable("failover_payload", payloadString);
-
-        // --- 2. Process Response if SC-VertexFailover executed ---
-        var failoverResponseContent = context.getVariable("failoverResponse.content");
-        var failoverResponseStatus = context.getVariable("failoverResponse.status.code");
-
-        if (failoverResponseContent) {
-            context.setVariable("failover.executed", "true");
-            context.setVariable("failover.success", (failoverResponseStatus === "200") ? "true" : "false");
-            context.setVariable("response.status.code", failoverResponseStatus || "200");
-            context.setVariable("response.header.Content-Type", "application/json");
-            context.setVariable("response.content", failoverResponseContent);
-        }
+        context.setVariable("failover.prepared", "true");
 
     } catch (err) {
-        print("Exception in JS-SetFailover: " + err.message);
-        context.setVariable("failover.executed", "false");
+        print("Exception in JS-PrepareFailoverPayload: " + err.message);
+        context.setVariable("failover.prepared", "false");
         context.setVariable("failover.error", err.message);
     }
 })();

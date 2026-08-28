@@ -78,9 +78,18 @@ gcloud run deploy "$SERVICE_NAME" \
   --project="$PROJECT_ID"
 
 # ==============================================================================
-# Step 3: Retrieve Deployed Service URL
+# Step 3: Retrieve Deployed Service URL & Grant Invoker Role
 # ==============================================================================
 SERVICE_URL=$(gcloud run services describe "$SERVICE_NAME" --region="$REGION" --project="$PROJECT_ID" --format="value(status.url)")
+
+SA_EMAIL="apigee-vertex-ai-caller@${PROJECT_ID}.iam.gserviceaccount.com"
+echo "--> Granting Cloud Run Invoker role (roles/run.invoker) to $SA_EMAIL..."
+gcloud run services add-iam-policy-binding "$SERVICE_NAME" \
+  --member="serviceAccount:$SA_EMAIL" \
+  --role="roles/run.invoker" \
+  --region="$REGION" \
+  --project="$PROJECT_ID" >/dev/null 2>&1 || true
+
 echo "=================================================================="
 echo "  Gemma 3 CPU Service Deployed Successfully!                      "
 echo "  Endpoint URL: $SERVICE_URL"

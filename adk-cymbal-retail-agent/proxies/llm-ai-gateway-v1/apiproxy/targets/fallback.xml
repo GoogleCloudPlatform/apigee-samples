@@ -69,7 +69,13 @@
   </HTTPTargetConnection>
   <DefaultFaultRule name="default-fault">
     <Step>
-      <Name>JS-SetFailover</Name>
+      <Name>JS-PrepareFailoverPayload</Name>
+    </Step>
+    <Step>
+      <Name>SC-VertexFailover</Name>
+    </Step>
+    <Step>
+      <Name>JS-ProcessFailoverResponse</Name>
     </Step>
     <Step>
       <Name>JS-ParseVertexResponse</Name>
