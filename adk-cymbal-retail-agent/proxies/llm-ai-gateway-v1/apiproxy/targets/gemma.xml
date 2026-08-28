@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+ Copyright 2026 Google LLC
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+      http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<TargetEndpoint name="gemma">
+  <PreFlow name="PreFlow">
+    <Request>
+      <Step>
+        <Name>AM-DisablePathSuffixCopy</Name>
+      </Step>
+    </Request>
+    <Response>
+      <Step>
+        <Name>LTQ-TokenCount</Name>
+        <Condition>llm_token_quota_enforce != "false"</Condition>
+      </Step>
+      <Step>
+        <Name>JS-ExtractTokenCount</Name>
+        <Condition>response.content != null</Condition>
+      </Step>
+      <Step>
+        <Name>DC-CollectTokenCounts</Name>
+      </Step>
+      <Step>
+        <Name>AM-ExtractResponsePrompt</Name>
+        <Condition>response.content != null</Condition>
+      </Step>
+      <Step>
+        <Name>FC-SanitizeModelResponse</Name>
+        <Condition>( response.content != null ) and ( response_prompt_value != null ) and ( response_prompt_value != "" ) and ( llm_sanitize_model_response != "false" )</Condition>
+      </Step>
+      <Step>
+        <Name>SCP-Semantic-Cache-Populate</Name>
+        <Condition>(response.content != null) and (cache_enabled != "false")</Condition>
+      </Step>
+    </Response>
+  </PreFlow>
+  <Flows/>
+  <PostFlow name="PostFlow">
+    <Request/>
+    <Response/>
+  </PostFlow>
+  <HTTPTargetConnection>
+    <!-- 
+      Google Cloud OIDC ID Token Authentication:
+      Secures communication between Apigee and Cloud Run in enterprise GCP orgs where
+      Domain-Restricted Sharing blocks 'allUsers' unauthenticated access.
+      Uses the deployed proxy's service account (apigee-vertex-ai-caller@PROJECT_ID.iam.gserviceaccount.com)
+      which is granted 'roles/run.invoker' on the Cloud Run service.
+    -->
+    <Authentication>
+      <GoogleIDToken>
+        <Audience>https://gemma-cpu-router-78901377646.us-central1.run.app</Audience>
+      </GoogleIDToken>
+    </Authentication>
+    <URL>https://gemma-cpu-router-78901377646.us-central1.run.app/v1/chat/completions</URL>
+  </HTTPTargetConnection>
+  <DefaultFaultRule name="default-fault">
+    <Step>
+      <Name>JS-SetFailover</Name>
+    </Step>
+    <Step>
+      <Name>SC-VertexFailover</Name>
+    </Step>
+    <Step>
+      <Name>JS-ProcessFailoverResponse</Name>
+    </Step>
+    <Step>
+      <Name>JS-ParseVertexResponse</Name>
+    </Step>
+  </DefaultFaultRule>
+</TargetEndpoint>
