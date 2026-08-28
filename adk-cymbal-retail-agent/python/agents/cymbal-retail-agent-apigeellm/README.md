@@ -40,14 +40,15 @@ flowchart TD
 ### 1. Environment Configuration
 Ensure your local `.env` file is populated with your Google Cloud and Apigee configuration:
 ```ini
-GOOGLE_CLOUD_PROJECT="apigee-ai"
+GOOGLE_CLOUD_PROJECT="<PROJECT_ID>"
 GOOGLE_CLOUD_LOCATION="us-central1"
-APIGEE_HOSTNAME="YOUR_APIGEE_HOSTNAME"
+APIGEE_HOSTNAME="<APIGEE_HOSTNAME>"
 GOOGLE_GENAI_USE_VERTEXAI="TRUE"
-GOOGLE_CLOUD_STORAGE_BUCKET="apigee-ai_cymbal_retail_agent"
+GOOGLE_CLOUD_STORAGE_BUCKET="<PROJECT_ID>_cymbal_retail_agent"
 MODEL_NAME="gemini-2.5-flash"
-AGENT_SERVICE_ACCOUNT="llm-cymbal-retail-agent@apigee-ai.iam.gserviceaccount.com"
+AGENT_SERVICE_ACCOUNT="llm-cymbal-retail-agent@<PROJECT_ID>.iam.gserviceaccount.com"
 APIGEE_LLM="/v1/adk-retail-agent-llm-governance"
+
 ```
 
 ### 2. Virtual Environment Synchronization

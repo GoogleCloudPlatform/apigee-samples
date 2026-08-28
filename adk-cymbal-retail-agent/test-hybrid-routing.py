@@ -105,7 +105,9 @@ def send_governance_request(prompt, custom_headers=None):
     
     headers = {
         "Content-Type": "application/json",
+        "Connection": "close",
         "x-apikey": API_KEY,
+
         "Authorization": f"Bearer {get_gcp_token()}"
     }
     if custom_headers:
@@ -117,14 +119,19 @@ def send_governance_request(prompt, custom_headers=None):
     
     req = urllib.request.Request(url, data=json.dumps(payload).encode(), headers=headers)
     try:
-        with urllib.request.urlopen(req, context=ctx) as resp:
+        with urllib.request.urlopen(req, context=ctx, timeout=60) as resp:
+
             return resp.status, json.loads(resp.read().decode())
+
     except urllib.error.HTTPError as e:
         body = e.read().decode()
         try:
             return e.code, json.loads(body)
         except Exception:
             return e.code, {"error": body}
+    except Exception as e:
+        return 503, {"error": f"Target connection/routing status: {str(e)}"}
+
 
 def main():
     print("==================================================================")

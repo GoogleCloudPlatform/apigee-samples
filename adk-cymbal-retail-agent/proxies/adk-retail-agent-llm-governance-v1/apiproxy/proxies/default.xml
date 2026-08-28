@@ -62,7 +62,7 @@
       <Description/>
       <Request/>
       <Response/>
-      <Condition>(proxy.pathsuffix MatchesPath "/*")</Condition>
+      <Condition>(proxy.pathsuffix MatchesPath "/**") or (proxy.pathsuffix MatchesPath "/*") or (proxy.pathsuffix MatchesPath "/")</Condition>
     </Flow>
   </Flows>
   <PostFlow name="PostFlow">

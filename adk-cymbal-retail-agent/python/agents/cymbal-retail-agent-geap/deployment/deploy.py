@@ -213,10 +213,23 @@ def deploy(args):
         agent=root_agent,
     )
 
+    apigee_host = args.apigee_hostname or os.getenv("APIGEE_HOSTNAME") or os.getenv("APIGEE_HOST", "")
+    if not apigee_host:
+        try:
+            token = subprocess.check_output("gcloud auth application-default print-access-token 2>/dev/null || gcloud auth print-access-token", shell=True).decode().strip()
+            apigeecli_bin = f"{os.environ.get('HOME')}/.apigeecli/bin/apigeecli"
+            if os.path.exists(apigeecli_bin):
+                out = json.loads(subprocess.check_output([apigeecli_bin, "envgroups", "list", "-o", project, "-t", token]))
+                if out and isinstance(out, list) and len(out) > 0 and "hostnames" in out[0]:
+                    apigee_host = out[0]["hostnames"][0]
+        except Exception:
+            pass
+
     env_vars = {
         "PROJECT_ID": project,
-        "APIGEE_HOSTNAME": args.apigee_hostname or os.getenv("APIGEE_HOSTNAME", ""),
+        "APIGEE_HOSTNAME": apigee_host,
         "AGENT_REGISTRY_LOCATION": os.getenv("AGENT_REGISTRY_LOCATION", location),
+
         "AUTH_PROVIDER_NAME": os.getenv("AUTH_PROVIDER_NAME", "cymbal-idp"),
         "OAUTH_CALLBACK_URL": os.getenv("OAUTH_CALLBACK_URL", "http://127.0.0.1:9000/callback"),
         "MODEL_NAME": os.getenv("MODEL_NAME", "gemini-2.5-flash"),
@@ -225,6 +238,9 @@ def deploy(args):
         "OTEL_SEMCONV_STABILITY_OPT_IN": "gen_ai_latest_experimental",
         "OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT": "EVENT_ONLY",
     }
+    # Filter out empty env vars to avoid Vertex AI BadRequest
+    env_vars = {k: str(v) for k, v in env_vars.items() if v is not None and str(v) != ""}
+
 
     agent_dir = Path(__file__).resolve().parent
     
@@ -333,10 +349,11 @@ def deploy(args):
         project,
         location,
         remote_agent.api_resource.name,
-        client_id=args.client_id,
-        client_secret=args.client_secret,
-        apigee_hostname=args.apigee_hostname
+        client_id=args.client_id or os.getenv("CLIENT_ID"),
+        client_secret=args.client_secret or os.getenv("CLIENT_SECRET"),
+        apigee_hostname=args.apigee_hostname or os.getenv("APIGEE_HOSTNAME") or os.getenv("APIGEE_HOST")
     )
+
 
     # Ensure Agent Registry Binding is created/updated
     print("\n🔗 Configuring Agent Registry Binding...")

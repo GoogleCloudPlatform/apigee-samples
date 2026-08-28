@@ -44,9 +44,10 @@
     -->
     <Authentication>
       <GoogleIDToken>
-        <Audience>https://gemma-cpu-router-xtdjbcahkq-uc.a.run.app</Audience>
+        <Audience>GEMMA_AUDIENCE</Audience>
       </GoogleIDToken>
     </Authentication>
-    <URL>https://gemma-cpu-router-xtdjbcahkq-uc.a.run.app/v1/chat/completions</URL>
+    <URL>GEMMA_URL</URL>
   </HTTPTargetConnection>
 </TargetEndpoint>
+

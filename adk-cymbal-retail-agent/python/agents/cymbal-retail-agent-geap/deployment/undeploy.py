@@ -55,10 +55,12 @@ def undeploy(args):
     matching_agents = []
     try:
         for engine in client.agent_engines.list():
-            if getattr(engine.api_resource, "display_name", None) == args.display_name:
+            disp = getattr(engine.api_resource, "display_name", "")
+            if disp in (args.display_name, args.display_name.replace('-', '_'), args.display_name.replace('_', '-')):
                 matching_agents.append(engine)
     except Exception as e:
         print(f"Warning: Failed to list existing engines: {e}")
+
 
     if matching_agents:
         for agent in matching_agents:

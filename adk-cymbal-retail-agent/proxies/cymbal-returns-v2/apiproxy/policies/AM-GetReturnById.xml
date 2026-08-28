@@ -74,8 +74,20 @@
             },
             "items": {
               "type": "array",
-              "description": "The list of items being returned."
+              "description": "The list of items being returned.",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "itemId": {
+                    "type": "string"
+                  },
+                  "quantity": {
+                    "type": "integer"
+                  }
+                }
+              }
             },
+
             "reason": {
               "type": "string",
               "description": "The reason for the return.",

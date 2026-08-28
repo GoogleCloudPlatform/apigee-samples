@@ -5,11 +5,40 @@
         "apiSource": "cymbal-discovery-v1",
         "operations": [
           {
+            "operation": "initialize"
+          }
+        ],
+        "quota": {}
+      },
+      {
+        "apiSource": "cymbal-discovery-v1",
+        "operations": [
+          {
+            "operation": "ping"
+          }
+        ],
+        "quota": {}
+      },
+      {
+        "apiSource": "cymbal-discovery-v1",
+        "operations": [
+          {
+            "operation": "notifications/initialized"
+          }
+        ],
+        "quota": {}
+      },
+      {
+        "apiSource": "cymbal-discovery-v1",
+        "operations": [
+          {
             "operation": "tools/list"
           }
         ],
         "quota": {}
       },
+
+
       {
         "apiSource": "cymbal-discovery-v1",
         "operations": [

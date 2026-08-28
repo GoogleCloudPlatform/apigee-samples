@@ -57,6 +57,14 @@ PRE_PROP="project_id=$VERTEXAI_PROJECT_ID
 model_id=$MODEL_NAME
 region=$VERTEXAI_REGION"
 
+sed_i() {
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+    sed -i '' "$@"
+  else
+    sed -i "$@"
+  fi
+}
+
 deploy_proxy() {
   local proxy=$1
   echo "--> Packaging & Deploying: $proxy"
@@ -65,17 +73,19 @@ deploy_proxy() {
   cp -rf "proxies/${proxy}/apiproxy" "tmp/${proxy}/"
   
   if [ -d "tmp/${proxy}/apiproxy/policies" ]; then
-    sed -i "" "s/APIGEE_HOST/$APIGEE_HOST/g" tmp/${proxy}/apiproxy/policies/*.xml 2>/dev/null || true
+    sed_i "s/APIGEE_HOST/$APIGEE_HOST/g" tmp/${proxy}/apiproxy/policies/*.xml 2>/dev/null || true
   fi
   if [ -d "tmp/${proxy}/apiproxy/resources/oas" ]; then
-    sed -i "" "s/APIGEE_HOST/$APIGEE_HOST/g" tmp/${proxy}/apiproxy/resources/oas/*.yaml 2>/dev/null || true
+    sed_i "s/APIGEE_HOST/$APIGEE_HOST/g" tmp/${proxy}/apiproxy/resources/oas/*.yaml 2>/dev/null || true
   fi
   if [ -d "tmp/${proxy}/apiproxy/resources/properties" ]; then
     echo "$PRE_PROP" > "tmp/${proxy}/apiproxy/resources/properties/vertex_config.properties" 2>/dev/null || true
   fi
   if [ -d "tmp/${proxy}/apiproxy/targets" ]; then
-    sed -i "" "s/PROJECT_ID.mcp.apigee.internal/$PROJECT_ID.mcp.apigee.internal/g" tmp/${proxy}/apiproxy/targets/*.xml 2>/dev/null || true
-    sed -i "" "s/APIGEE_HOST/$APIGEE_HOST/g" tmp/${proxy}/apiproxy/targets/*.xml 2>/dev/null || true
+    sed_i "s/PROJECT_ID.mcp.apigee.internal/$PROJECT_ID.mcp.apigee.internal/g" tmp/${proxy}/apiproxy/targets/*.xml 2>/dev/null || true
+    sed_i "s/APIGEE_HOST/$APIGEE_HOST/g" tmp/${proxy}/apiproxy/targets/*.xml 2>/dev/null || true
+    sed_i "s|GEMMA_AUDIENCE|${GEMMA_AUDIENCE:-https://gemma-cpu-router-${PROJECT_ID}.run.app}|g" tmp/${proxy}/apiproxy/targets/*.xml 2>/dev/null || true
+    sed_i "s|GEMMA_URL|${GEMMA_URL:-https://gemma-cpu-router-${PROJECT_ID}.run.app/v1/chat/completions}|g" tmp/${proxy}/apiproxy/targets/*.xml 2>/dev/null || true
   fi
   
   apigeecli apis create bundle -n "$proxy" \
@@ -83,6 +93,7 @@ deploy_proxy() {
     -e "$APIGEE_ENV" --token "$TOKEN" -o "$PROJECT_ID" \
     -s "${SERVICE_ACCOUNT_NAME}@${PROJECT_ID}.iam.gserviceaccount.com" \
     --ovr --wait
+
     
   rm -rf "tmp/${proxy}"
   echo "--> $proxy deployed successfully!"

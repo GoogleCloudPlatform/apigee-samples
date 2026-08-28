@@ -32,10 +32,58 @@ import urllib.error
 import concurrent.futures
 from statistics import mean, median
 
-# Load environment configuration
-APIGEE_HOST = os.getenv("APIGEE_HOST", "34.54.87.114.nip.io")
-PROJECT_ID = os.getenv("PROJECT_ID", "apigee-ai")
-API_KEY = os.getenv("APIKEY", os.getenv("CLIENT_ID", "PXifa5UsWH2WhPSJfZGabR7mVndqlWMtANUYjtAWYALC7Tbb"))
+def get_env_var(name, default=None):
+    val = os.getenv(name)
+    if val:
+        return val
+    if os.path.exists("env.sh"):
+        try:
+            out = subprocess.check_output(f'bash -c "source env.sh && echo -n \\${name}"', shell=True).decode()
+            if out:
+                return out
+        except Exception:
+            pass
+    return default
+
+def get_default_gcp_project():
+    try:
+        return subprocess.check_output("gcloud config get-value project 2>/dev/null", shell=True).decode().strip()
+    except Exception:
+        return "PROJECT_ID_TO_SET"
+
+PROJECT_ID = get_env_var("PROJECT_ID") or get_default_gcp_project()
+APIGEE_HOST = get_env_var("APIGEE_HOST")
+
+if not APIGEE_HOST or "TO_SET" in APIGEE_HOST:
+    try:
+        token = subprocess.check_output("gcloud auth application-default print-access-token 2>/dev/null || gcloud auth print-access-token", shell=True).decode().strip()
+        apigeecli_bin = f"{os.environ.get('HOME')}/.apigeecli/bin/apigeecli"
+        if os.path.exists(apigeecli_bin):
+            out = json.loads(subprocess.check_output([
+                apigeecli_bin, "envgroups", "list",
+                "-o", PROJECT_ID, "-t", token
+            ]))
+            if out and "environmentGroups" in out and len(out["environmentGroups"]) > 0:
+                APIGEE_HOST = out["environmentGroups"][0]["hostnames"][0]
+            elif out and isinstance(out, list) and len(out) > 0 and "hostnames" in out[0]:
+                APIGEE_HOST = out[0]["hostnames"][0]
+    except Exception:
+        pass
+
+if not APIGEE_HOST or "TO_SET" in APIGEE_HOST:
+    APIGEE_HOST = "APIGEE_HOST_TO_SET"
+
+API_KEY = get_env_var("CLIENT_ID") or get_env_var("APIKEY")
+
+if not API_KEY:
+    try:
+        token = subprocess.check_output("gcloud auth application-default print-access-token 2>/dev/null || gcloud auth print-access-token", shell=True).decode().strip()
+        apigeecli_bin = f"{os.environ.get('HOME')}/.apigeecli/bin/apigeecli"
+        if os.path.exists(apigeecli_bin):
+            app_json = json.loads(subprocess.check_output(f"{apigeecli_bin} apps get --name cymbal-retail-app --org {PROJECT_ID} --token {token} --disable-check", shell=True).decode())
+            API_KEY = app_json[0]["credentials"][0]["consumerKey"]
+    except Exception:
+        API_KEY = "API_KEY_TO_SET"
 
 def get_auth_token():
     try:
@@ -45,6 +93,7 @@ def get_auth_token():
     except Exception:
         pass
     return "mock-token"
+
 
 def send_prompt(prompt_text, tier="local", timeout=30):
     url = f"https://{APIGEE_HOST}/v1/adk-retail-agent-llm-governance/v1/projects/{PROJECT_ID}/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent"

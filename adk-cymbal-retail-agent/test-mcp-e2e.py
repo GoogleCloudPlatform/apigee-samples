@@ -126,8 +126,10 @@ def main():
     # 3. Initialize MCP Session
     headers = {
         "Authorization": f"Bearer {access_token}",
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "Connection": "close"
     }
+
 
     req = urllib.request.Request(f"{base_url}/mcp", data=json.dumps({
         "jsonrpc": "2.0",

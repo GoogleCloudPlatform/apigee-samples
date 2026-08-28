@@ -24,10 +24,15 @@ sed_i() {
   fi
 }
 
-if [ -z "$PROJECT_ID" ]; then
+if [ -f "env.sh" ]; then
+  source env.sh
+fi
+
+if [ -z "$PROJECT_ID" ] || [ "$PROJECT_ID" = "PROJECT_ID_TO_SET" ]; then
   echo "No PROJECT_ID variable set"
   exit 1
 fi
+
 
 if [ -z "$APIGEE_ENV" ]; then
   echo "No APIGEE_ENV variable set"
@@ -165,7 +170,10 @@ import_and_deploy_proxy() {
   if [ -d "tmp/${proxy}/apiproxy/targets" ]; then
     sed_i "s/PROJECT_ID.mcp.apigee.internal/$PROJECT_ID.mcp.apigee.internal/g" tmp/${proxy}/apiproxy/targets/*.xml 2>/dev/null || true
     sed_i "s/APIGEE_HOST/$APIGEE_HOST/g" tmp/${proxy}/apiproxy/targets/*.xml 2>/dev/null || true
+    sed_i "s|GEMMA_AUDIENCE|${GEMMA_AUDIENCE:-https://gemma-cpu-router-${PROJECT_ID}.run.app}|g" tmp/${proxy}/apiproxy/targets/*.xml 2>/dev/null || true
+    sed_i "s|GEMMA_URL|${GEMMA_URL:-https://gemma-cpu-router-${PROJECT_ID}.run.app/v1/chat/completions}|g" tmp/${proxy}/apiproxy/targets/*.xml 2>/dev/null || true
   fi
+
   apigeecli apis create bundle -n "$proxy" \
   -f "tmp/${proxy}/apiproxy" \
   -e "$APIGEE_ENV" --token "$TOKEN" -o "$PROJECT_ID" \

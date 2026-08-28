@@ -25,3 +25,12 @@ Thumbs.db
 # Temporary directories
 tmp/
 *.log
+
+# Environment & Credentials
+.env
+.env.*
+!.env.example
+*.env
+*.key
+*.pem
+sa-key.json

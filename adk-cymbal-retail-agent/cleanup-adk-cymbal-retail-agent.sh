@@ -13,12 +13,17 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
- set +e
+set +e
 
-if [ -z "$PROJECT_ID" ]; then
+if [ -f "env.sh" ]; then
+  source env.sh
+fi
+
+if [ -z "$PROJECT_ID" ] || [ "$PROJECT_ID" = "PROJECT_ID_TO_SET" ]; then
   echo "No PROJECT_ID variable set"
   exit 1
 fi
+
 
 if [ -z "$APIGEE_ENV" ]; then
   echo "No APIGEE_ENV variable set"

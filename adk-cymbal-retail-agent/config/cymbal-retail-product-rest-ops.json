@@ -2,11 +2,43 @@
   "operationGroup": {
     "operationConfigs": [
       {
+        "apiSource": "oauth-server",
+        "operations": [
+          {
+            "resource": "/",
+            "methods": ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS", "HEAD"]
+          }
+        ]
+      },
+      {
+        "apiSource": "oauth-server",
+        "operations": [
+          {
+            "resource": "/**",
+            "methods": ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS", "HEAD"]
+          }
+        ]
+      },
+      {
         "apiSource": "adk-retail-agent-llm-governance-v1",
         "operations": [
           {
             "resource": "/",
-            "methods": []
+            "methods": ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS", "HEAD"]
+          }
+        ],
+        "quota": {
+          "limit": "10000",
+          "interval": "1",
+          "timeUnit": "minute"
+        }
+      },
+      {
+        "apiSource": "adk-retail-agent-llm-governance-v1",
+        "operations": [
+          {
+            "resource": "/**",
+            "methods": ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS", "HEAD"]
           }
         ],
         "quota": {
@@ -20,7 +52,16 @@
         "operations": [
           {
             "resource": "/",
-            "methods": []
+            "methods": ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS", "HEAD"]
+          }
+        ]
+      },
+      {
+        "apiSource": "cymbal-customers-v2",
+        "operations": [
+          {
+            "resource": "/**",
+            "methods": ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS", "HEAD"]
           }
         ]
       },
@@ -29,7 +70,16 @@
         "operations": [
           {
             "resource": "/",
-            "methods": []
+            "methods": ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS", "HEAD"]
+          }
+        ]
+      },
+      {
+        "apiSource": "cymbal-orders-v2",
+        "operations": [
+          {
+            "resource": "/**",
+            "methods": ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS", "HEAD"]
           }
         ]
       },
@@ -38,7 +88,16 @@
         "operations": [
           {
             "resource": "/",
-            "methods": []
+            "methods": ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS", "HEAD"]
+          }
+        ]
+      },
+      {
+        "apiSource": "cymbal-returns-v2",
+        "operations": [
+          {
+            "resource": "/**",
+            "methods": ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS", "HEAD"]
           }
         ]
       },
@@ -47,7 +106,16 @@
         "operations": [
           {
             "resource": "/",
-            "methods": []
+            "methods": ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS", "HEAD"]
+          }
+        ]
+      },
+      {
+        "apiSource": "cymbal-shipping-v2",
+        "operations": [
+          {
+            "resource": "/**",
+            "methods": ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS", "HEAD"]
           }
         ]
       }
