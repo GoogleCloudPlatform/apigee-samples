@@ -287,7 +287,7 @@ print("Executing Multi-Agent Order Status verification...")
 
 ---
 
-### Module 6: Deploying Private Gemma 3 4B on Cloud Run (Scale-to-Zero)
+### Module 6: Deploying Private Gemma 3 on Cloud Run (CPU / Scale-to-Zero)
 Deploy a quantized Gemma 3 model on Cloud Run requiring **0 GPU quotas** with scale-to-zero cost optimization.
 
 ```bash

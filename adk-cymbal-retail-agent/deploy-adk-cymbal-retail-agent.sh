@@ -28,66 +28,46 @@ if [ -f "env.sh" ]; then
   source env.sh
 fi
 
-if [ -z "$PROJECT_ID" ] || [ "$PROJECT_ID" = "PROJECT_ID_TO_SET" ]; then
-  echo "No PROJECT_ID variable set"
-  exit 1
-fi
-
-
-if [ -z "$APIGEE_ENV" ]; then
-  echo "No APIGEE_ENV variable set"
-  exit 1
-fi
-
-if [ -z "$APIGEE_HOST" ]; then
-  echo "No APIGEE_HOST variable set"
-  exit 1
-fi
-
-if [ -z "$SERVICE_ACCOUNT_NAME" ]; then
-  echo "No SERVICE_ACCOUNT_NAME variable set"
-  exit 1
-fi
-
-if [ -z "$APIGEE_APIHUB_PROJECT_ID" ]; then
-  echo "No APIGEE_APIHUB_PROJECT_ID variable set"
-  exit 1
-fi
-
-if [ -z "$APIGEE_APIHUB_REGION" ]; then
-  echo "No APIGEE_APIHUB_REGION variable set"
-  exit 1
-fi
-
-if [ -z "$VERTEXAI_REGION" ]; then
-  echo "No VERTEXAI_REGION variable set"
-  exit 1
-fi
-
-if [ -z "$VERTEXAI_PROJECT_ID" ]; then
-  echo "No VERTEXAI_PROJECT_ID variable set"
-  exit 1
-fi
-
-if [ -z "$MODEL_ARMOR_REGION" ]; then
-  echo "No MODEL_ARMOR_REGION variable set"
-  exit 1
-fi
-
-if [ -z "$MODEL_ARMOR_TEMPLATE_ID" ]; then
-  echo "No MODEL_ARMOR_TEMPLATE_ID variable set"
-  exit 1
-fi
-
-if [ -z "$AGENT_GATEWAY_NAME" ]; then
-  echo "No AGENT_GATEWAY_NAME variable set"
+PROJECT_ID="${PROJECT_ID:-$(gcloud config get-value project 2>/dev/null)}"
+if [ -z "$PROJECT_ID" ] || [ "$PROJECT_ID" = "PROJECT_ID_TO_SET" ] || [ "$PROJECT_ID" = "(unset)" ]; then
+  echo "Error: PROJECT_ID variable is not set. Please set it or run 'gcloud config set project <id>'."
   exit 1
 fi
 
 if [ -z "$TOKEN" ]; then
-  TOKEN=$(gcloud auth application-default print-access-token)
+  TOKEN=$(gcloud auth application-default print-access-token 2>/dev/null || gcloud auth print-access-token 2>/dev/null || true)
 fi
 export TOKEN
+
+if [ -z "$APIGEE_ENV" ] || [ "$APIGEE_ENV" = "APIGEE_ENV_TO_SET" ]; then
+  if command -v apigeecli &>/dev/null && [ -n "$TOKEN" ]; then
+    APIGEE_ENV=$(apigeecli envs list -o "$PROJECT_ID" --token "$TOKEN" --disable-check 2>/dev/null | grep -o '"test-env"' | tr -d '"' || apigeecli envs list -o "$PROJECT_ID" --token "$TOKEN" --disable-check 2>/dev/null | grep -o '"[^"]*"' | tr -d '"' | head -n1 || true)
+  fi
+  export APIGEE_ENV="${APIGEE_ENV:-test-env}"
+fi
+
+if [ -z "$APIGEE_HOST" ] || [ "$APIGEE_HOST" = "APIGEE_HOST_TO_SET" ]; then
+  if command -v apigeecli &>/dev/null && [ -n "$TOKEN" ]; then
+    APIGEE_HOST=$(apigeecli envgroups get -n "${APIGEE_ENV}-group" -o "$PROJECT_ID" --token "$TOKEN" --disable-check 2>/dev/null | grep -o '"[0-9a-zA-Z.-]*\.nip\.io"' | tr -d '"' | head -n1 || true)
+    if [ -z "$APIGEE_HOST" ]; then
+      APIGEE_HOST=$(apigeecli envgroups list -o "$PROJECT_ID" --token "$TOKEN" --disable-check 2>/dev/null | grep -o '"[0-9a-zA-Z.-]*\.nip\.io"' | tr -d '"' | head -n1 || true)
+    fi
+  fi
+fi
+
+if [ -z "$APIGEE_HOST" ] || [ "$APIGEE_HOST" = "APIGEE_HOST_TO_SET" ]; then
+  echo "Error: Unable to resolve APIGEE_HOST. Please configure APIGEE_HOST in env.sh"
+  exit 1
+fi
+
+export SERVICE_ACCOUNT_NAME="${SERVICE_ACCOUNT_NAME:-llm-cymbal-retail-agent}"
+export APIGEE_APIHUB_PROJECT_ID="${APIGEE_APIHUB_PROJECT_ID:-$PROJECT_ID}"
+export APIGEE_APIHUB_REGION="${APIGEE_APIHUB_REGION:-us-central1}"
+export VERTEXAI_REGION="${VERTEXAI_REGION:-us-central1}"
+export VERTEXAI_PROJECT_ID="${VERTEXAI_PROJECT_ID:-$PROJECT_ID}"
+export MODEL_ARMOR_REGION="${MODEL_ARMOR_REGION:-$VERTEXAI_REGION}"
+export MODEL_ARMOR_TEMPLATE_ID="${MODEL_ARMOR_TEMPLATE_ID:-llm-governance-template}"
+export AGENT_GATEWAY_NAME="${AGENT_GATEWAY_NAME:-egress-gateway}"
 
 DEPLOY_DISCOVERY_PROXY="${DEPLOY_DISCOVERY_PROXY:-true}"
 DEPLOY_LLM_AI_GATEWAY="${DEPLOY_LLM_AI_GATEWAY:-true}"

@@ -35,17 +35,14 @@ echo "Starting Apigee X LLM AI Gateway Deployment (deploy-llm-ai-gateway.sh)"
 echo "===================================================================="
 
 # Check mandatory environment variables
-if [ -z "$PROJECT_ID" ]; then
+PROJECT_ID="${PROJECT_ID:-$(gcloud config get-value project 2>/dev/null)}"
+if [ -z "$PROJECT_ID" ] || [ "$PROJECT_ID" = "PROJECT_ID_TO_SET" ] || [ "$PROJECT_ID" = "(unset)" ]; then
   echo "ERROR: Mandatory environment variable PROJECT_ID is not set."
   echo "Usage: export PROJECT_ID=\"<your-gcp-project-id>\""
   exit 1
 fi
 
-if [ -z "$APIGEE_ENV" ]; then
-  echo "ERROR: Mandatory environment variable APIGEE_ENV is not set."
-  echo "Usage: export APIGEE_ENV=\"<your-apigee-environment>\""
-  exit 1
-fi
+APIGEE_ENV="${APIGEE_ENV:-test-env}"
 
 if [ -z "$MODEL_ARMOR_TEMPLATE" ]; then
   MODEL_ARMOR_REGION="${MODEL_ARMOR_REGION:-${VERTEXAI_REGION:-${GCP_PROJECT_REGION:-us-central1}}}"
