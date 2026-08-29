@@ -17,6 +17,7 @@
 try {
     var keywordDecision = context.getVariable("keyword_routing_decision");
     var defaultModel = context.getVariable("llm_model"); // Default model (e.g. gemini-2.5-pro)
+    var localModel = context.getVariable("llm_local_model");
     var model = context.getVariable("model") || defaultModel;
     var fallbackModel = context.getVariable("llm_fallback_model"); // Fallback model (e.g. gemini-2.5-flash)
     var matchedDatapointId = "";
@@ -27,7 +28,7 @@ try {
     if (keywordDecision) {
         var decisionLower = keywordDecision.toLowerCase();
         if (decisionLower === "gemma") {
-            model = fallbackModel;
+            model = localModel;
             routeToGemma = true;
         } else if (decisionLower === "simple") {
             model = fallbackModel;
@@ -61,7 +62,7 @@ try {
 
                 // Check datapoint ID classification: "gemma_", "simple_", or "complex_"
                 if (matchedIdLower.indexOf("gemma") >= 0) {
-                    model = fallbackModel;
+                    model = localModel;
                     routeToGemma = true;
                 } else if (matchedIdLower.indexOf("simple") >= 0) {
                     model = fallbackModel;
@@ -76,7 +77,7 @@ try {
         if (model === defaultModel) {
             var lowerPrompt = userPrompt.toLowerCase();
             if (lowerPrompt.indexOf("gemma") >= 0) {
-                model = fallbackModel;
+                model = localModel;
                 routeToGemma = true;
                 matchedDatapointId = "mock_gemma_query_from_prompt_rules";
                 distance = 0.99;

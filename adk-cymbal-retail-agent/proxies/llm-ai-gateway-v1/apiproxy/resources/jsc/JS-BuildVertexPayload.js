@@ -46,7 +46,6 @@ try {
             };
             context.setVariable("request.content", JSON.stringify(gemmaPayload));
         }
-<<<<<<< HEAD
     } else {
         // ----------------------------------------------------------------------
         // Vertex AI Target Payload Handling (Requires Vertex 'contents' schema)

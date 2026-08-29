@@ -77,6 +77,7 @@
     
     // 4. model + default and fallback + default model
     context.setVariable("llm_model", llmModel);
+    context.setVariable("llm_local_model", context.getVariable("propertyset.vertex_config.default_local_model"));
     context.setVariable("llm_default_model", context.getVariable("propertyset.vertex_config.default_model"));
     context.setVariable("llm_fallback_model", fallbackModel);
     context.setVariable("llm_default_fallback_model", context.getVariable("propertyset.vertex_config.default_fallback_model"));
