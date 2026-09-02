@@ -30,7 +30,7 @@ graph TD
 
     ClientApp -->|Query Stream| Supervisor
     
-    subgraph "Apigee LLM AI Gateway (/llm-ai-gateway/v1)"
+    subgraph "Apigee LLM AI Gateway (/v1/llm-ai-gateway)"
         LLMGateway[🤖 Apigee LLM AI Gateway<br>/chat/completions & /chat]
         LLMGateway --> RateQuota[1. Prompt Rate Limiting & Token Quotas]
         RateQuota --> ModelArmorDLP[2. Model Armor Defense & DLP Redaction]
@@ -118,7 +118,7 @@ sequenceDiagram
     participant Upstream as 🧠 Target Model (Vertex Gemini 2.5 / Gemma Cloud Run)
     participant Analytics as 📊 Apigee Data Collectors & Cloud Logging
 
-    Client->>Gateway: POST /llm-ai-gateway/v1/chat/completions (with x-apikey)
+    Client->>Gateway: POST /v1/llm-ai-gateway/chat/completions (with x-apikey)
     Gateway->>Gateway: PreFlow: Verify API Key (VA-VerifyAPIKey) & Parse Custom Headers
     
     Gateway->>RateQuota: Check prompt volume rate limits (PTL-PromptRateLimiting)
@@ -194,7 +194,7 @@ Instead of forcing a single LLM prompt to navigate complex enterprise APIs, the 
 
 ### 3. Centralized Apigee LLM AI Gateway (`llm-ai-gateway-v1`)
 The dedicated LLM AI Gateway proxy provides enterprise control, security, and optimization for all GenAI workloads:
-* **Multi-Format Protocols:** Supports OpenAI-compatible (`POST /llm-ai-gateway/v1/chat/completions`), native (`POST /llm-ai-gateway/v1/chat`), and direct Vertex AI `generateContent` schemas.
+* **Multi-Format Protocols:** Supports OpenAI-compatible (`POST /v1/llm-ai-gateway/chat/completions`), native (`POST /v1/llm-ai-gateway/chat`), and direct Vertex AI `generateContent` schemas.
 * **Token Rate Limiting & Quotas:** Automatically enforces token volume rate limits (`x-llm-prompt-rate-limiting`) and per-model consumption quotas (`x-llm-token-quota-enforce`).
 * **Semantic Caching:** Integrates with Vertex AI Vector Search embeddings to cache identical and semantically similar queries (`x-llm-cache`), slashing latency and model invocation costs.
 * **Model Overrides & Routing:** Allows runtime selection via `x-llm-model` or `x-model-tier` headers with automatic fallback protection.

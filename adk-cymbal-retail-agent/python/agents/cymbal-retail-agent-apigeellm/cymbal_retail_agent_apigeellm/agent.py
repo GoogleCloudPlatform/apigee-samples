@@ -34,7 +34,7 @@ load_dotenv()
 PROJECT_ID = os.getenv("GOOGLE_CLOUD_PROJECT")
 MODEL_NAME = os.getenv("MODEL_NAME", "gemma3:4b")
 APIGEE_HOSTNAME = os.getenv("APIGEE_HOSTNAME")
-APIGEE_LLM = os.getenv("APIGEE_LLM", "/v1/adk-retail-agent-llm-governance")
+APIGEE_LLM = os.getenv("APIGEE_LLM", "/v1/llm-ai-gateway")
 DEFAULT_MODEL_TIER = os.getenv("DEFAULT_MODEL_TIER", "local")
 SECRET = f"projects/{PROJECT_ID}/secrets/cymbal-retail-client-id/versions/latest"
 

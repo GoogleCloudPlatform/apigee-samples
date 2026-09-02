@@ -94,7 +94,7 @@ graph TD
     end
 
     subgraph "Apigee LLM AI Gateway & Hybrid Governance Layer"
-        LLMGateway[🤖 Apigee LLM AI Gateway<br>/llm-ai-gateway/v1/chat/completions]
+        LLMGateway[🤖 Apigee LLM AI Gateway<br>/v1/llm-ai-gateway/chat/completions]
         RateQuota[⏱️ Token Rate Limits & Quotas]
         ModelArmor[🛡️ Model Armor Threat Defense]
         DLP[🔒 Cloud DLP PII Sanitization]
@@ -176,7 +176,7 @@ The Apigee MCP Gateway (`/mcp`) implements the **Model Context Protocol specific
 * Authenticates the Reasoning Engine's runtime service account (`llm-cymbal-retail-agent@PROJECT_ID.iam.gserviceaccount.com`) using SPIFFE principal credentials.
 
 ### Pillar C: Apigee LLM AI Gateway & Security Guardrails
-The LLM AI Gateway (`/llm-ai-gateway/v1`) transparently governs all Generative AI interactions:
+The LLM AI Gateway (`/v1/llm-ai-gateway`) transparently governs all Generative AI interactions:
 1. **Prompt Token Rate Limiting (PTL):** Protects upstream quotas by throttling excessive prompts.
 2. **Model Armor Threat Defense:** Inspects prompts in real-time to block jailbreak attempts and prompt injections.
 3. **Cloud DLP Real-time Sanitization:** Automatically masks sensitive PII (SSNs, credit card numbers) before reaching models.

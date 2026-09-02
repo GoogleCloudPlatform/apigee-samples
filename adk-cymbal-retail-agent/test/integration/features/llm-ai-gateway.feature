@@ -23,7 +23,7 @@ Feature: Apigee LLM AI Gateway API
   Scenario: 1. Unauthorized request without API Key returns 401
     Given I store the raw value {"model":"gemini-2.5-flash","messages":[{"role":"user","content":"Hello"}]} as myPayload in scenario scope
     And I set body to `myPayload`
-    When I POST to /llm-ai-gateway/v1/chat/completions
+    When I POST to /v1/llm-ai-gateway/chat/completions
     Then response code should be 401
     And response body should be valid json
 
@@ -31,7 +31,7 @@ Feature: Apigee LLM AI Gateway API
     Given I set x-apikey header to invalid_api_key_12345
     And I store the raw value {"model":"gemini-2.5-flash","messages":[{"role":"user","content":"Hello"}]} as myPayload in scenario scope
     And I set body to `myPayload`
-    When I POST to /llm-ai-gateway/v1/chat/completions
+    When I POST to /v1/llm-ai-gateway/chat/completions
     Then response code should be 401
     And response body should be valid json
 
@@ -47,7 +47,7 @@ Feature: Apigee LLM AI Gateway API
       | x-llm-sanitize-model-response   | false            |
     And I store the raw value {"model":"gemini-2.5-flash","messages":[{"role":"user","content":"Respond with the single word: OK"}]} as myPayload in scenario scope
     And I set body to `myPayload`
-    When I POST to /llm-ai-gateway/v1/chat/completions
+    When I POST to /v1/llm-ai-gateway/chat/completions
     Then response body should be valid json
 
   Scenario: 4. Native /chat endpoint request with valid API Key
@@ -60,7 +60,7 @@ Feature: Apigee LLM AI Gateway API
       | x-llm-routing                   | false            |
     And I store the raw value {"model":"gemini-2.5-flash","messages":[{"role":"user","content":"Hello from Cymbal Retail"}]} as myPayload in scenario scope
     And I set body to `myPayload`
-    When I POST to /llm-ai-gateway/v1/chat
+    When I POST to /v1/llm-ai-gateway/chat
     Then response body should be valid json
 
   Scenario: 5. Model routing with frontier tier header
@@ -73,7 +73,7 @@ Feature: Apigee LLM AI Gateway API
       | x-llm-cache                     | false            |
     And I store the raw value {"model":"gemini-2.5-flash","messages":[{"role":"user","content":"Provide order return policy"}]} as myPayload in scenario scope
     And I set body to `myPayload`
-    When I POST to /llm-ai-gateway/v1/chat/completions
+    When I POST to /v1/llm-ai-gateway/chat/completions
     Then response body should be valid json
 
   Scenario: 6. Model override via x-llm-model header
@@ -87,7 +87,7 @@ Feature: Apigee LLM AI Gateway API
       | x-llm-routing                   | false            |
     And I store the raw value {"model":"gemini-2.5-flash","messages":[{"role":"user","content":"What are your operating hours?"}]} as myPayload in scenario scope
     And I set body to `myPayload`
-    When I POST to /llm-ai-gateway/v1/chat/completions
+    When I POST to /v1/llm-ai-gateway/chat/completions
     Then response body should be valid json
 
   Scenario: 7. Token quota enforcement and rate limiting flags
@@ -102,7 +102,7 @@ Feature: Apigee LLM AI Gateway API
       | x-llm-routing                   | false            |
     And I store the raw value {"model":"gemini-2.5-flash","messages":[{"role":"user","content":"Check order 123"}]} as myPayload in scenario scope
     And I set body to `myPayload`
-    When I POST to /llm-ai-gateway/v1/chat/completions
+    When I POST to /v1/llm-ai-gateway/chat/completions
     Then response body should be valid json
 
   Scenario: 8. Responsible AI Sanitization flags enabled
@@ -117,7 +117,7 @@ Feature: Apigee LLM AI Gateway API
       | x-llm-routing                   | false            |
     And I store the raw value {"model":"gemini-2.5-flash","messages":[{"role":"user","content":"My email is test@example.com"}]} as myPayload in scenario scope
     And I set body to `myPayload`
-    When I POST to /llm-ai-gateway/v1/chat/completions
+    When I POST to /v1/llm-ai-gateway/chat/completions
     Then response body should be valid json
 
   Scenario: 9. Native Vertex AI generateContent endpoint
@@ -130,10 +130,10 @@ Feature: Apigee LLM AI Gateway API
       | x-llm-routing                   | false            |
     And I store the raw value {"contents":[{"role":"USER","parts":[{"text":"Hello from Cymbal"}]}]} as myPayload in scenario scope
     And I set body to `myPayload`
-    When I POST to /llm-ai-gateway/v1/projects/`PROJECT_ID`/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent
+    When I POST to /v1/llm-ai-gateway/projects/`PROJECT_ID`/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent
     Then response body should be valid json
 
   Scenario: 10. Request to unknown LLM Gateway route returns 404
     Given I set x-apikey header to `llm_apikey`
-    When I GET /llm-ai-gateway/v1/unknown-route
+    When I GET /v1/llm-ai-gateway/unknown-route
     Then response code should be 404

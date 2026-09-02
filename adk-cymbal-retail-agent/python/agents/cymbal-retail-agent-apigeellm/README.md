@@ -8,7 +8,7 @@ This agent also routes model calls through Apigee AI Gateway to enforce pre-gene
 
 ## 🏛️ Governance Architecture
 
-Before the root agent processes user prompts or delegates to domain sub-agents, requests are routed through an Apigee AI gateway proxy (`/v1/adk-retail-agent-llm-governance`) which performs the following:
+Before the root agent processes user prompts or delegates to domain sub-agents, requests are routed through an Apigee AI gateway proxy (`/v1/llm-ai-gateway`) which performs the following:
 - **Model Armor Threat Filtering:** Intercepts prompt injections, jailbreaks, and hate speech.
 - **Cloud DLP Redaction:** Masks sensitive PII (SSNs, credit card numbers, email addresses) on the fly.
 - **Token Analytics:** Captures prompt and candidate token counts for RAI dashboards.
@@ -47,7 +47,7 @@ GOOGLE_GENAI_USE_VERTEXAI="TRUE"
 GOOGLE_CLOUD_STORAGE_BUCKET="<PROJECT_ID>_cymbal_retail_agent"
 MODEL_NAME="gemini-2.5-flash"
 AGENT_SERVICE_ACCOUNT="llm-cymbal-retail-agent@<PROJECT_ID>.iam.gserviceaccount.com"
-APIGEE_LLM="/v1/adk-retail-agent-llm-governance"
+APIGEE_LLM="/v1/llm-ai-gateway"
 
 ```
 

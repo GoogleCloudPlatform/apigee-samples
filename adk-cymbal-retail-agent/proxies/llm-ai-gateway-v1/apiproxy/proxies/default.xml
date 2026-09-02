@@ -65,7 +65,7 @@
       </Request>
       <Response>
       </Response>
-      <Condition>(proxy.pathsuffix MatchesPath "/chat" or proxy.pathsuffix MatchesPath "/chat/completions" or proxy.pathsuffix MatchesPath "/projects/*/locations/*/publishers/google/models/*:generateContent") and (request.verb = "POST")</Condition>
+      <Condition>(proxy.pathsuffix MatchesPath "/chat" or proxy.pathsuffix MatchesPath "/chat/completions" or proxy.pathsuffix MatchesPath "/*/projects/*/locations/*/publishers/google/models/*:generateContent") and (request.verb = "POST")</Condition>
     </Flow>
     <Flow name="404 - Not Found">
       <Request>
@@ -100,7 +100,7 @@
     <Properties>
       <Property name="response.streaming.enabled">false</Property>
     </Properties>
-    <BasePath>/llm-ai-gateway/v1</BasePath>
+    <BasePath>/v1/llm-ai-gateway</BasePath>
   </HTTPProxyConnection>
   <RouteRule name="gemma">
     <Condition>(route_to_gemma = "true") or (request.header.x-model-tier = "local") or (request.header.x-model-name Matches "*gemma*")</Condition>

@@ -27,59 +27,94 @@ The diagram below details the exact policy execution chain across `PreFlow`, `Fl
 
 ```mermaid
 flowchart TD
-    ClientReq([Incoming Request: /chat/completions OR /chat]) --> PreFlow
-    
-    subgraph PreFlow["1. PreFlow (Authentication & Headers)"]
-        PF1[CORS-AddCors] --> PF2[VA-VerifyAPIKey]
-        PF2 --> PF3[AM-StripAcceptEncoding]
-        PF3 --> PF4[JS-ProcessCustomLLMHeaders<br>Extract x-llm-* flags & tier]
+    %% ==========================================
+    %% Google Brand Colors & Global Styling
+    %% ==========================================
+    classDef client fill:#E8F0FE,stroke:#4285F4,stroke-width:2px,color:#1967D2,font-weight:bold;
+    classDef process fill:#FFFFFF,stroke:#5F6368,stroke-width:1.2px,color:#202124;
+    classDef decision fill:#FEF7E0,stroke:#F9AB00,stroke-width:1.5px,color:#B06000,font-weight:bold;
+    classDef primary fill:#E6F4EA,stroke:#34A853,stroke-width:2px,color:#137333,font-weight:bold;
+    classDef fallback fill:#FFF0F0,stroke:#EA4335,stroke-width:1.5px,color:#C5221F,font-weight:bold;
+    classDef secondary fill:#F1F3F4,stroke:#5F6368,stroke-width:1.5px,color:#3C4043;
+    classDef fault fill:#FCE8E6,stroke:#EA4335,stroke-width:2px,stroke-dasharray: 4 4,color:#C5221F,font-weight:bold;
+
+    %% Entry Point (Top)
+    ClientReq([Incoming Request: /chat/completions OR /chat]):::client --> PreFlow
+
+    %% ==========================================
+    %% 1. PreFlow (VERTICAL STACK - Top)
+    %% ==========================================
+    subgraph PreFlow["1. PreFlow: Authentication & Request Headers"]
+        direction TB
+        PF1[CORS-AddCors]:::process --> PF2[VA-VerifyAPIKey]:::process
+        PF2 --> PF3[AM-StripAcceptEncoding]:::process
+        PF3 --> PF4[JS-ProcessCustomLLMHeaders<br/>Extract x-llm-* flags & tier]:::process
     end
-    
+
+    %% Transition 1 -> 2
     PreFlow --> ChatFlow
-    
-    subgraph ChatFlow["2. Flow: Chat (Inspection, Safety, Cache & Quotas)"]
-        CF1[JS-ParseRequestBody] --> CF2[AM-ExtractRequestPrompt]
-        CF2 --> CF3{llm_prompt_rate_limiting != false?}
-        CF3 -->|Yes| CF4[PTL-PromptRateLimiting]
-        CF3 -->|No| CF5{llm_sanitize_user_prompt != false?}
-        CF4 --> CF5
-        CF5 -->|Yes| CF6[FC-SanitizeUserPrompt<br>Model Armor + Cloud DLP]
-        CF5 -->|No| CF7{cache_enabled != false?}
-        CF6 --> CF7
-        CF7 -->|Yes| CF8[SCL-Semantic-Cache-Lookup<br>Vector Search Index]
-        CF7 -->|No| CF9{llm_routing_enabled != false?}
-        CF8 -->|Cache Miss| CF9
-        CF9 -->|Yes| CF10[FC-LLMRouting<br>Vector Complexity / Keyword Route]
-        CF9 -->|No| CF11[JS-BuildVertexPayload]
-        CF10 --> CF11
-        CF11 --> CF12{llm_token_quota_enforce != false?}
-        CF12 -->|Yes| CF13[LTQ-TokenEnforce<br>Per-Model Token Bucket]
-        CF12 -->|No| CF14[Dispatch to TargetEndpoint]
-        CF13 --> CF14
+
+    %% ==========================================
+    %% 2. Main Flow: Chat (STRICT HORIZONTAL RIBBON)
+    %% ==========================================
+    subgraph ChatFlow["2. Main Flow: Chat Pipeline (Horizontal Execution)"]
+        direction LR
+        CF1["<b>1. Ingest</b><br/>JS-ParseRequestBody<br/>AM-ExtractRequestPrompt"]:::process --> CF2["<b>2. Rate Limit</b><br/>PTL-PromptRateLimiting<br/><i>(if enabled)</i>"]:::process
+        CF2 --> CF3["<b>3. Safety & DLP</b><br/>FC-SanitizeUserPrompt<br/>Model Armor + DLP"]:::process
+        CF3 --> CF4["<b>4. Semantic Cache</b><br/>SCL-Semantic-Cache-Lookup<br/>Vector Search Index"]:::process
+        CF4 --> CF5["<b>5. LLM Routing</b><br/>FC-LLMRouting<br/>Complexity & Keywords"]:::process
+        CF5 --> CF6["<b>6. Payload Builder</b><br/>JS-BuildGeminiPayload<br/>Gemini Enterprise Format"]:::process
+        CF6 --> CF7["<b>7. Quota Enforcement</b><br/>LTQ-TokenEnforce<br/>Token Bucket Check"]:::process
     end
-    
-    ChatFlow --> TargetSelection{Target Endpoint Selection}
-    
-    subgraph Targets["3. Target Endpoints & Fallback"]
-        TargetSelection -->|Default Model Route| PrimaryTarget[🎯 Primary Target<br>Vertex AI Gemini 2.5 Pro]
-        PrimaryTarget -.->|HTTP 5xx / 429 Fault| FallbackTarget[🔀 Fallback Target<br>Vertex AI Gemini 2.5 Flash]
-        TargetSelection -->|x-model-tier: local| GemmaTarget[🏠 Private Gemma Target<br>Cloud Run CPU Gemma 3 4B]
+
+    %% Transition 2 -> 3
+    ChatFlow --> Targets
+
+    %% ==========================================
+    %% 3. Targets & Multi-Level Failover (VERTICAL STACK)
+    %% ==========================================
+    subgraph Targets["3. Target Endpoints & Comprehensive Failover Chain"]
+        direction TB
+        T_Select{Target Route Selection}:::decision
+        
+        %% Primary Target Route
+        T_Select -->|Default Route| PrimaryTarget[🎯 Primary Target<br/>Gemini Enterprise Pro]:::primary
+        
+        %% Local Gemma Route
+        T_Select -->|x-model-tier: local| GemmaTarget[🏠 Private Gemma Target<br/>Cloud Run Gemma 3 4B]:::secondary
+        
+        %% Primary Failover -> Fallback Target
+        PrimaryTarget -.->|5xx / 429 / Timeout / Bad Payload| FallbackTarget[🔀 Fallback Target<br/>Gemini Enterprise Flash]:::fallback
+        
+        %% Gemma Failover -> Fallback Target
+        GemmaTarget -.->|Service Down / Capacity Exceeded| FallbackTarget
+        
+        %% Fallback Target Failover -> Global Fault Handler
+        FallbackTarget -.->|All Targets Exhausted| FaultHandler[⚠️ Global Target Fault Handler<br/>Graceful Degradation / 503 Gateway Error]:::fault
     end
-    
+
+    %% Transition 3 -> 4 (Success Path)
     PrimaryTarget --> PostFlow
     FallbackTarget --> PostFlow
     GemmaTarget --> PostFlow
-    CF8 -->|Cache Hit| PostFlow
-    
-    subgraph PostFlow["4. PostFlow (Response Sanitization, Cache Populate & Analytics)"]
-        PO1[Set Cache Hit / Miss Headers] --> PO2[JS-ParseVertexResponse]
-        PO2 --> PO3[FC-SanitizeModelResponse<br>Cloud DLP Response Redaction]
-        PO3 --> PO4[SCL-Semantic-Cache-Populate<br>Store in Vector Cache]
-        PO4 --> PO5[DC-* Extract Token Counts<br>Prompt, Candidates, Total, Latency]
-        PO5 --> PO6[FC-LLM-Logger<br>Cloud Logging & Analytics]
+
+    %% Direct Fault Return
+    FaultHandler --> ErrorResp([Return 503 / Degraded Error Response]):::fault
+
+    %% ==========================================
+    %% 4. PostFlow (VERTICAL STACK - Bottom)
+    %% ==========================================
+    subgraph PostFlow["4. PostFlow: Response Processing & Observability"]
+        direction TB
+        PO1[Set Cache Hit / Miss Headers]:::process --> PO2[JS-ParseGeminiResponse]:::process
+        PO2 --> PO3[FC-SanitizeModelResponse<br/>Cloud DLP Redaction]:::process
+        PO3 --> PO4[SCL-Semantic-Cache-Populate<br/>Store in Vector Cache]:::process
+        PO4 --> PO5[DC-* Extract Token Counts<br/>Latency & Usage]:::process
+        PO5 --> PO6[FC-LLM-Logger<br/>Cloud Logging & Analytics]:::process
     end
-    
-    PostFlow --> ClientResp([Return 200 OK to Client])
+
+    %% Exit Point (Bottom)
+    PostFlow --> ClientResp([Return 200 OK to Client]):::client
 ```
 
 ---
@@ -302,13 +337,13 @@ export REGION="your-vertexai-region" # e.g., europe-west1
 ### Option A: OpenAI-Compatible Chat Completions Endpoint
 
 ```bash
-curl -H "x-apikey: $API_KEY" -H "Content-Type: application/json; charset=utf-8" -d '{"model": "gemini-2.5-pro", "stream": false, "messages": [{"role": "user", "content": "when is the next eclispe in france?"}]}' https://$APIGEE_HOSTNAME/llm-ai-gateway/v1/chat/completions -vk
+curl -H "x-apikey: $API_KEY" -H "Content-Type: application/json; charset=utf-8" -d '{"model": "gemini-2.5-pro", "stream": false, "messages": [{"role": "user", "content": "when is the next eclispe in france?"}]}' https://$APIGEE_HOSTNAME/v1/llm-ai-gateway/chat/completions -vk
 ```
 
 ### Option B: Vertex AI Gemini generateContent Endpoint
 
 ```bash
-curl -s -X POST "https://$APIGEE_HOSTNAME/llm-ai-gateway/v1/projects/$PROJECT_ID/locations/$REGION/publishers/google/models/gemini-2.5-pro:generateContent" \
+curl -s -X POST "https://$APIGEE_HOSTNAME/v1/llm-ai-gateway/projects/$PROJECT_ID/locations/$REGION/publishers/google/models/gemini-2.5-pro:generateContent" \
   -H "x-apikey: $API_KEY" \
   -H "Content-Type: application/json; charset=utf-8" \
   -d '{"contents": [{"role": "USER", "parts": [{"text": "What does the Orion constellation look like?"}]}]}' -vk | jq
@@ -321,13 +356,13 @@ curl -s -X POST "https://$APIGEE_HOSTNAME/llm-ai-gateway/v1/projects/$PROJECT_ID
 The repository includes a dedicated Cucumber BDD regression test suite covering all LLM AI Gateway features and security behaviors in [`test/integration/features/llm-ai-gateway.feature`](test/integration/features/llm-ai-gateway.feature):
 
 * **Unauthorized Requests (401)**: Missing and invalid API key rejection via `VA-VerifyAPIKey`.
-* **OpenAI-Compatible Payload**: `POST /llm-ai-gateway/v1/chat/completions` validation.
-* **Native Chat Payload**: `POST /llm-ai-gateway/v1/chat` validation.
+* **OpenAI-Compatible Payload**: `POST /v1/llm-ai-gateway/chat/completions` validation.
+* **Native Chat Payload**: `POST /v1/llm-ai-gateway/chat` validation.
 * **Dynamic Hybrid Model Routing**: `x-model-tier: frontier` and `x-llm-routing: false`.
 * **Model Overrides**: `x-llm-model: gemini-2.5-pro` explicit header override.
 * **Prompt Rate Limiting & Token Quotas**: `x-llm-prompt-rate-limiting` and `x-llm-token-quota-enforce`.
 * **Responsible AI & PII Sanitization**: `x-llm-sanitize-user-prompt` and `x-llm-sanitize-model-response`.
-* **Native Vertex AI Endpoint**: `POST /llm-ai-gateway/v1/projects/{PROJECT_ID}/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent`.
+* **Native Vertex AI Endpoint**: `POST /v1/llm-ai-gateway/projects/{PROJECT_ID}/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent`.
 * **Invalid Route Handling (404)**: Unknown route error response.
 
 To execute the LLM AI Gateway regression tests as part of the unified test suite:
