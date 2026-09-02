@@ -18,6 +18,7 @@ try {
     var rawBody = context.getVariable("request.content");
     var reqBody = JSON.parse(rawBody);
     var routeToGemma = context.getVariable("route_to_gemma") === "true";
+    var defaultLocalModel = context.getVariable("llm_local_model");
 
     if (routeToGemma) {
         // ----------------------------------------------------------------------
@@ -41,7 +42,7 @@ try {
                 openAiMessages.push({ role: role, content: text });
             });
             var gemmaPayload = {
-                model: context.getVariable("model") || "gemma-3-4b",
+                model: context.getVariable("model") || defaultLocalModel,
                 messages: openAiMessages
             };
             context.setVariable("request.content", JSON.stringify(gemmaPayload));

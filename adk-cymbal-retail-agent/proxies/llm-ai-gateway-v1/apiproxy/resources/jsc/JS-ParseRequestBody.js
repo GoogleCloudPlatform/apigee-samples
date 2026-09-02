@@ -83,6 +83,14 @@ try {
         reqBody = {};
     }
 
+    // Detect inbound client request protocol (OpenAI vs native Vertex AI)
+    var pathSuffix = context.getVariable("proxy.pathsuffix") || "";
+    if (reqBody.messages || pathSuffix.indexOf("/chat") !== -1) {
+        context.setVariable("request_protocol", "openai");
+    } else {
+        context.setVariable("request_protocol", "vertex");
+    }
+
     var prompt = reqBody.prompt || "";
 
     // Support OpenAI /chat/completions payload structure
@@ -117,6 +125,7 @@ try {
     var llmModelHeader = context.getVariable("request.header.x-llm-model");
     var modelNameHeader = context.getVariable("request.header.x-model-name");
     var modelTierHeader = context.getVariable("request.header.x-model-tier");
+    var defaultLocalModel = context.getVariable("llm_local_model");
 
     // Order of precedence for explicit header model selection:
     // 1. x-llm-model header
@@ -167,7 +176,7 @@ try {
         } else if (bodyOrUriModel && bodyOrUriModel.toLowerCase().indexOf("gemma") !== -1) {
             model = bodyOrUriModel;
         } else {
-            model = "gemma-3-4b";
+            model = defaultLocalModel;
         }
     } else {
         // Standard model determination priority for Vertex AI:
