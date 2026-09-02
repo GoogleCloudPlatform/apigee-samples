@@ -103,11 +103,12 @@
     <BasePath>/v1/llm-ai-gateway</BasePath>
   </HTTPProxyConnection>
   <RouteRule name="gemma">
+    <!-- Condition>(route_to_gemma = "true") or (request.header.x-model-tier = "local") or (request.header.x-model-name Matches "*gemma*")</Condition-->
     <Condition>route_to_gemma = "true"</Condition>
     <TargetEndpoint>gemma</TargetEndpoint>
   </RouteRule>
   <RouteRule name="primary">
-    <Condition>ratelimit.LTQ-TokenEnforce.failed = false</Condition>
+    <Condition>( ratelimit.LTQ-TokenEnforce.failed = false ) or ( llm_token_quota_enforce = "false" )</Condition>
     <TargetEndpoint>primary</TargetEndpoint>
   </RouteRule>
   <RouteRule name="fallback">
