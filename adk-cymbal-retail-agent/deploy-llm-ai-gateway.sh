@@ -164,6 +164,86 @@ create_data_collector "dc_time_to_first_token_v2"    "INTEGER" "LLM Time to Firs
 create_data_collector "dc_total_token_count_v2"      "INTEGER" "LLM Total Token Count v2"
 
 # ==============================================================================
+# Step 2.5: Create Custom Analytics Report (llm-ai-gateway-report)
+# ==============================================================================
+echo ""
+echo "--- Step 2.5: Creating Custom Analytics Report (llm-ai-gateway-report) ---"
+REPORT_NAME="llm-ai-gateway-report"
+
+REPORT_PAYLOAD=$(jq -n \
+  --arg name "$REPORT_NAME" \
+  '{
+    name: $name,
+    displayName: $name,
+    dimensions: [
+      "api_product",
+      "dc_model_v2",
+      "developer_app"
+    ],
+    metrics: [
+      {
+        name: "dc_candidates_token_count_v2",
+        function: "sum"
+      },
+      {
+        name: "dc_prompt_token_count_v2",
+        function: "sum"
+      },
+      {
+        name: "dc_total_token_count_v2",
+        function: "sum"
+      },
+      {
+        name: "dc_time_to_first_token_v2",
+        function: "avg"
+      },
+      {
+        name: "dc_time_to_first_token_v2",
+        function: "max"
+      },
+      {
+        name: "dc_time_to_first_token_v2",
+        function: "min"
+      }
+    ]
+  }')
+
+echo "Checking if Custom Report $REPORT_NAME exists..."
+REPORT_HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+  -H "Authorization: Bearer $TOKEN" \
+  "https://apigee.googleapis.com/v1/organizations/$PROJECT_ID/reports/$REPORT_NAME")
+
+REPORT_TMP=$(mktemp)
+if [ "$REPORT_HTTP_STATUS" -eq 200 ]; then
+  echo "INFO: Custom Report $REPORT_NAME exists. Updating..."
+  REPORT_HTTP_RES=$(curl -s -X PUT \
+    "https://apigee.googleapis.com/v1/organizations/$PROJECT_ID/reports/$REPORT_NAME" \
+    -H "Authorization: Bearer $TOKEN" \
+    -H "Content-Type: application/json" \
+    -d "$REPORT_PAYLOAD" \
+    -o "$REPORT_TMP" \
+    -w "%{http_code}")
+else
+  echo "INFO: Custom Report $REPORT_NAME does not exist. Creating..."
+  REPORT_HTTP_RES=$(curl -s -X POST \
+    "https://apigee.googleapis.com/v1/organizations/$PROJECT_ID/reports" \
+    -H "Authorization: Bearer $TOKEN" \
+    -H "Content-Type: application/json" \
+    -d "$REPORT_PAYLOAD" \
+    -o "$REPORT_TMP" \
+    -w "%{http_code}")
+fi
+
+if [ "$REPORT_HTTP_RES" -lt 200 ] || [ "$REPORT_HTTP_RES" -ge 300 ]; then
+  echo "WARNING: Failed to configure Custom Report $REPORT_NAME (HTTP $REPORT_HTTP_RES)"
+  cat "$REPORT_TMP"
+  rm -f "$REPORT_TMP"
+else
+  rm -f "$REPORT_TMP"
+  echo "INFO: Custom Report $REPORT_NAME configured successfully."
+fi
+
+# ==============================================================================
 # Step 3: Create KeyValueMap (model-armor-config-v2) for Model Armor Template
 # ==============================================================================
 echo ""

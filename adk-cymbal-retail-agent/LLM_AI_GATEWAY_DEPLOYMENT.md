@@ -221,7 +221,7 @@ The deployment script [`deploy-llm-ai-gateway.sh`](deploy-llm-ai-gateway.sh) aut
      - **`roles/dlp.user` & `roles/dlp.reader`**: Required for Cloud DLP real-time PII de-identification.
      - **`roles/modelarmor.user` & `roles/modelarmor.viewer`**: Required for Model Armor responsible AI template execution.
    - Binds Google Cloud Apigee Service Agent (`service-${PROJECT_NUMBER}@gcp-sa-apigee.iam.gserviceaccount.com`) token creation and user permissions (`roles/iam.serviceAccountUser`, `roles/iam.serviceAccountTokenCreator`) so Apigee can impersonate this account at runtime.
-2. **Apigee X Data Collectors**:
+2. **Apigee X Data Collectors & Custom Analytics Report**:
    - Creates seven structured data collectors for LLM observability and reporting:
      - `dc_candidates_token_count_v2` (`INTEGER`)
      - `dc_cost_center_v2` (`STRING`)
@@ -230,6 +230,7 @@ The deployment script [`deploy-llm-ai-gateway.sh`](deploy-llm-ai-gateway.sh) aut
      - `dc_response_type_v2` (`STRING`)
      - `dc_time_to_first_token_v2` (`INTEGER`)
      - `dc_total_token_count_v2` (`INTEGER`)
+   - Creates or updates the Apigee Custom Analytics Report **`llm-ai-gateway-report`** configured with dimensions (`api_product`, `dc_model_v2`, `developer_app`) and metrics (`sum(dc_candidates_token_count_v2)`, `sum(dc_prompt_token_count_v2)`, `sum(dc_total_token_count_v2)`, `avg(dc_time_to_first_token_v2)`, `max(dc_time_to_first_token_v2)`, `min(dc_time_to_first_token_v2)`).
 3. **KeyValueMap (`model-armor-config-v2`)**:
    - Provisions an environment-scoped KVM `model-armor-config-v2` containing the `modelArmorTemplate` key configured via the `$MODEL_ARMOR_TEMPLATE` environment variable.
 4. **Shared Flows Deployment**:
@@ -284,6 +285,7 @@ Run the deployment script from the root repository directory:
 ### Expected Output
 - The script checks or creates the `apigee-vertex-ai-caller` service account and applies IAM policy bindings.
 - It verifies and creates all seven LLM `dc_*_v2` Data Collectors.
+- It provisions/updates the Custom Analytics Report `llm-ai-gateway-report`.
 - It creates or updates the `model-armor-config-v2` KVM with the `modelArmorTemplate` entry.
 - It deploys the `llm-modelarmor-dlp-v1` and `llm-routing-v2` shared flows.
 - It deploys the `llm-ai-gateway-v1` proxy.
@@ -294,9 +296,57 @@ Run the deployment script from the root repository directory:
 
 ## 5. Visualizing LLM AI Gateway Analytics
 
-Once requests are flowing through your deployed LLM AI Gateway, you can inspect real-time metrics and telemetry using the local Go analytics dashboard provided in `./llm-ai-gateway-analytics`.
+Once requests are flowing through your deployed LLM AI Gateway, you can inspect real-time metrics and telemetry using either the Apigee UI Custom Report or the local Go analytics dashboard provided in `./llm-ai-gateway-analytics`.
 
-### Step-by-Step Visualization
+### A. Apigee UI Custom Report (`llm-ai-gateway-report`)
+
+The deployment script automatically provisions the `llm-ai-gateway-report` Custom Report. If you need to construct or update it manually via curl, use the following request:
+
+```bash
+export PROJECT_ID="your-gcp-project-id"
+export TOKEN=$(gcloud auth print-access-token)
+
+curl -X POST "https://apigee.googleapis.com/v1/organizations/${PROJECT_ID}/reports" \
+  -H "Authorization: Bearer ${TOKEN}" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "llm-ai-gateway-report",
+    "displayName": "llm-ai-gateway-report",
+    "dimensions": [
+      "api_product",
+      "dc_model_v2",
+      "developer_app"
+    ],
+    "metrics": [
+      {
+        "name": "dc_candidates_token_count_v2",
+        "function": "sum"
+      },
+      {
+        "name": "dc_prompt_token_count_v2",
+        "function": "sum"
+      },
+      {
+        "name": "dc_total_token_count_v2",
+        "function": "sum"
+      },
+      {
+        "name": "dc_time_to_first_token_v2",
+        "function": "avg"
+      },
+      {
+        "name": "dc_time_to_first_token_v2",
+        "function": "max"
+      },
+      {
+        "name": "dc_time_to_first_token_v2",
+        "function": "min"
+      }
+    ]
+  }'
+```
+
+### B. Local Go Analytics Web UI
 
 1. Navigate to the analytics directory:
    ```bash

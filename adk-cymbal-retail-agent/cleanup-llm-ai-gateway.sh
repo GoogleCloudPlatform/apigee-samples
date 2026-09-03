@@ -140,6 +140,18 @@ for dc in "${DATA_COLLECTORS[@]}"; do
 done
 
 # ==============================================================================
+# Step 6.1: Delete Custom Analytics Report
+# ==============================================================================
+echo ""
+echo "--- Step 6.1: Deleting Custom Analytics Report (llm-ai-gateway-report) ---"
+REPORT_NAME="llm-ai-gateway-report"
+echo "Deleting Custom Report: $REPORT_NAME..."
+curl -s -X DELETE \
+  -H "Authorization: Bearer $TOKEN" \
+  "https://apigee.googleapis.com/v1/organizations/$PROJECT_ID/reports/$REPORT_NAME" >/dev/null 2>&1 || \
+  echo "INFO: Custom Report $REPORT_NAME deleted or does not exist."
+
+# ==============================================================================
 # Step 6.5: Delete KeyValueMap
 # ==============================================================================
 echo ""
