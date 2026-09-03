@@ -317,6 +317,20 @@ PRODUCT_PAYLOAD=$(jq -n \
           llmOperations: [
             {
               resource: "/**",
+              model: "gemma3:1b"
+            }
+          ],
+          llmTokenQuota: {
+            limit: "50000",
+            interval: "5",
+            timeUnit: "minute"
+          }
+        },
+        {
+          apiSource: "llm-ai-gateway-v1",
+          llmOperations: [
+            {
+              resource: "/**",
               model: "gemini-2.5-flash"
             }
           ],
