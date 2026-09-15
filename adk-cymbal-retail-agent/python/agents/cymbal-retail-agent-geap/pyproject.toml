@@ -7,7 +7,7 @@ authors = [
 ]
 license = {text = "Apache License 2.0"}
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = ">=3.11, <3.13"
 dependencies = [
     "google-adk[agent-identity,mcp] >= 2.3.0, < 3.0.0",
     "a2a-sdk >= 0.3.4, < 0.4.0",

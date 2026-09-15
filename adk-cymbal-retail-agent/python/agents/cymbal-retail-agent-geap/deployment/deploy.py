@@ -282,6 +282,7 @@ def deploy(args):
         "extra_packages": ["cymbal_retail_agent"],
         "requirements": requirements,
         "env_vars": env_vars,
+        "python_version": "3.12",
     }
 
     # Handle Gateways

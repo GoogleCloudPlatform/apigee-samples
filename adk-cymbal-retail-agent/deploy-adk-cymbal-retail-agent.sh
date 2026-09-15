@@ -494,7 +494,7 @@ echo "Configuring Agent Gateway Egress Endpoints and Rules..."
 echo "Syncing agent dependencies..."
 pushd python/agents/cymbal-retail-agent-geap >/dev/null
 if command -v uv &> /dev/null; then
-  uv sync
+  uv sync --python 3.12
 else
   # Fallback to standard pip if uv is not available
   if [ ! -d ".venv" ]; then
