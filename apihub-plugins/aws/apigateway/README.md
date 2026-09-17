@@ -158,8 +158,11 @@ gcloud secrets add-iam-policy-binding <SECRET_NAME> \
 plugin instance form in Step 3:
 
 ```
-projects/<GCP_PROJECT_ID>/secrets/<SECRET_NAME>/versions/latest
+projects/<GCP_PROJECT_ID>/secrets/<SECRET_NAME>/versions/<VERSION_NUMBER>
 ```
+
+Replace `<VERSION_NUMBER>` with the numeric version created in Step 2.2 (the
+first version is `1`; increment when you rotate the secret).
 
 ### Step 3: Create the API hub plugin instance
 
@@ -193,11 +196,17 @@ Field              | Value
 
 **Authentication:**
 
-Field                                        | Value
--------------------------------------------- | -----
-**Auth type**                                | **OAuth 2.0 Client Credentials** (required)
-**Client ID**                                | `<AWS_ACCESS_KEY_ID>` from Step 1
-**Client secret** (Secret Manager reference) | `projects/<GCP_PROJECT_ID>/secrets/<SECRET_NAME>/versions/latest` from Step 2.4
+Field         | Value
+------------- | -------------------------------------------
+**Auth type** | **OAuth 2.0 Client Credentials** (required)
+**Client ID** | `<AWS_ACCESS_KEY_ID>` from Step 1
+
+**Client secret** (Secret Manager reference) — paste the secret resource name
+captured in Step 2.4:
+
+```
+projects/<GCP_PROJECT_ID>/secrets/<SECRET_NAME>/versions/<VERSION_NUMBER>
+```
 
 **Sync frequency:**
 
@@ -339,6 +348,101 @@ Deploy any existing REST API in **API Gateway Console** to a new stage named
 -   The API should show up in API hub at
     `https://console.cloud.google.com/apigee/apihub?project=<GCP_PROJECT_ID>`
     with `realtime-test-1` as a deployment entry.
+
+## VPC Service Controls
+
+If the API hub project is inside a VPC Service Controls perimeter, the
+pull-based sync (Step 3) works without changes, but the real-time push path
+(Steps 4–9) is blocked. The Lambda makes three sequential calls, each with a
+different caller — the perimeter must permit all three:
+
+Service                         | Caller identity
+------------------------------- | -------------------------------------
+`sts.googleapis.com`            | None (WIF exchange runs before auth)
+`iamcredentials.googleapis.com` | Federated WIF principal
+`apihub.googleapis.com`         | Impersonated `aws-realtime-lambda` SA
+
+### Step V1: Add ingress rules to the perimeter
+
+Add three ingress rules to the perimeter that protects `<GCP_PROJECT_ID>`.
+
+In the
+[VPC Service Controls console](https://console.cloud.google.com/security/service-perimeter),
+edit the perimeter and add each rule under **Ingress policy → Add rule**:
+
+Rule | Identity                                                       | Service
+---- | -------------------------------------------------------------- | -------
+1    | **Identity type: Any identity**                                | `sts.googleapis.com`
+2    | `principalSet://…/attribute.aws_role/<lambda-assumed-role>`*   | `iamcredentials.googleapis.com`
+3    | `aws-realtime-lambda@<GCP_PROJECT_ID>.iam.gserviceaccount.com` | `apihub.googleapis.com`
+
+For every rule, set **Source: All sources** and **Project: Selected projects →
+`<GCP_PROJECT_ID>`**. The full Rule 2 identity string is:
+
+```
+principalSet://iam.googleapis.com/projects/<GCP_PROJECT_NUMBER>/locations/global/workloadIdentityPools/aws-realtime-pool/attribute.aws_role/arn:aws:sts::<AWS_ACCOUNT_ID>:assumed-role/aws-onramp-realtime-<AWS_REGION>-role
+```
+
+*If the console rejects the Rule 2 identity string, apply all three rules with
+gcloud instead — save the following under `status.ingressPolicies` in the
+perimeter YAML and run `gcloud access-context-manager perimeters replace-all`:
+
+```yaml
+- ingressFrom:
+    identityType: ANY_IDENTITY
+    sources: [{accessLevel: '*'}]
+  ingressTo:
+    operations:
+    - serviceName: sts.googleapis.com
+      methodSelectors: [{method: '*'}]
+    resources: [projects/<GCP_PROJECT_NUMBER>]
+- ingressFrom:
+    identities:
+    - principalSet://iam.googleapis.com/projects/<GCP_PROJECT_NUMBER>/locations/global/workloadIdentityPools/aws-realtime-pool/attribute.aws_role/arn:aws:sts::<AWS_ACCOUNT_ID>:assumed-role/aws-onramp-realtime-<AWS_REGION>-role
+    sources: [{accessLevel: '*'}]
+  ingressTo:
+    operations:
+    - serviceName: iamcredentials.googleapis.com
+      methodSelectors: [{method: '*'}]
+    resources: [projects/<GCP_PROJECT_NUMBER>]
+- ingressFrom:
+    identities:
+    - serviceAccount:aws-realtime-lambda@<GCP_PROJECT_ID>.iam.gserviceaccount.com
+    sources: [{accessLevel: '*'}]
+  ingressTo:
+    operations:
+    - serviceName: apihub.googleapis.com
+      methodSelectors: [{method: '*'}]
+    resources: [projects/<GCP_PROJECT_NUMBER>]
+```
+
+Rule 1 uses **Any identity** because the STS token exchange has no GCP identity
+to match against yet. IAM still enforces the real access control — only signed
+AWS tokens matching your WIF provider succeed, and the resulting token can only
+impersonate the SA bound in Step 5.3.
+
+Perimeter changes take 1–5 minutes to propagate.
+
+### Step V2: Shorten `google.subject` if the STS 127-byte limit trips
+
+If CloudWatch shows `The size of mapped attribute google.subject exceeds the 127
+bytes limit`, the Lambda's full assumed-role ARN (with session suffix) is too
+long. Change `google.subject` to use just the role portion.
+
+In the
+[Workload Identity Federation console](https://console.cloud.google.com/iam-admin/workload-identity-pools),
+open pool `aws-realtime-pool` → provider `aws-realtime-provider` → **Edit
+provider → Attribute mapping**, and set both `google.subject` and
+`attribute.aws_role` to this expression:
+
+```
+assertion.arn.contains('assumed-role') ? assertion.arn.extract('{account_arn}assumed-role/') + 'assumed-role/' + assertion.arn.extract('assumed-role/{role_name}/') : assertion.arn
+```
+
+Both attributes now resolve to
+`arn:aws:sts::<AWS_ACCOUNT_ID>:assumed-role/aws-onramp-realtime-<AWS_REGION>-role`
+— under 127 bytes and matching the WIF binding from Step 5.3 and the Rule 2
+identity above. WIF changes take effect in seconds.
 
 ## Files Included
 
