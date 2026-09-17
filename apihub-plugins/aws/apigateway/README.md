@@ -40,9 +40,7 @@ There are two independent ingestion paths that layer on top of each other:
     to 12 whitelisted API Gateway control-plane events on **EventBridge**
     (create / update / delete for APIs, stages, and deployments across REST v1
     and HTTP/WebSocket v2) enriches each event with the current API definition
-    from AWS and posts it to API hub's
-    `regions/*/plugins/*/instances/*:collectApiData` endpoint. Typical
-    end-to-end latency is 30–60 seconds.
+    from AWS and posts it to API hub's **collectApiData** action.
 
 Both paths write to the **same** plugin instance, so scheduled and real-time
 updates converge on one catalog entry per API — enable the real-time path later
