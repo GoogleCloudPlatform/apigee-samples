@@ -526,23 +526,116 @@ exception message. Common causes:
 -   Service account missing `roles/apihub.pluginAdmin` on the API hub project
     (revisit Step 4).
 -   **VPC Service Controls violation (`HTTP 403`, `type: VPC_SERVICE_CONTROLS`,
-    `reason: SECURITY_POLICY_VIOLATED`).** If the API hub project sits in a VPC
-    Service Perimeter, `iamcredentials.googleapis.com` and
-    `apihub.googleapis.com` are usually in its restricted-services list, so the
-    Function's WIF impersonation call and the subsequent `CollectApiData` are
-    both denied. Fix: add a perimeter **ingress rule** that permits the Azure
-    caller. Grab the `vpcServiceControlsUniqueIdentifier` from the exception,
-    paste it into Cloud Console → **Security → VPC Service Controls →
-    Troubleshoot** to identify the perimeter, then add an ingress rule with
-    **identities** = the WIF principal
-    (`principal://iam.googleapis.com/projects/<GCP_PROJECT_NUMBER>/locations/global/workloadIdentityPools/apihub-azure-onramp-pool/subject/<AZURE_MI_OBJECT_ID>`)
-    **and** the impersonated SA
-    (`serviceAccount:apihub-azure-onramp-sa@<GCP_PROJECT_ID>.iam.gserviceaccount.com`);
-    **source** = `accessLevel: '*'` (any); **target operations** =
-    `iamcredentials.googleapis.com` and `apihub.googleapis.com`. Both identities
-    are needed in one rule because impersonation is called by the federated
-    principal, and the subsequent `CollectApiData` is called by the impersonated
-    SA.
+    `reason: SECURITY_POLICY_VIOLATED`).** The API hub project sits in a service
+    perimeter that does not yet permit the Function. See
+    [VPC Service Controls](#vpc-service-controls) for the three ingress rules
+    the push path needs.
+
+## VPC Service Controls
+
+If the API hub project is inside a VPC Service Controls perimeter, the
+pull-based sync (Step 3) works without changes, but the real-time push path
+(Steps 4–9) is blocked. The Function makes three sequential Google API calls,
+each with a different caller — the perimeter must permit all three:
+
+Service                         | Caller identity
+------------------------------- | ----------------------------------------
+`sts.googleapis.com`            | None (WIF exchange runs before auth)
+`iamcredentials.googleapis.com` | Federated WIF principal
+`apihub.googleapis.com`         | Impersonated `apihub-azure-onramp-sa` SA
+
+The managed-identity token call that precedes them is served by the Azure
+platform (`IDENTITY_ENDPOINT`), so it never crosses the perimeter.
+
+### Step V1: Add ingress rules to the perimeter
+
+Add three ingress rules to the perimeter that protects `<GCP_PROJECT_ID>`.
+
+In the
+[VPC Service Controls console](https://console.cloud.google.com/security/service-perimeter),
+edit the perimeter and add each rule under **Ingress policy → Add rule**:
+
+Rule | Identity                                                          | Service
+---- | ----------------------------------------------------------------- | -------
+1    | **Identity type: Any identity**                                   | `sts.googleapis.com`
+2    | `principal://…/subject/<AZURE_MI_OBJECT_ID>` (full string below)  | `iamcredentials.googleapis.com`
+3    | `apihub-azure-onramp-sa@<GCP_PROJECT_ID>.iam.gserviceaccount.com` | `apihub.googleapis.com`
+
+For every rule, set **Source: All sources** and **Project: Selected projects →
+`<GCP_PROJECT_ID>`**. The full Rule 2 identity string is:
+
+```
+principal://iam.googleapis.com/projects/<GCP_PROJECT_NUMBER>/locations/global/workloadIdentityPools/apihub-azure-onramp-pool/subject/<AZURE_MI_OBJECT_ID>
+```
+
+`<AZURE_MI_OBJECT_ID>` is the same value bound as `subject` in Step 5.3; read it
+from the Bicep output in Step 6.4. Note the prefix is `principal://` (a single
+workload identity), not `principalSet://`.
+
+If the console rejects the Rule 2 identity string, apply all three rules with
+gcloud instead — save the following under `status.ingressPolicies` in the
+perimeter YAML and run `gcloud access-context-manager perimeters replace-all`:
+
+```yaml
+- ingressFrom:
+    identityType: ANY_IDENTITY
+    sources: [{accessLevel: '*'}]
+  ingressTo:
+    operations:
+    - serviceName: sts.googleapis.com
+      methodSelectors: [{method: '*'}]
+    resources: [projects/<GCP_PROJECT_NUMBER>]
+- ingressFrom:
+    identities:
+    - principal://iam.googleapis.com/projects/<GCP_PROJECT_NUMBER>/locations/global/workloadIdentityPools/apihub-azure-onramp-pool/subject/<AZURE_MI_OBJECT_ID>
+    sources: [{accessLevel: '*'}]
+  ingressTo:
+    operations:
+    - serviceName: iamcredentials.googleapis.com
+      methodSelectors: [{method: '*'}]
+    resources: [projects/<GCP_PROJECT_NUMBER>]
+- ingressFrom:
+    identities:
+    - serviceAccount:apihub-azure-onramp-sa@<GCP_PROJECT_ID>.iam.gserviceaccount.com
+    sources: [{accessLevel: '*'}]
+  ingressTo:
+    operations:
+    - serviceName: apihub.googleapis.com
+      methodSelectors: [{method: '*'}]
+    resources: [projects/<GCP_PROJECT_NUMBER>]
+```
+
+Rule 1 uses **Any identity** because the STS token exchange has no GCP identity
+to match against yet. IAM still enforces the real access control — only tokens
+whose issuer and audience match the provider configured in Step 5.2 are
+exchanged, and the result can only impersonate the SA bound in Step 5.3.
+
+Perimeter changes take 1–5 minutes to propagate.
+
+### Step V2: If your organization disallows `ANY_IDENTITY`
+
+Some organizations forbid `ANY_IDENTITY` in ingress rules. Replace Rule 1 with
+an [access level](https://console.cloud.google.com/access-context-manager) that
+matches the Function's outbound IP addresses, and set that access level as the
+`sources` entry instead of `'*'`.
+
+Read the addresses from **Function App → Networking → Outbound IP addresses**
+(or `az functionapp show --query possibleOutboundIpAddresses`). On a Consumption
+(Y1) plan this set is shared and can change when the app moves scale units, so
+prefer an Elastic Premium plan or a NAT gateway with a static egress IP if you
+depend on it.
+
+### Step V3: Confirm a denial is really VPC Service Controls
+
+A perimeter denial surfaces as `HTTP 403` with `type: VPC_SERVICE_CONTROLS` and
+`reason: SECURITY_POLICY_VIOLATED` in the Function's **Monitor** output, not as
+a permission error. Copy the `vpcServiceControlsUniqueIdentifier` from the
+exception and paste it into Cloud Console → **Security → VPC Service Controls →
+Troubleshoot** to identify which perimeter and which service blocked the call.
+
+Which service appears in the violation tells you which rule is missing: a denial
+on `sts.googleapis.com` means Rule 1, `iamcredentials.googleapis.com` means Rule
+2, and `apihub.googleapis.com` means Rule 3.
 
 ## Files Included
 
