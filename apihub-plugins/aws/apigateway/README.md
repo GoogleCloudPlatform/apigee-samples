@@ -16,11 +16,41 @@
 
 # Sync API metadata from AWS API Gateway to Google Cloud Apigee API hub
 
-This sample covers the one-time plugin instance setup that seeds API hub with
-all existing APIs and supports on-demand re-syncs, plus an optional AWS Lambda
-deployment that pushes individual API Gateway control-plane events to API hub
-via EventBridge for continuous synchronization. Authentication to Google Cloud
-uses Workload Identity Federation — no long-lived credentials are stored in AWS.
+[Apigee API hub](https://cloud.google.com/apigee/docs/apihub/what-is-api-hub)
+offers a [plugin framework](https://cloud.google.com/apigee/docs/apihub/plugins)
+for ingesting API data from various sources. This sample walks through the
+built-in **AWS API Gateway** plugin (`system-aws-apigateway`) end to end, plus
+an optional AWS Lambda deployment that pushes individual API Gateway
+control-plane events to API hub in near real time via EventBridge.
+
+Authentication to Google Cloud uses
+[Workload Identity Federation](https://cloud.google.com/iam/docs/workload-identity-federation)
+— no long-lived Google credentials are stored in AWS.
+
+## How it works
+
+There are two independent ingestion paths that layer on top of each other:
+
+1.  **Scheduled pull (Steps 1–3, always required).** You create one API hub
+    plugin instance per (AWS account, AWS region) pair, giving it read-only IAM
+    credentials for API Gateway. API hub runs an initial backfill on creation
+    and then re-syncs every 6 hours by default. You can also click **Run** on
+    the plugin instance to trigger a sync on demand.
+2.  **Real-time push (optional, Steps 4–9).** An AWS Lambda function subscribed
+    to 12 whitelisted API Gateway control-plane events on **EventBridge**
+    (create / update / delete for APIs, stages, and deployments across REST v1
+    and HTTP/WebSocket v2) enriches each event with the current API definition
+    from AWS and posts it to API hub's
+    `regions/*/plugins/*/instances/*:collectApiData` endpoint. Typical
+    end-to-end latency is 30–60 seconds.
+
+Both paths write to the **same** plugin instance, so scheduled and real-time
+updates converge on one catalog entry per API — enable the real-time path later
+without redoing the pull setup.
+
+The Lambda is written in Node.js 20 with **zero npm dependencies** — it uses
+only the AWS SDK bundled with the Lambda runtime and the `node:crypto` stdlib
+for SigV4 signing.
 
 ## Prerequisites
 
@@ -446,9 +476,14 @@ identity above. WIF changes take effect in seconds.
 
 ## Files Included
 
--   `cloudformation.yaml`: AWS infrastructure template (Lambda + IAM role
-    +   EventBridge rule).
--   `index.mjs`: The AWS Lambda handler (Node.js 20+, zero npm dependencies).
+-   `README.md` — this file: end-to-end deploy runbook using the AWS and GCP
+    consoles.
+-   `cloudformation.yaml` — one-per-region AWS stack: Lambda function, IAM
+    execution role, EventBridge rule (with the 12-event filter), and the Lambda
+    invoke permission.
+-   `index.mjs` — the AWS Lambda handler (Node.js 20+, zero npm dependencies).
+    Parses each EventBridge event, fetches the affected API's current definition
+    from AWS API Gateway, and posts it to API hub's `:collectApiData` endpoint.
 
 ## Disclaimer
 
