@@ -39,15 +39,12 @@ credentials are stored in Azure.
     holding the APIM (to deploy resources), plus `User Access Administrator` (to
     assign the APIM `Reader` role), and `Application Administrator` at the Entra
     tenant level (to create the App Registration).
-5.  **Azure subscription tier:** a **Pay-As-You-Go** or other paid subscription.
-    **Free / Trial subscriptions cannot deploy this sample** — they ship with
-    `0` quota for the Consumption Plan (Y1) SKU that the Function App in
-    [Step 6](#step-6-deploy-the-bicep-template) requires, and the deploy fails
-    preflight with `SubscriptionIsOverQuotaForSku`. Upgrade via **Subscriptions
-    → your subscription → Overview → Upgrade** before starting; Pay-As-You-Go
-    grants the default Y1 quota automatically. If the upgrade does not raise the
-    Y1 limit for your region, see [Step 6.0](#step-6-deploy-the-bicep-template)
-    for how to request it explicitly.
+5.  **Consumption Plan (Y1) quota:** the Function App in
+    [Step 6](#step-6-deploy-the-bicep-template) runs on the Consumption Plan
+    (Y1) SKU. If the subscription has `0` Y1 quota in the target region, the
+    deploy fails preflight with `SubscriptionIsOverQuotaForSku`. Check **Quotas
+    → App Service** for your region before starting, and see
+    [Step 6.0](#step-6-deploy-the-bicep-template) for how to request quota.
 
 ## Values to gather before starting
 
@@ -334,17 +331,16 @@ Portal's "Build your own template in the editor" pane accepts only ARM JSON, but
 `.bicep` file directly.
 
 > If the deploy fails with `SubscriptionIsOverQuotaForSku: Current Limit (Y1
-> VMs): 0`, you are on a Free / Trial subscription. Upgrade to Pay-As-You-Go per
-> [Prerequisites](#prerequisites) item 5 and re-run — the upgrade grants Y1
-> quota automatically in most tenants. If it does not, follow Step 6.0 below.
+> VMs): 0`, the subscription has no Consumption Plan (Y1) quota in this region.
+> Follow Step 6.0 below to request it.
 
-**6.0** (Only if the subscription upgrade did not grant Y1 quota in your
-region.) Request Y1 quota explicitly: in the Azure Portal, search for
-**Quotas**, select **App Service** (older tenants list it under **Compute**),
-filter by **Provider = Microsoft.Web** and **Region = `<AZURE_APIM_REGION>`**,
-find **Dynamic App Service Plans**, tick the row, and submit **New Quota
-Request** for `1` (or higher for headroom). Small requests typically resolve in
-a few hours; worst case ~1 business day.
+**6.0** (Only if the deploy failed with `SubscriptionIsOverQuotaForSku`.)
+Request Y1 quota explicitly: in the Azure Portal, search for **Quotas**, select
+**App Service** (older tenants list it under **Compute**), filter by
+**Provider = Microsoft.Web** and **Region = `<AZURE_APIM_REGION>`**, find
+**Dynamic App Service Plans**, tick the row, and submit **New Quota Request**
+for `1` (or higher for headroom). Small requests typically resolve in a few
+hours; worst case ~1 business day.
 
 **6.1** In the Azure Portal, click the Cloud Shell icon (`>_`) in the top nav
 bar and pick **Bash**. On first use, accept the default when prompted to create
