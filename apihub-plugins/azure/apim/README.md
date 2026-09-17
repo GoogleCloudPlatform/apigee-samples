@@ -16,12 +16,113 @@
 
 # Sync API metadata from Azure API Management to Google Cloud Apigee API hub
 
-This sample covers the one-time plugin instance setup that seeds API hub with
-all existing APIs and supports on-demand re-syncs, plus an optional Azure
-Function deployment that pushes individual APIM control-plane events to API hub
-via Event Grid for continuous synchronization. Authentication for the real-time
-Function to Google Cloud uses Workload Identity Federation — no long-lived
-credentials are stored in Azure.
+[Apigee API hub](https://cloud.google.com/apigee/docs/apihub/what-is-api-hub)
+ingests API metadata through a
+[plugin](https://cloud.google.com/apigee/docs/apihub/plugins) framework. This
+sample connects
+[Azure API Management](https://learn.microsoft.com/en-us/azure/api-management/api-management-key-concepts)
+(APIM) to it in two complementary ways:
+
+-   **Scheduled and on-demand sync** through the built-in `system-azure-apim`
+    plugin instance, which reads the APIM control plane over Azure Resource
+    Manager and seeds API hub with every existing API (Steps 1-3).
+-   **Real-time push** through an Azure Function that subscribes to APIM
+    control-plane events over
+    [Event Grid](https://learn.microsoft.com/en-us/azure/api-management/how-to-event-grid)
+    and forwards each change to API hub as it happens (Steps 4-9, optional).
+
+The Function is written in [Node.js](https://nodejs.org/) 20 and runs on an
+Azure Functions Consumption plan; its supporting infrastructure is provisioned
+from the
+[Bicep](https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/overview)
+template in this directory. It authenticates to Google Cloud with
+[Workload Identity Federation](https://cloud.google.com/iam/docs/workload-identity-federation),
+so no long-lived Google credentials are stored in Azure.
+
+## How it works
+
+Both paths write the same API hub resources. The push path exists only to
+shorten the delay between a change in APIM and its appearance in the catalog —
+it is not required for correctness, and Steps 1-3 are useful on their own.
+
+```mermaid
+flowchart LR
+  subgraph AZ["Azure"]
+    APIM["APIM control plane"]
+    EG["Event Grid"]
+    FN["Function: onrampApimSync"]
+  end
+  subgraph GC["Google Cloud"]
+    SM["Secret Manager"]
+    PI["Plugin instance: system-azure-apim"]
+    AH["API hub catalog"]
+  end
+  SM -->|client secret| PI
+  APIM -->|ARM read| PI
+  PI -->|scheduled / on-demand sync| AH
+  APIM -->|API change event| EG
+  EG --> FN
+  FN -->|collectApiData| AH
+```
+
+-   The plugin instance reads APIM over Azure Resource Manager as an Entra app
+    registration. That registration's client secret is held in
+    [Secret Manager](https://cloud.google.com/security/products/secret-manager)
+    and read by API hub's service agent, so the secret never leaves Google
+    Cloud.
+-   The Function receives one Event Grid event per API change, fetches that
+    API's metadata and specification from APIM, and calls `collectApiData`.
+-   Reaching Google Cloud takes three chained calls: an Azure managed-identity
+    token, a Workload Identity Federation exchange at `sts.googleapis.com`, and
+    service account impersonation at `iamcredentials.googleapis.com`. If a
+    perimeter protects the API hub project, see
+    [VPC Service Controls](#vpc-service-controls).
+
+## What gets synchronized
+
+Each APIM API becomes one API hub API, carrying its APIM version (or a synthetic
+`v1` when the API has none), a deployment that links back to the APIM instance,
+and a specification where APIM exposes one:
+
+APIM API type | API hub API style | Specification fetched
+------------- | ----------------- | -------------------------------------
+`http`        | `rest`            | OpenAPI, via the APIM export endpoint
+`soap`        | `soap`            | WSDL, via the APIM export endpoint
+`grpc`        | `grpc`            | Protobuf, from the inline schema
+`graphql`     | `graphql`         | GraphQL SDL, from the inline schema
+`odata`       | `odata`           | OData EDMX, from the inline schema
+`websocket`   | `websocket`       | None — cataloged as metadata only
+`a2a`         | `a2a`             | Agent Card, fetched from the gateway
+
+## Avoiding duplicate APIs
+
+API hub identifies an imported API by its `original_id`. Both paths derive that
+id the same way, from the APIM resource path:
+
+```
+subscriptions/<subscription>/resourceGroups/<group>/service/<service>/apis/<apiId>
+```
+
+Versions and specs extend that same prefix. Because the ids agree, a pushed
+change updates the API the scheduled sync would have written instead of creating
+a second copy of it.
+
+One detail matters if you modify the Function: it strips APIM's `;rev=N`
+revision suffix before building the id, and does so case-insensitively. Event
+Grid emits `;Rev=N` while Resource Manager emits `;rev=N`, so a case-sensitive
+match would leave the suffix attached and make every pushed API look like a new
+one to the next scheduled sync.
+
+## Limitations
+
+-   **A2A (agentic) APIs arrive only on the push path.** The default
+    `APIM_API_VERSION` of `2024-05-01` models six typed API types and does not
+    return A2A, so the scheduled sync does not see them. Set a 2024-06 or later
+    preview API version if you need A2A on the pull path.
+-   **WebSocket APIs are cataloged without a specification**, because APIM
+    exposes none for them.
+-   The Function App needs Consumption Plan (Y1) quota in the target region; see
+    [Prerequisites](#prerequisites) item 5.
 
 ## Prerequisites
 
