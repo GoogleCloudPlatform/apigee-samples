@@ -64,7 +64,8 @@ export CLIENT_SECRET="${CLIENT_SECRET:-$APISECRET}"
 
 # Fetch LLM AI Gateway App credentials dynamically
 if [ -z "$LLM_APIKEY" ]; then
-    if command -v apigeecli &>/dev/null && [ -n "$APP_DEFAULT_TOKEN" ]; then
+    LLM_APIKEY=$(gcloud secrets versions access latest --secret="llm-ai-gateway-client-id" --project="$PROJECT_ID" 2>/dev/null || true)
+    if [ -z "$LLM_APIKEY" ] && command -v apigeecli &>/dev/null && [ -n "$APP_DEFAULT_TOKEN" ]; then
         LLM_APP_JSON=$(apigeecli apps get --name "llm-ai-gateway-app" --org "$PROJECT_ID" --token "$APP_DEFAULT_TOKEN" --disable-check 2>/dev/null || true)
         if [ -n "$LLM_APP_JSON" ]; then
             LLM_APIKEY=$(echo "$LLM_APP_JSON" | jq -r '.[0].credentials[0].consumerKey // empty' 2>/dev/null || true)

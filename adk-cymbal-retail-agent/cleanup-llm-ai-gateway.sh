@@ -189,6 +189,16 @@ echo "Deleting Service Account: $SERVICE_ACCOUNT_NAME..."
 gcloud iam service-accounts delete "$SA_EMAIL" --project "$PROJECT_ID" --quiet >/dev/null 2>&1 || \
   echo "INFO: Service Account $SERVICE_ACCOUNT_NAME deleted or does not exist."
 
+# ==============================================================================
+# Step 8: Delete Secret Manager Secret
+# ==============================================================================
+echo ""
+echo "--- Step 8: Deleting Secret Manager Secret (llm-ai-gateway-client-id) ---"
+SECRET_ID="llm-ai-gateway-client-id"
+echo "Deleting Secret: $SECRET_ID..."
+gcloud secrets delete "$SECRET_ID" --project "$PROJECT_ID" --quiet >/dev/null 2>&1 || \
+  echo "INFO: Secret $SECRET_ID deleted or does not exist."
+
 echo ""
 echo "===================================================================="
 echo "SUCCESS: LLM AI Gateway Cleanup Completed!"

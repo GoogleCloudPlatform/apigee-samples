@@ -484,6 +484,23 @@ apigeecli apps create \
 
 # Retrieve and display the API Consumer Key
 CONSUMER_KEY=$(apigeecli apps get --name "$APP_NAME" --org "$PROJECT_ID" --token "$TOKEN" --disable-check | jq -r '.[0].credentials[0].consumerKey')
+
+# ==============================================================================
+# Step 8: Store Application Client ID in Secret Manager for Downstream Agents
+# ==============================================================================
+echo ""
+echo "--- Step 8: Storing llm-ai-gateway-app Client ID in Secret Manager ---"
+SECRET_ID="llm-ai-gateway-client-id"
+if [ -n "$CONSUMER_KEY" ] && [ "$CONSUMER_KEY" != "null" ]; then
+  echo "Storing $SECRET_ID in Secret Manager..."
+  gcloud services enable secretmanager.googleapis.com --project "$PROJECT_ID" 2>/dev/null || true
+  gcloud secrets create "$SECRET_ID" --replication-policy="automatic" --project "$PROJECT_ID" 2>/dev/null || true
+  echo -n "$CONSUMER_KEY" | gcloud secrets versions add "$SECRET_ID" --project "$PROJECT_ID" --data-file=- || true
+  echo "INFO: Secret $SECRET_ID stored successfully in Secret Manager."
+else
+  echo "WARNING: Could not retrieve CONSUMER_KEY for $APP_NAME. Secret $SECRET_ID not stored."
+fi
+
 if [ -n "$CONSUMER_KEY" ] && [ "$CONSUMER_KEY" != "null" ]; then
   echo ""
   echo "===================================================================="
@@ -493,6 +510,7 @@ if [ -n "$CONSUMER_KEY" ] && [ "$CONSUMER_KEY" != "null" ]; then
   echo "Developer Email : $DEV_EMAIL"
   echo "API Product     : $PRODUCT_NAME"
   echo "Consumer Key    : $CONSUMER_KEY"
+  echo "Secret Name     : $SECRET_ID"
   echo "===================================================================="
 else
   echo ""

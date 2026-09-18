@@ -36,13 +36,21 @@ MODEL_NAME = os.getenv("MODEL_NAME", "gemma3:4b")
 APIGEE_HOSTNAME = os.getenv("APIGEE_HOSTNAME")
 APIGEE_LLM = os.getenv("APIGEE_LLM", "/v1/llm-ai-gateway")
 DEFAULT_MODEL_TIER = os.getenv("DEFAULT_MODEL_TIER", "local")
-SECRET = f"projects/{PROJECT_ID}/secrets/cymbal-retail-client-id/versions/latest"
+SECRET = os.getenv(
+    "LLM_GATEWAY_SECRET",
+    f"projects/{PROJECT_ID}/secrets/llm-ai-gateway-client-id/versions/latest",
+)
 
 secret_manager_client = SecretManagerClient()
 try:
     client_id = secret_manager_client.get_secret(SECRET)
 except Exception:
-    client_id = os.getenv("APIKEY", "")
+    try:
+        client_id = secret_manager_client.get_secret(
+            f"projects/{PROJECT_ID}/secrets/cymbal-retail-client-id/versions/latest"
+        )
+    except Exception:
+        client_id = os.getenv("APIKEY", "")
 
 # Configure Apigee LLM client with local Gemma tier routing
 custom_headers = {"x-apikey": client_id}

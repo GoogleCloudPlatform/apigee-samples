@@ -245,6 +245,8 @@ The deployment script [`deploy-llm-ai-gateway.sh`](deploy-llm-ai-gateway.sh) aut
      - **gemini-2.5-flash**: `POST` operations limited to **100,000 tokens every 5 minutes**.
 7. **Application Provisioning (`llm-ai-gateway-app`)**:
    - Connects the developer and API product to issue an API consumer key.
+8. **Secret Manager Secret Storage (`llm-ai-gateway-client-id`)**:
+   - Stores the generated `llm-ai-gateway-app` consumer key in Google Cloud Secret Manager for automated, secure authentication by downstream agents.
 
 ---
 
@@ -291,6 +293,7 @@ Run the deployment script from the root repository directory:
 - It deploys the `llm-ai-gateway-v1` proxy.
 - It configures the API Product `llm-ai-gateway-product` via Apigee REST API v1.
 - It creates the `llm-ai-gateway-app` developer application and prints out the generated **API Key (`consumerKey`)** at the console summary.
+- It provisions/updates the Secret Manager secret `llm-ai-gateway-client-id` containing the consumer key for downstream agent authentication.
 
 ---
 
