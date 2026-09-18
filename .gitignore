@@ -11,7 +11,9 @@
 .settings
 .project
 .classpath
-.vscode
+.vscode/*
+!.vscode/tasks.json
+!.vscode/settings.json
 .DS_Store
 *.jar
 **/env1.sh

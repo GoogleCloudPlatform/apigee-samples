@@ -1,0 +1,15 @@
+{
+  "python.terminal.activateEnvironment": false,
+  "python.defaultInterpreterPath": "${workspaceFolder}/workspace/cymbal-retail-agent/.venv/bin/python",
+  "geminicodeassist.enable": false,
+  "terminal.integrated.defaultProfile.linux": "bash",
+  "terminal.integrated.profiles.linux": {
+    "bash": {
+      "path": "/bin/bash",
+      "icon": "terminal-bash"
+    }
+  },
+  "terminal.integrated.env.linux": {
+    "PATH": "${env:PATH}:${env:HOME}/.local/bin:${env:HOME}/.apigeecli/bin"
+  }
+}
