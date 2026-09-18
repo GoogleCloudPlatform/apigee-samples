@@ -130,6 +130,10 @@ import_and_deploy_sharedflow() {
 
 import_and_deploy_proxy() {
   local proxy=$1
+  if [ ! -d "proxies/${proxy}" ]; then
+    echo "Skipping ${proxy}: directory not found."
+    return 0
+  fi
   if is_proxy_deployed "$proxy"; then
     echo "Proxy $proxy is already deployed to $APIGEE_ENV. Skipping."
     return 0
@@ -144,7 +148,7 @@ import_and_deploy_proxy() {
   if [ -d "tmp/${proxy}/apiproxy/resources/oas" ]; then
     sed_i "s/APIGEE_HOST/$APIGEE_HOST/g" tmp/${proxy}/apiproxy/resources/oas/*.yaml 2>/dev/null || true
   fi
-  if [ -d "tmp/${proxy}/apiproxy/resources/properties" ]; then
+  if [ -d "tmp/${proxy}/apiproxy/resources/properties" ] && [ "$proxy" != "llm-ai-gateway-v1" ]; then
     echo "$PRE_PROP" > "tmp/${proxy}/apiproxy/resources/properties/vertex_config.properties" 2>/dev/null || true
   fi
   if [ -d "tmp/${proxy}/apiproxy/targets" ]; then

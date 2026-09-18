@@ -262,6 +262,95 @@ apigeecli kvms entries create --map "model-armor-config-v2" \
   --env "$APIGEE_ENV" --org "$PROJECT_ID" --token "$TOKEN"
 
 # ==============================================================================
+# Step 3.5: Resolve Vertex AI Vector Search & Gemma Target Configuration
+# ==============================================================================
+echo ""
+echo "--- Step 3.5: Resolving Vertex AI Vector Search & Gemma Endpoints ---"
+
+# Discover Vector Search Index Endpoint
+echo "Discovering Vector Search Index Endpoint in project $PROJECT_ID ($REGION)..."
+INDEX_ENDPOINT_JSON=$(gcloud ai index-endpoints list --project="$PROJECT_ID" --region="$REGION" --format="json" 2>/dev/null || echo "[]")
+INDEX_ENDPOINT_ID=$(echo "$INDEX_ENDPOINT_JSON" | jq -r '.[] | select(.displayName=="workshop-index-endpoint") | .name' 2>/dev/null | head -n1 | awk -F'/' '{print $NF}')
+if [ -z "$INDEX_ENDPOINT_ID" ]; then
+  INDEX_ENDPOINT_ID=$(echo "$INDEX_ENDPOINT_JSON" | jq -r '.[0].name // empty' 2>/dev/null | awk -F'/' '{print $NF}')
+fi
+
+INDEX_ENDPOINT_DESC="{}"
+INDEX_ENDPOINT_DNS=""
+if [ -n "$INDEX_ENDPOINT_ID" ]; then
+  echo "INFO: Found Vector Search Index Endpoint ID: $INDEX_ENDPOINT_ID"
+  INDEX_ENDPOINT_DESC=$(gcloud ai index-endpoints describe "$INDEX_ENDPOINT_ID" --project="$PROJECT_ID" --region="$REGION" --format="json" 2>/dev/null || echo "{}")
+  INDEX_ENDPOINT_DOMAIN=$(echo "$INDEX_ENDPOINT_DESC" | jq -r '.publicEndpointDomainName // empty' 2>/dev/null)
+  if [ -n "$INDEX_ENDPOINT_DOMAIN" ]; then
+    INDEX_ENDPOINT_DNS=$(echo "$INDEX_ENDPOINT_DOMAIN" | cut -d'.' -f1)
+    echo "INFO: Resolved Vector Search Public DNS Prefix: $INDEX_ENDPOINT_DNS"
+  fi
+fi
+
+# Discover Vector Search Indexes (Routing and Cache)
+echo "Discovering Vector Search Indexes in project $PROJECT_ID ($REGION)..."
+INDEXES_JSON=$(gcloud ai indexes list --project="$PROJECT_ID" --region="$REGION" --format="json" 2>/dev/null || echo "[]")
+ROUTING_INDEX_ID=$(echo "$INDEXES_JSON" | jq -r 'sort_by(.createTime) | reverse | .[] | select(.displayName=="semantic-routing-index") | .name' 2>/dev/null | head -n1 | awk -F'/' '{print $NF}')
+CACHE_INDEX_ID=$(echo "$INDEXES_JSON" | jq -r 'sort_by(.createTime) | reverse | .[] | select(.displayName=="semantic-cache-index") | .name' 2>/dev/null | head -n1 | awk -F'/' '{print $NF}')
+
+[ -n "$ROUTING_INDEX_ID" ] && echo "INFO: Found Semantic Routing Index ID: $ROUTING_INDEX_ID" || echo "INFO: Semantic Routing Index not yet found in project."
+[ -n "$CACHE_INDEX_ID" ] && echo "INFO: Found Semantic Cache Index ID: $CACHE_INDEX_ID" || echo "INFO: Semantic Cache Index not yet found in project."
+
+# Discover Deployed Index IDs on Endpoint
+ROUTING_DEPLOYED_INDEX_ID=""
+CACHE_DEPLOYED_INDEX_ID=""
+if [ -n "$INDEX_ENDPOINT_DESC" ] && [ "$INDEX_ENDPOINT_DESC" != "{}" ]; then
+  if [ -n "$ROUTING_INDEX_ID" ]; then
+    ROUTING_DEPLOYED_INDEX_ID=$(echo "$INDEX_ENDPOINT_DESC" | jq -r '.deployedIndexes[]? | select(.index | endswith("'"${ROUTING_INDEX_ID}"'")) | .id' 2>/dev/null | head -n1)
+  fi
+  if [ -n "$CACHE_INDEX_ID" ]; then
+    CACHE_DEPLOYED_INDEX_ID=$(echo "$INDEX_ENDPOINT_DESC" | jq -r '.deployedIndexes[]? | select(.index | endswith("'"${CACHE_INDEX_ID}"'")) | .id' 2>/dev/null | head -n1)
+  fi
+fi
+
+# Fallback defaults if not dynamically resolved
+ROUTING_DEPLOYED_INDEX_ID="${ROUTING_DEPLOYED_INDEX_ID:-semantic_routing_index_endpoint_deployment}"
+CACHE_DEPLOYED_INDEX_ID="${CACHE_DEPLOYED_INDEX_ID:-semantic_cache_index_endpoint_deployment}"
+DEFAULT_LOCAL_MODEL="${DEFAULT_LOCAL_MODEL:-gemma3:4b}"
+DEFAULT_MODEL="${DEFAULT_MODEL:-gemini-2.5-flash}"
+DEFAULT_FALLBACK_MODEL="${DEFAULT_FALLBACK_MODEL:-gemini-2.5-flash}"
+
+# Discover Gemma Cloud Run Service URL
+echo "Discovering Gemma Cloud Run service..."
+GEMMA_SERVICE_NAME="${GEMMA_SERVICE_NAME:-gemma-cpu-router}"
+GEMMA_URL=$(gcloud run services describe "$GEMMA_SERVICE_NAME" --region="$REGION" --project="$PROJECT_ID" --format="value(status.url)" 2>/dev/null || true)
+if [ -z "$GEMMA_URL" ]; then
+  GEMMA_URL=$(gcloud run services list --project="$PROJECT_ID" --region="$REGION" --format="value(status.url)" 2>/dev/null | grep "gemma" | head -n1 || true)
+fi
+
+if [ -n "$GEMMA_URL" ]; then
+  echo "INFO: Found active Gemma Cloud Run URL: $GEMMA_URL"
+else
+  echo "INFO: Gemma Cloud Run service not resolved from live services; using project-derived URL."
+  GEMMA_URL="https://${GEMMA_SERVICE_NAME}-${PROJECT_NUMBER}.${REGION}.run.app"
+fi
+
+inject_vertex_config_properties() {
+  local prop_file=$1
+  if [ -f "$prop_file" ]; then
+    echo "Injecting Vector Search & Gemma properties into $prop_file..."
+    sed_i "s|^project=.*|project=$PROJECT_ID|g" "$prop_file"
+    sed_i "s|^project_number=.*|project_number=$PROJECT_NUMBER|g" "$prop_file"
+    sed_i "s|^region=.*|region=$REGION|g" "$prop_file"
+    [ -n "$INDEX_ENDPOINT_DNS" ] && sed_i "s|^index_endpoint_dns=.*|index_endpoint_dns=$INDEX_ENDPOINT_DNS|g" "$prop_file"
+    sed_i "s|^default_model=.*|default_model=$DEFAULT_MODEL|g" "$prop_file"
+    sed_i "s|^default_fallback_model=.*|default_fallback_model=$DEFAULT_FALLBACK_MODEL|g" "$prop_file"
+    sed_i "s|^default_local_model=.*|default_local_model=$DEFAULT_LOCAL_MODEL|g" "$prop_file"
+    [ -n "$INDEX_ENDPOINT_ID" ] && sed_i "s|^routing_index_endpoint_id=.*|routing_index_endpoint_id=$INDEX_ENDPOINT_ID|g" "$prop_file"
+    [ -n "$ROUTING_DEPLOYED_INDEX_ID" ] && sed_i "s|^routing_deployed_index_id=.*|routing_deployed_index_id=$ROUTING_DEPLOYED_INDEX_ID|g" "$prop_file"
+    [ -n "$ROUTING_INDEX_ID" ] && sed_i "s|^routing_index_id=.*|routing_index_id=$ROUTING_INDEX_ID|g" "$prop_file"
+    [ -n "$INDEX_ENDPOINT_ID" ] && sed_i "s|^cache_index_endpoint_id=.*|cache_index_endpoint_id=$INDEX_ENDPOINT_ID|g" "$prop_file"
+    [ -n "$CACHE_DEPLOYED_INDEX_ID" ] && sed_i "s|^cache_deployed_index_id=.*|cache_deployed_index_id=$CACHE_DEPLOYED_INDEX_ID|g" "$prop_file"
+    [ -n "$CACHE_INDEX_ID" ] && sed_i "s|^cache_index_id=.*|cache_index_id=$CACHE_INDEX_ID|g" "$prop_file"
+  fi
+}
+
+# ==============================================================================
 # Step 4: Deploy Shared Flows and API Proxy using the Service Account
 # ==============================================================================
 echo ""
@@ -279,11 +368,7 @@ deploy_shared_flow() {
   tmp_sf_dir=$(mktemp -d)
   cp -r "$sf_dir" "$tmp_sf_dir/"
   local prop_file="$tmp_sf_dir/sharedflowbundle/resources/properties/vertex_config.properties"
-  if [ -f "$prop_file" ]; then
-    sed_i "s/project=.*/project=$PROJECT_ID/g" "$prop_file"
-    sed_i "s/project_number=.*/project_number=$PROJECT_NUMBER/g" "$prop_file"
-    sed_i "s/region=.*/region=$REGION/g" "$prop_file"
-  fi
+  inject_vertex_config_properties "$prop_file"
   apigeecli sharedflows create bundle -n "$sf_name" \
     -f "$tmp_sf_dir/sharedflowbundle" \
     -e "$APIGEE_ENV" --token "$TOKEN" -o "$PROJECT_ID" \
@@ -311,12 +396,21 @@ TMP_PROXY_DIR=$(mktemp -d)
 trap 'rm -rf "$TMP_PROXY_DIR"' EXIT
 cp -r "$PROXY_SRC_DIR" "$TMP_PROXY_DIR/"
 
-# Update project ID and region in vertex_config.properties if present
+# Update vertex_config.properties in API Proxy bundle
 PROP_FILE="$TMP_PROXY_DIR/apiproxy/resources/properties/vertex_config.properties"
-if [ -f "$PROP_FILE" ]; then
-  sed_i "s/project=.*/project=$PROJECT_ID/g" "$PROP_FILE"
-  sed_i "s/project_number=.*/project_number=$PROJECT_NUMBER/g" "$PROP_FILE"
-  sed_i "s/region=.*/region=$REGION/g" "$PROP_FILE"
+inject_vertex_config_properties "$PROP_FILE"
+
+# Patch Gemma target endpoint with resolved Cloud Run URL and Audience
+if [ -f "$TMP_PROXY_DIR/apiproxy/targets/gemma.xml" ]; then
+  echo "Patching Gemma target endpoint in $PROXY_NAME with audience and URL: $GEMMA_URL..."
+  sed_i "s|<Audience>.*</Audience>|<Audience>${GEMMA_URL}</Audience>|g" "$TMP_PROXY_DIR/apiproxy/targets/gemma.xml"
+  sed_i "s|<URL>.*</URL>|<URL>${GEMMA_URL}/v1/chat/completions</URL>|g" "$TMP_PROXY_DIR/apiproxy/targets/gemma.xml"
+fi
+
+# Sync DeployedIndexID in Semantic Cache Lookup policy if resolved
+if [ -f "$TMP_PROXY_DIR/apiproxy/policies/SCL-Semantic-Cache-Lookup.xml" ] && [ -n "$CACHE_DEPLOYED_INDEX_ID" ]; then
+  echo "Syncing DeployedIndexID in SCL-Semantic-Cache-Lookup policy with $CACHE_DEPLOYED_INDEX_ID..."
+  sed_i "s|<DeployedIndexID>.*</DeployedIndexID>|<DeployedIndexID>${CACHE_DEPLOYED_INDEX_ID}</DeployedIndexID>|g" "$TMP_PROXY_DIR/apiproxy/policies/SCL-Semantic-Cache-Lookup.xml"
 fi
 
 apigeecli apis create bundle -n "$PROXY_NAME" \
@@ -324,6 +418,12 @@ apigeecli apis create bundle -n "$PROXY_NAME" \
   -e "$APIGEE_ENV" --token "$TOKEN" -o "$PROJECT_ID" \
   -s "$SA_EMAIL" \
   --ovr --wait
+
+# Upsert intent embeddings to routing index if index is available
+if [ -n "$ROUTING_INDEX_ID" ] && [ -f "./upsert_routing_embeddings.py" ]; then
+  echo "Upserting intent embeddings to Vertex AI Vector Search routing index ($ROUTING_INDEX_ID)..."
+  python3 ./upsert_routing_embeddings.py --project "$PROJECT_ID" --region "$REGION" --index-id "$ROUTING_INDEX_ID" 2>&1 || echo "WARNING: Intent embeddings upsert encountered an error, continuing..."
+fi
 
 # ==============================================================================
 # Step 5: Create Developer (cymbal-retail-dev@example.com)
