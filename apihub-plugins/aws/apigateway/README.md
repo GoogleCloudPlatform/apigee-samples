@@ -14,6 +14,8 @@
  limitations under the License.
 -->
 
+<!-- cspell:ignore AKIA -->
+
 # Sync API metadata from AWS API Gateway to Google Cloud Apigee API hub
 
 [Apigee API hub](https://cloud.google.com/apigee/docs/apihub/what-is-api-hub)
@@ -31,12 +33,12 @@ Authentication to Google Cloud uses
 
 There are two independent ingestion paths that layer on top of each other:
 
-1.  **Scheduled pull (Steps 1–3, always required).** You create one API hub
+1. **Scheduled pull (Steps 1–3, always required).** You create one API hub
     plugin instance per (AWS account, AWS region) pair, giving it read-only IAM
     credentials for API Gateway. API hub runs an initial backfill on creation
     and then re-syncs every 6 hours by default. You can also click **Run** on
     the plugin instance to trigger a sync on demand.
-2.  **Real-time push (optional, Steps 4–9).** An AWS Lambda function subscribed
+2. **Real-time push (optional, Steps 4–9).** An AWS Lambda function subscribed
     to 12 whitelisted API Gateway control-plane events on **EventBridge**
     (create / update / delete for APIs, stages, and deployments across REST v1
     and HTTP/WebSocket v2) enriches each event with the current API definition
@@ -52,12 +54,12 @@ for SigV4 signing.
 
 ## Prerequisites
 
-1.  **AWS:** an account with API Gateway APIs to synchronize and permission to
+1. **AWS:** an account with API Gateway APIs to synchronize and permission to
     create IAM users and deploy CloudFormation stacks (which create IAM roles,
     Lambda functions, and EventBridge rules).
-2.  **Google Cloud:** an API hub-provisioned project. See
+2. **Google Cloud:** an API hub-provisioned project. See
     [Provision API hub](https://cloud.google.com/apigee/docs/apihub/provision).
-3.  **IAM on GCP side:** `roles/apihub.admin`,
+3. **IAM on GCP side:** `roles/apihub.admin`,
     `roles/iam.workloadIdentityPoolAdmin`, `roles/iam.serviceAccountAdmin`,
     `roles/secretmanager.admin`, and `roles/resourcemanager.projectIamAdmin` (or
     `roles/owner`).
@@ -88,11 +90,10 @@ generate a long-lived access key for it.
 
 **1.1** In AWS Console → **IAM → Users → Create user**:
 
-| Field                          | Value                                    |
-| ------------------------------ | ---------------------------------------- |
-| User name                      | `apihub-aws-reader`                      |
-| Provide user access to the AWS | **Unchecked** (programmatic access only) |
-: Management Console             :                                          :
+Field                                             | Value
+------------------------------------------------- | ----------------------------------------
+User name                                         | `apihub-aws-reader`
+Provide user access to the AWS Management Console | **Unchecked** (programmatic access only)
 
 Click **Next**.
 
@@ -121,13 +122,13 @@ user. Click **Next → Create user**.
 **1.3** Open the newly created `apihub-aws-reader` user → **Security
 credentials** tab → **Access keys → Create access key**.
 
--   Use case: **Application running outside AWS** (or **Other**).
--   Click **Next → Create access key**.
+- Use case: **Application running outside AWS** (or **Other**).
+- Click **Next → Create access key**.
 
 **1.4** Copy both values immediately (the secret will not be shown again):
 
--   `<AWS_ACCESS_KEY_ID>` (e.g., `AKIA...`)
--   `<AWS_SECRET_ACCESS_KEY>` (long random string)
+- `<AWS_ACCESS_KEY_ID>` (e.g., `AKIA...`)
+- `<AWS_SECRET_ACCESS_KEY>` (long random string)
 
 You will store these in GCP Secret Manager in the next step.
 
@@ -165,7 +166,7 @@ Use a descriptive `<SECRET_NAME>` such as `apihub-aws-secret-access-key`.
 **2.3** Grant the API hub P4SA (per-product service account) read access to the
 secret. The P4SA email format is:
 
-```
+```text
 service-<GCP_PROJECT_NUMBER>@gcp-sa-apihub.iam.gserviceaccount.com
 ```
 
@@ -185,7 +186,7 @@ gcloud secrets add-iam-policy-binding <SECRET_NAME> \
 **2.4** Capture the full secret resource name — you will paste it into the
 plugin instance form in Step 3:
 
-```
+```text
 projects/<GCP_PROJECT_ID>/secrets/<SECRET_NAME>/versions/<VERSION_NUMBER>
 ```
 
@@ -200,7 +201,7 @@ region) pair that you plan to sync.
 
 **3.1** In your browser, open API hub in the Cloud console:
 
-```
+```text
 https://console.cloud.google.com/apigee/apihub/settings/plugins?project=<GCP_PROJECT_ID>
 ```
 
@@ -232,16 +233,15 @@ Field         | Value
 **Client secret** (Secret Manager reference) — paste the secret resource name
 captured in Step 2.4:
 
-```
+```text
 projects/<GCP_PROJECT_ID>/secrets/<SECRET_NAME>/versions/<VERSION_NUMBER>
 ```
 
 **Sync frequency:**
 
-| Field        | Value                                                       |
-| ------------ | ----------------------------------------------------------- |
-| **Schedule** | Runs automatically every **6 hours** by default. Adjust the |
-:              : frequency if you want more or less frequent syncs.          :
+Field        | Value
+------------ | --------------------------------------------------------------------------------------------------------------
+**Schedule** | Runs automatically every **6 hours** by default. Adjust the frequency if you want more or less frequent syncs.
 
 **3.4** Click **Create instance** and wait for the status to become **Active**
 (~30 seconds). Note the auto-generated **instance ID** shown on the details page
@@ -256,14 +256,14 @@ projects/<GCP_PROJECT_ID>/secrets/<SECRET_NAME>/versions/<VERSION_NUMBER>
 **Keeping API hub in sync going forward.** After the initial backfill, you have
 three ways to pick up APIs that are created or updated later:
 
-1.  **Scheduled auto-sync (enabled by default).** The `sync-metadata` action
+1. **Scheduled auto-sync (enabled by default).** The `sync-metadata` action
     runs every **6 hours** on its own — no action required. Adjust the frequency
     in the plugin instance's Actions section if you want more or less frequent
     syncs.
-2.  **On-demand pull from API hub.** In the API hub Console, open the plugin
+2. **On-demand pull from API hub.** In the API hub Console, open the plugin
     instance and click **Run** to trigger a sync immediately. Useful right after
     a bulk deployment when you don't want to wait for the next scheduled run.
-3.  **Real-time push from AWS (this sample).** Deploy the Lambda + EventBridge
+3. **Real-time push from AWS (this sample).** Deploy the Lambda + EventBridge
     stack described in Steps 4–9 below. AWS then pushes individual API Gateway
     control-plane events to API hub within ~30–60 seconds of each change.
 
@@ -317,7 +317,7 @@ Attribute name | Attribute value
 
 **5.4 Build the WIF audience string** (needed in Step 7):
 
-```
+```text
 //iam.googleapis.com/projects/<GCP_PROJECT_NUMBER>/locations/global/workloadIdentityPools/aws-realtime-pool/providers/aws-realtime-provider
 ```
 
@@ -332,9 +332,9 @@ Write**. If not, create one (any name, any S3 bucket).
 In AWS Console → **CloudFormation → Create stack → With new resources** in
 `<AWS_REGION>`.
 
--   **Template:** upload `cloudformation.yaml` from this directory.
--   **Stack name:** `aws-onramp-realtime-poc`
--   **Parameters:**
+- **Template:** upload `cloudformation.yaml` from this directory.
+- **Stack name:** `aws-onramp-realtime-poc`
+- **Parameters:**
 
     Parameter        | Value
     ---------------- | -----
@@ -346,7 +346,7 @@ In AWS Console → **CloudFormation → Create stack → With new resources** in
 
     Leave `ApihubHost`, `PluginId`, and `ActionId` at their defaults.
 
--   Check **"I acknowledge that AWS CloudFormation might create IAM resources
+- Check **"I acknowledge that AWS CloudFormation might create IAM resources
     with custom names"** → **Submit**.
 
 Wait for status **CREATE_COMPLETE** (~2 minutes).
@@ -356,24 +356,24 @@ Wait for status **CREATE_COMPLETE** (~2 minutes).
 The template ships a placeholder handler so the function exists before the real
 code is uploaded.
 
-1.  In AWS Console → **Lambda → Functions**, open the function whose name starts
+1. In AWS Console → **Lambda → Functions**, open the function whose name starts
     with `aws-onramp-realtime-`.
-2.  On the **Code** tab, ensure the file is named `index.mjs`. If it is
+2. On the **Code** tab, ensure the file is named `index.mjs`. If it is
     `index.js`, right-click → **Rename** → `index.mjs`. (Node.js treats `.js` as
     CommonJS and rejects the ES module `import` statements otherwise.)
-3.  Open `index.mjs`, select all, delete, and paste the contents of `index.mjs`
+3. Open `index.mjs`, select all, delete, and paste the contents of `index.mjs`
     from this directory.
-4.  Click **Deploy** and wait for "Successfully updated the function."
+4. Click **Deploy** and wait for "Successfully updated the function."
 
 ### Step 9: Verify
 
 Deploy any existing REST API in **API Gateway Console** to a new stage named
 `realtime-test-1`. Within 30–60 seconds:
 
--   A new log stream should appear in **CloudWatch → Log groups →
+- A new log stream should appear in **CloudWatch → Log groups →
     /aws/lambda/aws-onramp-realtime...** showing the WIF token exchange and the
     API hub POST.
--   The API should show up in API hub at
+- The API should show up in API hub at
     `https://console.cloud.google.com/apigee/apihub?project=<GCP_PROJECT_ID>`
     with `realtime-test-1` as a deployment entry.
 
@@ -407,7 +407,7 @@ Rule | Identity                                                       | Service
 For every rule, set **Source: All sources** and **Project: Selected projects →
 `<GCP_PROJECT_ID>`**. The full Rule 2 identity string is:
 
-```
+```text
 principalSet://iam.googleapis.com/projects/<GCP_PROJECT_NUMBER>/locations/global/workloadIdentityPools/aws-realtime-pool/attribute.aws_role/arn:aws:sts::<AWS_ACCOUNT_ID>:assumed-role/aws-onramp-realtime-<AWS_REGION>-role
 ```
 
@@ -463,7 +463,7 @@ open pool `aws-realtime-pool` → provider `aws-realtime-provider` → **Edit
 provider → Attribute mapping**, and set both `google.subject` and
 `attribute.aws_role` to this expression:
 
-```
+```text
 assertion.arn.contains('assumed-role') ? assertion.arn.extract('{account_arn}assumed-role/') + 'assumed-role/' + assertion.arn.extract('assumed-role/{role_name}/') : assertion.arn
 ```
 
@@ -474,12 +474,12 @@ identity above. WIF changes take effect in seconds.
 
 ## Files Included
 
--   `README.md` — this file: end-to-end deploy runbook using the AWS and GCP
+- `README.md` — this file: end-to-end deploy runbook using the AWS and GCP
     consoles.
--   `cloudformation.yaml` — one-per-region AWS stack: Lambda function, IAM
+- `cloudformation.yaml` — one-per-region AWS stack: Lambda function, IAM
     execution role, EventBridge rule (with the 12-event filter), and the Lambda
     invoke permission.
--   `index.mjs` — the AWS Lambda handler (Node.js 20+, zero npm dependencies).
+- `index.mjs` — the AWS Lambda handler (Node.js 20+, zero npm dependencies).
     Parses each EventBridge event, fetches the affected API's current definition
     from AWS API Gateway, and posts it to API hub's `:collectApiData` endpoint.
 
