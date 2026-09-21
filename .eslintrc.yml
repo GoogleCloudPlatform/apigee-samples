@@ -28,3 +28,9 @@ overrides:
       no-var: 0
       node: 0
       es6: 0
+  # The Azure APIM onramp Function targets the Node.js 20 runtime and uses
+  # optional catch binding (ES2019) and optional chaining (ES2020), both of
+  # which fail to parse under the default ecmaVersion above.
+  - files: "apihub-plugins/azure/apim/src/**/*.js"
+    parserOptions:
+      ecmaVersion: 2022
