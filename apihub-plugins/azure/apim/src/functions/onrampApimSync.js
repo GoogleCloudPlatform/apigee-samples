@@ -562,7 +562,12 @@ async function fetchSchema(base, apiId, contentType, armToken, context) {
   const d = doc?.properties?.document || {};
   const value =
       d.value || d.odata;  // hoist: document.odata -> document.value (OData)
-  return value ? Buffer.from(value) : null;
+  if (!value) return null;
+  // Every content type fetched here (proto, SDL, EDMX) is text, so value is a
+  // string in practice. Serialize defensively anyway: Buffer.from throws a
+  // TypeError on a plain object, and fetchSpecs would swallow it and drop the
+  // spec rather than surface the problem.
+  return Buffer.from(typeof value === 'object' ? JSON.stringify(value) : value);
 }
 
 // fetchSpecs gathers every spec the API type carries, skipping sources that
