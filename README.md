@@ -156,6 +156,7 @@ Plugins, also known as *on-ramp plugins*, enable API hub to connect and ingest A
 | --- | ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 1   | [azure-apim](./apihub-plugins/azure-apim) | This sample provides an Application Integration template and scripts to synchronize API metadata from Azure API Management (APIM) to Apigee API hub |
 | 2   | [aws-apigateway](./apihub-plugins/aws/apigateway) | This sample walks through the built-in `system-aws-apigateway` plugin end to end, plus an optional AWS Lambda that pushes API Gateway control-plane events to Apigee API hub in near real time via EventBridge. |
+| 2   | [azure/apim](./apihub-plugins/azure/apim) | This sample provides an event-driven real-time on-ramp that syncs Azure API Management (APIM) API metadata into Apigee API hub whenever an API is created, updated, or deleted, via Event Grid + an Azure Function using Workload Identity Federation (no client secrets) |
 
 ## <a name="modifying"></a>Modifying a sample proxy
 
