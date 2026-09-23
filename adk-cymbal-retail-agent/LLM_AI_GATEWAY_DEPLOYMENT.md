@@ -28,7 +28,7 @@ The diagram below details the exact policy execution chain across `PreFlow`, `Fl
 ```mermaid
 flowchart TD
     %% ==========================================
-    %% Google Brand Colors & Global Styling
+    %% Palette & Styles Google Cloud
     %% ==========================================
     classDef client fill:#E8F0FE,stroke:#4285F4,stroke-width:2px,color:#1967D2,font-weight:bold;
     classDef process fill:#FFFFFF,stroke:#5F6368,stroke-width:1.2px,color:#202124;
@@ -38,83 +38,79 @@ flowchart TD
     classDef secondary fill:#F1F3F4,stroke:#5F6368,stroke-width:1.5px,color:#3C4043;
     classDef fault fill:#FCE8E6,stroke:#EA4335,stroke-width:2px,stroke-dasharray: 4 4,color:#C5221F,font-weight:bold;
 
-    %% Entry Point (Top)
-    ClientReq([Incoming Request: /chat/completions OR /chat]):::client --> PreFlow
+    %% Point d'entrée
+    ClientReq(["Incoming Request<br/><code>/chat/completions</code>"]):::client --> PF1
 
     %% ==========================================
-    %% 1. PreFlow (VERTICAL STACK - Top)
+    %% 1. PreFlow
     %% ==========================================
-    subgraph PreFlow["1. PreFlow: Authentication & Request Headers"]
+    subgraph PreFlow["1. PreFlow: Auth & Headers"]
         direction TB
-        PF1[CORS-AddCors]:::process --> PF2[VA-VerifyAPIKey]:::process
-        PF2 --> PF3[AM-StripAcceptEncoding]:::process
-        PF3 --> PF4[JS-ProcessCustomLLMHeaders<br/>Extract x-llm-* flags & tier]:::process
+        PF1["<b>CORS Setup</b><br/>Handle preflight & headers"]:::process --> PF2["<b>API Key Check</b><br/>Validate credentials"]:::process
+        PF2 --> PF3["<b>Normalize Headers</b><br/>Strip accept-encoding"]:::process
+        PF3 --> PF4["<b>Extract Context</b><br/>Flags & model tier"]:::process
     end
 
     %% Transition 1 -> 2
-    PreFlow --> ChatFlow
+    PF4 --> CF1
 
     %% ==========================================
-    %% 2. Main Flow: Chat (STRICT HORIZONTAL RIBBON)
+    %% 2. Main Flow: Chat Pipeline (Stack vertical)
     %% ==========================================
-    subgraph ChatFlow["2. Main Flow: Chat Pipeline (Horizontal Execution)"]
-        direction LR
-        CF1["<b>1. Ingest</b><br/>JS-ParseRequestBody<br/>AM-ExtractRequestPrompt"]:::process --> CF2["<b>2. Rate Limit</b><br/>PTL-PromptRateLimiting<br/><i>(if enabled)</i>"]:::process
-        CF2 --> CF3["<b>3. Safety & DLP</b><br/>FC-SanitizeUserPrompt<br/>Model Armor + DLP"]:::process
-        CF3 --> CF4["<b>4. Semantic Cache</b><br/>SCL-Semantic-Cache-Lookup<br/>Vector Search Index"]:::process
-        CF4 --> CF5["<b>5. LLM Routing</b><br/>FC-LLMRouting<br/>Complexity & Keywords"]:::process
-        CF5 --> CF6["<b>6. Payload Builder</b><br/>JS-BuildGeminiPayload<br/>Gemini Enterprise Format"]:::process
-        CF6 --> CF7["<b>7. Quota Enforcement</b><br/>LTQ-TokenEnforce<br/>Token Bucket Check"]:::process
+    subgraph ChatFlow["2. Main Pipeline: Chat Execution"]
+        direction TB
+        CF1["<b>1. Ingestion</b><br/>Extract prompt & body"]:::process --> CF2["<b>2. Rate Limit</b><br/>Spike arrest check"]:::process
+        CF2 --> CF3["<b>3. Safety & DLP</b><br/>Model Armor sanitization"]:::process
+        CF3 --> CF4["<b>4. Semantic Cache</b><br/>Vector lookup"]:::process
+        CF4 --> CF5["<b>5. Model Routing</b><br/>Complexity & rules"]:::process
+        CF5 --> CF6["<b>6. Payload Builder</b><br/>Gemini format"]:::process
+        CF6 --> CF7["<b>7. Quota Check</b><br/>Token bucket enforce"]:::process
     end
 
     %% Transition 2 -> 3
-    ChatFlow --> Targets
+    CF7 --> T_Select
 
     %% ==========================================
-    %% 3. Targets & Multi-Level Failover (VERTICAL STACK)
+    %% 3. Targets & Failover
     %% ==========================================
-    subgraph Targets["3. Target Endpoints & Comprehensive Failover Chain"]
+    subgraph Targets["3. Targets & Failover Chain"]
         direction TB
-        T_Select{Target Route Selection}:::decision
+        T_Select{"Route Selection"}:::decision
         
-        %% Primary Target Route
-        T_Select -->|Default Route| PrimaryTarget[🎯 Primary Target<br/>Gemini Enterprise Pro]:::primary
+        %% Routes
+        T_Select -->|Default| PrimaryTarget["🎯 Primary Target<br/>Gemini Enterprise Pro"]:::primary
+        T_Select -->|Local tier| GemmaTarget["🏠 Private Target<br/>Cloud Run Gemma 3 4B"]:::secondary
         
-        %% Local Gemma Route
-        T_Select -->|x-model-tier: local| GemmaTarget[🏠 Private Gemma Target<br/>Cloud Run Gemma 3 4B]:::secondary
+        %% Failovers
+        PrimaryTarget -.->|5xx / 429 / Timeout| FallbackTarget["🔀 Fallback Target<br/>Gemini Enterprise Flash"]:::fallback
+        GemmaTarget -.->|Down / Capacity| FallbackTarget
         
-        %% Primary Failover -> Fallback Target
-        PrimaryTarget -.->|5xx / 429 / Timeout / Bad Payload| FallbackTarget[🔀 Fallback Target<br/>Gemini Enterprise Flash]:::fallback
-        
-        %% Gemma Failover -> Fallback Target
-        GemmaTarget -.->|Service Down / Capacity Exceeded| FallbackTarget
-        
-        %% Fallback Target Failover -> Global Fault Handler
-        FallbackTarget -.->|All Targets Exhausted| FaultHandler[⚠️ Global Target Fault Handler<br/>Graceful Degradation / 503 Gateway Error]:::fault
+        %% Fault handler
+        FallbackTarget -.->|All Exhausted| FaultHandler["⚠️ Fault Handler<br/>Graceful Degradation"]:::fault
     end
 
-    %% Transition 3 -> 4 (Success Path)
-    PrimaryTarget --> PostFlow
-    FallbackTarget --> PostFlow
-    GemmaTarget --> PostFlow
+    %% Transition 3 -> 4 (Succès)
+    PrimaryTarget --> PO1
+    FallbackTarget --> PO1
+    GemmaTarget --> PO1
 
-    %% Direct Fault Return
-    FaultHandler --> ErrorResp([Return 503 / Degraded Error Response]):::fault
+    %% Sortie Erreur
+    FaultHandler --> ErrorResp(["Return 503 / Degraded"]):::fault
 
     %% ==========================================
-    %% 4. PostFlow (VERTICAL STACK - Bottom)
+    %% 4. PostFlow
     %% ==========================================
-    subgraph PostFlow["4. PostFlow: Response Processing & Observability"]
+    subgraph PostFlow["4. PostFlow: Response & Analytics"]
         direction TB
-        PO1[Set Cache Hit / Miss Headers]:::process --> PO2[JS-ParseGeminiResponse]:::process
-        PO2 --> PO3[FC-SanitizeModelResponse<br/>Cloud DLP Redaction]:::process
-        PO3 --> PO4[SCL-Semantic-Cache-Populate<br/>Store in Vector Cache]:::process
-        PO4 --> PO5[DC-* Extract Token Counts<br/>Latency & Usage]:::process
-        PO5 --> PO6[FC-LLM-Logger<br/>Cloud Logging & Analytics]:::process
+        PO1["<b>Cache Status</b><br/>Set Hit / Miss headers"]:::process --> PO2["<b>Parse Response</b><br/>Extract output"]:::process
+        PO2 --> PO3["<b>DLP Redaction</b><br/>Mask sensitive data"]:::process
+        PO3 --> PO4["<b>Cache Populate</b><br/>Store in vector DB"]:::process
+        PO4 --> PO5["<b>Usage Metrics</b><br/>Tokens & latency"]:::process
+        PO5 --> PO6["<b>Observability</b><br/>Cloud Logging & audit"]:::process
     end
 
-    %% Exit Point (Bottom)
-    PostFlow --> ClientResp([Return 200 OK to Client]):::client
+    %% Point de sortie nominal
+    PO6 --> ClientResp(["Return 200 OK"]):::client
 ```
 
 ---
