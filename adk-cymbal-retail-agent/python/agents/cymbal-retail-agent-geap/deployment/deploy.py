@@ -275,15 +275,45 @@ def deploy(args):
             "litellm",
         ]
 
-    config = {
-        "display_name": args.display_name,
-        "description": args.description,
-        "staging_bucket": staging_bucket,
-        "extra_packages": ["cymbal_retail_agent"],
-        "requirements": requirements,
-        "env_vars": env_vars,
-        "python_version": "3.12",
-    }
+    deployment_mode = getattr(args, "deployment_mode", "source")
+
+    if deployment_mode == "source":
+        import agentplatform._genai._agent_engines_utils as ae_utils
+        methods = ae_utils._generate_class_methods_spec_or_raise(
+            agent=local_agent,
+            operations=local_agent.register_operations()
+        )
+        class_methods = [ae_utils._to_dict(m) for m in methods]
+
+        # Write requirements.txt for source archive packaging
+        req_file = agent_dir.parent / "requirements.txt"
+        with open(req_file, "w") as f:
+            for req in requirements:
+                f.write(f"{req}\n")
+
+        config = {
+            "display_name": args.display_name,
+            "description": args.description,
+            "staging_bucket": staging_bucket,
+            "source_packages": ["cymbal_retail_agent", "requirements.txt"],
+            "entrypoint_module": "cymbal_retail_agent.agent",
+            "entrypoint_object": "adk_app",
+            "requirements_file": "requirements.txt",
+            "class_methods": class_methods,
+            "agent_framework": "google-adk",
+            "env_vars": env_vars,
+            "python_version": "3.12",
+        }
+    else:
+        config = {
+            "display_name": args.display_name,
+            "description": args.description,
+            "staging_bucket": staging_bucket,
+            "extra_packages": ["cymbal_retail_agent"],
+            "requirements": requirements,
+            "env_vars": env_vars,
+            "python_version": "3.12",
+        }
 
     # Handle Gateways
     gateway_config = {}
@@ -328,18 +358,45 @@ def deploy(args):
     if matching_agents:
         existing_agent = matching_agents[0]
         resource_name = existing_agent.api_resource.name
-        print(f"\n🔄 Updating existing Agent Runtime instance: {resource_name}...")
-        remote_agent = client.agent_engines.update(
-            name=resource_name,
-            agent=local_agent,
-            config=config,
-        )
+        is_package_spec = getattr(existing_agent.api_resource.spec, "package_spec", None) is not None
+        if deployment_mode == "source" and is_package_spec:
+            print(f"\n⚠️ Existing instance '{resource_name}' was deployed with cloudpickle (package_spec).")
+            print("Vertex AI does not allow in-place migration from package_spec to source_code_spec.")
+            print("Deleting old instance and creating a fresh source-based instance...")
+            try:
+                client.agent_engines.delete(name=resource_name, force=True)
+                print("Deleted old instance successfully.")
+            except Exception as e:
+                print(f"Warning: Failed to delete old instance: {e}")
+            print(f"\n🚀 Creating new Agent Runtime instance (source-based)...")
+            remote_agent = client.agent_engines.create(
+                config=config,
+            )
+        elif deployment_mode == "source":
+            print(f"\n🔄 Updating existing Agent Runtime instance (source-based): {resource_name}...")
+            remote_agent = client.agent_engines.update(
+                name=resource_name,
+                config=config,
+            )
+        else:
+            print(f"\n🔄 Updating existing Agent Runtime instance (pickle-based): {resource_name}...")
+            remote_agent = client.agent_engines.update(
+                name=resource_name,
+                agent=local_agent,
+                config=config,
+            )
     else:
-        print(f"\n🚀 Creating new Agent Runtime instance...")
-        remote_agent = client.agent_engines.create(
-            agent=local_agent,
-            config=config,
-        )
+        if deployment_mode == "source":
+            print(f"\n🚀 Creating new Agent Runtime instance (source-based)...")
+            remote_agent = client.agent_engines.create(
+                config=config,
+            )
+        else:
+            print(f"\n🚀 Creating new Agent Runtime instance (pickle-based)...")
+            remote_agent = client.agent_engines.create(
+                agent=local_agent,
+                config=config,
+            )
 
     print("\n✅ Deployment successful!")
     print(f"Agent Runtime ID: {remote_agent.api_resource.name}")
@@ -484,6 +541,7 @@ if __name__ == "__main__":
     parser.add_argument("--client-id", default=os.getenv("CLIENT_ID") or os.getenv("APIGEE_CLIENT_ID"), help="OAuth client ID")
     parser.add_argument("--client-secret", default=os.getenv("CLIENT_SECRET") or os.getenv("APIGEE_CLIENT_SECRET"), help="OAuth client secret")
     parser.add_argument("--apigee-hostname", default=os.getenv("APIGEE_HOSTNAME"), help="Apigee gateway hostname")
+    parser.add_argument("--deployment-mode", choices=["source", "pickle"], default="source", help="Deployment mode: source (bypasses cloudpickle) or pickle")
 
     args = parser.parse_args()
     deploy(args)

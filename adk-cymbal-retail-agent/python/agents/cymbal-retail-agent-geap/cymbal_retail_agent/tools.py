@@ -13,17 +13,26 @@
 # limitations under the License.
 
 import os
+import logging
+from datetime import datetime
+
 from google.adk.tools.mcp_tool import McpToolset, StreamableHTTPConnectionParams
 from google.adk.integrations.agent_registry.agent_registry import AgentRegistry
 from google.adk.auth.credential_manager import CredentialManager
 from google.adk.integrations.agent_identity import GcpAuthProvider
 
-# Use GCP Agent Identity Auth Provider to obtain tokens for the MCP toolset
-CredentialManager.register_auth_provider(GcpAuthProvider())
+logger = logging.getLogger("cymbal_retail_agent.tools")
+
+# Register GCP Agent Identity Auth Provider to obtain tokens for the MCP toolset
+try:
+    CredentialManager.register_auth_provider(GcpAuthProvider())
+except Exception:
+    pass
 
 PROJECT_ID = os.getenv("GOOGLE_CLOUD_PROJECT") or os.getenv("PROJECT_ID")
 LOCATION = os.getenv("AGENT_REGISTRY_LOCATION", os.getenv("GOOGLE_CLOUD_LOCATION", "us-central1"))
 APIGEE_HOSTNAME = os.getenv("APIGEE_HOSTNAME") or os.getenv("APIGEE_HOST") or os.getenv("APIGEE_PROD_HOSTNAME")
+CONTINUE_URI = os.getenv("OAUTH_CALLBACK_URL", "http://127.0.0.1:9000/callback")
 
 servers_list = []
 if PROJECT_ID:
@@ -33,16 +42,14 @@ if PROJECT_ID:
         mcp_servers_data = registry.list_mcp_servers(filter_str="displayName:cymbal-discovery-v1")
         servers_list = mcp_servers_data.get("mcpServers", [])
     except Exception as e:
-        import logging
-        logging.warning("Failed to list MCP servers from registry: %s", e)
+        logger.warning("Failed to list MCP servers from registry: %s", e)
 
 if servers_list:
     # Sort by updateTime descending to ensure we use the newest instance
     servers_list.sort(key=lambda x: x.get("updateTime", ""), reverse=True)
     server_name = servers_list[0]["name"]
     registry = AgentRegistry(project_id=PROJECT_ID, location=LOCATION)
-    continue_uri = os.getenv("OAUTH_CALLBACK_URL", "http://127.0.0.1:9000/callback")
-    cymbal_mcp = registry.get_mcp_toolset(server_name, continue_uri=continue_uri)
+    cymbal_mcp = registry.get_mcp_toolset(server_name, continue_uri=CONTINUE_URI)
 
     async def gcp_auth_header_provider(context):
         """Fetches the pre-seeded GcpAuthProvider token and injects it into MCP requests (including tools/list)."""
@@ -53,9 +60,8 @@ if servers_list:
                     cred = await CredentialManager(auth_config).get_auth_credential(context)
                     if cred and cred.oauth2 and cred.oauth2.access_token:
                         return {"Authorization": f"Bearer {cred.oauth2.access_token}"}
-                except Exception as e:
-                    import logging
-                    logging.warning("Pre-seeded token lookup failed: %s", e)
+                except Exception as ex:
+                    logger.warning("Pre-seeded token lookup failed: %s", ex)
         return {}
 
     cymbal_mcp._header_provider = gcp_auth_header_provider
@@ -68,9 +74,7 @@ else:
 if hasattr(cymbal_mcp, "connection_params") and cymbal_mcp.connection_params:
     cymbal_mcp.connection_params.timeout = 30.0
     cymbal_mcp.connection_params.sse_read_timeout = 60.0
-# cymbal_mcp.tool_list_cache_ttl_seconds = 600.0
 
-from datetime import datetime
 
 def get_current_time() -> str:
     """Returns the current local time for the customer service assistant."""

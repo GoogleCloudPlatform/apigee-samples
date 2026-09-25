@@ -128,3 +128,8 @@ Always preserve any customer ID, order ID, or relevant parameters provided by th
 )
 
 logging.info("Root Agent initialized successfully. Ready to receive input.")
+
+from vertexai.preview.reasoning_engines.templates.adk import AdkApp
+
+# Exported AdkApp entrypoint for source-based deployment (bypasses cloudpickle)
+adk_app = AdkApp(agent=root_agent)

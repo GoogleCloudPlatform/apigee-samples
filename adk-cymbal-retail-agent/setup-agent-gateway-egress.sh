@@ -2,7 +2,7 @@
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-if [ -z "$PROJECT_ID" ] && [ -f "$SCRIPT_DIR/env.sh" ] && ! grep -q "PROJECT_ID_TO_SET" "$SCRIPT_DIR/env.sh"; then
+if [ -f "$SCRIPT_DIR/env.sh" ]; then
   source "$SCRIPT_DIR/env.sh"
 fi
 
@@ -74,69 +74,20 @@ build_interfaces_json() {
   echo "$JSON"
 }
 
-# 1a. Base URLs for Google APIs
-GOOGLE_API_URLS=(
-  "https://agentregistry.googleapis.com"
-  "https://agentregistry.mtls.googleapis.com"
-  "https://${LOCATION}-agentregistry.googleapis.com"
-  "https://${LOCATION}-agentregistry.mtls.googleapis.com"
-  "https://agentregistry.${LOCATION}.rep.googleapis.com"
+# 1. Clean up legacy 'googleapis' service from Agent Registry if present
+if gcloud agent-registry services describe "googleapis" --project="$PROJECT_ID" --location="$LOCATION" >/dev/null 2>&1; then
+  echo "Cleaning up legacy 'googleapis' service from Agent Registry..."
+  gcloud agent-registry services delete "googleapis" --project="$PROJECT_ID" --location="$LOCATION" --quiet || true
+fi
 
-  "https://aiplatform.googleapis.com"
-  "https://aiplatform.mtls.googleapis.com"
-  "https://${LOCATION}-aiplatform.googleapis.com"
-  "https://${LOCATION}-aiplatform.mtls.googleapis.com"
-  "https://aiplatform.${LOCATION}.rep.googleapis.com"
-
-  "https://generativelanguage.googleapis.com"
-  "https://generativelanguage.mtls.googleapis.com"
-
-  "https://agentidentity.googleapis.com"
-  "https://agentidentity.mtls.googleapis.com"
-  "https://agentidentitycredentials.googleapis.com"
-  "https://agentidentitycredentials.mtls.googleapis.com"
-  "https://iamcredentials.googleapis.com"
-  "https://iamcredentials.mtls.googleapis.com"
-  "https://oauth2.googleapis.com"
-  "https://accounts.google.com"
-
-  "https://telemetry.googleapis.com"
-  "https://telemetry.mtls.googleapis.com"
-  "https://logging.googleapis.com"
-  "https://logging.mtls.googleapis.com"
-  "https://monitoring.googleapis.com"
-  "https://monitoring.mtls.googleapis.com"
-  "https://cloudtrace.googleapis.com"
-  "https://cloudtrace.mtls.googleapis.com"
-
-  "https://cloudresourcemanager.googleapis.com"
-  "https://cloudresourcemanager.mtls.googleapis.com"
-  "https://storage.googleapis.com"
-  "https://storage.mtls.googleapis.com"
-  "https://secretmanager.googleapis.com"
-  "https://secretmanager.mtls.googleapis.com"
-)
-
-GOOGLE_INTERFACES=$(build_interfaces_json "jsonrpc" "${GOOGLE_API_URLS[@]}")
-
+# 2. Configure Apigee Host Endpoint in Agent Registry
+echo "--- Configuring Apigee Host Endpoint (https://${APIGEE_HOST}) ---"
 APIGEE_HOST_URLS=("https://${APIGEE_HOST}")
 APIGEE_INTERFACES=$(build_interfaces_json "jsonrpc" "${APIGEE_HOST_URLS[@]}")
-
-ENDPOINTS=()
-
-# 1a. Configure Google APIs Endpoint
-echo "--- Configuring Google APIs Endpoint ---"
-GOOGLE_ENDPOINT_ID=$(register_or_update_service "googleapis" "Google APIs" "$GOOGLE_INTERFACES")
-echo "Google APIs Endpoint ID: $GOOGLE_ENDPOINT_ID"
-ENDPOINTS+=("$GOOGLE_ENDPOINT_ID")
-
-# 1b. Configure Apigee Host Endpoint
-echo "--- Configuring Apigee Host Endpoint (https://${APIGEE_HOST}) ---"
 APIGEE_ENDPOINT_ID=$(register_or_update_service "apigee-host" "Apigee Host" "$APIGEE_INTERFACES")
 echo "Apigee Host Endpoint ID: $APIGEE_ENDPOINT_ID"
-ENDPOINTS+=("$APIGEE_ENDPOINT_ID")
 
-# 2. Determine SPIFFE trust domain based on ancestry (org vs project level)
+# 3. Determine SPIFFE trust domain based on ancestry (org vs project level)
 echo "Determining agent principal pool identity..."
 PROJECT_NUMBER=$(gcloud projects describe "$PROJECT_ID" --format="value(projectNumber)")
 ORG_ID=$(gcloud projects get-ancestors "$PROJECT_ID" --format="value(id,type)" 2>/dev/null | grep "organization" | awk '{print $1}')
@@ -145,47 +96,184 @@ if [ -n "$ORG_ID" ]; then
   MEMBER="principalSet://agents.global.org-${ORG_ID}.system.id.goog/attribute.platformContainer/aiplatform/projects/${PROJECT_NUMBER}"
   echo "Found organization: $ORG_ID. Trust domain is organization-level."
 else
-  MEMBER="principalSet://agents.global.project-${PROJECT_NUMBER}.system.id.goog/attribute.platformContainer/aiplatform/projects/${PROJECT_NUMBER}"
+  MEMBER="principalSet://agents.global.proj-${PROJECT_NUMBER}.system.id.goog/attribute.platformContainer/aiplatform/projects/${PROJECT_NUMBER}"
   echo "No parent organization found. Trust domain is project-level."
 fi
 echo "Principal member: $MEMBER"
 
-# 3. Add the IAM policy binding for IAP on all registered service endpoints
-echo "Applying IAP egress IAM bindings for service endpoints..."
-for ENDPOINT_ID in "${ENDPOINTS[@]}"; do
-  echo "Applying IAP egress IAM binding for endpoint: $ENDPOINT_ID"
-  gcloud beta iap web add-iam-policy-binding \
-    --resource-type=agent-registry \
-    --endpoint="$ENDPOINT_ID" \
-    --region="$LOCATION" \
-    --project="$PROJECT_ID" \
-    --member="$MEMBER" \
-    --role=roles/iap.egressor
-done
-
-# 3b. Add the IAM policy binding for all MCP servers in the Agent Registry
-echo "Retrieving registered MCP servers..."
-MCP_SERVERS=$(gcloud agent-registry mcp-servers list \
+# 4. Look up cymbal-discovery-v1 MCP server in Agent Registry
+echo "Looking up cymbal-discovery-v1 MCP server in Agent Registry..."
+MCP_SERVER_NAMES=$(gcloud agent-registry mcp-servers list \
   --project="$PROJECT_ID" \
   --location="$LOCATION" \
+  --filter="displayName:cymbal-discovery-v1" \
   --format="value(name)" 2>/dev/null || true)
 
-for SERVER in $MCP_SERVERS; do
-  SERVER_ID=$(basename "$SERVER")
-  echo "Applying IAP egress IAM binding for MCP server: $SERVER_ID"
-  gcloud beta iap web add-iam-policy-binding \
-    --resource-type=agent-registry \
-    --mcp-server="$SERVER_ID" \
-    --region="$LOCATION" \
+if [ -z "$MCP_SERVER_NAMES" ]; then
+  # Fallback to name search if displayName wasn't matched
+  MCP_SERVER_NAMES=$(gcloud agent-registry mcp-servers list \
     --project="$PROJECT_ID" \
-    --member="$MEMBER" \
-    --role=roles/iap.egressor
-done
+    --location="$LOCATION" \
+    --format="value(name)" 2>/dev/null | grep -E "cymbal-discovery-v1" || true)
+fi
 
-# 4. Grant Agent Registry Viewer access at the project level
+if [ -n "$MCP_SERVER_NAMES" ]; then
+  LATEST_MCP=$(echo "$MCP_SERVER_NAMES" | head -n 1)
+  ACTIVE_MCP_SERVER_ID=$(basename "$LATEST_MCP")
+  echo "Found active cymbal-discovery-v1 MCP Server ID: $ACTIVE_MCP_SERVER_ID"
+else
+  echo "Notice: cymbal-discovery-v1 not yet listed in registry; dynamic resource_type rule will govern egress."
+fi
+
+# 5. Create or Update Unified Access Policy (UAP / IAM v3)
+POLICY_NAME="agent-egress-access-policy"
+BINDING_NAME="agent-egress-policy-binding"
+
+join_by() {
+  local d="$1"
+  shift
+  local f="$1"
+  shift
+  printf "%s" "$f" "${@/#/$d}"
+}
+
+# IAP evaluates resource names using both project number and project ID formats.
+APIGEE_ENDPOINT_CONDITIONS=(
+  "destination.agent_registry.endpoint.name == 'projects/${PROJECT_ID}/locations/${LOCATION}/endpoints/${APIGEE_ENDPOINT_ID}'"
+  "destination.agent_registry.endpoint.name == 'projects/${PROJECT_NUMBER}/locations/${LOCATION}/endpoints/${APIGEE_ENDPOINT_ID}'"
+  "destination.unregistered.host == '${APIGEE_HOST}'"
+)
+APIGEE_ENDPOINT_EXPR=$(join_by " || " "${APIGEE_ENDPOINT_CONDITIONS[@]}")
+
+# Dynamic MCP egress rule: allow any registered MCP Server in Agent Registry,
+# plus the active server name if discovered.
+MCP_CONDITIONS=(
+  "destination.agent_registry.resource_type == 'agentregistry.googleapis.com/McpServer'"
+)
+if [ -n "$ACTIVE_MCP_SERVER_ID" ]; then
+  MCP_CONDITIONS+=(
+    "destination.agent_registry.mcp_server.name == 'projects/${PROJECT_ID}/locations/${LOCATION}/mcpServers/${ACTIVE_MCP_SERVER_ID}'"
+    "destination.agent_registry.mcp_server.name == 'projects/${PROJECT_NUMBER}/locations/${LOCATION}/mcpServers/${ACTIVE_MCP_SERVER_ID}'"
+  )
+fi
+MCP_SERVER_EXPR=$(join_by " || " "${MCP_CONDITIONS[@]}")
+
+RULES_FILE=$(mktemp /tmp/uap-rules-XXXXXX.json)
+cat <<EOF > "$RULES_FILE"
+[
+  {
+    "description": "Allow all Google APIs",
+    "effect": "ALLOW",
+    "principals": [
+      "$MEMBER"
+    ],
+    "operation": {
+      "permissions": ["iap.googleapis.com/resources.egressViaIAP"]
+    },
+    "conditions": {
+      "iap.googleapis.com": {
+        "expression": "destination.unregistered.host.endsWith('googleapis.com')"
+      }
+    }
+  },
+  {
+    "description": "Allow Apigee host endpoint",
+    "effect": "ALLOW",
+    "principals": [
+      "$MEMBER"
+    ],
+    "operation": {
+      "permissions": ["iap.googleapis.com/resources.egressViaIAP"]
+    },
+    "conditions": {
+      "iap.googleapis.com": {
+        "expression": "$APIGEE_ENDPOINT_EXPR"
+      }
+    }
+  },
+  {
+    "description": "Allow registered Agent Registry MCP servers",
+    "effect": "ALLOW",
+    "principals": [
+      "$MEMBER"
+    ],
+    "operation": {
+      "permissions": ["iap.googleapis.com/resources.egressViaIAP"]
+    },
+    "conditions": {
+      "iap.googleapis.com": {
+        "expression": "$MCP_SERVER_EXPR"
+      }
+    }
+  }
+]
+EOF
+
+echo "--- Configuring Unified Access Policy: $POLICY_NAME ---"
+if gcloud iam access-policies describe "$POLICY_NAME" --project="$PROJECT_ID" --location=global >/dev/null 2>&1; then
+  echo "Access policy '$POLICY_NAME' exists. Updating rules..."
+  gcloud iam access-policies update "$POLICY_NAME" \
+    --details-rules="$RULES_FILE" \
+    --project="$PROJECT_ID" \
+    --location=global \
+    --quiet
+else
+  echo "Creating access policy '$POLICY_NAME'..."
+  gcloud iam access-policies create "$POLICY_NAME" \
+    --details-rules="$RULES_FILE" \
+    --project="$PROJECT_ID" \
+    --location=global \
+    --quiet
+fi
+rm -f "$RULES_FILE"
+
+# 6. Create Policy Binding if not already created
+echo "--- Configuring Policy Binding: $BINDING_NAME ---"
+TARGET_RESOURCE="//cloudresourcemanager.googleapis.com/projects/${PROJECT_ID}"
+POLICY_RESOURCE="projects/${PROJECT_ID}/locations/global/accessPolicies/${POLICY_NAME}"
+
+if gcloud iam policy-bindings describe "$BINDING_NAME" --project="$PROJECT_ID" --location=global >/dev/null 2>&1; then
+  echo "Policy binding '$BINDING_NAME' already exists."
+else
+  echo "Creating policy binding '$BINDING_NAME'..."
+  gcloud iam policy-bindings create "$BINDING_NAME" \
+    --policy="$POLICY_RESOURCE" \
+    --target-resource="$TARGET_RESOURCE" \
+    --project="$PROJECT_ID" \
+    --location=global \
+    --quiet
+fi
+
+# 7. Grant Agent Registry Viewer access at the project level
 echo "Granting Agent Registry Viewer IAM role to agent principal pool..."
 gcloud projects add-iam-policy-binding "$PROJECT_ID" \
   --member="$MEMBER" \
   --role="roles/agentregistry.viewer"
 
-echo "✅ Gateway egress policies configured successfully!"
+# 8. Ensure Agent Gateway Service Extension uses IAP Policy Version V2 for UAP
+AUTHZ_EXT="egress-gateway-iap-authzextension"
+if gcloud beta service-extensions authz-extensions describe "$AUTHZ_EXT" --location="$LOCATION" >/dev/null 2>&1; then
+  CURRENT_VERSION=$(gcloud beta service-extensions authz-extensions describe "$AUTHZ_EXT" --location="$LOCATION" --format="value(metadata.iapPolicyVersion)" 2>/dev/null || true)
+  if [ "$CURRENT_VERSION" != "V2" ]; then
+    echo "Updating $AUTHZ_EXT iapPolicyVersion to 'V2' to enable Unified Access Policy evaluation..."
+    EXT_JSON=$(mktemp /tmp/authz-ext-XXXXXX.json)
+    gcloud beta service-extensions authz-extensions describe "$AUTHZ_EXT" --location="$LOCATION" --format=json > "$EXT_JSON"
+    python3 -c "
+import json
+with open('$EXT_JSON', 'r') as f:
+    d = json.load(f)
+d.setdefault('metadata', {})['iapPolicyVersion'] = 'V2'
+d.pop('createTime', None)
+d.pop('updateTime', None)
+with open('$EXT_JSON', 'w') as f:
+    json.dump(d, f)
+"
+    gcloud beta service-extensions authz-extensions import "$AUTHZ_EXT" --location="$LOCATION" --source="$EXT_JSON" --quiet
+    rm -f "$EXT_JSON"
+    echo "Updated $AUTHZ_EXT to iapPolicyVersion V2."
+  else
+    echo "Agent Gateway authz-extension ($AUTHZ_EXT) is already configured for UAP (V2)."
+  fi
+fi
+
+echo "✅ Gateway egress Unified Access Policies configured successfully!"
