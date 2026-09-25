@@ -211,8 +211,15 @@ def main():
             logging.info(f"Generated embedding for: {item['id']}")
 
     if not datapoints:
-        logging.error("No datapoints generated. Exiting.")
-        sys.exit(1)
+        precomputed_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), "precomputed_routing_datapoints.json")
+        if os.path.exists(precomputed_file):
+            logging.info(f"Live embedding API calls unavailable (e.g. org policy restriction). Loading precomputed embeddings from {precomputed_file}...")
+            with open(precomputed_file, "r") as f:
+                datapoints = json.load(f)
+            logging.info(f"Successfully loaded {len(datapoints)} precomputed embeddings.")
+        else:
+            logging.error("No datapoints generated and no precomputed fallback file found. Exiting.")
+            sys.exit(1)
 
     # Save generated datapoints to temporary JSON file
     temp_filepath = os.path.abspath("routing_datapoints.json")
