@@ -55,6 +55,10 @@ async function createNewSession() {
             chatInput.focus();
             
             appendSystemMessage("New session created. You are connected to the deployed agent!");
+            if (data.pause && data.auth_uri) {
+                activeAuthRequest = data;
+                appendAuthCard(data.auth_uri);
+            }
         } else {
             appendSystemMessage(`Error creating session: ${data.detail}`);
         }

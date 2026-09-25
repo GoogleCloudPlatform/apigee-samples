@@ -44,7 +44,11 @@ except ImportError:
     import vertexai
     client_cls = vertexai.Client
 
-PROJECT_ID = os.getenv("GOOGLE_CLOUD_PROJECT") or os.getenv("PROJECT_ID")
+import google.auth
+from google.auth.transport.requests import Request as GoogleAuthRequest
+
+_default_creds, _default_proj = google.auth.default()
+PROJECT_ID = os.getenv("GOOGLE_CLOUD_PROJECT") or os.getenv("PROJECT_ID") or _default_proj or getattr(_default_creds, "quota_project_id", None) or "agentic-workshop-testing"
 LOCATION = os.getenv("GOOGLE_CLOUD_LOCATION") or os.getenv("VERTEXAI_REGION") or "us-central1"
 DISPLAY_NAME = os.getenv("AGENT_DISPLAY_NAME", "cymbal-retail-agent")
 
@@ -69,6 +73,20 @@ consent_sessions = {}
 
 # Lazy-load the deployed agent engine resource name
 REASONING_ENGINE_NAME = None
+DYNAMIC_AUTH_BINDING = None
+
+
+
+def get_google_auth_headers() -> dict:
+    """Returns valid Google OAuth authorization headers for GCP control plane APIs."""
+    creds, _ = google.auth.default()
+    if not creds.valid:
+        creds.refresh(GoogleAuthRequest())
+    return {
+        "Authorization": f"Bearer {creds.token}",
+        "Content-Type": "application/json",
+        "X-Goog-User-Project": PROJECT_ID,
+    }
 
 
 def get_deployed_engine_name():
@@ -84,6 +102,90 @@ def get_deployed_engine_name():
         matched_engines.sort(key=lambda x: str(getattr(x, "update_time", "") or getattr(x, "create_time", "")), reverse=True)
         REASONING_ENGINE_NAME = matched_engines[0].name
     return REASONING_ENGINE_NAME
+
+
+async def get_dynamic_auth_binding() -> dict:
+    """Dynamically resolves the Auth Provider Binding from Agent Registry for the deployed Reasoning Engine."""
+    global DYNAMIC_AUTH_BINDING
+    if DYNAMIC_AUTH_BINDING:
+        return DYNAMIC_AUTH_BINDING
+
+    engine_name = get_deployed_engine_name()
+    engine_id = engine_name.split("/")[-1]
+    
+    headers = get_google_auth_headers()
+    url = f"https://agentregistry.googleapis.com/v1alpha/projects/{PROJECT_ID}/locations/{LOCATION}/bindings"
+    
+    try:
+        async with httpx.AsyncClient(timeout=10.0) as http_client:
+            resp = await http_client.get(url, headers=headers)
+            if resp.status_code == 200:
+                bindings = resp.json().get("bindings", [])
+                for b in bindings:
+                    source_id = b.get("source", {}).get("identifier", "")
+                    if source_id.endswith(f":reasoningEngines:{engine_id}") or f"reasoningEngines:{engine_id}" in source_id:
+                        auth_binding = b.get("authProviderBinding", {})
+                        DYNAMIC_AUTH_BINDING = {
+                            "binding_name": b.get("name"),
+                            "auth_provider": auth_binding.get("authProvider"),
+                            "continue_uri": auth_binding.get("continueUri", "http://127.0.0.1:9000/callback"),
+                            "scopes": auth_binding.get("scopes", ["customer"]),
+                        }
+                        print(f"[DEBUG AUTH] Dynamically resolved Agent Registry binding: {DYNAMIC_AUTH_BINDING}")
+                        return DYNAMIC_AUTH_BINDING
+    except Exception as e:
+        print(f"[DEBUG AUTH] Error resolving Agent Registry binding: {e}")
+
+    # Fallback to default if lookup fails
+    default_auth_provider = os.getenv("AUTH_PROVIDER_NAME", "cymbal-idp")
+    DYNAMIC_AUTH_BINDING = {
+        "auth_provider": f"projects/{PROJECT_ID}/locations/{LOCATION}/authProviders/{default_auth_provider}",
+        "continue_uri": os.getenv("OAUTH_CALLBACK_URL", "http://127.0.0.1:9000/callback"),
+        "scopes": ["customer"]
+    }
+    return DYNAMIC_AUTH_BINDING
+
+
+async def check_user_credential(user_id: str) -> dict:
+    """Checks whether the user already has a valid credential in GCP Agent Identity Credentials service.
+    If not, returns the consent authorization URI and nonce from GCP.
+    """
+    binding = await get_dynamic_auth_binding()
+    auth_provider = binding["auth_provider"].lstrip("/")
+    continue_uri = binding["continue_uri"]
+    scopes = binding["scopes"]
+
+    headers = get_google_auth_headers()
+    retrieve_url = f"https://agentidentitycredentials.googleapis.com/v1/{auth_provider}/credentials:retrieve"
+    payload = {
+        "userId": user_id,
+        "continueUri": continue_uri,
+        "scopes": scopes
+    }
+    
+    try:
+        async with httpx.AsyncClient(timeout=10.0) as http_client:
+            resp = await http_client.post(retrieve_url, headers=headers, json=payload)
+            if resp.status_code == 200:
+                data = resp.json()
+                if "success" in data:
+                    print(f"[DEBUG AUTH] User '{user_id}' already pre-authenticated on {auth_provider}")
+                    return {"authenticated": True, "token": data["success"]}
+                elif "uriConsentRequired" in data:
+                    consent_info = data["uriConsentRequired"]
+                    print(f"[DEBUG AUTH] User '{user_id}' needs consent: {consent_info.get('authorizationUri')}")
+                    return {
+                        "authenticated": False,
+                        "auth_uri": consent_info.get("authorizationUri"),
+                        "nonce": consent_info.get("consentNonce"),
+                        "auth_provider": auth_provider,
+                    }
+            else:
+                print(f"[DEBUG AUTH] credentials:retrieve returned status {resp.status_code}: {resp.text}")
+    except Exception as e:
+        print(f"[DEBUG AUTH] Error checking user credential: {e}")
+
+    return {"authenticated": False}
 
 
 def extract_text_and_auth(event):
@@ -303,7 +405,7 @@ class ResumeRequest(BaseModel):
 
 @app.post("/api/session")
 async def create_session(request: Optional[SessionRequest] = None):
-    """Creates a new Reasoning Engine session on GEAP."""
+    """Creates a new Reasoning Engine session on GEAP and checks upfront auth status."""
     try:
         user_id = request.user_id if request and request.user_id else "customer@cymbal-retail.com"
         engine_name = get_deployed_engine_name()
@@ -325,13 +427,32 @@ async def create_session(request: Optional[SessionRequest] = None):
         elif hasattr(api_response, "name"):
             remote_session_name = api_response.name
 
+        # Eagerly check if the user is authenticated in Agent Identity
+        cred_status = await check_user_credential(user_id)
+        is_authenticated = cred_status.get("authenticated", False)
+
         global consent_sessions
         consent_sessions[session_id] = {
             "user_id": user_id,
-            "created_at": datetime.datetime.now().isoformat()
+            "created_at": datetime.datetime.now().isoformat(),
+            "authenticated": is_authenticated,
+            "auth_uri": cred_status.get("auth_uri"),
+            "nonce": cred_status.get("nonce"),
+            "consent_nonce": cred_status.get("nonce"),
+            "completed": False,
         }
         
-        response = JSONResponse(content={"session_id": session_id, "remote_session_name": str(remote_session_name)})
+        content = {
+            "session_id": session_id,
+            "remote_session_name": str(remote_session_name),
+            "auth_required": not is_authenticated,
+            "auth_uri": cred_status.get("auth_uri"),
+            "pause": not is_authenticated,
+            "call_id": "pre_auth" if not is_authenticated else None,
+            "invocation_id": "pre_auth" if not is_authenticated else None,
+            "tool_calls": [],
+        }
+        response = JSONResponse(content=content)
         response.set_cookie(key="session_id", value=session_id, path="/", samesite="lax")
         return response
     except Exception as e:
@@ -340,7 +461,8 @@ async def create_session(request: Optional[SessionRequest] = None):
 
 @app.post("/api/chat")
 async def chat(request: ChatRequest):
-    """Sends a chat message to the Reasoning Engine and checks for OAuth consent requirements."""
+    """Sends a chat message to the Reasoning Engine after verifying pre-authentication."""
+    global consent_sessions
     max_attempts = 3
     for attempt in range(max_attempts):
         try:
@@ -348,6 +470,33 @@ async def chat(request: ChatRequest):
             remote_app = client.agent_engines.get(name=engine_name)
             
             user_id = request.user_id or "customer@cymbal-retail.com"
+
+            # Ensure user is pre-authenticated before sending query to reasoning engine
+            cred_status = await check_user_credential(user_id)
+            if not cred_status.get("authenticated", False):
+                auth_uri = cred_status.get("auth_uri")
+                nonce = cred_status.get("nonce")
+                if request.session_id not in consent_sessions:
+                    consent_sessions[request.session_id] = {}
+                consent_sessions[request.session_id].update({
+                    "user_id": user_id,
+                    "auth_uri": auth_uri,
+                    "nonce": nonce,
+                    "consent_nonce": nonce,
+                    "call_id": "pre_auth",
+                    "invocation_id": "pre_auth",
+                    "completed": False,
+                    "pending_message": request.message,
+                })
+                return {
+                    "pause": True,
+                    "auth_uri": auth_uri,
+                    "call_id": "pre_auth",
+                    "invocation_id": "pre_auth",
+                    "response": "Authentication required. Please authorize with Apigee to proceed.",
+                    "tool_calls": []
+                }
+
             response_text = ""
             fallback_tool_text = ""
             auth_request = None
@@ -379,7 +528,6 @@ async def chat(request: ChatRequest):
                         auth_request = auth
                 
                 if auth_request:
-                    global consent_sessions
                     if request.session_id not in consent_sessions:
                         consent_sessions[request.session_id] = {}
                     consent_sessions[request.session_id].update({
@@ -433,23 +581,38 @@ async def resume(request: ResumeRequest):
             
         auth_response_config = copy.deepcopy(original_auth_config)
         
-        # Create the FunctionResponse Content matching the adk_request_credential call
+        # Check if this was a pre-authentication pause
         call_id = request.call_id or session_data.get("call_id")
-        auth_content = types.Content(
-            role="user",
-            parts=[
-                types.Part(
-                    function_response=types.FunctionResponse(
-                        name="adk_request_credential",
-                        id=call_id,
-                        response=auth_response_config
-                    )
-                )
-            ]
-        )
-        
         user_id = request.user_id or session_data.get("user_id") or "customer@cymbal-retail.com"
         remote_app = client.agent_engines.get(name=engine_name)
+        
+        is_pre_auth = (call_id == "pre_auth" or not original_auth_config)
+        pending_msg = session_data.get("pending_message")
+
+        if is_pre_auth and not pending_msg:
+            return {
+                "pause": False,
+                "response": "Authentication successful! You are now logged in. How can I assist you with your orders or products today?",
+                "tool_calls": []
+            }
+
+        if is_pre_auth:
+            resume_message = pending_msg
+        else:
+            # Create the FunctionResponse Content matching the adk_request_credential call
+            auth_content = types.Content(
+                role="user",
+                parts=[
+                    types.Part(
+                        function_response=types.FunctionResponse(
+                            name="adk_request_credential",
+                            id=call_id,
+                            response=auth_response_config
+                        )
+                    )
+                ]
+            )
+            resume_message = auth_content.model_dump(mode="json", exclude_none=True)
         
         # Invoke stream_query with retry in case of transient replication delay
         response_text = ""
@@ -468,7 +631,7 @@ async def resume(request: ResumeRequest):
                 for event in remote_app.stream_query(
                     user_id=user_id,
                     session_id=request.session_id,
-                    message=auth_content.model_dump(mode="json", exclude_none=True)
+                    message=resume_message
                 ):
                     print(f"[DEBUG RESUME EVENT] Raw Event: {event}")
                     text, auth = extract_text_and_auth(event)
@@ -608,8 +771,8 @@ async def oauth_callback(
     
     if resolved_auth_provider or user_id_validation_state:
         if not resolved_auth_provider:
-            default_auth_provider = os.getenv("AUTH_PROVIDER_NAME", "cymbal-idp")
-            resolved_auth_provider = f"projects/{PROJECT_ID}/locations/{LOCATION}/authProviders/{default_auth_provider}"
+            binding = await get_dynamic_auth_binding()
+            resolved_auth_provider = binding.get("auth_provider")
             
         if not resolved_auth_provider.startswith("projects/"):
             resolved_auth_provider = f"projects/{PROJECT_ID}/locations/{LOCATION}/authProviders/{resolved_auth_provider}"
@@ -627,18 +790,20 @@ async def oauth_callback(
                 "consentNonce": consent_nonce
             }
             
-            finalize_url = f"https://agentidentitycredentials.googleapis.com/v1alpha/{auth_provider_path}/credentials:finalize"
+            finalize_url = f"https://agentidentitycredentials.googleapis.com/v1/{auth_provider_path}/credentials:finalize"
             print(f"[DEBUG CALLBACK] Calling FinalizeCredentials on: {finalize_url}")
             print(f"[DEBUG CALLBACK] Payload: {payload}")
             
             try:
+                headers = get_google_auth_headers()
                 async with httpx.AsyncClient(timeout=30.0) as http_client:
-                    resp = await http_client.post(finalize_url, json=payload)
+                    resp = await http_client.post(finalize_url, headers=headers, json=payload)
                     print(f"[DEBUG CALLBACK] FinalizeCredentials Status: {resp.status_code}, Response: {resp.text}")
                     resp.raise_for_status()
                     print("[DEBUG CALLBACK] FinalizeCredentials completed successfully!")
                     success = True
                     session_data["completed"] = True
+                    session_data["authenticated"] = True
             except Exception as e:
                 err_detail = e.response.text if hasattr(e, "response") else str(e)
                 print(f"[DEBUG CALLBACK] Error calling FinalizeCredentials: {err_detail}")

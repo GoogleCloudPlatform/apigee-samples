@@ -41,9 +41,24 @@ if servers_list:
     servers_list.sort(key=lambda x: x.get("updateTime", ""), reverse=True)
     server_name = servers_list[0]["name"]
     registry = AgentRegistry(project_id=PROJECT_ID, location=LOCATION)
-    cymbal_mcp = registry.get_mcp_toolset(server_name)
-    # Detach internal registry closure to enable clean cloudpickle serialization for Agent Runtime
-    cymbal_mcp._header_provider = None
+    continue_uri = os.getenv("OAUTH_CALLBACK_URL", "http://127.0.0.1:9000/callback")
+    cymbal_mcp = registry.get_mcp_toolset(server_name, continue_uri=continue_uri)
+
+    async def gcp_auth_header_provider(context):
+        """Fetches the pre-seeded GcpAuthProvider token and injects it into MCP requests (including tools/list)."""
+        if context and hasattr(cymbal_mcp, "get_auth_config"):
+            auth_config = cymbal_mcp.get_auth_config()
+            if auth_config:
+                try:
+                    cred = await CredentialManager(auth_config).get_auth_credential(context)
+                    if cred and cred.oauth2 and cred.oauth2.access_token:
+                        return {"Authorization": f"Bearer {cred.oauth2.access_token}"}
+                except Exception as e:
+                    import logging
+                    logging.warning("Pre-seeded token lookup failed: %s", e)
+        return {}
+
+    cymbal_mcp._header_provider = gcp_auth_header_provider
 else:
     # Fallback to Apigee MCP gateway directly if registry query returned no servers
     mcp_url = f"https://{APIGEE_HOSTNAME}/mcp" if APIGEE_HOSTNAME else "http://localhost:8080"

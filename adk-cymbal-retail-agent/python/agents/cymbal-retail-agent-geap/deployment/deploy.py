@@ -426,13 +426,29 @@ def ensure_agent_registry_binding(project_id, location, engine_name, auth_provid
     for attempt in range(1, max_retries + 1):
         print(f"Configuring Agent Registry Binding '{binding_name}' (attempt {attempt}/{max_retries})...")
         describe_res = subprocess.run(
-            ["gcloud", "agent-registry", "bindings", "describe", binding_name, f"--project={project_id}", f"--location={location}"],
+            ["gcloud", "agent-registry", "bindings", "describe", binding_name, f"--project={project_id}", f"--location={location}", "--format=json"],
             capture_output=True, text=True
         )
 
-        action = "update" if describe_res.returncode == 0 else "create"
+        if describe_res.returncode == 0:
+            try:
+                curr_data = json.loads(describe_res.stdout)
+                curr_auth = curr_data.get("authProviderBinding", {}).get("authProvider", "")
+                curr_source = curr_data.get("source", {}).get("identifier", "")
+                if curr_source == source_identifier and (auth_provider_path in curr_auth or curr_auth.endswith(auth_provider)):
+                    print(f"✅ Agent Registry Binding '{binding_name}' is already up-to-date.")
+                    success = True
+                    break
+            except Exception:
+                pass
+            # If update is needed, delete and recreate since gcloud cannot update auth_provider directly
+            subprocess.run(
+                ["gcloud", "agent-registry", "bindings", "delete", binding_name, f"--project={project_id}", f"--location={location}", "--quiet"],
+                capture_output=True, text=True
+            )
+
         cmd = [
-            "gcloud", "agent-registry", "bindings", action, binding_name,
+            "gcloud", "agent-registry", "bindings", "create", binding_name,
             f"--project={project_id}", f"--location={location}",
             f"--source-identifier={source_identifier}",
             f"--target-identifier={target_identifier}",

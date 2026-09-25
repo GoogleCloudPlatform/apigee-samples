@@ -65,6 +65,9 @@
           "items": {
             "type": "array",
             "description": "A list of products in the order.",
+            "items": {
+              "type": "string"
+            }
           },
           "totalAmount": {
             "type": "number",
