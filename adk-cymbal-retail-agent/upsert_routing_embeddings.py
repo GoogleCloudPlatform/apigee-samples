@@ -17,7 +17,8 @@ limitations under the License.
 
 import subprocess
 import json
-import httpx
+import urllib.request
+import urllib.error
 import logging
 import sys
 import argparse
@@ -144,14 +145,20 @@ def get_embedding(text, token):
         "Content-Type": "application/json",
         "Authorization": f"Bearer {token}"
     }
+    data = json.dumps(payload).encode("utf-8")
+    req = urllib.request.Request(EMBEDDING_URL, data=data, headers=headers, method="POST")
     try:
-        response = httpx.post(EMBEDDING_URL, json=payload, headers=headers, timeout=60.0)
-        if response.status_code == 200:
-            body = response.json()
-            predictions = body.get("predictions", [])
-            if predictions:
-                return predictions[0].get("embeddings", []).get("values")
-        logging.error(f"Failed to get embedding for '{text}'. Status: {response.status_code}, Body: {response.text}")
+        with urllib.request.urlopen(req, timeout=60.0) as response:
+            if response.status == 200:
+                body = json.loads(response.read().decode("utf-8"))
+                predictions = body.get("predictions", [])
+                if predictions:
+                    return predictions[0].get("embeddings", []).get("values")
+        logging.error(f"Failed to get embedding for '{text}'.")
+        return None
+    except urllib.error.HTTPError as e:
+        error_body = e.read().decode("utf-8", errors="replace")
+        logging.error(f"Failed to get embedding for '{text}'. Status: {e.code}, Body: {error_body}")
         return None
     except Exception as e:
         logging.error(f"Error calling embedding API: {e}")
