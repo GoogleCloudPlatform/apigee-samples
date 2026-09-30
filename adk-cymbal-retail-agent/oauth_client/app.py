@@ -862,6 +862,23 @@ async def oauth_callback(
 app.mount("/static", StaticFiles(directory=os.path.join(os.path.dirname(__file__), "static")), name="static")
 
 if __name__ == "__main__":
+    import signal
     import uvicorn
-    uvicorn.run("app:app", host="127.0.0.1", port=9000, reload=True)
+    import uvicorn.server
+
+    def _immediate_exit(self, sig, frame):
+        print("\n[INFO] Stopped server.")
+        os._exit(0)
+
+    # Override uvicorn's cooperative exit handler so Ctrl+C terminates immediately
+    # without hanging on active synchronous socket reads or frozen event loops.
+    uvicorn.server.Server.handle_exit = _immediate_exit
+    signal.signal(signal.SIGINT, lambda s, f: os._exit(0))
+    signal.signal(signal.SIGTERM, lambda s, f: os._exit(0))
+
+    reload_enabled = os.getenv("RELOAD", "false").lower() in ("true", "1", "yes")
+    if reload_enabled:
+        uvicorn.run("app:app", host="127.0.0.1", port=9000, reload=True)
+    else:
+        uvicorn.run(app, host="127.0.0.1", port=9000)
 
