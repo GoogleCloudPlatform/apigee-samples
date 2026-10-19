@@ -25,7 +25,7 @@ ORG_ID=$(gcloud projects get-ancestors "$PROJECT_ID" --format="value(id,type)" 2
 if [ -n "$ORG_ID" ]; then
   MEMBER="principalSet://agents.global.org-${ORG_ID}.system.id.goog/attribute.platformContainer/aiplatform/projects/${PROJECT_NUMBER}"
 else
-  MEMBER="principalSet://agents.global.proj-${PROJECT_NUMBER}.system.id.goog/attribute.platformContainer/aiplatform/projects/${PROJECT_NUMBER}"
+  MEMBER="principalSet://agents.global.project-${PROJECT_NUMBER}.system.id.goog/attribute.platformContainer/aiplatform/projects/${PROJECT_NUMBER}"
 fi
 echo "Principal member: $MEMBER"
 
