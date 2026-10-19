@@ -20,7 +20,7 @@
         ]
       },
       {
-        "apiSource": "adk-retail-agent-llm-governance-v1",
+        "apiSource": "llm-ai-gateway-v1",
         "operations": [
           {
             "resource": "/",
@@ -34,7 +34,7 @@
         }
       },
       {
-        "apiSource": "adk-retail-agent-llm-governance-v1",
+        "apiSource": "llm-ai-gateway-v1",
         "operations": [
           {
             "resource": "/**",

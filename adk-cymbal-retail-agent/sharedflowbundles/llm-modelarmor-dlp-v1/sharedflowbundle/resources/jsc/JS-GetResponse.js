@@ -14,5 +14,10 @@
  * limitations under the License.
  */
 
-var prompt = context.getVariable("response_prompt_value");
+var responseContent = response.content.asJSON;
+var prompt = "";
+if (responseContent) {
+  prompt = getResponse(responseContent) || "";
+}
+context.setVariable("response_has_text", prompt !== "" ? "true" : "false");
 context.setVariable("sdp.text", JSON.stringify(prompt));

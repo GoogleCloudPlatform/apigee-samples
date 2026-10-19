@@ -46,7 +46,8 @@ def get_default_gcp_project():
         return "PROJECT_ID_TO_SET"
 
 PROJECT_ID = get_env_var("PROJECT_ID") or get_default_gcp_project()
-APIGEE_HOST = get_env_var("APIGEE_HOST")
+REGION = get_env_var("VERTEXAI_REGION") or get_env_var("GOOGLE_CLOUD_LOCATION") or "us-central1"
+APIGEE_HOST = get_env_var("APIGEE_HOST") or get_env_var("APIGEE_HOSTNAME")
 
 if not APIGEE_HOST or "TO_SET" in APIGEE_HOST:
     try:
@@ -67,15 +68,21 @@ if not APIGEE_HOST or "TO_SET" in APIGEE_HOST:
 if not APIGEE_HOST or "TO_SET" in APIGEE_HOST:
     APIGEE_HOST = "APIGEE_HOST_TO_SET"
 
-API_KEY = get_env_var("CLIENT_ID") or get_env_var("APIKEY")
+API_KEY = get_env_var("LLM_GATEWAY_KEY") or get_env_var("APIKEY") or get_env_var("CLIENT_ID")
 
 if not API_KEY:
     try:
         token = subprocess.check_output("gcloud auth application-default print-access-token 2>/dev/null || gcloud auth print-access-token", shell=True).decode().strip()
         apigeecli_bin = f"{os.environ.get('HOME')}/.apigeecli/bin/apigeecli"
         if os.path.exists(apigeecli_bin):
-            app_json = json.loads(subprocess.check_output(f"{apigeecli_bin} apps get --name cymbal-retail-app --org {PROJECT_ID} --token {token} --disable-check", shell=True).decode())
-            API_KEY = app_json[0]["credentials"][0]["consumerKey"]
+            for app_name in ("llm-ai-gateway-app", "cymbal-retail-admin-app", "cymbal-retail-app"):
+                try:
+                    app_json = json.loads(subprocess.check_output(f"{apigeecli_bin} apps get --name {app_name} --org {PROJECT_ID} --token {token} --disable-check", shell=True).decode())
+                    API_KEY = app_json[0]["credentials"][0]["consumerKey"]
+                    if API_KEY:
+                        break
+                except Exception:
+                    continue
     except Exception:
         API_KEY = None
 
@@ -89,7 +96,7 @@ def get_gcp_token():
 
 
 def send_governance_request(prompt, custom_headers=None):
-    url = f"https://{APIGEE_HOST}/v1/adk-retail-agent-llm-governance/v1/projects/{PROJECT_ID}/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent"
+    url = f"https://{APIGEE_HOST}/v1/llm-ai-gateway/v1/projects/{PROJECT_ID}/locations/{REGION}/publishers/google/models/gemini-2.5-flash:generateContent"
     
     payload = {
         "contents": [

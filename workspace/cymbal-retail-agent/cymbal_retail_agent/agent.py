@@ -15,6 +15,8 @@
 import os
 from dotenv import load_dotenv
 
+load_dotenv()
+
 import warnings
 warnings.filterwarnings("ignore")
 
@@ -27,11 +29,10 @@ from .tools import orders
 print("Libraries imported.")
 print("Starting agent initialization...")
 
-load_dotenv()
+MODEL_NAME = os.getenv("MODEL_NAME", "gemini-2.5-flash")
+SUBAGENT_MODEL = MODEL_NAME
 
-MODEL_NAME=os.getenv("MODEL_NAME")
-
-model=MODEL_NAME
+model = MODEL_NAME
 
 # Define the sub-agents for each tool with their instructions
 orders_agent = Agent(

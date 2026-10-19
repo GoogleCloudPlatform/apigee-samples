@@ -13,10 +13,13 @@
 # limitations under the License.
 
 import os
+from dotenv import load_dotenv
 from google.adk.tools.apihub_tool.apihub_toolset import APIHubToolset
 from google.adk.tools.mcp_tool.mcp_toolset import MCPToolset
 from google.adk.tools.mcp_tool.mcp_toolset import StreamableHTTPConnectionParams
 from .auth_config import auth_scheme, auth_credential
+
+load_dotenv()
 
 APIGEE_HOSTNAME=os.getenv("APIGEE_HOSTNAME")
 

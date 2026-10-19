@@ -36,6 +36,10 @@ try {
                 promptTokens = responseObj.usageMetadata.promptTokenCount || 0;
                 candidatesTokens = responseObj.usageMetadata.candidatesTokenCount || 0;
                 totalTokens = responseObj.usageMetadata.totalTokenCount || 0;
+            } else if (responseObj.usage) {
+                promptTokens = responseObj.usage.prompt_tokens || 0;
+                candidatesTokens = responseObj.usage.completion_tokens || 0;
+                totalTokens = responseObj.usage.total_tokens || (promptTokens + candidatesTokens);
             }
             // Inject routed model name into the response body JSON so it persists in semantic cache
             responseObj.routedModel = context.getVariable("model");

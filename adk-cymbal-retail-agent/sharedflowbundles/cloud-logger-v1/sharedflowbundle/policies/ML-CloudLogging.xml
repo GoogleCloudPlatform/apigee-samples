@@ -24,7 +24,7 @@
             "client_ip": "{client.ip}",
             "verb": "{request.verb}",
             "request_path": "{proxy.basepath}{proxy.pathsuffix}",
-            "status_code": "{response.status.code}",
+            "status_code": "{message.status.code}",
             "user_agent": "{request.header.User-Agent}",
             "error_flow": "{flow.error.state}"
         }</Message>

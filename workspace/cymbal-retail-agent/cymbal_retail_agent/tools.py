@@ -13,7 +13,10 @@
 # limitations under the License.
 
 import os
+from dotenv import load_dotenv
 from google.adk.tools.apihub_tool.apihub_toolset import APIHubToolset
+
+load_dotenv()
 
 PROJECT_ID=os.getenv("GOOGLE_CLOUD_PROJECT")
 LOCATION=os.getenv("GOOGLE_CLOUD_LOCATION")

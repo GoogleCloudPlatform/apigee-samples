@@ -13,18 +13,40 @@
 # limitations under the License.
 
 import os
+from dotenv import load_dotenv
 from fastapi.openapi.models import OAuth2, OAuthFlowAuthorizationCode, OAuthFlows
 from google.adk.auth import AuthCredential, AuthCredentialTypes, OAuth2Auth
 from google.adk.tools.apihub_tool.clients.secret_client import SecretManagerClient
 
-PROJECT_ID=os.getenv("GOOGLE_CLOUD_PROJECT")
+load_dotenv()
+
+PROJECT_ID = os.getenv("GOOGLE_CLOUD_PROJECT")
 APIGEE_HOSTNAME = os.getenv("APIGEE_HOSTNAME")
-SECRET1=f"projects/{PROJECT_ID}/secrets/cymbal-retail-client-id/versions/latest"
-SECRET2=f"projects/{PROJECT_ID}/secrets/cymbal-retail-client-secret/versions/latest"
 
 secret_manager_client = SecretManagerClient()
-CLIENT_ID = secret_manager_client.get_secret(SECRET1)
-CLIENT_SECRET = secret_manager_client.get_secret(SECRET2)
+
+
+def _resolve_secret(env_var_name: str, secret_ids: list[str]) -> str:
+    env_val = os.getenv(env_var_name)
+    if env_val:
+        return env_val
+    for secret_id in secret_ids:
+        try:
+            return secret_manager_client.get_secret(
+                f"projects/{PROJECT_ID}/secrets/{secret_id}/versions/latest"
+            )
+        except Exception:
+            continue
+    return ""
+
+
+CLIENT_ID = _resolve_secret(
+    "CLIENT_ID", ["cymbal-retail-admin-client-id", "cymbal-retail-client-id"]
+)
+CLIENT_SECRET = _resolve_secret(
+    "CLIENT_SECRET",
+    ["cymbal-retail-admin-client-secret", "cymbal-retail-client-secret"],
+)
 
 auth_scheme = OAuth2(
     flows=OAuthFlows(

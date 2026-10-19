@@ -15,6 +15,8 @@
 import os
 from dotenv import load_dotenv
 
+load_dotenv()
+
 import warnings
 warnings.filterwarnings("ignore")
 
@@ -29,42 +31,43 @@ from google.adk.tools.apihub_tool.clients.secret_client import SecretManagerClie
 print("Libraries imported.")
 print("Starting agent initialization...")
 
-load_dotenv()
-
 PROJECT_ID = os.getenv("GOOGLE_CLOUD_PROJECT")
-MODEL_NAME = os.getenv("MODEL_NAME", "gemma3:4b")
+MODEL_NAME = os.getenv("MODEL_NAME", "gemini-2.5-flash")
 APIGEE_HOSTNAME = os.getenv("APIGEE_HOSTNAME")
 APIGEE_LLM = os.getenv("APIGEE_LLM", "/v1/llm-ai-gateway")
-DEFAULT_MODEL_TIER = os.getenv("DEFAULT_MODEL_TIER", "local")
 SECRET = os.getenv(
     "LLM_GATEWAY_SECRET",
     f"projects/{PROJECT_ID}/secrets/llm-ai-gateway-client-id/versions/latest",
 )
 
-secret_manager_client = SecretManagerClient()
-try:
-    client_id = secret_manager_client.get_secret(SECRET)
-except Exception:
+client_id = os.getenv("LLM_GATEWAY_KEY") or os.getenv("APIKEY", "")
+if not client_id:
+    secret_manager_client = SecretManagerClient()
     try:
-        client_id = secret_manager_client.get_secret(
-            f"projects/{PROJECT_ID}/secrets/cymbal-retail-client-id/versions/latest"
-        )
+        client_id = secret_manager_client.get_secret(SECRET)
     except Exception:
-        client_id = os.getenv("APIKEY", "")
+        try:
+            client_id = secret_manager_client.get_secret(
+                f"projects/{PROJECT_ID}/secrets/cymbal-retail-admin-client-id/versions/latest"
+            )
+        except Exception:
+            try:
+                client_id = secret_manager_client.get_secret(
+                    f"projects/{PROJECT_ID}/secrets/cymbal-retail-client-id/versions/latest"
+                )
+            except Exception:
+                client_id = ""
 
-# Configure Apigee LLM client with local Gemma tier routing
+# Configure Apigee LLM client headers
 custom_headers = {"x-apikey": client_id}
-if DEFAULT_MODEL_TIER:
-    custom_headers["x-model-tier"] = DEFAULT_MODEL_TIER
-
-# Optional LLM AI Gateway Control Headers (Uncomment to override gateway behaviors):
+# custom_headers["x-model-tier"] = "local"                   # Force local Gemma tier routing
 # custom_headers["x-llm-model"] = "gemini-2.5-pro"           # Explicitly override target model (e.g., gemini-2.5-pro, gemini-2.5-flash)
 # custom_headers["x-llm-cache"] = "false"                    # Disable Vector Search Semantic Cache lookup & population
 # custom_headers["x-llm-routing"] = "false"                  # Disable dynamic semantic vector complexity routing
 # custom_headers["x-llm-sanitize-user-prompt"] = "false"     # Disable user prompt sanitization (Model Armor & Cloud DLP)
-# custom_headers["x-llm-sanitize-model-response"] = "false"    # Disable model response sanitization (Cloud DLP)
+# custom_headers["x-llm-sanitize-model-response"] = "false"  # Disable model response sanitization (Cloud DLP)
 # custom_headers["x-llm-token-quota-enforce"] = "false"      # Disable API Product LLM token quota enforcement
-# custom_headers["x-llm-prompt-rate-limiting"] = "false"      # Disable token-based prompt rate limiting
+# custom_headers["x-llm-prompt-rate-limiting"] = "false"     # Disable token-based prompt rate limiting
 
 model = ApigeeLlm(
     model=f"apigee/{MODEL_NAME}",

@@ -34,6 +34,9 @@ if [ -z "$PROJECT_ID" ] || [ "$PROJECT_ID" = "PROJECT_ID_TO_SET" ] || [ "$PROJEC
   exit 1
 fi
 
+PROJECT_NUMBER="${PROJECT_NUMBER:-$(gcloud projects describe "$PROJECT_ID" --format="value(projectNumber)" 2>/dev/null || true)}"
+export PROJECT_NUMBER
+
 if [ -z "$TOKEN" ]; then
   TOKEN=$(gcloud auth application-default print-access-token 2>/dev/null || gcloud auth print-access-token 2>/dev/null || true)
 fi
@@ -71,17 +74,21 @@ export AGENT_GATEWAY_NAME="${AGENT_GATEWAY_NAME:-egress-gateway}"
 
 DEPLOY_DISCOVERY_PROXY="${DEPLOY_DISCOVERY_PROXY:-true}"
 DEPLOY_LLM_AI_GATEWAY="${DEPLOY_LLM_AI_GATEWAY:-true}"
+FORCE_REDEPLOY="${FORCE_REDEPLOY:-false}"
 while [[ "$#" -gt 0 ]]; do
   case $1 in
     --deploy-discovery-proxy) DEPLOY_DISCOVERY_PROXY="$2"; shift 2 ;;
     --deploy-discovery-proxy=*) DEPLOY_DISCOVERY_PROXY="${1#*=}"; shift ;;
     --deploy-llm-ai-gateway) DEPLOY_LLM_AI_GATEWAY="$2"; shift 2 ;;
     --deploy-llm-ai-gateway=*) DEPLOY_LLM_AI_GATEWAY="${1#*=}"; shift ;;
+    --force-redeploy) FORCE_REDEPLOY="true"; shift ;;
+    --force-redeploy=*) FORCE_REDEPLOY="${1#*=}"; shift ;;
     *) echo "Unknown parameter: $1"; exit 1 ;;
   esac
 done
 export DEPLOY_DISCOVERY_PROXY
 export DEPLOY_LLM_AI_GATEWAY
+export FORCE_REDEPLOY
 
 add_role_to_serviceaccount(){
   local role=$1
@@ -116,7 +123,7 @@ is_sharedflow_deployed() {
 
 import_and_deploy_sharedflow() {
   local sharedflow_name=$1
-  if is_sharedflow_deployed "$sharedflow_name"; then
+  if [ "$FORCE_REDEPLOY" != "true" ] && [ "$sharedflow_name" != "cloud-logger-v1" ] && is_sharedflow_deployed "$sharedflow_name"; then
     echo "Shared Flow $sharedflow_name is already deployed to $APIGEE_ENV. Skipping."
     return 0
   fi
@@ -134,7 +141,7 @@ import_and_deploy_proxy() {
     echo "Skipping ${proxy}: directory not found."
     return 0
   fi
-  if is_proxy_deployed "$proxy"; then
+  if [ "$FORCE_REDEPLOY" != "true" ] && is_proxy_deployed "$proxy"; then
     echo "Proxy $proxy is already deployed to $APIGEE_ENV. Skipping."
     return 0
   fi
@@ -178,6 +185,8 @@ add_rest_api_to_hub(){
   -f "tmp/${api}/${api}-api-ver.json"  -r "$APIGEE_APIHUB_REGION" -o "$APIGEE_APIHUB_PROJECT_ID" -t "$TOKEN" ) || true
 
   ( apigeecli apihub apis versions specs create --api-id "${api}_api" -i $id --version $id \
+  -d openapi.yaml -f "tmp/${api}/${api}.yaml"  -r "$APIGEE_APIHUB_REGION" -o "$APIGEE_APIHUB_PROJECT_ID" -t "$TOKEN" ) || \
+  ( apigeecli apihub apis versions specs update --api-id "${api}_api" -i $id --version $id \
   -d openapi.yaml -f "tmp/${api}/${api}.yaml"  -r "$APIGEE_APIHUB_REGION" -o "$APIGEE_APIHUB_PROJECT_ID" -t "$TOKEN" ) || true
 }
 
@@ -291,12 +300,19 @@ echo "Installing dependencies..."
 #npm install
 
 echo "Registering APIs in Apigee API hub"
+HUB_STAGE_DIR=$(mktemp -d)
 rm -rf tmp
-mkdir -p tmp
-cp -rf config/* tmp/
-sed_i "s/APIGEE_HOST/$APIGEE_HOST/g" tmp/*/*.yaml
-sed_i "s/APIGEE_APIHUB_PROJECT_ID/$APIGEE_APIHUB_PROJECT_ID/g" tmp/*/*.json
-sed_i "s/APIGEE_APIHUB_REGION/$APIGEE_APIHUB_REGION/g" tmp/*/*.json
+ln -sfn "$HUB_STAGE_DIR" tmp
+cp -rf config/* "$HUB_STAGE_DIR/"
+for spec_file in "$HUB_STAGE_DIR"/*/*.yaml "$HUB_STAGE_DIR"/*/*.wsdl "$HUB_STAGE_DIR"/*/*.proto; do
+  [ -f "$spec_file" ] && sed_i "s/APIGEE_HOST/$APIGEE_HOST/g" "$spec_file"
+done
+for meta_file in "$HUB_STAGE_DIR"/*/*.json; do
+  if [ -f "$meta_file" ]; then
+    sed_i "s/APIGEE_APIHUB_PROJECT_ID/$APIGEE_APIHUB_PROJECT_ID/g" "$meta_file"
+    sed_i "s/APIGEE_APIHUB_REGION/$APIGEE_APIHUB_REGION/g" "$meta_file"
+  fi
+done
 
 apigeecli apihub attributes update -r "$APIGEE_APIHUB_REGION" -o "$APIGEE_APIHUB_PROJECT_ID" -t "$TOKEN" --allowed-values  "config/business-units.json" --data-type "ENUM" -i "system-business-unit" -s "API" -m "allowed_values" -d "Business Unit" || true
 apigeecli apihub attributes update -r "$APIGEE_APIHUB_REGION" -o "$APIGEE_APIHUB_PROJECT_ID" -t "$TOKEN" --allowed-values  "config/teams.json" --data-type "ENUM" -i "system-team" -s "API" -m "allowed_values" -d "Team" || true
@@ -313,7 +329,7 @@ add_rest_api_to_hub "returns"
 add_rest_api_to_hub "stocks"
 add_rest_api_to_hub "shipping"
 
-rm -rf tmp
+rm -rf tmp "$HUB_STAGE_DIR"
 
 echo "Checking Service Account..."
 if ! gcloud iam service-accounts describe "${SERVICE_ACCOUNT_NAME}@${PROJECT_ID}.iam.gserviceaccount.com" --project "$PROJECT_ID" &>/dev/null; then
@@ -348,7 +364,7 @@ gcloud iam service-accounts add-iam-policy-binding \
   --project="${PROJECT_ID}" || true
 
 
-gcloud config set api_endpoint_overrides/modelarmor "https://modelarmor.$MODEL_ARMOR_REGION.rep.mtls.googleapis.com/" || true
+gcloud config set api_endpoint_overrides/modelarmor "https://modelarmor.$MODEL_ARMOR_REGION.rep.googleapis.com/" || true
 
 gcloud model-armor templates create "$MODEL_ARMOR_TEMPLATE_ID" -q --location "$MODEL_ARMOR_REGION" --project="$PROJECT_ID" \
   --rai-settings-filters='[{ "filterType": "HATE_SPEECH", "confidenceLevel": "MEDIUM_AND_ABOVE" },{ "filterType": "HARASSMENT", "confidenceLevel": "MEDIUM_AND_ABOVE" },{ "filterType": "SEXUALLY_EXPLICIT", "confidenceLevel": "MEDIUM_AND_ABOVE" }]' \
@@ -455,18 +471,27 @@ echo "Creating or Updating API Products"
 # 2 products are required due to b/541033120
 create_or_update_product "cymbal-retail-product-rest" "Cymbal Retail Product - REST" "$APIGEE_ENV" "./config/cymbal-retail-product-rest-ops.json"
 create_or_update_product "cymbal-retail-product-mcp" "Cymbal Retail Product - MCP" "$APIGEE_ENV" "./config/cymbal-retail-product-mcp-ops.json"
+create_or_update_product "cymbal-retail-admin-product-mcp" "Cymbal Retail Admin Product - MCP" "$APIGEE_ENV" "./config/cymbal-retail-product-mcp-ops.json"
 
 echo "Creating Developer"
 apigeecli developers create --user cymbal-retail-developer \
   --email "cymbal-retail-developer@acme.com" --first="Cymbal Retail" \
   --last="Sample User" --org "$PROJECT_ID" --token "$TOKEN" || true
 
-echo "Creating Developer App"
+APP_CALLBACK_URLS="http://localhost:9000/callback,http://127.0.0.1:9000/callback,http://localhost:8000/dev-ui/,http://127.0.0.1:8000/dev-ui/,https://agentidentitycredentials.googleapis.com/v1/projects/${PROJECT_ID}/locations/${VERTEXAI_REGION}/authProviders/cymbal-idp/oauthcallback,https://agentidentitycredentials.googleapis.com/v1alpha/projects/${PROJECT_ID}/locations/${VERTEXAI_REGION}/authProviders/cymbal-idp/oauthcallback,https://agentidentitycredentials.googleapis.com/v1/projects/${PROJECT_NUMBER}/locations/${VERTEXAI_REGION}/authProviders/cymbal-idp/oauthcallback,https://agentidentitycredentials.googleapis.com/v1alpha/projects/${PROJECT_NUMBER}/locations/${VERTEXAI_REGION}/authProviders/cymbal-idp/oauthcallback"
+
+echo "Creating Developer Apps"
 apigeecli apps create --name cymbal-retail-app --email "cymbal-retail-developer@acme.com" \
-  --prods "cymbal-retail-product-rest,cymbal-retail-product-mcp" --callback "http://localhost:9000/callback,http://127.0.0.1:9000/callback,http://localhost:8000/dev-ui/,http://127.0.0.1:8000/dev-ui/,https://agentidentitycredentials.googleapis.com/v1/projects/${PROJECT_ID}/locations/${VERTEXAI_REGION}/authProviders/cymbal-idp/oauthcallback,https://agentidentitycredentials.googleapis.com/v1alpha/projects/${PROJECT_ID}/locations/${VERTEXAI_REGION}/authProviders/cymbal-idp/oauthcallback,https://agentidentitycredentials.googleapis.com/v1/projects/${PROJECT_NUMBER}/locations/${VERTEXAI_REGION}/authProviders/cymbal-idp/oauthcallback,https://agentidentitycredentials.googleapis.com/v1alpha/projects/${PROJECT_NUMBER}/locations/${VERTEXAI_REGION}/authProviders/cymbal-idp/oauthcallback" --org "$PROJECT_ID" --token "$TOKEN" --disable-check || true
+  --prods "cymbal-retail-product-rest,cymbal-retail-product-mcp" --callback "$APP_CALLBACK_URLS" --org "$PROJECT_ID" --token "$TOKEN" --disable-check || true
+
+apigeecli apps create --name cymbal-retail-admin-app --email "cymbal-retail-developer@acme.com" \
+  --prods "cymbal-retail-product-rest,cymbal-retail-admin-product-mcp" --callback "$APP_CALLBACK_URLS" --org "$PROJECT_ID" --token "$TOKEN" --disable-check || true
 
 CLIENT_ID=$(apigeecli apps get --name "cymbal-retail-app" --org "$PROJECT_ID" --token "$TOKEN" --disable-check | jq ."[0].credentials[0].consumerKey" -r)
 CLIENT_SECRET=$(apigeecli apps get --name "cymbal-retail-app" --org "$PROJECT_ID" --token "$TOKEN" --disable-check | jq ."[0].credentials[0].consumerSecret" -r)
+
+ADMIN_CLIENT_ID=$(apigeecli apps get --name "cymbal-retail-admin-app" --org "$PROJECT_ID" --token "$TOKEN" --disable-check | jq ."[0].credentials[0].consumerKey" -r)
+ADMIN_CLIENT_SECRET=$(apigeecli apps get --name "cymbal-retail-admin-app" --org "$PROJECT_ID" --token "$TOKEN" --disable-check | jq ."[0].credentials[0].consumerSecret" -r)
 
 echo "Creating secrets that will be used by ADK"
 
@@ -480,6 +505,14 @@ gcloud secrets create "$CLIENT_SECRET_SECRET_ID" --replication-policy="automatic
 echo -n "$CLIENT_SECRET" | gcloud secrets versions add "$CLIENT_SECRET_SECRET_ID" --project "$PROJECT_ID" --data-file=- || true
 echo "Secret $CLIENT_SECRET_SECRET_ID created successfully"
 
+if [ -n "$ADMIN_CLIENT_ID" ] && [ "$ADMIN_CLIENT_ID" != "null" ]; then
+  gcloud secrets create "cymbal-retail-admin-client-id" --replication-policy="automatic" --project "$PROJECT_ID" || true
+  echo -n "$ADMIN_CLIENT_ID" | gcloud secrets versions add "cymbal-retail-admin-client-id" --project "$PROJECT_ID" --data-file=- || true
+  gcloud secrets create "cymbal-retail-admin-client-secret" --replication-policy="automatic" --project "$PROJECT_ID" || true
+  echo -n "$ADMIN_CLIENT_SECRET" | gcloud secrets versions add "cymbal-retail-admin-client-secret" --project "$PROJECT_ID" --data-file=- || true
+  echo "Secrets cymbal-retail-admin-client-id & cymbal-retail-admin-client-secret created successfully"
+fi
+
 echo "Creating Flow-Hook for cloud-logger-v1 sharedflow ..."
 apigeecli flowhooks attach \
  --name "PostProxyFlowHook" \
@@ -489,10 +522,16 @@ apigeecli flowhooks attach \
  --token "$TOKEN" || true
 
 export CLIENT_ID
+export ADMIN_CLIENT_ID
 export PROXY_URL="$APIGEE_HOST/v2/samples/adk-cymbal-retail"
 
 echo "Configuring Agent Gateway Egress Endpoints and Rules..."
 ./setup-agent-gateway-egress.sh
+
+echo "Ensuring GCS staging bucket gs://${PROJECT_ID}_cymbal_retail_agent exists..."
+gcloud storage buckets create "gs://${PROJECT_ID}_cymbal_retail_agent" \
+  --project="$PROJECT_ID" \
+  --location="$VERTEXAI_REGION" 2>/dev/null || true
 
 # Sync dependencies in the package source folder before deploying
 echo "Syncing agent dependencies..."
@@ -518,8 +557,8 @@ python3 deployment/deploy.py \
   --project "$PROJECT_ID" \
   --location "$VERTEXAI_REGION" \
   --bucket "${PROJECT_ID}_cymbal_retail_agent" \
-  --client-id "$CLIENT_ID" \
-  --client-secret "$CLIENT_SECRET" \
+  --client-id "${ADMIN_CLIENT_ID:-$CLIENT_ID}" \
+  --client-secret "${ADMIN_CLIENT_SECRET:-$CLIENT_SECRET}" \
   --apigee-hostname "$APIGEE_HOST" \
   --egress-gateway "$AGENT_GATEWAY_NAME"
 deactivate

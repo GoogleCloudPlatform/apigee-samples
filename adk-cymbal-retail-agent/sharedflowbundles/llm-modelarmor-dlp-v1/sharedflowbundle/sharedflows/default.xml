@@ -49,10 +49,10 @@
   </Step>
   <Step>
     <Name>SC-SensitiveDataProtection</Name>
-    <Condition>type = "response-prompt"</Condition>
+    <Condition>type = "response-prompt" and response_has_text = "true"</Condition>
   </Step>
   <Step>
     <Name>JS-SetResponse</Name>
-    <Condition>type = "response-prompt"</Condition>
+    <Condition>type = "response-prompt" and response_has_text = "true" and sensitiveDataProtectionResponse.content != null</Condition>
   </Step>
 </SharedFlow>

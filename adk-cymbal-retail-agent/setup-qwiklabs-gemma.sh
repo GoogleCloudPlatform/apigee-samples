@@ -17,7 +17,7 @@
 set -e
 
 echo "=================================================================="
-echo "    CYMBAL RETAIL: QWIKLABS GEMMA 3 (4B) WORKSHOP SETUP           "
+echo "    CYMBAL RETAIL: QWIKLABS GEMMA 3 (1B) WORKSHOP SETUP           "
 echo "=================================================================="
 
 # ==============================================================================
@@ -38,27 +38,33 @@ fi
 echo "--> Target Project: $PROJECT_ID"
 
 # ==============================================================================
-# Step 2: Deploy CPU-Optimized Gemma 3 (4B) to Cloud Run (Qwiklabs Sandbox Mode)
-# Runs a quantized model requiring 0 GPU quotas with scale-to-zero ($0 idle cost).
+# Step 2: Deploy CPU-Optimized Gemma 3 (1B) to Cloud Run (Qwiklabs Sandbox Mode)
+# Runs a quantized model requiring 0 GPU quotas with pre-warmed CPU instance.
 # Automatically updates Apigee propertyset (gemma_config.properties) with endpoint.
 # ==============================================================================
 echo ""
-echo "--> Step 1/2: Deploying Gemma 3 (4B) on Cloud Run (CPU / Scale-to-Zero)..."
+echo "--> Step 1/2: Deploying Gemma 3 (1B) on Cloud Run (CPU)..."
 ./deploy-gemma-cpu-cloudrun.sh
 
 # ==============================================================================
-# Step 3: Run End-to-End Hybrid Routing & AI Safety Verification
-# Tests both local Gemma route and frontier Gemini route with Model Armor & DLP.
+# Step 3: Optional Hybrid Routing Smoke Test
+# Disabled during automated Qwiklabs bootstrap so synthetic llm-ai-gateway-v1
+# traffic does not pre-satisfy student activity logs before the lab begins.
 # ==============================================================================
-echo ""
-echo "--> Step 2/2: Validating Apigee Hybrid Model Routing & AI Safety..."
-python3 test-hybrid-routing.py
+if [ "${RUN_ROUTING_SMOKE_TEST:-false}" = "true" ]; then
+  echo ""
+  echo "--> Step 2/2: Validating Apigee Hybrid Model Routing & AI Safety..."
+  python3 test-hybrid-routing.py
+else
+  echo ""
+  echo "--> Step 2/2: Skipping synthetic gateway smoke traffic during bootstrap (set RUN_ROUTING_SMOKE_TEST=true to run manually)."
+fi
 
 echo ""
 echo "=================================================================="
 echo "  QWIKLABS GEMMA WORKSHOP ENVIRONMENT READY!                     "
 echo "=================================================================="
-echo "  1. Simple prompts & mock calls route to private Gemma 3 (4B)."
-echo "  2. Complex multi-agent reasoning routes to Gemini 2.5 Flash."
-echo "  3. Google Cloud Model Armor and Cloud DLP protect both paths."
+echo "  1. Simple prompts & FAQ calls route to private Gemma 3 (1B)."
+echo "  2. Complex multi-agent reasoning routes to Gemini 2.5 Pro/Flash."
+echo "  3. Google Cloud Model Armor and Cloud DLP protect all paths."
 echo "=================================================================="

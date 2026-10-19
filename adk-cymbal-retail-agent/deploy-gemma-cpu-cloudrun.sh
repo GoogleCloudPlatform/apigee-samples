@@ -31,10 +31,9 @@ if [ "$REGION" == "VERTEXAI_REGION_TO_SET" ] || [ -z "$REGION" ]; then
 fi
 
 SERVICE_NAME="gemma-cpu-router"
-MODEL_NAME="${MODEL_NAME:-gemma3:1b}"
-if [ "$MODEL_NAME" == "gemini-2.5-flash" ] || [ "$MODEL_NAME" == "gemma3:4b" ]; then
-  # Allow override via environment, defaulting to ultra-low latency gemma3:1b for CPU tier
-  MODEL_NAME="${MODEL_NAME:-gemma3:1b}"
+if [ -z "${MODEL_NAME:-}" ] || [[ "${MODEL_NAME}" == gemini* ]] || [ "${MODEL_NAME}" == "gemma3:4b" ]; then
+  # Default to ultra-low latency gemma3:1b for CPU tier when unset or inherited from Gemini env
+  MODEL_NAME="gemma3:1b"
 fi
 
 echo "=================================================================="

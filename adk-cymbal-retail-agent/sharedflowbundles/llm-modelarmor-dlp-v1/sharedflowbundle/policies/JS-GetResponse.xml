@@ -15,4 +15,5 @@
   <DisplayName>JS-GetResponse</DisplayName>
   <Properties/>
   <ResourceURL>jsc://JS-GetResponse.js</ResourceURL>
+  <IncludeURL>jsc://ai-functions.js</IncludeURL>
 </Javascript>

@@ -311,7 +311,7 @@ fi
 # Fallback defaults if not dynamically resolved
 ROUTING_DEPLOYED_INDEX_ID="${ROUTING_DEPLOYED_INDEX_ID:-semantic_routing_index_endpoint_deployment}"
 CACHE_DEPLOYED_INDEX_ID="${CACHE_DEPLOYED_INDEX_ID:-semantic_cache_index_endpoint_deployment}"
-DEFAULT_LOCAL_MODEL="${DEFAULT_LOCAL_MODEL:-gemma3:4b}"
+DEFAULT_LOCAL_MODEL="${DEFAULT_LOCAL_MODEL:-gemma3:1b}"
 DEFAULT_MODEL="${DEFAULT_MODEL:-gemini-2.5-flash}"
 DEFAULT_FALLBACK_MODEL="${DEFAULT_FALLBACK_MODEL:-gemini-2.5-flash}"
 
