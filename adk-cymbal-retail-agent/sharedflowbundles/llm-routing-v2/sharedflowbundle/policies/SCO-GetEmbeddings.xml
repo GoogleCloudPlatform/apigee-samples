@@ -11,7 +11,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<ServiceCallout async="false" continueOnError="false" enabled="true" name="SCO-GetEmbeddings">
+<ServiceCallout async="false" continueOnError="true" enabled="true" name="SCO-GetEmbeddings">
   <DisplayName>SCO-GetEmbeddings</DisplayName>
   <Request clearPayload="false" variable="embeddingsRequest">
     <Set>

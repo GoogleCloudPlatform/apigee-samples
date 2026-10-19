@@ -23,6 +23,7 @@ import logging
 import sys
 import argparse
 import os
+import time
 
 # Configure logging format and level
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -130,39 +131,74 @@ def get_token():
         logging.error(f"Failed to get access token: {e}")
         return None
 
-def get_embedding(text, token):
+def get_embeddings_batch(texts, token, batch_size=100, max_retries=3):
     """
-    Generates text embedding vector using Vertex AI text-embedding-005 model.
+    Generates text embedding vectors in batches using Vertex AI text-embedding-005 model.
+    Batching up to 100 prompts per request avoids per-minute request quota exhaustion (HTTP 429).
     """
-    payload = {
-        "instances": [
-            {
-                "content": text
-            }
-        ]
-    }
     headers = {
         "Content-Type": "application/json",
         "Authorization": f"Bearer {token}"
     }
-    data = json.dumps(payload).encode("utf-8")
-    req = urllib.request.Request(EMBEDDING_URL, data=data, headers=headers, method="POST")
+    results = []
+    for start in range(0, len(texts), batch_size):
+        chunk = texts[start:start + batch_size]
+        payload = {
+            "instances": [{"content": text} for text in chunk]
+        }
+        data = json.dumps(payload).encode("utf-8")
+        chunk_vectors = None
+
+        for attempt in range(max_retries):
+            req = urllib.request.Request(EMBEDDING_URL, data=data, headers=headers, method="POST")
+            try:
+                with urllib.request.urlopen(req, timeout=60.0) as response:
+                    if response.status == 200:
+                        body = json.loads(response.read().decode("utf-8"))
+                        predictions = body.get("predictions", [])
+                        if len(predictions) == len(chunk):
+                            chunk_vectors = [p.get("embeddings", {}).get("values") for p in predictions]
+                            break
+                logging.warning(f"Unexpected response size generating batch embeddings (batch offset {start}).")
+                break
+            except urllib.error.HTTPError as e:
+                error_body = e.read().decode("utf-8", errors="replace")
+                if e.code in (429, 500, 502, 503, 504) and attempt < max_retries - 1:
+                    delay = 5 * (2 ** attempt)
+                    logging.warning(
+                        f"Transient HTTP {e.code} calling batch embedding API (attempt {attempt + 1}/{max_retries}); retrying in {delay}s..."
+                    )
+                    time.sleep(delay)
+                    continue
+                logging.warning(
+                    f"Batch embedding API returned HTTP {e.code} after {attempt + 1} attempt(s); falling back to precomputed vectors where available. Details: {error_body}"
+                )
+                break
+            except Exception as e:
+                logging.warning(f"Error calling batch embedding API: {e}")
+                break
+
+        if chunk_vectors:
+            results.extend(chunk_vectors)
+        else:
+            results.extend([None] * len(chunk))
+
+    return results
+
+def load_precomputed_map():
+    """
+    Loads precomputed 768-dim text-embedding-005 vectors indexed by datapointId.
+    """
+    precomputed_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), "precomputed_routing_datapoints.json")
+    if not os.path.exists(precomputed_file):
+        return {}
     try:
-        with urllib.request.urlopen(req, timeout=60.0) as response:
-            if response.status == 200:
-                body = json.loads(response.read().decode("utf-8"))
-                predictions = body.get("predictions", [])
-                if predictions:
-                    return predictions[0].get("embeddings", []).get("values")
-        logging.error(f"Failed to get embedding for '{text}'.")
-        return None
-    except urllib.error.HTTPError as e:
-        error_body = e.read().decode("utf-8", errors="replace")
-        logging.error(f"Failed to get embedding for '{text}'. Status: {e.code}, Body: {error_body}")
-        return None
+        with open(precomputed_file, "r") as f:
+            entries = json.load(f)
+        return {entry["datapointId"]: entry["featureVector"] for entry in entries if "datapointId" in entry and "featureVector" in entry}
     except Exception as e:
-        logging.error(f"Error calling embedding API: {e}")
-        return None
+        logging.warning(f"Unable to read precomputed embeddings file {precomputed_file}: {e}")
+        return {}
 
 def main():
     global INDEX_ID, PROJECT_ID, REGION, EMBEDDING_URL
@@ -198,28 +234,38 @@ def main():
         sys.exit(1)
 
     datapoints = []
+    precomputed_map = load_precomputed_map()
     logging.info(f"Using Project: {PROJECT_ID}, Region: {REGION}, Index: {INDEX_ID}")
-    logging.info("Generating embeddings for routing dataset...")
+    logging.info(f"Generating embeddings for {len(DATASET)} routing prompts in a single batched request...")
 
-    for item in DATASET:
-        vector = get_embedding(item["text"], token)
+    vectors = get_embeddings_batch([item["text"] for item in DATASET], token)
+    live_count = 0
+    fallback_count = 0
+
+    for item, vector in zip(DATASET, vectors):
+        item_id = item["id"]
         if vector:
             datapoints.append({
-                "datapointId": item["id"],
+                "datapointId": item_id,
                 "featureVector": vector
             })
-            logging.info(f"Generated embedding for: {item['id']}")
+            live_count += 1
+        elif item_id in precomputed_map:
+            datapoints.append({
+                "datapointId": item_id,
+                "featureVector": precomputed_map[item_id]
+            })
+            fallback_count += 1
+        else:
+            logging.error(f"Missing both live and precomputed embedding vector for datapoint '{item_id}'.")
+
+    logging.info(
+        f"Prepared {len(datapoints)}/{len(DATASET)} routing embeddings (live batched: {live_count}, precomputed fallback: {fallback_count})."
+    )
 
     if not datapoints:
-        precomputed_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), "precomputed_routing_datapoints.json")
-        if os.path.exists(precomputed_file):
-            logging.info(f"Live embedding API calls unavailable (e.g. org policy restriction). Loading precomputed embeddings from {precomputed_file}...")
-            with open(precomputed_file, "r") as f:
-                datapoints = json.load(f)
-            logging.info(f"Successfully loaded {len(datapoints)} precomputed embeddings.")
-        else:
-            logging.error("No datapoints generated and no precomputed fallback file found. Exiting.")
-            sys.exit(1)
+        logging.error("No datapoints generated and no precomputed fallback file found. Exiting.")
+        sys.exit(1)
 
     # Save generated datapoints to temporary JSON file
     temp_filepath = os.path.abspath("routing_datapoints.json")

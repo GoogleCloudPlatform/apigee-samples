@@ -28,7 +28,7 @@
   </Step>
   <Step>
     <Name>SCO-VectorSearch</Name>
-    <Condition>keyword_routing_decision = null or keyword_routing_decision = ""</Condition>
+    <Condition>(keyword_routing_decision = null or keyword_routing_decision = "") and (x-mock-vector-error = "none")</Condition>
   </Step>
   <Step>
     <Name>JS-DetermineModelRoute</Name>
