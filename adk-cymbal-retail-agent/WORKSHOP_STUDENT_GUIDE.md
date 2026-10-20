@@ -16,7 +16,7 @@
 6. [Hands-On Step-by-Step Lab Modules](#6-hands-on-step-by-step-lab-modules)
    - [Module 1: Environment Discovery & Toolchain Setup](#module-1-environment-discovery--toolchain-setup)
    - [Module 2: Deploying Apigee Proxies & Native MCP Gateway](#module-2-deploying-apigee-proxies--native-mcp-gateway)
-   - [Module 3: Deploying Autonomous Agent Engine to Vertex AI Platform](#module-3-deploying-autonomous-agent-engine-to-vertex-ai-platform)
+   - [Module 3: Deploying Autonomous Agent Engine to Agent Platform](#module-3-deploying-autonomous-agent-engine-to-agent-platform)
    - [Module 4: Binding Agent Identity Auth Provider & Registry](#module-4-binding-agent-identity-auth-provider--registry)
    - [Module 5: Interactive Multi-Agent Testing & Handoffs](#module-5-interactive-multi-agent-testing--handoffs)
    - [Module 6: Deploying Private Gemma 3 4B on Cloud Run (Scale-to-Zero)](#module-6-deploying-private-gemma-3-4b-on-cloud-run-scale-to-zero)
@@ -44,7 +44,7 @@ In this workshop, you will deploy and orchestrate a complete enterprise-grade AI
 * **Apigee Native MCP Gateway:** Converts legacy REST microservices into standardized Model Context Protocol tools.
 * **Google Cloud Agent Identity:** Provides cryptographic SPIFFE-based zero-trust identity and dynamic OAuth 2.0 token injection.
 * **Apigee LLM AI Gateway:** Enforces prompt rate limiting, token consumption quotas, semantic vector caching, **Model Armor** threat defense, and **Sensitive Data Protection (Cloud DLP)** real-time PII redaction.
-* **Hybrid Model Routing:** Automatically routes traffic between local CPU-quantized **Gemma 3 (4B)** on Cloud Run and frontier **Gemini 2.5 Flash** on Vertex AI.
+* **Hybrid Model Routing:** Automatically routes traffic between local CPU-quantized **Gemma 3 (4B)** on Cloud Run and frontier **Gemini 2.5 Flash** on Agent Platform.
 
 ---
 
@@ -52,7 +52,7 @@ In this workshop, you will deploy and orchestrate a complete enterprise-grade AI
 
 By the end of this workshop, you will be able to:
 * 🎯 **Design & Orchestrate Multi-Agent Networks:** Build a hierarchical supervisor/sub-agent network using the Google ADK.
-* 🎯 **Deploy Managed Reasoning Engines:** Package and publish agent code to Google Cloud Agent Platform / Vertex AI Reasoning Engine.
+* 🎯 **Deploy Managed Reasoning Engines:** Package and publish agent code to Google Cloud Agent Platform / Agent Platform Reasoning Engine.
 * 🎯 **Standardize Tooling with Native MCP:** Expose RESTful microservices as MCP JSON-RPC 2.0 tool definitions managed by Apigee.
 * 🎯 **Enforce Zero-Trust Security:** Integrate Google Cloud Agent Identity (`authProviders`) to eliminate static API keys from code.
 * 🎯 **Govern GenAI Traffic with Apigee:** Apply token rate limiting, consumption quotas, and semantic vector caching to reduce LLM latency and costs.
@@ -103,7 +103,7 @@ graph TD
         
         LLMGateway --> RateQuota --> ModelArmor --> DLP --> SemCache --> Router
         
-        Router -->|Tier: Frontier / Complex| VertexGemini[⚡ Vertex AI Gemini 2.5 Flash]
+        Router -->|Tier: Frontier / Complex| VertexGemini[⚡ Agent Platform Gemini 2.5 Flash]
         Router -->|Tier: Local / FAQ / Short| CloudRunGemma[🏠 Private Gemma 3 4B on Cloud Run]
     end
 ```
@@ -190,7 +190,7 @@ flowchart TD
     InboundPrompt([Inbound User Prompt]) --> HeaderCheck{x-model-tier Header?}
     
     HeaderCheck -->|local| RouteGemma[🏠 Route to Private Gemma 3 4B<br>Cloud Run CPU Scale-to-Zero]
-    HeaderCheck -->|frontier| RouteGemini[⚡ Route to Frontier Gemini 2.5 Flash<br>Vertex AI Managed Platform]
+    HeaderCheck -->|frontier| RouteGemini[⚡ Route to Frontier Gemini 2.5 Flash<br>Agent Platform Managed Platform]
     
     HeaderCheck -->|Auto / None| AIClassifier{Apigee Dynamic Intent Classifier}
     
@@ -243,8 +243,8 @@ Deploy the 8 API proxies, 6 shared flows, API products, and developer credential
 
 ---
 
-### Module 3: Deploying Autonomous Agent Engine to Vertex AI Platform
-Package the multi-agent system and deploy it as a managed Vertex AI Reasoning Engine.
+### Module 3: Deploying Autonomous Agent Engine to Agent Platform
+Package the multi-agent system and deploy it as a managed Agent Platform Reasoning Engine.
 
 ```bash
 # Deploy to Google Cloud Agent Platform

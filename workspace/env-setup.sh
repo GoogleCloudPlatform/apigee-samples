@@ -83,7 +83,7 @@ ADMIN_CLIENT_ID=""
 ADMIN_CLIENT_SECRET=""
 
 if [ -n "$PROJECT_ID" ]; then
-  # Ensure staging GCS bucket exists for Agent Engine deployments
+  # Ensure staging GCS bucket exists for Agent Runtime deployments
   gcloud storage buckets create "gs://${PROJECT_ID}_cymbal_retail_agent" \
     --project="${PROJECT_ID}" \
     --location="${REGION}" 2>/dev/null || true
@@ -130,8 +130,8 @@ GOOGLE_CLOUD_PROJECT="${PROJECT_ID}"
 GOOGLE_CLOUD_LOCATION="${REGION}"
 APIGEE_HOSTNAME="${APIGEE_HOST}"
 
-# If using Gemini via Vertex AI on Google Cloud
-GOOGLE_GENAI_USE_VERTEXAI="TRUE"
+# If using Gemini via Agent Platform on Google Cloud
+GOOGLE_GENAI_USE_ENTERPRISE="TRUE"
 GOOGLE_CLOUD_STORAGE_BUCKET="${PROJECT_ID}_cymbal_retail_agent"
 MODEL_NAME="gemini-2.5-flash"
 AGENT_SERVICE_ACCOUNT="llm-cymbal-retail-agent@${PROJECT_ID}.iam.gserviceaccount.com"
@@ -145,7 +145,7 @@ if [ -d "$APIGEELLM_DIR" ] && [ -n "$PROJECT_ID" ]; then
   if [ ! -f "$APIGEELLM_ENV_FILE" ] || [ ! -s "$APIGEELLM_ENV_FILE" ] || grep -q "<YOUR_" "$APIGEELLM_ENV_FILE" 2>/dev/null; then
     echo "✅ Pre-populating ${APIGEELLM_ENV_FILE} with Apigee AI Gateway & MCP credentials..."
     cat <<APIGEELLMEOF > "$APIGEELLM_ENV_FILE"
-GOOGLE_GENAI_USE_VERTEXAI="TRUE"
+GOOGLE_GENAI_USE_ENTERPRISE="TRUE"
 GOOGLE_CLOUD_PROJECT="${PROJECT_ID}"
 GOOGLE_CLOUD_LOCATION="${REGION}"
 APIGEE_HOSTNAME="${APIGEE_HOST}"

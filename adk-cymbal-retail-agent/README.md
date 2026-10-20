@@ -1,7 +1,7 @@
 # Cymbal Retail: ADK & Apigee Enterprise AI Governance Showcase
 
 [![Google Cloud](https://img.shields.io/badge/Google%20Cloud-%234285F4.svg?style=for-the-badge&logo=google-cloud&logoColor=white)](https://cloud.google.com)
-[![Vertex AI](https://img.shields.io/badge/Vertex%20AI-Agent%20Engine-blue?style=for-the-badge)](https://cloud.google.com/vertex-ai)
+[![Agent Platform](https://img.shields.io/badge/Vertex%20AI-Agent%20Engine-blue?style=for-the-badge)](https://cloud.google.com/vertex-ai)
 [![Apigee](https://img.shields.io/badge/Apigee-API%20Management-FF6F00?style=for-the-badge)](https://cloud.google.com/apigee)
 [![Model Context Protocol](https://img.shields.io/badge/Protocol-MCP%20JSON--RPC-green?style=for-the-badge)](https://modelcontextprotocol.io)
 
@@ -36,7 +36,7 @@ graph TD
         RateQuota --> ModelArmorDLP[2. Model Armor Defense & DLP Redaction]
         ModelArmorDLP --> SemCache[3. Semantic Caching via Vector Search]
         SemCache --> ModelRouter[4. Dynamic Model Routing & Fallback]
-        ModelRouter --> VertexAI[⚡ Vertex AI Gemini Models]
+        ModelRouter --> VertexAI[⚡ Agent Platform Gemini Models]
         ModelRouter --> GemmaCloudRun[🏠 Private Gemma 3 4B on Cloud Run]
     end
 
@@ -159,7 +159,7 @@ flowchart TD
     Start([Inbound Prompt / LLM Request]) --> CheckHeader{Explicit Routing Header?}
     
     CheckHeader -->|x-model-tier: local OR x-model-name: gemma| RouteGemma[🏠 Route to Private Gemma 3 4B<br>Cloud Run CPU Scale-to-Zero]
-    CheckHeader -->|x-model-tier: frontier| RouteGemini[⚡ Route to Frontier Gemini 2.5 Flash<br>Vertex AI Managed Infrastructure]
+    CheckHeader -->|x-model-tier: frontier| RouteGemini[⚡ Route to Frontier Gemini 2.5 Flash<br>Agent Platform Managed Infrastructure]
     
     CheckHeader -->|No explicit header| CheckEndpoint{Is Gemma Endpoint Configured?}
     CheckEndpoint -->|No| RouteGemini
@@ -187,16 +187,16 @@ Instead of forcing a single LLM prompt to navigate complex enterprise APIs, the 
 * **`customerserviceagent` (Supervisor):** Clarifies customer intent, inspects session state, and delegates execution context cleanly to domain workers via `transfer_to_agent`.
 * **Specialized Sub-Agents:** `ordersagent`, `returnsagent`, `customersagent`, and `shippingagent` operate with isolated system instructions, specialized domain prompts, and scoped tool permissions.
 
-### 2. Deployed GEAP Agent Runtime (Vertex AI Reasoning Engine)
+### 2. Deployed GEAP Agent Runtime (Agent Platform Reasoning Engine)
 * **Managed Execution:** The agent runs natively on Google Cloud's Agent Platform as a managed `ReasoningEngine` resource (`projects/{PROJECT_NUMBER}/locations/{REGION}/reasoningEngines/{ENGINE_ID}`).
 * **Stateful Sessions:** Backed by persistent session lifecycle management (`create_session`, `list_sessions`, `delete_session`) preserving multi-turn context across agent handoffs.
 * **Agent Identity & Registry Bindings:** Eliminates static API keys and client secrets from container source code by utilizing Google Cloud Agent Identity Auth Providers (`cymbal-idp`) and Agent Registry bindings (`cymbal-auth-binding`).
 
 ### 3. Centralized Apigee LLM AI Gateway (`llm-ai-gateway-v1`)
 The dedicated LLM AI Gateway proxy provides enterprise control, security, and optimization for all GenAI workloads:
-* **Multi-Format Protocols:** Supports OpenAI-compatible (`POST /v1/llm-ai-gateway/chat/completions`), native (`POST /v1/llm-ai-gateway/chat`), and direct Vertex AI `generateContent` schemas.
+* **Multi-Format Protocols:** Supports OpenAI-compatible (`POST /v1/llm-ai-gateway/chat/completions`), native (`POST /v1/llm-ai-gateway/chat`), and direct Agent Platform `generateContent` schemas.
 * **Token Rate Limiting & Quotas:** Automatically enforces token volume rate limits (`x-llm-prompt-rate-limiting`) and per-model consumption quotas (`x-llm-token-quota-enforce`).
-* **Semantic Caching:** Integrates with Vertex AI Vector Search embeddings to cache identical and semantically similar queries (`x-llm-cache`), slashing latency and model invocation costs.
+* **Semantic Caching:** Integrates with Vector Search embeddings to cache identical and semantically similar queries (`x-llm-cache`), slashing latency and model invocation costs.
 * **Model Overrides & Routing:** Allows runtime selection via `x-llm-model` or `x-model-tier` headers with automatic fallback protection.
 
 ### 4. Unified Apigee Native MCP Gateway (`/mcp`)
@@ -207,7 +207,7 @@ All backend microservices are exposed via Apigee as a standardized **Model Conte
 * **Shipping (1 tool):** `createShippingLabel` (Requires `customer` scope).
 
 ### 5. Dynamic Hybrid AI Routing & Private Gemma 3 (4B)
-To eliminate Vertex AI 429 quota exhaustion and optimize inference costs:
+To eliminate Agent Platform 429 quota exhaustion and optimize inference costs:
 * **Intelligent Prompt Classifier:** Evaluates prompt complexity and header directives (`x-model-tier: local` or `x-model-tier: frontier`).
 * **Private Local Routing:** Routes simple greetings, FAQs, and mock microservice calls to a self-contained **Gemma 3 (4B)** instance running on **Cloud Run (CPU with Scale-to-Zero)**.
 * **Frontier Routing:** Routes multi-agent planning and complex reasoning tasks to **Gemini 2.5 Flash**.
@@ -370,7 +370,7 @@ python3 test-mcp-e2e.py
 * **Security & Negative Checks:** Rejection of unknown tools (`401`), unauthenticated executions (`401`), and malformed JSON-RPC methods (`400`).
 
 #### C. GEAP Agent Runtime Reasoning Engine Suite (`test-agent-runtime-e2e.py`)
-Validates the live deployed Agent Engine instance on Vertex AI Agent Platform:
+Validates the live deployed Agent Engine instance on Agent Platform Agent Platform:
 ```bash
 python/agents/cymbal-retail-agent-geap/.venv/bin/python3 test-agent-runtime-e2e.py
 ```

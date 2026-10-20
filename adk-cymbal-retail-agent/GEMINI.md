@@ -7,7 +7,7 @@ This guide provides context, guidelines, and rules for Jetski agents working wit
 ## 🏛️ System Architecture Context
 
 Cymbal Retail is an enterprise reference architecture demonstrating:
-1. **Agent-to-Agent (A2A) Orchestration**: Root supervisor agent (`customerserviceagent`) coordinating domain sub-agents (`ordersagent`, `returnsagent`, `customersagent`, and `shippingagent`) using Google's Agent Development Kit (ADK) and Vertex AI Agent Platform Reasoning Engine.
+1. **Agent-to-Agent (A2A) Orchestration**: Root supervisor agent (`customerserviceagent`) coordinating domain sub-agents (`ordersagent`, `returnsagent`, `customersagent`, and `shippingagent`) using Google's Agent Development Kit (ADK) and Agent Platform Agent Platform Reasoning Engine.
 2. **Apigee LLM AI Gateway (`llm-ai-gateway-v1`)**: Centralized AI governance layer supporting OpenAI-compatible (`/chat/completions`) and native (`/chat`) endpoints, semantic caching via Vector Search, prompt rate limiting, token consumption quotas, and Model Armor threat protection.
 3. **Apigee Native MCP Gateway (`cymbal-discovery-v1` at `/mcp`)**: Standardized Model Context Protocol (MCP) gateway exposing domain backend microservices over JSON-RPC 2.0.
 4. **Apigee AI Governance (`adk-retail-agent-llm-governance-v1`)**: Model Armor prompt injection defense, Cloud DLP real-time PII sanitization, and token usage accounting.
@@ -65,4 +65,4 @@ Run all automated test suites sequentially with automatic credential discovery:
 1. **Reasoning Engine SDK Invocation:** Always fetch engines via `client.agent_engines.get(name=...)` with the full resource name before calling `.stream_query()` or session methods.
 2. **Agent Identity CLI:** Manage auth providers using `gcloud beta agent-identity auth-providers` and registry bindings using `gcloud agent-registry`.
 3. **OAuth Redirect Callbacks:** The `oauth-server` proxy validates that `redirect_uri` matches one of the registered developer app callbacks (`http://127.0.0.1:9000/callback` or `http://localhost:9000/callback`).
-4. **Rate Limiting Mitigation:** Use exponential backoff and token caching in `test/integration/features/support/init.js` to prevent 429 Vertex AI quota errors during test execution.
+4. **Rate Limiting Mitigation:** Use exponential backoff and token caching in `test/integration/features/support/init.js` to prevent 429 Agent Platform quota errors during test execution.

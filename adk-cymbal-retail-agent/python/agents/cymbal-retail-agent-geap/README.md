@@ -6,7 +6,7 @@ An autonomous retail customer service agent built with Google's **Agent Developm
 
 ## 🏛️ Architecture & Platform Integration
 
-* **Gemini Enterprise Agent Platform (GEAP) Agent Runtime:** Deployed as a managed Vertex AI Reasoning Engine instance (`projects/{PROJECT_NUMBER}/locations/{REGION}/reasoningEngines/{ENGINE_ID}`).
+* **Gemini Enterprise Agent Platform (GEAP) Agent Runtime:** Deployed as a managed Agent Platform Reasoning Engine instance (`projects/{PROJECT_NUMBER}/locations/{REGION}/reasoningEngines/{ENGINE_ID}`).
 * **Agent Registry:** Dynamically resolves native MCP tool registrations and proxy endpoints without hardcoding URLs.
 * **Agent Identity Auth Provider:** Integrates with [Google Cloud Agent Identity](https://docs.cloud.google.com/iam/docs/auth-manager-overview) (`gcloud beta agent-identity auth-providers`) to obtain and refresh OAuth 2.0 access tokens dynamically via client ID bindings (`cymbal-idp` and `cymbal-auth-binding`).
 * **Multi-Turn Stateful Sessions:** Backed by Agent Engine session storage with complete conversational context preservation and delegation tracking.
@@ -54,7 +54,7 @@ sequenceDiagram
 ## 🚀 Deployment & Management
 
 ### 1. Deploying to Agent Platform
-To deploy the agent reasoning engine to Vertex AI / Agent Platform and bind the Agent Identity Auth Provider:
+To deploy the agent reasoning engine to Agent Platform / Agent Platform and bind the Agent Identity Auth Provider:
 
 ```bash
 # Ensure environment variables are loaded
@@ -66,7 +66,7 @@ python deployment/deploy.py
 
 The deployment script executes:
 1. **Agent Gateway Pre-flight Check:** Inspects Network Services Agent Gateways.
-2. **Reasoning Engine Packaging & Deployment:** Uploads artifacts to `$STAGING_BUCKET` and creates the `ReasoningEngine` instance in Vertex AI.
+2. **Reasoning Engine Packaging & Deployment:** Uploads artifacts to `$STAGING_BUCKET` and creates the `ReasoningEngine` instance in Agent Platform.
 3. **Agent Identity Provider Registration:** Provisions `projects/{PROJECT_ID}/locations/{REGION}/authProviders/cymbal-idp` with the OAuth Client ID.
 4. **Agent Registry Binding:** Links the Auth Provider to the Apigee MCP endpoint (`cymbal-auth-binding`).
 
@@ -105,7 +105,7 @@ Populate `.env` with your Google Cloud and Apigee configuration:
 GOOGLE_CLOUD_PROJECT="YOUR_PROJECT_ID"
 GOOGLE_CLOUD_LOCATION="us-central1"
 APIGEE_HOSTNAME="YOUR_APIGEE_HOSTNAME"
-GOOGLE_GENAI_USE_VERTEXAI="TRUE"
+GOOGLE_GENAI_USE_ENTERPRISE="TRUE"
 GOOGLE_CLOUD_STORAGE_BUCKET="YOUR_PROJECT_ID_cymbal_retail_agent"
 MODEL_NAME="gemini-2.5-flash"
 AGENT_SERVICE_ACCOUNT="llm-cymbal-retail-agent@YOUR_PROJECT_ID.iam.gserviceaccount.com"

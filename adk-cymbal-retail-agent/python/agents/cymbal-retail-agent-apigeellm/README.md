@@ -23,7 +23,7 @@ flowchart TD
         MA --> DLP[🔍 Cloud DLP Real-time Redaction]
         DLP --> Router{Model Tier Router}
         Router -->|Tier: local| Gemma[🏠 Cloud Run CPU Gemma 3 4B]
-        Router -->|Tier: frontier| Gemini[⚡ Vertex AI Gemini 2.5 Flash]
+        Router -->|Tier: frontier| Gemini[⚡ Agent Platform Gemini 2.5 Flash]
         Gemma --> Normalizer[Transform OpenAI to Vertex JSON]
         Gemini --> Analytics[Token Data Collectors]
         Normalizer --> Analytics
@@ -43,7 +43,7 @@ Ensure your local `.env` file is populated with your Google Cloud and Apigee con
 GOOGLE_CLOUD_PROJECT="<PROJECT_ID>"
 GOOGLE_CLOUD_LOCATION="us-central1"
 APIGEE_HOSTNAME="<APIGEE_HOSTNAME>"
-GOOGLE_GENAI_USE_VERTEXAI="TRUE"
+GOOGLE_GENAI_USE_ENTERPRISE="TRUE"
 GOOGLE_CLOUD_STORAGE_BUCKET="<PROJECT_ID>_cymbal_retail_agent"
 MODEL_NAME="gemini-2.5-flash"
 AGENT_SERVICE_ACCOUNT="llm-cymbal-retail-agent@<PROJECT_ID>.iam.gserviceaccount.com"
