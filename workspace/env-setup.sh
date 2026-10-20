@@ -61,9 +61,19 @@ if [ -f "$HOME/.bashrc" ] && ! grep -q 'cymbal-retail-agent/\.venv/bin' "$HOME/.
   echo "$AGENT_PATH_EXPORT" >> "$HOME/.bashrc"
 fi
 
-# Resolve active GCP project, region, Apigee hostname, and credentials
+# Pre-configure ADK telemetry so first `uv run adk web` never blocks on interactive [Y/n] prompt
+adk telemetry disable >/dev/null 2>&1 || true
+
+# Resolve active GCP project, region (auto-detecting lab Cloud Run / Compute region if unset), Apigee hostname, and credentials
 PROJECT_ID=$(gcloud config get-value project 2>/dev/null || echo "")
 REGION=$(gcloud config get-value compute/region 2>/dev/null || echo "")
+if [ -z "$REGION" ] && [ -n "$PROJECT_ID" ]; then
+  REGION=$(gcloud run services list --project="$PROJECT_ID" --limit=1 --format="value(region)" 2>/dev/null || echo "")
+fi
+if [ -z "$REGION" ] && [ -n "$PROJECT_ID" ]; then
+  ZONE_VAL=$(gcloud compute instances list --project="$PROJECT_ID" --limit=1 --format="value(zone)" 2>/dev/null || echo "")
+  REGION="${ZONE_VAL%-[a-z]}"
+fi
 [ -z "$REGION" ] && REGION="us-central1"
 
 TOKEN=$(gcloud auth application-default print-access-token 2>/dev/null || gcloud auth print-access-token 2>/dev/null || echo "")

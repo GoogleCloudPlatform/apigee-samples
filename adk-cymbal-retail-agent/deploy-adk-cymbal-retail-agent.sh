@@ -564,6 +564,80 @@ python3 deployment/deploy.py \
 deactivate
 popd >/dev/null
 
+echo "Ensuring API Hub system-apigee-x-and-hybrid plugin & OpenAPI specs on cymbal-*-v2 versions..."
+python3 - "$APIGEE_APIHUB_PROJECT_ID" "$APIGEE_APIHUB_REGION" "$PROJECT_ID" << 'PY_APIHUB_SYNC' || true
+import json, subprocess, sys, time, urllib.request
+
+hub_proj, region, src_proj = sys.argv[1], sys.argv[2], sys.argv[3]
+
+def token():
+    return subprocess.check_output(["gcloud", "auth", "print-access-token"]).decode().strip()
+
+def req_json(method, url, body=None):
+    hdr = {"Authorization": f"Bearer {token()}", "Content-Type": "application/json"}
+    data = json.dumps(body).encode() if body is not None else None
+    r = urllib.request.Request(url, data=data, headers=hdr, method=method)
+    with urllib.request.urlopen(r, timeout=30) as resp:
+        return json.loads(resp.read().decode())
+
+try:
+    req_json(
+        "POST",
+        f"https://apihub.googleapis.com/v1/projects/{hub_proj}/locations/{region}/plugins/system-apigee-x-and-hybrid/instances?pluginInstanceId={src_proj}",
+        {
+            "displayName": f"Apigee X and Hybrid - {src_proj}",
+            "sourceProjectId": src_proj,
+            "actions": [{"actionId": "sync-metadata"}, {"actionId": "sync-runtime-data"}],
+        },
+    )
+except Exception:
+    pass
+
+targets = {
+    "cymbal-orders-v2": ("orders_api", "orders.yaml"),
+    "cymbal-returns-v2": ("returns_api", "returns.yaml"),
+    "cymbal-customers-v2": ("customers_api", "customers.yaml"),
+    "cymbal-shipping-v2": ("shipping_api", "shipping.yaml"),
+}
+synced = set()
+for _ in range(18):
+    apis = req_json("GET", f"https://apihub.googleapis.com/v1/projects/{hub_proj}/locations/{region}/apis?pageSize=100").get("apis", [])
+    by_display = {a.get("displayName"): a.get("name") for a in apis if a.get("name") and not a["name"].endswith("_api")}
+    for proxy_name, (src_api_id, spec_display) in targets.items():
+        if proxy_name in synced or proxy_name not in by_display:
+            continue
+        try:
+            src_contents = req_json(
+                "GET",
+                f"https://apihub.googleapis.com/v1/projects/{hub_proj}/locations/{region}/apis/{src_api_id}/versions/1_0_0/specs/1_0_0:contents",
+            )
+            vers = req_json("GET", f"https://apihub.googleapis.com/v1/{by_display[proxy_name]}/versions").get("versions", [])
+            if not vers:
+                continue
+            ver_name = vers[0]["name"]
+            existing = req_json("GET", f"https://apihub.googleapis.com/v1/{ver_name}/specs").get("specs", [])
+            if not existing:
+                req_json(
+                    "POST",
+                    f"https://apihub.googleapis.com/v1/{ver_name}/specs?specId=openapi",
+                    {
+                        "displayName": spec_display,
+                        "specType": {"enumValues": {"values": [{"id": "openapi"}]}},
+                        "parsingMode": "RELAXED",
+                        "contents": {
+                            "contents": src_contents["contents"],
+                            "mimeType": src_contents.get("mimeType", "application/yaml"),
+                        },
+                    },
+                )
+            synced.add(proxy_name)
+        except Exception:
+            pass
+    if len(synced) == len(targets):
+        break
+    time.sleep(5)
+PY_APIHUB_SYNC
+
 # npm test
 
 echo " "
