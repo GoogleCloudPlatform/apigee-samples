@@ -322,6 +322,9 @@ GEMMA_URL=$(gcloud run services describe "$GEMMA_SERVICE_NAME" --region="$REGION
 if [ -z "$GEMMA_URL" ]; then
   GEMMA_URL=$(gcloud run services list --project="$PROJECT_ID" --region="$REGION" --format="value(status.url)" 2>/dev/null | grep "gemma" | head -n1 || true)
 fi
+if [ -z "$GEMMA_URL" ]; then
+  GEMMA_URL=$(gcloud run services list --project="$PROJECT_ID" --filter="metadata.name=$GEMMA_SERVICE_NAME" --format="value(status.url)" 2>/dev/null | head -n1 || true)
+fi
 
 if [ -n "$GEMMA_URL" ]; then
   echo "INFO: Found active Gemma Cloud Run URL: $GEMMA_URL"

@@ -20,60 +20,65 @@
 // ====================================================
 (function () {
     try {
+        var originalVertexRequest = context.getVariable("original_vertex_request");
         var rawPayload = context.getVariable("request.content") || request.content;
         var failoverModel = context.getVariable("llm_default_fallback_model") || "gemini-2.5-flash";
         var currentModel = context.getVariable("model") || "";
 
-        // --- 1. Payload Adaptation (OpenAI messages -> Vertex AI contents) ---
-        var payloadObj = null;
-        try {
-            payloadObj = (typeof rawPayload === "object") ? rawPayload : JSON.parse(rawPayload);
-        } catch (e) {
-            payloadObj = null;
-        }
-
+        // --- 1. Payload Adaptation (Preserve original_vertex_request if available, else OpenAI messages -> Vertex AI contents) ---
         var payloadString = "";
-        if (payloadObj && payloadObj.messages && Array.isArray(payloadObj.messages)) {
-            var vertexContents = [];
-            var systemInstruction = null;
+        if (originalVertexRequest && typeof originalVertexRequest === "string" && originalVertexRequest.length > 2) {
+            payloadString = originalVertexRequest;
+        } else {
+            var payloadObj = null;
+            try {
+                payloadObj = (typeof rawPayload === "object") ? rawPayload : JSON.parse(rawPayload);
+            } catch (e) {
+                payloadObj = null;
+            }
 
-            payloadObj.messages.forEach(function(m) {
-                if (m.role === "system") {
-                    systemInstruction = { "parts": [{"text": m.content || ""}] };
-                } else {
-                    var role = (m.role === "assistant") ? "model" : "user";
+            if (payloadObj && payloadObj.messages && Array.isArray(payloadObj.messages)) {
+                var vertexContents = [];
+                var systemInstruction = null;
+
+                payloadObj.messages.forEach(function(m) {
+                    if (m.role === "system") {
+                        systemInstruction = { "parts": [{"text": m.content || ""}] };
+                    } else {
+                        var role = (m.role === "assistant") ? "model" : "user";
+                        vertexContents.push({
+                            "role": role,
+                            "parts": [{"text": m.content || ""}]
+                        });
+                    }
+                });
+
+                if (vertexContents.length === 0) {
+                    var sysText = systemInstruction && systemInstruction.parts && systemInstruction.parts[0] ? systemInstruction.parts[0].text : " ";
                     vertexContents.push({
-                        "role": role,
-                        "parts": [{"text": m.content || ""}]
+                        "role": "user",
+                        "parts": [{"text": sysText}]
                     });
                 }
-            });
 
-            if (vertexContents.length === 0) {
-                var sysText = systemInstruction && systemInstruction.parts && systemInstruction.parts[0] ? systemInstruction.parts[0].text : " ";
-                vertexContents.push({
-                    "role": "user",
-                    "parts": [{"text": sysText}]
-                });
-            }
+                var vertexPayload = {
+                    "contents": vertexContents,
+                    "generationConfig": {
+                        "maxOutputTokens": payloadObj.max_tokens || payloadObj.max_completion_tokens || 8192,
+                        "temperature": payloadObj.temperature || 0.7
+                    }
+                };
 
-            var vertexPayload = {
-                "contents": vertexContents,
-                "generationConfig": {
-                    "maxOutputTokens": payloadObj.max_tokens || payloadObj.max_completion_tokens || 8192,
-                    "temperature": payloadObj.temperature || 0.7
+                if (systemInstruction) {
+                    vertexPayload.systemInstruction = systemInstruction;
                 }
-            };
 
-            if (systemInstruction) {
-                vertexPayload.systemInstruction = systemInstruction;
-            }
-
-            payloadString = JSON.stringify(vertexPayload);
-        } else {
-            payloadString = (typeof rawPayload === "object") ? JSON.stringify(rawPayload) : String(rawPayload);
-            if (currentModel && currentModel.length > 0) {
-                payloadString = payloadString.split(currentModel).join(failoverModel);
+                payloadString = JSON.stringify(vertexPayload);
+            } else {
+                payloadString = (typeof rawPayload === "object") ? JSON.stringify(rawPayload) : String(rawPayload);
+                if (currentModel && currentModel.length > 0) {
+                    payloadString = payloadString.split(currentModel).join(failoverModel);
+                }
             }
         }
 

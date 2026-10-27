@@ -32,15 +32,22 @@ try {
             var openAiMessages = [];
             if (reqBody.systemInstruction && reqBody.systemInstruction.parts) {
                 var sysText = reqBody.systemInstruction.parts.map(function(p) { return p.text || ""; }).join("\n");
+                // Strip ADK agent-transfer tool instructions when routing to tool-less local Gemma
+                sysText = sysText.replace(/You have a list of other agents to transfer to:[\s\S]*/i, "").replace(/^\s+|\s+$/g, "");
                 if (sysText) {
                     openAiMessages.push({ role: "system", content: sysText });
                 }
             }
             reqBody.contents.forEach(function(c) {
                 var role = (c.role === "model") ? "assistant" : "user";
-                var text = (c.parts || []).map(function(p) { return p.text || ""; }).join("\n");
-                openAiMessages.push({ role: role, content: text });
+                var text = (c.parts || []).map(function(p) { return p.text || ""; }).join("\n").replace(/^\s+|\s+$/g, "");
+                if (text) {
+                    openAiMessages.push({ role: role, content: text });
+                }
             });
+            if (openAiMessages.length === 0) {
+                openAiMessages.push({ role: "user", content: context.getVariable("request_prompt") || "Hello" });
+            }
             var gemmaPayload = {
                 model: context.getVariable("model") || defaultLocalModel,
                 messages: openAiMessages

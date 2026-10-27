@@ -91,24 +91,46 @@ try {
         context.setVariable("request_protocol", "vertex");
     }
 
+    // Preserve original Vertex AI payload for lossless failover (tools, systemInstruction, functionCall/functionResponse)
+    if (reqBody.contents && Array.isArray(reqBody.contents)) {
+        context.setVariable("original_vertex_request", rawContent);
+    }
+
     var prompt = reqBody.prompt || "";
 
-    // Support OpenAI /chat/completions payload structure
+    // Support OpenAI /chat/completions payload structure (scan backwards across all user messages & parts)
     if (!prompt && reqBody.messages && Array.isArray(reqBody.messages)) {
-        for (var i = reqBody.messages.length - 1; i >= 0; i--) {
-            if (reqBody.messages[i] && reqBody.messages[i].role === 'user') {
-                prompt = reqBody.messages[i].content || "";
-                break;
+        for (var i = reqBody.messages.length - 1; i >= 0 && !prompt; i--) {
+            var msg = reqBody.messages[i];
+            if (msg && msg.role === 'user' && msg.content) {
+                if (typeof msg.content === 'string' && msg.content.replace(/^\s+|\s+$/g, '') !== '') {
+                    prompt = msg.content;
+                    break;
+                } else if (Array.isArray(msg.content)) {
+                    for (var mIdx = msg.content.length - 1; mIdx >= 0; mIdx--) {
+                        var mPart = msg.content[mIdx];
+                        if (mPart && typeof mPart.text === 'string' && mPart.text.replace(/^\s+|\s+$/g, '') !== '') {
+                            prompt = mPart.text;
+                            break;
+                        }
+                    }
+                }
             }
         }
     }
 
-    // Support native Vertex AI payload structure
+    // Support native Vertex AI payload structure (scan backwards across all user messages & parts, skipping functionResponse)
     if (!prompt && reqBody.contents && Array.isArray(reqBody.contents)) {
-        for (var j = reqBody.contents.length - 1; j >= 0; j--) {
-            if (reqBody.contents[j] && reqBody.contents[j].role === 'user' && reqBody.contents[j].parts && reqBody.contents[j].parts.length > 0) {
-                prompt = reqBody.contents[j].parts[0].text || "";
-                break;
+        for (var j = reqBody.contents.length - 1; j >= 0 && !prompt; j--) {
+            var cTurn = reqBody.contents[j];
+            if (cTurn && cTurn.role === 'user' && cTurn.parts && Array.isArray(cTurn.parts)) {
+                for (var pIdx = cTurn.parts.length - 1; pIdx >= 0; pIdx--) {
+                    var part = cTurn.parts[pIdx];
+                    if (part && !part.functionResponse && typeof part.text === 'string' && part.text.replace(/^\s+|\s+$/g, '') !== '') {
+                        prompt = part.text;
+                        break;
+                    }
+                }
             }
         }
     }
@@ -118,14 +140,61 @@ try {
         prompt = " ";
     }
 
+    // Detect tools / functionDeclarations / functionCall / functionResponse usage
+    var hasTools = false;
+    var hasToolHistory = false;
+    var hasToolCallTurn = false;
+
+    if ((reqBody.tools && Array.isArray(reqBody.tools) && reqBody.tools.length > 0) ||
+        (reqBody.functionDeclarations && Array.isArray(reqBody.functionDeclarations) && reqBody.functionDeclarations.length > 0)) {
+        hasTools = true;
+    }
+
+    if (reqBody.contents && Array.isArray(reqBody.contents)) {
+        if (reqBody.contents.length > 1) {
+            hasToolCallTurn = true;
+        }
+        for (var cIdx = 0; cIdx < reqBody.contents.length; cIdx++) {
+            var contentItem = reqBody.contents[cIdx];
+            if (contentItem && (contentItem.role === 'function' || contentItem.role === 'tool')) {
+                hasTools = true;
+                hasToolHistory = true;
+                hasToolCallTurn = true;
+            }
+            if (contentItem && contentItem.parts && Array.isArray(contentItem.parts)) {
+                for (var ptIdx = 0; ptIdx < contentItem.parts.length; ptIdx++) {
+                    var pt = contentItem.parts[ptIdx];
+                    if (pt && (pt.functionCall || pt.functionResponse)) {
+                        hasTools = true;
+                        hasToolHistory = true;
+                        hasToolCallTurn = true;
+                    }
+                }
+            }
+        }
+    }
+
+    if (reqBody.messages && Array.isArray(reqBody.messages)) {
+        for (var msgIdx = 0; msgIdx < reqBody.messages.length; msgIdx++) {
+            var mItem = reqBody.messages[msgIdx];
+            if (mItem && (mItem.tool_calls || mItem.role === 'tool' || mItem.role === 'function')) {
+                hasTools = true;
+                hasToolHistory = true;
+                hasToolCallTurn = true;
+            }
+        }
+    }
+
     // --------------------------------------------------------------------------
     // 2. Header Management & Redundancy Consolidation
     // --------------------------------------------------------------------------
-    // Consolidate redundant headers: x-llm-model, x-model-name, and x-model-tier
+    // Consolidate redundant headers: x-llm-model, x-model-name, x-llm-tier, and x-model-tier
     var llmModelHeader = context.getVariable("request.header.x-llm-model");
     var modelNameHeader = context.getVariable("request.header.x-model-name");
+    var llmTierHeader = context.getVariable("request.header.x-llm-tier");
     var modelTierHeader = context.getVariable("request.header.x-model-tier");
-    var defaultLocalModel = context.getVariable("llm_local_model");
+    var effectiveTierHeader = exists(llmTierHeader) ? llmTierHeader : modelTierHeader;
+    var defaultLocalModel = context.getVariable("llm_local_model") || "gemma3:1b";
 
     // Order of precedence for explicit header model selection:
     // 1. x-llm-model header
@@ -154,15 +223,27 @@ try {
     // --------------------------------------------------------------------------
     var routeToGemma = false;
     var headerModelLower = headerModel.toLowerCase();
-    var modelTierLower = modelTierHeader ? modelTierHeader.toLowerCase() : "";
+    var modelTierLower = effectiveTierHeader ? effectiveTierHeader.toLowerCase().replace(/^\s+|\s+$/g, '') : "";
+    var explicitLocalRequested = (modelTierLower === "local" || modelTierLower === "gemma");
 
     // Criterion A: Explicit header request for local Gemma tier or Gemma model name
-    if (modelTierLower === "local" || modelTierLower === "gemma" || headerModelLower.indexOf("gemma") !== -1) {
+    if (explicitLocalRequested || headerModelLower.indexOf("gemma") !== -1) {
         routeToGemma = true;
     }
     // Criterion B: Explicit body or URI request for Gemma model name
     else if (bodyOrUriModel && bodyOrUriModel.toLowerCase().indexOf("gemma") !== -1) {
         routeToGemma = true;
+    }
+
+    // Keep tool-bearing agent requests on the tool-capable Vertex Gemini target
+    // unless x-llm-tier: local (or x-model-tier: local) is explicitly requested
+    var explicitRoutingHeader = context.getVariable("request.header.x-llm-routing");
+    var explicitRoutingRequested = exists(explicitRoutingHeader) && explicitRoutingHeader.toLowerCase().replace(/^\s+|\s+$/g, '') === "true";
+    if (hasTools && !explicitLocalRequested) {
+        routeToGemma = false;
+        if (hasToolHistory || !explicitRoutingRequested) {
+            context.setVariable("llm_routing_enabled", "false");
+        }
     }
 
     // --------------------------------------------------------------------------
@@ -200,8 +281,8 @@ try {
         cache_enabled = "true";
     }
 
-    // Disable semantic cache for multi-turn conversations or tool calls
-    if ((reqBody.messages && reqBody.messages.length > 4) || (reqBody.contents && reqBody.contents.length > 3)) {
+    // Disable semantic cache for multi-turn conversations or tool-call turns
+    if (hasToolCallTurn || (reqBody.messages && reqBody.messages.length > 4) || (reqBody.contents && reqBody.contents.length > 1)) {
         cache_enabled = "false";
     }
 
@@ -211,6 +292,7 @@ try {
     context.setVariable("request_prompt", prompt);
     context.setVariable("model", model);
     context.setVariable("route_to_gemma", routeToGemma ? "true" : "false");
+    context.setVariable("has_tools", hasTools ? "true" : "false");
     context.setVariable("cache_enabled", cache_enabled);
 
     print("Model Routing Decision: model=" + model + ", route_to_gemma=" + routeToGemma);
