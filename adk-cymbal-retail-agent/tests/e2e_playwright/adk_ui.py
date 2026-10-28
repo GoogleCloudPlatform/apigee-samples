@@ -38,9 +38,22 @@ class AdkWebServer:
     self.stop()
     env = os.environ.copy()
     if self.student_home:
-      env["HOME"] = os.path.realpath(self.student_home)
+      real_home = os.path.realpath(self.student_home)
+      env["HOME"] = real_home
+      env["PATH"] = f"{real_home}/.local/bin:{real_home}/.apigeecli/bin:" + env.get("PATH", "")
     self.proc = subprocess.Popen(
-        ["uv", "run", "adk", "web", "--host", "127.0.0.1", "--port", str(self.port), "."],
+        [
+            "uv",
+            "run",
+            "adk",
+            "web",
+            "--host",
+            "127.0.0.1",
+            "--port",
+            str(self.port),
+            "--allow_origins=*",
+            ".",
+        ],
         cwd=os.path.realpath(agent_parent_dir),
         env=env,
         preexec_fn=os.setsid,
