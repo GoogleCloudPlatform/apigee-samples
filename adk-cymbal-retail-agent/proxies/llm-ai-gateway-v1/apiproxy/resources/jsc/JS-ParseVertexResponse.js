@@ -145,7 +145,7 @@ try {
 
                     if (textContent) {
                         if (context.getVariable("fallback_triggered") === "true") {
-                            message.content = "[SYSTEM NOTICE: Downgraded to " + fallbackModel + " because your Pro token quota was exceeded]\n\n" + textContent;
+                            message.content = "[SYSTEM NOTICE: Downgraded to " + fallbackModel + " because primary model token quota was exceeded]\n\n" + textContent;
                         } else {
                             message.content = textContent;
                         }

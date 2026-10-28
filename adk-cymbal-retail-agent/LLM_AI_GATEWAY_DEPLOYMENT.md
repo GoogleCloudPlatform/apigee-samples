@@ -137,7 +137,7 @@ Gemma routing takes precedence over Cloud/Agent Platform models if requested exp
 - **Header Model Name**: `x-llm-model` or `x-model-name` containing `"gemma"` (case-insensitive).
 - **Body / URI Model**: Model path or JSON field containing `"gemma"`.
 
-*Result*: Sets `route_to_gemma = "true"` and assigns `model` to the requested Gemma variant (defaults to `gemma-3-4b`).
+*Result*: Sets `route_to_gemma = "true"` and assigns `model` to the requested Gemma variant (defaults to `default_local_model` configured in `vertex_config.properties`, e.g. `gemma3:1b`).
 
 #### 2. Cloud / Agent Platform Model Resolution Hierarchy (`route_to_gemma = false`)
 When Gemma is not explicitly targeted, the gateway resolves the Agent Platform target model as follows:
@@ -161,10 +161,10 @@ If dynamic routing is enabled (`x-llm-routing: true`) and the model has not been
    - A Service Callout (`SCO-VectorSearch`) queries the configured Vector Search Index Endpoint (`routing_index_endpoint_id`).
    - Finds the nearest neighbor datapoint cluster (`simple` vs `complex` query reference embeddings) and returns the similarity distance score.
 5. **Step 4: Model Decision & Variable Assignment (`JS-DetermineModelRoute`)**:
-   - Evaluates the nearest neighbor `datapointId` prefix and sets the model tier:
-     - **`gemma_*` (Retail FAQ Intents)**: Sets `model = llm_fallback_model` and `route_to_gemma = "true"` (routes to private Gemma 3 instance).
-     - **`simple_*` (Greetings & General Tasks)**: Sets `model = llm_fallback_model` (`gemini-2.5-flash`).
-     - **`complex_*` (Complex Reasoning & Code)**: Maintains `model = default_model` (`gemini-2.5-pro`).
+   - Evaluates the nearest neighbor `datapointId` prefix and sets the model tier dynamically from `vertex_config.properties`:
+     - **`gemma_*` (Retail FAQ Intents)**: Sets `model = localModel` (`default_local_model`, e.g. `gemma3:1b`) and `route_to_gemma = "true"` (routes to private Gemma 3 instance).
+     - **`simple_*` (Greetings & General Tasks)**: Sets `model = fallbackModel` (`default_fallback_model`, e.g. `gemini-2.5-flash`).
+     - **`complex_*` (Complex Reasoning & Code)**: Sets `model = defaultModel` (`default_model`, e.g. `gemini-2.5-pro`).
    - Populates observability variables: `semantic_match_id` (datapoint ID) and `semantic_match_distance` (cosine distance score).
 
 ##### Vector Search Intent Generation & Upsert Script (`upsert_routing_embeddings.py`)
@@ -180,8 +180,8 @@ To populate or update the Vector Search Index with reference intent embeddings, 
 2. **Text Embedding Generation**: Sends each intent text prompt to Agent Platform `text-embedding-005:predict` endpoint to extract a 768-dimensional floating point feature vector.
 3. **Index Upsert**: Formats feature vectors into Agent Platform datapoint JSON payloads (`datapointId` + `featureVector`) and calls `gcloud ai indexes upsert-datapoints` to publish them to the Vector Search index.
 
-### Mandatory Configuration: `vertex_config.properties`
-Before deploying, you **must configure** the following property values in `vertex_config.properties` within both the **`llm-routing-v2` shared flow** and the **`llm-ai-gateway-v1` API proxy** (`apiproxy/resources/properties/vertex_config.properties`):
+### Mandatory Configuration: `vertex_config.properties` (Single Source of Truth)
+Before deploying, you **must configure** the following property values in `vertex_config.properties` within both the **`llm-routing-v2` shared flow** (`sharedflowbundles/llm-routing-v2/sharedflowbundle/resources/properties/vertex_config.properties`) and the **`llm-ai-gateway-v1` API proxy** (`proxies/llm-ai-gateway-v1/apiproxy/resources/properties/vertex_config.properties`):
 
 ```properties
 # Common
@@ -191,10 +191,11 @@ project_number=<your-project-number>
 index_endpoint_dns=<retrieve-from-vector-search-dns>
 default_model=gemini-2.5-pro
 default_fallback_model=gemini-2.5-flash
+default_local_model=gemma3:1b
 
 # Routing (Dynamic routing based on prompt complexity)
 routing_index_endpoint_id=<retrieve-from-vector-search-endpoint-id>
-routing_deployed_index_id=semantic_routing_index_endpoint_deployment_v2
+routing_deployed_index_id=semantic_routing_index_endpoint_deployment
 routing_index_id=<retrieve-from-vector-search-index-id>
 
 # Cache (Semantic Caching via Vector Search)
@@ -202,6 +203,11 @@ cache_index_endpoint_id=<retrieve-from-vector-search-endpoint-id>
 cache_deployed_index_id=semantic_cache_index_endpoint_deployment
 cache_index_id=<retrieve-from-vector-search-index-id>
 ```
+
+#### Updating Default, Fallback, or Local Models (Zero Code Changes Required)
+All model names across the gateway are **100% externalized** into `vertex_config.properties`—no model identifiers (`gemini-2.5-pro`, `gemini-2.5-flash`, `gemma3:1b`, etc.) are hardcoded in any JavaScript policy (`JS-ProcessCustomLLMHeaders.js`, `JS-ParseRequestBody.js`, `JS-DetermineModelRoute.js`, `JS-ChangeToFallbackModel.js`, `JS-PrepareFailoverPayload.js`, `JS-ProcessFailoverResponse.js`, `JS-SetFailover.js`), XML policy/target, or in `deploy-llm-ai-gateway.sh`:
+- **Model-Agnostic Fallback & Downgrade**: `JS-ChangeToFallbackModel.js` switches directly to `default_fallback_model` (or `x-llm-fallback-model`) without relying on `-pro` or `-flash` naming conventions. This supports any future model combination (for example, `default_model=gemini-3.8-flash` and `default_fallback_model=gemini-3.6-flash`).
+- **Dynamic API Product Quotas**: During deployment, `deploy-llm-ai-gateway.sh` reads `default_model`, `default_fallback_model`, and `default_local_model` directly from `vertex_config.properties` (unless overridden via environment variables `DEFAULT_MODEL`, `DEFAULT_FALLBACK_MODEL`, `DEFAULT_LOCAL_MODEL`) and dynamically injects them into the `llm-ai-gateway-product` LLM quota operations.
 
 ---
 
@@ -236,9 +242,10 @@ The deployment script [`deploy-llm-ai-gateway.sh`](deploy-llm-ai-gateway.sh) aut
    - Deploys the GenAI proxy bundle with token count extraction, semantic caching, routing, and quota enforcement policies.
 6. **Developer & Developer App Configuration**:
    - Provisions developer `cymbal-retail-dev@example.com` (`cymbal-retail-dev`).
-   - Provisions the API Product `llm-ai-gateway-product` with both proxy operations and per-model **LLM Token Quotas** on `llm-ai-gateway-v1`:
-     - **gemini-2.5-pro**: `POST` operations limited to **10,000 tokens every 5 minutes**.
-     - **gemini-2.5-flash**: `POST` operations limited to **100,000 tokens every 5 minutes**.
+   - Provisions the API Product `llm-ai-gateway-product` with both proxy operations and per-model **LLM Token Quotas** dynamically populated from `vertex_config.properties`:
+     - **`default_model`** (e.g. `gemini-2.5-pro`): `POST` operations limited to **10,000 tokens every 5 minutes**.
+     - **`default_local_model`** (e.g. `gemma3:1b`): `POST` operations limited to **50,000 tokens every 5 minutes**.
+     - **`default_fallback_model`** (e.g. `gemini-2.5-flash`): `POST` operations limited to **100,000 tokens every 5 minutes**.
 7. **Application Provisioning (`llm-ai-gateway-app`)**:
    - Connects the developer and API product to issue an API consumer key.
 8. **Secret Manager Secret Storage (`llm-ai-gateway-client-id`)**:

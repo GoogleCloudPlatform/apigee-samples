@@ -22,7 +22,7 @@
     try {
         var originalVertexRequest = context.getVariable("original_vertex_request");
         var rawPayload = context.getVariable("request.content") || request.content;
-        var failoverModel = context.getVariable("llm_default_fallback_model") || "gemini-2.5-flash";
+        var failoverModel = context.getVariable("llm_fallback_model") || context.getVariable("llm_default_fallback_model") || context.getVariable("propertyset.vertex_config.default_fallback_model");
         var currentModel = context.getVariable("model") || "";
 
         // --- 1. Payload Adaptation (Preserve original_vertex_request if available, else OpenAI messages -> Vertex AI contents) ---

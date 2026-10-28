@@ -16,7 +16,7 @@
   <Set>
     <Headers>
       <Header name="X-LLM-Routing-Fallback">true</Header>
-      <Header name="X-LLM-Routing-Fallback-Reason">Pro token quota exceeded, downgraded to Flash</Header>
+      <Header name="X-LLM-Routing-Fallback-Reason">Primary model token quota exceeded, downgraded to {model}</Header>
     </Headers>
   </Set>
   <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>

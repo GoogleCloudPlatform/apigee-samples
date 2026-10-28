@@ -311,9 +311,14 @@ fi
 # Fallback defaults if not dynamically resolved
 ROUTING_DEPLOYED_INDEX_ID="${ROUTING_DEPLOYED_INDEX_ID:-semantic_routing_index_endpoint_deployment}"
 CACHE_DEPLOYED_INDEX_ID="${CACHE_DEPLOYED_INDEX_ID:-semantic_cache_index_endpoint_deployment}"
-DEFAULT_LOCAL_MODEL="${DEFAULT_LOCAL_MODEL:-gemma3:1b}"
-DEFAULT_MODEL="${DEFAULT_MODEL:-gemini-2.5-flash}"
-DEFAULT_FALLBACK_MODEL="${DEFAULT_FALLBACK_MODEL:-gemini-2.5-flash}"
+PROP_SOURCE_FILE="proxies/llm-ai-gateway-v1/apiproxy/resources/properties/vertex_config.properties"
+PROP_DEFAULT_LOCAL_MODEL=$(grep -E '^default_local_model=' "$PROP_SOURCE_FILE" 2>/dev/null | cut -d= -f2 | tr -d '[:space:]' || true)
+PROP_DEFAULT_MODEL=$(grep -E '^default_model=' "$PROP_SOURCE_FILE" 2>/dev/null | cut -d= -f2 | tr -d '[:space:]' || true)
+PROP_DEFAULT_FALLBACK_MODEL=$(grep -E '^default_fallback_model=' "$PROP_SOURCE_FILE" 2>/dev/null | cut -d= -f2 | tr -d '[:space:]' || true)
+
+DEFAULT_LOCAL_MODEL="${DEFAULT_LOCAL_MODEL:-$PROP_DEFAULT_LOCAL_MODEL}"
+DEFAULT_MODEL="${DEFAULT_MODEL:-$PROP_DEFAULT_MODEL}"
+DEFAULT_FALLBACK_MODEL="${DEFAULT_FALLBACK_MODEL:-$PROP_DEFAULT_FALLBACK_MODEL}"
 
 # Discover Gemma Cloud Run Service URL
 echo "Discovering Gemma Cloud Run service..."
@@ -459,6 +464,9 @@ PRODUCT_PAYLOAD=$(jq -n \
   --arg name "$PRODUCT_NAME" \
   --arg displayName "$PRODUCT_DISPLAY_NAME" \
   --arg env "$APIGEE_ENV" \
+  --arg defaultModel "$DEFAULT_MODEL" \
+  --arg localModel "$DEFAULT_LOCAL_MODEL" \
+  --arg fallbackModel "$DEFAULT_FALLBACK_MODEL" \
   '{
     name: $name,
     displayName: $displayName,
@@ -486,7 +494,7 @@ PRODUCT_PAYLOAD=$(jq -n \
           llmOperations: [
             {
               resource: "/**",
-              model: "gemini-2.5-pro"
+              model: $defaultModel
             }
           ],
           llmTokenQuota: {
@@ -500,7 +508,7 @@ PRODUCT_PAYLOAD=$(jq -n \
           llmOperations: [
             {
               resource: "/**",
-              model: "gemma3:1b"
+              model: $localModel
             }
           ],
           llmTokenQuota: {
@@ -514,7 +522,7 @@ PRODUCT_PAYLOAD=$(jq -n \
           llmOperations: [
             {
               resource: "/**",
-              model: "gemini-2.5-flash"
+              model: $fallbackModel
             }
           ],
           llmTokenQuota: {

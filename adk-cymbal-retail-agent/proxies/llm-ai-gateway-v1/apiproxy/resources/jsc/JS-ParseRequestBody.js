@@ -194,7 +194,7 @@ try {
     var llmTierHeader = context.getVariable("request.header.x-llm-tier");
     var modelTierHeader = context.getVariable("request.header.x-model-tier");
     var effectiveTierHeader = exists(llmTierHeader) ? llmTierHeader : modelTierHeader;
-    var defaultLocalModel = context.getVariable("llm_local_model") || "gemma3:1b";
+    var defaultLocalModel = context.getVariable("llm_local_model") || context.getVariable("propertyset.vertex_config.default_local_model");
 
     // Order of precedence for explicit header model selection:
     // 1. x-llm-model header
@@ -209,7 +209,7 @@ try {
         headerModel = context.getVariable("llm_model");
     }
 
-    var defaultModel = context.getVariable("llm_default_model") || "gemini-2.5-flash";
+    var defaultModel = context.getVariable("llm_default_model") || context.getVariable("propertyset.vertex_config.default_model");
 
     // Extract model from URL path suffix or payload JSON
     var bodyOrUriModel = getModelName(context.getVariable("proxy.pathsuffix"), rawContent);

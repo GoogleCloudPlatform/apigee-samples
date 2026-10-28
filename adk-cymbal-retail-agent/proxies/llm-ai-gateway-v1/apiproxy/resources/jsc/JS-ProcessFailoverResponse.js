@@ -22,7 +22,7 @@
     try {
         var failoverResponseContent = context.getVariable("failoverResponse.content");
         var failoverResponseStatus = context.getVariable("failoverResponse.status.code") || "503";
-        var failoverModel = context.getVariable("llm_default_fallback_model") || "gemini-2.5-flash";
+        var failoverModel = context.getVariable("llm_fallback_model") || context.getVariable("llm_default_fallback_model") || context.getVariable("propertyset.vertex_config.default_fallback_model");
 
         function toCleanIntString(val, fallback) {
             if (val === null || val === undefined) return String(fallback);

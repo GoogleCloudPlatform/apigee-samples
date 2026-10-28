@@ -14,23 +14,8 @@
  * limitations under the License.
  */
 
-var defaultFallback = context.getVariable("llm_default_fallback_model") || "gemini-2.5-flash";
-var originalModel = context.getVariable("model") || "";
+var defaultFallback = context.getVariable("llm_default_fallback_model") || context.getVariable("propertyset.vertex_config.default_fallback_model");
 var fallbackModel = context.getVariable("llm_fallback_model") || defaultFallback;
-
-if (originalModel) {
-    if (originalModel.indexOf("flash") >= 0) {
-        fallbackModel = originalModel;
-    } else if (originalModel.indexOf("-pro") >= 0) {
-        fallbackModel = originalModel.replace("-pro", "-flash");
-    } else {
-        fallbackModel = defaultFallback;
-    }
-}
-
-if (!fallbackModel) {
-    fallbackModel = defaultFallback;
-}
 
 // 1. Update the 'model' variable so that the LLMTokenQuota policy counts it under the fallback model
 context.setVariable("model", fallbackModel);

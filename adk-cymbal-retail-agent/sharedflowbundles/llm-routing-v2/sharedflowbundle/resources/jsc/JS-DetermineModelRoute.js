@@ -16,10 +16,10 @@
 
 try {
     var keywordDecision = context.getVariable("keyword_routing_decision");
-    var defaultModel = context.getVariable("llm_model") || context.getVariable("propertyset.vertex_config.default_model") || "gemini-2.5-flash"; // Default model
-    var localModel = context.getVariable("llm_local_model") || context.getVariable("propertyset.vertex_config.default_local_model") || "gemma3:1b";
+    var defaultModel = context.getVariable("llm_model") || context.getVariable("propertyset.vertex_config.default_model"); // Default model
+    var localModel = context.getVariable("llm_local_model") || context.getVariable("propertyset.vertex_config.default_local_model");
     var model = context.getVariable("model") || defaultModel;
-    var fallbackModel = context.getVariable("llm_fallback_model") || context.getVariable("propertyset.vertex_config.default_fallback_model") || "gemini-2.5-flash"; // Fallback model
+    var fallbackModel = context.getVariable("llm_fallback_model") || context.getVariable("propertyset.vertex_config.default_fallback_model"); // Fallback model
     var matchedDatapointId = "";
     var distance = 0.0;
     var routeToGemma = false;
@@ -33,7 +33,7 @@ try {
         } else if (decisionLower === "simple") {
             model = fallbackModel;
         } else if (decisionLower === "complex") {
-            model = "gemini-2.5-pro";
+            model = defaultModel;
         }
         matchedDatapointId = "kvm_override_" + decisionLower;
         distance = 1.0;
@@ -67,7 +67,7 @@ try {
                 } else if (matchedIdLower.indexOf("simple") >= 0) {
                     model = fallbackModel;
                 } else if (matchedIdLower.indexOf("complex") >= 0) {
-                    model = "gemini-2.5-pro";
+                    model = defaultModel;
                 }
             }
         }
