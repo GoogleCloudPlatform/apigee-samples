@@ -42,7 +42,7 @@ echo "✅ Installing agent dependencies (workspace/cymbal-retail-agent)..."
 pushd "${SCRIPT_DIR}/cymbal-retail-agent" >/dev/null
 rm -f uv.lock 2>/dev/null || true
 uv sync --python 3.12
-uv pip install "google-adk[a2a,agent-identity]" a2a-sdk 2>/dev/null || true
+uv pip install "google-adk[a2a,agent-identity]<=2.11.0" a2a-sdk 2>/dev/null || true
 popd >/dev/null
 
 # Sync Python dependencies for cymbal-retail-agent-apigeellm (Task 4)
@@ -105,6 +105,25 @@ if [ -n "$PROJECT_ID" ]; then
     # Discover LLM AI Gateway consumer key
     LLM_APP_JSON=$(apigeecli apps get --name "llm-ai-gateway-app" --org "$PROJECT_ID" --token "$TOKEN" --disable-check 2>/dev/null || echo "")
     LLM_GATEWAY_KEY=$(echo "$LLM_APP_JSON" | jq -r '.[0].credentials[0].consumerKey // empty' 2>/dev/null || echo "")
+
+    # Register Cloud Shell Web Preview callback URL on Developer Apps if running in Cloud Shell
+    CS_HOST="${WEB_HOST:-${DEVSHELL_WEB_HOST:-}}"
+    if [ -n "$CS_HOST" ]; then
+      CS_CALLBACK="https://8000-${CS_HOST}/dev-ui/"
+      for APP_NAME in cymbal-retail-app cymbal-retail-admin-app; do
+        APP_BODY=$(curl -s -H "Authorization: Bearer ${TOKEN}" "https://apigee.googleapis.com/v1/organizations/${PROJECT_ID}/developers/cymbal-retail-developer@acme.com/apps/${APP_NAME}" 2>/dev/null || echo "")
+        if [ -n "$APP_BODY" ] && echo "$APP_BODY" | jq -e '.appId' >/dev/null 2>&1; then
+          CUR_CB=$(echo "$APP_BODY" | jq -r '.callbackUrl // ""')
+          if [[ "$CUR_CB" != *"$CS_CALLBACK"* ]]; then
+            NEW_CB="${CUR_CB:+${CUR_CB},}${CS_CALLBACK}"
+            UPDATED_APP=$(echo "$APP_BODY" | jq --arg cb "$NEW_CB" '.callbackUrl = $cb')
+            curl -s -X PUT -H "Authorization: Bearer ${TOKEN}" -H "Content-Type: application/json" \
+              "https://apigee.googleapis.com/v1/organizations/${PROJECT_ID}/developers/cymbal-retail-developer@acme.com/apps/${APP_NAME}" \
+              -d "$UPDATED_APP" >/dev/null 2>&1 || true
+          fi
+        fi
+      done
+    fi
   fi
 
   if [ -z "$LLM_GATEWAY_KEY" ]; then

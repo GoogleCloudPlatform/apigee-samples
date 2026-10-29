@@ -20,6 +20,9 @@
         <Name>CORS-Allow</Name>
       </Step>
       <Step>
+        <Name>JS-NormalizeRedirectUri</Name>
+      </Step>
+      <Step>
         <Name>GenerateAuthCode</Name>
       </Step>
     </Request>
@@ -27,7 +30,11 @@
   </PreFlow>
   <PostFlow name="PostFlow">
     <Request/>
-    <Response/>
+    <Response>
+      <Step>
+        <Name>JS-RestoreRedirectLocation</Name>
+      </Step>
+    </Response>
   </PostFlow>
   <Flows>
     <Flow name="GetAuthorizationCode">

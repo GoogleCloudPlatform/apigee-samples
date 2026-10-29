@@ -37,10 +37,11 @@ class AdkWebServer:
   def restart(self, agent_parent_dir: str) -> None:
     self.stop()
     env = os.environ.copy()
+    orig_local_bin = os.path.expanduser("~/.local/bin")
     if self.student_home:
       real_home = os.path.realpath(self.student_home)
       env["HOME"] = real_home
-      env["PATH"] = f"{real_home}/.local/bin:{real_home}/.apigeecli/bin:" + env.get("PATH", "")
+      env["PATH"] = f"{real_home}/.local/bin:{real_home}/.apigeecli/bin:{orig_local_bin}:" + env.get("PATH", "")
     self.proc = subprocess.Popen(
         [
             "uv",
@@ -77,6 +78,7 @@ class AdkWebServer:
       except Exception:
         os.killpg(os.getpgid(self.proc.pid), signal.SIGKILL)
       self.proc = None
+    subprocess.run(["fuser", "-k", f"{self.port}/tcp"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=False)
 
 
 async def send_adk_prompts(
@@ -107,6 +109,7 @@ async def send_adk_prompts(
 
     results = []
     for idx, prompt in enumerate(prompts, start=1):
+      print(f"[ADK UI | {screenshot_prefix}] Sending prompt #{idx}: {prompt!r}", flush=True)
       before_text = await page.locator("body").inner_text()
       box = page.locator("textarea.chat-input-box, textarea:visible, input[type='text']:visible").last
       await box.wait_for(state="visible", timeout=20000)
@@ -124,6 +127,7 @@ async def send_adk_prompts(
         for b_idx in range(await auth_btns.count()):
           btn = auth_btns.nth(b_idx)
           if await btn.is_visible():
+            print(f"[ADK UI | {screenshot_prefix}] Clicking OAuth button: {await btn.inner_text()!r}", flush=True)
             await btn.click()
             await page.wait_for_timeout(2500)
 
@@ -142,9 +146,11 @@ async def send_adk_prompts(
 
       shot_path = os.path.join(screenshot_dir, f"{screenshot_prefix}_p{idx}.png")
       await page.screenshot(path=shot_path, full_page=False)
+      elapsed = round(time.time() - t0, 2)
+      print(f"[ADK UI | {screenshot_prefix}] Reply #{idx} ({elapsed}s):\n{reply_snippet[:450]}\n[Screenshot -> {shot_path}]", flush=True)
       results.append({
           "prompt": prompt,
-          "elapsed_sec": round(time.time() - t0, 2),
+          "elapsed_sec": elapsed,
           "reply": reply_snippet,
           "screenshot": shot_path,
           "oauth_popups": list(popup_urls),

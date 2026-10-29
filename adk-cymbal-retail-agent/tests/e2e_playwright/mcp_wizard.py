@@ -182,6 +182,11 @@ async def configure_mcp_proxy_ui(
     await page.set_viewport_size({"width": 1440, "height": 950})
     await page.goto(f"https://console.cloud.google.com/apigee/api-hub/apis?project={project_id}", wait_until="domcontentloaded", timeout=60000)
     await page.wait_for_timeout(8000)
+    cookie_btn = page.locator("button:has-text('OK, got it'):visible, #glue-cookie-notification-bar-1 button:visible")
+    if await cookie_btn.count() > 0:
+      await cookie_btn.first.click(force=True)
+      await page.wait_for_timeout(1000)
+    await page.evaluate("() => document.querySelectorAll('.glue-cookie-notification-bar, #glue-cookie-notification-bar-1').forEach(e => e.remove())")
 
     if edit_mode:
       href = await page.locator(f"a:has-text('{proxy_name}')").first.get_attribute("href")
@@ -212,16 +217,23 @@ async def configure_mcp_proxy_ui(
         await _pick_select(page, dep_sel, "Deployment environment", env_name)
 
     await page.screenshot(path=os.path.join(screenshot_dir, f"{shot_prefix}_step1.png"))
+    print(f"[MCP Wizard | {shot_prefix}] Step 1 complete, adding APIs: {api_names}", flush=True)
     await page.locator("button:has-text('Continue'):visible").first.click()
     await page.wait_for_timeout(2500)
 
     for i, api_name in enumerate(api_names, start=1):
+      print(f"[MCP Wizard | {shot_prefix}] Selecting API #{i}: {api_name}", flush=True)
       await _add_one_api_in_step2(page, api_name, screenshot_dir, f"{shot_prefix}_{i}")
 
     await page.screenshot(path=os.path.join(screenshot_dir, f"{shot_prefix}_step2.png"))
-    await page.locator("button:has-text('Continue'):visible").first.click()
+    await page.evaluate("() => document.querySelectorAll('.glue-cookie-notification-bar, #glue-cookie-notification-bar-1').forEach(e => e.remove())")
+    await page.locator("button:has-text('Continue'):visible").first.click(force=True)
     await page.wait_for_timeout(2000)
+    await page.keyboard.press("Escape")
+    await page.wait_for_timeout(500)
     await page.screenshot(path=os.path.join(screenshot_dir, f"{shot_prefix}_step3.png"))
-    await page.locator("button:has-text('Deploy'):visible").first.click()
+    await page.evaluate("() => document.querySelectorAll('.glue-cookie-notification-bar, #glue-cookie-notification-bar-1').forEach(e => e.remove())")
+    await page.locator("button:has-text('Deploy'):visible").first.click(force=True)
+    print(f"[MCP Wizard | {shot_prefix}] Clicked Deploy in API Hub UI!", flush=True)
     await page.wait_for_timeout(8000)
     await page.close()

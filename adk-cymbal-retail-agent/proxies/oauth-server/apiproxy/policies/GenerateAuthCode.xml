@@ -14,5 +14,6 @@
 <OAuthV2 name="GenerateAuthCode">
   <Operation>GenerateAuthorizationCode</Operation>
   <ExpiresIn>300000</ExpiresIn>
+  <RedirectUri>normalized_redirect_uri</RedirectUri>
   <GenerateResponse/>
 </OAuthV2>

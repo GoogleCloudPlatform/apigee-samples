@@ -23,7 +23,13 @@
     <Policy>RefreshAccessToken</Policy>
     <Policy>AM-SetAuthServerMetadata</Policy>
     <Policy>CORS-Allow</Policy>
+    <Policy>JS-NormalizeRedirectUri</Policy>
+    <Policy>JS-RestoreRedirectLocation</Policy>
   </Policies>
+  <Resources>
+    <Resource>jsc://JS-NormalizeRedirectUri.js</Resource>
+    <Resource>jsc://JS-RestoreRedirectLocation.js</Resource>
+  </Resources>
   <ProxyEndpoints>
     <ProxyEndpoint>authorize</ProxyEndpoint>
     <ProxyEndpoint>metadata</ProxyEndpoint>

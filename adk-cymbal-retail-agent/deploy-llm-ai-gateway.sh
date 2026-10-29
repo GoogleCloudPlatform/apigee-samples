@@ -320,15 +320,15 @@ DEFAULT_LOCAL_MODEL="${DEFAULT_LOCAL_MODEL:-$PROP_DEFAULT_LOCAL_MODEL}"
 DEFAULT_MODEL="${DEFAULT_MODEL:-$PROP_DEFAULT_MODEL}"
 DEFAULT_FALLBACK_MODEL="${DEFAULT_FALLBACK_MODEL:-$PROP_DEFAULT_FALLBACK_MODEL}"
 
-# Discover Gemma Cloud Run Service URL
+# Discover Gemma Cloud Run Service URL (prefer deterministic run.googleapis.com/urls[0] matching Cloud Run UI)
 echo "Discovering Gemma Cloud Run service..."
 GEMMA_SERVICE_NAME="${GEMMA_SERVICE_NAME:-gemma-cpu-router}"
-GEMMA_URL=$(gcloud run services describe "$GEMMA_SERVICE_NAME" --region="$REGION" --project="$PROJECT_ID" --format="value(status.url)" 2>/dev/null || true)
+GEMMA_URL=$(gcloud run services describe "$GEMMA_SERVICE_NAME" --region="$REGION" --project="$PROJECT_ID" --format="json" 2>/dev/null | jq -r '(.metadata.annotations["run.googleapis.com/urls"] // "[]" | fromjson | .[0]) // .status.url // empty' 2>/dev/null || true)
 if [ -z "$GEMMA_URL" ]; then
-  GEMMA_URL=$(gcloud run services list --project="$PROJECT_ID" --region="$REGION" --format="value(status.url)" 2>/dev/null | grep "gemma" | head -n1 || true)
+  GEMMA_URL=$(gcloud run services list --project="$PROJECT_ID" --filter="metadata.name=$GEMMA_SERVICE_NAME" --format="json" 2>/dev/null | jq -r '.[0] | (.metadata.annotations["run.googleapis.com/urls"] // "[]" | fromjson | .[0]) // .status.url // empty' 2>/dev/null || true)
 fi
 if [ -z "$GEMMA_URL" ]; then
-  GEMMA_URL=$(gcloud run services list --project="$PROJECT_ID" --filter="metadata.name=$GEMMA_SERVICE_NAME" --format="value(status.url)" 2>/dev/null | head -n1 || true)
+  GEMMA_URL=$(gcloud run services list --project="$PROJECT_ID" --region="$REGION" --format="value(status.url)" 2>/dev/null | grep "gemma" | head -n1 || true)
 fi
 
 if [ -n "$GEMMA_URL" ]; then
