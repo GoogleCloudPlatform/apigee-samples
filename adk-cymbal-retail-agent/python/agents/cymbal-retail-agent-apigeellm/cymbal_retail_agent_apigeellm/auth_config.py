@@ -19,6 +19,14 @@ from google.adk.auth import AuthCredential, AuthCredentialTypes, OAuth2Auth
 from google.adk.tools.apihub_tool.clients.secret_client import SecretManagerClient
 
 load_dotenv()
+load_dotenv(
+    os.path.abspath(
+        os.path.join(
+            os.path.dirname(__file__),
+            "../../../../../workspace/cymbal-retail-agent/.env",
+        )
+    )
+)
 
 PROJECT_ID = os.getenv("GOOGLE_CLOUD_PROJECT")
 APIGEE_HOSTNAME = os.getenv("APIGEE_HOSTNAME")

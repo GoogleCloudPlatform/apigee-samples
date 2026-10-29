@@ -16,6 +16,15 @@ import os
 from dotenv import load_dotenv
 
 load_dotenv()
+load_dotenv(
+    os.path.abspath(
+        os.path.join(
+            os.path.dirname(__file__),
+            "../../../../../workspace/cymbal-retail-agent/.env",
+        )
+    )
+)
+os.environ.setdefault("GOOGLE_GENAI_USE_ENTERPRISE", "TRUE")
 
 import warnings
 warnings.filterwarnings("ignore")

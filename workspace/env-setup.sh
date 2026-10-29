@@ -77,6 +77,10 @@ adk telemetry disable >/dev/null 2>&1 || true
 
 # Resolve active GCP project, region (auto-detecting lab Cloud Run / Compute region if unset), Apigee hostname, and credentials
 PROJECT_ID="${GOOGLE_CLOUD_PROJECT:-$(gcloud config get-value project 2>/dev/null || echo "")}"
+if [ -z "$PROJECT_ID" ]; then
+  PROJECT_ID=$(gcloud projects list --filter="projectId:qwiklabs-gcp-*" --limit=1 --format="value(projectId)" 2>/dev/null || gcloud projects list --limit=1 --format="value(projectId)" 2>/dev/null || echo "")
+  [ -n "$PROJECT_ID" ] && gcloud config set project "$PROJECT_ID" >/dev/null 2>&1 || true
+fi
 REGION="${REGION:-$(gcloud config get-value compute/region 2>/dev/null || echo "")}"
 if [ -z "$REGION" ] && [ -n "$PROJECT_ID" ]; then
   REGION=$(gcloud run services list --project="$PROJECT_ID" --limit=1 --format="value(region)" 2>/dev/null || echo "")

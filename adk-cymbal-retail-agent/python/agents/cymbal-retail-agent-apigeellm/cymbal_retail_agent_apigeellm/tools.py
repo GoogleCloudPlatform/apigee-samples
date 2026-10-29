@@ -20,6 +20,14 @@ from google.adk.tools.mcp_tool.mcp_toolset import StreamableHTTPConnectionParams
 from .auth_config import auth_scheme, auth_credential
 
 load_dotenv()
+load_dotenv(
+    os.path.abspath(
+        os.path.join(
+            os.path.dirname(__file__),
+            "../../../../../workspace/cymbal-retail-agent/.env",
+        )
+    )
+)
 
 APIGEE_HOSTNAME=os.getenv("APIGEE_HOSTNAME")
 
