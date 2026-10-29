@@ -8,9 +8,16 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 WORKSPACE_SYMLINK="$HOME/workspace"
+REPO_SYMLINK="$HOME/apigee-samples"
 APIGEELLM_DIR="${REPO_ROOT}/adk-cymbal-retail-agent/python/agents/cymbal-retail-agent-apigeellm"
 
 echo "=== [Workspace Setup] Initializing Apigee AI Agents Workshop Environment ==="
+
+# Ensure ~/apigee-samples symlink points to the repo root (e.g. when cloned into ~/cloudshell_open/apigee-samples)
+if [ "$REPO_SYMLINK" != "$REPO_ROOT" ]; then
+  echo "✅ Creating ~/apigee-samples symlink -> ${REPO_ROOT}..."
+  ln -sfn "$REPO_ROOT" "$REPO_SYMLINK"
+fi
 
 # Ensure ~/workspace symlink points to this workspace directory
 if [ "$WORKSPACE_SYMLINK" != "$SCRIPT_DIR" ]; then
@@ -65,8 +72,8 @@ fi
 adk telemetry disable >/dev/null 2>&1 || true
 
 # Resolve active GCP project, region (auto-detecting lab Cloud Run / Compute region if unset), Apigee hostname, and credentials
-PROJECT_ID=$(gcloud config get-value project 2>/dev/null || echo "")
-REGION=$(gcloud config get-value compute/region 2>/dev/null || echo "")
+PROJECT_ID="${GOOGLE_CLOUD_PROJECT:-$(gcloud config get-value project 2>/dev/null || echo "")}"
+REGION="${REGION:-$(gcloud config get-value compute/region 2>/dev/null || echo "")}"
 if [ -z "$REGION" ] && [ -n "$PROJECT_ID" ]; then
   REGION=$(gcloud run services list --project="$PROJECT_ID" --limit=1 --format="value(region)" 2>/dev/null || echo "")
 fi
