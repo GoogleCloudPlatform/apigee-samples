@@ -13,10 +13,14 @@ APIGEELLM_DIR="${REPO_ROOT}/adk-cymbal-retail-agent/python/agents/cymbal-retail-
 
 echo "=== [Workspace Setup] Initializing Apigee AI Agents Workshop Environment ==="
 
-# Ensure ~/apigee-samples symlink points to the repo root (e.g. when cloned into ~/cloudshell_open/apigee-samples)
+# Ensure ~/apigee-samples and ~/cloudshell_open/apigee-samples symlinks both resolve to the repo root
 if [ "$REPO_SYMLINK" != "$REPO_ROOT" ]; then
   echo "✅ Creating ~/apigee-samples symlink -> ${REPO_ROOT}..."
   ln -sfn "$REPO_ROOT" "$REPO_SYMLINK"
+fi
+if [ "$HOME/cloudshell_open/apigee-samples" != "$REPO_ROOT" ]; then
+  mkdir -p "$HOME/cloudshell_open"
+  ln -sfn "$REPO_ROOT" "$HOME/cloudshell_open/apigee-samples"
 fi
 
 # Ensure ~/workspace symlink points to this workspace directory
