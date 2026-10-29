@@ -16,15 +16,24 @@ import os
 from dotenv import load_dotenv
 
 load_dotenv()
-load_dotenv(
+for _candidate_env in (
     os.path.abspath(
         os.path.join(
             os.path.dirname(__file__),
             "../../../../../workspace/cymbal-retail-agent/.env",
         )
-    )
-)
-os.environ.setdefault("GOOGLE_GENAI_USE_ENTERPRISE", "TRUE")
+    ),
+    os.path.expanduser(
+        "~/cloudshell_open/apigee-samples/workspace/cymbal-retail-agent/.env"
+    ),
+    os.path.expanduser(
+        "~/apigee-samples/workspace/cymbal-retail-agent/.env"
+    ),
+    os.path.expanduser("~/workspace/cymbal-retail-agent/.env"),
+):
+    if os.path.isfile(_candidate_env):
+        load_dotenv(_candidate_env)
+os.environ["GOOGLE_GENAI_USE_ENTERPRISE"] = "TRUE"
 
 import warnings
 warnings.filterwarnings("ignore")

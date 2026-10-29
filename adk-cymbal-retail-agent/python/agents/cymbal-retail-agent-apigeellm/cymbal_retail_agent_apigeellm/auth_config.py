@@ -19,14 +19,23 @@ from google.adk.auth import AuthCredential, AuthCredentialTypes, OAuth2Auth
 from google.adk.tools.apihub_tool.clients.secret_client import SecretManagerClient
 
 load_dotenv()
-load_dotenv(
+for _candidate_env in (
     os.path.abspath(
         os.path.join(
             os.path.dirname(__file__),
             "../../../../../workspace/cymbal-retail-agent/.env",
         )
-    )
-)
+    ),
+    os.path.expanduser(
+        "~/cloudshell_open/apigee-samples/workspace/cymbal-retail-agent/.env"
+    ),
+    os.path.expanduser(
+        "~/apigee-samples/workspace/cymbal-retail-agent/.env"
+    ),
+    os.path.expanduser("~/workspace/cymbal-retail-agent/.env"),
+):
+    if os.path.isfile(_candidate_env):
+        load_dotenv(_candidate_env)
 
 PROJECT_ID = os.getenv("GOOGLE_CLOUD_PROJECT")
 APIGEE_HOSTNAME = os.getenv("APIGEE_HOSTNAME")

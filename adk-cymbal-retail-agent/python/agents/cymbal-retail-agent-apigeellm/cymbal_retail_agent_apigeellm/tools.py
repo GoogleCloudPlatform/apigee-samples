@@ -20,14 +20,23 @@ from google.adk.tools.mcp_tool.mcp_toolset import StreamableHTTPConnectionParams
 from .auth_config import auth_scheme, auth_credential
 
 load_dotenv()
-load_dotenv(
+for _candidate_env in (
     os.path.abspath(
         os.path.join(
             os.path.dirname(__file__),
             "../../../../../workspace/cymbal-retail-agent/.env",
         )
-    )
-)
+    ),
+    os.path.expanduser(
+        "~/cloudshell_open/apigee-samples/workspace/cymbal-retail-agent/.env"
+    ),
+    os.path.expanduser(
+        "~/apigee-samples/workspace/cymbal-retail-agent/.env"
+    ),
+    os.path.expanduser("~/workspace/cymbal-retail-agent/.env"),
+):
+    if os.path.isfile(_candidate_env):
+        load_dotenv(_candidate_env)
 
 APIGEE_HOSTNAME=os.getenv("APIGEE_HOSTNAME")
 
