@@ -237,11 +237,10 @@ try {
 
     // Keep tool-bearing agent requests on the tool-capable Vertex Gemini target
     // unless x-llm-tier: local (or x-model-tier: local) is explicitly requested
-    var explicitRoutingHeader = context.getVariable("request.header.x-llm-routing");
-    var explicitRoutingRequested = exists(explicitRoutingHeader) && explicitRoutingHeader.toLowerCase().replace(/^\s+|\s+$/g, '') === "true";
+    var isRoutingEnabled = context.getVariable("llm_routing_enabled") === "true";
     if (hasTools && !explicitLocalRequested) {
         routeToGemma = false;
-        if (hasToolHistory || !explicitRoutingRequested) {
+        if (hasToolHistory || !isRoutingEnabled) {
             context.setVariable("llm_routing_enabled", "false");
         }
     }
@@ -251,6 +250,8 @@ try {
     // --------------------------------------------------------------------------
     var model = "";
     if (routeToGemma) {
+        // Explicit local/Gemma route selected: bypass semantic router FC-LLMRouting
+        context.setVariable("llm_routing_enabled", "false");
         // Preserve specific Gemma model name if passed in header/body; fallback to default Gemma model
         if (headerModelLower.indexOf("gemma") !== -1) {
             model = headerModel;
@@ -266,6 +267,7 @@ try {
         // 3. Default Model from propertyset
         if (exists(headerModel) && headerModel !== defaultModel) {
             model = headerModel;
+            context.setVariable("llm_routing_enabled", "false");
         } else if (exists(bodyOrUriModel)) {
             model = bodyOrUriModel;
         } else {

@@ -53,7 +53,7 @@
         </Step>
         <Step>
           <Name>FC-LLMRouting</Name>
-          <Condition>llm_routing_enabled != "false" and ( llm_model = llm_default_model )</Condition>
+          <Condition>llm_routing_enabled != "false"</Condition>
         </Step>
         <Step>
           <Name>JS-BuildVertexPayload</Name>
