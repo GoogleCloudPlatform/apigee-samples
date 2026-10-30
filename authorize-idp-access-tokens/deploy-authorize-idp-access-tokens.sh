@@ -15,7 +15,6 @@
 # limitations under the License.
 
 echo "Installing dependencies"
-npm run preinstall
 npm install
 
 gen_key_pairs() {
@@ -24,7 +23,7 @@ gen_key_pairs() {
     echo "$PR_KEY"
     PU_KEY=$(printf '%s\n' "$PR_KEY" | openssl rsa -outform PEM -pubout)
     echo "$PU_KEY"
-    JWK=$(printf '%s\n' "$PU_KEY" | pem-jwk)
+    JWK=$(printf '%s\n' "$PU_KEY" | npx pem-jwk)
     JWK=$(printf '%s\n' "$JWK" | jq '. += {"kid":"mock_key"}')
     JWK=$(printf '%s\n' "$JWK" | jq '. += {"alg":"RS256"}')
     JWK=$(printf '%s\n' "$JWK" | jq '. += {"kty":"RSA"}')
