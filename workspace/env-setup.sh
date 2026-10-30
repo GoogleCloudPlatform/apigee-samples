@@ -16,16 +16,19 @@ echo "=== [Workspace Setup] Initializing Apigee AI Agents Workshop Environment =
 # Ensure ~/apigee-samples and ~/cloudshell_open/apigee-samples symlinks both resolve to the repo root
 if [ "$REPO_SYMLINK" != "$REPO_ROOT" ]; then
   echo "✅ Creating ~/apigee-samples symlink -> ${REPO_ROOT}..."
+  [ -e "$REPO_SYMLINK" ] && [ ! -L "$REPO_SYMLINK" ] && rm -rf "$REPO_SYMLINK"
   ln -sfn "$REPO_ROOT" "$REPO_SYMLINK"
 fi
 if [ "$HOME/cloudshell_open/apigee-samples" != "$REPO_ROOT" ]; then
   mkdir -p "$HOME/cloudshell_open"
+  [ -e "$HOME/cloudshell_open/apigee-samples" ] && [ ! -L "$HOME/cloudshell_open/apigee-samples" ] && rm -rf "$HOME/cloudshell_open/apigee-samples"
   ln -sfn "$REPO_ROOT" "$HOME/cloudshell_open/apigee-samples"
 fi
 
 # Ensure ~/workspace symlink points to this workspace directory
 if [ "$WORKSPACE_SYMLINK" != "$SCRIPT_DIR" ]; then
   echo "✅ Creating ~/workspace symlink -> ${SCRIPT_DIR}..."
+  [ -e "$WORKSPACE_SYMLINK" ] && [ ! -L "$WORKSPACE_SYMLINK" ] && rm -rf "$WORKSPACE_SYMLINK"
   ln -sfn "$SCRIPT_DIR" "$WORKSPACE_SYMLINK"
 fi
 
