@@ -196,7 +196,7 @@ Instead of forcing a single LLM prompt to navigate complex enterprise APIs, the 
 The dedicated LLM AI Gateway proxy provides enterprise control, security, and optimization for all GenAI workloads:
 * **Multi-Format Protocols:** Supports OpenAI-compatible (`POST /v1/llm-ai-gateway/chat/completions`), native (`POST /v1/llm-ai-gateway/chat`), and direct Agent Platform `generateContent` schemas.
 * **Token Rate Limiting & Quotas:** Automatically enforces token volume rate limits (`x-llm-prompt-rate-limiting`) and per-model consumption quotas (`x-llm-token-quota-enforce`).
-* **Semantic Caching:** Integrates with Vector Search embeddings to cache identical and semantically similar queries (`x-llm-cache`), slashing latency and model invocation costs.
+* **Semantic Caching:** Integrates with Vector Search embeddings to cache identical and semantically similar queries (`x-llm-cache`, with `x-force-cache: true` to force caching across multi-turn or tool-call sessions for testing), slashing latency and model invocation costs.
 * **Model Overrides & Routing:** Allows runtime selection via `x-llm-model` or `x-model-tier` headers with automatic fallback protection.
 
 ### 4. Unified Apigee Native MCP Gateway (`/mcp`)

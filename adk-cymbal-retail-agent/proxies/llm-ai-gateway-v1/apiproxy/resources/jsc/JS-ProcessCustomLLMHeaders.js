@@ -55,8 +55,12 @@
         return fallbackValue ? fallbackValue : "";
     }
 
-    // 1. Process Boolean Headers (Defaulting to the String "true")
+    // 1. Process Boolean Headers (Defaulting to the String "true", except x-force-cache which defaults to "false")
     var isCacheEnabled = getBooleanStringHeader("x-llm-cache", "true");
+    var isForceCache = getBooleanStringHeader("x-force-cache", "false");
+    if (isForceCache !== "true") {
+        isForceCache = getBooleanStringHeader("x-llm-force-cache", "false");
+    }
     var isSanitizeUserPrompt = getBooleanStringHeader("x-llm-sanitize-user-prompt", "true");
     var isRoutingEnabled = getBooleanStringHeader("x-llm-routing", "true");
     var isTokenQuotaEnforce = getBooleanStringHeader("x-llm-token-quota-enforce", "true");
@@ -69,6 +73,7 @@
 
     // 3. Set Apigee Flow Variables (All stored as Strings)
     context.setVariable("llm_cache_enabled", isCacheEnabled);
+    context.setVariable("llm_force_cache", isForceCache);
     context.setVariable("llm_sanitize_user_prompt", isSanitizeUserPrompt);
     context.setVariable("llm_routing_enabled", isRoutingEnabled);
     context.setVariable("llm_token_quota_enforce", isTokenQuotaEnforce);

@@ -280,8 +280,16 @@ try {
         cache_enabled = "true";
     }
 
+    var force_cache = context.getVariable("llm_force_cache");
+    if (!exists(force_cache)) {
+        var forceCacheHeader = context.getVariable("request.header.x-force-cache") || context.getVariable("request.header.x-llm-force-cache");
+        force_cache = (exists(forceCacheHeader) && forceCacheHeader.toLowerCase().replace(/^\s+|\s+$/g, '') === "true") ? "true" : "false";
+    }
+    var isForceCache = (force_cache === "true");
+
     // Disable semantic cache for multi-turn conversations or tool-call turns
-    if (hasToolCallTurn || (reqBody.messages && reqBody.messages.length > 4) || (reqBody.contents && reqBody.contents.length > 1)) {
+    // unless x-force-cache: true is explicitly provided
+    if (!isForceCache && (hasToolCallTurn || (reqBody.messages && reqBody.messages.length > 4) || (reqBody.contents && reqBody.contents.length > 1))) {
         cache_enabled = "false";
     }
 
@@ -292,6 +300,7 @@ try {
     context.setVariable("model", model);
     context.setVariable("route_to_gemma", routeToGemma ? "true" : "false");
     context.setVariable("has_tools", hasTools ? "true" : "false");
+    context.setVariable("force_cache", isForceCache ? "true" : "false");
     context.setVariable("cache_enabled", cache_enabled);
 
     print("Model Routing Decision: model=" + model + ", route_to_gemma=" + routeToGemma);

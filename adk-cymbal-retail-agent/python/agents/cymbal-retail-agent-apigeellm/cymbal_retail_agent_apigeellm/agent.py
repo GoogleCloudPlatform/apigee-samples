@@ -81,6 +81,7 @@ custom_headers = {"x-apikey": client_id}
 # custom_headers["x-model-tier"] = "local"                   # Force local Gemma tier routing
 # custom_headers["x-llm-model"] = "gemini-2.5-pro"           # Explicitly override target model (e.g., gemini-2.5-pro, gemini-2.5-flash)
 # custom_headers["x-llm-cache"] = "false"                    # Disable Vector Search Semantic Cache lookup & population
+# custom_headers["x-force-cache"] = "true"                   # Force Semantic Cache even on multi-turn or tool-call turns (default: false)
 # custom_headers["x-llm-routing"] = "false"                  # Disable dynamic semantic vector complexity routing
 # custom_headers["x-llm-sanitize-user-prompt"] = "false"     # Disable user prompt sanitization (Model Armor & Cloud DLP)
 # custom_headers["x-llm-sanitize-model-response"] = "false"  # Disable model response sanitization (Cloud DLP)

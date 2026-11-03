@@ -117,11 +117,12 @@ flowchart TD
 
 
 ### Control Headers (Processing Flags)
-Each treatment or feature can be enabled or disabled per request using HTTP headers. By default, all features are enabled (`true`). Passing any value other than `true` (e.g., `false`) disables the respective treatment:
+Each treatment or feature can be enabled or disabled per request using HTTP headers. By default, all standard features are enabled (`true`), while `x-force-cache` defaults to `false`:
 
 | Header Name | Default | Description |
 | :--- | :---: | :--- |
 | `x-llm-cache` | `true` | Enables Semantic Caching lookup and population |
+| `x-force-cache` *(or `x-llm-force-cache`)* | `false` | Forces Semantic Caching even on multi-turn conversations or tool-call turns (requires `x-llm-cache` to be `true` or omitted) |
 | `x-llm-sanitize-user-prompt` | `true` | Enables user prompt cleaning/anonymization via DLP & Model Armor |
 | `x-llm-routing` | `true` | Enables dynamic model routing based on prompt complexity |
 | `x-llm-token-quota-enforce` | `true` | Enforces API Product LLM token consumption quotas |
@@ -179,6 +180,66 @@ To populate or update the Vector Search Index with reference intent embeddings, 
 1. **Dataset Intent Categorization**: Defines structured prompt datasets categorized into `simple_*` (general tasks), `gemma_*` (retail FAQs like store hours, shipping, return policy), and `complex_*` (coding, architecture analysis).
 2. **Text Embedding Generation**: Sends each intent text prompt to Agent Platform `text-embedding-005:predict` endpoint to extract a 768-dimensional floating point feature vector.
 3. **Index Upsert**: Formats feature vectors into Agent Platform datapoint JSON payloads (`datapointId` + `featureVector`) and calls `gcloud ai indexes upsert-datapoints` to publish them to the Vector Search index.
+
+### Semantic Caching Eligibility & Execution Flow
+
+Semantic caching saves latency and LLM token costs by returning cached responses for semantically similar questions. **By default, semantic caching is enabled (`cache_enabled = "true"`)**, but the gateway automatically disables it when a request involves multi-turn conversation history or active tool executions so that responses remain contextually accurate.
+
+#### Conditions Required for Semantic Cache Execution
+For the semantic cache policies (`SCL-Semantic-Cache-Lookup` on the request path and `SCP-Semantic-Cache-Populate` on the response path) to run:
+
+1. **Condition 1 — Not Disabled by Header (`x-llm-cache`)**:
+   - The `x-llm-cache` HTTP header must be either omitted (defaults to `true`) or explicitly set to `true` (evaluated in `JS-ProcessCustomLLMHeaders.js`).
+   - Passing `x-llm-cache: false` (or any value other than `true`) always disables caching for the request.
+2. **Condition 2 — No Active Tool / Function Call Turn (`hasToolCallTurn == false`)**:
+   - The conversation does not contain any executed tool or function call history (`role: "tool"`, `role: "function"`, `tool_calls`, `functionCall`, or `functionResponse` evaluated in `JS-ParseRequestBody.js`).
+   - *Note*: Declaring available `tools` or `functionDeclarations` on the initial user prompt does **not** disable caching—only actual tool call/response turns in the conversation history disable it.
+3. **Condition 3 — Single-Turn / Short Conversation History**:
+   - **Native Vertex AI Format (`contents`)**: Must contain **at most 1 turn** (`contents.length <= 1`, i.e., the initial user question).
+   - **OpenAI Format (`messages`)**: Must contain **at most 4 messages** (`messages.length <= 4`).
+
+#### Forcing Cache Execution for Testing (`x-force-cache: true`)
+Because multi-agent frameworks (such as ADK) frequently include multi-turn history or tool turns, testing semantic cache hits in an interactive session can be challenging. To simplify testing:
+- You can pass the header **`x-force-cache: true`** (or its alias **`x-llm-force-cache: true`**; default is `false`).
+- When **`x-llm-cache` is `true` (or omitted)** AND **`x-force-cache` is `true`**, **Conditions 2 and 3 are bypassed**: semantic caching executes based on the latest extracted user prompt regardless of conversation length or tool-call history.
+
+#### What Happens When Semantic Cache Executes (`cache_enabled != "false"`)
+- **On Request (`SCL-Semantic-Cache-Lookup`)**: Apigee generates an embedding for the user prompt and searches the Vector Search cache index.
+  - **Cache HIT**: Returns the cached response immediately (`X-Cache-Status: HIT`), bypassing LLM routing and backend model invocation.
+  - **Cache MISS**: Proceeds to model routing and invokes the target LLM (`X-Cache-Status: MISS`).
+- **On Response (`SCP-Semantic-Cache-Populate`)**: When the backend LLM returns a non-empty response (`response.content != null`), Apigee stores the response in the semantic cache for future similar requests.
+
+```mermaid
+flowchart TD
+    classDef start fill:#E8F0FE,stroke:#4285F4,stroke-width:2px,color:#1967D2,font-weight:bold;
+    classDef check fill:#FEF7E0,stroke:#F9AB00,stroke-width:1.5px,color:#B06000,font-weight:bold;
+    classDef enabled fill:#E6F4EA,stroke:#34A853,stroke-width:2px,color:#137333,font-weight:bold;
+    classDef bypassed fill:#FCE8E6,stroke:#EA4335,stroke-width:1.5px,color:#C5221F,font-weight:bold;
+    classDef process fill:#FFFFFF,stroke:#5F6368,stroke-width:1.2px,color:#202124;
+
+    Req(["Incoming Chat Request"]):::start --> C1{"1. Header Check<br/>Is <code>x-llm-cache</code> omitted or <code>true</code>?"}:::check
+
+    C1 -- "No (false)" --> Bypass["<b>Cache Disabled</b><br/><code>cache_enabled = false</code>"]:::bypassed
+    C1 -- "Yes" --> ForceCheck{"Force Cache Override?<br/>Is <code>x-force-cache: true</code>?"}:::check
+
+    ForceCheck -- "Yes (Bypass Conditions 2 &amp; 3)" --> Active["<b>Cache Enabled</b><br/><code>cache_enabled = true</code>"]:::enabled
+    ForceCheck -- "No (default: false)" --> C2{"2. Tool History Check<br/>Any <code>functionCall</code>, <code>functionResponse</code>,<br/><code>tool_calls</code>, or <code>tool/function</code> role?"}:::check
+
+    C2 -- "Yes (hasToolCallTurn)" --> Bypass
+    C2 -- "No" --> C3{"3. Turn Count Check<br/>Vertex: <code>contents.length &lt;= 1</code><br/>OpenAI: <code>messages.length &lt;= 4</code>"}:::check
+
+    C3 -- "No (Multi-turn)" --> Bypass
+    C3 -- "Yes (Initial turn)" --> Active
+
+    Bypass --> CallLLM["Call Target LLM Directly<br/>(Skip Lookup &amp; Populate)"]:::process
+
+    Active --> Lookup["<b>SCL-Semantic-Cache-Lookup</b><br/>Query Vector Search Cache"]:::process
+    Lookup --> HitMiss{"Similar Prompt<br/>Found in Cache?"}:::check
+
+    HitMiss -- "HIT" --> ReturnCached(["Return Cached Response Immediately<br/><code>X-Cache-Status: HIT</code>"]):::enabled
+    HitMiss -- "MISS" --> CallLLMWithCache["Call Target LLM<br/><code>X-Cache-Status: MISS</code>"]:::process
+    CallLLMWithCache --> Populate["<b>SCP-Semantic-Cache-Populate</b><br/>Store LLM Response in Cache"]:::enabled
+```
 
 ### Mandatory Configuration: `vertex_config.properties` (Single Source of Truth)
 Before deploying, you **must configure** the following property values in `vertex_config.properties` within both the **`llm-routing-v2` shared flow** (`sharedflowbundles/llm-routing-v2/sharedflowbundle/resources/properties/vertex_config.properties`) and the **`llm-ai-gateway-v1` API proxy** (`proxies/llm-ai-gateway-v1/apiproxy/resources/properties/vertex_config.properties`):

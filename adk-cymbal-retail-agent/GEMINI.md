@@ -22,7 +22,7 @@ Cymbal Retail is an enterprise reference architecture demonstrating:
   - `POST https://{APIGEE_HOST}/v1/llm-ai-gateway/chat/completions` (OpenAI format)
   - `POST https://{APIGEE_HOST}/v1/llm-ai-gateway/chat` (Native format)
   - `POST https://{APIGEE_HOST}/v1/llm-ai-gateway/projects/{PROJECT_ID}/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent`
-  - Headers: `x-apikey: {LLM_APIKEY}`, `x-llm-cache`, `x-llm-routing`, `x-model-tier`, `x-llm-model`
+  - Headers: `x-apikey: {LLM_APIKEY}`, `x-llm-cache`, `x-force-cache`, `x-llm-routing`, `x-model-tier`, `x-llm-model`
 - **MCP Gateway**: `POST https://{APIGEE_HOST}/mcp`
   - Methods: `initialize`, `notifications/initialized`, `tools/list`, `tools/call`.
 - **LLM Governance Gateway**: `POST https://{APIGEE_HOST}/v1/adk-retail-agent-llm-governance/v1/projects/{PROJECT_ID}/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent`
