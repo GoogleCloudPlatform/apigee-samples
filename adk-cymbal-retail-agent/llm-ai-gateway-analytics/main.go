@@ -34,12 +34,30 @@ import (
 var (
 	// Global cache for analytics data
 	analyticsCache      []byte
+	analyticsCacheRange string = "3h"
 	analyticsCacheMutex sync.RWMutex
 
 	// SSE Broker
 	clients      = make(map[chan []byte]bool)
 	clientsMutex sync.Mutex
 )
+
+func parseTimeRangeConfig(rangeKey string) (string, time.Duration, string) {
+	switch rangeKey {
+	case "5m":
+		return "5m", 5 * time.Minute, "minute"
+	case "15m":
+		return "15m", 15 * time.Minute, "minute"
+	case "30m":
+		return "30m", 30 * time.Minute, "minute"
+	case "1h":
+		return "1h", 1 * time.Hour, "minute"
+	case "3h":
+		return "3h", 3 * time.Hour, "minute"
+	default:
+		return "3h", 3 * time.Hour, "minute"
+	}
+}
 
 // Helper function to broadcast data to all connected SSE clients
 func broadcast(data []byte) {
@@ -125,7 +143,7 @@ func doApigeeRequest(ctx context.Context, method, url string, body interface{}, 
 	return nil
 }
 
-func fetchAnalyticsForEmail(ctx context.Context, projectId, env, escapedTimeRange, email string) (map[string]interface{}, error) {
+func fetchAnalyticsForEmail(ctx context.Context, projectId, env, timeUnit, escapedTimeRange, email string) (map[string]interface{}, error) {
 	escapedFilter := strings.Replace(url.QueryEscape(fmt.Sprintf("(developer_email eq '%s')", email)), "+", "%20", -1)
 
 	var appStats []interface{}
@@ -133,8 +151,8 @@ func fetchAnalyticsForEmail(ctx context.Context, projectId, env, escapedTimeRang
 	var modelStats []interface{}
 
 	// 1. Stats by developer_app
-	appStatsUrl := fmt.Sprintf("https://apigee.googleapis.com/v1/organizations/%s/environments/%s/stats/developer_app?select=sum(message_count),sum(dc_prompt_token_count_v2),sum(dc_candidates_token_count_v2),avg(dc_time_to_first_token_v2)&timeUnit=day&timeRange=%s&filter=%s",
-		projectId, env, escapedTimeRange, escapedFilter)
+	appStatsUrl := fmt.Sprintf("https://apigee.googleapis.com/v1/organizations/%s/environments/%s/stats/developer_app?select=sum(message_count),sum(dc_prompt_token_count_v2),sum(dc_candidates_token_count_v2),avg(dc_time_to_first_token_v2)&timeUnit=%s&timeRange=%s&filter=%s",
+		projectId, env, timeUnit, escapedTimeRange, escapedFilter)
 	var appStatsResp map[string]interface{}
 	if err := doApigeeRequest(ctx, "GET", appStatsUrl, nil, &appStatsResp); err == nil {
 		delete(appStatsResp, "metaData")
@@ -142,8 +160,8 @@ func fetchAnalyticsForEmail(ctx context.Context, projectId, env, escapedTimeRang
 	}
 
 	// 2. Stats by api_product
-	prodStatsUrl := fmt.Sprintf("https://apigee.googleapis.com/v1/organizations/%s/environments/%s/stats/api_product?select=sum(message_count),sum(dc_prompt_token_count_v2),sum(dc_candidates_token_count_v2),avg(dc_time_to_first_token_v2)&timeUnit=day&timeRange=%s&filter=%s",
-		projectId, env, escapedTimeRange, escapedFilter)
+	prodStatsUrl := fmt.Sprintf("https://apigee.googleapis.com/v1/organizations/%s/environments/%s/stats/api_product?select=sum(message_count),sum(dc_prompt_token_count_v2),sum(dc_candidates_token_count_v2),avg(dc_time_to_first_token_v2)&timeUnit=%s&timeRange=%s&filter=%s",
+		projectId, env, timeUnit, escapedTimeRange, escapedFilter)
 	var prodStatsResp map[string]interface{}
 	if err := doApigeeRequest(ctx, "GET", prodStatsUrl, nil, &prodStatsResp); err == nil {
 		delete(prodStatsResp, "metaData")
@@ -151,8 +169,8 @@ func fetchAnalyticsForEmail(ctx context.Context, projectId, env, escapedTimeRang
 	}
 
 	// 3. Stats by dc_model_v2
-	modelStatsUrl := fmt.Sprintf("https://apigee.googleapis.com/v1/organizations/%s/environments/%s/stats/dc_model_v2?select=sum(message_count),sum(dc_prompt_token_count_v2),sum(dc_candidates_token_count_v2),avg(dc_time_to_first_token_v2)&timeUnit=day&timeRange=%s&filter=%s",
-		projectId, env, escapedTimeRange, escapedFilter)
+	modelStatsUrl := fmt.Sprintf("https://apigee.googleapis.com/v1/organizations/%s/environments/%s/stats/dc_model_v2?select=sum(message_count),sum(dc_prompt_token_count_v2),sum(dc_candidates_token_count_v2),avg(dc_time_to_first_token_v2)&timeUnit=%s&timeRange=%s&filter=%s",
+		projectId, env, timeUnit, escapedTimeRange, escapedFilter)
 	var modelStatsResp map[string]interface{}
 	if err := doApigeeRequest(ctx, "GET", modelStatsUrl, nil, &modelStatsResp); err == nil {
 		delete(modelStatsResp, "metaData")
@@ -166,15 +184,18 @@ func fetchAnalyticsForEmail(ctx context.Context, projectId, env, escapedTimeRang
 	}, nil
 }
 
-func refreshAnalyticsData(projectId string) error {
+func refreshAnalyticsData(projectId, rangeKey string) error {
 	ctx := context.Background()
 
-	// Compute timeRange (last 3 months)
+	normalizedRange, duration, timeUnit := parseTimeRangeConfig(rangeKey)
+
+	// Compute timeRange for the selected workshop window (e.g., last 5m, 15m, 30m, 1h, 3h)
 	now := time.Now().UTC()
-	threeMonthsAgo := now.AddDate(0, -3, 0)
+	endTime := now.Add(1 * time.Minute)
+	startTime := now.Add(-duration)
 	timeRange := fmt.Sprintf("%02d/%02d/%04d %02d:%02d~%02d/%02d/%04d %02d:%02d",
-		threeMonthsAgo.Month(), threeMonthsAgo.Day(), threeMonthsAgo.Year(), threeMonthsAgo.Hour(), threeMonthsAgo.Minute(),
-		now.Month(), now.Day(), now.Year(), now.Hour(), now.Minute())
+		startTime.Month(), startTime.Day(), startTime.Year(), startTime.Hour(), startTime.Minute(),
+		endTime.Month(), endTime.Day(), endTime.Year(), endTime.Hour(), endTime.Minute())
 	escapedTimeRange := strings.Replace(url.QueryEscape(timeRange), "+", "%20", -1)
 
 	// Get all environments for this org
@@ -193,7 +214,7 @@ func refreshAnalyticsData(projectId string) error {
 		} `json:"developer"`
 	}
 	if err := doApigeeRequest(ctx, "GET", devsUrl, nil, &devsResp); err != nil {
-		log.Printf("failed to get developers for org $s, %v", projectId, err)
+		log.Printf("failed to get developers for org %s: %v", projectId, err)
 	}
 	for _, d := range devsResp.Developer {
 		emailsToQuery = append(emailsToQuery, d.Email)
@@ -209,7 +230,7 @@ func refreshAnalyticsData(projectId string) error {
 		}
 
 		for _, env := range envs {
-			stats, err := fetchAnalyticsForEmail(ctx, projectId, env, escapedTimeRange, userEmail)
+			stats, err := fetchAnalyticsForEmail(ctx, projectId, env, timeUnit, escapedTimeRange, userEmail)
 			if err != nil {
 				continue
 			}
@@ -233,17 +254,17 @@ func refreshAnalyticsData(projectId string) error {
 	}
 
 	analyticsCacheMutex.Lock()
-	changed := !bytes.Equal(analyticsCache, newCache)
-	if changed {
-		analyticsCache = newCache
-	}
+	changed := !bytes.Equal(analyticsCache, newCache) || analyticsCacheRange != normalizedRange
+	analyticsCache = newCache
+	analyticsCacheRange = normalizedRange
 	analyticsCacheMutex.Unlock()
 
 	if changed {
-		log.Println("Data changed, broadcasting to clients...")
+		log.Printf("Analytics data updated for range=%s, broadcasting to clients...", normalizedRange)
 		broadcast(newCache)
 	} else {
-		log.Println("Data unchanged, skip broadcast.")
+		log.Printf("Analytics data unchanged for range=%s, broadcasting current snapshot...", normalizedRange)
+		broadcast(newCache)
 	}
 
 	return nil
@@ -260,10 +281,12 @@ func userAnalyticsHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	rangeKey, _, _ := parseTimeRangeConfig(r.URL.Query().Get("timeRange"))
+
 	// Always trigger a refresh when explicitly called
 	go func() {
-		log.Println("Manual cache refresh triggered")
-		if err := refreshAnalyticsData(projectId); err != nil {
+		log.Printf("Manual cache refresh triggered (timeRange=%s)", rangeKey)
+		if err := refreshAnalyticsData(projectId, rangeKey); err != nil {
 			log.Printf("Error refreshing analytics: %v", err)
 		}
 	}()
@@ -302,6 +325,12 @@ func sseHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Connection", "keep-alive")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 
+	projectId := r.PathValue("projectId")
+	if projectId == "" {
+		projectId = os.Getenv("GOOGLE_CLOUD_PROJECT")
+	}
+	rangeKey, _, _ := parseTimeRangeConfig(r.URL.Query().Get("timeRange"))
+
 	// Create a channel for this specific client
 	clientChan := make(chan []byte, 1)
 
@@ -316,17 +345,26 @@ func sseHandler(w http.ResponseWriter, r *http.Request) {
 		close(clientChan)
 	}()
 
-	// Push current cache immediately if available
+	// Push current cache immediately if available and matching range, and trigger background refresh if needed
 	analyticsCacheMutex.RLock()
-	if analyticsCache != nil {
+	cachedData := analyticsCache
+	cachedRange := analyticsCacheRange
+	analyticsCacheMutex.RUnlock()
+
+	if cachedData != nil && cachedRange == rangeKey {
 		w.Write([]byte("data: "))
-		w.Write(analyticsCache)
+		w.Write(cachedData)
 		w.Write([]byte("\n\n"))
 		if f, ok := w.(http.Flusher); ok {
 			f.Flush()
 		}
+	} else if projectId != "" {
+		go func() {
+			if err := refreshAnalyticsData(projectId, rangeKey); err != nil {
+				log.Printf("SSE initial refresh failed: %v", err)
+			}
+		}()
 	}
-	analyticsCacheMutex.RUnlock()
 
 	// Wait for updates or connection close
 	notify := r.Context().Done()
@@ -844,7 +882,7 @@ func main() {
 	if projectId != "" {
 		log.Printf("Starting initial background cache refresh for project: %s", projectId)
 		go func() {
-			if err := refreshAnalyticsData(projectId); err != nil {
+			if err := refreshAnalyticsData(projectId, "3h"); err != nil {
 				log.Printf("Initial cache refresh failed: %v", err)
 			}
 		}()

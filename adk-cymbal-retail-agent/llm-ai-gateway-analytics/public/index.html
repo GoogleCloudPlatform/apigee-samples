@@ -118,6 +118,7 @@
         font-size: 1.6rem;
         font-weight: 800;
         background: linear-gradient(to right, var(--text-title), var(--primary));
+        background-clip: text;
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         letter-spacing: -0.5px;
@@ -248,7 +249,8 @@
         color: var(--text-muted);
       }
 
-      input {
+      input,
+      select {
         padding: 0.5rem;
         border: 1px solid var(--border-color);
         border-radius: 6px;
@@ -262,7 +264,8 @@
           color 0.3s ease;
       }
 
-      input:focus {
+      input:focus,
+      select:focus {
         border-color: var(--primary);
         box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
       }
@@ -521,23 +524,18 @@
         </div>
         <div class="form-group">
           <label for="userFilter">Filter by User</label>
-          <select
-            id="userFilter"
-            style="
-              padding: 0.5rem;
-              border: 1px solid var(--border-color);
-              border-radius: 6px;
-              font-size: 1rem;
-              outline: none;
-              background-color: var(--bg-color);
-              color: var(--text-main);
-              transition:
-                border-color 0.2s ease,
-                background-color 0.3s ease,
-                color 0.3s ease;
-            "
-          >
+          <select id="userFilter">
             <option value="all">All Users</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="timeRangeFilter">Time Range</label>
+          <select id="timeRangeFilter">
+            <option value="5m">Last 5 minutes</option>
+            <option value="15m">Last 15 minutes</option>
+            <option value="30m">Last 30 minutes</option>
+            <option value="1h">Last hour</option>
+            <option value="3h" selected>Last 3 hours</option>
           </select>
         </div>
         <button id="refreshBtn" class="primary-btn">Refresh Data</button>
@@ -627,8 +625,17 @@
     </main>
 
     <script>
+      // Time Range Configurations
+      const TIME_RANGES = {
+        "5m": { label: "Last 5 minutes", durationMs: 5 * 60 * 1000, stepMs: 60 * 1000 },
+        "15m": { label: "Last 15 minutes", durationMs: 15 * 60 * 1000, stepMs: 60 * 1000 },
+        "30m": { label: "Last 30 minutes", durationMs: 30 * 60 * 1000, stepMs: 60 * 1000 },
+        "1h": { label: "Last hour", durationMs: 60 * 60 * 1000, stepMs: 2 * 60 * 1000 },
+        "3h": { label: "Last 3 hours", durationMs: 3 * 60 * 60 * 1000, stepMs: 5 * 60 * 1000 },
+      };
+
       // State
-      let currentData = null; // now a map of email -> {app: [], model: [], product: []}
+      let currentData = null; // map of email -> {app: [], model: [], product: []}
       let currentTab = "app";
       let charts = {};
       let eventSource = null;
@@ -636,6 +643,7 @@
       // DOM Elements
       const projectInput = document.getElementById("projectInput");
       const userFilter = document.getElementById("userFilter");
+      const timeRangeFilter = document.getElementById("timeRangeFilter");
       const refreshBtn = document.getElementById("refreshBtn");
       const errorMsg = document.getElementById("errorMsg");
       const loadingModal = document.getElementById("loadingModal");
@@ -648,9 +656,34 @@
       const sunIcon = document.getElementById("sunIcon");
       const moonIcon = document.getElementById("moonIcon");
 
-      // Check Demo Mode
+      // Check URL Params
       const urlParams = new URLSearchParams(window.location.search);
       const isDemoMode = urlParams.get("demoMode") === "true";
+      const initialTimeRange = urlParams.get("timeRange");
+      if (initialTimeRange && TIME_RANGES[initialTimeRange]) {
+        timeRangeFilter.value = initialTimeRange;
+      }
+
+      function getTimeWindowBuckets() {
+        const rangeKey = (timeRangeFilter && timeRangeFilter.value) || "3h";
+        const cfg = TIME_RANGES[rangeKey] || TIME_RANGES["3h"];
+        const now = Date.now();
+        const alignedEnd = Math.floor(now / cfg.stepMs) * cfg.stepMs;
+        const numSteps = Math.round(cfg.durationMs / cfg.stepMs);
+        const start = alignedEnd - numSteps * cfg.stepMs;
+        const buckets = [];
+        for (let t = start; t <= alignedEnd; t += cfg.stepMs) {
+          buckets.push(t);
+        }
+        return {
+          buckets,
+          start,
+          end: now + cfg.stepMs,
+          stepMs: cfg.stepMs,
+          cfg,
+          rangeKey,
+        };
+      }
 
       // Theme Initialization
       function applyTheme(theme) {
@@ -706,7 +739,7 @@
               console.error("Failed to load config");
             }
           } catch (e) {
-            console.error("Could not load configuration:", e);
+            console.error("Could not load configuration");
           }
           if (projectInput.value) {
             connectSSE(projectInput.value);
@@ -747,7 +780,8 @@
         errorMsg.style.display = "none";
         loadingModal.style.display = "flex";
 
-        const url = `/api/projects/${encodeURIComponent(projectId)}/users/analytics/stream`;
+        const selectedRange = timeRangeFilter.value || "3h";
+        const url = `/api/projects/${encodeURIComponent(projectId)}/users/analytics/stream?timeRange=${encodeURIComponent(selectedRange)}`;
         eventSource = new EventSource(url);
 
         eventSource.onmessage = function (event) {
@@ -760,12 +794,12 @@
               loadingModal.style.display = "none";
             }
           } catch (err) {
-            console.error("Failed to parse SSE data", err);
+            console.error("Failed to parse SSE data");
           }
         };
 
-        eventSource.onerror = function (err) {
-          console.error("SSE Error:", err);
+        eventSource.onerror = function () {
+          console.error("SSE connection error");
           if (!currentData) {
             loadingModal.style.display = "none";
             showError("Failed to connect to analytics stream.");
@@ -776,7 +810,7 @@
 
       async function triggerRefresh() {
         if (isDemoMode) {
-          fetchMockData();
+          updateView();
           return;
         }
 
@@ -786,13 +820,16 @@
           return;
         }
 
+        const selectedRange = timeRangeFilter.value || "3h";
         if (!eventSource || !eventSource.url.includes(encodeURIComponent(projectId))) {
           connectSSE(projectId);
         }
 
         try {
           loadingModal.style.display = "flex";
-          await fetch(`/api/projects/${encodeURIComponent(projectId)}/users/analytics`);
+          await fetch(
+            `/api/projects/${encodeURIComponent(projectId)}/users/analytics?timeRange=${encodeURIComponent(selectedRange)}`,
+          );
           // Fallback timeout in case the SSE push happens faster than the UI renders, or data didn't change
           setTimeout(() => {
             loadingModal.style.display = "none";
@@ -805,15 +842,25 @@
 
       function updateUserFilterOptions() {
         if (!currentData) return;
+        const previousSelection = userFilter.value || "all";
         const users = Object.keys(currentData);
-        // keep the "all" option
-        userFilter.innerHTML = '<option value="all">All Users</option>';
+
+        userFilter.replaceChildren();
+        const allOpt = document.createElement("option");
+        allOpt.value = "all";
+        allOpt.textContent = "All Users";
+        userFilter.appendChild(allOpt);
+
         users.forEach((user) => {
           const opt = document.createElement("option");
           opt.value = user;
           opt.textContent = user;
           userFilter.appendChild(opt);
         });
+
+        if (previousSelection !== "all" && users.includes(previousSelection)) {
+          userFilter.value = previousSelection;
+        }
       }
 
       function showError(msg) {
@@ -821,10 +868,36 @@
         errorMsg.style.display = "block";
       }
 
+      function filterAndNormalizeMetricValues(vals, windowInfo) {
+        if (!Array.isArray(vals) || vals.length === 0) return [];
+
+        if (isDemoMode) {
+          const sortedDesc = [...vals].sort(
+            (a, b) => parseInt(b.timestamp || 0, 10) - parseInt(a.timestamp || 0, 10),
+          );
+          const count = Math.min(sortedDesc.length, windowInfo.buckets.length);
+          const mapped = [];
+          for (let i = 0; i < count; i++) {
+            const bucketTs = windowInfo.buckets[windowInfo.buckets.length - 1 - i];
+            mapped.push({
+              timestamp: bucketTs,
+              value: sortedDesc[i].value,
+            });
+          }
+          return mapped;
+        }
+
+        return vals.filter((v) => {
+          const ts = parseInt(v.timestamp || 0, 10);
+          return ts >= windowInfo.start - windowInfo.stepMs && ts <= windowInfo.end;
+        });
+      }
+
       function processDataForTab(tabName) {
         if (!currentData) return [];
 
         const selectedUser = userFilter.value;
+        const windowInfo = getTimeWindowBuckets();
         const dimensionsMap = new Map(); // Group by name across users
 
         const processUserTab = (userData) => {
@@ -844,7 +917,7 @@
                 totalRTokens: 0,
                 totalTTFT: 0,
                 ttftCount: 0,
-                messageValues: [], // We might just concat for simplicity and group later in chart
+                messageValues: [],
                 rTokenValues: [],
                 ttftValues: [],
               });
@@ -852,22 +925,31 @@
             const current = dimensionsMap.get(name);
 
             metrics.forEach((m) => {
+              const filteredVals = filterAndNormalizeMetricValues(m.values || [], windowInfo);
               if (m.name.includes("message_count")) {
-                const vals = m.values || [];
-                current.messageValues.push(...vals);
-                current.totalMessages += vals.reduce((sum, v) => sum + parseInt(v.value || 0), 0);
+                current.messageValues.push(...filteredVals);
+                current.totalMessages += filteredVals.reduce(
+                  (sum, v) => sum + parseInt(v.value || 0, 10),
+                  0,
+                );
               } else if (m.name.includes("prompt_token_count_v2")) {
-                const vals = m.values || [];
-                current.totalPTokens += vals.reduce((sum, v) => sum + parseInt(v.value || 0), 0);
+                current.totalPTokens += filteredVals.reduce(
+                  (sum, v) => sum + parseInt(v.value || 0, 10),
+                  0,
+                );
               } else if (m.name.includes("candidates_token_count_v2")) {
-                const vals = m.values || [];
-                current.rTokenValues.push(...vals);
-                current.totalRTokens += vals.reduce((sum, v) => sum + parseInt(v.value || 0), 0);
+                current.rTokenValues.push(...filteredVals);
+                current.totalRTokens += filteredVals.reduce(
+                  (sum, v) => sum + parseInt(v.value || 0, 10),
+                  0,
+                );
               } else if (m.name.includes("time_to_first_token_v2")) {
-                const vals = m.values || [];
-                current.ttftValues.push(...vals);
-                current.totalTTFT += vals.reduce((sum, v) => sum + parseFloat(v.value || 0), 0);
-                current.ttftCount += vals.length;
+                current.ttftValues.push(...filteredVals);
+                current.totalTTFT += filteredVals.reduce(
+                  (sum, v) => sum + parseFloat(v.value || 0),
+                  0,
+                );
+                current.ttftCount += filteredVals.length;
               }
             });
           });
@@ -906,23 +988,44 @@
 
         const processed = processDataForTab(currentTab);
 
-        // Update Table
+        // Update Table using safe DOM methods
         const tbody = document.querySelector("#summaryTable tbody");
-        tbody.innerHTML = "";
+        tbody.replaceChildren();
 
         if (processed.length === 0) {
-          tbody.innerHTML =
-            '<tr><td colspan="5" style="text-align: center;">No data available</td></tr>';
+          const tr = document.createElement("tr");
+          const td = document.createElement("td");
+          td.setAttribute("colspan", "5");
+          td.style.textAlign = "center";
+          td.textContent = "No data available for selected time range";
+          tr.appendChild(td);
+          tbody.appendChild(tr);
         } else {
           processed.forEach((item) => {
             const tr = document.createElement("tr");
-            tr.innerHTML = `
-                        <td><strong>${item.name}</strong></td>
-                        <td>${item.totalMessages.toLocaleString()}</td>
-                        <td>${item.totalPTokens.toLocaleString()}</td>
-                        <td>${item.totalRTokens.toLocaleString()}</td>
-                        <td>${item.avgTTFT ? item.avgTTFT.toFixed(2) : "-"}</td>
-                    `;
+
+            const tdName = document.createElement("td");
+            const strong = document.createElement("strong");
+            strong.textContent = item.name;
+            tdName.appendChild(strong);
+
+            const tdMessages = document.createElement("td");
+            tdMessages.textContent = item.totalMessages.toLocaleString();
+
+            const tdPTokens = document.createElement("td");
+            tdPTokens.textContent = item.totalPTokens.toLocaleString();
+
+            const tdRTokens = document.createElement("td");
+            tdRTokens.textContent = item.totalRTokens.toLocaleString();
+
+            const tdTTFT = document.createElement("td");
+            tdTTFT.textContent = item.avgTTFT ? item.avgTTFT.toFixed(2) : "-";
+
+            tr.appendChild(tdName);
+            tr.appendChild(tdMessages);
+            tr.appendChild(tdPTokens);
+            tr.appendChild(tdRTokens);
+            tr.appendChild(tdTTFT);
             tbody.appendChild(tr);
           });
         }
@@ -1019,19 +1122,35 @@
           },
         });
 
-        // Timeline Chart (Total Response Tokens over time)
-        const dateMap = {}; // timestamp -> { name: value }
+        // Build continuous time-axis grid for the selected time range
+        const windowInfo = getTimeWindowBuckets();
+        const timestamps = windowInfo.buckets;
+        const timeLabels = timestamps.map((ts) =>
+          new Date(ts).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+        );
+
+        const getBucketKey = (rawTs) => {
+          const ts = parseInt(rawTs, 10);
+          const idx = Math.min(
+            timestamps.length - 1,
+            Math.max(0, Math.floor((ts - windowInfo.start) / windowInfo.stepMs)),
+          );
+          return timestamps[idx];
+        };
+
+        // 1. Timeline Chart (Total Response Tokens over time)
+        const dateMap = {}; // bucketTimestamp -> { name: sumValue }
+        timestamps.forEach((bTs) => {
+          dateMap[bTs] = {};
+        });
         data.forEach((d) => {
           if (d.rTokenValues) {
             d.rTokenValues.forEach((v) => {
-              if (!dateMap[v.timestamp]) dateMap[v.timestamp] = {};
-              dateMap[v.timestamp][d.name] = parseInt(v.value);
+              const bTs = getBucketKey(v.timestamp);
+              dateMap[bTs][d.name] = (dateMap[bTs][d.name] || 0) + parseInt(v.value || 0, 10);
             });
           }
         });
-
-        const timestamps = Object.keys(dateMap).sort((a, b) => parseInt(a) - parseInt(b));
-        const timeLabels = timestamps.map((ts) => new Date(parseInt(ts)).toLocaleDateString());
 
         const datasets = data.map((d, i) => {
           const dVals = timestamps.map((ts) => dateMap[ts][d.name] || 0);
@@ -1073,24 +1192,23 @@
           },
         });
 
-        // Timeline Chart (Messages over time)
-        const msgDateMap = {}; // timestamp -> { name: value }
+        // 2. Timeline Chart (Messages over time)
+        const msgDateMap = {}; // bucketTimestamp -> { name: sumValue }
+        timestamps.forEach((bTs) => {
+          msgDateMap[bTs] = {};
+        });
         data.forEach((d) => {
           if (d.messageValues) {
             d.messageValues.forEach((v) => {
-              if (!msgDateMap[v.timestamp]) msgDateMap[v.timestamp] = {};
-              msgDateMap[v.timestamp][d.name] = parseInt(v.value);
+              const bTs = getBucketKey(v.timestamp);
+              msgDateMap[bTs][d.name] =
+                (msgDateMap[bTs][d.name] || 0) + parseInt(v.value || 0, 10);
             });
           }
         });
 
-        const msgTimestamps = Object.keys(msgDateMap).sort((a, b) => parseInt(a) - parseInt(b));
-        const msgTimeLabels = msgTimestamps.map((ts) =>
-          new Date(parseInt(ts)).toLocaleDateString(),
-        );
-
         const msgDatasets = data.map((d, i) => {
-          const dVals = msgTimestamps.map((ts) => msgDateMap[ts][d.name] || 0);
+          const dVals = timestamps.map((ts) => msgDateMap[ts][d.name] || 0);
           return {
             label: d.name,
             data: dVals,
@@ -1107,7 +1225,7 @@
         charts.msgTimeline = new Chart(ctxMsgTimeline, {
           type: "line",
           data: {
-            labels: msgTimeLabels,
+            labels: timeLabels,
             datasets: msgDatasets,
           },
           options: {
@@ -1129,22 +1247,29 @@
           },
         });
 
-        // TTFT Chart
-        const ttftDateMap = {}; // timestamp -> { name: value }
+        // 3. TTFT Chart (Avg Time To First Token over time)
+        const ttftSumMap = {}; // bucketTimestamp -> { name: sumValue }
+        const ttftCntMap = {}; // bucketTimestamp -> { name: count }
+        timestamps.forEach((bTs) => {
+          ttftSumMap[bTs] = {};
+          ttftCntMap[bTs] = {};
+        });
         data.forEach((d) => {
           if (d.ttftValues) {
             d.ttftValues.forEach((v) => {
-              if (!ttftDateMap[v.timestamp]) ttftDateMap[v.timestamp] = {};
-              ttftDateMap[v.timestamp][d.name] = parseFloat(v.value);
+              const bTs = getBucketKey(v.timestamp);
+              const val = parseFloat(v.value || 0);
+              ttftSumMap[bTs][d.name] = (ttftSumMap[bTs][d.name] || 0) + val;
+              ttftCntMap[bTs][d.name] = (ttftCntMap[bTs][d.name] || 0) + 1;
             });
           }
         });
 
-        const ttftTimestamps = Object.keys(ttftDateMap).sort((a, b) => parseInt(a) - parseInt(b));
-        const ttftLabels = ttftTimestamps.map((ts) => new Date(parseInt(ts)).toLocaleDateString());
-
         const ttftDatasets = data.map((d, i) => {
-          const dVals = ttftTimestamps.map((ts) => ttftDateMap[ts][d.name] || 0);
+          const dVals = timestamps.map((ts) => {
+            const cnt = ttftCntMap[ts][d.name] || 0;
+            return cnt > 0 ? ttftSumMap[ts][d.name] / cnt : 0;
+          });
           return {
             label: d.name,
             data: dVals,
@@ -1161,7 +1286,7 @@
         charts.ttft = new Chart(ctxTtft, {
           type: "line",
           data: {
-            labels: ttftLabels,
+            labels: timeLabels,
             datasets: ttftDatasets,
           },
           options: {
@@ -1193,6 +1318,10 @@
         }
       });
       userFilter.addEventListener("change", updateView);
+      timeRangeFilter.addEventListener("change", () => {
+        updateView();
+        triggerRefresh();
+      });
 
       demoModeSwitch.addEventListener("change", (e) => {
         const url = new URL(window.location.href);
