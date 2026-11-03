@@ -133,24 +133,24 @@ The gateway determines the target LLM model and routing tier during `JS-ParseReq
 
 #### 1. Gemma / Local Execution Priority Route (`route_to_gemma = true`)
 Gemma routing takes precedence over Cloud/Agent Platform models if requested explicitly:
-- **Header Tier Override**: `x-model-tier` set to `local` or `gemma`.
+- **Header Tier Override**: `x-llm-tier` or `x-model-tier` set to `local` or `gemma`.
 - **Header Model Name**: `x-llm-model` or `x-model-name` containing `"gemma"` (case-insensitive).
-- **Body / URI Model**: Model path or JSON field containing `"gemma"`.
+- **Body / URI Model**: Model path or JSON field containing `"gemma"` (only when no explicit model header `x-llm-model` or `x-model-name` is provided).
 
-*Result*: Sets `route_to_gemma = "true"` and assigns `model` to the requested Gemma variant (defaults to `default_local_model` configured in `vertex_config.properties`, e.g. `gemma3:1b`).
+*Result*: Sets `route_to_gemma = "true"`, sets `llm_routing_enabled = "false"`, and assigns `model` to the requested Gemma variant (defaults to `default_local_model` configured in `vertex_config.properties`, e.g. `gemma3:1b`).
 
 #### 2. Cloud / Agent Platform Model Resolution Hierarchy (`route_to_gemma = false`)
-When Gemma is not explicitly targeted, the gateway resolves the Agent Platform target model as follows:
-1. **Consolidated HTTP Header**: Value specified in `x-llm-model` (primary header) or `x-model-name` (secondary header alias).
-2. **URI Path / Request Payload**: Model extracted from the request URI path (e.g. `/publishers/google/models/{model}`) or JSON body `model` field.
+When Gemma is not explicitly targeted, the gateway resolves the Agent Platform target model in strict priority order:
+1. **Consolidated HTTP Header**: Value specified in `x-llm-model` (primary header) or `x-model-name` (secondary header alias). Always takes precedence over URI and JSON body models, and sets `llm_routing_enabled = "false"` to preserve the explicit header selection.
+2. **URI Path / Request Payload**: Model extracted from the request URI path (e.g. `/publishers/google/models/{model}`, which takes precedence over the JSON body) or fallback JSON body `model` field.
 3. **Default Property**: Fallback to `default_model` configured in `vertex_config.properties` (e.g. `gemini-2.5-pro` or `gemini-2.5-flash`).
 
 #### 3. Dynamic Semantic Routing (`FC-LLMRouting`)
-If dynamic routing is enabled (`x-llm-routing: true`) and the model has not been explicitly overridden by a header or URI, the gateway invokes the `FC-LLMRouting` Flow Callout policy. This delegates execution to the **`llm-routing-v2`** Shared Flow to classify prompt complexity and assign the optimal model tier.
+If dynamic routing is enabled (`x-llm-routing: true` or omitted by default) and the model has not been explicitly overridden via header (`x-llm-model` / `x-model-name`) or routed to Gemma, the gateway invokes the `FC-LLMRouting` Flow Callout policy. This delegates execution to the **`llm-routing-v2`** Shared Flow to classify prompt complexity and assign the optimal model tier.
 
 ##### Execution Steps of `llm-routing-v2`:
 1. **Execution Condition**:
-   - Executes only when `llm_routing_enabled != "false"` and `llm_model == llm_default_model`.
+   - Executes only when `llm_routing_enabled != "false"`.
 2. **Step 1: Keyword Route Pre-Check (`KVM-GetKeywordRoute`)**:
    - Executes `JS-PrepareKVMKey` to normalize the prompt and queries an Apigee Key-Value Map (`KVM-GetKeywordRoute`).
    - If an exact keyword match is found (e.g. mapping simple intent keywords directly to `"simple"`), vector embedding calls are bypassed to minimize latency and API cost.

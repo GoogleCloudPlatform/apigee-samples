@@ -199,14 +199,11 @@ try {
     // Order of precedence for explicit header model selection:
     // 1. x-llm-model header
     // 2. x-model-name header
-    // 3. llm_model context variable (populated by JS-ProcessCustomLLMHeaders)
     var headerModel = "";
     if (exists(llmModelHeader)) {
         headerModel = llmModelHeader;
     } else if (exists(modelNameHeader)) {
         headerModel = modelNameHeader;
-    } else if (exists(context.getVariable("llm_model"))) {
-        headerModel = context.getVariable("llm_model");
     }
 
     var defaultModel = context.getVariable("llm_default_model") || context.getVariable("propertyset.vertex_config.default_model");
@@ -230,8 +227,8 @@ try {
     if (explicitLocalRequested || headerModelLower.indexOf("gemma") !== -1) {
         routeToGemma = true;
     }
-    // Criterion B: Explicit body or URI request for Gemma model name
-    else if (bodyOrUriModel && bodyOrUriModel.toLowerCase().indexOf("gemma") !== -1) {
+    // Criterion B: Explicit body or URI request for Gemma model name (when no non-Gemma header model overrides it)
+    else if (!exists(headerModel) && bodyOrUriModel && bodyOrUriModel.toLowerCase().indexOf("gemma") !== -1) {
         routeToGemma = true;
     }
 
@@ -262,10 +259,10 @@ try {
         }
     } else {
         // Standard model determination priority for Vertex AI:
-        // 1. Explicit Header Model (if present and not default)
+        // 1. Explicit Header Model (if present)
         // 2. Extracted Body / URI Model
         // 3. Default Model from propertyset
-        if (exists(headerModel) && headerModel !== defaultModel) {
+        if (exists(headerModel)) {
             model = headerModel;
             context.setVariable("llm_routing_enabled", "false");
         } else if (exists(bodyOrUriModel)) {
