@@ -21,28 +21,41 @@
             </Step>
             <Step>
                 <Name>VA-Key</Name>
+                <Condition>request.verb != "OPTIONS"</Condition>
             </Step>
             <Step>
                 <Name>OAS-Verify</Name>
+                <Condition>request.verb != "OPTIONS"</Condition>
             </Step>
             <Step>
                 <Name>EV-ExtractFields</Name>
+                <Condition>request.verb != "OPTIONS"</Condition>
+            </Step>
+            <Step>
+                <Name>JS-NormalizeRequest</Name>
+                <Condition>request.verb != "OPTIONS"</Condition>
+            </Step>
+            <Step>
+                <Name>RF-InvalidRequestSchema</Name>
+                <Condition>request_validation_error != null</Condition>
             </Step>
             <Step>
                 <Name>AM-ExtractRequestPrompt</Name>
+                <Condition>request.verb != "OPTIONS"</Condition>
             </Step>
             <Step>
                 <Name>FC-SanitizeUserPrompt</Name>
+                <Condition>request.verb != "OPTIONS"</Condition>
             </Step>
         </Request>
         <Response>
             <Step>
                 <Name>AM-ExtractResponsePrompt</Name>
-                <Condition>request.verb != "OPTIONS"</Condition>
+                <Condition>request.verb != "OPTIONS" and response.status.code = 200</Condition>
             </Step>
             <Step>
                 <Name>FC-SanitizeModelResponse</Name>
-                <Condition>request.verb != "OPTIONS"</Condition>
+                <Condition>request.verb != "OPTIONS" and response.status.code = 200</Condition>
             </Step>
         </Response>
     </PreFlow>
@@ -56,6 +69,10 @@
         <Properties/>
     </HTTPProxyConnection>
     <RouteRule name="llm">
+        <Condition>request.verb != "OPTIONS"</Condition>
         <TargetEndpoint>llm</TargetEndpoint>
+    </RouteRule>
+    <RouteRule name="preflight">
+        <Condition>request.verb = "OPTIONS"</Condition>
     </RouteRule>
 </ProxyEndpoint>

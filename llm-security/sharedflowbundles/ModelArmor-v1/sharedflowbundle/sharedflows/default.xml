@@ -49,6 +49,10 @@
   </Step>
   <Step>
     <Name>RF-SDP-Detected</Name>
-    <Condition>sdp = "MATCH_FOUND"</Condition>
+    <Condition>sdp = "MATCH_FOUND" or sdpDeidentify = "MATCH_FOUND"</Condition>
+  </Step>
+  <Step>
+    <Name>RF-ModelArmor-PolicyViolation</Name>
+    <Condition>modelArmorFilterMatchState != "NO_MATCH_FOUND" or (modelArmorInvocationResult != null and modelArmorInvocationResult != "SUCCESS")</Condition>
   </Step>
 </SharedFlow>
