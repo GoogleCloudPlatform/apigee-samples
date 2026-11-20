@@ -11,13 +11,11 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<SanitizeModelResponse async="false" continueOnError="true" enabled="true" name="SMR-SantizeModelResponse">
-  <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+<SanitizeModelResponse async="false" continueOnError="false" enabled="true" name="SMR-SantizeModelResponse">
+  <IgnoreUnresolvedVariables>false</IgnoreUnresolvedVariables>
   <DisplayName>SMR-SantizeModelResponse</DisplayName>
   <ModelArmor>
     <TemplateName>{modelArmorTemplate}</TemplateName>
   </ModelArmor>
-  <LLMResponseSource>{response.event.current.content}</LLMResponseSource>
-  <!-- Use the below settings if you do want to call a Model Armor policy on every event. -->
-  <!-- <LLMResponseSource>{response_partial}</LLMResponseSource> -->
+  <LLMResponseSource>{response_partial}</LLMResponseSource>
 </SanitizeModelResponse>

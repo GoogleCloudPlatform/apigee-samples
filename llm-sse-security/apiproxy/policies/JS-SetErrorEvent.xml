@@ -14,31 +14,43 @@
 <Javascript continueOnError="false" enabled="true" timeLimit="200" name="JS-SetErrorEvent">
   <DisplayName>JS-SetErrorEvent</DisplayName>
   <Properties/>
-  <Source>
-  var eventObj = JSON.parse(context.getVariable("response.event.current.content").substring(5));
-  context.setVariable("modelVersion", eventObj.modelVersion);
-  context.setVariable("responseId", eventObj.responseId);
+  <Source><![CDATA[
+  var modelVersion = "gemini";
+  var responseId = "blocked";
+  try {
+    var raw = context.getVariable("response.event.current.content") || "";
+    var jsonStr = String(raw).replace(/^data:\s?/, "").trim();
+    if (jsonStr && jsonStr !== "[DONE]") {
+      var eventObj = JSON.parse(jsonStr);
+      if (eventObj && eventObj.modelVersion) modelVersion = eventObj.modelVersion;
+      if (eventObj && eventObj.responseId) responseId = eventObj.responseId;
+    }
+  } catch (e) {
+    // Ignore parse errors when building redaction payload
+  }
+  context.setVariable("modelVersion", modelVersion);
+  context.setVariable("responseId", responseId);
   context.setVariable("hasError", true);
   context.setVariable("errorMsg", "Inappropriate text detected.");
-  var msg = "\nYour prompt and/or response contains PII or sensitive data, which is not allowed for privacy reasons.\n"
+  var msg = "\nYour prompt and/or response contains PII or sensitive data, which is not allowed for privacy reasons.\n";
   var dataObj = {
-    "candidates":[
-        {
-          "content":{
-              "role":"model",
-              "parts":[
-                {
-                    "text": msg
-                }
-              ]
-          },
-          "finishReason":"STOP"
-        }
+    "candidates": [
+      {
+        "content": {
+          "role": "model",
+          "parts": [
+            {
+              "text": msg
+            }
+          ]
+        },
+        "finishReason": "STOP"
+      }
     ],
-    "modelVersion": eventObj.modelVersion,
+    "modelVersion": modelVersion,
     "createTime": new Date().toISOString(),
-    "responseId": eventObj.responseId
-  }
-  context.setVariable("response.event.current.content", JSON.stringify(dataObj));
-  </Source>
+    "responseId": responseId
+  };
+  context.setVariable("response.event.current.content", "data: " + JSON.stringify(dataObj));
+  ]]></Source>
 </Javascript>
