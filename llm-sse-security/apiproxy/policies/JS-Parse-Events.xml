@@ -51,6 +51,8 @@
               chunks.push(part.text);
             } else if (part && part.functionCall) {
               chunks.push(JSON.stringify(part.functionCall));
+            } else if (part && (part.executableCode || part.codeExecutionResult)) {
+              chunks.push(JSON.stringify(part));
             }
           }
         }
@@ -68,7 +70,7 @@
     }
 
     context.setVariable("tmp_buffer_pre", combined);
-    if (combined.length > 0) {
+    if (eventText.length > 0) {
       context.setVariable("response_partial", combined);
       context.setVariable("buff_ready", true);
     } else {

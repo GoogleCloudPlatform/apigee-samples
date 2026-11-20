@@ -51,6 +51,6 @@
     "createTime": new Date().toISOString(),
     "responseId": responseId
   };
-  context.setVariable("response.event.current.content", JSON.stringify(dataObj));
+  context.setVariable("response.event.current.content", "data: " + JSON.stringify(dataObj));
   ]]></Source>
 </Javascript>
