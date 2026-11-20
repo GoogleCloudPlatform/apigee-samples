@@ -40,7 +40,7 @@
     var allowedTopKeys = { "contents": true, "generationConfig": true };
     if (!context.getVariable("request_validation_error")) {
       for (var k in body) {
-        if (Object.prototype.hasOwnProperty.call(body, k) && !allowedTopKeys[k]) {
+        if (Object.prototype.hasOwnProperty.call(body, k) && !Object.prototype.hasOwnProperty.call(allowedTopKeys, k)) {
           markInvalid("Unsupported or unscannable request field: " + k);
           break;
         }
@@ -66,13 +66,13 @@
           break;
         }
         for (var ck in item) {
-          if (Object.prototype.hasOwnProperty.call(item, ck) && !allowedContentKeys[ck]) {
+          if (Object.prototype.hasOwnProperty.call(item, ck) && !Object.prototype.hasOwnProperty.call(allowedContentKeys, ck)) {
             markInvalid("Unsupported field in contents[" + i + "]: " + ck);
             break;
           }
         }
         if (context.getVariable("request_validation_error")) break;
-        if (item.role !== undefined && (typeof item.role !== "string" || !allowedRoles[item.role])) {
+        if (item.role !== undefined && (typeof item.role !== "string" || !Object.prototype.hasOwnProperty.call(allowedRoles, item.role))) {
           markInvalid("Unsupported role in contents[" + i + "].");
           break;
         }
@@ -129,7 +129,7 @@
         var cleanGc = {};
         for (var gk in gc) {
           if (Object.prototype.hasOwnProperty.call(gc, gk)) {
-            if (!allowedGc[gk] || typeof gc[gk] !== allowedGc[gk]) {
+            if (!Object.prototype.hasOwnProperty.call(allowedGc, gk) || typeof gc[gk] !== allowedGc[gk]) {
               markInvalid("Unsupported generationConfig field: " + gk);
               break;
             }

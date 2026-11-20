@@ -51,11 +51,11 @@
         <Response>
             <Step>
                 <Name>AM-ExtractResponsePrompt</Name>
-                <Condition>request.verb != "OPTIONS"</Condition>
+                <Condition>request.verb != "OPTIONS" and response.status.code = 200</Condition>
             </Step>
             <Step>
                 <Name>FC-SanitizeModelResponse</Name>
-                <Condition>request.verb != "OPTIONS"</Condition>
+                <Condition>request.verb != "OPTIONS" and response.status.code = 200</Condition>
             </Step>
         </Response>
     </PreFlow>
