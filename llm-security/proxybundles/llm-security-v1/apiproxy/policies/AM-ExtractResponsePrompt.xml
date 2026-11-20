@@ -16,11 +16,11 @@
   <Properties/>
   <AssignVariable>
     <Name>response_jsonpath</Name>
-    <Value>$.candidates[0].content.parts[*].text</Value>
+    <Value>$.candidates[*].content.parts[*].text</Value>
   </AssignVariable>
   <AssignVariable>
     <Name>response_prompt_value</Name>
     <Template>{jsonPath(response_jsonpath,response.content,false)}</Template>
   </AssignVariable>
-  <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+  <IgnoreUnresolvedVariables>false</IgnoreUnresolvedVariables>
 </AssignMessage>

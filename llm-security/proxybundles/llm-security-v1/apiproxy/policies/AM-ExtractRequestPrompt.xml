@@ -14,13 +14,13 @@
 <AssignMessage continueOnError="false" enabled="true" name="AM-ExtractRequestPrompt">
   <DisplayName>AM-ExtractRequestPrompt</DisplayName>
   <Properties/>
-  <AssignVariable>
-    <Name>request_jsonpath</Name>
-    <Value>$.contents[*].parts[*].text</Value>
-  </AssignVariable>
+  <Set>
+    <Payload contentType="application/json">{sanitized_request_json}</Payload>
+  </Set>
   <AssignVariable>
     <Name>request_prompt_value</Name>
-    <Template>{jsonPath(request_jsonpath,request.content,false)}</Template>
+    <Ref>extracted_prompt_text</Ref>
   </AssignVariable>
-  <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>
+  <IgnoreUnresolvedVariables>false</IgnoreUnresolvedVariables>
+  <AssignTo createNew="false" transport="http" type="request"/>
 </AssignMessage>
