@@ -14,30 +14,66 @@
 <Javascript continueOnError="false" enabled="true" timeLimit="200" name="JS-Parse-Events">
   <DisplayName>JS-Parse-Events</DisplayName>
   <Properties/>
-  <Source>
-    //return the Error and not process the data event object
-    if(context.getVariable("hasError")){
-      throw new Error(context.getVariable("errorMsg"));
+  <Source><![CDATA[
+    if (context.getVariable("hasError")) {
+      throw new Error(context.getVariable("errorMsg") || "Stream halted due to security policy match.");
     }
 
-    //The below block is if you need to combine text from multiple data event objects
-    var stream_count = 3;
-    var eventText = JSON.parse(context.getVariable("response.event.current.content").substring(5)).candidates[0].content.parts[0].text;
-    var finishReason = JSON.parse(context.getVariable("response.event.current.content").substring(5)).candidates[0].finishReason;
-    var idx = context.getVariable("response.event.current.count");
-    if(idx%stream_count==0 || finishReason=="STOP") {
-      context.setVariable("response_partial", context.getVariable("tmp_buffer_pre"));
-      context.setVariable("buff_ready", true);
-      context.setVariable("tmp_buffer_pre", "");
-    } else {
-      context.setVariable("buff_ready", false);
-      context.setVariable("response_partial", "");
-      var previousBufferVal = context.getVariable("tmp_buffer_pre");
-      if(previousBufferVal) {
-        context.setVariable("tmp_buffer_pre", previousBufferVal+eventText);
-      } else {
-        context.setVariable("tmp_buffer_pre", eventText);
+    var rawEvent = context.getVariable("response.event.current.content") || "";
+    var lines = String(rawEvent).split(/\r?\n/);
+    var dataLines = [];
+    for (var i = 0; i < lines.length; i++) {
+      var line = lines[i];
+      if (!line || line.indexOf(":") === 0) {
+        continue;
+      }
+      if (line.indexOf("data:") === 0) {
+        dataLines.push(line.replace(/^data:\s?/, ""));
+      } else if (line.indexOf("event:") !== 0 && line.indexOf("id:") !== 0 && line.indexOf("retry:") !== 0) {
+        dataLines.push(line);
       }
     }
-  </Source>
+
+    var payload = dataLines.join("\n").trim();
+    var eventText = "";
+
+    if (payload && payload !== "[DONE]") {
+      try {
+        var parsed = JSON.parse(payload);
+        var candidates = (parsed && Array.isArray(parsed.candidates)) ? parsed.candidates : [];
+        var chunks = [];
+        for (var c = 0; c < candidates.length; c++) {
+          var cand = candidates[c];
+          var parts = (cand && cand.content && Array.isArray(cand.content.parts)) ? cand.content.parts : [];
+          for (var p = 0; p < parts.length; p++) {
+            var part = parts[p];
+            if (part && typeof part.text === "string" && part.text.length > 0) {
+              chunks.push(part.text);
+            } else if (part && part.functionCall) {
+              chunks.push(JSON.stringify(part.functionCall));
+            }
+          }
+        }
+        eventText = chunks.join("");
+      } catch (e) {
+        eventText = payload;
+      }
+    }
+
+    var previousBufferVal = context.getVariable("tmp_buffer_pre") || "";
+    var combined = previousBufferVal + eventText;
+    var maxBufferChars = 32000;
+    if (combined.length > maxBufferChars) {
+      combined = combined.substring(combined.length - maxBufferChars);
+    }
+
+    context.setVariable("tmp_buffer_pre", combined);
+    if (combined.length > 0) {
+      context.setVariable("response_partial", combined);
+      context.setVariable("buff_ready", true);
+    } else {
+      context.setVariable("response_partial", "");
+      context.setVariable("buff_ready", false);
+    }
+  ]]></Source>
 </Javascript>

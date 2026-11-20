@@ -17,10 +17,14 @@
   <PreFlow name="PreFlow">
     <Request>
       <Step>
-         <Name>VA-Key</Name>
+        <Name>VA-Key</Name>
       </Step>
       <Step>
         <Name>KVM-GetModelArmorConfig</Name>
+      </Step>
+      <Step>
+        <Name>RF-MissingModelArmorConfig</Name>
+        <Condition>modelArmorTemplate = null or modelArmorTemplate = ""</Condition>
       </Step>
       <Step>
         <Name>EV-ExtractFields</Name>
