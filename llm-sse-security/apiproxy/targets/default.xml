@@ -30,12 +30,11 @@
       </Step>
       <Step>
         <Name>SMR-SantizeModelResponse</Name>
-        <!-- uncomment below line if you do not want to call Model Armor on every event -->
-        <!-- <Condition> buff_ready = true </Condition>  -->
+        <Condition>buff_ready = true</Condition>
       </Step>
       <Step>
         <Name>JS-SetErrorEvent</Name>
-        <Condition>SanitizeModelResponse.SMR-SantizeModelResponse.filterMatchState = "MATCH_FOUND"</Condition>
+        <Condition>buff_ready = true and SanitizeModelResponse.SMR-SantizeModelResponse.filterMatchState != "NO_MATCH_FOUND"</Condition>
       </Step>
     </Response>
   </EventFlow>
