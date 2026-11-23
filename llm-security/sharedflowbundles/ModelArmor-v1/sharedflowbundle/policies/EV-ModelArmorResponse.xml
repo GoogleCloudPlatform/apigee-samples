@@ -19,6 +19,9 @@
     <Variable name="modelArmorFilterMatchState">
       <JSONPath>$.sanitizationResult.filterMatchState</JSONPath>
     </Variable>
+    <Variable name="modelArmorInvocationResult">
+      <JSONPath>$.sanitizationResult.invocationResult</JSONPath>
+    </Variable>
     <Variable name="csam">
       <JSONPath>$.sanitizationResult.filterResults.csam.csamFilterFilterResult.matchState</JSONPath>
     </Variable>
@@ -33,6 +36,9 @@
     </Variable>
     <Variable name="sdp">
       <JSONPath>$.sanitizationResult.filterResults.sdp.sdpFilterResult.inspectResult.matchState</JSONPath>
+    </Variable>
+    <Variable name="sdpDeidentify">
+      <JSONPath>$.sanitizationResult.filterResults.sdp.sdpFilterResult.deidentifyResult.matchState</JSONPath>
     </Variable>
   </JSONPayload>
   <Source clearPayload="false">modelArmorResponse</Source>

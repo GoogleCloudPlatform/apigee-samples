@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+ Copyright 2025 Google LLC
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+      http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<Javascript continueOnError="false" enabled="true" timeLimit="200" name="JS-NormalizeRequest">
+  <DisplayName>JS-NormalizeRequest</DisplayName>
+  <Properties/>
+  <Source><![CDATA[
+    function markInvalid(msg) {
+      context.setVariable("request_validation_error", msg);
+    }
+
+    var rawBody = context.getVariable("request.content");
+    var body = null;
+    if (!rawBody) {
+      markInvalid("Request body is required.");
+    } else {
+      try {
+        body = JSON.parse(rawBody);
+      } catch (e) {
+        markInvalid("Request body must be valid JSON.");
+      }
+    }
+
+    if (!context.getVariable("request_validation_error")) {
+      if (!body || typeof body !== "object" || Array.isArray(body)) {
+        markInvalid("Request body must be a JSON object.");
+      }
+    }
+
+    var allowedTopKeys = { "contents": true, "generationConfig": true };
+    if (!context.getVariable("request_validation_error")) {
+      for (var k in body) {
+        if (Object.prototype.hasOwnProperty.call(body, k) && !Object.prototype.hasOwnProperty.call(allowedTopKeys, k)) {
+          markInvalid("Unsupported or unscannable request field: " + k);
+          break;
+        }
+      }
+    }
+
+    if (!context.getVariable("request_validation_error")) {
+      if (!Array.isArray(body.contents) || body.contents.length === 0) {
+        markInvalid("Field 'contents' must be a non-empty array.");
+      }
+    }
+
+    var canonicalContents = [];
+    var promptSegments = [];
+    var allowedContentKeys = { "role": true, "parts": true };
+    var allowedRoles = { "user": true, "model": true };
+
+    if (!context.getVariable("request_validation_error")) {
+      for (var i = 0; i < body.contents.length && !context.getVariable("request_validation_error"); i++) {
+        var item = body.contents[i];
+        if (!item || typeof item !== "object" || Array.isArray(item)) {
+          markInvalid("Each entry in 'contents' must be an object.");
+          break;
+        }
+        for (var ck in item) {
+          if (Object.prototype.hasOwnProperty.call(item, ck) && !Object.prototype.hasOwnProperty.call(allowedContentKeys, ck)) {
+            markInvalid("Unsupported field in contents[" + i + "]: " + ck);
+            break;
+          }
+        }
+        if (context.getVariable("request_validation_error")) break;
+        if (item.role !== undefined && (typeof item.role !== "string" || !Object.prototype.hasOwnProperty.call(allowedRoles, item.role))) {
+          markInvalid("Unsupported role in contents[" + i + "].");
+          break;
+        }
+        if (!Array.isArray(item.parts) || item.parts.length === 0) {
+          markInvalid("Each entry in 'contents' must contain a non-empty 'parts' array.");
+          break;
+        }
+
+        var canonicalParts = [];
+        for (var j = 0; j < item.parts.length; j++) {
+          var part = item.parts[j];
+          if (!part || typeof part !== "object" || Array.isArray(part)) {
+            markInvalid("Each entry in 'parts' must be an object.");
+            break;
+          }
+          for (var pk in part) {
+            if (Object.prototype.hasOwnProperty.call(part, pk) && pk !== "text") {
+              markInvalid("Unsupported non-text part field in contents[" + i + "].parts[" + j + "]: " + pk);
+              break;
+            }
+          }
+          if (context.getVariable("request_validation_error")) break;
+          if (typeof part.text !== "string" || part.text.trim().length === 0) {
+            markInvalid("Each part must contain a non-empty 'text' string.");
+            break;
+          }
+          canonicalParts.push({ "text": part.text });
+          promptSegments.push(part.text);
+        }
+
+        if (!context.getVariable("request_validation_error")) {
+          var normalizedItem = { "parts": canonicalParts };
+          if (item.role !== undefined) {
+            normalizedItem.role = item.role;
+          }
+          canonicalContents.push(normalizedItem);
+        }
+      }
+    }
+
+    var canonicalBody = { "contents": canonicalContents };
+    if (!context.getVariable("request_validation_error") && body.generationConfig !== undefined) {
+      var gc = body.generationConfig;
+      if (!gc || typeof gc !== "object" || Array.isArray(gc)) {
+        markInvalid("Field 'generationConfig' must be an object.");
+      } else {
+        var allowedGc = {
+          "temperature": "number",
+          "topP": "number",
+          "topK": "number",
+          "maxOutputTokens": "number",
+          "candidateCount": "number"
+        };
+        var cleanGc = {};
+        for (var gk in gc) {
+          if (Object.prototype.hasOwnProperty.call(gc, gk)) {
+            if (!Object.prototype.hasOwnProperty.call(allowedGc, gk) || typeof gc[gk] !== allowedGc[gk]) {
+              markInvalid("Unsupported generationConfig field: " + gk);
+              break;
+            }
+            cleanGc[gk] = gc[gk];
+          }
+        }
+        canonicalBody.generationConfig = cleanGc;
+      }
+    }
+
+    if (!context.getVariable("request_validation_error")) {
+      context.setVariable("extracted_prompt_text", promptSegments.join("\n"));
+      context.setVariable("sanitized_request_json", JSON.stringify(canonicalBody));
+    }
+  ]]></Source>
+</Javascript>
